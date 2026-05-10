@@ -44,3 +44,9 @@ infrastructure/state/**/inventory/runtime-inventory.txt
 
 # Kubernetes mutable runtime
 *.kubeconfig
+
+# =========================================
+# Stage Runtime State
+# =========================================
+
+infrastructure/state/stage-02/
