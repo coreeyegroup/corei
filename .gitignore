@@ -3,3 +3,18 @@
 *.iso
 *.vmdk
 *.log
+
+# =========================================
+# Stage 01 Runtime State
+# =========================================
+
+infrastructure/state/**/logs/
+infrastructure/state/**/backups/
+infrastructure/state/**/snapshots/
+
+# Runtime-generated inventory outputs
+infrastructure/state/**/inventory/runtime-inventory.txt
+
+# Generated archives
+*.tar.gz
+*.snapshot
