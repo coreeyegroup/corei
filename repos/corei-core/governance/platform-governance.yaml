@@ -1,0 +1,258 @@
+# ============================================================
+# COREI PLATFORM — GOVERNANCE RULE BOOK
+# STAGE 3 — PLATFORM GOVERNANCE FOUNDATION
+# ============================================================
+
+metadata:
+  system: corei
+  version: 1.0.0
+  stage: STAGE_3_PLATFORM_GOVERNANCE
+  authority: corei-core/governance
+  description: >
+    This document defines the authoritative governance rules
+    for the Corei institutional trading platform.
+    These rules are binding across all repositories, services,
+    infrastructure, and runtime systems.
+
+# ============================================================
+# 1. CORE GOVERNANCE PRINCIPLE
+# ============================================================
+
+core_principles:
+  foundation_law:
+    description: >
+      All systems must follow the build order:
+      foundation → platform → data → state → logic → execution → connectivity → validation → operations.
+
+  determinism:
+    description: >
+      Every system must produce reproducible results given identical inputs.
+
+  single_source_of_truth:
+    description: >
+      All definitions (schemas, configs, contracts) must exist in exactly one authoritative location.
+
+  no_runtime_ambiguity:
+    description: >
+      No service or component may infer behavior implicitly. All behavior must be explicitly defined.
+
+# ============================================================
+# 2. REPOSITORY OWNERSHIP MODEL
+# ============================================================
+
+repository_ownership:
+
+  corei-core:
+    responsibility:
+      - platform runtime
+      - workflow engine
+      - event orchestration
+      - governance enforcement
+    restriction:
+      - must NOT contain business logic
+      - must NOT contain infrastructure code
+
+  corei-sdk:
+    responsibility:
+      - shared runtime modules
+      - reusable platform utilities
+    restriction:
+      - must NOT contain service-specific logic
+
+  corei-services:
+    responsibility:
+      - business logic
+      - trading services
+    restriction:
+      - must NOT define schemas
+      - must NOT define governance rules
+      - must NOT duplicate SDK logic
+
+  corei-infrastructure:
+    responsibility:
+      - deployment
+      - networking
+      - cluster management
+    restriction:
+      - must NOT contain business logic
+
+  corei-schemas:
+    responsibility:
+      - event schemas
+      - database schemas
+      - contracts
+    restriction:
+      - must NOT contain executable logic
+
+# ============================================================
+# 3. EVENT GOVERNANCE
+# ============================================================
+
+event_governance:
+
+  event_contract_rule:
+    description: >
+      Every event must have a schema defined in corei-schemas.
+
+  immutable_events:
+    description: >
+      Events are append-only and cannot be modified after emission.
+
+  required_fields:
+    - event_id
+    - event_type
+    - timestamp
+    - execution_id
+    - source_service
+
+  ordering:
+    description: >
+      Events must preserve ordering within defined partitions.
+
+  replayability:
+    description: >
+      All events must support deterministic replay.
+
+# ============================================================
+# 4. SCHEMA GOVERNANCE
+# ============================================================
+
+schema_governance:
+
+  versioning:
+    type: semantic_versioning
+    rule: >
+      Breaking changes require major version increment.
+
+  compatibility:
+    rule: >
+      Backward compatibility must be maintained unless explicitly approved.
+
+  registry:
+    location: corei-schemas
+
+# ============================================================
+# 5. SERVICE GOVERNANCE
+# ============================================================
+
+service_governance:
+
+  template_mandate:
+    description: >
+      All services must follow services/_template structure.
+
+  required_structure:
+    - contracts/
+    - config/
+    - bootstrap/
+    - tests/
+
+  statelessness:
+    description: >
+      Services must not maintain local state unless explicitly allowed.
+
+  idempotency:
+    description: >
+      All service operations must be idempotent.
+
+# ============================================================
+# 6. CONFIGURATION GOVERNANCE
+# ============================================================
+
+configuration_governance:
+
+  centralization:
+    description: >
+      All configuration must be centralized and version-controlled.
+
+  hierarchy:
+    levels:
+      - global
+      - environment
+      - service
+      - runtime
+
+  immutability:
+    description: >
+      Configuration snapshots must be immutable once deployed.
+
+# ============================================================
+# 7. EXECUTION GOVERNANCE
+# ============================================================
+
+execution_governance:
+
+  execution_id_rule:
+    description: >
+      Every workflow must have a unique execution_id.
+
+  lifecycle_control:
+    description: >
+      Execution must follow strict lifecycle transitions.
+
+  invalid_transitions:
+    description: >
+      Illegal state transitions must be blocked at runtime.
+
+# ============================================================
+# 8. WORKFLOW GOVERNANCE
+# ============================================================
+
+workflow_governance:
+
+  deterministic_execution:
+    description: >
+      Workflow execution must be deterministic and reproducible.
+
+  failure_handling:
+    description: >
+      Failures must be handled via retry, DLQ, or compensation logic.
+
+# ============================================================
+# 9. INFRASTRUCTURE GOVERNANCE
+# ============================================================
+
+infrastructure_governance:
+
+  infrastructure_as_code:
+    description: >
+      All infrastructure must be defined using Terraform.
+
+  immutable_infra:
+    description: >
+      Infrastructure changes must be applied via redeployment, not manual edits.
+
+# ============================================================
+# 10. NAMING CONVENTIONS
+# ============================================================
+
+naming_conventions:
+
+  services:
+    format: "<domain>-service"
+
+  topics:
+    format: "<domain>.<action>.<version>"
+
+  repos:
+    format: "corei-<domain>"
+
+# ============================================================
+# 11. ENFORCEMENT MODEL
+# ============================================================
+
+enforcement:
+
+  authority:
+    enforced_by:
+      - platform runtime (corei-core)
+      - CI/CD validation
+      - schema registry
+
+  violation_policy:
+    description: >
+      Any violation must result in rejection or failure at build or runtime.
+
+# ============================================================
+# END OF GOVERNANCE
+# ============================================================

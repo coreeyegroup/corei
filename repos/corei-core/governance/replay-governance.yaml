@@ -1,0 +1,3 @@
+replay:
+  deterministic_replay: required
+  snapshot_consistency: enforced
