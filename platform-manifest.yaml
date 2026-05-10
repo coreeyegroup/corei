@@ -1,0 +1,30 @@
+platform:
+
+  name: COREI
+
+  governance:
+    enabled: true
+
+  environments:
+    - development
+    - staging
+    - production
+    - disaster-recovery
+
+  runtime_domains:
+    - policy-runtime
+    - system-state
+    - mode-governance
+    - config-control
+    - determinism
+    - security
+
+  infrastructure_components:
+    - vault
+    - keycloak
+    - istio
+
+  platform_services:
+    - config-service
+    - config-snapshot-service
+    - audit-service

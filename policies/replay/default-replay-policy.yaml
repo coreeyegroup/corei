@@ -1,0 +1,15 @@
+policy: replay-default
+
+rules:
+
+  deterministic_clock: true
+
+  immutable_events: true
+
+  ordering:
+    strict: true
+
+prohibited:
+
+  - external_mutation
+  - realtime_side_effects

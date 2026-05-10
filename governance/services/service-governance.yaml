@@ -1,0 +1,25 @@
+version: 1
+
+principles:
+
+  - bounded_context
+  - single_responsibility
+  - event_driven_communication
+  - isolated_failures
+
+requirements:
+
+  ownership:
+    mandatory: true
+
+  observability:
+    mandatory: true
+
+  replay_support:
+    mandatory: true
+
+prohibited:
+
+  - shared_runtime_state
+  - direct_database_coupling
+  - cross_service_mutation

@@ -1,0 +1,23 @@
+version: 1
+
+principles:
+
+  - deterministic_replay
+  - immutable_history
+  - timestamp_ordering
+  - reproducible_execution
+
+requirements:
+
+  lineage_tracking: mandatory
+
+  event_ordering:
+    strict: true
+
+  clock_source:
+    deterministic: true
+
+prohibited:
+
+  - realtime_mutation_during_replay
+  - external_side_effects

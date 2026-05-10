@@ -1,0 +1,17 @@
+service:
+  version: 1
+
+runtime:
+  observability_required: true
+  replay_safe: true
+  lineage_required: true
+
+surfaces:
+  - /health
+  - /metrics
+  - /version
+  - /config
+
+governance:
+  bounded_context: mandatory
+  deterministic_config: mandatory

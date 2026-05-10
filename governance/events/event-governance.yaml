@@ -1,0 +1,32 @@
+version: 1
+
+principles:
+
+  - immutable_events
+  - append_only
+  - replay_safe
+  - schema_versioned
+  - deterministic_ordering
+
+requirements:
+
+  event_id:
+    required: true
+
+  correlation_id:
+    required: true
+
+  causation_id:
+    required: true
+
+  timestamp:
+    required: true
+
+  schema_version:
+    required: true
+
+prohibited:
+
+  - mutable_payloads
+  - schema_breaking_without_version
+  - hidden_side_effects

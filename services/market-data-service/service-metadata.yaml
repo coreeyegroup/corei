@@ -1,0 +1,9 @@
+service:
+  name: market-data-service
+
+ownership:
+  bounded_context: true
+
+runtime:
+  replay_safe: true
+  observability_required: true

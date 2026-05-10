@@ -1,0 +1,20 @@
+#cloud-config
+
+hostname: core-node
+
+users:
+  - name: coreeye
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: sudo
+    shell: /bin/bash
+    ssh_authorized_keys:
+      - ssh-ed25519 YOUR_PUBLIC_KEY
+
+ssh_pwauth: false
+
+packages:
+  - openssh-server
+
+runcmd:
+  - systemctl enable ssh
+  - systemctl start ssh

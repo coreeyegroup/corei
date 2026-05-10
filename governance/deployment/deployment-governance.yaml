@@ -1,0 +1,23 @@
+version: 1
+
+principles:
+
+  - immutable_deployments
+  - versioned_releases
+  - rollback_capable
+  - environment_isolation
+
+requirements:
+
+  semantic_versioning: true
+
+  deployment_validation:
+    mandatory: true
+
+  observability_required: true
+
+prohibited:
+
+  - manual_hotfixes
+  - unversioned_deployments
+  - runtime_mutation

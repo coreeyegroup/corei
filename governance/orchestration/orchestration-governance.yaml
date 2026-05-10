@@ -1,0 +1,25 @@
+version: 1
+
+principles:
+
+  - deterministic_execution
+  - workflow_visibility
+  - retry_governed
+  - failure_isolation
+
+requirements:
+
+  workflow_id:
+    mandatory: true
+
+  auditability:
+    mandatory: true
+
+  retry_policy:
+    externalized: true
+
+prohibited:
+
+  - hidden_execution_paths
+  - unmanaged_retries
+  - non_observable_workflows

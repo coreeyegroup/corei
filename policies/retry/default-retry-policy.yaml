@@ -1,0 +1,17 @@
+policy: default-retry
+
+rules:
+
+  max_attempts: 5
+
+  backoff:
+    type: exponential
+
+  retryable_errors:
+    - timeout
+    - transient_network
+    - broker_unavailable
+
+prohibited:
+
+  - infinite_retries

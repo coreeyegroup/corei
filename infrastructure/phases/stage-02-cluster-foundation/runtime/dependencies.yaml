@@ -1,0 +1,13 @@
+dependencies:
+
+  ingress-nginx:
+    - metallb
+
+  cert-manager:
+    - ingress-nginx
+
+  longhorn:
+    - namespaces
+
+  istio-base:
+    - ingress-nginx

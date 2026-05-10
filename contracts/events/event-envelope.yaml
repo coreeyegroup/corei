@@ -1,0 +1,14 @@
+event_contract:
+
+  required_fields:
+    - event_id
+    - event_type
+    - event_version
+    - event_time
+    - trace_id
+    - lineage_id
+
+  governance:
+    timestamp: int64
+    replay_safe: true
+    immutable: true

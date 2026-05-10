@@ -1,0 +1,33 @@
+version: 1
+
+platform: corei
+
+rules:
+
+  services:
+    pattern: "<domain>-service"
+
+  events:
+    pattern: "<domain>.<entity>.<action>.v<version>"
+
+  topics:
+    pattern: "<domain>.<stream>"
+
+  schemas:
+    pattern: "<domain>.<entity>.v<version>"
+
+  workflows:
+    pattern: "<domain>-<workflow>"
+
+  deployments:
+    pattern: "<environment>-<service>"
+
+standards:
+
+  case: kebab-case
+
+restrictions:
+
+  - no_spaces
+  - no_uppercase
+  - deterministic_names_only
