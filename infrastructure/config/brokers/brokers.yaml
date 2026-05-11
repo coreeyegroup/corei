@@ -1,0 +1,12 @@
+brokers:
+  - broker_id: paper-broker
+
+    supported_features:
+      - paper-trading
+      - replay
+
+    rate_limits:
+      orders_per_second: 10
+
+    connection_profile:
+      environment: staging

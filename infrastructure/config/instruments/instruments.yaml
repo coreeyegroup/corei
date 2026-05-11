@@ -1,0 +1,20 @@
+instruments:
+  - symbol: EURUSD
+    asset_class: forex
+    pip_precision: 5
+    lot_size: 100000
+    broker_mapping:
+      primary: paper-broker
+    trading_sessions:
+      - london
+      - new_york
+
+  - symbol: XAUUSD
+    asset_class: metals
+    pip_precision: 2
+    lot_size: 100
+    broker_mapping:
+      primary: paper-broker
+    trading_sessions:
+      - london
+      - new_york

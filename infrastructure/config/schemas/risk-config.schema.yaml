@@ -1,0 +1,17 @@
+schema:
+  name: risk-config
+  version: v1
+
+required:
+  - max_daily_loss
+  - max_position_size
+  - max_strategy_exposure
+  - leverage_limit
+
+rules:
+  numeric_type: int64
+  zero_values_forbidden: true
+  negative_values_forbidden: true
+
+approval:
+  role_required: risk-admin

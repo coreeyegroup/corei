@@ -1,0 +1,11 @@
+environment: staging
+
+operation_mode: PAPER
+
+runtime_profile:
+  logging: structured
+  tracing: enabled
+  replay: enabled
+
+deployment:
+  mutable_runtime: false

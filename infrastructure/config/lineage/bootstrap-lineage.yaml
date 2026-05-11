@@ -1,0 +1,13 @@
+lineage:
+  lineage_id: bootstrap-lineage-v1
+
+changes:
+  - created_environment_profiles
+  - seeded_runtime_parameters
+  - seeded_risk_limits
+  - seeded_account_metadata
+  - seeded_broker_metadata
+
+tracking:
+  actor: stage-03a-foundation
+  timestamp_source: governance-controlled

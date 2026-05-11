@@ -1,0 +1,20 @@
+schema:
+  name: environment-config
+  version: v1
+
+required:
+  - environment
+  - operation_mode
+  - runtime_profile
+
+environments:
+  - development
+  - staging
+  - production
+
+operation_modes:
+  - PAPER
+  - LIVE_SEMI
+  - LIVE_AUTO
+  - DISABLED
+  - BACKTEST

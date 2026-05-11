@@ -1,0 +1,11 @@
+environment: production
+
+operation_mode: LIVE_SEMI
+
+runtime_profile:
+  logging: structured
+  tracing: mandatory
+  replay: mandatory
+
+deployment:
+  mutable_runtime: false

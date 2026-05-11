@@ -1,0 +1,11 @@
+environment: development
+
+operation_mode: PAPER
+
+runtime_profile:
+  logging: verbose
+  tracing: enabled
+  replay: enabled
+
+deployment:
+  mutable_runtime: true

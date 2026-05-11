@@ -1,0 +1,5 @@
+runtime:
+  request_timeout_ms: 5000
+  retry_count: 3
+  batch_size: 100
+  queue_limits: 10000

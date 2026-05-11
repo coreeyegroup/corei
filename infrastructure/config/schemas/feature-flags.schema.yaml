@@ -1,0 +1,11 @@
+schema:
+  name: feature-flags
+  version: v1
+
+required:
+  - feature_name
+  - enabled
+  - rollout_scope
+
+rules:
+  deployless_toggle: true

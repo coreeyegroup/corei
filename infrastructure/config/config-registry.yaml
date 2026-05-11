@@ -1,0 +1,22 @@
+config_domains:
+  - environments
+  - strategies
+  - risk
+  - instruments
+  - brokers
+  - accounts
+  - runtime
+  - feature-flags
+
+authority:
+  source_of_truth: config-service
+  versioning: immutable
+  lineage_required: true
+  snapshots_required: true
+
+operation_modes:
+  - PAPER
+  - LIVE_SEMI
+  - LIVE_AUTO
+  - DISABLED
+  - BACKTEST

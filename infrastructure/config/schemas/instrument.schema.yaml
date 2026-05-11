@@ -1,0 +1,15 @@
+schema:
+  name: instrument
+  version: v1
+
+required:
+  - symbol
+  - asset_class
+  - pip_precision
+  - lot_size
+  - trading_sessions
+  - broker_mapping
+
+rules:
+  fixed_point_required: true
+  float_forbidden: true

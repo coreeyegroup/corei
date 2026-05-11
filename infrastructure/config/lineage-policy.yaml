@@ -1,0 +1,14 @@
+lineage_policy:
+  enabled: true
+
+requirements:
+  actor_tracking: mandatory
+  timestamp_tracking: mandatory
+  change_tracking: mandatory
+  approval_tracking: mandatory
+
+hashing:
+  algorithm: SHA-256
+
+immutability:
+  append_only: true

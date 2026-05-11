@@ -1,0 +1,9 @@
+feature_flags:
+  replay_mode:
+    enabled: true
+
+  shadow_execution:
+    enabled: false
+
+  auto_risk_shutdown:
+    enabled: true

@@ -1,0 +1,12 @@
+schema:
+  name: broker
+  version: v1
+
+required:
+  - broker_id
+  - supported_features
+  - rate_limits
+  - connection_profile
+
+rules:
+  immutable_broker_id: true

@@ -1,0 +1,21 @@
+schema:
+  name: strategy-config
+  version: v1
+
+required:
+  - strategy_id
+  - strategy_version
+  - enabled
+  - operation_mode
+  - risk_profile
+
+constraints:
+  immutable_strategy_id: true
+  approval_required: true
+
+operation_modes:
+  - PAPER
+  - LIVE_SEMI
+  - LIVE_AUTO
+  - DISABLED
+  - BACKTEST

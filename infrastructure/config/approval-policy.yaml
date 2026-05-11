@@ -1,0 +1,15 @@
+approval_policy:
+  risk_changes:
+    approval_required: true
+    approver_role: risk-admin
+
+  strategy_changes:
+    approval_required: true
+    approver_role: strategy-admin
+
+  broker_changes:
+    approval_required: true
+    approver_role: infrastructure-admin
+
+  runtime_changes:
+    approval_required: false

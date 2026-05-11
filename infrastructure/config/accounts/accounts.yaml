@@ -1,0 +1,11 @@
+accounts:
+  - account_id: paper-account-001
+
+    broker_id: paper-broker
+
+    capital_base: 100000000
+
+    operation_mode: PAPER
+
+    assigned_strategies:
+      - strategy-alpha

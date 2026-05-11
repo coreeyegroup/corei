@@ -1,0 +1,13 @@
+schema:
+  name: runtime-params
+  version: v1
+
+required:
+  - request_timeout_ms
+  - retry_count
+  - batch_size
+  - queue_limits
+
+rules:
+  negative_values_forbidden: true
+  zero_values_forbidden: true

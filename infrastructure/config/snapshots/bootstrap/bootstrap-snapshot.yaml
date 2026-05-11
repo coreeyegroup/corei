@@ -1,0 +1,19 @@
+snapshot:
+  snapshot_id: bootstrap-config-v1
+
+  environment:
+    - development
+    - staging
+    - production
+
+  seeded_domains:
+    - instruments
+    - brokers
+    - accounts
+    - risk
+    - runtime
+    - feature-flags
+
+lineage:
+  created_by: stage-03a-foundation
+  approval_status: approved

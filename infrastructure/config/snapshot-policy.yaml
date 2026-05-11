@@ -1,0 +1,14 @@
+snapshot_policy:
+  immutable_snapshots: true
+  snapshot_on_change: true
+  lineage_tracking: mandatory
+
+retention:
+  preserve_all_risk_snapshots: true
+  preserve_all_live_snapshots: true
+
+naming:
+  format: config-snapshot-<timestamp>
+
+storage:
+  authority: config-snapshot-service

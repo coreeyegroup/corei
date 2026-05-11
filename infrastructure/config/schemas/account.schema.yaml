@@ -1,0 +1,20 @@
+schema:
+  name: account
+  version: v1
+
+required:
+  - account_id
+  - broker_id
+  - capital_base
+  - operation_mode
+  - assigned_strategies
+
+operation_modes:
+  - PAPER
+  - LIVE_SEMI
+  - LIVE_AUTO
+  - DISABLED
+  - BACKTEST
+
+rules:
+  immutable_account_id: true
