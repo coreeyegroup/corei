@@ -1,0 +1,12 @@
+/home/coreeye/corei/scripts/kubernetes/apply-network-policies.sh
+/home/coreeye/corei/scripts/kubernetes/apply-pdb.sh
+/home/coreeye/corei/scripts/kubernetes/apply-priority-classes.sh
+/home/coreeye/corei/scripts/kubernetes/apply-rbac.sh
+/home/coreeye/corei/scripts/kubernetes/apply-resource-quotas.sh
+/home/coreeye/corei/scripts/kubernetes/apply-service-accounts.sh
+/home/coreeye/corei/scripts/kubernetes/audit-stage-05.sh
+/home/coreeye/corei/scripts/kubernetes/check-stage-05-contamination.sh
+/home/coreeye/corei/scripts/kubernetes/create-namespaces.sh
+/home/coreeye/corei/scripts/kubernetes/install-calico.sh
+/home/coreeye/corei/scripts/kubernetes/install-kubernetes.sh
+/home/coreeye/corei/scripts/kubernetes/validate-cluster.sh

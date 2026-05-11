@@ -1,0 +1,118 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kafka
+  labels:
+    domain: messaging
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: storage
+  labels:
+    domain: storage
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: auth
+  labels:
+    domain: security
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: vault
+  labels:
+    domain: security
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: monitoring
+  labels:
+    domain: observability
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: logging
+  labels:
+    domain: observability
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: tracing
+  labels:
+    domain: observability
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: registry
+  labels:
+    domain: platform
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cicd
+  labels:
+    domain: platform
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: platform
+  labels:
+    domain: platform
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: market-data
+  labels:
+    domain: trading
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: strategy
+  labels:
+    domain: trading
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: execution
+  labels:
+    domain: trading
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: trading-infra
+  labels:
+    domain: trading
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: portfolio
+  labels:
+    domain: trading
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: n8n
+  labels:
+    domain: automation
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: istio-system
+  labels:
+    domain: service-mesh
