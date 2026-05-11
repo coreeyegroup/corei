@@ -50,3 +50,10 @@ infrastructure/state/**/inventory/runtime-inventory.txt
 # =========================================
 
 infrastructure/state/stage-02/
+
+# =========================================
+# Legacy Cleanup Governance
+# =========================================
+
+scratch/legacy-cleanup/
+scratch/*.txt

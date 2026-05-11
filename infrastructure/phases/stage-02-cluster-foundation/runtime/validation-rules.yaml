@@ -1,8 +1,0 @@
-validation:
-  - cluster-ready
-  - nodes-ready
-  - ingress-ready
-  - certificates-ready
-  - storage-ready
-  - namespaces-ready
-  - network-policies-active
