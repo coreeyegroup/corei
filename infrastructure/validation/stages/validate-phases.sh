@@ -7,7 +7,7 @@ ROOT="$HOME/corei"
 required=(
   infrastructure/phases/stage-01-machine-foundation
   infrastructure/phases/stage-02-repository-foundation
-  infrastructure/phases/stage-03-governance-foundation
+  infrastructure/phases/stage-03-platform-governance-foundation
 )
 
 FAIL=0

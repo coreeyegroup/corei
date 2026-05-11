@@ -255,7 +255,7 @@ Authoritative structure:
 infrastructure/phases/
 ├── stage-01-machine-foundation/
 ├── stage-02-repository-foundation/
-└── stage-03-governance-foundation/
+└── stage-03-platform-governance-foundation/
 ```
 
 Each stage contains:
@@ -641,4 +641,3 @@ Stage 3 will establish:
 * naming governance
 
 on top of the fully governed repository substrate established by Stage 2.
-

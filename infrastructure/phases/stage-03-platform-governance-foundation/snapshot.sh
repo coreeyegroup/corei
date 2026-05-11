@@ -6,7 +6,7 @@ SNAPSHOT_DIR="$HOME/corei/.snapshots"
 
 mkdir -p "$SNAPSHOT_DIR"
 
-SNAPSHOT_FILE="$SNAPSHOT_DIR/stage-03-governance-foundation.tar.gz"
+SNAPSHOT_FILE="$SNAPSHOT_DIR/stage-03-platform-governance-foundation.tar.gz"
 
 tar -czf "$SNAPSHOT_FILE" \
     "$HOME/corei/docs/stage-03" \
