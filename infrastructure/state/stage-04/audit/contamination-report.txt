@@ -1,0 +1,15 @@
+/home/coreeye/corei/infrastructure/phases/stage-04-infra-foundation/backup.sh:6:BACKUP_DIR="$ROOT_DIR/infrastructure/state/stage-04/backups"
+/home/coreeye/corei/infrastructure/phases/stage-04-infra-foundation/backup.sh:13:"$BACKUP_DIR/stage-04-backup-$TIMESTAMP.tar.gz" \
+/home/coreeye/corei/infrastructure/phases/stage-04-infra-foundation/snapshot.sh:11:"$SNAPSHOT_DIR/stage-04-infra-foundation.tar.gz" \
+/home/coreeye/corei/infrastructure/phases/stage-04-infra-foundation/snapshot.sh:18:echo "$SNAPSHOT_DIR/stage-04-infra-foundation.tar.gz"
+/home/coreeye/corei/infrastructure/phases/stage-04-infra-foundation/inventory.sh:6:STATE_DIR="$ROOT_DIR/infrastructure/state/stage-04/inventory"
+/home/coreeye/corei/infrastructure/state/stage-04/inventory/infrastructure-scripts.txt:1:/home/coreeye/corei/scripts/infrastructure/audit-stage-04.sh
+/home/coreeye/corei/infrastructure/state/stage-04/audit/phase-topology.txt:7:/home/coreeye/corei/infrastructure/phases/stage-04-infra-foundation
+/home/coreeye/corei/infrastructure/state/stage-04/audit/infrastructure-scripts.txt:1:/home/coreeye/corei/scripts/infrastructure/audit-stage-04.sh
+/home/coreeye/corei/scripts/infrastructure/install-docker.sh:37:docker-ce-cli \
+/home/coreeye/corei/scripts/infrastructure/audit-stage-04.sh:6:AUDIT_DIR="$ROOT_DIR/infrastructure/state/stage-04/audit"
+/home/coreeye/corei/scripts/infrastructure/audit-stage-04.sh:38:-type f | grep "stage-04" | sort \
+/home/coreeye/corei/scripts/infrastructure/audit-stage-04.sh:39:> "$AUDIT_DIR/stage-04-docs.txt" || true
+/home/coreeye/corei/scripts/infrastructure/check-stage-04-contamination.sh:6:AUDIT_DIR="$ROOT_DIR/infrastructure/state/stage-04/audit"
+/home/coreeye/corei/scripts/infrastructure/check-stage-04-contamination.sh:18:"stage-04|infra-foundation|terraform 1.15|docker-ce-cli" \
+/home/coreeye/corei/scripts/infrastructure/check-stage-04-contamination.sh:39:"stage-04|infra|docker|terraform" \
