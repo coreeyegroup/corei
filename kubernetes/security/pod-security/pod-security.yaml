@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Namespace
+
+metadata:
+  name: market-data
+
+  labels:
+    pod-security.kubernetes.io/enforce: baseline
+
+---
+
+apiVersion: v1
+kind: Namespace
+
+metadata:
+  name: strategy
+
+  labels:
+    pod-security.kubernetes.io/enforce: baseline
+
+---
+
+apiVersion: v1
+kind: Namespace
+
+metadata:
+  name: execution
+
+  labels:
+    pod-security.kubernetes.io/enforce: baseline
+
+---
+
+apiVersion: v1
+kind: Namespace
+
+metadata:
+  name: trading-infra
+
+  labels:
+    pod-security.kubernetes.io/enforce: baseline

@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: falco-custom-rules
+  namespace: logging
+
+data:
+  custom-rules.yaml: |
+    - rule: Terminal shell in container
+      desc: Detect shell spawned in container
+      condition: >
+        spawned_process and container and
+        shell_procs
+      output: >
+        Shell spawned in container
+      priority: WARNING

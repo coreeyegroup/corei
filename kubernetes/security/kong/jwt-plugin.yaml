@@ -1,0 +1,11 @@
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+
+metadata:
+  name: jwt-validator
+
+plugin: jwt
+
+config:
+  claims_to_verify:
+    - exp

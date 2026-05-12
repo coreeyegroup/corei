@@ -1,0 +1,23 @@
+[
+  {
+    "clientId": "trading-api",
+    "enabled": true,
+    "serviceAccountsEnabled": true,
+    "publicClient": false,
+    "protocol": "openid-connect"
+  },
+  {
+    "clientId": "risk-engine",
+    "enabled": true,
+    "serviceAccountsEnabled": true,
+    "publicClient": false,
+    "protocol": "openid-connect"
+  },
+  {
+    "clientId": "execution-engine",
+    "enabled": true,
+    "serviceAccountsEnabled": true,
+    "publicClient": false,
+    "protocol": "openid-connect"
+  }
+]

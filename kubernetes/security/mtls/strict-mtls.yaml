@@ -1,0 +1,49 @@
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+
+metadata:
+  name: default
+  namespace: market-data
+
+spec:
+  mtls:
+    mode: STRICT
+
+---
+
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+
+metadata:
+  name: default
+  namespace: strategy
+
+spec:
+  mtls:
+    mode: STRICT
+
+---
+
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+
+metadata:
+  name: default
+  namespace: execution
+
+spec:
+  mtls:
+    mode: STRICT
+
+---
+
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+
+metadata:
+  name: default
+  namespace: trading-infra
+
+spec:
+  mtls:
+    mode: STRICT
