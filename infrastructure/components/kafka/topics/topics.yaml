@@ -1,0 +1,45 @@
+topics:
+  - name: signal_stream
+    partitions: 3
+    replication_factor: 1
+    retention_ms: 604800000
+
+  - name: trade_intent_stream
+    partitions: 3
+    replication_factor: 1
+    retention_ms: 604800000
+
+  - name: execution_intent_stream
+    partitions: 3
+    replication_factor: 1
+    retention_ms: 604800000
+
+  - name: execution_order_stream
+    partitions: 3
+    replication_factor: 1
+    retention_ms: 604800000
+
+  - name: fill_stream
+    partitions: 3
+    replication_factor: 1
+    retention_ms: 604800000
+
+  - name: kill_switch_stream
+    partitions: 1
+    replication_factor: 1
+    retention_ms: 604800000
+
+  - name: audit_stream
+    partitions: 3
+    replication_factor: 1
+    retention_ms: -1
+
+  - name: retry_stream
+    partitions: 3
+    replication_factor: 1
+    retention_ms: 604800000
+
+  - name: dead_letter_stream
+    partitions: 3
+    replication_factor: 1
+    retention_ms: 604800000

@@ -1,0 +1,9 @@
+retry_stream:
+  enabled: true
+  max_retry_attempts: 5
+
+metadata:
+  - retry_count
+  - retry_delay
+  - original_topic
+  - replay_lineage

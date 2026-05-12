@@ -1,0 +1,12 @@
+acl_rules:
+  producers:
+    - strategy-engine
+    - execution-engine
+
+  consumers:
+    - portfolio-service
+    - audit-service
+
+rules:
+  topic_isolation: true
+  service_account_isolation: true

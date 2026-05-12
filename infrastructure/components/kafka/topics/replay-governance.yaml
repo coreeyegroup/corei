@@ -1,0 +1,8 @@
+replay_governance:
+  replay_safe: true
+  immutable_event_history: true
+  deterministic_ordering: true
+
+rules:
+  no_event_mutation: true
+  no_topic_autocreation: true

@@ -1,0 +1,7 @@
+retention:
+  trading_streams_ms: 604800000
+  audit_stream_ms: -1
+
+rules:
+  audit_stream_never_deleted: true
+  replay_safe_retention: true

@@ -1,0 +1,9 @@
+dead_letter_stream:
+  enabled: true
+
+failure_envelope:
+  - failure_reason
+  - original_payload
+  - originating_topic
+  - lineage_metadata
+  - rejection_timestamp
