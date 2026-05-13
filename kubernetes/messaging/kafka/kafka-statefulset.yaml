@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: StatefulSet
+
+metadata:
+  name: kafka-broker
+  namespace: kafka
+
+spec:
+  serviceName: kafka
+
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: kafka
+
+  template:
+    metadata:
+      labels:
+        app: kafka
+
+    spec:
+      securityContext:
+        fsGroup: 1000
+
+      containers:
+        - name: kafka
+
+          image: confluentinc/cp-kafka:7.6.0
+          imagePullPolicy: IfNotPresent
+
+          ports:
+            - containerPort: 9092
+            - containerPort: 9093
+
+          envFrom:
+            - configMapRef:
+                name: kafka-config
+
+          volumeMounts:
+            - name: kafka-data
+              mountPath: /var/lib/kafka/data
+
+  volumeClaimTemplates:
+    - metadata:
+        name: kafka-data
+
+      spec:
+        accessModes:
+          - ReadWriteOnce
+
+        resources:
+          requests:
+            storage: 20Gi

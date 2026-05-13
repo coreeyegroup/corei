@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: schema-registry
+  namespace: kafka
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: schema-registry
+
+  template:
+    metadata:
+      labels:
+        app: schema-registry
+
+    spec:
+      containers:
+        - name: schema-registry
+
+          image: apicurio/apicurio-registry-mem:2.5.10.Final
+
+          imagePullPolicy: IfNotPresent
+
+          ports:
+            - containerPort: 8080
+
+          env:
+            - name: REGISTRY_AUTH_ANONYMOUS_READ_ACCESS_ENABLED
+              value: "true"
+
+            - name: REGISTRY_AUTH_ANONYMOUS_WRITE_ACCESS_ENABLED
+              value: "true"

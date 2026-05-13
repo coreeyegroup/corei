@@ -1,0 +1,34 @@
+{
+  "type": "record",
+  "name": "ExecutionOrderEventV1",
+  "namespace": "corei.events.execution_order.v1",
+
+  "fields": [
+
+    { "name": "event_id", "type": "string" },
+    { "name": "event_type", "type": "string" },
+    { "name": "event_version", "type": "string" },
+    { "name": "timestamp", "type": "string" },
+    { "name": "correlation_id", "type": "string" },
+    { "name": "source_service", "type": "string" },
+    { "name": "account_id", "type": "string" },
+
+    {
+      "name": "payload",
+      "type": {
+        "type": "record",
+        "name": "ExecutionOrderPayload",
+
+        "fields": [
+
+          { "name": "order_id", "type": "string" },
+          { "name": "symbol", "type": "string" },
+          { "name": "side", "type": "string" },
+          { "name": "quantity", "type": "double" }
+
+        ]
+      }
+    }
+
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "type": "record",
+  "name": "SignalEventV1",
+  "namespace": "corei.events.signal.v1",
+
+  "fields": [
+
+    {
+      "name": "event_id",
+      "type": "string"
+    },
+
+    {
+      "name": "event_type",
+      "type": "string"
+    },
+
+    {
+      "name": "event_version",
+      "type": "string"
+    },
+
+    {
+      "name": "timestamp",
+      "type": "string"
+    },
+
+    {
+      "name": "correlation_id",
+      "type": "string"
+    },
+
+    {
+      "name": "source_service",
+      "type": "string"
+    },
+
+    {
+      "name": "account_id",
+      "type": "string"
+    },
+
+    {
+      "name": "payload",
+      "type": {
+        "type": "record",
+        "name": "SignalPayload",
+
+        "fields": [
+
+          {
+            "name": "symbol",
+            "type": "string"
+          },
+
+          {
+            "name": "signal_type",
+            "type": "string"
+          },
+
+          {
+            "name": "signal_strength",
+            "type": "double"
+          }
+
+        ]
+      }
+    }
+
+  ]
+}

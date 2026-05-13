@@ -1,0 +1,33 @@
+{
+  "type": "record",
+  "name": "ExecutionIntentEventV1",
+  "namespace": "corei.events.execution_intent.v1",
+
+  "fields": [
+
+    { "name": "event_id", "type": "string" },
+    { "name": "event_type", "type": "string" },
+    { "name": "event_version", "type": "string" },
+    { "name": "timestamp", "type": "string" },
+    { "name": "correlation_id", "type": "string" },
+    { "name": "source_service", "type": "string" },
+    { "name": "account_id", "type": "string" },
+
+    {
+      "name": "payload",
+      "type": {
+        "type": "record",
+        "name": "ExecutionIntentPayload",
+
+        "fields": [
+
+          { "name": "venue", "type": "string" },
+          { "name": "execution_strategy", "type": "string" },
+          { "name": "priority", "type": "string" }
+
+        ]
+      }
+    }
+
+  ]
+}

@@ -1,8 +1,41 @@
 topics:
+
+  # =========================================================
+  # MARKET DATA
+  # =========================================================
+
+  - name: market_ticks_stream
+    partitions: 3
+    replication_factor: 1
+    retention_ms: 604800000
+
+  - name: market_ohlcv_stream
+    partitions: 3
+    replication_factor: 1
+    retention_ms: 604800000
+
+  - name: market_depth_stream
+    partitions: 3
+    replication_factor: 1
+    retention_ms: 604800000
+
+  # =========================================================
+  # SIGNAL + STRATEGY
+  # =========================================================
+
   - name: signal_stream
     partitions: 3
     replication_factor: 1
     retention_ms: 604800000
+
+  - name: strategy_state_stream
+    partitions: 3
+    replication_factor: 1
+    retention_ms: 604800000
+
+  # =========================================================
+  # TRADE + EXECUTION
+  # =========================================================
 
   - name: trade_intent_stream
     partitions: 3
@@ -24,15 +57,81 @@ topics:
     replication_factor: 1
     retention_ms: 604800000
 
+  - name: order_state_stream
+    partitions: 3
+    replication_factor: 1
+    retention_ms: 604800000
+
+  # =========================================================
+  # PORTFOLIO + RISK
+  # =========================================================
+
+  - name: portfolio_state_stream
+    partitions: 3
+    replication_factor: 1
+    retention_ms: 604800000
+
+  - name: position_state_stream
+    partitions: 3
+    replication_factor: 1
+    retention_ms: 604800000
+
+  - name: pnl_stream
+    partitions: 3
+    replication_factor: 1
+    retention_ms: 604800000
+
+  - name: risk_event_stream
+    partitions: 3
+    replication_factor: 1
+    retention_ms: 604800000
+
+  - name: margin_event_stream
+    partitions: 3
+    replication_factor: 1
+    retention_ms: 604800000
+
+  # =========================================================
+  # CONTROL + GOVERNANCE
+  # =========================================================
+
   - name: kill_switch_stream
     partitions: 1
     replication_factor: 1
     retention_ms: 604800000
 
+  - name: config_event_stream
+    partitions: 3
+    replication_factor: 1
+    retention_ms: 604800000
+
+  - name: orchestration_event_stream
+    partitions: 3
+    replication_factor: 1
+    retention_ms: 604800000
+
+  # =========================================================
+  # OBSERVABILITY + AUDIT
+  # =========================================================
+
   - name: audit_stream
     partitions: 3
     replication_factor: 1
     retention_ms: -1
+
+  - name: alert_stream
+    partitions: 3
+    replication_factor: 1
+    retention_ms: 604800000
+
+  - name: metrics_stream
+    partitions: 3
+    replication_factor: 1
+    retention_ms: 604800000
+
+  # =========================================================
+  # FAILURE TOPOLOGY
+  # =========================================================
 
   - name: retry_stream
     partitions: 3
