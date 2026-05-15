@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: StatefulSet
+
+metadata:
+  name: postgres
+  namespace: storage
+
+spec:
+  serviceName: postgres
+
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: postgres
+
+  template:
+    metadata:
+      labels:
+        app: postgres
+
+    spec:
+      containers:
+        - name: postgres
+
+          image: postgres:15
+
+          imagePullPolicy: IfNotPresent
+
+          env:
+            - name: POSTGRES_DB
+              value: coredb
+
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: username
+
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: password
+
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+
+          ports:
+            - containerPort: 5432
+
+          volumeMounts:
+            - name: postgres-storage
+              mountPath: /var/lib/postgresql/data
+
+            - name: postgres-config
+              mountPath: /etc/postgres
+
+            - name: wal-archive
+              mountPath: /wal-archive
+
+      volumes:
+        - name: postgres-config
+          configMap:
+            name: postgres-config
+            defaultMode: 0777
+
+        - name: wal-archive
+          hostPath:
+            path: /root/corei/infrastructure/backups/wal/archive
+            type: DirectoryOrCreate
+
+  volumeClaimTemplates:
+    - metadata:
+        name: postgres-storage
+
+      spec:
+        accessModes:
+          - ReadWriteOnce
+
+        storageClassName: longhorn
+
+        resources:
+          requests:
+            storage: 20Gi

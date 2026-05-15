@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: postgres-config
+  namespace: storage
+
+data:
+  archive.sh: |
+    #!/bin/bash
+
+    set -e
+
+    mkdir -p /wal-archive
+
+    cp "$1" "/wal-archive/$2"
+
+  postgresql.conf.append: |
+    wal_level = replica
+    archive_mode = on
+    archive_command = 'bash /etc/postgres/archive.sh %p %f'

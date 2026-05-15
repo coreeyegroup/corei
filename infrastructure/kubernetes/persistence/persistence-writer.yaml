@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: persistence-writer
+  namespace: persistence
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: persistence-writer
+
+  template:
+    metadata:
+      labels:
+        app: persistence-writer
+
+    spec:
+      containers:
+        - name: persistence-writer
+
+          image: persistence-writer:stage-08
+
+          imagePullPolicy: Never
+
+          env:
+            - name: KAFKA_BROKER
+              value: kafka-broker-0.kafka.kafka.svc.cluster.local:9092
+
+            - name: POSTGRES_HOST
+              value: postgres.storage.svc.cluster.local
+
+            - name: POSTGRES_DB
+              value: coredb
+
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: username
+
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: password
+
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+
+            limits:
+              memory: "256Mi"
+              cpu: "250m"

@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: StatefulSet
+
+metadata:
+  name: timescaledb
+  namespace: storage
+
+spec:
+  serviceName: timescaledb
+
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: timescaledb
+
+  template:
+    metadata:
+      labels:
+        app: timescaledb
+
+    spec:
+      containers:
+        - name: timescaledb
+
+          image: timescale/timescaledb:2.14.2-pg15
+
+          ports:
+            - containerPort: 5432
+
+          env:
+            - name: POSTGRES_DB
+              value: marketdb
+
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: timescaledb-secret
+                  key: username
+
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: timescaledb-secret
+                  key: password
+
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+
+          volumeMounts:
+            - name: timescaledb-storage
+              mountPath: /var/lib/postgresql/data
+
+  volumeClaimTemplates:
+    - metadata:
+        name: timescaledb-storage
+
+      spec:
+        accessModes:
+          - ReadWriteOnce
+
+        storageClassName: longhorn
+
+        resources:
+          requests:
+            storage: 5Gi

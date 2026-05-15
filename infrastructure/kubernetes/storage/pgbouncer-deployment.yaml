@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: pgbouncer
+  namespace: storage
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: pgbouncer
+
+  template:
+    metadata:
+      labels:
+        app: pgbouncer
+
+    spec:
+      containers:
+        - name: pgbouncer
+
+          image: edoburu/pgbouncer:1.18.0
+
+          ports:
+            - containerPort: 5432
+
+          env:
+            - name: DB_HOST
+              value: postgres
+
+            - name: DB_PORT
+              value: "5432"
+
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: username
+
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: password
+
+            - name: DB_NAME
+              value: coredb
+
+            - name: POOL_MODE
+              value: transaction
+
+            - name: MAX_CLIENT_CONN
+              value: "100"
+
+            - name: DEFAULT_POOL_SIZE
+              value: "20"
