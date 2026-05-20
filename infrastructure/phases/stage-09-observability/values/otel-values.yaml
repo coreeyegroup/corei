@@ -1,0 +1,52 @@
+mode: deployment
+
+image:
+  repository: otel/opentelemetry-collector-contrib
+  tag: 0.100.0
+
+config:
+  extensions:
+    health_check: {}
+
+  receivers:
+    otlp:
+      protocols:
+        grpc: {}
+        http: {}
+
+  processors:
+    batch: {}
+
+  exporters:
+    otlp:
+      endpoint: jaeger.observability.svc.cluster.local:4317
+      tls:
+        insecure: true
+
+  service:
+    telemetry:
+      metrics:
+        level: none
+
+    extensions:
+      - health_check
+
+    pipelines:
+      traces:
+        receivers:
+          - otlp
+
+        processors:
+          - batch
+
+        exporters:
+          - otlp
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+
+  limits:
+    cpu: 1
+    memory: 1Gi

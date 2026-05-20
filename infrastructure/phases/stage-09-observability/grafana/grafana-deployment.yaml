@@ -1,0 +1,217 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "2"
+    meta.helm.sh/release-name: grafana
+    meta.helm.sh/release-namespace: observability
+
+  labels:
+    app.kubernetes.io/instance: grafana
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/version: 12.3.1
+    helm.sh/chart: grafana-10.5.15
+
+  name: grafana
+  namespace: observability
+
+spec:
+  progressDeadlineSeconds: 600
+
+  replicas: 1
+
+  revisionHistoryLimit: 10
+
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: grafana
+      app.kubernetes.io/name: grafana
+
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+
+    type: RollingUpdate
+
+  template:
+    metadata:
+      annotations:
+        checksum/config: e174e1a22c4da21898dc1d4fd35b2d2143807e19ad3de5ae24cc7bbab6582ed4
+        checksum/sc-dashboard-provider-config: e70bf6a851099d385178a76de9757bb0bef8299da6d8443602590e44f05fdf24
+        checksum/secret: 5aa349818ca7c81e341b8bf7347c4280ca8ea0c776dff17e31184cf3c840844b
+        kubectl.kubernetes.io/default-container: grafana
+
+      labels:
+        app.kubernetes.io/instance: grafana
+        app.kubernetes.io/name: grafana
+        app.kubernetes.io/version: 12.3.1
+        helm.sh/chart: grafana-10.5.15
+
+    spec:
+      automountServiceAccountToken: true
+
+      serviceAccount: grafana
+      serviceAccountName: grafana
+
+      securityContext:
+        fsGroup: 472
+        runAsGroup: 472
+        runAsNonRoot: true
+        runAsUser: 472
+
+      containers:
+
+        - name: grafana
+
+          image: docker.io/grafana/grafana:12.3.1
+          imagePullPolicy: IfNotPresent
+
+          env:
+
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: status.podIP
+
+            - name: GF_SECURITY_ADMIN_USER
+              valueFrom:
+                secretKeyRef:
+                  key: admin-user
+                  name: grafana
+
+            - name: GF_SECURITY_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: admin-password
+                  name: grafana
+
+            - name: GF_PATHS_DATA
+              value: /var/lib/grafana/
+
+            - name: GF_PATHS_LOGS
+              value: /var/log/grafana
+
+            - name: GF_PATHS_PLUGINS
+              value: /var/lib/grafana/plugins
+
+            - name: GF_PATHS_PROVISIONING
+              value: /etc/grafana/provisioning
+
+            - name: GF_UNIFIED_STORAGE_INDEX_PATH
+              value: /var/lib/grafana-search/bleve
+
+          ports:
+
+            - containerPort: 3000
+              name: grafana
+              protocol: TCP
+
+            - containerPort: 9094
+              name: gossip-tcp
+              protocol: TCP
+
+            - containerPort: 9094
+              name: gossip-udp
+              protocol: UDP
+
+            - containerPort: 6060
+              name: profiling
+              protocol: TCP
+
+          livenessProbe:
+            failureThreshold: 10
+
+            httpGet:
+              path: /api/health
+              port: grafana
+              scheme: HTTP
+
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 30
+
+          readinessProbe:
+            failureThreshold: 3
+
+            httpGet:
+              path: /api/health
+              port: grafana
+              scheme: HTTP
+
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+
+          securityContext:
+            allowPrivilegeEscalation: false
+
+            capabilities:
+              drop:
+                - ALL
+
+            privileged: false
+
+            seccompProfile:
+              type: RuntimeDefault
+
+          resources: {}
+
+          volumeMounts:
+
+            - mountPath: /etc/grafana/grafana.ini
+              name: config
+              subPath: grafana.ini
+
+            - mountPath: /var/lib/grafana
+              name: storage
+
+            - mountPath: /var/lib/grafana-search
+              name: search
+
+            - mountPath: /etc/grafana/provisioning/datasources
+              name: grafana-datasources
+
+            - mountPath: /etc/grafana/provisioning/dashboards
+              name: grafana-dashboard-providers
+
+            - mountPath: /var/lib/grafana/dashboards
+              name: grafana-dashboards
+
+      restartPolicy: Always
+
+      dnsPolicy: ClusterFirst
+
+      schedulerName: default-scheduler
+
+      terminationGracePeriodSeconds: 30
+
+      volumes:
+
+        - configMap:
+            defaultMode: 420
+            name: grafana
+          name: config
+
+        - emptyDir: {}
+          name: storage
+
+        - emptyDir: {}
+          name: search
+
+        - configMap:
+            defaultMode: 420
+            name: grafana-datasources
+          name: grafana-datasources
+
+        - configMap:
+            name: grafana-dashboard-providers
+          name: grafana-dashboard-providers
+
+        - configMap:
+            name: grafana-dashboards
+          name: grafana-dashboards

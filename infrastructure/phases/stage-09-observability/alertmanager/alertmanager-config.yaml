@@ -1,0 +1,56 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  receiver: telegram-warning
+
+  routes:
+
+    - matchers:
+        - severity="critical"
+
+      receiver: telegram-critical
+      continue: true
+
+    - matchers:
+        - severity="warning"
+
+      receiver: telegram-warning
+
+receivers:
+
+  - name: telegram-critical
+
+    telegram_configs:
+      - bot_token: "REPLACE_WITH_TELEGRAM_BOT_TOKEN"
+        chat_id: REPLACE_WITH_CHAT_ID
+
+        parse_mode: Markdown
+
+        message: |
+          🚨 CRITICAL ALERT 🚨
+          Alert: {{ .CommonLabels.alertname }}
+          Severity: {{ .CommonLabels.severity }}
+
+          Summary:
+          {{ .CommonAnnotations.summary }}
+
+        send_resolved: true
+
+  - name: telegram-warning
+
+    telegram_configs:
+      - bot_token: "REPLACE_WITH_TELEGRAM_BOT_TOKEN"
+        chat_id: REPLACE_WITH_CHAT_ID
+
+        parse_mode: Markdown
+
+        message: |
+          ⚠️ WARNING ALERT ⚠️
+          Alert: {{ .CommonLabels.alertname }}
+          Severity: {{ .CommonLabels.severity }}
+
+          Summary:
+          {{ .CommonAnnotations.summary }}
+
+        send_resolved: true

@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+
+  "title": "CORE EYE Structured Log Schema",
+
+  "type": "object",
+
+  "required": [
+    "service",
+    "trace_id",
+    "account_id",
+    "event_time",
+    "level",
+    "message"
+  ],
+
+  "properties": {
+
+    "service": {
+      "type": "string"
+    },
+
+    "trace_id": {
+      "type": "string"
+    },
+
+    "account_id": {
+      "type": "string"
+    },
+
+    "event_time": {
+      "type": "string",
+      "format": "date-time"
+    },
+
+    "level": {
+      "type": "string",
+
+      "enum": [
+        "DEBUG",
+        "INFO",
+        "WARNING",
+        "ERROR",
+        "CRITICAL"
+      ]
+    },
+
+    "message": {
+      "type": "string"
+    }
+  }
+}

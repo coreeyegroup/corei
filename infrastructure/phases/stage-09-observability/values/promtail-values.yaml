@@ -1,0 +1,22 @@
+config:
+  clients:
+    - url: http://loki-gateway/loki/api/v1/push
+
+  snippets:
+    pipelineStages:
+      - cri: {}
+
+daemonset:
+  enabled: true
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+serviceMonitor:
+  enabled: true

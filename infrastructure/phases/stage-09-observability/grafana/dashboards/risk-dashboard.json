@@ -1,0 +1,23 @@
+{
+  "annotations": {
+    "list": []
+  },
+  "editable": true,
+  "panels": [],
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": [
+    "core-eye",
+    "institutional"
+  ],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timezone": "browser",
+  "title": "Risk Dashboard",
+  "version": 1
+}

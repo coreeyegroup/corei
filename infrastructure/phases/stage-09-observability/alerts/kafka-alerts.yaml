@@ -1,0 +1,56 @@
+apiVersion: monitoring.coreos.com/v1
+
+kind: PrometheusRule
+
+metadata:
+  name: kafka-alerts
+  namespace: observability
+
+spec:
+  groups:
+
+    - name: kafka-alerts
+
+      rules:
+
+        - alert: KafkaConsumerLagHigh
+
+          expr: kafka_consumergroup_lag > 10000
+
+          for: 5m
+
+          labels:
+            severity: warning
+
+          annotations:
+            summary: Kafka consumer lag high
+
+            description: Consumer lag exceeded 10000 messages for 5 minutes.
+
+        - alert: KafkaBrokerDown
+
+          expr: up{job="kafka"} == 0
+
+          for: 2m
+
+          labels:
+            severity: critical
+
+          annotations:
+            summary: Kafka broker down
+
+            description: Kafka broker unavailable for more than 2 minutes.
+
+        - alert: KafkaISRBelowMinimum
+
+          expr: kafka_server_replicamanager_underreplicatedpartitions > 0
+
+          for: 5m
+
+          labels:
+            severity: critical
+
+          annotations:
+            summary: Kafka ISR below minimum
+
+            description: Kafka has under-replicated partitions.

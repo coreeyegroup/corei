@@ -1,0 +1,41 @@
+deploymentMode: SingleBinary
+
+loki:
+  auth_enabled: false
+
+singleBinary:
+  replicas: 1
+
+read:
+  replicas: 0
+
+write:
+  replicas: 0
+
+backend:
+  replicas: 0
+
+gateway:
+  enabled: true
+
+chunksCache:
+  enabled: false
+
+resultsCache:
+  enabled: false
+
+monitoring:
+  dashboards:
+    enabled: true
+
+  rules:
+    enabled: true
+
+  serviceMonitor:
+    enabled: true
+
+lokiCanary:
+  enabled: true
+
+test:
+  enabled: false

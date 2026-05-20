@@ -1,0 +1,57 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+
+metadata:
+  name: stage09-platform-alerts
+  namespace: observability
+
+spec:
+  groups:
+
+    - name: trading-alerts
+
+      rules:
+
+        - alert: BrokerDisconnect
+          expr: up{job="broker-api"} == 0
+          for: 1m
+
+          labels:
+            severity: critical
+
+          annotations:
+            summary: "Broker connectivity lost"
+
+        - alert: KafkaConsumerLag
+          expr: kafka_consumergroup_lag > 10000
+          for: 5m
+
+          labels:
+            severity: warning
+
+          annotations:
+            summary: "Kafka consumer lag elevated"
+
+    - name: infra-alerts
+
+      rules:
+
+        - alert: NodeMemoryCritical
+          expr: (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) < 0.10
+          for: 2m
+
+          labels:
+            severity: critical
+
+          annotations:
+            summary: "Node memory critically low"
+
+        - alert: DiskUsageHigh
+          expr: (node_filesystem_avail_bytes / node_filesystem_size_bytes) < 0.20
+          for: 5m
+
+          labels:
+            severity: warning
+
+          annotations:
+            summary: "Disk usage above 80%"

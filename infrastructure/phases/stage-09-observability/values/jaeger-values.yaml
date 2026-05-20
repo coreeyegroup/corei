@@ -1,0 +1,29 @@
+provisionDataStore:
+  cassandra: false
+
+storage:
+  type: memory
+
+allInOne:
+  enabled: true
+
+agent:
+  enabled: false
+
+collector:
+  enabled: false
+
+query:
+  enabled: false
+
+ingester:
+  enabled: false
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+
+  limits:
+    cpu: 1
+    memory: 1Gi

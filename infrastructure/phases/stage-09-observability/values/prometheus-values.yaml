@@ -1,0 +1,65 @@
+grafana:
+  enabled: false
+
+alertmanager:
+  enabled: true
+
+  alertmanagerSpec:
+    retention: 720h
+
+    secrets:
+      - alertmanager-custom-config
+      - alertmanager-telegram-secret
+      - alertmanager-pagerduty-secret
+
+    configSecret: alertmanager-custom-config
+
+    storage:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: longhorn
+
+          accessModes:
+            - ReadWriteOnce
+
+          resources:
+            requests:
+              storage: 10Gi
+
+prometheus:
+  prometheusSpec:
+    retention: 30d
+
+    serviceMonitorSelectorNilUsesHelmValues: false
+
+    podMonitorSelectorNilUsesHelmValues: false
+
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: longhorn
+
+          accessModes:
+            - ReadWriteOnce
+
+          resources:
+            requests:
+              storage: 50Gi
+
+    resources:
+      requests:
+        memory: 2Gi
+        cpu: 500m
+
+      limits:
+        memory: 4Gi
+        cpu: 2
+
+kubeStateMetrics:
+  enabled: true
+
+nodeExporter:
+  enabled: true
+
+prometheusOperator:
+  enabled: true

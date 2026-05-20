@@ -1,0 +1,81 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  group_by:
+    - alertname
+
+  group_wait: 10s
+
+  group_interval: 5m
+
+  repeat_interval: 1h
+
+  receiver: telegram-warning
+
+  routes:
+
+    - matchers:
+        - severity="critical"
+
+      receiver: critical-routing
+
+receivers:
+
+  - name: telegram-warning
+
+    telegram_configs:
+
+      - bot_token_file: /etc/alertmanager/secrets/alertmanager-telegram-secret/bot-token
+
+        chat_id: 1228822089
+
+        parse_mode: HTML
+
+        message: |
+          ⚠️ <b>CORE EYE WARNING</b>
+
+          <b>Alert:</b> {{ .CommonLabels.alertname }}
+
+          <b>Summary:</b>
+          {{ .CommonAnnotations.summary }}
+
+          <b>Description:</b>
+          {{ .CommonAnnotations.description }}
+
+  - name: critical-routing
+
+    telegram_configs:
+
+      - bot_token_file: /etc/alertmanager/secrets/alertmanager-telegram-secret/bot-token
+
+        chat_id: 1228822089
+
+        parse_mode: HTML
+
+        message: |
+          🚨 <b>CORE EYE CRITICAL ALERT</b> 🚨
+
+          <b>Alert:</b> {{ .CommonLabels.alertname }}
+
+          <b>Severity:</b> {{ .CommonLabels.severity }}
+
+          <b>Summary:</b>
+          {{ .CommonAnnotations.summary }}
+
+          <b>Description:</b>
+          {{ .CommonAnnotations.description }}
+
+    pagerduty_configs:
+
+      - routing_key_file: /etc/alertmanager/secrets/alertmanager-pagerduty-secret/integration-key
+
+        severity: critical
+
+        description: |
+          CORE EYE Critical Alert:
+          {{ .CommonLabels.alertname }}
+
+        details:
+          summary: "{{ .CommonAnnotations.summary }}"
+          description: "{{ .CommonAnnotations.description }}"

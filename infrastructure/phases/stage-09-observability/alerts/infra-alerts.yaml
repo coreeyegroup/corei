@@ -1,0 +1,56 @@
+apiVersion: monitoring.coreos.com/v1
+
+kind: PrometheusRule
+
+metadata:
+  name: infra-alerts
+  namespace: observability
+
+spec:
+  groups:
+
+    - name: infra-alerts
+
+      rules:
+
+        - alert: PodCrashLooping
+
+          expr: kube_pod_container_status_restarts_total > 5
+
+          for: 10m
+
+          labels:
+            severity: warning
+
+          annotations:
+            summary: Pod crash looping
+
+            description: Kubernetes pod restarting excessively.
+
+        - alert: DiskUsageHigh
+
+          expr: (node_filesystem_avail_bytes / node_filesystem_size_bytes) < 0.20
+
+          for: 10m
+
+          labels:
+            severity: warning
+
+          annotations:
+            summary: Disk usage high
+
+            description: Disk usage exceeded 80 percent.
+
+        - alert: NodeMemoryCritical
+
+          expr: (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) < 0.10
+
+          for: 5m
+
+          labels:
+            severity: critical
+
+          annotations:
+            summary: Node memory critical
+
+            description: Node available memory below 10 percent.

@@ -1,0 +1,25 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+
+metadata:
+  name: stage09-test-alert
+  namespace: observability
+
+spec:
+  groups:
+    - name: stage09-test-alerts
+
+      rules:
+        - alert: Stage09TestAlert
+
+          expr: up == 1
+
+          for: 30s
+
+          labels:
+            severity: critical
+            platform: core-eye
+
+          annotations:
+            summary: "Stage09 observability alert pipeline test"
+            description: "Prometheus -> Alertmanager -> Telegram pipeline validation"

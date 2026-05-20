@@ -1,0 +1,70 @@
+apiVersion: monitoring.coreos.com/v1
+
+kind: PrometheusRule
+
+metadata:
+  name: trading-alerts
+  namespace: observability
+
+spec:
+  groups:
+
+    - name: trading-alerts
+
+      rules:
+
+        - alert: KillSwitchTriggered
+
+          expr: vector(1)
+
+          for: 1m
+
+          labels:
+            severity: critical
+
+          annotations:
+            summary: Kill switch triggered
+
+            description: Emergency kill switch activated.
+
+        - alert: ReconciliationMismatch
+
+          expr: vector(0)
+
+          for: 5m
+
+          labels:
+            severity: critical
+
+          annotations:
+            summary: Reconciliation mismatch detected
+
+            description: Trading reconciliation mismatch identified.
+
+        - alert: DailyPnLBelowThreshold
+
+          expr: vector(0)
+
+          for: 10m
+
+          labels:
+            severity: critical
+
+          annotations:
+            summary: Daily PnL below threshold
+
+            description: Daily trading PnL dropped below acceptable threshold.
+
+        - alert: BrokerDisconnect
+
+          expr: up{job="broker-gateway"} == 0
+
+          for: 2m
+
+          labels:
+            severity: critical
+
+          annotations:
+            summary: Broker disconnected
+
+            description: Broker gateway connectivity lost.
