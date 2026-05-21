@@ -57,3 +57,19 @@ infrastructure/state/stage-02/
 
 scratch/legacy-cleanup/
 scratch/*.txt
+
+# --------------------------------------------------
+# STAGE-10 :: GITOPS SECRETS
+# --------------------------------------------------
+
+secrets/gitops/
+*.pem
+*.key
+*.pub.tmp
+
+
+# --------------------------------------------------
+# STAGE-10 :: ARGOCD RUNTIME SECRETS
+# --------------------------------------------------
+
+kubernetes/cicd/argocd/*secret*.yaml
