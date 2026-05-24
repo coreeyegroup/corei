@@ -1,0 +1,72 @@
+expose:
+  type: ingress
+
+  ingress:
+    className: kong
+
+    hosts:
+      core: harbor.core.local
+
+    annotations:
+      konghq.com/protocols: "https"
+      konghq.com/https-redirect-status-code: "301"
+
+harborAdminPassword: "ChangeMeImmediately"
+
+externalURL: https://harbor.core.local:32208
+
+persistence:
+  enabled: true
+
+  persistentVolumeClaim:
+    registry:
+      storageClass: longhorn
+      accessMode: ReadWriteOnce
+      size: 50Gi
+
+    jobservice:
+      jobLog:
+        storageClass: longhorn
+        accessMode: ReadWriteOnce
+        size: 5Gi
+
+    database:
+      storageClass: longhorn
+      accessMode: ReadWriteOnce
+      size: 10Gi
+
+    redis:
+      storageClass: longhorn
+      accessMode: ReadWriteOnce
+      size: 5Gi
+
+trivy:
+  enabled: true
+
+portal:
+  replicas: 1
+
+core:
+  replicas: 1
+
+jobservice:
+  replicas: 1
+
+registry:
+  replicas: 1
+
+  relativeurls: true
+
+database:
+  internal:
+    replicas: 1
+
+redis:
+  internal:
+    replicas: 1
+
+notary:
+  enabled: false
+
+chartmuseum:
+  enabled: false

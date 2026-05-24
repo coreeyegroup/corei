@@ -1,25 +1,50 @@
-# COREI
+# CORE PLATFORM GITOPS REPOSITORY
 
-Institutional deterministic trading platform.
+Institutional GitOps deployment governance repository for the CORE trading platform infrastructure.
 
-Authoritative platform root for:
+## PURPOSE
 
-- infrastructure
-- runtime systems
-- trading services
-- governance
-- replay
-- lineage
-- orchestration
-- observability
-- compliance
-- operational tooling
+This repository is the authoritative deployment state source for:
 
-This repository is governed by:
+- Kubernetes infrastructure
+- platform services
+- observability stack
+- storage systems
+- CI/CD systems
+- application deployment orchestration
 
-- platform governance laws
-- deterministic deployment rules
-- event-driven architecture principles
-- replay-first operational design
-- institutional runtime separation
+## GOVERNANCE MODEL
 
+All platform deployments follow:
+
+Git Commit
+→ CI Validation
+→ Harbor Artifact Push
+→ GitOps Manifest Update
+→ ArgoCD Reconciliation
+→ Kubernetes Deployment
+
+## OPERATIONAL RULES
+
+- No direct kubectl apply in normal operations
+- No runtime drift allowed
+- Git is authoritative
+- ArgoCD performs reconciliation
+- Rollbacks occur through Git revert workflows
+
+## ENVIRONMENTS
+
+- dev
+- staging
+- production
+
+## DEPLOYMENT MODEL
+
+App-of-Apps institutional GitOps architecture.
+
+## RECOVERY
+
+Disaster recovery assets located under:
+
+operations/
+scripts/recovery/

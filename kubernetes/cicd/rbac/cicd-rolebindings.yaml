@@ -1,0 +1,27 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: harbor-runtime-binding
+  namespace: cicd
+subjects:
+  - kind: ServiceAccount
+    name: harbor-runtime
+    namespace: cicd
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: cicd-runtime-role
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: argocd-runtime-binding
+  namespace: cicd
+subjects:
+  - kind: ServiceAccount
+    name: argocd-runtime
+    namespace: cicd
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: cicd-runtime-role

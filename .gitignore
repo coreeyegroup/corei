@@ -3,6 +3,12 @@
 *.iso
 *.vmdk
 *.log
+*.tmp
+*.bak
+*swp
+.env
+.env.*
+
 
 # =========================================
 # Stage 01 Runtime State
@@ -44,6 +50,7 @@ infrastructure/state/**/inventory/runtime-inventory.txt
 
 # Kubernetes mutable runtime
 *.kubeconfig
+kubeconfig
 
 # =========================================
 # Stage Runtime State
@@ -73,3 +80,6 @@ secrets/gitops/
 # --------------------------------------------------
 
 kubernetes/cicd/argocd/*secret*.yaml
+
+operations/backups/*
+operations/snapshots/*

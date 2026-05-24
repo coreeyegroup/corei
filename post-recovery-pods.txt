@@ -1,0 +1,69 @@
+NAMESPACE         NAME                                                      READY   STATUS    RESTARTS        AGE     IP                NODE        NOMINATED NODE   READINESS GATES
+auth              keycloak-5d687c65cc-dkhq7                                 1/1     Running   21 (33m ago)    172m    192.168.117.196   core-node   <none>           <none>
+auth              keycloak-postgres-64dd7479d5-5p222                        1/1     Running   0               172m    192.168.117.231   core-node   <none>           <none>
+cert-manager      cert-manager-b5ffdd788-l2nlr                              1/1     Running   1 (71m ago)     172m    192.168.117.237   core-node   <none>           <none>
+cert-manager      cert-manager-cainjector-85796596b4-7wxzf                  1/1     Running   25 (34m ago)    172m    192.168.117.250   core-node   <none>           <none>
+cert-manager      cert-manager-webhook-78df589d59-jd6rn                     1/1     Running   0               172m    192.168.117.245   core-node   <none>           <none>
+cicd              argocd-application-controller-0                           0/1     Running   0               172m    192.168.117.238   core-node   <none>           <none>
+cicd              argocd-applicationset-controller-5df66b44b7-ll5n8         1/1     Running   0               171m    192.168.117.229   core-node   <none>           <none>
+cicd              argocd-dex-server-c8bfff5c7-zcdvv                         1/1     Running   0               171m    192.168.117.230   core-node   <none>           <none>
+cicd              argocd-notifications-controller-986b88b6-fx2q2            1/1     Running   0               171m    192.168.117.219   core-node   <none>           <none>
+cicd              argocd-redis-846cfbc8d9-r5gzw                             1/1     Running   0               171m    192.168.117.227   core-node   <none>           <none>
+cicd              argocd-repo-server-54c58469b-lptkh                        1/1     Running   0               171m    192.168.117.255   core-node   <none>           <none>
+cicd              harbor-core-58b54c68ff-wx426                              1/1     Running   23 (31m ago)    171m    192.168.117.241   core-node   <none>           <none>
+cicd              harbor-database-0                                         1/1     Running   0               28m     192.168.117.166   core-node   <none>           <none>
+cicd              harbor-jobservice-55cdd89d4b-lx6vl                        1/1     Running   2 (26m ago)     28m     192.168.117.174   core-node   <none>           <none>
+cicd              harbor-portal-65685dc68-b78km                             1/1     Running   0               171m    192.168.117.204   core-node   <none>           <none>
+cicd              harbor-redis-0                                            1/1     Running   0               28m     192.168.117.129   core-node   <none>           <none>
+cicd              harbor-registry-684cc4c6bb-95z82                          2/2     Running   0               28m     192.168.117.172   core-node   <none>           <none>
+cicd              harbor-trivy-0                                            1/1     Running   0               28m     192.168.117.131   core-node   <none>           <none>
+istio-system      istio-ingressgateway-5db55d86c5-5wvfg                     1/1     Running   0               170m    192.168.117.200   core-node   <none>           <none>
+istio-system      istiod-77fc5db7bb-nq9bj                                   1/1     Running   0               170m    192.168.117.239   core-node   <none>           <none>
+kafka             kafka-broker-0                                            1/1     Running   0               28m     192.168.117.136   core-node   <none>           <none>
+kafka             schema-registry-7d64d4b94f-r5x7r                          1/1     Running   0               170m    192.168.117.195   core-node   <none>           <none>
+kube-system       calico-kube-controllers-5ffb4969b6-5hq47                  1/1     Running   0               107m    192.168.117.177   core-node   <none>           <none>
+kube-system       calico-node-vfxct                                         1/1     Running   0               115m    192.168.1.10      core-node   <none>           <none>
+kube-system       coredns-6486f97dcb-2qg74                                  1/1     Running   0               154m    192.168.117.146   core-node   <none>           <none>
+kube-system       coredns-6486f97dcb-j2h5d                                  1/1     Running   0               155m    192.168.117.226   core-node   <none>           <none>
+kube-system       etcd-core-node                                            1/1     Running   0               172m    192.168.1.10      core-node   <none>           <none>
+kube-system       kube-apiserver-core-node                                  1/1     Running   0               172m    192.168.1.10      core-node   <none>           <none>
+kube-system       kube-controller-manager-core-node                         1/1     Running   53 (175m ago)   173m    192.168.1.10      core-node   <none>           <none>
+kube-system       kube-proxy-nzcmg                                          1/1     Running   0               30m     192.168.1.10      core-node   <none>           <none>
+kube-system       kube-scheduler-core-node                                  1/1     Running   50              156m    192.168.1.10      core-node   <none>           <none>
+logging           falco-xpv2l                                               1/1     Running   0               171m    192.168.117.221   core-node   <none>           <none>
+longhorn-system   csi-attacher-777966c964-jjgnn                             1/1     Running   9 (34m ago)     45m     192.168.117.188   core-node   <none>           <none>
+longhorn-system   csi-attacher-777966c964-l6b6k                             1/1     Running   10 (34m ago)    45m     192.168.117.153   core-node   <none>           <none>
+longhorn-system   csi-attacher-777966c964-vbdfn                             1/1     Running   8 (34m ago)     44m     192.168.117.171   core-node   <none>           <none>
+longhorn-system   csi-provisioner-66cf876fb7-76qql                          1/1     Running   8 (34m ago)     44m     192.168.117.135   core-node   <none>           <none>
+longhorn-system   csi-provisioner-66cf876fb7-hfmkr                          1/1     Running   9 (34m ago)     45m     192.168.117.142   core-node   <none>           <none>
+longhorn-system   csi-provisioner-66cf876fb7-hgpjv                          1/1     Running   8 (34m ago)     45m     192.168.117.140   core-node   <none>           <none>
+longhorn-system   csi-resizer-7684559497-kr9b4                              1/1     Running   7 (31m ago)     44m     192.168.117.167   core-node   <none>           <none>
+longhorn-system   csi-resizer-7684559497-l95b9                              1/1     Running   8 (31m ago)     45m     192.168.117.189   core-node   <none>           <none>
+longhorn-system   csi-resizer-7684559497-rtw57                              1/1     Running   7 (32m ago)     44m     192.168.117.168   core-node   <none>           <none>
+longhorn-system   csi-snapshotter-7fbfd46694-gzg5s                          1/1     Running   7 (35m ago)     44m     192.168.117.182   core-node   <none>           <none>
+longhorn-system   csi-snapshotter-7fbfd46694-rfpmj                          1/1     Running   9 (34m ago)     45m     192.168.117.149   core-node   <none>           <none>
+longhorn-system   csi-snapshotter-7fbfd46694-rz46r                          1/1     Running   8 (34m ago)     44m     192.168.117.132   core-node   <none>           <none>
+longhorn-system   engine-image-ei-c9fa6d45-nwsc5                            1/1     Running   0               162m    192.168.117.202   core-node   <none>           <none>
+longhorn-system   instance-manager-b5f2e48e13220065ab8d016faafc3eb7         1/1     Running   0               29m     192.168.117.183   core-node   <none>           <none>
+longhorn-system   longhorn-csi-plugin-gfhnr                                 3/3     Running   17 (31m ago)    47m     192.168.117.169   core-node   <none>           <none>
+longhorn-system   longhorn-driver-deployer-f77846648-vklk7                  1/1     Running   0               44m     192.168.117.143   core-node   <none>           <none>
+longhorn-system   longhorn-manager-png9q                                    2/2     Running   0               43m     192.168.117.160   core-node   <none>           <none>
+longhorn-system   longhorn-ui-765655d4f8-p4qj5                              1/1     Running   23 (30m ago)    169m    192.168.117.217   core-node   <none>           <none>
+longhorn-system   longhorn-ui-765655d4f8-xqpjv                              1/1     Running   23 (30m ago)    168m    192.168.117.218   core-node   <none>           <none>
+observability     alertmanager-kube-prometheus-stack-alertmanager-0         2/2     Running   0               28m     192.168.117.139   core-node   <none>           <none>
+observability     jaeger-fcb8c7d9b-ntnj9                                    1/1     Running   0               169m    192.168.117.253   core-node   <none>           <none>
+observability     kube-prometheus-stack-prometheus-node-exporter-vvbn5      1/1     Running   0               171m    192.168.1.10      core-node   <none>           <none>
+observability     loki-0                                                    2/2     Running   1 (13m ago)     28m     192.168.117.190   core-node   <none>           <none>
+observability     loki-canary-4m87c                                         1/1     Running   0               162m    192.168.117.233   core-node   <none>           <none>
+observability     loki-results-cache-0                                      2/2     Running   0               171m    192.168.117.224   core-node   <none>           <none>
+observability     otel-collector-opentelemetry-collector-69d79964d8-kxpqc   1/1     Running   0               168m    192.168.117.236   core-node   <none>           <none>
+observability     prometheus-kube-prometheus-stack-prometheus-0             2/2     Running   0               28m     192.168.117.150   core-node   <none>           <none>
+observability     promtail-qfhg5                                            0/1     Running   0               171m    192.168.117.223   core-node   <none>           <none>
+persistence       persistence-writer-7d84d6f984-l94qf                       1/1     Running   0               3m26s   192.168.117.161   core-node   <none>           <none>
+platform          kong-kong-864d564d68-57xkd                                2/2     Running   30 (30m ago)    168m    192.168.117.248   core-node   <none>           <none>
+storage           pgbouncer-585f9f6957-kqlds                                1/1     Running   0               168m    192.168.117.198   core-node   <none>           <none>
+storage           postgres-0                                                1/1     Running   0               28m     192.168.117.137   core-node   <none>           <none>
+storage           redis-0                                                   1/1     Running   0               28m     192.168.117.159   core-node   <none>           <none>
+storage           timescaledb-0                                             1/1     Running   0               28m     192.168.117.173   core-node   <none>           <none>
+vault             vault-0                                                   0/1     Running   0               28m     192.168.117.158   core-node   <none>           <none>
+vault             vault-agent-injector-8d6b668b4-xg2hk                      1/1     Running   25 (32m ago)    168m    192.168.117.232   core-node   <none>           <none>

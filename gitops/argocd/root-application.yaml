@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: core-platform-root
+  namespace: cicd
+
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/corei-org/core-platform-gitops.git
+    targetRevision: main
+    path: gitops/argocd/apps
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: cicd
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+    syncOptions:
+      - CreateNamespace=true

@@ -1,0 +1,13 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+
+metadata:
+  name: kube-prometheus-stack-prometheus
+  namespace: observability
+
+spec:
+  containers:
+    - name: prometheus
+
+      securityContext:
+        readOnlyRootFilesystem: false

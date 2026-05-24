@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+
+metadata:
+  name: allow-argocd-git-egress
+  namespace: cicd
+
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: argocd-repo-server
+
+  policyTypes:
+    - Egress
+
+  egress:
+    - {}

@@ -1,0 +1,25 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: cicd-deployer-role
+rules:
+  - apiGroups:
+      - ""
+      - apps
+      - networking.k8s.io
+    resources:
+      - deployments
+      - statefulsets
+      - daemonsets
+      - services
+      - ingresses
+      - configmaps
+      - secrets
+      - namespaces
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
