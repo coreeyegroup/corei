@@ -8,7 +8,7 @@ spec:
   project: default
 
   source:
-    repoURL: https://github.com/corei-org/core-platform-gitops.git
+    repoURL: https://github.com/coreeyegroup/corei.git
     targetRevision: main
     path: gitops/base/platform/storage
 
