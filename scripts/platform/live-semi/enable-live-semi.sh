@@ -6,7 +6,7 @@ ACCOUNT_ID="${1:-}"
 
 ROOT_DIR="$HOME/corei"
 
-STATE_FILE="$ROOT_DIR/state/governance/live-semi/live-semi.state"
+STATE_FILE="$ROOT_DIR/state/runtime/live-activation/live-semi/live-semi.state"
 LOG_FILE="$ROOT_DIR/telemetry/operations/live-semi/live-semi.log"
 
 timestamp() {
