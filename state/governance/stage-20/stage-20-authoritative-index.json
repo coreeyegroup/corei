@@ -1,0 +1,19 @@
+{
+  "stage": "20",
+  "canonical_name": "LIVE_ACTIVATION_AND_GOVERNANCE_CONVERGENCE",
+  "lifecycle_classification": "PRODUCTION_TRANSITION",
+  "semantic_governance": "ACTIVE",
+  "orchestration_governance": "ACTIVE",
+  "institutional_transition_boundary": true,
+  "subphases": {
+    "20.1": "FOUNDATION_INITIALIZATION",
+    "20.2": "PRECONDITIONS_VALIDATION",
+    "20R": "GOVERNANCE_CONVERGENCE_REFACTOR",
+    "20C": "INSTITUTIONAL_REPOSITORY_CONVERGENCE",
+    "20A": "MASTER_FLOW_REALIGNMENT",
+    "20.3": "BROKER_ONBOARDING",
+    "20.4": "LIVE_SEMI_ACTIVATION",
+    "20.5": "LIVE_SEMI_OBSERVATION",
+    "20.6": "LIVE_AUTO_ACTIVATION"
+  }
+}
