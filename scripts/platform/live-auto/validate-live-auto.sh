@@ -3,10 +3,11 @@
 set -euo pipefail
 
 ROOT_DIR="$HOME/corei"
+source "$ROOT_DIR/ops/runtime-authority/runtime-paths.env"
 
-STATE_FILE="$ROOT_DIR/state/runtime/live-activation/live-auto/live-auto.state"
+STATE_FILE="$LIVE_AUTO_STATE_PATH"
 
-LOG_FILE="$ROOT_DIR/telemetry/operations/live-auto/live-auto.log"
+LOG_FILE="$LIVE_AUTO_LOG_PATH"
 
 timestamp() {
   date -u +"%Y-%m-%dT%H:%M:%SZ"

@@ -5,13 +5,14 @@ set -euo pipefail
 ACCOUNT_ID="${1:-}"
 
 ROOT_DIR="$HOME/corei"
+source "$ROOT_DIR/ops/runtime-authority/runtime-paths.env"
 
-STATE_FILE="$ROOT_DIR/state/runtime/live-activation/live-auto/live-auto.state"
+STATE_FILE="$LIVE_AUTO_STATE_PATH"
 
-LIVE_SEMI_STATE="$ROOT_DIR/state/runtime/live-activation/live-semi/live-semi.state"
+LIVE_SEMI_STATE="$LIVE_SEMI_STATE_PATH"
 OBSERVATION_STATE="$ROOT_DIR/state/governance/live-observation/live-observation.state"
 
-LOG_FILE="$ROOT_DIR/telemetry/operations/live-auto/live-auto.log"
+LOG_FILE="$LIVE_AUTO_LOG_PATH"
 
 timestamp() {
   date -u +"%Y-%m-%dT%H:%M:%SZ"

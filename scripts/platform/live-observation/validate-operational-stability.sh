@@ -3,11 +3,12 @@
 set -euo pipefail
 
 ROOT_DIR="$HOME/corei"
+source "$ROOT_DIR/ops/runtime-authority/runtime-paths.env"
 
-OBSERVATION_STATE="$ROOT_DIR/state/runtime/live-activation/live-observation/live-observation.state"
+OBSERVATION_STATE="$LIVE_OBSERVATION_STATE_PATH"
 LIVE_SEMI_STATE="$ROOT_DIR/state/governance/live-semi/live-semi.state"
 
-LOG_FILE="$ROOT_DIR/telemetry/operations/live-observation/live-observation.log"
+LOG_FILE="$LIVE_OBSERVATION_LOG_PATH"
 
 timestamp() {
   date -u +"%Y-%m-%dT%H:%M:%SZ"
