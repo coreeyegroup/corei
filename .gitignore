@@ -84,3 +84,44 @@ corei-full-tree.txt
 # Governance generated inventories
 governance/repository-governance/repository-file-inventory.txt
 governance/repository-governance/repository-directory-inventory.txt
+
+# ==================================================
+# INSTITUTIONAL OPERATIONAL LINEAGE
+# ==================================================
+
+# Operational artifacts
+artifacts/
+
+# Runtime lineage
+runtime/
+
+# Telemetry lineage
+telemetry/
+logs/
+reports/
+
+# Event lineage
+events/audit_stream/
+events/dead_letter_stream/
+
+# Operational lifecycle
+operations/logs/
+operations/backups/
+operations/snapshots/
+
+# Recovery lineage
+resilience/recovery/
+
+# Strategy operational lineage
+strategies/*/artifacts/
+strategies/*/logs/
+strategies/*/signals/
+
+# Scratch engineering workspace
+scratch/
+
+# Secrets and credentials
+secrets/
+
+# Local operational states
+ops/

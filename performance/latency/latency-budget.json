@@ -1,0 +1,14 @@
+{
+  "pipeline": {
+    "max_latency_ms": 100
+  },
+  "market_data": {
+    "max_latency_ms": 25
+  },
+  "signal_generation": {
+    "max_latency_ms": 50
+  },
+  "order_submission": {
+    "max_latency_ms": 75
+  }
+}
