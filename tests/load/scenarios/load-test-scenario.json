@@ -1,0 +1,9 @@
+{
+  "scenario": "signal-throughput-load",
+  "iterations": 1000,
+  "payload": {
+    "instrument": "EURUSD",
+    "signal": "BUY",
+    "quantity": "100"
+  }
+}

@@ -1,0 +1,35 @@
+# ==================================================
+# SEMANTIC FREEZE EXCLUSIONS
+# ==================================================
+
+# Operational lifecycle state
+state/live-activation/
+state/live-validation/
+state/stage-10a/
+state/stage-11/
+state/stage-12/
+
+# Generated inventories
+corei-tree.txt
+state/corei-full-tree-detailed.txt
+state/stage-18-tree.txt
+
+# Operational reports
+final-argocd-state.txt
+final-platform-state.txt
+final-rs-state.txt
+
+# Transitional governance docs
+authoritative-stage-index.md
+authoritative-stage-index.md.md
+institutional-stage-execution-lifecycle.md
+institutional-stage-execution-lifecycle.md.md
+platform-continuity-restoration-block.md
+platform-continuity-restoration-block.md.md
+
+# Transitional runtime state
+install.state
+state/install.state
+
+# Local infrastructure runtime
+kafka-0

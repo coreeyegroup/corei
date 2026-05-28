@@ -16,7 +16,7 @@ TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
 FREEZE_STATUS="UNKNOWN"
 
-if "${ROOT}/scripts/governance/validate-freeze-governance.sh"; then
+if "${ROOT}/scripts/governance/validate-semantic-freeze-governance.sh"; then
   FREEZE_STATUS="CERTIFIED"
 else
   FREEZE_STATUS="FAILED"
@@ -26,6 +26,7 @@ cat <<EOF_JSON > "${OUTPUT_DIR}/repository-certification-report.json"
 {
   "timestamp": "${TIMESTAMP}",
   "repository_freeze_status": "${FREEZE_STATUS}",
+  "freeze_model": "SEMANTIC_GOVERNANCE",
   "runtime_isolation": "ENFORCED",
   "artifact_isolation": "ENFORCED",
   "telemetry_isolation": "ENFORCED",

@@ -1,0 +1,5 @@
+testing:
+  deterministic_seed: 42
+  replay_safe: true
+  async_mode: enabled
+  artifact_path: artifacts/testing
