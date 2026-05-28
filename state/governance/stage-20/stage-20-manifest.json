@@ -1,0 +1,19 @@
+{
+  "stage": "20",
+  "name": "LIVE_ACTIVATION_AND_GOVERNANCE_CONVERGENCE",
+  "freeze_model": "SEMANTIC_GOVERNANCE",
+  "governance_status": "CERTIFIED",
+  "subphases": {
+    "20.1": "COMPLETED",
+    "20.2": "COMPLETED",
+    "20R": "COMPLETED",
+    "20C": "COMPLETED",
+    "20.3": "NOT_STARTED",
+    "20.4": "NOT_STARTED",
+    "20.5": "NOT_STARTED",
+    "20.6": "NOT_STARTED"
+  },
+  "live_trading_enabled": false,
+  "live_auto_enabled": false,
+  "institutional_transition_boundary": true
+}
