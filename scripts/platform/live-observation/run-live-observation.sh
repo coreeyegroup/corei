@@ -6,7 +6,7 @@ ROOT_DIR="$HOME/corei"
 source "$ROOT_DIR/ops/runtime-authority/runtime-paths.env"
 
 STATE_FILE="$LIVE_OBSERVATION_STATE_PATH"
-LIVE_SEMI_STATE="$ROOT_DIR/state/governance/live-semi/live-semi.state"
+LIVE_SEMI_STATE="$LIVE_SEMI_STATE_PATH"
 
 LOG_FILE="$LIVE_OBSERVATION_LOG_PATH"
 
