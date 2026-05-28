@@ -8,7 +8,7 @@ ROOT_DIR="$HOME/corei"
 
 STATE_FILE="$ROOT_DIR/state/runtime/live-activation/live-auto/live-auto.state"
 
-LIVE_SEMI_STATE="$ROOT_DIR/state/governance/live-semi/live-semi.state"
+LIVE_SEMI_STATE="$ROOT_DIR/state/runtime/live-activation/live-semi/live-semi.state"
 OBSERVATION_STATE="$ROOT_DIR/state/governance/live-observation/live-observation.state"
 
 LOG_FILE="$ROOT_DIR/telemetry/operations/live-auto/live-auto.log"
