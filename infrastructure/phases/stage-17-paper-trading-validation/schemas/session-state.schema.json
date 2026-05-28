@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "required": [
+    "session_id",
+    "session_mode",
+    "start_time",
+    "status",
+    "kafka_capture",
+    "replay_capture"
+  ],
+  "properties": {
+    "session_id": {
+      "type": "string"
+    },
+    "session_mode": {
+      "type": "string"
+    },
+    "start_time": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "kafka_capture": {
+      "type": "boolean"
+    },
+    "replay_capture": {
+      "type": "boolean"
+    }
+  }
+}

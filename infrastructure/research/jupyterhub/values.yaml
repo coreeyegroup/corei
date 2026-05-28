@@ -1,0 +1,37 @@
+proxy:
+  secretToken: "coreeye-research-secret-token"
+
+singleuser:
+  image:
+    name: jupyter/minimal-notebook
+    tag: latest
+
+  storage:
+    dynamic:
+      storageClass: longhorn
+
+  memory:
+    limit: 512M
+    guarantee: 128M
+
+  cpu:
+    limit: 0.2
+    guarantee: 0.01
+
+hub:
+  config:
+    Authenticator:
+      admin_users:
+        - coreeye
+
+    DummyAuthenticator:
+      password: research
+
+    JupyterHub:
+      authenticator_class: dummy
+
+    KubeSpawner:
+      start_timeout: 900
+
+ingress:
+  enabled: false

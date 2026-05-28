@@ -1,0 +1,6 @@
+#!/bin/bash
+
+echo "STAGE=14A"
+echo "STATE=FREEZE_CERTIFIED"
+echo "CLASSIFICATION=INSTITUTIONAL_RUNTIME_AUTHORITY"
+echo "TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")"

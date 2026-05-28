@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ResourceQuota
+
+metadata:
+  name: market-data-resource-quota
+  namespace: market-data
+
+spec:
+  hard:
+    requests.cpu: "4"
+    requests.memory: 8Gi
+
+    limits.cpu: "8"
+    limits.memory: 16Gi
+
+    pods: "32"
+    services: "16"
+    persistentvolumeclaims: "8"

@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: synthetic-market-generator
+  namespace: market-data
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: synthetic-market-generator
+
+  template:
+
+    metadata:
+      labels:
+        app: synthetic-market-generator
+
+    spec:
+
+      containers:
+
+        - name: synthetic-market-generator
+
+          image:
+            localhost:5000/synthetic-market-generator:stage-12a-v2
+
+          imagePullPolicy: Always
+
+          resources:
+
+            requests:
+              cpu: "25m"
+              memory: "64Mi"
+
+            limits:
+              cpu: "100m"
+              memory: "128Mi"

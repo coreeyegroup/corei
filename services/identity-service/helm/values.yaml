@@ -1,0 +1,9 @@
+service:
+  name: identity-service
+
+image:
+  repository: identity-service
+  tag: latest
+  pullPolicy: Never
+
+replicaCount: 1

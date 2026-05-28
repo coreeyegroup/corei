@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: copy-trade-engine
+  namespace: trading-infra
+
+spec:
+  selector:
+    app: copy-trade-engine
+
+  ports:
+    - protocol: TCP
+      port: 8006
+      targetPort: 8006

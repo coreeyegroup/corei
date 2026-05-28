@@ -1,0 +1,9 @@
+service:
+  name: audit-service
+
+image:
+  repository: audit-service
+  tag: latest
+  pullPolicy: Never
+
+replicaCount: 1

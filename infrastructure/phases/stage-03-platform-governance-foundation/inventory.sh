@@ -40,7 +40,7 @@ find "$ROOT/contracts" -type f \
 # Platform registry inventory
 # =========================================
 
-find "$ROOT/platform/system-registry" -type f \
+find "$ROOT/core_platform/system-registry" -type f \
 | sort \
 > "$OUTPUT_DIR/system-registry-files.txt"
 

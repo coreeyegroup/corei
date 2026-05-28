@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: historical-data-service
+  namespace: market-data
+
+spec:
+  selector:
+    app: historical-data-service
+
+  ports:
+    - port: 8080
+      targetPort: 8080
+
+---
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: historical-data-service
+  namespace: market-data
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: historical-data-service
+
+  template:
+    metadata:
+      labels:
+        app: historical-data-service
+
+    spec:
+      containers:
+        - name: historical-data-service
+
+          image: historical-data-service:stage-12
+
+          imagePullPolicy: Never
+
+          ports:
+            - containerPort: 8080
+
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+
+            limits:
+              cpu: "500m"
+              memory: "1Gi"

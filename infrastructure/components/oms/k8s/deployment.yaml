@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: oms
+  namespace: trading-infra
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: oms
+
+  template:
+    metadata:
+      labels:
+        app: oms
+
+    spec:
+      containers:
+
+        - name: oms
+
+          image: oms:stage-16
+
+          imagePullPolicy: Never
+
+          ports:
+            - containerPort: 8001
+
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 8001
+
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 8001

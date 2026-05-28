@@ -1,0 +1,39 @@
+lineage:
+
+  - dataset_id: market_ticks_goldfx_v1
+
+    upstream:
+
+      - source: mock_connector
+        namespace: market-data
+
+      - source: raw_market_data_stream
+        namespace: kafka
+
+      - source: market-data-normalizer
+        namespace: market-data
+
+      - source: normalized_market_data_stream
+        namespace: kafka
+
+      - source: TimescaleDB
+        namespace: database
+
+    downstream:
+
+      - consumer: historical-data-service
+        namespace: market-data
+
+      - consumer: feature-store-service
+        namespace: market-data
+
+      - consumer: research-notebooks
+        namespace: research
+
+    guarantees:
+      deterministic_replay: true
+      timestamp_integrity: true
+      sequence_validation: planned
+      deduplication: planned
+
+    lineage_version: v1

@@ -1,0 +1,11 @@
+{
+  "execution_order": [
+    "schemas",
+    "contracts",
+    "simulation",
+    "replay-validation",
+    "chaos-validation",
+    "performance",
+    "load"
+  ]
+}

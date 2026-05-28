@@ -1,0 +1,9 @@
+service:
+  name: event-ingestion-service
+
+image:
+  repository: event-ingestion-service
+  tag: latest
+  pullPolicy: Never
+
+replicaCount: 1

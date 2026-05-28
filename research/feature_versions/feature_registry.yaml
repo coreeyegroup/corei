@@ -1,0 +1,16 @@
+features:
+
+  - feature_name: spread_bps
+    version: v1
+    source_dataset: market_ticks_goldfx_v1
+    computation_owner: feature-store-service
+
+  - feature_name: mid_price
+    version: v1
+    source_dataset: market_ticks_goldfx_v1
+    computation_owner: feature-store-service
+
+  - feature_name: tick_direction
+    version: v1
+    source_dataset: market_ticks_goldfx_v1
+    computation_owner: feature-store-service

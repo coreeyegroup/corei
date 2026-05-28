@@ -28,7 +28,7 @@ check "contracts directory exists" \
 "[ -d \"$HOME/corei/contracts\" ]"
 
 check "system-registry exists" \
-"[ -d \"$HOME/corei/platform/system-registry\" ]"
+"[ -d \"$HOME/corei/core_platform/system-registry\" ]"
 
 check "governance scripts exist" \
 "[ -d \"$HOME/corei/scripts/governance\" ]"

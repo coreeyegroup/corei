@@ -52,4 +52,3 @@ Performs rollback/recovery actions.
 ## state.sh
 
 Tracks stage execution state.
-

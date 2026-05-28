@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: market-data-ingestion
+  namespace: market-data
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: market-data-ingestion
+
+  template:
+    metadata:
+      labels:
+        app: market-data-ingestion
+
+    spec:
+      containers:
+        - name: market-data-ingestion
+
+          image: market-data-ingestion:stage-12
+
+          imagePullPolicy: Never
+
+          envFrom:
+            - configMapRef:
+                name: market-data-config
+
+          command:
+            - python
+
+          args:
+            - -m
+            - app.main
+
+          workingDir: /app
+
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+
+            limits:
+              memory: "1Gi"
+              cpu: "500m"

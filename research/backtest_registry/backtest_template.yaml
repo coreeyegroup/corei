@@ -1,0 +1,24 @@
+backtest:
+
+  strategy_name: REQUIRED
+  strategy_version: REQUIRED
+
+  dataset_reference:
+    dataset_id: REQUIRED
+    dataset_version: REQUIRED
+
+  feature_versions:
+    - REQUIRED
+
+  execution_environment:
+    notebook: REQUIRED
+    researcher: REQUIRED
+
+  validation:
+    walk_forward_completed: false
+    paper_trade_completed: false
+    risk_review_completed: false
+
+  promotion:
+    eligible_for_staging: false
+    eligible_for_production: false

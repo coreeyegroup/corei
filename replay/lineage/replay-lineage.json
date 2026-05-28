@@ -1,0 +1,6 @@
+{
+  "replay_session": "canonical-replay-session",
+  "input_fixture": "tests/replay/fixtures/replay-session.jsonl",
+  "output_artifact": "tests/replay/output/replay-output.jsonl",
+  "hash_artifact": "replay/hashes/replay.sha256"
+}

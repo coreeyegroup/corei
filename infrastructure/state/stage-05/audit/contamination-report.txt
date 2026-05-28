@@ -20,64 +20,64 @@
 /home/coreeye/corei/docs/machine-spec.md:275:Kubernetes cluster not yet initialized
 /home/coreeye/corei/docs/infrastructure/README.md:11:- Kubernetes
 /home/coreeye/corei/infrastructure/phases/stage-01-machine-foundation/README.md:13:- Kubernetes tooling
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/backup.sh:6:BACKUP_DIR="$ROOT_DIR/infrastructure/state/stage-05/backups"
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/backup.sh:13:"$BACKUP_DIR/stage-05-backup-$TIMESTAMP.tar.gz" \
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/backup.sh:14:"$ROOT_DIR/kubernetes" \
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/backup.sh:15:"$ROOT_DIR/scripts/kubernetes" \
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/backup.sh:16:"$ROOT_DIR/infrastructure/phases/stage-05-k8s-platform"
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/setup.sh:8:echo "Stage 05 Kubernetes Platform Setup"
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/setup.sh:11:"$ROOT_DIR/scripts/kubernetes/install-kubernetes.sh"
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/setup.sh:14:echo "Initializing Kubernetes cluster..."
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/setup.sh:17:--config "$ROOT_DIR/kubernetes/cluster-config/kubeadm-config.yaml"
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/setup.sh:22:/etc/kubernetes/admin.conf \
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/setup.sh:34:node-role.kubernetes.io/control-plane- || true
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/setup.sh:36:"$ROOT_DIR/scripts/kubernetes/install-calico.sh"
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/setup.sh:42:"$ROOT_DIR/kubernetes/namespaces/all-namespaces.yaml"
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/setup.sh:48:"$ROOT_DIR/kubernetes/rbac/"
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/setup.sh:54:"$ROOT_DIR/kubernetes/network-policies/"
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/setup.sh:60:"$ROOT_DIR/kubernetes/resource-quotas/"
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/setup.sh:66:"$ROOT_DIR/kubernetes/priority-classes/"
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/setup.sh:72:"$ROOT_DIR/kubernetes/service-accounts/"
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/state.sh:8:echo "Stage 05 Kubernetes State"
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/state.sh:12:echo "Kubernetes Scripts:"
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/state.sh:16:"$ROOT_DIR/scripts/kubernetes" \
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/state.sh:20:echo "Kubernetes Topology:"
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/state.sh:24:"$ROOT_DIR/kubernetes" \
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/state.sh:28:echo "Kubernetes Manifests:"
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/state.sh:32:"$ROOT_DIR/kubernetes" \
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/state.sh:40:"$ROOT_DIR/infrastructure/state/stage-05/inventory" \
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/rollback.sh:6:echo "Stage 05 Kubernetes Rollback"
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/rollback.sh:14:echo "- Kubernetes manifests are version-controlled"
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/snapshot.sh:11:"$SNAPSHOT_DIR/stage-05-k8s-platform.tar.gz" \
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/snapshot.sh:12:"$ROOT_DIR/kubernetes" \
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/snapshot.sh:13:"$ROOT_DIR/scripts/kubernetes" \
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/snapshot.sh:14:"$ROOT_DIR/infrastructure/phases/stage-05-k8s-platform"
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/snapshot.sh:18:echo "$SNAPSHOT_DIR/stage-05-k8s-platform.tar.gz"
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/validate.sh:6:echo "Stage 05 Kubernetes Validation"
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/inventory.sh:6:STATE_DIR="$ROOT_DIR/infrastructure/state/stage-05/inventory"
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/inventory.sh:11:echo "Stage 05 Kubernetes Inventory"
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/inventory.sh:15:"$ROOT_DIR/kubernetes/namespaces" \
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/inventory.sh:20:"$ROOT_DIR/kubernetes/rbac" \
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/inventory.sh:25:"$ROOT_DIR/kubernetes/network-policies" \
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/inventory.sh:30:"$ROOT_DIR/kubernetes/resource-quotas" \
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/inventory.sh:35:"$ROOT_DIR/kubernetes/priority-classes" \
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/inventory.sh:40:"$ROOT_DIR/kubernetes/service-accounts" \
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/inventory.sh:45:"$ROOT_DIR/kubernetes" \
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/inventory.sh:47:> "$STATE_DIR/kubernetes-topology.txt"
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/inventory.sh:50:"$ROOT_DIR/scripts/kubernetes" \
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/inventory.sh:52:> "$STATE_DIR/kubernetes-scripts.txt"
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/inventory.sh:55:"$ROOT_DIR/infrastructure/phases/stage-05-k8s-platform" \
-/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/inventory.sh:57:> "$STATE_DIR/stage-05-lifecycle.txt"
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/backup.sh:6:BACKUP_DIR="$ROOT_DIR/infrastructure/state/stage-05/backups"
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/backup.sh:13:"$BACKUP_DIR/stage-05-backup-$TIMESTAMP.tar.gz" \
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/backup.sh:14:"$ROOT_DIR/kubernetes" \
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/backup.sh:15:"$ROOT_DIR/scripts/kubernetes" \
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/backup.sh:16:"$ROOT_DIR/infrastructure/phases/stage-05-k8s-platform"
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/setup.sh:8:echo "Stage 05 Kubernetes Platform Setup"
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/setup.sh:11:"$ROOT_DIR/scripts/kubernetes/install-kubernetes.sh"
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/setup.sh:14:echo "Initializing Kubernetes cluster..."
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/setup.sh:17:--config "$ROOT_DIR/kubernetes/cluster-config/kubeadm-config.yaml"
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/setup.sh:22:/etc/kubernetes/admin.conf \
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/setup.sh:34:node-role.kubernetes.io/control-plane- || true
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/setup.sh:36:"$ROOT_DIR/scripts/kubernetes/install-calico.sh"
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/setup.sh:42:"$ROOT_DIR/kubernetes/namespaces/all-namespaces.yaml"
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/setup.sh:48:"$ROOT_DIR/kubernetes/rbac/"
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/setup.sh:54:"$ROOT_DIR/kubernetes/network-policies/"
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/setup.sh:60:"$ROOT_DIR/kubernetes/resource-quotas/"
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/setup.sh:66:"$ROOT_DIR/kubernetes/priority-classes/"
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/setup.sh:72:"$ROOT_DIR/kubernetes/service-accounts/"
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/state.sh:8:echo "Stage 05 Kubernetes State"
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/state.sh:12:echo "Kubernetes Scripts:"
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/state.sh:16:"$ROOT_DIR/scripts/kubernetes" \
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/state.sh:20:echo "Kubernetes Topology:"
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/state.sh:24:"$ROOT_DIR/kubernetes" \
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/state.sh:28:echo "Kubernetes Manifests:"
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/state.sh:32:"$ROOT_DIR/kubernetes" \
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/state.sh:40:"$ROOT_DIR/infrastructure/state/stage-05/inventory" \
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/rollback.sh:6:echo "Stage 05 Kubernetes Rollback"
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/rollback.sh:14:echo "- Kubernetes manifests are version-controlled"
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/snapshot.sh:11:"$SNAPSHOT_DIR/stage-05-k8s-platform.tar.gz" \
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/snapshot.sh:12:"$ROOT_DIR/kubernetes" \
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/snapshot.sh:13:"$ROOT_DIR/scripts/kubernetes" \
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/snapshot.sh:14:"$ROOT_DIR/infrastructure/phases/stage-05-k8s-platform"
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/snapshot.sh:18:echo "$SNAPSHOT_DIR/stage-05-k8s-platform.tar.gz"
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/validate.sh:6:echo "Stage 05 Kubernetes Validation"
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/inventory.sh:6:STATE_DIR="$ROOT_DIR/infrastructure/state/stage-05/inventory"
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/inventory.sh:11:echo "Stage 05 Kubernetes Inventory"
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/inventory.sh:15:"$ROOT_DIR/kubernetes/namespaces" \
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/inventory.sh:20:"$ROOT_DIR/kubernetes/rbac" \
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/inventory.sh:25:"$ROOT_DIR/kubernetes/network-policies" \
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/inventory.sh:30:"$ROOT_DIR/kubernetes/resource-quotas" \
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/inventory.sh:35:"$ROOT_DIR/kubernetes/priority-classes" \
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/inventory.sh:40:"$ROOT_DIR/kubernetes/service-accounts" \
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/inventory.sh:45:"$ROOT_DIR/kubernetes" \
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/inventory.sh:47:> "$STATE_DIR/kubernetes-topology.txt"
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/inventory.sh:50:"$ROOT_DIR/scripts/kubernetes" \
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/inventory.sh:52:> "$STATE_DIR/kubernetes-scripts.txt"
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/inventory.sh:55:"$ROOT_DIR/infrastructure/phases/stage-05-k8s-platform" \
+/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/inventory.sh:57:> "$STATE_DIR/stage-05-lifecycle.txt"
 /home/coreeye/corei/infrastructure/phases/stage-04-infra-foundation/README.md:19:This stage does NOT deploy Kubernetes workloads.
 /home/coreeye/corei/infrastructure/phases/stage-04-infra-foundation/README.md:21:Kubernetes orchestration begins in Stage 05.
-/home/coreeye/corei/infrastructure/state/stage-05/inventory/stage-05-lifecycle.txt:1:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/backup.sh
-/home/coreeye/corei/infrastructure/state/stage-05/inventory/stage-05-lifecycle.txt:2:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/inventory.sh
-/home/coreeye/corei/infrastructure/state/stage-05/inventory/stage-05-lifecycle.txt:3:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/README.md
-/home/coreeye/corei/infrastructure/state/stage-05/inventory/stage-05-lifecycle.txt:4:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/rollback.sh
-/home/coreeye/corei/infrastructure/state/stage-05/inventory/stage-05-lifecycle.txt:5:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/setup.sh
-/home/coreeye/corei/infrastructure/state/stage-05/inventory/stage-05-lifecycle.txt:6:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/snapshot.sh
-/home/coreeye/corei/infrastructure/state/stage-05/inventory/stage-05-lifecycle.txt:7:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/state.sh
-/home/coreeye/corei/infrastructure/state/stage-05/inventory/stage-05-lifecycle.txt:8:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/validate.sh
+/home/coreeye/corei/infrastructure/state/stage-05/inventory/stage-05-lifecycle.txt:1:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/backup.sh
+/home/coreeye/corei/infrastructure/state/stage-05/inventory/stage-05-lifecycle.txt:2:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/inventory.sh
+/home/coreeye/corei/infrastructure/state/stage-05/inventory/stage-05-lifecycle.txt:3:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/README.md
+/home/coreeye/corei/infrastructure/state/stage-05/inventory/stage-05-lifecycle.txt:4:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/rollback.sh
+/home/coreeye/corei/infrastructure/state/stage-05/inventory/stage-05-lifecycle.txt:5:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/setup.sh
+/home/coreeye/corei/infrastructure/state/stage-05/inventory/stage-05-lifecycle.txt:6:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/snapshot.sh
+/home/coreeye/corei/infrastructure/state/stage-05/inventory/stage-05-lifecycle.txt:7:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/state.sh
+/home/coreeye/corei/infrastructure/state/stage-05/inventory/stage-05-lifecycle.txt:8:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/validate.sh
 /home/coreeye/corei/infrastructure/state/stage-05/inventory/resource-quotas.txt:1:/home/coreeye/corei/kubernetes/resource-quotas/resource-quotas.yaml
 /home/coreeye/corei/infrastructure/state/stage-05/inventory/namespaces.txt:1:/home/coreeye/corei/kubernetes/namespaces/all-namespaces.yaml
 /home/coreeye/corei/infrastructure/state/stage-05/inventory/service-accounts.txt:1:/home/coreeye/corei/kubernetes/service-accounts/platform-service-accounts.yaml
@@ -115,14 +115,14 @@
 /home/coreeye/corei/infrastructure/state/stage-05/audit/kubernetes-manifests.txt:6:/home/coreeye/corei/kubernetes/rbac/platform-rbac.yaml
 /home/coreeye/corei/infrastructure/state/stage-05/audit/kubernetes-manifests.txt:7:/home/coreeye/corei/kubernetes/resource-quotas/resource-quotas.yaml
 /home/coreeye/corei/infrastructure/state/stage-05/audit/kubernetes-manifests.txt:8:/home/coreeye/corei/kubernetes/service-accounts/platform-service-accounts.yaml
-/home/coreeye/corei/infrastructure/state/stage-05/audit/stage-05-lifecycle.txt:1:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/backup.sh
-/home/coreeye/corei/infrastructure/state/stage-05/audit/stage-05-lifecycle.txt:2:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/inventory.sh
-/home/coreeye/corei/infrastructure/state/stage-05/audit/stage-05-lifecycle.txt:3:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/README.md
-/home/coreeye/corei/infrastructure/state/stage-05/audit/stage-05-lifecycle.txt:4:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/rollback.sh
-/home/coreeye/corei/infrastructure/state/stage-05/audit/stage-05-lifecycle.txt:5:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/setup.sh
-/home/coreeye/corei/infrastructure/state/stage-05/audit/stage-05-lifecycle.txt:6:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/snapshot.sh
-/home/coreeye/corei/infrastructure/state/stage-05/audit/stage-05-lifecycle.txt:7:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/state.sh
-/home/coreeye/corei/infrastructure/state/stage-05/audit/stage-05-lifecycle.txt:8:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/validate.sh
+/home/coreeye/corei/infrastructure/state/stage-05/audit/stage-05-lifecycle.txt:1:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/backup.sh
+/home/coreeye/corei/infrastructure/state/stage-05/audit/stage-05-lifecycle.txt:2:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/inventory.sh
+/home/coreeye/corei/infrastructure/state/stage-05/audit/stage-05-lifecycle.txt:3:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/README.md
+/home/coreeye/corei/infrastructure/state/stage-05/audit/stage-05-lifecycle.txt:4:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/rollback.sh
+/home/coreeye/corei/infrastructure/state/stage-05/audit/stage-05-lifecycle.txt:5:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/setup.sh
+/home/coreeye/corei/infrastructure/state/stage-05/audit/stage-05-lifecycle.txt:6:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/snapshot.sh
+/home/coreeye/corei/infrastructure/state/stage-05/audit/stage-05-lifecycle.txt:7:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/state.sh
+/home/coreeye/corei/infrastructure/state/stage-05/audit/stage-05-lifecycle.txt:8:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/validate.sh
 /home/coreeye/corei/infrastructure/state/stage-05/audit/runtime-tooling-audit.txt:1:/home/coreeye/corei/scripts/kubernetes/apply-network-policies.sh
 /home/coreeye/corei/infrastructure/state/stage-05/audit/runtime-tooling-audit.txt:2:/home/coreeye/corei/scripts/kubernetes/apply-pdb.sh
 /home/coreeye/corei/infrastructure/state/stage-05/audit/runtime-tooling-audit.txt:3:/home/coreeye/corei/scripts/kubernetes/apply-priority-classes.sh
@@ -135,14 +135,14 @@
 /home/coreeye/corei/infrastructure/state/stage-05/audit/runtime-tooling-audit.txt:10:/home/coreeye/corei/scripts/kubernetes/install-calico.sh
 /home/coreeye/corei/infrastructure/state/stage-05/audit/runtime-tooling-audit.txt:11:/home/coreeye/corei/scripts/kubernetes/install-kubernetes.sh
 /home/coreeye/corei/infrastructure/state/stage-05/audit/runtime-tooling-audit.txt:12:/home/coreeye/corei/scripts/kubernetes/validate-cluster.sh
-/home/coreeye/corei/infrastructure/state/stage-05/audit/lifecycle-audit.txt:1:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/backup.sh
-/home/coreeye/corei/infrastructure/state/stage-05/audit/lifecycle-audit.txt:2:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/inventory.sh
-/home/coreeye/corei/infrastructure/state/stage-05/audit/lifecycle-audit.txt:3:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/README.md
-/home/coreeye/corei/infrastructure/state/stage-05/audit/lifecycle-audit.txt:4:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/rollback.sh
-/home/coreeye/corei/infrastructure/state/stage-05/audit/lifecycle-audit.txt:5:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/setup.sh
-/home/coreeye/corei/infrastructure/state/stage-05/audit/lifecycle-audit.txt:6:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/snapshot.sh
-/home/coreeye/corei/infrastructure/state/stage-05/audit/lifecycle-audit.txt:7:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/state.sh
-/home/coreeye/corei/infrastructure/state/stage-05/audit/lifecycle-audit.txt:8:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-platform/validate.sh
+/home/coreeye/corei/infrastructure/state/stage-05/audit/lifecycle-audit.txt:1:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/backup.sh
+/home/coreeye/corei/infrastructure/state/stage-05/audit/lifecycle-audit.txt:2:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/inventory.sh
+/home/coreeye/corei/infrastructure/state/stage-05/audit/lifecycle-audit.txt:3:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/README.md
+/home/coreeye/corei/infrastructure/state/stage-05/audit/lifecycle-audit.txt:4:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/rollback.sh
+/home/coreeye/corei/infrastructure/state/stage-05/audit/lifecycle-audit.txt:5:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/setup.sh
+/home/coreeye/corei/infrastructure/state/stage-05/audit/lifecycle-audit.txt:6:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/snapshot.sh
+/home/coreeye/corei/infrastructure/state/stage-05/audit/lifecycle-audit.txt:7:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/state.sh
+/home/coreeye/corei/infrastructure/state/stage-05/audit/lifecycle-audit.txt:8:/home/coreeye/corei/infrastructure/phases/stage-05-k8s-core_platform/validate.sh
 /home/coreeye/corei/infrastructure/state/stage-05/audit/helm-repositories.txt:7:ingress-nginx       	https://kubernetes.github.io/ingress-nginx
 /home/coreeye/corei/infrastructure/state/stage-05/audit/kubernetes-scripts.txt:1:/home/coreeye/corei/scripts/kubernetes/apply-network-policies.sh
 /home/coreeye/corei/infrastructure/state/stage-05/audit/kubernetes-scripts.txt:2:/home/coreeye/corei/scripts/kubernetes/apply-pdb.sh

@@ -1,0 +1,14 @@
+[
+  {
+    "instrument_id": "BANKNIFTY",
+    "monitor_state": "READY_FOR_ENTRY",
+    "strategy_id": "stock_momentum_strategy",
+    "signal_strength_bps": 8200
+  },
+  {
+    "instrument_id": "XAUUSD",
+    "monitor_state": "READY_FOR_ENTRY",
+    "strategy_id": "gold_timing_strategy",
+    "signal_strength_bps": 7900
+  }
+]

@@ -1,0 +1,32 @@
+replay:
+
+  dataset:
+    symbol: GOLD.FX
+    source: timescaledb
+    dataset_version: v1
+
+  playback:
+
+    speed: 1.0
+
+    deterministic_clock: true
+
+    preserve_event_gaps: true
+
+    replay_batch_size: 100
+
+  kafka:
+
+    bootstrap_servers:
+      - kafka.kafka.svc.cluster.local:9092
+
+    replay_topic:
+      normalized_market_data_replay
+
+  governance:
+
+    isolated_namespace: research
+
+    audit_logging: true
+
+    immutable_session_metadata: true

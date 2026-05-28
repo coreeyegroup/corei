@@ -1,0 +1,85 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+
+metadata:
+  name: market-data-network-policy
+  namespace: market-data
+
+spec:
+  podSelector: {}
+
+  policyTypes:
+    - Ingress
+    - Egress
+
+  ingress:
+    - from:
+
+        # Ingress Controller
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-nginx
+
+        # Kafka Namespace
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kafka
+
+        # Database Namespace
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: database
+
+        # Research Namespace
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: research
+
+  egress:
+
+    # DNS Access
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+
+      ports:
+        - protocol: UDP
+          port: 53
+
+        - protocol: TCP
+          port: 53
+
+    # Kafka Access
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kafka
+
+      ports:
+        - protocol: TCP
+          port: 9092
+
+    # Database Access
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: database
+
+    # Monitoring Access
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: monitoring
+
+    # Research Namespace Access
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: research
+
+    # External Internet Access
+    # Required for broker feeds / external APIs
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0

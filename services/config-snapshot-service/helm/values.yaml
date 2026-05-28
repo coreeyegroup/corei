@@ -1,0 +1,9 @@
+service:
+  name: config-snapshot-service
+
+image:
+  repository: config-snapshot-service
+  tag: latest
+  pullPolicy: Never
+
+replicaCount: 1

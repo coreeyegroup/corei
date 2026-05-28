@@ -1,0 +1,40 @@
+datasets:
+
+  - dataset_id: market_ticks_goldfx_v1
+
+    description: |
+      Normalized GOLD.FX tick dataset sourced from
+      normalized_market_data_stream.
+
+    source:
+      kafka_topic: normalized_market_data_stream
+      persistence_layer: TimescaleDB
+      originating_feed: mock
+
+    schema:
+      - event_id
+      - symbol
+      - event_time
+      - bid_price
+      - ask_price
+      - bid_size
+      - ask_size
+      - normalized_timestamp_ns
+      - source
+
+    governance:
+      immutable: true
+      lineage_tracking: enabled
+      replayable: true
+      float_precision_allowed: false
+      timestamp_format: int64_nanoseconds
+
+    retention:
+      hot_storage_days: 7
+      cold_storage_archive: planned
+
+    ownership:
+      namespace: market-data
+      steward: coreeye-market-data-team
+
+    version: v1

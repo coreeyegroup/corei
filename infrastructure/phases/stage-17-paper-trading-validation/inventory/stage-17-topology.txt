@@ -1,0 +1,62 @@
+infrastructure/phases/stage-17-paper-trading-validation
+├── audit.sh
+├── backups
+├── backup.sh
+├── checkpoints
+│   └── stage-17-governance.checkpoint
+├── config
+│   ├── latency.env
+│   ├── replay.env
+│   ├── risk-test.env
+│   └── validation.env
+├── contamination-check.sh
+├── docs
+│   ├── replay-governance.md
+│   ├── stage-17-validation-blueprint.md
+│   └── validation-results-template.md
+├── inventory
+│   └── stage-17-topology.txt
+├── inventory.sh
+├── logs
+│   └── stage-17-initialization.log
+├── README.md
+├── replay
+├── reports
+├── rollback.sh
+├── runtime
+│   ├── kafka-captures
+│   ├── metrics
+│   ├── paper-session
+│   ├── replay
+│   ├── state
+│   └── validation
+├── runtime-state.json
+├── schemas
+├── scripts
+│   ├── collect-kafka-window.sh
+│   ├── emit-kill-switch.sh
+│   ├── inject-reconciliation-break.sh
+│   ├── inject-risk-events.sh
+│   ├── replay-session.sh
+│   ├── start-paper-session.sh
+│   ├── stop-paper-session.sh
+│   ├── verify-copy-trades.sh
+│   └── verify-event-time.sh
+├── setup.sh
+├── snapshots
+│   └── stage-17-initialized.snapshot
+├── snapshot.sh
+├── state.sh
+├── tests
+│   ├── test_copy_trade.py
+│   ├── test_determinism.sh
+│   ├── test_event_time.py
+│   ├── test_fixed_point.py
+│   ├── test_kill_switch.sh
+│   ├── test_lineage.py
+│   ├── test_reconciliation.sh
+│   └── test_risk_enforcement.py
+├── validate.sh
+└── validation
+
+20 directories, 39 files

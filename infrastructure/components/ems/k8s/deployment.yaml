@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: ems
+  namespace: trading-infra
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: ems
+
+  template:
+    metadata:
+      labels:
+        app: ems
+
+    spec:
+      containers:
+
+        - name: ems
+
+          image: ems:stage-16
+
+          imagePullPolicy: Never
+
+          ports:
+            - containerPort: 8002
+
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 8002
+
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 8002

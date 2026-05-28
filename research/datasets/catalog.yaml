@@ -1,0 +1,21 @@
+datasets:
+
+  ticks:
+    database: marketdata
+    table: ticks
+    description: normalized market tick stream
+    retention: long-term
+    source: normalized_market_data_stream
+
+  ohlcv_1m:
+    database: marketdata
+    table: ohlcv_1m
+    description: 1-minute aggregated candles
+    retention: long-term
+    source: historical-data-service
+
+  feature_store:
+    topic: feature_store_updates
+    description: live computed indicators
+    retention: 7d
+    source: feature-store-service

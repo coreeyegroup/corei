@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: reconciliation-service
+  namespace: trading-infra
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: reconciliation-service
+
+  template:
+    metadata:
+      labels:
+        app: reconciliation-service
+
+    spec:
+      containers:
+
+        - name: reconciliation-service
+
+          image: reconciliation:stage-16
+
+          imagePullPolicy: Never
+
+          ports:
+            - containerPort: 8005
+
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 8005
+
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 8005

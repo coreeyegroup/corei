@@ -1,0 +1,49 @@
+global:
+  security:
+    allowInsecureImages: true
+
+image:
+  registry: docker.io
+  repository: apache/kafka
+  tag: 3.7.1
+  pullPolicy: IfNotPresent
+
+kraft:
+  enabled: true
+
+zookeeper:
+  enabled: false
+
+controller:
+  replicaCount: 3
+
+listeners:
+  client:
+    protocol: PLAINTEXT
+
+persistence:
+  enabled: true
+  size: 20Gi
+
+resources:
+  requests:
+    memory: 1Gi
+    cpu: 500m
+
+  limits:
+    memory: 2Gi
+    cpu: 1000m
+
+service:
+  type: ClusterIP
+
+autoCreateTopicsEnable: false
+
+deleteTopicEnable: true
+
+logRetentionHours: 168
+
+logSegmentHours: 24
+
+provisioning:
+  enabled: false

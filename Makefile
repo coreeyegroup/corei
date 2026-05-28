@@ -29,3 +29,17 @@ validate-stage-02:
 
 inventory-stage-02:
 	~/corei/infrastructure/phases/stage-02-repository-foundation/inventory.sh
+
+
+
+stage-10a:
+	bash infrastructure/phases/stage-10a-testing-foundation/setup.sh
+
+validate-stage-10a:
+	bash infrastructure/phases/stage-10a-testing-foundation/validate.sh
+
+stage-11:
+	bash infrastructure/phases/stage-11-platform-foundation/setup.sh
+
+validate-stage-11:
+	bash infrastructure/phases/stage-11-platform-foundation/validate.sh

@@ -1,0 +1,80 @@
+STAGE-13 AUTHORITATIVE INVENTORY
+================================
+
+=== PHASE LIFECYCLE ===
+infrastructure/phases/stage-13-portfolio/audit.sh
+infrastructure/phases/stage-13-portfolio/backup.sh
+infrastructure/phases/stage-13-portfolio/inventory.sh
+infrastructure/phases/stage-13-portfolio/rollback.sh
+infrastructure/phases/stage-13-portfolio/scripts/certify-replay.sh
+infrastructure/phases/stage-13-portfolio/scripts/certify-stage13-freeze.sh
+infrastructure/phases/stage-13-portfolio/scripts/generate-audit-report.sh
+infrastructure/phases/stage-13-portfolio/scripts/generate-replay-hash.sh
+infrastructure/phases/stage-13-portfolio/scripts/register-portfolio-schemas.sh
+infrastructure/phases/stage-13-portfolio/scripts/run-synthetic-replay.sh
+infrastructure/phases/stage-13-portfolio/scripts/validate-audit-governance.sh
+infrastructure/phases/stage-13-portfolio/scripts/validate-capital-governance.sh
+infrastructure/phases/stage-13-portfolio/scripts/validate-domain-topology.sh
+infrastructure/phases/stage-13-portfolio/scripts/validate-persistence-governance.sh
+infrastructure/phases/stage-13-portfolio/scripts/validate-replay-governance.sh
+infrastructure/phases/stage-13-portfolio/scripts/validate-replay-hash.sh
+infrastructure/phases/stage-13-portfolio/setup.sh
+infrastructure/phases/stage-13-portfolio/snapshot.sh
+infrastructure/phases/stage-13-portfolio/state.sh
+infrastructure/phases/stage-13-portfolio/validate.sh
+
+=== REPLAY GOVERNANCE ===
+infrastructure/replay/portfolio/contracts/replay-governance.md
+infrastructure/replay/portfolio/datasets/synthetic-fills.json
+infrastructure/replay/portfolio/hashes/replay.sha256
+infrastructure/replay/portfolio/results/replay-results.json
+
+=== AUDIT GOVERNANCE ===
+infrastructure/audit/portfolio/evidence/capital-certification.json
+infrastructure/audit/portfolio/evidence/reconciliation-evidence.json
+infrastructure/audit/portfolio/evidence/replay-certification.json
+infrastructure/audit/portfolio/reconciliation/reconciliation-governance.md
+infrastructure/audit/portfolio/reports/stage13-audit-report.txt
+
+=== PORTFOLIO PERSISTENCE ===
+infrastructure/persistence/portfolio/postgresql/migrations/001_positions.sql
+infrastructure/persistence/portfolio/postgresql/migrations/002_portfolio_snapshots.sql
+infrastructure/persistence/portfolio/postgresql/migrations/003_pnl_ledger.sql
+infrastructure/persistence/portfolio/postgresql/migrations/004_capital_allocations.sql
+infrastructure/persistence/portfolio/postgresql/migrations/005_reconciliation_log.sql
+infrastructure/persistence/portfolio/postgresql/migrations/006_capital_partitions.sql
+infrastructure/persistence/portfolio/postgresql/migrations/007_capital_reservations.sql
+infrastructure/persistence/portfolio/postgresql/triggers/immutable_pnl_ledger.sql
+infrastructure/persistence/portfolio/timescaledb/hypertables/equity_history.sql
+infrastructure/persistence/portfolio/timescaledb/hypertables/exposure_history.sql
+infrastructure/persistence/portfolio/timescaledb/hypertables/margin_history.sql
+
+=== SERVICES ===
+services
+services/alert-service
+services/audit-service
+services/capital-partition-service
+services/config-service
+services/config-snapshot-service
+services/event-ingestion-service
+services/event-ordering-service
+services/event-validation-service
+services/exposure-service
+services/failure-handling-service
+services/identity-service
+services/market-data-service
+services/orchestration-service
+services/platform
+services/portfolio-service
+services/replay-engine-service
+services/snapshot-service
+services/_template
+
+=== PORTFOLIO KUBERNETES TOPOLOGY ===
+kubernetes/portfolio
+kubernetes/portfolio/base
+kubernetes/portfolio/dev
+kubernetes/portfolio/kafka
+kubernetes/portfolio/kafka/topics.yaml
+kubernetes/portfolio/prod
+kubernetes/portfolio/staging

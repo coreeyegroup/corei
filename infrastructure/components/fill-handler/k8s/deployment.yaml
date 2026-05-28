@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: fill-handler-service
+  namespace: trading-infra
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: fill-handler-service
+
+  template:
+    metadata:
+      labels:
+        app: fill-handler-service
+
+    spec:
+      containers:
+
+        - name: fill-handler-service
+
+          image: fill-handler:stage-16
+
+          imagePullPolicy: Never
+
+          ports:
+            - containerPort: 8004
+
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 8004
+
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 8004

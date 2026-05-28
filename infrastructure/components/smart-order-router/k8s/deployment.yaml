@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: smart-order-router
+  namespace: execution
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: smart-order-router
+
+  template:
+    metadata:
+      labels:
+        app: smart-order-router
+
+    spec:
+      containers:
+
+        - name: smart-order-router
+
+          image: smart-order-router:stage-16
+
+          imagePullPolicy: Never
+
+          ports:
+            - containerPort: 8000
+
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 8000
+
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 8000

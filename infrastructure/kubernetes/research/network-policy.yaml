@@ -1,0 +1,54 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+
+metadata:
+  name: research-network-policy
+  namespace: research
+
+spec:
+  podSelector: {}
+
+  policyTypes:
+    - Egress
+    - Ingress
+
+  ingress:
+    - {}
+
+  egress:
+
+    # DNS Access
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+
+      ports:
+        - protocol: UDP
+          port: 53
+
+        - protocol: TCP
+          port: 53
+
+    # Market Data Namespace Access
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: market-data
+
+    # Kafka Namespace Access
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kafka
+
+    # Database Namespace Access
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: database
+
+    # External Internet Access
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0

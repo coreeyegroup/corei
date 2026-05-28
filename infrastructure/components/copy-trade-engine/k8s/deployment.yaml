@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: copy-trade-engine
+  namespace: trading-infra
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: copy-trade-engine
+
+  template:
+    metadata:
+      labels:
+        app: copy-trade-engine
+
+    spec:
+      containers:
+
+        - name: copy-trade-engine
+
+          image: copy-trade-engine:stage-16
+
+          imagePullPolicy: Never
+
+          ports:
+            - containerPort: 8006
+
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 8006
+
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 8006

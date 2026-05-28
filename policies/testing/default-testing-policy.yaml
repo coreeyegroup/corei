@@ -1,0 +1,4 @@
+policy:
+  replay_validation: mandatory
+  determinism_validation: mandatory
+  schema_validation: mandatory
