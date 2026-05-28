@@ -33,3 +33,6 @@ state/install.state
 
 # Local infrastructure runtime
 kafka-0
+
+# Governance certification telemetry
+governance/repository-governance/repository-certification-report.json
