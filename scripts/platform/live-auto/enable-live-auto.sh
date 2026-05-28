@@ -10,7 +10,7 @@ source "$ROOT_DIR/ops/runtime-authority/runtime-paths.env"
 STATE_FILE="$LIVE_AUTO_STATE_PATH"
 
 LIVE_SEMI_STATE="$LIVE_SEMI_STATE_PATH"
-OBSERVATION_STATE="$ROOT_DIR/state/governance/live-observation/live-observation.state"
+OBSERVATION_STATE="$LIVE_OBSERVATION_STATE_PATH"
 
 LOG_FILE="$LIVE_AUTO_LOG_PATH"
 

@@ -33,31 +33,31 @@ log "=================================================="
 log "LIVE_AUTO GOVERNANCE VALIDATION STARTED"
 log "=================================================="
 
-log "[1/10] Validating semantic governance..."
+log "[1/12] Validating semantic governance..."
 
 "$SEMANTIC_GOVERNANCE_VALIDATOR" \
   && pass "Semantic governance validated" \
   || fail "Semantic governance invalid"
 
-log "[2/10] Validating LIVE_AUTO certification..."
+log "[2/12] Validating LIVE_AUTO certification..."
 
 "$ROOT_DIR/scripts/platform/live-auto/validate-live-auto.sh" \
   && pass "LIVE_AUTO certification validated" \
   || fail "LIVE_AUTO certification failed"
 
-log "[3/10] Validating runtime authority registry..."
+log "[3/12] Validating runtime authority registry..."
 
 [[ -f "$ROOT_DIR/ops/runtime-authority/runtime-paths.env" ]] \
   && pass "Runtime authority registry active" \
   || fail "Runtime authority registry missing"
 
-log "[4/10] Validating autonomous execution..."
+log "[4/12] Validating autonomous execution..."
 
 grep -q "AUTONOMOUS_EXECUTION=true" "$LIVE_AUTO_STATE_PATH" \
   && pass "Autonomous execution active" \
   || fail "Autonomous execution inactive"
 
-log "[5/10] Validating institutional containment..."
+log "[5/12] Validating institutional containment..."
 
 grep -q "MAX_ACCOUNTS=1" "$LIVE_AUTO_STATE_PATH" \
   && pass "Single-account containment active" \
@@ -71,32 +71,58 @@ grep -q "CAPITAL_PROFILE=SMALL" "$LIVE_AUTO_STATE_PATH" \
   && pass "Small-capital containment active" \
   || fail "Capital containment violated"
 
-log "[6/10] Validating runtime isolation..."
+log "[6/12] Validating runtime isolation..."
 
 [[ -d "$ROOT_DIR/state/runtime" ]] \
   && pass "Runtime isolation active" \
   || fail "Runtime isolation invalid"
 
-log "[7/10] Validating telemetry isolation..."
+log "[7/12] Validating telemetry isolation..."
 
 [[ -d "$ROOT_DIR/telemetry" ]] \
   && pass "Telemetry isolation active" \
   || fail "Telemetry isolation invalid"
 
-log "[8/10] Validating audit lineage..."
+log "[8/12] Validating audit lineage..."
 
 grep -q "AUDIT_LINEAGE=ACTIVE" "$LIVE_AUTO_STATE_PATH" \
   && pass "Audit lineage active" \
   || fail "Audit lineage invalid"
 
-log "[9/10] Validating topology decoupling..."
+log "[9/12] Validating runtime topology decoupling..."
 
-grep -R "state/governance/live-semi" \
-"$ROOT_DIR/scripts/platform" >/dev/null 2>&1 \
-  && fail "Legacy topology coupling detected" \
-  || pass "Topology decoupling validated"
+LEGACY_REFERENCES=$(
+  grep -R "state/governance/live-" \
+  "$ROOT_DIR/scripts/platform/live-auto" \
+  "$ROOT_DIR/scripts/platform/live-semi" \
+  "$ROOT_DIR/scripts/platform/live-observation" \
+  2>/dev/null || true
+)
 
-log "[10/10] Finalizing governance certification..."
+if [[ -n "$LEGACY_REFERENCES" ]]; then
+  echo "$LEGACY_REFERENCES" | tee -a "$LOG_FILE"
+  fail "Legacy runtime topology coupling detected"
+else
+  pass "Runtime topology decoupling validated"
+fi
+
+log "[10/12] Validating runtime authority propagation..."
+
+grep -R "_STATE_PATH" \
+"$ROOT_DIR/scripts/platform/live-auto" \
+"$ROOT_DIR/scripts/platform/live-semi" \
+"$ROOT_DIR/scripts/platform/live-observation" \
+>/dev/null 2>&1 \
+  && pass "Runtime authority propagation validated" \
+  || fail "Runtime authority propagation missing"
+
+log "[11/12] Validating governance continuity..."
+
+grep -q "SEMANTIC_GOVERNANCE=ACTIVE" "$STATE_FILE" \
+  && pass "Governance continuity active" \
+  || fail "Governance continuity invalid"
+
+log "[12/12] Finalizing governance certification..."
 
 cat <<STATE > "$STATE_FILE"
 LIVE_AUTO_GOVERNANCE_STATUS=CERTIFIED
@@ -109,6 +135,7 @@ INSTITUTIONAL_CONTAINMENT=ACTIVE
 
 AUDIT_LINEAGE=ACTIVE
 TOPOLOGY_DECOUPLING=VALIDATED
+RUNTIME_AUTHORITY_PROPAGATION=VALIDATED
 STATE
 
 pass "Governance certification finalized"
@@ -119,6 +146,10 @@ if [[ "$FAILED" -eq 0 ]]; then
   log "=================================================="
   log "LIVE_AUTO GOVERNANCE CERTIFICATION PASSED"
   log "=================================================="
+
+  log "[PASS] Autonomous execution governance certified"
+  log "[PASS] Runtime authority abstraction certified"
+  log "[PASS] Institutional containment certified"
 
   exit 0
 else
