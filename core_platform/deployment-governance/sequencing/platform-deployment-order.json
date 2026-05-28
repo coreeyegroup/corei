@@ -1,0 +1,17 @@
+{
+  "deployment_order": [
+    "config-service",
+    "config-snapshot-service",
+    "identity-service",
+    "audit-service",
+    "event-ingestion-service",
+    "event-validation-service",
+    "event-ordering-service",
+    "orchestration-service",
+    "portfolio-service",
+    "snapshot-service",
+    "replay-engine-service",
+    "failure-handling-service",
+    "alert-service"
+  ]
+}

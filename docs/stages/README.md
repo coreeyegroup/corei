@@ -19,4 +19,3 @@ Contains authoritative platform lifecycle stage documentation.
 # GOVERNANCE
 
 Stage execution must remain deterministic and resumable.
-

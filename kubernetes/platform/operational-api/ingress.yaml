@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: operational-api-ingress
+  namespace: platform
+spec:
+  ingressClassName: kong
+
+  rules:
+    - http:
+        paths:
+          - path: /operations
+            pathType: Prefix
+            backend:
+              service:
+                name: operational-api-service
+                port:
+                  number: 8081

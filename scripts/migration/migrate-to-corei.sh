@@ -50,9 +50,9 @@ repos=(
 
 for repo in "${repos[@]}"; do
   NEW_REPO=$(echo "$repo" | sed 's/corei/corei/')
-  
+
   echo "Renaming $repo → $NEW_REPO"
-  
+
   gh repo rename "$NEW_REPO" \
     --repo "$OLD_ORG/$repo" \
     --yes

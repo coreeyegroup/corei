@@ -111,4 +111,3 @@ Premature flattening is prohibited.
 # GOVERNANCE STATUS
 
 Repository topology changes require governance review.
-

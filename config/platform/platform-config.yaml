@@ -1,0 +1,32 @@
+platform:
+
+  environment: development
+
+  governance:
+    enabled: true
+
+  replay:
+    deterministic: true
+
+  resilience:
+    kill_switch_enabled: true
+
+  audit:
+    immutable_logging: true
+
+  deployment:
+    governed_rollouts: true
+
+services:
+
+  config-service:
+    enabled: true
+
+  identity-service:
+    enabled: true
+
+  audit-service:
+    enabled: true
+
+  portfolio-service:
+    enabled: true

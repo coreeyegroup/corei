@@ -1,25 +1,16 @@
-version: 1
+orchestration:
+  deterministic: true
+  dependency_ordering_required: true
+  replay_safe: true
+  centralized_execution_required: true
 
-principles:
+parallel_execution:
+  allowed: true
+  dependency_aware: true
 
-  - deterministic_execution
-  - workflow_visibility
-  - retry_governed
-  - failure_isolation
+reporting:
+  aggregation_required: true
+  junit_generation_required: true
 
-requirements:
-
-  workflow_id:
-    mandatory: true
-
-  auditability:
-    mandatory: true
-
-  retry_policy:
-    externalized: true
-
-prohibited:
-
-  - hidden_execution_paths
-  - unmanaged_retries
-  - non_observable_workflows
+ci:
+  orchestration_failure_blocks_pipeline: true

@@ -86,4 +86,3 @@ Must NOT own:
 # GOVERNANCE STATUS
 
 Repository ownership is authoritative platform law.
-

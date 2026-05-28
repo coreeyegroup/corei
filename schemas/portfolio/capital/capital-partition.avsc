@@ -1,0 +1,12 @@
+{
+  "type": "record",
+  "name": "CapitalPartition",
+  "namespace": "core.portfolio.capital",
+  "fields": [
+    {"name": "partition_id", "type": "string"},
+    {"name": "account_group", "type": "string"},
+    {"name": "strategy_id", "type": "string"},
+    {"name": "partition_limit", "type": "long"},
+    {"name": "created_timestamp", "type": "long"}
+  ]
+}

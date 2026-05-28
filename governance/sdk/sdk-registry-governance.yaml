@@ -1,0 +1,15 @@
+sdk:
+  centralized_distribution_required: true
+  immutable_versions_required: true
+  local_sdk_copy_forbidden: true
+
+registry:
+  provider: harbor
+  repository: pypi/trading-platform-sdk
+
+publishing:
+  version_validation_required: true
+  install_verification_required: true
+
+ci:
+  sdk_publish_failure_blocks_pipeline: true

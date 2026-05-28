@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: n8n
+  labels:
+    governance.core/stage: "18"
+    governance.core/domain: "workflow-automation"
+    governance.core/type: "automation-runtime"

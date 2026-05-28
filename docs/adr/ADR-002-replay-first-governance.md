@@ -47,4 +47,3 @@ All critical runtime systems must support deterministic reconstruction.
 # GOVERNANCE
 
 Replay capability is mandatory architectural authority.
-

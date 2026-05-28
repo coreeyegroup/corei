@@ -1,0 +1,24 @@
+registry:
+
+  provider: apicurio
+
+  governance:
+    replay_safe: true
+    deterministic_contracts: true
+    immutable_lineage: true
+
+  compatibility:
+    mode: BACKWARD_COMPATIBLE
+
+  required_schemas:
+    - broker_dispatch_v1
+    - broker_fill_v1
+    - reconciliation_event_v1
+    - broker_health_v1
+    - execution_session_v1
+    - copy_trade_event_v1
+
+  forbidden:
+    - breaking_schema_changes
+    - lineage_field_removal
+    - incompatible_precision_mutation

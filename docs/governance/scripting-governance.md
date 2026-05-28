@@ -39,4 +39,3 @@ All platform scripts must remain:
 # GOVERNANCE STATUS
 
 Operational scripting is authoritative platform infrastructure.
-

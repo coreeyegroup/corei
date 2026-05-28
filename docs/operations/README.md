@@ -19,4 +19,3 @@ Contains operational governance and operational runtime procedures.
 # GOVERNANCE
 
 Operational procedures must remain deterministic and auditable.
-

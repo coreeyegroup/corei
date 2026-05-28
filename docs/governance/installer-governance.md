@@ -92,4 +92,3 @@ Installers must emit:
 # GOVERNANCE STATUS
 
 Installer architecture is authoritative operational infrastructure.
-

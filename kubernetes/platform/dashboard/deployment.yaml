@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: trading-dashboard
+  namespace: platform
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: trading-dashboard
+
+  template:
+    metadata:
+      labels:
+        app: trading-dashboard
+
+    spec:
+      containers:
+        - name: dashboard
+          image: trading-dashboard:stage18
+          imagePullPolicy: Never
+
+          ports:
+            - containerPort: 80
+
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
+
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 15

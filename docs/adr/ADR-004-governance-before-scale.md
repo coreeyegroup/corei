@@ -39,4 +39,3 @@ Filesystem governance, deployment governance, replay governance, and ownership g
 # GOVERNANCE
 
 Governance stability takes precedence over implementation speed.
-

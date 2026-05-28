@@ -1,0 +1,31 @@
+{
+  "type": "record",
+  "name": "HistoricalQueryV1",
+  "namespace": "core.marketdata.historical",
+  "fields": [
+    {
+      "name": "query_id",
+      "type": "string"
+    },
+    {
+      "name": "canonical_symbol",
+      "type": "string"
+    },
+    {
+      "name": "start_time_ns",
+      "type": "long"
+    },
+    {
+      "name": "end_time_ns",
+      "type": "long"
+    },
+    {
+      "name": "timeframe",
+      "type": "string"
+    },
+    {
+      "name": "schema_version",
+      "type": "string"
+    }
+  ]
+}

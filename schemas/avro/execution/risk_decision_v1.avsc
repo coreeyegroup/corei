@@ -1,0 +1,28 @@
+{
+  "type": "record",
+  "name": "RiskDecision",
+  "namespace": "core.execution",
+  "doc": "Deterministic risk evaluation result",
+  "fields": [
+    {"name": "event_id", "type": "string"},
+    {"name": "event_time", "type": "long"},
+    {"name": "trace_id", "type": "string"},
+    {"name": "schema_version", "type": "string"},
+    {"name": "lineage_hash", "type": "string"},
+    {"name": "execution_intent_id", "type": "string"},
+    {"name": "risk_decision_id", "type": "string"},
+    {"name": "risk_hash", "type": "string"},
+    {"name": "risk_status", "type": {
+      "type": "enum",
+      "name": "RiskStatus",
+      "symbols": ["APPROVED", "REJECTED", "HALTED"]
+    }},
+    {"name": "rejection_reason", "type": ["null", "string"], "default": null},
+    {"name": "daily_loss_pct", "type": "long"},
+    {"name": "drawdown_pct", "type": "long"},
+    {"name": "margin_utilization_pct", "type": "long"},
+    {"name": "open_positions", "type": "int"},
+    {"name": "max_allowed_positions", "type": "int"},
+    {"name": "kill_switch_active", "type": "boolean"}
+  ]
+}

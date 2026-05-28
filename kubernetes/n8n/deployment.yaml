@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: n8n
+  namespace: n8n
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: n8n
+
+  template:
+    metadata:
+      labels:
+        app: n8n
+
+    spec:
+      containers:
+        - name: n8n
+          image: docker.n8n.io/n8nio/n8n:latest
+
+          ports:
+            - containerPort: 5678
+
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 5678
+            initialDelaySeconds: 15
+            periodSeconds: 10
+
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 5678
+            initialDelaySeconds: 20
+            periodSeconds: 15

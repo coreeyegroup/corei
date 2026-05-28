@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: {{ .Chart.Name }}
+  namespace: {{ .Values.global.namespace }}
+
+spec:
+  replicas: {{ .Values.service.replicaCount }}
+
+  strategy:
+    type: {{ .Values.global.deployment.rollout_strategy }}
+
+    rollingUpdate:
+      maxUnavailable: {{ .Values.global.deployment.maxUnavailable }}
+      maxSurge: {{ .Values.global.deployment.maxSurge }}
+
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}
+
+  template:
+
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}
+
+    spec:
+
+      serviceAccountName: platform-runtime
+
+      containers:
+
+      - name: {{ .Chart.Name }}
+
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+
+        imagePullPolicy: IfNotPresent
+
+        ports:
+        - containerPort: 8080
+
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: 8080
+
+        livenessProbe:
+          httpGet:
+            path: /health/live
+            port: 8080
+
+        resources:
+
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+
+          limits:
+            memory: "256Mi"
+            cpu: "250m"

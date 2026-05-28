@@ -742,4 +742,3 @@ This document supersedes:
 This document becomes the canonical repository governance authority.
 
 END OF DOCUMENT
-

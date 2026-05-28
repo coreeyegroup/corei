@@ -1,0 +1,25 @@
+topics:
+
+  - name: instrument_screened
+    partitions: 3
+    replication_factor: 1
+    retention_ms: 604800000
+    cleanup_policy: delete
+
+  - name: instrument_monitor_events
+    partitions: 3
+    replication_factor: 1
+    retention_ms: 604800000
+    cleanup_policy: delete
+
+  - name: signal_events
+    partitions: 6
+    replication_factor: 1
+    retention_ms: -1
+    cleanup_policy: delete
+
+  - name: decision_events
+    partitions: 6
+    replication_factor: 1
+    retention_ms: -1
+    cleanup_policy: delete

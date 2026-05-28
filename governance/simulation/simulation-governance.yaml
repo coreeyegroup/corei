@@ -1,0 +1,19 @@
+simulation:
+  deterministic: true
+  replay_safe: true
+  seed_required: true
+  uncontrolled_randomness_forbidden: true
+
+market_generation:
+  canonical_seed: 42
+  replay_validation: required
+  timestamp_ordering: deterministic
+
+broker_simulation:
+  latency_injection_allowed: true
+  rejection_simulation_allowed: true
+  disconnect_simulation_allowed: true
+  partial_fill_simulation_allowed: true
+
+ci:
+  simulation_validation_required: true

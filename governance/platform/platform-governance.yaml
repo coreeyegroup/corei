@@ -1,0 +1,20 @@
+platform:
+  deterministic_runtime: true
+  replay_safe: true
+  centralized_governance: true
+
+deployment:
+  ordered_deployment_required: true
+  health_gate_required: true
+  namespace: platform
+
+sdk:
+  centralized_sdk_required: true
+  service_local_sdk_forbidden: true
+
+runtime:
+  lineage_enforcement_required: true
+  orchestration_enforcement_required: true
+
+ci:
+  validation_failure_blocks_pipeline: true

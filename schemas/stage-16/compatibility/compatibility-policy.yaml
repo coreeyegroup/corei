@@ -1,0 +1,26 @@
+schema_governance:
+
+  compatibility_mode: BACKWARD_COMPATIBLE
+
+  forbidden_operations:
+    - field_removal
+    - lineage_field_mutation
+    - timestamp_precision_change
+    - financial_precision_change
+    - incompatible_type_change
+
+  mandatory_fields:
+    - signal_id
+    - trade_intent_id
+    - execution_intent_id
+    - order_id
+
+  timestamp_precision:
+    standard: epoch_nanoseconds
+
+  numeric_precision:
+    standard: int64
+
+  replay_governance:
+    replay_safe: true
+    deterministic_reconstruction: true

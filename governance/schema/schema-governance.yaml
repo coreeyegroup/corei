@@ -1,0 +1,18 @@
+schema_governance:
+  format: avro
+  deterministic: true
+  replay_safe: true
+  backward_compatibility_required: true
+  float_types_forbidden: true
+  schema_evolution_controlled: true
+
+validation:
+  compatibility_mode: backward
+  hash_validation: required
+  canonical_ordering: required
+
+ci:
+  blocking_failures:
+    - schema_breaking_change
+    - replay_incompatible_change
+    - ordering_mutation

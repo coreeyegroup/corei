@@ -1,0 +1,13 @@
+{
+  "type": "record",
+  "name": "PnLState",
+  "namespace": "core.portfolio",
+  "fields": [
+    {"name": "account_id", "type": "string"},
+    {"name": "instrument", "type": "string"},
+    {"name": "realized_pnl", "type": "long"},
+    {"name": "unrealized_pnl", "type": "long"},
+    {"name": "fees", "type": "long"},
+    {"name": "timestamp", "type": "long"}
+  ]
+}

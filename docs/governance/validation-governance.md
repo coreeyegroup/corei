@@ -40,4 +40,3 @@ Validation must remain:
 # GOVERNANCE STATUS
 
 Validation authority is mandatory operational infrastructure.
-

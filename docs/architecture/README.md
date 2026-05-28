@@ -23,4 +23,3 @@ Contains authoritative platform architecture documentation.
 Architecture documentation is authoritative engineering guidance.
 
 Undocumented architectural mutation is prohibited.
-

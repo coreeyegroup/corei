@@ -1,85 +1,86 @@
-.logs/
-.snapshots/
-*.iso
-*.vmdk
+
+# ==================================================
+# INSTITUTIONAL GOVERNANCE DOMAINS
+# ==================================================
+
+# --------------------------------------------------
+# RUNTIME DOMAINS
+# --------------------------------------------------
+
+runtime/
+logs/
+reports/
+
+state/runtime/
+
+# --------------------------------------------------
+# PYTHON RUNTIME
+# --------------------------------------------------
+
+venv/
+.venv/
+env/
+
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# --------------------------------------------------
+# NODE RUNTIME
+# --------------------------------------------------
+
+node_modules/
+**/node_modules/
+
+.next/
+dist/
+build/
+
+# --------------------------------------------------
+# ARTIFACT STORAGE
+# --------------------------------------------------
+
+*.tar
+*.tar.gz
+*.tgz
+
+snapshots/
+images/
+exports/
+
+# --------------------------------------------------
+# RECOVERY STORAGE
+# --------------------------------------------------
+
+*.sql
+
+# --------------------------------------------------
+# TELEMETRY
+# --------------------------------------------------
+
 *.log
-*.tmp
-*.bak
-*swp
-.env
-.env.*
-
-
-# =========================================
-# Stage 01 Runtime State
-# =========================================
-
-infrastructure/state/**/logs/
-infrastructure/state/**/backups/
-infrastructure/state/**/snapshots/
-
-# Runtime-generated inventory outputs
-infrastructure/state/**/inventory/runtime-inventory.txt
-
-# Generated archives
-*.tar.gz
-*.snapshot
-
-# =========================================
-# Runtime Generated State
-# =========================================
-
-# Stage runtime state
-infrastructure/state/**/logs/
-infrastructure/state/**/backups/
-infrastructure/state/**/snapshots/
-
-# Generated inventory/runtime outputs
-infrastructure/state/**/inventory/runtime-inventory.txt
-
-# Generated archives
-*.tar.gz
-*.snapshot
-
-# VM/runtime artifacts
-*.qcow2
-*.img
-*.vdi
-*.vhd
-*.vhdx
-
-# Kubernetes mutable runtime
-*.kubeconfig
-kubeconfig
-
-# =========================================
-# Stage Runtime State
-# =========================================
-
-infrastructure/state/stage-02/
-
-# =========================================
-# Legacy Cleanup Governance
-# =========================================
-
-scratch/legacy-cleanup/
-scratch/*.txt
 
 # --------------------------------------------------
-# STAGE-10 :: GITOPS SECRETS
+# EDITOR
 # --------------------------------------------------
 
-secrets/gitops/
-*.pem
-*.key
-*.pub.tmp
-
+.vscode/
+.idea/
 
 # --------------------------------------------------
-# STAGE-10 :: ARGOCD RUNTIME SECRETS
+# TEST OUTPUTS
 # --------------------------------------------------
 
-kubernetes/cicd/argocd/*secret*.yaml
+coverage/
+htmlcov/
 
-operations/backups/*
-operations/snapshots/*
+# --------------------------------------------------
+# GENERATED FILES
+# --------------------------------------------------
+
+corei-full-tree.txt
+
+# Governance generated inventories
+governance/repository-governance/repository-file-inventory.txt
+governance/repository-governance/repository-directory-inventory.txt

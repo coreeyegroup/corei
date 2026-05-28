@@ -1,0 +1,33 @@
+{
+  "type": "record",
+  "name": "PerAccountIntent",
+  "namespace": "core.execution",
+  "doc": "Governed account-routed execution intent",
+  "fields": [
+    {"name": "event_id", "type": "string"},
+    {"name": "event_time", "type": "long"},
+    {"name": "trace_id", "type": "string"},
+    {"name": "schema_version", "type": "string"},
+    {"name": "lineage_hash", "type": "string"},
+    {"name": "execution_intent_id", "type": "string"},
+    {"name": "per_account_intent_id", "type": "string"},
+    {"name": "account_id", "type": "string"},
+    {"name": "account_group", "type": "string"},
+    {"name": "operation_mode", "type": {
+      "type": "enum",
+      "name": "OperationMode",
+      "symbols": [
+        "PAPER",
+        "LIVE_SEMI",
+        "LIVE_AUTO",
+        "DISABLED",
+        "BACKTEST"
+      ]
+    }},
+    {"name": "instrument_id", "type": "string"},
+    {"name": "side", "type": "ExecutionSide"},
+    {"name": "requested_price", "type": "long"},
+    {"name": "stop_price", "type": "long"},
+    {"name": "target_price", "type": "long"}
+  ]
+}

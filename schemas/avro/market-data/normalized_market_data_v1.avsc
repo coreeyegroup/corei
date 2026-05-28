@@ -1,0 +1,55 @@
+{
+  "type": "record",
+  "name": "NormalizedMarketDataV1",
+  "namespace": "core.marketdata.normalized",
+  "fields": [
+    {
+      "name": "event_id",
+      "type": "string"
+    },
+    {
+      "name": "canonical_symbol",
+      "type": "string"
+    },
+    {
+      "name": "event_time_ns",
+      "type": "long"
+    },
+    {
+      "name": "bid_price",
+      "type": "long"
+    },
+    {
+      "name": "ask_price",
+      "type": "long"
+    },
+    {
+      "name": "last_price",
+      "type": "long"
+    },
+    {
+      "name": "spread",
+      "type": "long"
+    },
+    {
+      "name": "volume",
+      "type": "long"
+    },
+    {
+      "name": "sequence_id",
+      "type": "long"
+    },
+    {
+      "name": "partition_key",
+      "type": "string"
+    },
+    {
+      "name": "lineage_hash",
+      "type": "string"
+    },
+    {
+      "name": "schema_version",
+      "type": "string"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "type": "record",
+  "name": "CapitalReservation",
+  "namespace": "core.portfolio.capital",
+  "fields": [
+    {"name": "reservation_id", "type": "string"},
+    {"name": "account_group", "type": "string"},
+    {"name": "strategy_id", "type": "string"},
+    {"name": "reserved_capital", "type": "long"},
+    {"name": "reservation_timestamp", "type": "long"}
+  ]
+}

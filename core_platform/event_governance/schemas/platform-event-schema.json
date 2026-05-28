@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+
+  "type": "object",
+
+  "properties": {
+
+    "event_id": {
+      "type": "string"
+    },
+
+    "event_type": {
+      "type": "string"
+    },
+
+    "lineage_hash": {
+      "type": "string"
+    },
+
+    "payload": {
+      "type": "object"
+    }
+  },
+
+  "required": [
+    "event_id",
+    "event_type",
+    "lineage_hash",
+    "payload"
+  ]
+}

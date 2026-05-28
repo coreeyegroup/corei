@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: platform
+  labels:
+    governance.core/stage: "18"
+    governance.core/domain: "ui-operations"
+    governance.core/type: "platform-runtime"

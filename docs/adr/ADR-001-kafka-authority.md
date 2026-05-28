@@ -49,4 +49,3 @@ All cross-domain runtime communication must become event-driven.
 # GOVERNANCE
 
 Replay-first architecture takes precedence over implementation simplicity.
-

@@ -46,4 +46,3 @@ Repositories remain implementation authorities.
 Topology convergence must remain governance-driven.
 
 Premature flattening is prohibited.
-

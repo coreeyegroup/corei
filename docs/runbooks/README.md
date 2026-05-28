@@ -19,4 +19,3 @@ Contains deterministic operational execution procedures.
 # GOVERNANCE
 
 Runbooks must remain executable, deterministic, and operationally validated.
-

@@ -1,0 +1,25 @@
+{
+  "type": "record",
+  "name": "PolicyDecision",
+  "namespace": "core.execution",
+  "doc": "Execution policy evaluation result",
+  "fields": [
+    {"name": "event_id", "type": "string"},
+    {"name": "event_time", "type": "long"},
+    {"name": "trace_id", "type": "string"},
+    {"name": "schema_version", "type": "string"},
+    {"name": "lineage_hash", "type": "string"},
+    {"name": "execution_intent_id", "type": "string"},
+    {"name": "policy_decision_id", "type": "string"},
+    {"name": "policy_hash", "type": "string"},
+    {"name": "policy_status", "type": {
+      "type": "enum",
+      "name": "PolicyStatus",
+      "symbols": ["APPROVED", "REJECTED"]
+    }},
+    {"name": "session_allowed", "type": "boolean"},
+    {"name": "rate_limit_allowed", "type": "boolean"},
+    {"name": "wash_trade_detected", "type": "boolean"},
+    {"name": "policy_reason", "type": ["null", "string"], "default": null}
+  ]
+}

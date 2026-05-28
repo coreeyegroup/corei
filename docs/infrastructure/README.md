@@ -20,4 +20,3 @@ Contains infrastructure architecture and operational infrastructure guidance.
 # GOVERNANCE
 
 Infrastructure changes must remain deterministic and governance-aware.
-

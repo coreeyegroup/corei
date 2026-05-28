@@ -41,4 +41,3 @@ Cross-domain mutation is prohibited.
 # GOVERNANCE
 
 Bounded ownership takes precedence over convenience coupling.
-

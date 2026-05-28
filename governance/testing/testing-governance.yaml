@@ -1,0 +1,5 @@
+testing:
+  deterministic: true
+  replay_safe: true
+  script_authoritative: true
+  audit_required: true

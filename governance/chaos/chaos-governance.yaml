@@ -1,0 +1,19 @@
+chaos:
+  deterministic: true
+  bounded_execution: true
+  replay_safe: true
+  destructive_operations_forbidden: true
+
+failure_injection:
+  pod_failure_allowed: true
+  kafka_failure_allowed: true
+  network_partition_allowed: true
+  database_interruption_allowed: true
+
+recovery:
+  recovery_validation_required: true
+  cleanup_required: true
+
+ci:
+  chaos_execution_allowed: true
+  chaos_failure_blocks_pipeline: true

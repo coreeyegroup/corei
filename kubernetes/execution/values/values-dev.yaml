@@ -1,0 +1,8 @@
+routing:
+  failover_enabled: true
+  latency_tracking: true
+  deterministic_ordering: true
+
+governance:
+  replay_safe: true
+  lineage_enforced: true

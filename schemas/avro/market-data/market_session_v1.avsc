@@ -1,0 +1,35 @@
+{
+  "type": "record",
+  "name": "MarketSessionV1",
+  "namespace": "core.marketdata.session",
+  "fields": [
+    {
+      "name": "session_id",
+      "type": "string"
+    },
+    {
+      "name": "exchange",
+      "type": "string"
+    },
+    {
+      "name": "session_state",
+      "type": "string"
+    },
+    {
+      "name": "session_open_ns",
+      "type": "long"
+    },
+    {
+      "name": "session_close_ns",
+      "type": "long"
+    },
+    {
+      "name": "trading_day",
+      "type": "string"
+    },
+    {
+      "name": "schema_version",
+      "type": "string"
+    }
+  ]
+}

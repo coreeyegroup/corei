@@ -1,0 +1,14 @@
+{
+  "type": "record",
+  "name": "broker_fill_v1",
+  "fields": [
+    { "name": "fill_id", "type": "string" },
+    { "name": "order_id", "type": "string" },
+    { "name": "execution_intent_id", "type": "string" },
+    { "name": "trade_intent_id", "type": "string" },
+    { "name": "signal_id", "type": "string" },
+    { "name": "fill_price", "type": "long" },
+    { "name": "fill_quantity", "type": "long" },
+    { "name": "timestamp_ns", "type": "long" }
+  ]
+}

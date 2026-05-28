@@ -1,0 +1,10 @@
+{
+  "type": "record",
+  "name": "broker_health_v1",
+  "fields": [
+    { "name": "broker", "type": "string" },
+    { "name": "status", "type": "string" },
+    { "name": "latency_ms", "type": "long" },
+    { "name": "heartbeat_timestamp_ns", "type": "long" }
+  ]
+}

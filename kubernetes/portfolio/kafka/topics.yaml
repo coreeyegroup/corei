@@ -1,0 +1,29 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: portfolio-state-stream
+  namespace: kafka
+spec:
+  partitions: 3
+  replicas: 1
+  topicName: portfolio_state_stream
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: position-state-stream
+  namespace: kafka
+spec:
+  partitions: 3
+  replicas: 1
+  topicName: position_state_stream
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: pnl-stream
+  namespace: kafka
+spec:
+  partitions: 3
+  replicas: 1
+  topicName: pnl_stream

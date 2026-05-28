@@ -1,0 +1,15 @@
+performance:
+  deterministic: true
+  replay_safe: true
+  artifact_generation_required: true
+
+latency:
+  max_pipeline_latency_ms: 100
+  latency_budget_validation_required: true
+
+throughput:
+  throughput_validation_required: true
+
+ci:
+  latency_failure_blocks_pipeline: true
+  performance_artifacts_required: true

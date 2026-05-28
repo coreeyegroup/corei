@@ -1,0 +1,12 @@
+determinism:
+  identical_inputs_required: true
+  identical_outputs_required: true
+  identical_hashes_required: true
+  identical_state_required: true
+
+hashing:
+  algorithm: sha256
+  canonical_serialization: true
+
+validation:
+  replay_equivalence_required: true

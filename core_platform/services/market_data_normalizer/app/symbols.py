@@ -1,0 +1,3 @@
+SYMBOL_MAPPING = {
+    "XAUUSD": "GOLD.FX",
+}

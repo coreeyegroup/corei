@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: operational-api-service
+  namespace: platform
+
+spec:
+  selector:
+    app: operational-api
+
+  ports:
+    - port: 8081
+      targetPort: 8081
+
+  type: ClusterIP

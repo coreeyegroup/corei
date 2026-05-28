@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: websocket-gateway
+  namespace: platform
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: websocket-gateway
+
+  template:
+    metadata:
+      labels:
+        app: websocket-gateway
+
+    spec:
+      containers:
+        - name: websocket-gateway
+          image: websocket-gateway:stage18
+          imagePullPolicy: Never
+
+          ports:
+            - containerPort: 8080
+
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 15

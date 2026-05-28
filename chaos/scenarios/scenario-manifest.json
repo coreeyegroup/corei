@@ -1,0 +1,16 @@
+{
+  "scenarios": [
+    {
+      "name": "mock-kafka-broker-failure",
+      "type": "kafka_failure"
+    },
+    {
+      "name": "mock-network-partition",
+      "type": "network_partition"
+    },
+    {
+      "name": "mock-database-interruption",
+      "type": "database_failure"
+    }
+  ]
+}

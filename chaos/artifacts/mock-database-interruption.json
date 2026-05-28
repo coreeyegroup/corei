@@ -1,0 +1,6 @@
+{
+  "scenario": "mock-database-interruption",
+  "type": "database_failure",
+  "status": "recovered",
+  "duration_seconds": 1
+}

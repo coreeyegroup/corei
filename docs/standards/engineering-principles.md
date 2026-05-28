@@ -31,4 +31,3 @@ Retry, routing, replay, and orchestration behavior must be policy-controlled.
 
 ### 10. OPERATIONAL VISIBILITY
 All critical runtime systems must expose observability surfaces.
-

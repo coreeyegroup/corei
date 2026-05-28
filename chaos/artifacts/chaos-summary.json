@@ -1,0 +1,20 @@
+[
+  {
+    "scenario": "mock-kafka-broker-failure",
+    "type": "kafka_failure",
+    "status": "recovered",
+    "duration_seconds": 2
+  },
+  {
+    "scenario": "mock-network-partition",
+    "type": "network_partition",
+    "status": "recovered",
+    "duration_seconds": 1
+  },
+  {
+    "scenario": "mock-database-interruption",
+    "type": "database_failure",
+    "status": "recovered",
+    "duration_seconds": 1
+  }
+]

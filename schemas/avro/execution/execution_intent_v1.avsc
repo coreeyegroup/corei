@@ -1,0 +1,39 @@
+{
+  "type": "record",
+  "name": "ExecutionIntent",
+  "namespace": "core.execution",
+  "doc": "Governed execution intent contract",
+  "fields": [
+    {"name": "event_id", "type": "string"},
+    {"name": "event_time", "type": "long"},
+    {"name": "trace_id", "type": "string"},
+    {"name": "schema_version", "type": "string"},
+    {"name": "lineage_hash", "type": "string"},
+    {"name": "trade_intent_id", "type": "string"},
+    {"name": "execution_intent_id", "type": "string"},
+    {"name": "strategy_id", "type": "string"},
+    {"name": "account_routing_key", "type": "string"},
+    {"name": "origin_type", "type": {
+      "type": "enum",
+      "name": "OriginType",
+      "symbols": ["CORE", "EXTERNAL"]
+    }},
+    {"name": "execution_type", "type": {
+      "type": "enum",
+      "name": "ExecutionType",
+      "symbols": ["MARKET", "LIMIT", "STOP", "STOP_LIMIT"]
+    }},
+    {"name": "instrument_id", "type": "string"},
+    {"name": "side", "type": {
+      "type": "enum",
+      "name": "ExecutionSide",
+      "symbols": ["BUY", "SELL"]
+    }},
+    {"name": "signal_strength", "type": "long"},
+    {"name": "requested_price", "type": "long"},
+    {"name": "stop_price", "type": "long"},
+    {"name": "target_price", "type": "long"},
+    {"name": "risk_percentage", "type": "long"},
+    {"name": "created_by", "type": "string"}
+  ]
+}

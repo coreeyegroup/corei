@@ -19,4 +19,3 @@ Contains bounded-context service documentation.
 # GOVERNANCE
 
 All services must remain bounded and deterministic.
-

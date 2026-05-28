@@ -1,0 +1,32 @@
+topics:
+  - name: broker_dispatch_stream
+    partitions: 3
+    replication_factor: 1
+
+  - name: broker_health_stream
+    partitions: 1
+    replication_factor: 1
+
+  - name: broker_execution_stream
+    partitions: 3
+    replication_factor: 1
+
+  - name: reconciliation_stream
+    partitions: 1
+    replication_factor: 1
+
+  - name: copy_trade_stream
+    partitions: 3
+    replication_factor: 1
+
+  - name: copy_trade_audit_stream
+    partitions: 1
+    replication_factor: 1
+
+  - name: execution_session_stream
+    partitions: 1
+    replication_factor: 1
+
+  - name: broker_latency_stream
+    partitions: 1
+    replication_factor: 1

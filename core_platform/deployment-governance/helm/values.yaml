@@ -1,0 +1,24 @@
+global:
+
+  namespace: platform
+
+  governance:
+    enabled: true
+
+  health:
+    readiness_required: true
+    liveness_required: true
+
+  deployment:
+    rollout_strategy: RollingUpdate
+    maxUnavailable: 0
+    maxSurge: 1
+
+service:
+
+  replicaCount: 1
+
+image:
+
+  repository: platform-service
+  tag: latest

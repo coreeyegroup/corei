@@ -1,0 +1,12 @@
+{
+  "type": "record",
+  "name": "copy_trade_event_v1",
+  "fields": [
+    { "name": "master_account_id", "type": "string" },
+    { "name": "follower_account_id", "type": "string" },
+    { "name": "master_order_id", "type": "string" },
+    { "name": "follower_order_id", "type": "string" },
+    { "name": "scaling_ratio", "type": "long" },
+    { "name": "timestamp_ns", "type": "long" }
+  ]
+}

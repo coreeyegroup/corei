@@ -32,4 +32,3 @@ Corei is governed by:
 # GOVERNANCE STATUS
 
 This governance index represents authoritative platform operating law.
-

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: execution
+
+  labels:
+    governance.core/stage: "16"
+    governance.core/domain: "execution"
+    governance.core/type: "broker-connectivity"
+    governance.core/runtime: "governed"
+
+  annotations:
+    governance.core/purpose: "execution-connectivity-runtime"

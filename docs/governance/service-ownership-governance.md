@@ -39,4 +39,3 @@ Every service must expose:
 # GOVERNANCE STATUS
 
 Bounded service ownership is authoritative runtime law.
-

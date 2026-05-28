@@ -37,4 +37,3 @@ State tracking must remain:
 # GOVERNANCE STATUS
 
 Build state tracking is authoritative operational law.
-

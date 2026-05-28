@@ -1,0 +1,10 @@
+global:
+  environment: dev
+
+broker:
+  MOCK_MODE: true
+
+governance:
+  execution_mode: mock-only
+  replay_safe: true
+  deterministic_execution: true

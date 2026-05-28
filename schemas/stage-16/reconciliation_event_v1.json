@@ -1,0 +1,11 @@
+{
+  "type": "record",
+  "name": "reconciliation_event_v1",
+  "fields": [
+    { "name": "account_id", "type": "string" },
+    { "name": "order_id", "type": "string" },
+    { "name": "status", "type": "string" },
+    { "name": "mismatch_detected", "type": "boolean" },
+    { "name": "timestamp_ns", "type": "long" }
+  ]
+}
