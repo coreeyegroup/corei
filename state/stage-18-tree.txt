@@ -1,0 +1,3034 @@
+/home/coreeye/corei
+├── argocd
+│   ├── apps
+│   │   └── core-root-app.yaml
+│   └── projects
+│       └── core-system-project.yaml
+├── artifacts
+│   ├── configuration
+│   │   └── config-snapshot.json
+│   ├── events
+│   ├── execution_gate
+│   │   └── stage-11-execution-readiness.json
+│   ├── install
+│   │   └── install.log
+│   ├── operations
+│   ├── platform
+│   │   ├── deployments
+│   │   ├── runtime-governance
+│   │   └── sdk
+│   ├── portfolio
+│   ├── replay
+│   ├── resilience
+│   ├── stage-14
+│   │   ├── audit
+│   │   ├── hashes
+│   │   ├── lineage
+│   │   ├── recovery
+│   │   ├── replay
+│   │   └── validation
+│   └── testing
+│       ├── chaos
+│       │   └── chaos.xml
+│       ├── contracts
+│       │   └── contracts.xml
+│       ├── coverage
+│       ├── determinism
+│       ├── junit
+│       │   ├── chaos-validation.xml
+│       │   ├── contracts.xml
+│       │   ├── integration.xml
+│       │   ├── load.xml
+│       │   ├── performance.xml
+│       │   ├── replay-validation.xml
+│       │   ├── schemas.xml
+│       │   └── simulation.xml
+│       ├── latency
+│       ├── load
+│       │   ├── load-test-report.json
+│       │   └── load.xml
+│       ├── orchestration
+│       │   └── orchestration-summary.json
+│       ├── performance
+│       │   └── performance.xml
+│       ├── replay
+│       │   └── replay-validation.xml
+│       ├── schemas
+│       │   └── schemas.xml
+│       ├── simulation
+│       │   └── simulation.xml
+│       └── synthetic-market
+├── audit
+│   └── stage-14
+│       ├── decisions
+│       ├── lineage
+│       └── signals
+├── authoritative-stage-index.md
+├── authoritative-stage-index.md.md
+├── broker-adapter-stage16.tar
+├── brokers
+├── -c
+├── chaos
+│   ├── artifacts
+│   │   ├── chaos-summary.json
+│   │   ├── mock-database-interruption.json
+│   │   ├── mock-kafka-broker-failure.json
+│   │   └── mock-network-partition.json
+│   ├── database
+│   ├── engine
+│   │   └── chaos-engine.py
+│   ├── kafka
+│   ├── network
+│   ├── pods
+│   ├── recovery
+│   └── scenarios
+│       └── scenario-manifest.json
+├── cicd
+│   ├── github-actions
+│   │   ├── build.yaml
+│   │   ├── deploy.yaml
+│   │   └── rollback.yaml
+│   ├── pipelines
+│   ├── README.md
+│   ├── release
+│   └── validation
+│       ├── deployment_risk_score.py
+│       ├── latency_regression_check.py
+│       ├── lineage_integrity_check.py
+│       ├── replay_equivalence_check.py
+│       └── schema_compatibility_check.py
+├── compliance
+├── config
+│   ├── execution
+│   │   ├── account-routing.yaml
+│   │   ├── execution-modes.yaml
+│   │   ├── policy-rules.yaml
+│   │   ├── position-sizing.yaml
+│   │   └── risk-limits.yaml
+│   └── platform
+│       └── platform-config.yaml
+├── contracts
+│   └── events
+│       └── event-envelope.yaml
+├── copy-trade-engine-stage16.tar
+├── corei-full-tree.txt
+├── corei-tree.txt
+├── core_platform
+│   ├── config-control
+│   │   └── __init__.py
+│   ├── config_governance
+│   │   ├── audit
+│   │   │   ├── config_audit_log.py
+│   │   │   └── __init__.py
+│   │   ├── __init__.py
+│   │   ├── lineage
+│   │   │   ├── config_lineage.py
+│   │   │   └── __init__.py
+│   │   ├── restoration
+│   │   │   ├── config_restoration.py
+│   │   │   └── __init__.py
+│   │   ├── runtime
+│   │   │   ├── __init__.py
+│   │   │   └── test_config_governance.py
+│   │   ├── schemas
+│   │   │   ├── __init__.py
+│   │   │   └── platform-config-schema.json
+│   │   ├── snapshots
+│   │   │   ├── __init__.py
+│   │   │   └── snapshot_engine.py
+│   │   ├── validate-config-governance.sh
+│   │   └── validation
+│   │       ├── config_validator.py
+│   │       └── __init__.py
+│   ├── contracts
+│   │   ├── health
+│   │   │   ├── health-contract.md
+│   │   │   └── __init__.py
+│   │   ├── __init__.py
+│   │   └── metadata
+│   │       ├── __init__.py
+│   │       └── service-metadata-contract.md
+│   ├── deployment-governance
+│   │   ├── health
+│   │   │   └── health-gate.py
+│   │   ├── helm
+│   │   │   ├── templates
+│   │   │   └── values.yaml
+│   │   ├── policies
+│   │   ├── rollbacks
+│   │   │   └── rollback-policy.md
+│   │   ├── sequencing
+│   │   │   └── platform-deployment-order.json
+│   │   └── validate-deployment-governance.sh
+│   ├── determinism
+│   │   └── __init__.py
+│   ├── deterministic_replay
+│   │   ├── consistency
+│   │   │   ├── __init__.py
+│   │   │   └── state_consistency_validator.py
+│   │   ├── engine
+│   │   │   ├── __init__.py
+│   │   │   └── replay_engine.py
+│   │   ├── __init__.py
+│   │   ├── lineage
+│   │   │   ├── __init__.py
+│   │   │   └── replay_lineage.py
+│   │   ├── runtime
+│   │   │   ├── __init__.py
+│   │   │   └── test_deterministic_replay.py
+│   │   ├── validate-deterministic-replay.sh
+│   │   └── validation
+│   │       ├── __init__.py
+│   │       └── replay_validator.py
+│   ├── event_bus
+│   │   ├── contracts
+│   │   │   └── __init__.py
+│   │   ├── gateway.py
+│   │   ├── __init__.py
+│   │   ├── ordering_coordinator.py
+│   │   ├── runtime
+│   │   │   └── __init__.py
+│   │   └── tests
+│   │       └── __init__.py
+│   ├── event_governance
+│   │   ├── audit
+│   │   │   ├── event_audit_log.py
+│   │   │   └── __init__.py
+│   │   ├── dead_letter
+│   │   │   ├── dead_letter_router.py
+│   │   │   └── __init__.py
+│   │   ├── __init__.py
+│   │   ├── lineage
+│   │   │   ├── event_lineage.py
+│   │   │   └── __init__.py
+│   │   ├── replay
+│   │   │   ├── event_replay.py
+│   │   │   └── __init__.py
+│   │   ├── runtime
+│   │   │   ├── event_ingestion_gateway.py
+│   │   │   ├── __init__.py
+│   │   │   └── test_event_governance.py
+│   │   ├── schemas
+│   │   │   ├── __init__.py
+│   │   │   └── platform-event-schema.json
+│   │   ├── validate-event-governance.sh
+│   │   └── validation
+│   │       ├── event_validator.py
+│   │       └── __init__.py
+│   ├── execution_gate
+│   │   ├── certification
+│   │   │   ├── execution_certifier.py
+│   │   │   └── __init__.py
+│   │   ├── governance
+│   │   │   └── __init__.py
+│   │   ├── __init__.py
+│   │   ├── reconciliation
+│   │   │   ├── __init__.py
+│   │   │   └── platform_reconciliation.py
+│   │   ├── runtime
+│   │   │   ├── __init__.py
+│   │   │   └── test_execution_gate.py
+│   │   ├── validate-execution-gate.sh
+│   │   └── validation
+│   │       ├── governance_validator.py
+│   │       └── __init__.py
+│   ├── flow_control
+│   │   ├── __init__.py
+│   │   ├── lag_monitor.py
+│   │   ├── monitoring
+│   │   │   └── __init__.py
+│   │   ├── rate_limiter.py
+│   │   ├── runtime
+│   │   │   └── __init__.py
+│   │   └── tests
+│   │       └── __init__.py
+│   ├── governance
+│   │   └── __init__.py
+│   ├── __init__.py
+│   ├── lineage
+│   │   ├── hasher.py
+│   │   ├── __init__.py
+│   │   ├── runtime
+│   │   │   └── __init__.py
+│   │   ├── tests
+│   │   │   └── __init__.py
+│   │   ├── trace_propagation.py
+│   │   └── tracking
+│   │       └── __init__.py
+│   ├── mode-governance
+│   │   └── __init__.py
+│   ├── operations
+│   │   ├── alerts
+│   │   │   ├── alert_router.py
+│   │   │   └── __init__.py
+│   │   ├── escalation
+│   │   │   ├── escalation_orchestrator.py
+│   │   │   └── __init__.py
+│   │   ├── incidents
+│   │   │   ├── incident_manager.py
+│   │   │   └── __init__.py
+│   │   ├── __init__.py
+│   │   ├── lineage
+│   │   │   ├── __init__.py
+│   │   │   └── operations_lineage.py
+│   │   ├── runtime
+│   │   │   ├── __init__.py
+│   │   │   └── test_operations_foundation.py
+│   │   ├── severity
+│   │   │   ├── __init__.py
+│   │   │   └── severity_classifier.py
+│   │   ├── validate-operations-foundation.sh
+│   │   └── validation
+│   │       ├── __init__.py
+│   │       └── operations_validator.py
+│   ├── policy-runtime
+│   │   └── __init__.py
+│   ├── portfolio
+│   │   ├── engine
+│   │   │   ├── __init__.py
+│   │   │   └── portfolio_state_engine.py
+│   │   ├── __init__.py
+│   │   ├── lineage
+│   │   │   ├── __init__.py
+│   │   │   └── portfolio_lineage.py
+│   │   ├── replay
+│   │   │   ├── __init__.py
+│   │   │   └── portfolio_replay.py
+│   │   ├── runtime
+│   │   │   ├── __init__.py
+│   │   │   └── test_portfolio_foundation.py
+│   │   ├── snapshots
+│   │   │   ├── __init__.py
+│   │   │   └── snapshot_engine.py
+│   │   ├── state
+│   │   │   └── __init__.py
+│   │   ├── validate-portfolio-foundation.sh
+│   │   └── validation
+│   │       ├── __init__.py
+│   │       └── portfolio_validator.py
+│   ├── __pycache__
+│   │   └── __init__.cpython-310.pyc
+│   ├── README.md
+│   ├── replay
+│   │   ├── consistency
+│   │   │   └── __init__.py
+│   │   ├── __init__.py
+│   │   ├── replay_controller.py
+│   │   ├── runtime
+│   │   │   └── __init__.py
+│   │   ├── snapshot_consistency_guard.py
+│   │   └── tests
+│   │       └── __init__.py
+│   ├── resilience
+│   │   ├── circuit_breaker.py
+│   │   ├── circuit_breaker_runtime
+│   │   │   └── __init__.py
+│   │   ├── fallback_manager.py
+│   │   ├── __init__.py
+│   │   ├── runtime
+│   │   │   └── __init__.py
+│   │   └── tests
+│   │       └── __init__.py
+│   ├── resilience_runtime
+│   │   ├── circuit_breakers
+│   │   │   ├── circuit_breaker_engine.py
+│   │   │   └── __init__.py
+│   │   ├── fallback
+│   │   │   ├── fallback_manager.py
+│   │   │   └── __init__.py
+│   │   ├── __init__.py
+│   │   ├── lineage
+│   │   │   ├── __init__.py
+│   │   │   └── resilience_lineage.py
+│   │   ├── recovery
+│   │   │   ├── __init__.py
+│   │   │   └── recovery_engine.py
+│   │   ├── retry
+│   │   │   ├── __init__.py
+│   │   │   └── retry_orchestrator.py
+│   │   ├── runtime
+│   │   │   ├── __init__.py
+│   │   │   └── test_resilience_foundation.py
+│   │   ├── validate-resilience-foundation.sh
+│   │   └── validation
+│   │       ├── __init__.py
+│   │       └── resilience_validator.py
+│   ├── runtime
+│   │   └── __init__.py
+│   ├── runtime_governance
+│   │   ├── health
+│   │   │   └── __init__.py
+│   │   ├── ingress
+│   │   │   └── __init__.py
+│   │   ├── __init__.py
+│   │   ├── namespace
+│   │   │   ├── __init__.py
+│   │   │   └── platform-namespace.yaml
+│   │   ├── network
+│   │   │   ├── __init__.py
+│   │   │   └── platform-network-policy.yaml
+│   │   ├── policies
+│   │   │   └── __init__.py
+│   │   ├── rbac
+│   │   │   ├── __init__.py
+│   │   │   ├── platform-role-binding.yaml
+│   │   │   ├── platform-role.yaml
+│   │   │   └── platform-service-account.yaml
+│   │   └── validate-runtime-governance.sh
+│   ├── sdk
+│   │   ├── artifacts
+│   │   │   └── __init__.py
+│   │   ├── dist
+│   │   │   ├── __init__.py
+│   │   │   ├── trading_platform_sdk-0.1.0-py3-none-any.whl
+│   │   │   └── trading_platform_sdk-0.1.0.tar.gz
+│   │   ├── __init__.py
+│   │   ├── pyproject.toml
+│   │   ├── README.md
+│   │   ├── registry
+│   │   │   ├── harbor-pypi.conf
+│   │   │   ├── __init__.py
+│   │   │   └── validate-registry.sh
+│   │   ├── requirements.txt
+│   │   ├── sdk
+│   │   │   ├── bootstrap
+│   │   │   ├── config
+│   │   │   ├── context
+│   │   │   ├── event
+│   │   │   ├── flow_control
+│   │   │   ├── __init__.py
+│   │   │   ├── lineage
+│   │   │   ├── resilience
+│   │   │   └── workflow
+│   │   ├── setup.py
+│   │   ├── tests
+│   │   │   ├── __init__.py
+│   │   │   └── test_sdk.py
+│   │   ├── trading_platform_sdk.egg-info
+│   │   │   ├── dependency_links.txt
+│   │   │   ├── __init__.py
+│   │   │   ├── PKG-INFO
+│   │   │   ├── requires.txt
+│   │   │   ├── SOURCES.txt
+│   │   │   └── top_level.txt
+│   │   ├── validate-version.py
+│   │   └── VERSION
+│   ├── security
+│   │   └── __init__.py
+│   ├── services
+│   │   ├── conflict_resolver.py
+│   │   ├── decision-engine-service
+│   │   │   ├── app
+│   │   │   ├── artifacts
+│   │   │   ├── config
+│   │   │   ├── DECISION-GOVERNANCE.md
+│   │   │   ├── logs
+│   │   │   ├── README.md
+│   │   │   ├── replay
+│   │   │   ├── schemas
+│   │   │   └── tests
+│   │   ├── event_emitter.py
+│   │   ├── feature_store_service
+│   │   │   ├── app
+│   │   │   ├── Dockerfile
+│   │   │   └── requirements.txt
+│   │   ├── float_auditor.py
+│   │   ├── historical_data_service
+│   │   │   ├── app
+│   │   │   ├── Dockerfile
+│   │   │   └── requirements.txt
+│   │   ├── instrument-monitoring-service
+│   │   │   ├── app
+│   │   │   ├── artifacts
+│   │   │   ├── config
+│   │   │   ├── logs
+│   │   │   ├── MONITORING-GOVERNANCE.md
+│   │   │   ├── README.md
+│   │   │   ├── replay
+│   │   │   ├── schemas
+│   │   │   └── tests
+│   │   ├── instrument-screening-service
+│   │   │   ├── app
+│   │   │   ├── artifacts
+│   │   │   ├── config
+│   │   │   ├── logs
+│   │   │   ├── README.md
+│   │   │   ├── replay
+│   │   │   ├── schemas
+│   │   │   ├── SCREENING-GOVERNANCE.md
+│   │   │   └── tests
+│   │   ├── market_data_ingestion
+│   │   │   ├── app
+│   │   │   ├── Dockerfile
+│   │   │   ├── market-data-ingestion-stage12.tar
+│   │   │   ├── README.md
+│   │   │   └── requirements.txt
+│   │   ├── market_data_normalizer
+│   │   │   ├── app
+│   │   │   ├── Dockerfile
+│   │   │   └── requirements.txt
+│   │   ├── market_data_persistence
+│   │   │   ├── app
+│   │   │   ├── Dockerfile
+│   │   │   └── requirements.txt
+│   │   ├── mlflow
+│   │   │   ├── Dockerfile
+│   │   │   └── requirements.txt
+│   │   ├── __pycache__
+│   │   │   ├── conflict_resolver.cpython-310.pyc
+│   │   │   ├── event_emitter.cpython-310.pyc
+│   │   │   ├── float_auditor.cpython-310.pyc
+│   │   │   └── ttl_validator.cpython-310.pyc
+│   │   ├── signal-processor-service
+│   │   │   ├── app
+│   │   │   ├── artifacts
+│   │   │   ├── config
+│   │   │   ├── logs
+│   │   │   ├── README.md
+│   │   │   ├── replay
+│   │   │   ├── schemas
+│   │   │   ├── SIGNAL-GOVERNANCE.md
+│   │   │   └── tests
+│   │   ├── strategy-engine-service
+│   │   │   ├── app
+│   │   │   ├── artifacts
+│   │   │   ├── config
+│   │   │   ├── logs
+│   │   │   ├── README.md
+│   │   │   ├── replay
+│   │   │   ├── schemas
+│   │   │   ├── STRATEGY-GOVERNANCE.md
+│   │   │   └── tests
+│   │   ├── synthetic-market-generator
+│   │   │   ├── Dockerfile
+│   │   │   ├── generator.py
+│   │   │   └── requirements.txt
+│   │   └── ttl_validator.py
+│   ├── service-template
+│   │   ├── config
+│   │   │   └── __init__.py
+│   │   ├── Dockerfile
+│   │   ├── helm
+│   │   │   ├── Chart.yaml
+│   │   │   ├── templates
+│   │   │   └── values.yaml
+│   │   ├── __init__.py
+│   │   ├── requirements.txt
+│   │   ├── scripts
+│   │   │   ├── __init__.py
+│   │   │   └── validate-service-template.sh
+│   │   ├── src
+│   │   │   ├── app.py
+│   │   │   └── __init__.py
+│   │   └── tests
+│   │       ├── __init__.py
+│   │       └── test_health_contracts.py
+│   ├── shared
+│   │   └── __init__.py
+│   ├── system
+│   │   ├── deployment_order_enforcer.py
+│   │   ├── governance
+│   │   │   └── __init__.py
+│   │   ├── health
+│   │   │   ├── health_aggregator.py
+│   │   │   └── __init__.py
+│   │   ├── __init__.py
+│   │   ├── kill_switch
+│   │   │   ├── __init__.py
+│   │   │   └── kill_switch_controller.py
+│   │   └── tests
+│   │       ├── __init__.py
+│   │       └── test_platform_subsystems.py
+│   ├── system_registry
+│   │   ├── execution_registry.py
+│   │   ├── __init__.py
+│   │   ├── README.md
+│   │   ├── runtime
+│   │   │   └── __init__.py
+│   │   └── tests
+│   │       └── __init__.py
+│   ├── system-state
+│   │   └── __init__.py
+│   └── workflow_engine
+│       ├── __init__.py
+│       ├── runtime
+│       │   └── __init__.py
+│       ├── saga
+│       │   ├── __init__.py
+│       │   └── saga_orchestrator.py
+│       ├── state_machine
+│       │   ├── __init__.py
+│       │   └── workflow_state_machine.py
+│       └── tests
+│           └── __init__.py
+├── datasets
+├── deployments
+├── docs
+│   ├── adr
+│   │   ├── ADR-001-kafka-authority.md
+│   │   ├── ADR-001-kafka-source-of-truth.md
+│   │   ├── ADR-002-replay-first-governance.md
+│   │   ├── ADR-002-sha256-lineage.md
+│   │   ├── ADR-003-bounded-context-services.md
+│   │   ├── ADR-003-fixed-point-int64.md
+│   │   ├── ADR-004-event-time-governance.md
+│   │   ├── ADR-004-governance-before-scale.md
+│   │   ├── ADR-005-multi-repo-topology.md
+│   │   ├── ADR-005-paper-first-activation.md
+│   │   └── README.md
+│   ├── architecture
+│   │   ├── governance.md
+│   │   ├── MASTER_TREE_v2.md
+│   │   ├── README.md
+│   │   ├── stage-00-engineering-foundation.md
+│   │   └── standards.md
+│   ├── audits
+│   │   └── stage-15
+│   ├── blueprints
+│   │   ├── stage-07-event-backbone-foundation.md
+│   │   ├── stage-13-portfolio-foundation.md
+│   │   └── stage-15-execution-foundation.md
+│   ├── continuity
+│   │   └── platform-continuity-restoration-block.md
+│   ├── governance
+│   │   ├── artifact-governance.md
+│   │   ├── authoritative-platform-execution-model.md
+│   │   ├── authoritative-stage-index.md
+│   │   ├── branching-strategy.md
+│   │   ├── build-state-governance.md
+│   │   ├── capital-partition-governance.md
+│   │   ├── change-management-policy.md
+│   │   ├── config-governance.md
+│   │   ├── configuration-governance.md
+│   │   ├── definition-of-done.md
+│   │   ├── engineering-workflow.md
+│   │   ├── environment-governance.md
+│   │   ├── environment-naming.md
+│   │   ├── environment-runtime-governance.md
+│   │   ├── event-governance.md
+│   │   ├── execution-governance.md
+│   │   ├── execution-lineage-governance.md
+│   │   ├── execution-risk-governance.md
+│   │   ├── filesystem-governance.md
+│   │   ├── fixed-point-governance.md
+│   │   ├── installer-governance.md
+│   │   ├── institutional-stage-execution-lifecycle.md
+│   │   ├── lineage-governance.md
+│   │   ├── mode-governance.md
+│   │   ├── platform-manifest-governance.md
+│   │   ├── policy-governance.md
+│   │   ├── portfolio-audit-governance.md
+│   │   ├── portfolio-domain-architecture.md
+│   │   ├── portfolio-event-governance.md
+│   │   ├── portfolio-governance-laws.md
+│   │   ├── portfolio-persistence-governance.md
+│   │   ├── portfolio-replay-governance.md
+│   │   ├── pr-review-policy.md
+│   │   ├── README.md
+│   │   ├── release-governance.md
+│   │   ├── repository-boundaries.md
+│   │   ├── repository-ownership.md
+│   │   ├── repository-strategy.md
+│   │   ├── repository-topology.md
+│   │   ├── runtime-authority.md
+│   │   ├── schema-governance.md
+│   │   ├── schema-versioning.md
+│   │   ├── scripting-governance.md
+│   │   ├── security-authority.md
+│   │   ├── service-boundary-governance.md
+│   │   ├── service-ownership-governance.md
+│   │   ├── stage13-freeze-governance.md
+│   │   ├── stage-14a-freeze-certification.md
+│   │   ├── stage-14a-validation-authority.md
+│   │   ├── system-state-governance.md
+│   │   ├── timestamp-governance.md
+│   │   ├── topic-governance.md
+│   │   ├── trading-conflict-governance.md
+│   │   ├── trading-event-governance
+│   │   │   └── topic-governance.md
+│   │   ├── trading-event-transport-governance.md
+│   │   ├── trading-numeric-governance.md
+│   │   ├── trading-runtime-governance.md
+│   │   ├── trading-temporal-governance.md
+│   │   ├── validation-governance.md
+│   │   └── versioning-policy.md
+│   ├── host
+│   │   ├── cloud-init-governance.md
+│   │   ├── ssh-access-governance.md
+│   │   ├── stage-0a-classification.md
+│   │   ├── stage-0a-windows-host-preparation.md
+│   │   ├── vm-specification.md
+│   │   ├── vmware-networking.md
+│   │   └── windows-tooling.md
+│   ├── infrastructure
+│   │   └── README.md
+│   ├── inventories
+│   │   └── stage-15
+│   ├── lineage
+│   ├── machine-spec.md
+│   ├── observability
+│   ├── operations
+│   │   ├── observability
+│   │   │   └── stage-09-observability-operations.md
+│   │   ├── README.md
+│   │   └── recovery
+│   │       ├── CALICO_RECOVERY.md
+│   │       ├── CERTIFICATE_RECOVERY.md
+│   │       ├── CONTROL_PLANE_RECOVERY.md
+│   │       ├── ETCD_RECOVERY.md
+│   │       ├── LONGHORN_RECOVERY.md
+│   │       └── NETWORK_RECOVERY.md
+│   ├── recovery
+│   │   ├── cluster-recovery.md
+│   │   ├── disaster-recovery.md
+│   │   ├── full-platform-rebuild.md
+│   │   ├── node-replacement.md
+│   │   └── vm-to-vps-migration.md
+│   ├── replay
+│   ├── runbooks
+│   │   └── README.md
+│   ├── runtime
+│   ├── schemas
+│   │   └── README.md
+│   ├── security
+│   ├── services
+│   │   └── README.md
+│   ├── stage-01
+│   │   ├── firewall-baseline.md
+│   │   ├── kernel-tuning.md
+│   │   ├── machine-foundation.md
+│   │   ├── network-baseline.md
+│   │   ├── normalization-report.md
+│   │   ├── README.md
+│   │   ├── runtime-inventory.md
+│   │   ├── storage-layout.md
+│   │   └── time-sync-governance.md
+│   ├── stage-02
+│   │   ├── makefile-governance.md
+│   │   ├── monorepo-governance.md
+│   │   ├── normalization-report.md
+│   │   ├── precommit-governance.md
+│   │   ├── README.md
+│   │   ├── repository-foundation.md
+│   │   ├── runtime-inventory.md
+│   │   └── service-scaffolding.md
+│   ├── stage-03
+│   │   ├── config-hierarchy.md
+│   │   ├── environment-hierarchy.md
+│   │   ├── event-contracts.md
+│   │   ├── fixed-point-governance.md
+│   │   ├── governance-foundation.md
+│   │   ├── lineage-governance.md
+│   │   ├── normalization-report.md
+│   │   ├── README.md
+│   │   ├── runtime-inventory.md
+│   │   ├── schema-governance.md
+│   │   ├── service-boundaries.md
+│   │   ├── timestamp-governance.md
+│   │   └── topic-governance.md
+│   ├── stage-04
+│   ├── stage-05
+│   ├── stage-06
+│   ├── stage-10a
+│   ├── stage-12
+│   │   ├── data-lineage-governance.md
+│   │   ├── deprecated-schema-governance.md
+│   │   ├── feature-contract-governance.md
+│   │   ├── feature-store-governance.md
+│   │   ├── kafka-governance.md
+│   │   ├── market-data-foundation.md
+│   │   ├── market-data-governance.md
+│   │   ├── normalization-governance.md
+│   │   ├── partition-governance.md
+│   │   ├── README.md
+│   │   ├── replay-governance.md
+│   │   ├── schema-governance.md
+│   │   └── timestamp-governance.md
+│   ├── stages
+│   │   ├── README.md
+│   │   ├── stage-02-cluster-foundation.md
+│   │   ├── stage-02-repository-foundation.md
+│   │   └── stage-03-platform-governance-foundation.md
+│   ├── standards
+│   │   ├── api-standards.md
+│   │   ├── coding-standards.md
+│   │   ├── commit-standards.md
+│   │   ├── documentation-standards.md
+│   │   ├── engineering-principles.md
+│   │   ├── json-standards.md
+│   │   ├── naming-standards.md
+│   │   ├── security-standards.md
+│   │   ├── shell-script-standards.md
+│   │   └── yaml-standards.md
+│   └── testing
+│       ├── chaos-recovery-governance.md
+│       ├── contract-testing-governance.md
+│       ├── determinism-governance.md
+│       ├── orchestrated-testing-governance.md
+│       ├── performance-governance.md
+│       ├── platform-deployment-governance.md
+│       ├── platform-deterministic-replay.md
+│       ├── platform-event-governance.md
+│       ├── platform-execution-governance.md
+│       ├── platform-operations-governance.md
+│       ├── platform-portfolio-authority.md
+│       ├── platform-resilience-governance.md
+│       ├── platform-runtime-governance.md
+│       ├── platform-runtime-governance-policies.md
+│       ├── platform-service-deployment.md
+│       ├── platform-service-standardization.md
+│       ├── platform-subsystem-governance.md
+│       ├── replay-governance.md
+│       ├── replay-validation-governance.md
+│       ├── schema-validation-governance.md
+│       ├── sdk-publishing-governance.md
+│       └── testing-governance.md
+├── ems-stage16.tar
+├── environments
+│   ├── dev
+│   ├── development
+│   │   └── environment.yaml
+│   ├── disaster-recovery
+│   │   └── environment.yaml
+│   ├── production
+│   │   └── environment.yaml
+│   └── staging
+│       └── environment.yaml
+├── events
+│   ├── audit_stream
+│   │   └── audit-events.jsonl
+│   ├── dead_letter_stream
+│   │   └── dead-events.jsonl
+│   ├── ingress
+│   └── replay
+├── feature-store
+├── fill-handler-stage16.tar
+├── final-argocd-state.txt
+├── final-platform-state.txt
+├── final-rs-state.txt
+├── generated
+├── gitops
+│   ├── argocd
+│   │   ├── apps
+│   │   │   ├── cicd.yaml
+│   │   │   ├── observability.yaml
+│   │   │   └── storage.yaml
+│   │   ├── environments
+│   │   │   ├── dev
+│   │   │   ├── production
+│   │   │   └── staging
+│   │   └── root-application.yaml
+│   ├── base
+│   │   ├── applications
+│   │   │   ├── analytics
+│   │   │   ├── market-data
+│   │   │   ├── persistence
+│   │   │   └── trading
+│   │   ├── infrastructure
+│   │   └── platform
+│   │       ├── cicd
+│   │       ├── networking
+│   │       ├── observability
+│   │       ├── security
+│   │       └── storage
+│   ├── DEPLOYMENT_POLICY.md
+│   └── overlays
+│       ├── dev
+│       ├── production
+│       └── staging
+├── governance
+│   ├── chaos
+│   │   └── chaos-governance.yaml
+│   ├── compliance
+│   ├── deployment
+│   │   └── deployment-governance.yaml
+│   ├── determinism
+│   │   └── determinism-governance.yaml
+│   ├── events
+│   │   └── event-governance.yaml
+│   ├── naming
+│   │   └── naming-conventions.yaml
+│   ├── orchestration
+│   │   └── orchestration-governance.yaml
+│   ├── performance
+│   │   └── performance-governance.yaml
+│   ├── platform
+│   │   ├── platform-governance.yaml
+│   │   └── platform-service-order.json
+│   ├── replay
+│   │   └── replay-governance.yaml
+│   ├── runtime
+│   ├── schema
+│   │   └── schema-governance.yaml
+│   ├── sdk
+│   │   └── sdk-registry-governance.yaml
+│   ├── security
+│   ├── services
+│   │   └── service-governance.yaml
+│   ├── simulation
+│   │   └── simulation-governance.yaml
+│   ├── technical-debt
+│   │   ├── chaos-session-isolation.md
+│   │   ├── pact-v3-migration.md
+│   │   ├── performance-session-isolation.md
+│   │   ├── replay-session-isolation.md
+│   │   └── sdk-packaging-standardization.md
+│   ├── testing
+│   │   └── testing-governance.yaml
+│   └── versioning
+├── infrastructure
+│   ├── audit
+│   │   ├── portfolio
+│   │   │   ├── certification
+│   │   │   ├── evidence
+│   │   │   ├── reconciliation
+│   │   │   └── reports
+│   │   └── stage-08
+│   ├── backups
+│   │   ├── postgres
+│   │   ├── timescaledb
+│   │   └── wal
+│   │       └── archive
+│   ├── bootstrap
+│   │   └── install.sh
+│   ├── capital-governance
+│   │   ├── allocations
+│   │   │   └── allocation-governance.md
+│   │   ├── partitions
+│   │   │   └── partition-governance.md
+│   │   └── reservations
+│   ├── components
+│   │   ├── argocd
+│   │   │   ├── configure-repository.sh
+│   │   │   ├── configure.sh
+│   │   │   ├── install.sh
+│   │   │   ├── rollback.sh
+│   │   │   └── validate.sh
+│   │   ├── broker-adapter
+│   │   │   ├── app
+│   │   │   ├── BROKER-ADAPTER-GOVERNANCE.md
+│   │   │   ├── config
+│   │   │   ├── Dockerfile
+│   │   │   ├── helm
+│   │   │   ├── k8s
+│   │   │   ├── logs
+│   │   │   ├── README.md
+│   │   │   ├── requirements.txt
+│   │   │   ├── schemas
+│   │   │   └── scripts
+│   │   ├── cert-manager
+│   │   │   ├── certificates
+│   │   │   ├── issuers
+│   │   │   └── scripts
+│   │   ├── containerd
+│   │   ├── copy-trade-engine
+│   │   │   ├── app
+│   │   │   ├── config
+│   │   │   ├── COPY-TRADE-GOVERNANCE.md
+│   │   │   ├── Dockerfile
+│   │   │   ├── helm
+│   │   │   ├── k8s
+│   │   │   ├── logs
+│   │   │   ├── README.md
+│   │   │   ├── requirements.txt
+│   │   │   ├── schemas
+│   │   │   └── scripts
+│   │   ├── docker
+│   │   ├── email-alerts
+│   │   ├── ems
+│   │   │   ├── app
+│   │   │   ├── config
+│   │   │   ├── Dockerfile
+│   │   │   ├── EMS-GOVERNANCE.md
+│   │   │   ├── helm
+│   │   │   ├── k8s
+│   │   │   ├── logs
+│   │   │   ├── README.md
+│   │   │   ├── requirements.txt
+│   │   │   ├── schemas
+│   │   │   └── scripts
+│   │   ├── execution
+│   │   │   ├── account-routing-service
+│   │   │   ├── execution-intent-service
+│   │   │   ├── order-engine-service
+│   │   │   ├── policy-engine-service
+│   │   │   ├── position-sizer-service
+│   │   │   └── risk-engine-service
+│   │   ├── falco
+│   │   │   ├── rules
+│   │   │   └── scripts
+│   │   ├── fill-handler
+│   │   │   ├── app
+│   │   │   ├── config
+│   │   │   ├── Dockerfile
+│   │   │   ├── FILL-HANDLER-GOVERNANCE.md
+│   │   │   ├── helm
+│   │   │   ├── k8s
+│   │   │   ├── logs
+│   │   │   ├── README.md
+│   │   │   ├── requirements.txt
+│   │   │   ├── schemas
+│   │   │   └── scripts
+│   │   ├── helm
+│   │   ├── ingress
+│   │   ├── istio
+│   │   │   ├── gateways
+│   │   │   ├── mtls
+│   │   │   ├── policies
+│   │   │   └── scripts
+│   │   ├── kafka
+│   │   │   ├── acl
+│   │   │   ├── config
+│   │   │   ├── contracts
+│   │   │   ├── dlq
+│   │   │   ├── manifests
+│   │   │   ├── market-data
+│   │   │   ├── retry
+│   │   │   ├── scripts
+│   │   │   ├── tools
+│   │   │   └── topics
+│   │   ├── keycloak
+│   │   │   ├── clients
+│   │   │   ├── config
+│   │   │   ├── exports
+│   │   │   ├── realms
+│   │   │   ├── roles
+│   │   │   └── scripts
+│   │   ├── kong
+│   │   │   ├── consumers
+│   │   │   ├── plugins
+│   │   │   ├── routes
+│   │   │   └── scripts
+│   │   ├── kubectl
+│   │   ├── longhorn
+│   │   ├── metallb
+│   │   ├── n8n
+│   │   │   ├── config
+│   │   │   ├── configure.sh
+│   │   │   ├── helm
+│   │   │   ├── install.sh
+│   │   │   ├── scripts
+│   │   │   ├── validate.sh
+│   │   │   ├── validation
+│   │   │   └── workflows
+│   │   ├── network-policy
+│   │   │   ├── inventory.sh
+│   │   │   ├── rollback.sh
+│   │   │   ├── setup.sh
+│   │   │   └── validate.sh
+│   │   ├── oms
+│   │   │   ├── app
+│   │   │   ├── config
+│   │   │   ├── Dockerfile
+│   │   │   ├── helm
+│   │   │   ├── k8s
+│   │   │   ├── logs
+│   │   │   ├── OMS-GOVERNANCE.md
+│   │   │   ├── README.md
+│   │   │   ├── requirements.txt
+│   │   │   ├── schemas
+│   │   │   └── scripts
+│   │   ├── operational-api
+│   │   │   ├── config
+│   │   │   ├── configure.sh
+│   │   │   ├── helm
+│   │   │   ├── install.sh
+│   │   │   ├── scripts
+│   │   │   ├── validate.sh
+│   │   │   └── validation
+│   │   ├── pagerduty
+│   │   ├── pgbouncer
+│   │   │   ├── backup.sh
+│   │   │   ├── configure.sh
+│   │   │   ├── install.sh
+│   │   │   ├── inventory.sh
+│   │   │   ├── restore.sh
+│   │   │   └── validate.sh
+│   │   ├── postgres
+│   │   │   ├── backup.sh
+│   │   │   ├── configure.sh
+│   │   │   ├── install.sh
+│   │   │   ├── inventory.sh
+│   │   │   ├── migrate.sh
+│   │   │   ├── restore.sh
+│   │   │   └── validate.sh
+│   │   ├── rbac
+│   │   │   ├── configure-harbor-access.sh
+│   │   │   ├── configure-imagepull-governance.sh
+│   │   │   ├── reset-runtime-pull.sh
+│   │   │   ├── rollback.sh
+│   │   │   ├── rotate-harbor-robots.sh
+│   │   │   ├── rotate-runtime-pull.sh
+│   │   │   ├── setup.sh
+│   │   │   ├── validate-harbor-access.sh
+│   │   │   ├── validate-imagepull-governance.sh
+│   │   │   └── validate.sh
+│   │   ├── reconciliation
+│   │   │   ├── app
+│   │   │   ├── config
+│   │   │   ├── Dockerfile
+│   │   │   ├── helm
+│   │   │   ├── k8s
+│   │   │   ├── logs
+│   │   │   ├── README.md
+│   │   │   ├── RECONCILIATION-GOVERNANCE.md
+│   │   │   ├── requirements.txt
+│   │   │   ├── schemas
+│   │   │   └── scripts
+│   │   ├── redis
+│   │   │   ├── backup.sh
+│   │   │   ├── configure.sh
+│   │   │   ├── install.sh
+│   │   │   ├── inventory.sh
+│   │   │   ├── restore.sh
+│   │   │   └── validate.sh
+│   │   ├── registry
+│   │   │   ├── configure.sh
+│   │   │   ├── install.sh
+│   │   │   ├── rollback.sh
+│   │   │   └── validate.sh
+│   │   ├── schema-registry
+│   │   │   ├── compatibility
+│   │   │   ├── config
+│   │   │   ├── manifests
+│   │   │   └── scripts
+│   │   ├── smart-order-router
+│   │   │   ├── app
+│   │   │   ├── config
+│   │   │   ├── Dockerfile
+│   │   │   ├── helm
+│   │   │   ├── k8s
+│   │   │   ├── logs
+│   │   │   ├── README.md
+│   │   │   ├── requirements.txt
+│   │   │   ├── ROUTING-GOVERNANCE.md
+│   │   │   ├── schemas
+│   │   │   └── scripts
+│   │   ├── _standards
+│   │   │   ├── component-contract.md
+│   │   │   ├── install-contract.md
+│   │   │   ├── lifecycle-governance.md
+│   │   │   ├── rollback-contract.md
+│   │   │   └── validate-contract.md
+│   │   ├── telegram-alerts
+│   │   ├── terraform
+│   │   ├── timescaledb
+│   │   │   ├── backup.sh
+│   │   │   ├── configure.sh
+│   │   │   ├── install.sh
+│   │   │   ├── inventory.sh
+│   │   │   ├── migrate.sh
+│   │   │   ├── restore.sh
+│   │   │   └── validate.sh
+│   │   ├── trading-dashboard
+│   │   │   ├── config
+│   │   │   ├── configure.sh
+│   │   │   ├── helm
+│   │   │   ├── install.sh
+│   │   │   ├── scripts
+│   │   │   ├── validate.sh
+│   │   │   └── validation
+│   │   ├── vault
+│   │   │   ├── config
+│   │   │   ├── policies
+│   │   │   ├── scripts
+│   │   │   └── secrets
+│   │   ├── websocket-gateway
+│   │   │   ├── config
+│   │   │   ├── configure.sh
+│   │   │   ├── helm
+│   │   │   ├── install.sh
+│   │   │   ├── scripts
+│   │   │   ├── validate.sh
+│   │   │   └── validation
+│   │   └── wireguard
+│   ├── config
+│   │   ├── accounts
+│   │   │   └── accounts.yaml
+│   │   ├── approval-policy.yaml
+│   │   ├── brokers
+│   │   │   └── brokers.yaml
+│   │   ├── config-registry.yaml
+│   │   ├── environments
+│   │   │   ├── development.yaml
+│   │   │   ├── production.yaml
+│   │   │   └── staging.yaml
+│   │   ├── feature-flags
+│   │   │   └── feature-flags.yaml
+│   │   ├── global.env
+│   │   ├── instruments
+│   │   │   └── instruments.yaml
+│   │   ├── lineage
+│   │   │   └── bootstrap-lineage.yaml
+│   │   ├── lineage-policy.yaml
+│   │   ├── network.env
+│   │   ├── README.md
+│   │   ├── risk
+│   │   │   └── risk-limits.yaml
+│   │   ├── runtime
+│   │   │   └── runtime.yaml
+│   │   ├── schemas
+│   │   │   ├── account.schema.yaml
+│   │   │   ├── broker.schema.yaml
+│   │   │   ├── environment-config.schema.yaml
+│   │   │   ├── feature-flags.schema.yaml
+│   │   │   ├── instrument.schema.yaml
+│   │   │   ├── README.md
+│   │   │   ├── risk-config.schema.yaml
+│   │   │   ├── runtime-params.schema.yaml
+│   │   │   └── strategy-config.schema.yaml
+│   │   ├── snapshot-policy.yaml
+│   │   ├── snapshots
+│   │   │   └── bootstrap
+│   │   ├── storage.env
+│   │   ├── strategies
+│   │   └── versions.env
+│   ├── freeze
+│   │   └── stage-13
+│   │       ├── certification
+│   │       ├── inventory
+│   │       ├── recovery
+│   │       └── snapshots
+│   ├── governance
+│   │   └── install
+│   │       ├── checkpoint-governance.md
+│   │       ├── execution-governance.md
+│   │       ├── failure-governance.md
+│   │       ├── retry-governance.md
+│   │       └── rollback-governance.md
+│   ├── host
+│   │   ├── cloud-init
+│   │   │   ├── meta-data.yaml
+│   │   │   └── user-data.yaml
+│   │   ├── iso
+│   │   │   └── ubuntu-22.04.sha256
+│   │   └── vmware
+│   │       └── core-node.vmx
+│   ├── kubernetes
+│   │   ├── feature-store-service
+│   │   │   └── deployment.yaml
+│   │   ├── historical-data-service
+│   │   │   └── deployment.yaml
+│   │   ├── kafka
+│   │   │   ├── bootstrap.env
+│   │   │   ├── deploy.sh
+│   │   │   ├── kafka-configmap.yaml
+│   │   │   ├── kafka-headless-service.yaml
+│   │   │   ├── kafka-service.yaml
+│   │   │   ├── kafka-statefulset.yaml
+│   │   │   ├── market-topics-job.yaml
+│   │   │   ├── namespace.yaml
+│   │   │   ├── README.md
+│   │   │   ├── validate.sh
+│   │   │   └── values.yaml
+│   │   ├── market-data
+│   │   │   ├── cleanup.sh
+│   │   │   ├── configmap.yaml
+│   │   │   ├── deploy.sh
+│   │   │   ├── ingestion-deployment.yaml
+│   │   │   ├── ingestion-service.yaml
+│   │   │   ├── limit-range.yaml
+│   │   │   ├── logs.sh
+│   │   │   ├── namespace.yaml
+│   │   │   ├── network-policy.yaml
+│   │   │   ├── README.md
+│   │   │   ├── resource-quota.yaml
+│   │   │   ├── role-binding.yaml
+│   │   │   ├── role.yaml
+│   │   │   ├── secrets-template.yaml
+│   │   │   ├── service-account.yaml
+│   │   │   └── validate.sh
+│   │   ├── market-data-normalizer
+│   │   │   └── deployment.yaml
+│   │   ├── market-data-persistence
+│   │   │   └── deployment.yaml
+│   │   ├── mlflow
+│   │   │   └── deployment.yaml
+│   │   ├── persistence
+│   │   │   ├── namespace.yaml
+│   │   │   └── persistence-writer.yaml
+│   │   ├── research
+│   │   │   └── network-policy.yaml
+│   │   ├── research-service-account.yaml
+│   │   ├── storage
+│   │   │   ├── namespace.yaml
+│   │   │   ├── pgbouncer-deployment.yaml
+│   │   │   ├── postgres-config.yaml
+│   │   │   ├── postgres-pvc.yaml
+│   │   │   ├── postgres-secret.yaml
+│   │   │   ├── postgres-service.yaml
+│   │   │   ├── postgres-statefulset.yaml
+│   │   │   ├── redis-pvc.yaml
+│   │   │   ├── redis-secret.yaml
+│   │   │   ├── redis-statefulset.yaml
+│   │   │   ├── timescaledb-pvc.yaml
+│   │   │   ├── timescaledb-secret.yaml
+│   │   │   └── timescaledb-statefulset.yaml
+│   │   ├── synthetic-market-generator
+│   │   │   └── deployment.yaml
+│   │   └── timescaledb
+│   │       └── deployment.yaml
+│   ├── locks
+│   │   ├── docker.lock
+│   │   ├── helm.lock
+│   │   ├── kubernetes.lock
+│   │   ├── runtime.lock
+│   │   └── terraform.lock
+│   ├── logs
+│   ├── migrations
+│   │   ├── postgres
+│   │   │   ├── 001_accounts.sql
+│   │   │   ├── 002_account_groups.sql
+│   │   │   ├── 003_orders.sql
+│   │   │   ├── 004_positions.sql
+│   │   │   ├── 005_portfolio_snapshots.sql
+│   │   │   ├── 006_strategy_versions.sql
+│   │   │   ├── 007_config_snapshots.sql
+│   │   │   ├── 008_reconciliation_log.sql
+│   │   │   ├── 009_audit_log.sql
+│   │   │   └── 010_operation_modes.sql
+│   │   └── timescaledb
+│   │       ├── 001_ticks.sql
+│   │       ├── 002_ohlcv_1m.sql
+│   │       ├── 003_ohlcv_5m.sql
+│   │       ├── 004_ohlcv_1h.sql
+│   │       ├── 005_signals.sql
+│   │       ├── 006_fills.sql
+│   │       └── 007_features.sql
+│   ├── orchestrator
+│   │   ├── checkpoint-manager.sh
+│   │   ├── dependency-resolver.sh
+│   │   ├── execute-phase.sh
+│   │   ├── execution-engine.sh
+│   │   ├── rebuild-platform.sh
+│   │   ├── resume-install.sh
+│   │   ├── rollback-phase.sh
+│   │   ├── runtime
+│   │   │   ├── dependency-map.yaml
+│   │   │   ├── execution-graph.yaml
+│   │   │   ├── phase-authority.yaml
+│   │   │   └── recovery-map.yaml
+│   │   └── validate-platform.sh
+│   ├── persistence
+│   │   └── portfolio
+│   │       ├── postgresql
+│   │       └── timescaledb
+│   ├── phases
+│   │   ├── _shared
+│   │   │   ├── checkpoint-schema.yaml
+│   │   │   ├── execution-governance.md
+│   │   │   ├── manifest-schema.yaml
+│   │   │   ├── phase-contract.md
+│   │   │   ├── rollback-contract.md
+│   │   │   └── validation-contract.md
+│   │   ├── stage-01-machine-foundation
+│   │   │   ├── backup.sh
+│   │   │   ├── inventory.sh
+│   │   │   ├── README.md
+│   │   │   ├── rollback.sh
+│   │   │   ├── setup.sh
+│   │   │   ├── snapshot.sh
+│   │   │   ├── state.sh
+│   │   │   └── validate.sh
+│   │   ├── stage-02-repository-foundation
+│   │   │   ├── backup.sh
+│   │   │   ├── inventory.sh
+│   │   │   ├── README.md
+│   │   │   ├── rollback.sh
+│   │   │   ├── setup.sh
+│   │   │   ├── snapshot.sh
+│   │   │   ├── state.sh
+│   │   │   └── validate.sh
+│   │   ├── stage-03a-configuration-foundation
+│   │   │   ├── backup.sh
+│   │   │   ├── inventory.sh
+│   │   │   ├── README.md
+│   │   │   ├── rollback.sh
+│   │   │   ├── setup.sh
+│   │   │   ├── snapshot.sh
+│   │   │   ├── state.sh
+│   │   │   └── validate.sh
+│   │   ├── stage-03-platform-governance-foundation
+│   │   │   ├── backup.sh
+│   │   │   ├── checkpoints
+│   │   │   ├── inventory.sh
+│   │   │   ├── README.md
+│   │   │   ├── rollback.sh
+│   │   │   ├── runtime
+│   │   │   ├── setup.sh
+│   │   │   ├── snapshot.sh
+│   │   │   ├── state.sh
+│   │   │   └── validate.sh
+│   │   ├── stage-04-infra-foundation
+│   │   │   ├── backup.sh
+│   │   │   ├── inventory.sh
+│   │   │   ├── README.md
+│   │   │   ├── rollback.sh
+│   │   │   ├── setup.sh
+│   │   │   ├── snapshot.sh
+│   │   │   ├── state.sh
+│   │   │   └── validate.sh
+│   │   ├── stage-05-k8s-platform
+│   │   │   ├── backup.sh
+│   │   │   ├── inventory.sh
+│   │   │   ├── README.md
+│   │   │   ├── rollback.sh
+│   │   │   ├── setup.sh
+│   │   │   ├── snapshot.sh
+│   │   │   ├── state.sh
+│   │   │   └── validate.sh
+│   │   ├── stage-06-security
+│   │   │   ├── backup.sh
+│   │   │   ├── DEFERRED-HARDENING.md
+│   │   │   ├── inventory.sh
+│   │   │   ├── README.md
+│   │   │   ├── rollback.sh
+│   │   │   ├── setup.sh
+│   │   │   ├── snapshot.sh
+│   │   │   ├── state.sh
+│   │   │   └── validate.sh
+│   │   ├── stage-07-event-backbone
+│   │   │   ├── backup.sh
+│   │   │   ├── inventory.sh
+│   │   │   ├── README.md
+│   │   │   ├── rollback.sh
+│   │   │   ├── setup.sh
+│   │   │   ├── snapshot.sh
+│   │   │   ├── state.sh
+│   │   │   └── validate.sh
+│   │   ├── stage-08-storage
+│   │   │   ├── backup.sh
+│   │   │   ├── DEFERRED-HARDENING.md
+│   │   │   ├── inventory.sh
+│   │   │   ├── README.md
+│   │   │   ├── rollback.sh
+│   │   │   ├── setup.sh
+│   │   │   ├── snapshot.sh
+│   │   │   ├── state.sh
+│   │   │   └── validate.sh
+│   │   ├── stage-09-observability
+│   │   │   ├── alertmanager
+│   │   │   ├── alerts
+│   │   │   ├── components
+│   │   │   ├── coredns-configmap.yaml
+│   │   │   ├── DEFERRED-HARDENING.md
+│   │   │   ├── grafana
+│   │   │   ├── logging
+│   │   │   ├── operations
+│   │   │   ├── setup.sh
+│   │   │   ├── validate.sh
+│   │   │   └── values
+│   │   ├── stage-10a-testing-foundation
+│   │   │   ├── backup.sh
+│   │   │   ├── checkpoints
+│   │   │   ├── inventory.sh
+│   │   │   ├── rollback.sh
+│   │   │   ├── runtime
+│   │   │   ├── setup.sh
+│   │   │   ├── snapshot.sh
+│   │   │   ├── state.sh
+│   │   │   └── validate.sh
+│   │   ├── stage-10-cicd
+│   │   │   ├── DEFERRED-HARDENING.md
+│   │   │   ├── inventory.sh
+│   │   │   ├── rbac
+│   │   │   ├── README.md
+│   │   │   ├── rollback.sh
+│   │   │   ├── setup.sh
+│   │   │   ├── snapshot.sh
+│   │   │   ├── state.sh
+│   │   │   ├── validate.sh
+│   │   │   └── values
+│   │   ├── stage-11-platform-foundation
+│   │   │   ├── backup.sh
+│   │   │   ├── inventory.sh
+│   │   │   ├── setup.sh
+│   │   │   ├── snapshot.sh
+│   │   │   └── validate.sh
+│   │   ├── stage-12-market-data
+│   │   │   ├── backup.sh
+│   │   │   ├── checkpoints
+│   │   │   ├── configs
+│   │   │   ├── governance
+│   │   │   ├── inventory.sh
+│   │   │   ├── manifests
+│   │   │   ├── README.md
+│   │   │   ├── rollback.sh
+│   │   │   ├── runtime
+│   │   │   ├── scripts
+│   │   │   ├── setup.sh
+│   │   │   ├── snapshot.sh
+│   │   │   ├── state.sh
+│   │   │   └── validate.sh
+│   │   ├── stage-13-portfolio
+│   │   │   ├── audit.sh
+│   │   │   ├── backup.sh
+│   │   │   ├── inventory.sh
+│   │   │   ├── rollback.sh
+│   │   │   ├── scripts
+│   │   │   ├── setup.sh
+│   │   │   ├── snapshot.sh
+│   │   │   ├── state.sh
+│   │   │   └── validate.sh
+│   │   ├── stage-14a-operational-reconciliation
+│   │   │   ├── audit
+│   │   │   ├── audit.sh
+│   │   │   ├── certification-state.sh
+│   │   │   ├── freeze.sh
+│   │   │   ├── inventory.sh
+│   │   │   ├── rollback.sh
+│   │   │   ├── scripts
+│   │   │   ├── setup.sh
+│   │   │   ├── snapshots
+│   │   │   ├── snapshot.sh
+│   │   │   ├── state.sh
+│   │   │   └── validate.sh
+│   │   ├── stage-14-trading-logic
+│   │   │   ├── backup.sh
+│   │   │   ├── certify-stage14-freeze.sh
+│   │   │   ├── DEFERRED-HARDENING.md
+│   │   │   ├── inventory.sh
+│   │   │   ├── README.md
+│   │   │   ├── recover.sh
+│   │   │   ├── REPLAY-GOVERNANCE.md
+│   │   │   ├── rollback.sh
+│   │   │   ├── scripts
+│   │   │   ├── setup.sh
+│   │   │   ├── snapshot.sh
+│   │   │   ├── STAGE-14-EXECUTION-PLAN.md
+│   │   │   ├── state.sh
+│   │   │   ├── validate.sh
+│   │   │   └── VALIDATION-GOVERNANCE.md
+│   │   ├── stage-15-execution
+│   │   │   ├── backup.sh
+│   │   │   ├── bootstrap-step-10-order-engine.sh
+│   │   │   ├── bootstrap-step-1.sh
+│   │   │   ├── bootstrap-step-2-governance.sh
+│   │   │   ├── bootstrap-step-3-schemas.sh
+│   │   │   ├── bootstrap-step-4-runtime.sh
+│   │   │   ├── bootstrap-step-5-execution-intent.sh
+│   │   │   ├── bootstrap-step-6-account-routing.sh
+│   │   │   ├── bootstrap-step-7-risk-engine.sh
+│   │   │   ├── bootstrap-step-8-policy-engine.sh
+│   │   │   ├── bootstrap-step-9-position-sizer.sh
+│   │   │   ├── governance-validation.sh
+│   │   │   ├── inventory.sh
+│   │   │   ├── lineage-validation.sh
+│   │   │   ├── README.md
+│   │   │   ├── reconcile.sh
+│   │   │   ├── replay-validation.sh
+│   │   │   ├── rollback.sh
+│   │   │   ├── setup.sh
+│   │   │   ├── snapshot.sh
+│   │   │   ├── state.sh
+│   │   │   └── validate.sh
+│   │   ├── stage-16-broker-connectivity
+│   │   │   ├── audit.sh
+│   │   │   ├── backup.sh
+│   │   │   ├── DEFERRED-HARDENING.md
+│   │   │   ├── e2e
+│   │   │   ├── END-TO-END-EXECUTION-GOVERNANCE.md
+│   │   │   ├── EVENT-TOPOLOGY.md
+│   │   │   ├── EXECUTION-GOVERNANCE.md
+│   │   │   ├── GOVERNANCE-INDEX.md
+│   │   │   ├── inventory.sh
+│   │   │   ├── MOCK-GOVERNANCE.md
+│   │   │   ├── README.md
+│   │   │   ├── RECOVERY-GOVERNANCE.md
+│   │   │   ├── rollback.sh
+│   │   │   ├── SCHEMA-GOVERNANCE.md
+│   │   │   ├── SCOPE.md
+│   │   │   ├── SERVICE-BOUNDARIES.md
+│   │   │   ├── setup.sh
+│   │   │   ├── snapshot.sh
+│   │   │   ├── STAGE-16-COMPLETION-GOVERNANCE.md
+│   │   │   ├── STAGE-17-TRANSITION-GOVERNANCE.md
+│   │   │   ├── state.sh
+│   │   │   ├── TOPOLOGY-INVENTORY.md
+│   │   │   ├── validate-broker-adapter.sh
+│   │   │   ├── validate-copy-trade.sh
+│   │   │   ├── validate-ems.sh
+│   │   │   ├── validate-event-topology.sh
+│   │   │   ├── validate-fill-handler.sh
+│   │   │   ├── validate-governance.sh
+│   │   │   ├── validate-oms.sh
+│   │   │   ├── validate-reconciliation.sh
+│   │   │   ├── validate-schema-governance.sh
+│   │   │   ├── validate-scope.sh
+│   │   │   ├── validate.sh
+│   │   │   ├── validate-smart-order-router.sh
+│   │   │   ├── validate-stage16-completion.sh
+│   │   │   ├── validate-stage16-e2e.sh
+│   │   │   └── validate-topology.sh
+│   │   ├── stage-17a-runtime-hardening
+│   │   │   ├── config
+│   │   │   ├── docs
+│   │   │   ├── inventory
+│   │   │   ├── logs
+│   │   │   ├── replay
+│   │   │   ├── reports
+│   │   │   ├── runtime
+│   │   │   ├── scripts
+│   │   │   ├── services
+│   │   │   └── tests
+│   │   ├── stage-17-paper-trading-validation
+│   │   │   ├── audit.sh
+│   │   │   ├── backups
+│   │   │   ├── backup.sh
+│   │   │   ├── checkpoints
+│   │   │   ├── config
+│   │   │   ├── contamination-check.sh
+│   │   │   ├── docs
+│   │   │   ├── inventory
+│   │   │   ├── inventory.sh
+│   │   │   ├── logs
+│   │   │   ├── README.md
+│   │   │   ├── replay
+│   │   │   ├── reports
+│   │   │   ├── rollback.sh
+│   │   │   ├── runtime
+│   │   │   ├── runtime-state.json
+│   │   │   ├── schemas
+│   │   │   ├── scripts
+│   │   │   ├── setup.sh
+│   │   │   ├── snapshots
+│   │   │   ├── snapshot.sh
+│   │   │   ├── state.sh
+│   │   │   ├── tests
+│   │   │   ├── validate.sh
+│   │   │   └── validation
+│   │   └── stage-18-ui-operations
+│   │       ├── artifacts
+│   │       ├── audit.sh
+│   │       ├── backup.sh
+│   │       ├── contamination-check.sh
+│   │       ├── dashboards
+│   │       ├── inventory.sh
+│   │       ├── reports
+│   │       ├── rollback.sh
+│   │       ├── scripts
+│   │       ├── setup.sh
+│   │       ├── snapshot.sh
+│   │       ├── state.sh
+│   │       ├── validate.sh
+│   │       ├── validation
+│   │       └── workflows
+│   ├── recovery
+│   │   ├── cluster-recovery.sh
+│   │   ├── disaster-recovery.md
+│   │   ├── etcd-recovery.sh
+│   │   ├── kafka-recovery.sh
+│   │   ├── longhorn-recovery.sh
+│   │   ├── postgres-recovery.sh
+│   │   ├── rebuild-from-state.sh
+│   │   └── recovery-policies.yaml
+│   ├── replay
+│   │   ├── portfolio
+│   │   │   ├── contracts
+│   │   │   ├── datasets
+│   │   │   ├── hashes
+│   │   │   └── results
+│   │   └── stage-14
+│   │       ├── contracts
+│   │       ├── datasets
+│   │       ├── results
+│   │       └── run-replay.py
+│   ├── research
+│   │   └── jupyterhub
+│   │       └── values.yaml
+│   ├── scripts
+│   │   ├── lib
+│   │   │   ├── docker.sh
+│   │   │   ├── env.sh
+│   │   │   ├── filesystem.sh
+│   │   │   ├── github.sh
+│   │   │   ├── governance.sh
+│   │   │   ├── helm.sh
+│   │   │   ├── kubernetes.sh
+│   │   │   ├── log.sh
+│   │   │   ├── report.sh
+│   │   │   ├── retry.sh
+│   │   │   ├── state.sh
+│   │   │   └── validate.sh
+│   │   ├── persistence
+│   │   │   └── build-persistence-writer.sh
+│   │   └── storage
+│   │       ├── apply-retention-policies.sh
+│   │       ├── audit-stage-08.sh
+│   │       ├── backup-postgres.sh
+│   │       ├── backup-timescaledb.sh
+│   │       ├── check-stage-08-contamination.sh
+│   │       ├── validate-backup.sh
+│   │       ├── validate-migrations.sh
+│   │       ├── validate-persistence.sh
+│   │       ├── validate-redis.sh
+│   │       ├── validate-restore.sh
+│   │       ├── validate-retention.sh
+│   │       ├── validate-schema-governance.sh
+│   │       ├── validate-storage-runtime.sh
+│   │       ├── validate-timescaledb.sh
+│   │       └── validate-wal.sh
+│   ├── services
+│   │   ├── market-data-producer
+│   │   │   ├── app
+│   │   │   └── requirements.txt
+│   │   └── persistence-writer
+│   │       ├── app
+│   │       ├── Dockerfile
+│   │       └── requirements.txt
+│   ├── stages
+│   ├── state
+│   │   ├── install
+│   │   │   ├── checkpoints
+│   │   │   ├── current-session.log
+│   │   │   ├── manifests
+│   │   │   ├── rebuild-history
+│   │   │   └── recovery-state.json
+│   │   ├── install.state
+│   │   ├── stage-01
+│   │   │   ├── backups
+│   │   │   ├── inventory
+│   │   │   ├── logs
+│   │   │   ├── snapshots
+│   │   │   └── validation
+│   │   ├── stage-02
+│   │   │   ├── backup
+│   │   │   ├── inventory
+│   │   │   ├── logs
+│   │   │   ├── snapshots
+│   │   │   └── validation
+│   │   ├── stage-03
+│   │   │   ├── backups
+│   │   │   ├── inventory
+│   │   │   └── logs
+│   │   ├── stage-03a
+│   │   │   ├── audit
+│   │   │   ├── backups
+│   │   │   └── inventory
+│   │   ├── stage-04
+│   │   │   ├── audit
+│   │   │   ├── backups
+│   │   │   └── inventory
+│   │   ├── stage-05
+│   │   │   ├── audit
+│   │   │   ├── backups
+│   │   │   └── inventory
+│   │   ├── stage-06
+│   │   │   ├── audit
+│   │   │   ├── backups
+│   │   │   ├── inventory
+│   │   │   └── vault
+│   │   └── stage-07
+│   │       ├── audit
+│   │       ├── backups
+│   │       ├── inventory
+│   │       ├── logs
+│   │       ├── snapshots
+│   │       └── validation
+│   └── validation
+│       ├── filesystem
+│       │   └── validate-root-structure.sh
+│       ├── governance
+│       │   ├── check-no-float.sh
+│       │   └── validate-governance.sh
+│       ├── repository
+│       │   └── validate-repositories.sh
+│       ├── scripts
+│       │   └── validate-libraries.sh
+│       ├── services
+│       │   └── validate-service-template.sh
+│       └── stages
+│           ├── validate-phases.sh
+│           └── validate-stage-02.sh
+├── init-git.sh
+├── install.state
+├── institutional-stage-execution-lifecycle.md
+├── institutional-stage-execution-lifecycle.md.md
+├── kafka
+│   └── stage-14
+│       └── create-topics.sh
+├── kafka-0
+├── kubernetes
+│   ├── admission
+│   ├── cicd
+│   │   ├── argocd
+│   │   │   ├── argocd-rbac-cm.yaml
+│   │   │   └── argocd-values.yaml
+│   │   ├── rbac
+│   │   │   ├── cicd-clusterrolebindings.yaml
+│   │   │   ├── cicd-clusterroles.yaml
+│   │   │   ├── cicd-rolebindings.yaml
+│   │   │   ├── cicd-roles.yaml
+│   │   │   ├── cicd-serviceaccounts.yaml
+│   │   │   ├── harbor-imagepull-secret.yaml
+│   │   │   └── harbor-robot-accounts.yaml
+│   │   └── registry
+│   ├── cluster-config
+│   │   └── kubeadm-config.yaml
+│   ├── execution
+│   │   ├── account-routing-service
+│   │   │   ├── configmap.yaml
+│   │   │   ├── deployment.yaml
+│   │   │   ├── hpa.yaml
+│   │   │   ├── networkpolicy.yaml
+│   │   │   └── service.yaml
+│   │   ├── execution-intent-service
+│   │   │   ├── configmap.yaml
+│   │   │   ├── deployment.yaml
+│   │   │   ├── hpa.yaml
+│   │   │   ├── networkpolicy.yaml
+│   │   │   └── service.yaml
+│   │   ├── kustomization.yaml
+│   │   ├── namespace.yaml
+│   │   ├── order-engine-service
+│   │   │   ├── configmap.yaml
+│   │   │   ├── deployment.yaml
+│   │   │   ├── hpa.yaml
+│   │   │   ├── networkpolicy.yaml
+│   │   │   └── service.yaml
+│   │   ├── policy-engine-service
+│   │   │   ├── configmap.yaml
+│   │   │   ├── deployment.yaml
+│   │   │   ├── hpa.yaml
+│   │   │   ├── networkpolicy.yaml
+│   │   │   └── service.yaml
+│   │   ├── position-sizer-service
+│   │   │   ├── configmap.yaml
+│   │   │   ├── deployment.yaml
+│   │   │   ├── hpa.yaml
+│   │   │   ├── networkpolicy.yaml
+│   │   │   └── service.yaml
+│   │   ├── risk-engine-service
+│   │   │   ├── configmap.yaml
+│   │   │   ├── deployment.yaml
+│   │   │   ├── hpa.yaml
+│   │   │   ├── networkpolicy.yaml
+│   │   │   └── service.yaml
+│   │   └── values
+│   │       └── values-dev.yaml
+│   ├── messaging
+│   │   ├── configmaps
+│   │   │   └── kafka-config.yaml
+│   │   ├── kafka
+│   │   │   ├── kafka-service.yaml
+│   │   │   ├── kafka-statefulset.yaml
+│   │   │   └── namespace.yaml
+│   │   ├── kafka-ui
+│   │   │   ├── kafka-ui-service.yaml
+│   │   │   └── kafka-ui.yaml
+│   │   ├── monitoring
+│   │   ├── network-policies
+│   │   ├── pvc
+│   │   │   └── kafka-pvc.yaml
+│   │   ├── schema-registry
+│   │   │   ├── schema-registry-service.yaml
+│   │   │   └── schema-registry.yaml
+│   │   ├── secrets
+│   │   ├── service-accounts
+│   │   └── stage-16
+│   │       └── topics.yaml
+│   ├── n8n
+│   │   ├── deployment.yaml
+│   │   ├── ingress.yaml
+│   │   ├── namespace.yaml
+│   │   └── service.yaml
+│   ├── namespaces
+│   │   └── all-namespaces.yaml
+│   ├── network-policies
+│   │   ├── base
+│   │   │   ├── allow-cluster-dns.yaml
+│   │   │   └── default-deny-all.yaml
+│   │   ├── cicd
+│   │   │   ├── allow-argocd-git-egress.yaml
+│   │   │   ├── allow-cicd-dns.yaml
+│   │   │   ├── allow-harbor-internal.yaml
+│   │   │   ├── allow-platform-ingress.yaml
+│   │   │   └── cicd-default-deny.yaml
+│   │   ├── default-deny.yaml
+│   │   ├── execution-isolation.yaml
+│   │   ├── observability
+│   │   │   ├── allow-kube-api.yaml
+│   │   │   ├── allow-loki-ingestion.yaml
+│   │   │   ├── allow-observability-dns.yaml
+│   │   │   ├── allow-observability-ingress.yaml
+│   │   │   ├── allow-otel-collector.yaml
+│   │   │   └── allow-prometheus-scrape.yaml
+│   │   └── platform
+│   ├── observability
+│   │   └── prometheus-runtime-override.yaml
+│   ├── platform
+│   │   ├── dashboard
+│   │   │   ├── deployment.yaml
+│   │   │   ├── ingress.yaml
+│   │   │   ├── namespace.yaml
+│   │   │   └── service.yaml
+│   │   ├── network-policy.yaml
+│   │   ├── operational-api
+│   │   │   ├── deployment.yaml
+│   │   │   ├── ingress.yaml
+│   │   │   └── service.yaml
+│   │   ├── rbac
+│   │   │   ├── operator-rolebinding.yaml
+│   │   │   ├── operator-role.yaml
+│   │   │   └── operator-serviceaccount.yaml
+│   │   └── websocket
+│   │       ├── deployment.yaml
+│   │       ├── ingress.yaml
+│   │       └── service.yaml
+│   ├── pod-disruption-budgets
+│   ├── portfolio
+│   │   ├── base
+│   │   ├── dev
+│   │   ├── kafka
+│   │   │   └── topics.yaml
+│   │   ├── prod
+│   │   └── staging
+│   ├── priority-classes
+│   │   └── priority-classes.yaml
+│   ├── rbac
+│   │   └── platform-rbac.yaml
+│   ├── resource-quotas
+│   │   └── resource-quotas.yaml
+│   ├── security
+│   │   ├── cert-manager
+│   │   │   └── cluster-issuer.yaml
+│   │   ├── falco
+│   │   │   └── falco-rules.yaml
+│   │   ├── istio
+│   │   ├── keycloak
+│   │   │   ├── config
+│   │   │   ├── ingress
+│   │   │   ├── keycloak-deployment.yaml
+│   │   │   ├── keycloak-service.yaml
+│   │   │   ├── postgres-deployment.yaml
+│   │   │   ├── postgres-secret.yaml
+│   │   │   ├── postgres-service.yaml
+│   │   │   ├── realm
+│   │   │   └── secrets
+│   │   ├── kong
+│   │   │   └── jwt-plugin.yaml
+│   │   ├── mtls
+│   │   │   └── strict-mtls.yaml
+│   │   ├── pod-security
+│   │   │   └── pod-security.yaml
+│   │   ├── rbac
+│   │   └── vault
+│   ├── service-accounts
+│   │   └── platform-service-accounts.yaml
+│   ├── testing
+│   │   └── testing-namespace.yaml
+│   ├── trading-infra
+│   │   ├── kustomization.yaml
+│   │   ├── namespace.yaml
+│   │   └── values
+│   │       └── values-dev.yaml
+│   └── trading-logic
+│       └── kafka
+│           └── topics.yaml
+├── libraries
+├── lineage
+├── logs
+├── Makefile
+├── observability
+├── oms-stage16.tar
+├── operations
+│   ├── alerts
+│   ├── backups
+│   ├── incidents
+│   │   └── incident-log.json
+│   ├── logs
+│   ├── runbooks
+│   │   └── README.md
+│   ├── snapshots
+│   └── state
+├── orchestration
+│   ├── engine
+│   │   ├── load-test-engine.py
+│   │   └── test-orchestrator.py
+│   ├── graphs
+│   │   └── test-execution-graph.json
+│   ├── reports
+│   └── state
+├── performance
+│   ├── artifacts
+│   │   └── performance-report.json
+│   ├── engine
+│   │   └── performance-engine.py
+│   ├── latency
+│   │   └── latency-budget.json
+│   └── throughput
+├── platform
+│   ├── automation
+│   │   └── n8n
+│   │       ├── config
+│   │       ├── scripts
+│   │       └── workflows
+│   ├── backend
+│   │   ├── operational-api
+│   │   │   ├── app
+│   │   │   ├── Dockerfile
+│   │   │   └── requirements.txt
+│   │   └── websocket-gateway
+│   │       ├── app
+│   │       ├── Dockerfile
+│   │       ├── node_modules
+│   │       ├── package.json
+│   │       └── package-lock.json
+│   └── frontend
+│       └── trading-dashboard
+│           ├── auth
+│           ├── charts
+│           ├── components
+│           ├── dist
+│           ├── Dockerfile
+│           ├── hooks
+│           ├── index.html
+│           ├── node_modules
+│           ├── package.json
+│           ├── package-lock.json
+│           ├── pages
+│           ├── public
+│           ├── services
+│           ├── src
+│           ├── store
+│           ├── tsconfig.json
+│           ├── types
+│           ├── vite.config.ts
+│           └── websocket
+├── platform-continuity-restoration-block.md
+├── platform-continuity-restoration-block.md.md
+├── platform-manifest.yaml
+├── policies
+│   ├── deployment
+│   ├── orchestration
+│   ├── replay
+│   │   └── default-replay-policy.yaml
+│   ├── retry
+│   │   └── default-retry-policy.yaml
+│   ├── risk
+│   ├── routing
+│   ├── runtime
+│   ├── security
+│   └── testing
+│       └── default-testing-policy.yaml
+├── portfolio
+│   ├── events
+│   ├── snapshots
+│   │   └── latest_snapshot.json
+│   └── state
+├── post-recovery-nodes.txt
+├── post-recovery-pods.txt
+├── post-recovery-pvc.txt
+├── post-recovery-services.txt
+├── README.md
+├── reconciliation-stage16.tar
+├── replay
+│   ├── artifacts
+│   ├── engine
+│   │   └── replay-engine.py
+│   ├── events
+│   │   └── fills.jsonl
+│   ├── hashes
+│   │   └── replay.sha256
+│   ├── lineage
+│   │   └── replay-lineage.json
+│   ├── sessions
+│   ├── snapshots
+│   ├── stage-14
+│   │   ├── market-replay
+│   │   ├── signals
+│   │   └── trade-intents
+│   ├── state
+│   ├── validation
+│   └── verification
+├── repos
+│   ├── corei-core
+│   │   ├── config
+│   │   ├── docs
+│   │   │   ├── environment.md
+│   │   │   ├── machine-spec.md
+│   │   │   └── repository-architecture.md
+│   │   ├── event-bus
+│   │   ├── governance
+│   │   │   ├── execution-governance.yaml
+│   │   │   ├── lifecycle-guard-rules.yaml
+│   │   │   ├── platform-governance.yaml
+│   │   │   ├── replay-governance.yaml
+│   │   │   └── workflow-governance.yaml
+│   │   ├── README.md
+│   │   ├── replay-engine
+│   │   ├── runtime
+│   │   ├── scripts
+│   │   ├── system
+│   │   ├── tests
+│   │   └── workflow-engine
+│   ├── corei-infrastructure
+│   │   ├── configs
+│   │   ├── database
+│   │   ├── docs
+│   │   ├── frontend
+│   │   ├── kubernetes
+│   │   ├── logs
+│   │   ├── modules
+│   │   ├── phases
+│   │   ├── README.md
+│   │   ├── scripts
+│   │   ├── stages
+│   │   ├── state
+│   │   ├── terraform
+│   │   └── tests
+│   ├── corei-schemas
+│   │   ├── contracts
+│   │   ├── database
+│   │   ├── docs
+│   │   ├── events
+│   │   ├── governance
+│   │   │   ├── event-governance.yaml
+│   │   │   ├── naming-conventions.yaml
+│   │   │   ├── schema-versioning.yaml
+│   │   │   ├── topic-governance.yaml
+│   │   │   └── validation-rules.yaml
+│   │   ├── README.md
+│   │   ├── tests
+│   │   └── versions
+│   ├── corei-sdk
+│   │   ├── bootstrap
+│   │   ├── config
+│   │   ├── context
+│   │   ├── docs
+│   │   ├── event
+│   │   ├── flow_control
+│   │   ├── governance
+│   │   │   ├── config-governance.yaml
+│   │   │   ├── context-governance.yaml
+│   │   │   ├── flow-control-governance.yaml
+│   │   │   └── resilience-governance.yaml
+│   │   ├── lineage
+│   │   ├── README.md
+│   │   ├── resilience
+│   │   ├── tests
+│   │   └── workflow
+│   └── corei-services
+│       ├── audit-service
+│       ├── docs
+│       ├── market-data-service
+│       ├── orchestration-service
+│       ├── order-service
+│       ├── README.md
+│       ├── risk-service
+│       ├── scripts
+│       ├── state-update-service
+│       ├── _template
+│       │   ├── bootstrap
+│       │   ├── config
+│       │   ├── contracts
+│       │   └── tests
+│       └── tests
+├── research
+│   ├── backtesting
+│   │   ├── configs
+│   │   ├── engines
+│   │   │   └── run_backtest.py
+│   │   ├── metrics
+│   │   ├── replay_engine
+│   │   │   └── run_deterministic_replay.py
+│   │   ├── replay_results
+│   │   ├── results
+│   │   ├── strategies
+│   │   │   └── momentum_strategy.py
+│   │   └── trade_logs
+│   ├── backtest_registry
+│   │   └── backtest_template.yaml
+│   ├── backtests
+│   ├── catalog
+│   │   └── dataset_catalog.yaml
+│   ├── datasets
+│   │   └── catalog.yaml
+│   ├── dataset_versions
+│   ├── experiments
+│   ├── features
+│   │   ├── generated
+│   │   ├── registry
+│   │   ├── replay
+│   │   ├── sdk
+│   │   └── transformations
+│   │       └── generate_midprice_features.py
+│   ├── feature_versions
+│   │   └── feature_registry.yaml
+│   ├── lineage
+│   │   └── dataset_lineage.yaml
+│   ├── metadata
+│   ├── mlflow
+│   │   ├── artifacts
+│   │   ├── metrics
+│   │   ├── models
+│   │   └── runs
+│   ├── notebooks
+│   ├── promotion_registry
+│   ├── README.md
+│   ├── replay
+│   │   ├── configs
+│   │   │   └── replay_config.yaml
+│   │   ├── controllers
+│   │   │   └── export_ticks.py
+│   │   ├── datasets
+│   │   ├── engines
+│   │   │   └── run_deterministic_replay.py
+│   │   ├── exporters
+│   │   │   ├── export_persisted_ticks.py
+│   │   │   └── generate_replay_features.py
+│   │   ├── logs
+│   │   └── sessions
+│   │       └── session_registry.yaml
+│   └── sdk
+│       └── data_access.py
+├── resilience
+│   ├── events
+│   ├── recovery
+│   │   └── recovery-log.json
+│   └── state
+├── runbooks
+├── runtime
+│   ├── images
+│   │   ├── audit-service.tar
+│   │   ├── config-service.tar
+│   │   ├── config-snapshot-service.tar
+│   │   ├── event-ingestion-service.tar
+│   │   └── identity-service.tar
+│   ├── platform
+│   ├── python
+│   │   └── testing
+│   │       └── venv
+│   └── stage-14
+│       ├── events
+│       │   ├── decision_events
+│       │   ├── instrument_monitor_events
+│       │   ├── instrument_screened
+│       │   └── signal_events
+│       ├── logs
+│       │   ├── decision-engine-service-health.log
+│       │   ├── decision-engine-service-main.log
+│       │   ├── instrument-monitoring-service-health.log
+│       │   ├── instrument-monitoring-service-main.log
+│       │   ├── instrument-screening-service-health.log
+│       │   ├── instrument-screening-service-main.log
+│       │   ├── signal-processor-service-health.log
+│       │   ├── signal-processor-service-main.log
+│       │   ├── strategy-engine-service-health.log
+│       │   └── strategy-engine-service-main.log
+│       └── pids
+│           ├── decision-engine-service-health.pid
+│           ├── decision-engine-service-main.pid
+│           ├── instrument-monitoring-service-health.pid
+│           ├── instrument-monitoring-service-main.pid
+│           ├── instrument-screening-service-health.pid
+│           ├── instrument-screening-service-main.pid
+│           ├── signal-processor-service-health.pid
+│           ├── signal-processor-service-main.pid
+│           ├── strategy-engine-service-health.pid
+│           └── strategy-engine-service-main.pid
+├── schemas
+│   ├── avro
+│   │   ├── audit
+│   │   │   └── audit_event_v1.avsc
+│   │   ├── common
+│   │   │   └── base-event.avsc
+│   │   ├── deprecated
+│   │   │   └── market-tick.avsc
+│   │   ├── execution
+│   │   │   ├── execution_intent_v1.avsc
+│   │   │   ├── execution_order_v1.avsc
+│   │   │   ├── fill_v1.avsc
+│   │   │   ├── per_account_intent_v1.avsc
+│   │   │   ├── policy_decision_v1.avsc
+│   │   │   └── risk_decision_v1.avsc
+│   │   ├── governance
+│   │   │   └── kill_switch_v1.avsc
+│   │   ├── market-data
+│   │   │   ├── feature_store_update_v1.avsc
+│   │   │   ├── historical_query_v1.avsc
+│   │   │   ├── market_session_v1.avsc
+│   │   │   ├── normalized_market_data_v1.avsc
+│   │   │   └── raw_market_data_v1.avsc
+│   │   ├── orders
+│   │   ├── portfolio
+│   │   ├── risk
+│   │   ├── signals
+│   │   └── strategy
+│   │       ├── signal_v1.avsc
+│   │       └── trade_intent_v1.avsc
+│   ├── compatibility
+│   ├── monitoring
+│   │   └── InstrumentMonitorEvent_v1.avsc
+│   ├── portfolio
+│   │   ├── avro
+│   │   │   ├── exposure-state.avsc
+│   │   │   ├── pnl-state.avsc
+│   │   │   ├── portfolio-state.avsc
+│   │   │   └── position-state.avsc
+│   │   ├── capital
+│   │   │   ├── allocation-state.avsc
+│   │   │   ├── capital-partition.avsc
+│   │   │   └── capital-reservation.avsc
+│   │   ├── contracts
+│   │   │   └── topic-governance.md
+│   │   └── registry
+│   ├── README.md
+│   ├── registry
+│   ├── screening
+│   │   └── InstrumentScreened_v1.avsc
+│   ├── signal
+│   │   └── Signal_v1.avsc
+│   ├── stage-16
+│   │   ├── broker_dispatch_v1.json
+│   │   ├── broker_fill_v1.json
+│   │   ├── compatibility
+│   │   │   └── compatibility-policy.yaml
+│   │   ├── contracts
+│   │   │   ├── broker_health_v1.json
+│   │   │   ├── copy_trade_event_v1.json
+│   │   │   └── execution_session_v1.json
+│   │   ├── reconciliation_event_v1.json
+│   │   └── registry
+│   │       └── schema-registry-governance.yaml
+│   ├── strategy
+│   │   └── contracts
+│   │       └── schema-governance.md
+│   └── trade_intent
+│       └── TradeIntent_v1.avsc
+├── scratch
+│   └── legacy-cleanup
+│       ├── quarantine
+│       │   ├── docs-stages
+│       │   ├── infrastructure-scripts-host
+│       │   ├── infrastructure-validation-governance
+│       │   ├── stage-02-cluster-foundation
+│       │   ├── stage-03a-platform-governance-stabilization
+│       │   └── stage-03-governance-foundation
+│       ├── stage-03a-configuration
+│       └── stage-03-governance
+│           ├── setup-stage-03a-platform-governance.sh
+│           └── setup-stage-03-governance.sh
+├── scripts
+│   ├── broker
+│   ├── config
+│   │   ├── seed-config.sh
+│   │   └── validate-config.sh
+│   ├── deploy
+│   ├── deployment
+│   ├── execution
+│   ├── foundation
+│   │   ├── generate-stage-02-artifacts.sh
+│   │   ├── generate-standards.sh
+│   │   ├── init-adrs.sh
+│   │   ├── new-service.sh
+│   │   ├── normalize-makefile.py
+│   │   ├── setup-github.sh
+│   │   ├── setup-repos.sh
+│   │   ├── setup-stage-02-cluster-foundation.sh
+│   │   └── validate.sh
+│   ├── gitops
+│   ├── governance
+│   │   ├── check-lineage-rules.py
+│   │   ├── inventory-contaminated-scripts.sh
+│   │   ├── inventory-legacy-artifacts.sh
+│   │   └── validate-governance.py
+│   ├── health
+│   │   └── platform-health-check.sh
+│   ├── host
+│   │   ├── create-vm.ps1
+│   │   ├── install-host-tools.ps1
+│   │   ├── validate.ps1
+│   │   └── windows-prereq-check.ps1
+│   ├── infrastructure
+│   │   ├── audit-stage-04.sh
+│   │   ├── check-stage-04-contamination.sh
+│   │   ├── configure-containerd.sh
+│   │   ├── install-docker.sh
+│   │   ├── install-helm.sh
+│   │   ├── install-kubectl.sh
+│   │   ├── install-terraform.sh
+│   │   ├── start-registry.sh
+│   │   └── validate-runtime.sh
+│   ├── kubernetes
+│   │   ├── apply-network-policies.sh
+│   │   ├── apply-pdb.sh
+│   │   ├── apply-priority-classes.sh
+│   │   ├── apply-rbac.sh
+│   │   ├── apply-resource-quotas.sh
+│   │   ├── apply-service-accounts.sh
+│   │   ├── audit-stage-05.sh
+│   │   ├── check-stage-05-contamination.sh
+│   │   ├── create-namespaces.sh
+│   │   ├── install-calico.sh
+│   │   ├── install-kubernetes.sh
+│   │   └── validate-cluster.sh
+│   ├── messaging
+│   │   ├── apply-acls.sh
+│   │   ├── audit-stage-07.sh
+│   │   ├── check-stage-07-contamination.sh
+│   │   ├── create-topics.sh
+│   │   ├── install-kafka.sh
+│   │   ├── install-kafka-ui.sh
+│   │   ├── install-schema-registry.sh
+│   │   ├── register-schemas.sh
+│   │   ├── stage-16
+│   │   │   ├── setup-topics.sh
+│   │   │   ├── validate-schemas.sh
+│   │   │   └── validate-topics.sh
+│   │   ├── validate-acls.sh
+│   │   ├── validate-event-backbone.sh
+│   │   ├── validate-replay.sh
+│   │   ├── validate-schemas.sh
+│   │   └── validate-topics.sh
+│   ├── migration
+│   │   └── migrate-to-corei.sh
+│   ├── platform
+│   │   ├── apply-platform-governance.sh
+│   │   ├── build-sdk.sh
+│   │   ├── deploy-platform-services.sh
+│   │   ├── publish-sdk.sh
+│   │   ├── run-config-governance-tests.sh
+│   │   ├── run-deterministic-replay-tests.sh
+│   │   ├── run-deterministic-replay-validation.sh
+│   │   ├── run-event-governance-tests.sh
+│   │   ├── run-execution-gate-tests.sh
+│   │   ├── run-full-platform-validation.sh
+│   │   ├── run-operations-foundation-tests.sh
+│   │   ├── run-operations-validation.sh
+│   │   ├── run-platform-subsystem-tests.sh
+│   │   ├── run-portfolio-foundation-tests.sh
+│   │   ├── run-resilience-foundation-tests.sh
+│   │   ├── run-resilience-validation.sh
+│   │   ├── run-sdk-tests.sh
+│   │   ├── validate-helm-governance.sh
+│   │   ├── validate-platform-services.sh
+│   │   └── validate-sdk-install.sh
+│   ├── recovery
+│   │   └── backup.sh
+│   ├── rollback
+│   ├── schema
+│   │   └── stage-16
+│   │       ├── register-schemas.sh
+│   │       ├── validate-compatibility.sh
+│   │       └── validate-lineage-governance.sh
+│   ├── security
+│   │   ├── audit-stage-06.sh
+│   │   ├── check-stage-06-contamination.sh
+│   │   ├── configure-cert-manager.sh
+│   │   ├── configure-istio.sh
+│   │   ├── configure-keycloak.sh
+│   │   ├── configure-kong.sh
+│   │   ├── configure-vault.sh
+│   │   ├── install-cert-manager.sh
+│   │   ├── install-falco.sh
+│   │   ├── install-istio.sh
+│   │   ├── install-keycloak.sh
+│   │   ├── install-kong.sh
+│   │   ├── install-vault.sh
+│   │   └── validate-security.sh
+│   ├── testing
+│   │   ├── run-chaos-tests.sh
+│   │   ├── run-contract-tests.sh
+│   │   ├── run-load-tests.sh
+│   │   ├── run-orchestrated-tests.sh
+│   │   ├── run-performance-tests.sh
+│   │   ├── run-replay-validation.sh
+│   │   ├── run-schema-tests.sh
+│   │   ├── run-simulation-stack.sh
+│   │   ├── run-simulation-tests.sh
+│   │   ├── run-tests.sh
+│   │   ├── setup-test-env.sh
+│   │   ├── stop-simulation-stack.sh
+│   │   └── validate-test-env.sh
+│   ├── tooling
+│   └── validation
+├── secrets
+│   └── gitops
+│       ├── argocd-repo-key
+│       └── argocd-repo-key.pub
+├── security
+├── services
+│   ├── alert-service
+│   │   ├── config
+│   │   ├── helm
+│   │   │   └── templates
+│   │   ├── src
+│   │   └── tests
+│   ├── audit-service
+│   │   ├── config
+│   │   ├── Dockerfile
+│   │   ├── helm
+│   │   │   ├── Chart.yaml
+│   │   │   ├── templates
+│   │   │   ├── tests
+│   │   │   └── values.yaml
+│   │   ├── requirements.txt
+│   │   ├── scripts
+│   │   ├── src
+│   │   │   └── app.py
+│   │   └── tests
+│   ├── capital-partition-service
+│   │   ├── api
+│   │   ├── cmd
+│   │   ├── configs
+│   │   ├── internal
+│   │   ├── README.md
+│   │   └── scripts
+│   ├── config-service
+│   │   ├── config
+│   │   ├── Dockerfile
+│   │   ├── helm
+│   │   │   ├── Chart.yaml
+│   │   │   ├── templates
+│   │   │   ├── tests
+│   │   │   └── values.yaml
+│   │   ├── requirements.txt
+│   │   ├── scripts
+│   │   ├── src
+│   │   │   └── app.py
+│   │   └── tests
+│   ├── config-snapshot-service
+│   │   ├── config
+│   │   ├── Dockerfile
+│   │   ├── helm
+│   │   │   ├── Chart.yaml
+│   │   │   ├── templates
+│   │   │   ├── tests
+│   │   │   └── values.yaml
+│   │   ├── requirements.txt
+│   │   ├── scripts
+│   │   ├── src
+│   │   │   └── app.py
+│   │   └── tests
+│   ├── event-ingestion-service
+│   │   ├── config
+│   │   ├── Dockerfile
+│   │   ├── helm
+│   │   │   ├── Chart.yaml
+│   │   │   ├── templates
+│   │   │   ├── tests
+│   │   │   └── values.yaml
+│   │   ├── requirements.txt
+│   │   ├── scripts
+│   │   ├── src
+│   │   │   └── app.py
+│   │   └── tests
+│   ├── event-ordering-service
+│   │   ├── config
+│   │   ├── helm
+│   │   │   └── templates
+│   │   ├── src
+│   │   └── tests
+│   ├── event-validation-service
+│   │   ├── config
+│   │   ├── helm
+│   │   │   └── templates
+│   │   ├── src
+│   │   └── tests
+│   ├── execution
+│   │   ├── account-routing-service
+│   │   │   ├── cmd
+│   │   │   ├── Dockerfile
+│   │   │   ├── go.mod
+│   │   │   ├── internal
+│   │   │   ├── Makefile
+│   │   │   ├── README.md
+│   │   │   ├── schemas
+│   │   │   └── tests
+│   │   ├── execution-intent-service
+│   │   │   ├── cmd
+│   │   │   ├── Dockerfile
+│   │   │   ├── go.mod
+│   │   │   ├── internal
+│   │   │   ├── Makefile
+│   │   │   ├── README.md
+│   │   │   ├── schemas
+│   │   │   └── tests
+│   │   ├── order-engine-service
+│   │   │   ├── cmd
+│   │   │   ├── Dockerfile
+│   │   │   ├── go.mod
+│   │   │   ├── internal
+│   │   │   ├── Makefile
+│   │   │   ├── README.md
+│   │   │   ├── schemas
+│   │   │   └── tests
+│   │   ├── policy-engine-service
+│   │   │   ├── cmd
+│   │   │   ├── Dockerfile
+│   │   │   ├── go.mod
+│   │   │   ├── internal
+│   │   │   ├── Makefile
+│   │   │   ├── README.md
+│   │   │   ├── schemas
+│   │   │   └── tests
+│   │   ├── position-sizer-service
+│   │   │   ├── cmd
+│   │   │   ├── Dockerfile
+│   │   │   ├── go.mod
+│   │   │   ├── internal
+│   │   │   ├── Makefile
+│   │   │   ├── README.md
+│   │   │   ├── schemas
+│   │   │   └── tests
+│   │   └── risk-engine-service
+│   │       ├── cmd
+│   │       ├── Dockerfile
+│   │       ├── go.mod
+│   │       ├── internal
+│   │       ├── Makefile
+│   │       ├── README.md
+│   │       ├── schemas
+│   │       └── tests
+│   ├── exposure-service
+│   │   ├── api
+│   │   ├── cmd
+│   │   ├── configs
+│   │   ├── internal
+│   │   ├── README.md
+│   │   └── scripts
+│   ├── failure-handling-service
+│   │   ├── config
+│   │   ├── helm
+│   │   │   └── templates
+│   │   ├── src
+│   │   └── tests
+│   ├── identity-service
+│   │   ├── config
+│   │   ├── Dockerfile
+│   │   ├── helm
+│   │   │   ├── Chart.yaml
+│   │   │   ├── templates
+│   │   │   ├── tests
+│   │   │   └── values.yaml
+│   │   ├── requirements.txt
+│   │   ├── scripts
+│   │   ├── src
+│   │   │   └── app.py
+│   │   └── tests
+│   ├── market-data-service
+│   │   ├── app
+│   │   │   └── main.py
+│   │   ├── config
+│   │   │   └── service.yaml
+│   │   ├── contracts
+│   │   │   └── events.yaml
+│   │   ├── Dockerfile
+│   │   ├── helm
+│   │   │   ├── Chart.yaml
+│   │   │   ├── templates
+│   │   │   └── values.yaml
+│   │   ├── Makefile
+│   │   ├── README.md
+│   │   ├── scripts
+│   │   │   └── start.sh
+│   │   ├── service-metadata.yaml
+│   │   ├── service.yaml
+│   │   ├── src
+│   │   └── tests
+│   │       └── test_health.py
+│   ├── orchestration-service
+│   │   ├── config
+│   │   ├── helm
+│   │   │   └── templates
+│   │   ├── src
+│   │   └── tests
+│   ├── platform
+│   │   ├── audit-service
+│   │   ├── config
+│   │   ├── config-service
+│   │   ├── config-snapshot-service
+│   │   ├── helm
+│   │   │   └── templates
+│   │   ├── src
+│   │   └── tests
+│   ├── portfolio-service
+│   │   ├── api
+│   │   ├── cmd
+│   │   ├── config
+│   │   ├── configs
+│   │   ├── helm
+│   │   │   └── templates
+│   │   ├── internal
+│   │   ├── README.md
+│   │   ├── scripts
+│   │   ├── src
+│   │   └── tests
+│   ├── README.md
+│   ├── replay-engine-service
+│   │   ├── config
+│   │   ├── helm
+│   │   │   └── templates
+│   │   ├── src
+│   │   └── tests
+│   ├── snapshot-service
+│   │   ├── config
+│   │   ├── helm
+│   │   │   └── templates
+│   │   ├── src
+│   │   └── tests
+│   └── _template
+│       ├── app
+│       │   └── main.py
+│       ├── config
+│       │   └── service.yaml
+│       ├── contracts
+│       │   └── events.yaml
+│       ├── Dockerfile
+│       ├── helm
+│       │   ├── Chart.yaml
+│       │   ├── templates
+│       │   └── values.yaml
+│       ├── Makefile
+│       ├── README.md
+│       ├── scripts
+│       │   └── start.sh
+│       ├── service.yaml
+│       ├── src
+│       └── tests
+│           └── test_health.py
+├── simulation
+│   ├── broker
+│   ├── broker-runtime
+│   ├── market-data
+│   ├── market-runtime
+│   └── replay
+├── smart-order-router-stage16.tar
+├── snapshots
+│   └── stage-14a-freeze-20260527-111836
+│       ├── governance
+│       │   ├── artifact-governance.md
+│       │   ├── authoritative-platform-execution-model.md
+│       │   ├── authoritative-stage-index.md
+│       │   ├── branching-strategy.md
+│       │   ├── build-state-governance.md
+│       │   ├── capital-partition-governance.md
+│       │   ├── change-management-policy.md
+│       │   ├── config-governance.md
+│       │   ├── configuration-governance.md
+│       │   ├── definition-of-done.md
+│       │   ├── engineering-workflow.md
+│       │   ├── environment-governance.md
+│       │   ├── environment-naming.md
+│       │   ├── environment-runtime-governance.md
+│       │   ├── event-governance.md
+│       │   ├── filesystem-governance.md
+│       │   ├── fixed-point-governance.md
+│       │   ├── installer-governance.md
+│       │   ├── institutional-stage-execution-lifecycle.md
+│       │   ├── lineage-governance.md
+│       │   ├── mode-governance.md
+│       │   ├── platform-manifest-governance.md
+│       │   ├── policy-governance.md
+│       │   ├── portfolio-audit-governance.md
+│       │   ├── portfolio-domain-architecture.md
+│       │   ├── portfolio-event-governance.md
+│       │   ├── portfolio-governance-laws.md
+│       │   ├── portfolio-persistence-governance.md
+│       │   ├── portfolio-replay-governance.md
+│       │   ├── pr-review-policy.md
+│       │   ├── README.md
+│       │   ├── release-governance.md
+│       │   ├── repository-boundaries.md
+│       │   ├── repository-ownership.md
+│       │   ├── repository-strategy.md
+│       │   ├── repository-topology.md
+│       │   ├── runtime-authority.md
+│       │   ├── schema-governance.md
+│       │   ├── schema-versioning.md
+│       │   ├── scripting-governance.md
+│       │   ├── security-authority.md
+│       │   ├── service-boundary-governance.md
+│       │   ├── service-ownership-governance.md
+│       │   ├── stage13-freeze-governance.md
+│       │   ├── stage-14a-freeze-certification.md
+│       │   ├── stage-14a-validation-authority.md
+│       │   ├── system-state-governance.md
+│       │   ├── timestamp-governance.md
+│       │   ├── topic-governance.md
+│       │   ├── trading-conflict-governance.md
+│       │   ├── trading-event-governance
+│       │   ├── trading-event-transport-governance.md
+│       │   ├── trading-numeric-governance.md
+│       │   ├── trading-runtime-governance.md
+│       │   ├── trading-temporal-governance.md
+│       │   ├── validation-governance.md
+│       │   └── versioning-policy.md
+│       ├── schemas
+│       │   ├── avro
+│       │   ├── compatibility
+│       │   ├── monitoring
+│       │   ├── portfolio
+│       │   ├── README.md
+│       │   ├── registry
+│       │   ├── screening
+│       │   ├── signal
+│       │   ├── strategy
+│       │   └── trade_intent
+│       ├── services
+│       │   ├── conflict_resolver.py
+│       │   ├── decision-engine-service
+│       │   ├── event_emitter.py
+│       │   ├── feature_store_service
+│       │   ├── float_auditor.py
+│       │   ├── historical_data_service
+│       │   ├── instrument-monitoring-service
+│       │   ├── instrument-screening-service
+│       │   ├── market_data_ingestion
+│       │   ├── market_data_normalizer
+│       │   ├── market_data_persistence
+│       │   ├── mlflow
+│       │   ├── __pycache__
+│       │   ├── signal-processor-service
+│       │   ├── strategy-engine-service
+│       │   ├── synthetic-market-generator
+│       │   └── ttl_validator.py
+│       ├── stage-14
+│       │   ├── events
+│       │   ├── logs
+│       │   └── pids
+│       └── stage-14a-operational-reconciliation
+│           ├── audit
+│           ├── audit.sh
+│           ├── certification-state.sh
+│           ├── freeze.sh
+│           ├── inventory.sh
+│           ├── rollback.sh
+│           ├── scripts
+│           ├── setup.sh
+│           ├── snapshots
+│           ├── snapshot.sh
+│           ├── state.sh
+│           └── validate.sh
+├── state
+│   ├── configuration
+│   ├── corei-governed-tree.txt
+│   ├── corei-tree-depth4.txt
+│   ├── corei-tree-size.txt
+│   ├── corei-tree.txt
+│   ├── events
+│   ├── execution_gate
+│   ├── install.state
+│   ├── operations
+│   ├── portfolio
+│   ├── replay
+│   ├── resilience
+│   ├── stage-10a
+│   │   ├── audit
+│   │   ├── backups
+│   │   │   ├── stage-10a-backup-20260525-083945.tar.gz
+│   │   │   ├── stage-10a-backup-20260525-085104.tar.gz
+│   │   │   ├── stage-10a-backup-20260525-091802.tar.gz
+│   │   │   ├── stage-10a-backup-20260525-094407.tar.gz
+│   │   │   ├── stage-10a-backup-20260525-100225.tar.gz
+│   │   │   ├── stage-10a-backup-20260525-101006.tar.gz
+│   │   │   ├── stage-10a-backup-20260525-101431.tar.gz
+│   │   │   ├── stage-10a-backup-20260525-102307.tar.gz
+│   │   │   ├── stage-10a-backup-20260525-102723.tar.gz
+│   │   │   └── stage-10a-backup-20260525-105841.tar.gz
+│   │   ├── inventory
+│   │   │   └── testing-topology.txt
+│   │   ├── logs
+│   │   │   ├── stage-10a-setup-20260525-083749.log
+│   │   │   └── testing-runtime-install.log
+│   │   ├── runtime
+│   │   │   └── mock-broker.pid
+│   │   ├── runtime-state.json
+│   │   ├── snapshots
+│   │   │   ├── stage-10a-20260525-083234.snapshot
+│   │   │   ├── stage-10a-20260525-083938.snapshot
+│   │   │   ├── stage-10a-20260525-085059.snapshot
+│   │   │   ├── stage-10a-20260525-091756.snapshot
+│   │   │   ├── stage-10a-20260525-094402.snapshot
+│   │   │   ├── stage-10a-20260525-100219.snapshot
+│   │   │   ├── stage-10a-20260525-101000.snapshot
+│   │   │   ├── stage-10a-20260525-101426.snapshot
+│   │   │   ├── stage-10a-20260525-102712.snapshot
+│   │   │   └── stage-10a-20260525-105834.snapshot
+│   │   └── validation
+│   ├── stage-11
+│   │   ├── backups
+│   │   │   └── stage-11-platform-backup.tar.gz
+│   │   ├── checkpoints
+│   │   ├── inventory
+│   │   │   ├── core_platform-topology.txt
+│   │   │   └── platform-topology.txt
+│   │   ├── runtime
+│   │   │   └── stage-11-init.timestamp
+│   │   └── snapshots
+│   │       ├── stage-11-20260525-121954.snapshot
+│   │       ├── stage-11-20260525-123009.snapshot
+│   │       ├── stage-11-20260525-123932.snapshot
+│   │       ├── stage-11-20260525-124452.snapshot
+│   │       ├── stage-11-20260525-125401.snapshot
+│   │       ├── stage-11-20260525-125547.snapshot
+│   │       ├── stage-11-20260525-172525.snapshot
+│   │       ├── stage-11-20260525-172755.snapshot
+│   │       ├── stage-11-20260525-173323.snapshot
+│   │       ├── stage-11-20260525-180110.snapshot
+│   │       ├── stage-11-20260525-183217.snapshot
+│   │       ├── stage-11-20260525-184652.snapshot
+│   │       ├── stage-11-20260525-185618.snapshot
+│   │       ├── stage-11-20260525-190828.snapshot
+│   │       ├── stage-11-20260525-191608.snapshot
+│   │       ├── stage-11-20260525-192134.snapshot
+│   │       └── stage-11-20260525-192617.snapshot
+│   ├── stage-12
+│   │   ├── audit
+│   │   ├── contracts
+│   │   ├── inventory
+│   │   ├── kafka
+│   │   │   ├── bootstrap
+│   │   │   ├── brokers
+│   │   │   ├── cluster
+│   │   │   ├── replay
+│   │   │   ├── retention
+│   │   │   ├── storage
+│   │   │   ├── topology
+│   │   │   └── validation
+│   │   ├── kubernetes
+│   │   ├── logs
+│   │   ├── namespaces
+│   │   ├── runtime
+│   │   ├── schemas
+│   │   └── validation
+│   └── stage-18-tree.txt
+├── strategies
+│   ├── forex_momentum_strategy
+│   │   ├── artifacts
+│   │   ├── config
+│   │   │   └── strategy.env
+│   │   ├── forex_momentum_strategy.py
+│   │   ├── lineage
+│   │   ├── logs
+│   │   ├── README.md
+│   │   ├── replay
+│   │   ├── signals
+│   │   └── tests
+│   │       └── test_strategy_placeholder.py
+│   ├── gold_timing_strategy
+│   │   ├── artifacts
+│   │   ├── config
+│   │   │   └── strategy.env
+│   │   ├── gold_timing_strategy.py
+│   │   ├── lineage
+│   │   ├── logs
+│   │   ├── README.md
+│   │   ├── replay
+│   │   ├── signals
+│   │   └── tests
+│   │       └── test_strategy_placeholder.py
+│   ├── mean_reversion_strategy
+│   │   ├── artifacts
+│   │   ├── config
+│   │   │   └── strategy.env
+│   │   ├── lineage
+│   │   ├── logs
+│   │   ├── mean_reversion_strategy.py
+│   │   ├── README.md
+│   │   ├── replay
+│   │   ├── signals
+│   │   └── tests
+│   │       └── test_strategy_placeholder.py
+│   └── stock_momentum_strategy
+│       ├── artifacts
+│       ├── config
+│       │   └── strategy.env
+│       ├── lineage
+│       ├── logs
+│       ├── README.md
+│       ├── replay
+│       ├── signals
+│       ├── stock_momentum_strategy.py
+│       └── tests
+│           └── test_strategy_placeholder.py
+├── terraform
+│   ├── environments
+│   │   ├── production
+│   │   ├── vmware
+│   │   └── vps-staging
+│   ├── modules
+│   └── shared
+├── tests
+│   ├── chaos
+│   │   ├── fixtures
+│   │   ├── recovery
+│   │   ├── reports
+│   │   └── test_chaos_recovery.py
+│   ├── config
+│   │   ├── pytest.ini
+│   │   └── test-runtime.yaml
+│   ├── contracts
+│   │   ├── consumer
+│   │   │   └── test_market_consumer_contract.py
+│   │   ├── pacts
+│   │   ├── provider
+│   │   └── reports
+│   ├── determinism
+│   │   ├── fixtures
+│   │   ├── reports
+│   │   └── test_replay_determinism.py
+│   ├── fixtures
+│   │   └── sample-events.json
+│   ├── integration
+│   │   ├── test_mock_broker.py
+│   │   └── test_runtime_validation.py
+│   ├── lineage
+│   ├── load
+│   │   ├── fixtures
+│   │   ├── reports
+│   │   ├── scenarios
+│   │   │   └── load-test-scenario.json
+│   │   └── test_load_validation.py
+│   ├── mock-services
+│   │   ├── brokers
+│   │   │   └── mock-broker.py
+│   │   └── market-data
+│   │       └── synthetic-market-generator.py
+│   ├── orchestration
+│   ├── performance
+│   │   ├── benchmarks
+│   │   ├── fixtures
+│   │   ├── reports
+│   │   └── test_latency_budget.py
+│   ├── replay
+│   │   ├── fixtures
+│   │   │   └── replay-session.jsonl
+│   │   ├── output
+│   │   │   └── replay-output.jsonl
+│   │   ├── reports
+│   │   ├── sessions
+│   │   └── test_replay_output.py
+│   ├── reports
+│   ├── schemas
+│   │   ├── avro
+│   │   ├── compatibility
+│   │   │   └── test_schema_compatibility.py
+│   │   ├── fixtures
+│   │   │   ├── market-tick-invalid.json
+│   │   │   └── market-tick-valid.json
+│   │   ├── reports
+│   │   └── test_market_tick_schema.py
+│   ├── stage-15
+│   │   ├── determinism
+│   │   ├── lineage
+│   │   ├── ordering
+│   │   ├── policy
+│   │   ├── replay
+│   │   ├── risk
+│   │   └── sizing
+│   ├── state
+│   ├── synthetic
+│   │   ├── config
+│   │   ├── fixtures
+│   │   ├── output
+│   │   │   └── generated-ticks.jsonl
+│   │   └── test_synthetic_market_generation.py
+│   └── validation
+├── tools
+├── ui
+├── VERSION
+└── workflows
+
+1402 directories, 1629 files

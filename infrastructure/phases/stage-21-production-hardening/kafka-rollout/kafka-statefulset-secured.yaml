@@ -1,0 +1,24 @@
+# GENERATED DEPLOYMENT TARGET
+
+SOURCE
+
+state/security/kafka/recovery/kafka-statefulset-pre-sasl.yaml
+
+TARGET
+
+Dual Listener
+
+PLAINTEXT://9092
+SASL_SSL://9094
+
+TLS
+
+kafka-runtime-tls
+
+AUTH
+
+SCRAM-SHA-512
+
+STATUS
+
+PRE-DEPLOYMENT ARTIFACT

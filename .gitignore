@@ -125,3 +125,30 @@ secrets/
 
 # Local operational states
 ops/
+
+##################################################
+# SECURITY ARTIFACTS
+##################################################
+
+state/security/kafka/*.key
+state/security/kafka/*.crt
+state/security/kafka/*.csr
+state/security/kafka/*.p12
+state/security/kafka/*.jks
+
+state/security/kafka/runtime-security/*
+state/security/kafka/users/*.password
+
+state/security/vault/*.json
+
+state/security-backup/
+
+##################################################
+# LARGE GENERATED INVENTORY FILES
+##################################################
+
+state/corei-full-authoritative-tree.txt
+state/corei-full-tree-detailed.txt
+corei-tree.txt
+
+state/security/kafka/runtime-tls/*

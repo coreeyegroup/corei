@@ -1,0 +1,25 @@
+# KAFKA SECURITY DEPLOYMENT DIFF
+
+ADD
+
+KAFKA_OPTS
+
+ADD
+
+SASL_SSL 9094
+
+ADD
+
+kafka-runtime-tls
+
+ADD
+
+kafka-security-runtime
+
+PRESERVE
+
+PLAINTEXT 9092
+
+PRESERVE
+
+CONTROLLER 9093

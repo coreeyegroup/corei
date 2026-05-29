@@ -1,0 +1,46 @@
+spec:
+  template:
+    spec:
+
+      volumes:
+
+      - name: kafka-runtime-tls
+
+        secret:
+          secretName: kafka-runtime-tls
+
+      - name: kafka-security-runtime
+
+        secret:
+          secretName: kafka-security-runtime
+
+      containers:
+
+      - name: kafka
+
+        env:
+
+        - name: KAFKA_OPTS
+
+          value: >
+            -Djava.security.auth.login.config=
+            /etc/kafka/security/kafka_jaas.conf
+
+        volumeMounts:
+
+        - name: kafka-runtime-tls
+
+          mountPath: /etc/kafka/tls
+
+          readOnly: true
+
+        - name: kafka-security-runtime
+
+          mountPath: /etc/kafka/security
+
+          readOnly: true
+
+        ports:
+
+        - containerPort: 9094
+          name: sasl-ssl

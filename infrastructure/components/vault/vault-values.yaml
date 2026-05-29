@@ -1,0 +1,8 @@
+server:
+  dataStorage:
+    enabled: true
+    storageClass: longhorn-single-node
+    size: 10Gi
+
+ui:
+  enabled: true

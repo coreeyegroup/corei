@@ -1,0 +1,29 @@
+# DESIGN ONLY
+
+spec:
+  template:
+    spec:
+
+      volumes:
+
+      - name: kafka-runtime-tls
+
+        secret:
+          secretName: kafka-runtime-tls
+
+      containers:
+
+      - name: kafka
+
+        volumeMounts:
+
+        - name: kafka-runtime-tls
+
+          mountPath: /etc/kafka/tls
+
+          readOnly: true
+
+        ports:
+
+        - containerPort: 9094
+          name: sasl-ssl

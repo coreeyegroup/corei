@@ -1,0 +1,91 @@
+tests
+├── chaos
+│   ├── fixtures
+│   ├── __pycache__
+│   │   └── test_chaos_recovery.cpython-310-pytest-8.3.2.pyc
+│   ├── recovery
+│   ├── reports
+│   └── test_chaos_recovery.py
+├── config
+│   ├── pytest.ini
+│   └── test-runtime.yaml
+├── contracts
+│   ├── consumer
+│   │   ├── __pycache__
+│   │   │   └── test_market_consumer_contract.cpython-310-pytest-8.3.2.pyc
+│   │   └── test_market_consumer_contract.py
+│   ├── pacts
+│   ├── provider
+│   └── reports
+├── determinism
+│   ├── fixtures
+│   ├── __pycache__
+│   │   └── test_replay_determinism.cpython-310-pytest-8.3.2.pyc
+│   ├── reports
+│   └── test_replay_determinism.py
+├── fixtures
+│   └── sample-events.json
+├── integration
+│   ├── __pycache__
+│   │   ├── test_mock_broker.cpython-310-pytest-8.3.2.pyc
+│   │   └── test_runtime_validation.cpython-310-pytest-8.3.2.pyc
+│   ├── test_mock_broker.py
+│   └── test_runtime_validation.py
+├── lineage
+├── load
+│   ├── fixtures
+│   ├── __pycache__
+│   │   └── test_load_validation.cpython-310-pytest-8.3.2.pyc
+│   ├── reports
+│   ├── scenarios
+│   │   └── load-test-scenario.json
+│   └── test_load_validation.py
+├── mock-services
+│   ├── brokers
+│   │   └── mock-broker.py
+│   └── market-data
+│       └── synthetic-market-generator.py
+├── orchestration
+├── performance
+│   ├── benchmarks
+│   ├── fixtures
+│   ├── __pycache__
+│   │   └── test_latency_budget.cpython-310-pytest-8.3.2.pyc
+│   ├── reports
+│   └── test_latency_budget.py
+├── replay
+│   ├── fixtures
+│   │   └── replay-session.jsonl
+│   ├── output
+│   │   └── replay-output.jsonl
+│   ├── __pycache__
+│   │   └── test_replay_output.cpython-310-pytest-8.3.2.pyc
+│   ├── reports
+│   ├── sessions
+│   └── test_replay_output.py
+├── reports
+├── schemas
+│   ├── avro
+│   ├── compatibility
+│   │   ├── __pycache__
+│   │   │   └── test_schema_compatibility.cpython-310-pytest-8.3.2.pyc
+│   │   └── test_schema_compatibility.py
+│   ├── fixtures
+│   │   ├── market-tick-invalid.json
+│   │   └── market-tick-valid.json
+│   ├── __pycache__
+│   │   └── test_market_tick_schema.cpython-310-pytest-8.3.2.pyc
+│   ├── reports
+│   └── test_market_tick_schema.py
+├── state
+├── synthetic
+│   ├── config
+│   ├── fixtures
+│   ├── output
+│   │   └── generated-ticks.jsonl
+│   ├── __pycache__
+│   │   └── test_synthetic_market_generation.cpython-310-pytest-8.3.2.pyc
+│   └── test_synthetic_market_generation.py
+└── validation
+
+55 directories, 33 files

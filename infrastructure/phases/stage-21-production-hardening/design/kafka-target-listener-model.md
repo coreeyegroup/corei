@@ -1,0 +1,34 @@
+# KAFKA TARGET LISTENER MODEL
+
+CURRENT
+
+PLAINTEXT://9092
+CONTROLLER://9093
+
+TARGET
+
+SASL_SSL://9094
+CONTROLLER://9093
+
+AUTHENTICATION
+
+SCRAM-SHA-512
+
+TLS
+
+Broker Certificate
+Kafka CA
+
+CREDENTIAL SOURCE
+
+Vault
+
+BROKER USERS
+
+kafka-admin
+kafka-service
+
+ROLLBACK
+
+Restore pre-sasl StatefulSet
+Restore pre-sasl ConfigMap
