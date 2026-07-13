@@ -1,0 +1,414 @@
+/******************************************************************************
+ *
+ * COREI OPERATING SYSTEM
+ *
+ * STAGE-25
+ * PHASE-17
+ * STEP-12
+ *
+ * FILE:
+ * shell-layout.css
+ *
+ * PURPOSE:
+ * Institutional Theme, Visual System and Responsive Shell
+ *
+ * DESCRIPTION:
+ * Defines the browser-visible geometry and visual integration contract for
+ * the Institutional Shell.
+ *
+ * The Shell consumes the existing Foundation visual system through inherited
+ * semantic theme variables.
+ *
+ * This stylesheet does not redefine the Foundation Theme Platform.
+ * This stylesheet does not create a parallel token system.
+ * This stylesheet does not style subsystem internals.
+ *
+ * RESPONSIVE MODEL:
+ *
+ * LARGE OPERATIONAL VIEWPORT
+ *     Six-region institutional workstation.
+ *
+ * COMPACT OPERATIONAL VIEWPORT
+ *     Reduced navigation and intelligence widths.
+ *
+ * NARROW OPERATIONAL VIEWPORT
+ *     Center workspace receives priority.
+ *     Intelligence region is removed from active layout flow.
+ *
+ * MINIMUM OPERATIONAL VIEWPORT
+ *     Navigation and intelligence side regions are removed from active
+ *     layout flow.
+ *     Top, center, bottom and status regions remain operational.
+ *
+ ******************************************************************************/
+
+/*=============================================================================
+    SHELL GEOMETRY CONTRACT
+=============================================================================*/
+
+.corei-shell-frame {
+
+    --corei-shell-top-height: 52px;
+    --corei-shell-left-width: 248px;
+    --corei-shell-right-width: 320px;
+    --corei-shell-bottom-height: 168px;
+    --corei-shell-status-height: 28px;
+
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+
+    min-width: 0;
+    min-height: 0;
+
+    overflow: hidden;
+
+    color: var(--foreground);
+    background: var(--background);
+
+    font-family: var(
+        --font-sans,
+        "Geist Variable",
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif
+    );
+
+    color-scheme: light dark;
+
+    isolation: isolate;
+}
+
+
+/*=============================================================================
+    AUTHORITATIVE SIX-REGION LAYOUT
+=============================================================================*/
+
+.corei-shell-layout {
+
+    display: grid;
+
+    grid-template-columns:
+        var(--corei-shell-left-width)
+        minmax(0, 1fr)
+        var(--corei-shell-right-width);
+
+    grid-template-rows:
+        var(--corei-shell-top-height)
+        minmax(0, 1fr)
+        var(--corei-shell-bottom-height)
+        var(--corei-shell-status-height);
+
+    grid-template-areas:
+        "top top top"
+        "left center right"
+        "bottom bottom bottom"
+        "status status status";
+
+    width: 100%;
+    height: 100%;
+
+    min-width: 0;
+    min-height: 0;
+
+    overflow: hidden;
+
+    color: inherit;
+    background: inherit;
+}
+
+
+/*=============================================================================
+    COMMON REGION CONTRACT
+=============================================================================*/
+
+.shell-top,
+.shell-left,
+.shell-center,
+.shell-right,
+.shell-bottom,
+.shell-status {
+
+    position: relative;
+
+    min-width: 0;
+    min-height: 0;
+
+    overflow: hidden;
+
+    color: inherit;
+    background: inherit;
+}
+
+
+/*=============================================================================
+    TOP REGION
+=============================================================================*/
+
+.shell-top {
+
+    grid-area: top;
+
+    z-index: 60;
+
+    border-bottom: 1px solid var(--border);
+}
+
+
+/*=============================================================================
+    LEFT REGION
+=============================================================================*/
+
+.shell-left {
+
+    grid-area: left;
+
+    z-index: 40;
+
+    border-right: 1px solid var(--border);
+}
+
+
+/*=============================================================================
+    CENTER REGION
+=============================================================================*/
+
+.shell-center {
+
+    grid-area: center;
+
+    z-index: 10;
+
+    min-width: 0;
+    min-height: 0;
+
+    overflow: hidden;
+
+    background: var(--background);
+}
+
+
+/*=============================================================================
+    RIGHT REGION
+=============================================================================*/
+
+.shell-right {
+
+    grid-area: right;
+
+    z-index: 40;
+
+    border-left: 1px solid var(--border);
+}
+
+
+/*=============================================================================
+    BOTTOM REGION
+=============================================================================*/
+
+.shell-bottom {
+
+    grid-area: bottom;
+
+    z-index: 50;
+
+    border-top: 1px solid var(--border);
+}
+
+
+/*=============================================================================
+    STATUS REGION
+=============================================================================*/
+
+.shell-status {
+
+    grid-area: status;
+
+    z-index: 70;
+
+    border-top: 1px solid var(--border);
+}
+
+
+/*=============================================================================
+    SHELL REGION HOST CONTRACT
+=============================================================================*/
+
+.corei-shell-region {
+
+    width: 100%;
+    height: 100%;
+
+    min-width: 0;
+    min-height: 0;
+
+    overflow: hidden;
+}
+
+
+/*=============================================================================
+    THEME TRANSITION CONTRACT
+=============================================================================*/
+
+.corei-shell-frame,
+.corei-shell-layout,
+.shell-top,
+.shell-left,
+.shell-center,
+.shell-right,
+.shell-bottom,
+.shell-status {
+
+    transition:
+        background-color 120ms ease,
+        color 120ms ease,
+        border-color 120ms ease;
+}
+
+
+/*=============================================================================
+    COMPACT OPERATIONAL VIEWPORT
+=============================================================================*/
+
+@media (max-width: 1440px) {
+
+    .corei-shell-frame {
+
+        --corei-shell-left-width: 220px;
+        --corei-shell-right-width: 288px;
+        --corei-shell-bottom-height: 152px;
+
+    }
+
+}
+
+
+/*=============================================================================
+    NARROW OPERATIONAL VIEWPORT
+=============================================================================*/
+
+@media (max-width: 1180px) {
+
+    .corei-shell-frame {
+
+        --corei-shell-left-width: 208px;
+        --corei-shell-bottom-height: 144px;
+
+    }
+
+    .corei-shell-layout {
+
+        grid-template-columns:
+            var(--corei-shell-left-width)
+            minmax(0, 1fr);
+
+        grid-template-areas:
+            "top top"
+            "left center"
+            "bottom bottom"
+            "status status";
+
+    }
+
+    .shell-right {
+
+        display: none;
+
+    }
+
+}
+
+
+/*=============================================================================
+    MINIMUM OPERATIONAL VIEWPORT
+=============================================================================*/
+
+@media (max-width: 900px) {
+
+    .corei-shell-frame {
+
+        --corei-shell-top-height: 48px;
+        --corei-shell-bottom-height: 128px;
+        --corei-shell-status-height: 28px;
+
+    }
+
+    .corei-shell-layout {
+
+        grid-template-columns:
+            minmax(0, 1fr);
+
+        grid-template-areas:
+            "top"
+            "center"
+            "bottom"
+            "status";
+
+    }
+
+    .shell-left,
+    .shell-right {
+
+        display: none;
+
+    }
+
+}
+
+
+/*=============================================================================
+    CONSTRAINED HEIGHT
+=============================================================================*/
+
+@media (max-height: 760px) {
+
+    .corei-shell-frame {
+
+        --corei-shell-top-height: 48px;
+        --corei-shell-bottom-height: 112px;
+        --corei-shell-status-height: 26px;
+
+    }
+
+}
+
+
+/*=============================================================================
+    SEVERELY CONSTRAINED HEIGHT
+=============================================================================*/
+
+@media (max-height: 620px) {
+
+    .corei-shell-frame {
+
+        --corei-shell-top-height: 44px;
+        --corei-shell-bottom-height: 88px;
+        --corei-shell-status-height: 24px;
+
+    }
+
+}
+
+
+/*=============================================================================
+    REDUCED MOTION
+=============================================================================*/
+
+@media (prefers-reduced-motion: reduce) {
+
+    .corei-shell-frame,
+    .corei-shell-layout,
+    .shell-top,
+    .shell-left,
+    .shell-center,
+    .shell-right,
+    .shell-bottom,
+    .shell-status {
+
+        transition: none;
+
+    }
+
+}

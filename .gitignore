@@ -7,7 +7,7 @@
 # RUNTIME DOMAINS
 # --------------------------------------------------
 
-runtime/
+/runtime/
 logs/
 reports/
 
@@ -75,6 +75,11 @@ exports/
 coverage/
 htmlcov/
 
+
+# Playwright generated test outputs
+playwright-report/
+test-results/
+
 # --------------------------------------------------
 # GENERATED FILES
 # --------------------------------------------------
@@ -93,7 +98,7 @@ governance/repository-governance/repository-directory-inventory.txt
 artifacts/
 
 # Runtime lineage
-runtime/
+/runtime/
 
 # Telemetry lineage
 telemetry/
