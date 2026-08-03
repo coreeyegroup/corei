@@ -1,0 +1,11 @@
+apiVersion: v1
+data:
+  kafka_jaas.conf: S2Fma2FTZXJ2ZXIgewogICAgb3JnLmFwYWNoZS5rYWZrYS5jb21tb24uc2VjdXJpdHkuc2NyYW0uU2NyYW1Mb2dpbk1vZHVsZSByZXF1aXJlZAogICAgdXNlcm5hbWU9ImthZmthLWFkbWluIgogICAgcGFzc3dvcmQ9IjVPN0RUSXVyaEIvclFKOUkzb0hacmdNR0xnb05TQTdyVDBXdS9aUXJsTVU9IjsKfTsK
+kind: Secret
+metadata:
+  creationTimestamp: "2026-05-29T12:27:13Z"
+  name: kafka-security-runtime
+  namespace: kafka
+  resourceVersion: "520352"
+  uid: cc62b3e9-d809-4dd6-abb3-a1b3c6b887ef
+type: Opaque

@@ -17,4 +17,3 @@ export type DomainHealthStatus =
     | "HEALTHY"
     | "DEGRADED"
     | "UNHEALTHY";
-

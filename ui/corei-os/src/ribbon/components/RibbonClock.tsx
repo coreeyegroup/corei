@@ -31,4 +31,3 @@ export function RibbonClock(): ReactElement {
 }
 
 export default RibbonClock;
-

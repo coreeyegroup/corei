@@ -19,4 +19,3 @@ export type PlatformRuntimeHealthStatus =
     | "WARNING"
     | "FAILED"
     | "RECOVERING";
-

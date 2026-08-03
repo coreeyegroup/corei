@@ -43,4 +43,3 @@ class RibbonRegistry {
 }
 
 export const ribbonRegistry = new RibbonRegistry();
-

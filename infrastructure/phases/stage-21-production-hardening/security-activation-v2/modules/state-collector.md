@@ -27,4 +27,3 @@ empty output
 OUTPUT CONTRACT
 
 Valid Kubernetes StatefulSet YAML
-

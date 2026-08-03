@@ -16,4 +16,3 @@ export const Density = Object.freeze({
     comfortable: 1.15
 
 });
-

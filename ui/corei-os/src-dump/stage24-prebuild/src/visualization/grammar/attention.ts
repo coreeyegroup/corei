@@ -20,4 +20,3 @@ export const Attention = Object.freeze({
     emergency: "emergency"
 
 });
-

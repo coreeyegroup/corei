@@ -17,9 +17,9 @@ export interface WindowStatusProps {
     readonly className?: string;
 
     readonly left?: ReactNode;
-    
+
     readonly center?: ReactNode;
-    
+
     readonly right?: ReactNode;
 
 }

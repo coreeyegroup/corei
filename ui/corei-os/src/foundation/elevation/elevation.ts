@@ -62,4 +62,3 @@ export const Elevation = Object.freeze({
 } as const);
 
 export type ElevationTokens = typeof Elevation;
-

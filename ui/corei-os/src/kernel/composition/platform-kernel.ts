@@ -88,4 +88,3 @@ export const PLATFORM_KERNEL: PlatformKernelContract = {
     event:        slot("event",        "Event Platform")
 
 };
-
