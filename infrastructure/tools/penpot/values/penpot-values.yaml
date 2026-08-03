@@ -1,0 +1,35 @@
+global:
+  storageClass: longhorn
+
+config:
+
+  publicUri: "http://192.168.1.10:31580"
+
+  postgresql:
+    host: "penpot-postgres.tools.svc.cluster.local"
+    port: 5432
+    username: "penpot"
+    password: "penpot-postgres-password"
+    database: "penpot"
+
+  redis:
+    host: "penpot-redis.tools.svc.cluster.local"
+    port: 6379
+    database: "0"
+
+  objectsStorage:
+    storageBackend: fs
+
+persistence:
+  assets:
+    enabled: true
+    storageClass: longhorn
+    size: 20Gi
+
+frontend:
+  service:
+    type: NodePort
+    port: 8080
+
+ingress:
+  enabled: false

@@ -1,0 +1,27 @@
+/* src/styles/font-scale.css */
+:root {
+  --font-size-base: 1.1rem;       /* increased from 1rem */
+  --font-size-sm: 0.9rem;         /* was 0.85rem */
+  --font-size-xs: 0.8rem;         /* was 0.75rem */
+  --font-size-lg: 1.25rem;        /* was 1.15rem */
+  --font-size-xl: 1.5rem;         /* was 1.35rem */
+  --spacing-unit: 0.65rem;        /* was 0.5rem */
+}
+
+/* Apply to all text elements */
+html, body, input, select, button, textarea, pre, code {
+  font-size: var(--font-size-base);
+  line-height: 1.6;               /* better readability */
+}
+
+/* Component overrides */
+.view-title {
+  font-size: var(--font-size-xl) !important;
+  margin-bottom: calc(var(--spacing-unit) * 2) !important;
+}
+.sidebar-header, .panel-header, .prop-label, .stat-card span:first-child, .form-section-header {
+  font-size: var(--font-size-xs) !important;
+}
+.tab-item, .status-bar, .log-line, .form-field label, .form-field input, .form-field select {
+  font-size: var(--font-size-sm) !important;
+}

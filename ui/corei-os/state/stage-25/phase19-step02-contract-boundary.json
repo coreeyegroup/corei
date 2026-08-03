@@ -1,0 +1,32 @@
+{
+  "phase": "19",
+  "step": "02",
+  "typescript": "PASS",
+  "build": "PASS",
+  "status": "PASS",
+  "contracts": {
+    "src/windowing/contracts": [
+      "src/windowing/contracts/window-contract.ts",
+      "src/windowing/contracts/window-layout-contract.ts"
+    ],
+    "src/workbench/contracts": [
+      "src/workbench/contracts/index.ts",
+      "src/workbench/contracts/workbench-contract.ts"
+    ],
+    "src/workspace/core/contracts": [
+      "src/workspace/core/contracts/workspace-contract.ts"
+    ],
+    "src/workspaces/contracts": [
+      "src/workspaces/contracts/index.ts",
+      "src/workspaces/contracts/workspace-contract.ts"
+    ],
+    "src/capabilities/workspace": [
+      "src/capabilities/workspace/index.ts",
+      "src/capabilities/workspace/workspace-capability-contract.ts",
+      "src/capabilities/workspace/workspace-capability-manager.ts",
+      "src/capabilities/workspace/workspace-capability-registry.ts",
+      "src/capabilities/workspace/workspace-capability-runtime.ts",
+      "src/capabilities/workspace/workspace-capability.ts"
+    ]
+  }
+}

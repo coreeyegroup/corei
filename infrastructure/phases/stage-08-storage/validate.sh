@@ -30,10 +30,10 @@ echo "[PASS] TimescaleDB extension present"
 
 echo "[CHECK] Redis validation..."
 
-kubectl exec -n storage redis-0 -- \
+kubectl exec -n database redis-0 -- \
 redis-cli SET stage08 validation
 
-RESULT=$(kubectl exec -n storage redis-0 -- \
+RESULT=$(kubectl exec -n database redis-0 -- \
 redis-cli GET stage08)
 
 if [[ "$RESULT" != "validation" ]]; then

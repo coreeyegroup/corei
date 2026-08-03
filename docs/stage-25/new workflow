@@ -1,0 +1,168 @@
+COREI Workbench Development Plan (VS Code-style, Trading-focused)
+STEP-01 — Workbench Foundation
+
+Goal: Build the operating environment.
+
+Use:
+
+React
+Dockview
+Zustand
+shadcn
+Tailwind
+
+Build:
+
+Workbench Host
+Widget Registry
+Layout Engine
+Workspace Manager
+STEP-02 — Window & Docking System
+
+Goal: VS Code-like workspace.
+
+Implement:
+
+Dockview
+Tabs
+Split Horizontal
+Split Vertical
+Drag & Drop
+Resize
+Maximize
+Close/Open Panels
+Layout Persistence
+STEP-03 — Shell & Navigation
+
+Goal: VS Code navigation.
+
+Build:
+
+Activity Bar
+Sidebar
+Secondary Sidebar
+Top Ribbon
+Bottom Panel
+Status Bar
+Breadcrumb
+Context Menu
+
+Replace coding items with COREI items.
+
+STEP-04 — Command & Search
+
+Goal: Everything searchable.
+
+Build:
+
+Command Palette
+Global Search
+Widget Search
+Tool Search
+Symbol Search
+Quick Open
+Recent Items
+Keyboard Shortcuts
+STEP-05 — Widget Framework
+
+Goal: Everything becomes a widget.
+
+Examples:
+
+TradingView
+Order Book
+DOM
+Positions
+Portfolio
+Risk
+AI
+Monaco
+xterm
+Grafana
+Headlamp
+Kafka
+Vault
+
+All widgets follow one contract.
+
+STEP-06 — Workspace & Perspectives
+
+Goal: One workbench, multiple terminals.
+
+Create:
+
+Trading Workspace
+Infrastructure Workspace
+Research Workspace
+Risk Workspace
+Executive Workspace
+Compliance Workspace
+
+Save/Restore unlimited layouts.
+
+STEP-07 — Runtime Integration
+
+Goal: Connect real systems.
+
+Integrate:
+
+TradingView
+Monaco
+xterm
+Grafana
+Kubernetes
+PostgreSQL
+Kafka
+Redis
+Vault
+Keycloak
+Prometheus
+Loki
+Jaeger
+Broker APIs
+COREI Domains
+
+No mockups—real integrations.
+
+STEP-08 — Institutional Experience
+
+Goal: Production-grade operator workstation.
+
+Implement:
+
+Multi-monitor support
+Themes
+Notifications
+Window memory
+User profiles
+Permissions
+Session restore
+Hotkeys
+Plugin system
+Performance optimization
+Workspace import/export
+Audit & telemetry
+Final Architecture
+COREI OS
+│
+├── Workbench Engine
+│   ├── Shell
+│   ├── Navigation
+│   ├── Docking
+│   ├── Search
+│   ├── Commands
+│   ├── Widget Registry
+│   ├── Workspace Manager
+│   ├── Layout Persistence
+│   └── Window Manager
+│
+└── COREI Widgets
+    ├── Trading
+    ├── Infrastructure
+    ├── Risk
+    ├── Research
+    ├── Executive
+    ├── Compliance
+    └── AI
+
+I would freeze this as the UI roadmap. It keeps your current React ecosystem, leverages the libraries you've already installed, delivers the VS Code-style operator experience you want, and avoids introducing a second framework that overlaps with COREI.

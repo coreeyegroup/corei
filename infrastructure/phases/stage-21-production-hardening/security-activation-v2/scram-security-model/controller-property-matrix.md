@@ -1,0 +1,17 @@
+# CONTROLLER PROPERTY MATRIX
+
+CONTROLLER ROLE
+
+KRaft Controller
+
+SECURITY MODEL
+
+To Be Implemented
+
+OWNERSHIP
+
+Security Property Generator
+
+STATUS
+
+SPECIFIED

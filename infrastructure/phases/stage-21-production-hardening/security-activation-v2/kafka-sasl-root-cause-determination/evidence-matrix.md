@@ -1,0 +1,53 @@
+# EVIDENCE MATRIX
+
+EVIDENCE 01
+
+TLS Secret
+
+VALID
+
+EVIDENCE 02
+
+JAAS Secret
+
+VALID
+
+EVIDENCE 03
+
+Volume Mounts
+
+VALID
+
+EVIDENCE 04
+
+KAFKA_OPTS
+
+VALID
+
+EVIDENCE 05
+
+SASL_SSL Listener
+
+PRESENT
+
+EVIDENCE 06
+
+Inter-Broker SCRAM
+
+REMOVED
+
+EVIDENCE 07
+
+Kafka Startup
+
+FAILED
+
+EVIDENCE 08
+
+KerberosLogin Path
+
+CONFIRMED
+
+CONCLUSION
+
+Runtime listener startup requirement remains unresolved

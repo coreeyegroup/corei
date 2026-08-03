@@ -1,0 +1,1920 @@
+# STAGE-23 — INSTITUTIONAL OPERATOR WORKSTATION
+
+## Phase-05 — Technology Landscape
+
+**Document Status:** Authoritative
+**Stage:** 23
+**Phase:** 05
+**Sections Covered:** 01–04 (Message 1 of 4)
+
+**Authoritative References**
+
+* Stage-23 Phase-00 — Constitutional Foundation
+* Stage-23 Phase-01 — Discovery & Reverse Engineering
+* Stage-23 Phase-02 — Operator Architecture
+* Stage-23 Phase-03 — Operational Environment Architecture
+* Stage-23 Phase-04 — Experience Architecture
+* COREI Anchor Law
+* Master Trader Persona
+
+---
+
+# SECTION 01 — PURPOSE
+
+## Purpose
+
+The purpose of Phase-05 is to establish the Technology Landscape for the COREI Institutional Operator Workstation.
+
+Unlike conventional technology selection exercises, Phase-05 does not begin with libraries, frameworks, vendors, or programming languages.
+
+It begins with architecture.
+
+Only after the constitutional, operational, environmental, and behavioural foundations have been established do we determine which technologies are capable of implementing those architectural requirements.
+
+Technology therefore becomes an implementation instrument rather than an architectural driver.
+
+The objective of this phase is to identify, evaluate, validate, and govern every technology that may become part of the COREI Institutional Operator Workstation.
+
+This includes technologies supporting:
+
+* workstation shell,
+* layout management,
+* docking,
+* window management,
+* command systems,
+* search,
+* state management,
+* data visualisation,
+* charting,
+* operational dashboards,
+* graph visualisation,
+* terminals,
+* editors,
+* tables,
+* AI interaction,
+* extension systems,
+* collaboration,
+* notifications,
+* workflow orchestration,
+* accessibility,
+* performance,
+* theming,
+* multi-monitor operation.
+
+Every selected technology must strengthen the architecture established throughout Stages 00–04.
+
+No technology shall be introduced merely because it is popular, fashionable, or widely adopted.
+
+---
+
+# SECTION 02 — MISSION
+
+## Mission
+
+The mission of Phase-05 is to create an institutional technology strategy that supports long-term architectural stability, operational excellence, scalability, maintainability, and continuous evolution.
+
+Technology selection shall satisfy four simultaneous objectives.
+
+---
+
+### Architectural Fidelity
+
+Every selected technology shall faithfully implement the architectural principles established throughout Stage-23.
+
+Technology shall never require architectural compromise.
+
+---
+
+### Institutional Longevity
+
+Selected technologies should remain viable for many years.
+
+Preference shall be given to technologies demonstrating:
+
+* architectural maturity,
+* active maintenance,
+* stable ecosystems,
+* production adoption,
+* extensibility,
+* long-term sustainability.
+
+---
+
+### Engineering Quality
+
+Technologies shall improve:
+
+* maintainability,
+* modularity,
+* composability,
+* developer productivity,
+* operational reliability,
+* testing,
+* observability.
+
+---
+
+### Operational Excellence
+
+Technologies shall ultimately improve the daily experience of professional operators.
+
+If a technology benefits engineers while reducing operator effectiveness,
+
+it shall not become part of COREI.
+
+The mission therefore is not to collect technologies.
+
+The mission is to assemble an institutional technology ecosystem capable of supporting the Operational Environment for many years of continuous evolution.
+
+---
+
+# SECTION 03 — PROBLEM STATEMENT
+
+## Problem Statement
+
+Modern frontend ecosystems provide thousands of libraries and frameworks.
+
+Most organisations select technologies through:
+
+* popularity,
+* community trends,
+* developer familiarity,
+* online comparisons,
+* isolated feature evaluation.
+
+These approaches frequently produce:
+
+* inconsistent technology stacks,
+* duplicated capability,
+* incompatible architectures,
+* difficult upgrades,
+* fragmented user experience,
+* excessive maintenance burden.
+
+Institutional operational platforms require a fundamentally different approach.
+
+The workstation will support:
+
+* multiple terminals,
+* hundreds of workspaces,
+* thousands of operational components,
+* continuous institutional operation,
+* multi-monitor environments,
+* AI integration,
+* complex visualisation,
+* real-time streaming,
+* collaborative workflows.
+
+Technology decisions made today will influence architectural flexibility for many years.
+
+The COREI Anchor Law requires that the workstation remain scalable across:
+
+* Multi Account
+* Multi Broker
+* Multi Strategy
+* Multi Portfolio
+* Multi Asset
+* Multi Exchange
+* Multi Region
+* Multi Team
+* Multi Monitor
+* Institutional Governance
+* 24×7 Operations
+
+Technology therefore becomes a constitutional responsibility rather than merely an engineering preference.
+
+The challenge is not selecting the "best" technology.
+
+The challenge is selecting technologies that collectively strengthen one coherent institutional architecture.
+
+---
+
+# SECTION 04 — BACKGROUND
+
+## Background
+
+The previous phases established everything necessary before technology evaluation begins.
+
+Phase-00 established constitutional principles.
+
+Phase-01 established institutional engineering knowledge.
+
+Phase-02 established professional operator requirements.
+
+Phase-03 established the Operational Environment.
+
+Phase-04 established behavioural architecture.
+
+Technology selection therefore begins with unusually rich architectural context.
+
+Instead of asking:
+
+"What is the best chart library?"
+
+COREI asks:
+
+Which charting technology best supports institutional operational workflows?
+
+Instead of asking:
+
+"What is the best layout library?"
+
+COREI asks:
+
+Which layout technology best supports the Operational Environment?
+
+Instead of asking:
+
+"What is the best data grid?"
+
+COREI asks:
+
+Which grid technology best supports professional investigation?
+
+Technology evaluation therefore follows the following constitutional sequence.
+
+Constitution
+
+↓
+
+Operator
+
+↓
+
+Environment
+
+↓
+
+Experience
+
+↓
+
+Technology
+
+↓
+
+Implementation
+
+This sequence ensures that architecture remains permanently independent of technology.
+
+Technologies may evolve.
+
+Architectural principles remain stable.
+
+Phase-05 therefore establishes the institutional Technology Landscape from which the complete software implementation of the COREI Institutional Operator Workstation will eventually be constructed.
+
+## Architectural Observation
+
+I believe Phase-05 introduces another long-term COREI engineering principle:
+
+Architecture chooses technology.
+
+Technology never chooses architecture.
+
+This sounds simple, but it prevents one of the biggest causes of architectural drift.
+
+For example, instead of saying:
+
+"Let's use AG Grid because it's powerful."
+
+We ask:
+
+What characteristics must an institutional investigation grid possess?
+Can AG Grid satisfy those characteristics?
+Can another technology satisfy them better?
+Does either technology align with the COREI Constitution, the Operator Architecture, the Operational Environment, and the Experience Architecture?
+
+Only after those questions are answered do we select a technology.
+
+I also think this phase should produce something unique that many architecture documents never include:
+
+A Technology Constitution Matrix.
+
+Every technology should have a formal evaluation record containing:
+
+Capability Domain (Layout, Grid, Charting, Terminal, Graph, AI, etc.)
+Architectural Requirements
+Candidate Technologies
+Evaluation Criteria
+Strengths
+Weaknesses
+Integration Complexity
+Performance Characteristics
+Scalability Assessment
+License & Governance
+Institutional Risks
+Constitutional Compliance
+Final Decision
+Reasoning
+
+That matrix will become the authoritative record explaining why every technology exists in COREI, making future upgrades, replacements, and architectural reviews far more disciplined.
+
+# SECTION 05 — ARCHITECTURAL CONTEXT
+
+## Architectural Context
+
+Phase-05 occupies a unique position within Stage-23.
+
+It is the first phase where architectural principles begin transforming into implementation strategy.
+
+However, this transformation is intentionally indirect.
+
+Technology does not become architecture.
+
+Technology becomes a servant of architecture.
+
+Its architectural position is illustrated below.
+
+```text
+Stage-23
+
+Phase-00
+Constitution
+
+        │
+
+Phase-01
+Discovery
+
+        │
+
+Phase-02
+Operator
+
+        │
+
+Phase-03
+Operational Environment
+
+        │
+
+Phase-04
+Experience
+
+        │
+
+▼
+
+Phase-05
+Technology Landscape
+
+        │
+
+▼
+
+Phase-06
+Workbench Architecture
+
+        │
+
+▼
+
+Implementation
+```
+
+Technology therefore forms the bridge between architectural thinking and engineering implementation.
+
+Every technology selected during this phase exists because architecture requires it.
+
+Not because engineers prefer it.
+
+---
+
+## Technology Architecture Model
+
+The Technology Landscape is organised into capability domains.
+
+Technology is never selected as an isolated product.
+
+Instead it is selected to satisfy one architectural capability.
+
+Examples include:
+
+### Environment Technologies
+
+Supporting:
+
+* Shell
+* Layout
+* Docking
+* Window Management
+* Multi-monitor
+
+---
+
+### Intelligence Technologies
+
+Supporting:
+
+* AI
+* Search
+* Recommendations
+* Context
+* Relationships
+
+---
+
+### Operational Technologies
+
+Supporting:
+
+* Commands
+* Notifications
+* Session
+* Workflow
+* Collaboration
+
+---
+
+### Visualisation Technologies
+
+Supporting:
+
+* Charts
+* Tables
+* Graphs
+* Heatmaps
+* Timelines
+* Topology
+
+---
+
+### Development Technologies
+
+Supporting:
+
+* Editors
+* Terminal
+* Diff
+* Documentation
+* Debugging
+
+---
+
+### Platform Technologies
+
+Supporting:
+
+* Extension Framework
+* State
+* Theme
+* Authentication
+* Permissions
+* Plugin Runtime
+
+Every future technology shall belong to one or more capability domains.
+
+Technology without architectural responsibility shall not exist.
+
+---
+
+## Constitutional Technology Selection
+
+Technology selection shall follow one immutable sequence.
+
+Operational Need
+
+↓
+
+Architectural Capability
+
+↓
+
+Capability Contract
+
+↓
+
+Evaluation Criteria
+
+↓
+
+Technology Candidates
+
+↓
+
+Institutional Evaluation
+
+↓
+
+Selection
+
+↓
+
+Governance
+
+↓
+
+Implementation
+
+This sequence becomes mandatory throughout COREI.
+
+---
+
+# SECTION 06 — OPERATOR PERSPECTIVE
+
+## Operator Perspective
+
+Professional operators should never notice technology.
+
+They experience professional work.
+
+Technology remains invisible.
+
+Every technology should therefore answer one question.
+
+How does this improve professional operation?
+
+Examples include:
+
+A layout engine should improve:
+
+workspace organisation.
+
+Not demonstrate docking capability.
+
+---
+
+A chart engine should improve:
+
+market understanding.
+
+Not display attractive graphics.
+
+---
+
+A terminal engine should improve:
+
+operational control.
+
+Not terminal emulation itself.
+
+---
+
+A data grid should improve:
+
+institutional investigation.
+
+Not spreadsheet appearance.
+
+---
+
+An AI engine should improve:
+
+professional judgement.
+
+Not conversational novelty.
+
+---
+
+## Invisible Engineering
+
+The highest compliment an operator can give technology is:
+
+"I never think about it."
+
+Professional attention remains focused upon:
+
+* markets,
+* infrastructure,
+* research,
+* execution,
+* institutional performance,
+
+rather than implementation details.
+
+---
+
+## Long-Term Comfort
+
+Technology should reduce:
+
+* waiting,
+* searching,
+* remembering,
+* repetitive interaction,
+* unnecessary movement,
+* visual instability.
+
+Every technology must improve long-duration institutional operation.
+
+---
+
+# SECTION 07 — ENGINEERING PERSPECTIVE
+
+## Engineering Perspective
+
+Engineering shall evaluate technologies through institutional architecture rather than marketing.
+
+Every technology becomes an engineering decision supported by evidence.
+
+---
+
+## Capability-Driven Selection
+
+Engineering shall first define the capability.
+
+Only afterwards shall technologies be evaluated.
+
+Example:
+
+Capability
+
+Institutional Investigation Grid
+
+↓
+
+Requirements
+
+↓
+
+Evaluation Matrix
+
+↓
+
+Technology Selection
+
+Never:
+
+Technology
+
+↓
+
+Find a use.
+
+---
+
+## Technology Evaluation Model
+
+Every candidate technology shall undergo identical evaluation.
+
+Evaluation areas include:
+
+### Architectural Fit
+
+Does it satisfy constitutional architecture?
+
+---
+
+### Capability Coverage
+
+Does it satisfy functional requirements?
+
+---
+
+### Integration
+
+Does it integrate naturally with the COREI Workbench?
+
+---
+
+### Performance
+
+Can it support institutional operational scale?
+
+---
+
+### Extensibility
+
+Can future capabilities be added without redesign?
+
+---
+
+### Maintainability
+
+Will engineering remain sustainable?
+
+---
+
+### Community & Longevity
+
+Does it demonstrate long-term institutional viability?
+
+---
+
+### Governance
+
+Can updates be managed predictably?
+
+---
+
+### Licensing
+
+Does licensing support institutional deployment?
+
+---
+
+### Operational Risk
+
+What institutional risks accompany adoption?
+
+---
+
+### Exit Strategy
+
+Can COREI replace this technology without architectural disruption?
+
+Technology selection is incomplete until every category has been evaluated.
+
+---
+
+## Technology Independence
+
+Engineering shall preserve architectural independence.
+
+If a technology becomes obsolete:
+
+Architecture survives.
+
+Capability survives.
+
+Only implementation changes.
+
+---
+
+# SECTION 08 — INSTITUTIONAL PERSPECTIVE
+
+## Institutional Perspective
+
+Institutions invest in platforms for decades.
+
+Technology inevitably changes.
+
+Institutional architecture should not.
+
+The Technology Landscape therefore supports continuous technological evolution while preserving operational continuity.
+
+---
+
+## Institutional Governance
+
+Technology adoption shall require institutional review.
+
+No technology enters COREI without documented architectural justification.
+
+---
+
+## Institutional Standardisation
+
+Equivalent capabilities should use common technologies wherever practical.
+
+Avoiding unnecessary duplication improves:
+
+* maintainability,
+* consistency,
+* operational quality.
+
+---
+
+## Controlled Diversity
+
+Not every capability requires the same technology.
+
+Different architectural responsibilities justify different specialised technologies.
+
+Consistency should never become technological rigidity.
+
+---
+
+## Institutional Knowledge
+
+Every technology decision becomes permanent institutional knowledge.
+
+Future engineers should understand:
+
+* why the technology exists,
+* why alternatives were rejected,
+* what architectural capability it satisfies,
+* when replacement becomes appropriate.
+
+---
+
+## Sustainable Technology Ecosystem
+
+The objective is not assembling the largest technology stack.
+
+The objective is assembling the smallest collection of technologies capable of implementing the complete Institutional Operator Workstation.
+
+Every selected technology should strengthen the ecosystem.
+
+None should increase unnecessary architectural complexity.
+
+The Technology Landscape therefore becomes a governed institutional ecosystem rather than a collection of independent libraries.
+
+## Architectural Observation
+
+I think we have now arrived at what could become the COREI Technology Law.
+
+Instead of selecting technologies directly, every technology should pass through this institutional pipeline:
+
+Constitution
+        │
+        ▼
+Architecture
+        │
+        ▼
+Capability
+        │
+        ▼
+Capability Contract
+        │
+        ▼
+Evaluation Matrix
+        │
+        ▼
+Technology Selection
+        │
+        ▼
+Integration Architecture
+        │
+        ▼
+Implementation
+        │
+        ▼
+Code
+
+I would even recommend that this become a mandatory engineering review process for COREI.
+
+It has an important long-term consequence.
+
+Suppose, five years from now, a new grid library appears that is clearly superior to today's choice.
+
+Most projects face a difficult migration because their architecture has become coupled to the technology.
+
+COREI should not.
+
+Under this model:
+
+The Operator Architecture remains unchanged.
+The Operational Environment remains unchanged.
+The Experience Architecture remains unchanged.
+The Capability Contract remains unchanged.
+
+Only one box changes:
+
+Technology Selection
+
+That is the hallmark of an institutional platform. Technologies are treated as replaceable implementation assets, while the architecture and the institution's way of working remain stable. I believe this principle is one of the strongest safeguards we can build into COREI's long-term evolution.
+
+# SECTION 09 — FUNCTIONAL REQUIREMENTS
+
+## Functional Requirements
+
+The Technology Landscape shall establish the institutional technology ecosystem required to implement the COREI Institutional Operator Workstation.
+
+Technology selection shall always satisfy architectural capability before implementation convenience.
+
+---
+
+## 9.1 Capability-Driven Technology
+
+Every selected technology shall implement one or more clearly defined architectural capabilities.
+
+Examples include:
+
+* Workspace Composition
+* Docking & Layout
+* Data Investigation
+* Chart Analysis
+* Graph Relationships
+* Terminal Interaction
+* Documentation
+* AI Assistance
+* Command Processing
+* Search
+* Collaboration
+* Notification
+* Authentication
+* Theme Management
+* Extension Runtime
+
+Technology shall never exist without an architectural capability.
+
+---
+
+## 9.2 Modular Integration
+
+Every technology shall integrate as an independent module.
+
+Modules should communicate through:
+
+* contracts,
+* services,
+* adapters,
+* interfaces,
+
+rather than direct coupling.
+
+Technologies remain replaceable.
+
+Architecture remains stable.
+
+---
+
+## 9.3 Shared Capability Services
+
+Equivalent capabilities shall expose common services.
+
+Examples include:
+
+Layout Service
+
+Search Service
+
+Notification Service
+
+Context Service
+
+History Service
+
+Permission Service
+
+Extension Service
+
+Command Service
+
+This prevents duplicate implementations.
+
+---
+
+## 9.4 Technology Interoperability
+
+Selected technologies shall interoperate naturally inside one institutional workbench.
+
+Examples include:
+
+Charts opening investigations.
+
+Tables opening graphs.
+
+Graphs opening documentation.
+
+Editors opening terminals.
+
+Commands controlling layouts.
+
+AI understanding workspace context.
+
+The workstation shall behave as one environment.
+
+---
+
+## 9.5 Extension Readiness
+
+Every technology shall support future extensibility.
+
+Future capabilities should integrate through composition rather than modification.
+
+---
+
+## 9.6 Multi-Workspace Support
+
+Technologies shall support:
+
+* multiple windows,
+* multiple tabs,
+* multiple layouts,
+* floating panels,
+* docking,
+* workspace persistence,
+* workspace sharing.
+
+These capabilities are architectural requirements.
+
+---
+
+## 9.7 Performance Awareness
+
+Technology selection shall consider:
+
+* rendering efficiency,
+* memory usage,
+* startup behaviour,
+* runtime scalability,
+* large dataset handling,
+* continuous streaming,
+* multi-monitor operation.
+
+Institutional performance is mandatory.
+
+---
+
+## 9.8 Operational Reliability
+
+Technologies shall support continuous professional operation.
+
+Examples include:
+
+* graceful failure,
+* recovery,
+* persistence,
+* state restoration,
+* resilience,
+* observability.
+
+---
+
+## 9.9 Replaceability
+
+Every technology shall remain replaceable.
+
+No architectural capability shall depend exclusively upon a specific vendor or implementation.
+
+---
+
+## 9.10 Institutional Governance
+
+Technology selection shall produce:
+
+* documentation,
+* evaluation,
+* architectural reasoning,
+* integration guidance,
+* lifecycle governance.
+
+Technology becomes institutional knowledge.
+
+---
+
+# SECTION 10 — NON-FUNCTIONAL REQUIREMENTS
+
+## Non-Functional Requirements
+
+The Technology Landscape establishes quality expectations governing the institutional technology ecosystem.
+
+---
+
+### Architectural Independence
+
+Architecture shall remain independent of technology.
+
+Technology shall never redefine architecture.
+
+---
+
+### Capability Independence
+
+Capabilities shall survive technology replacement.
+
+---
+
+### Vendor Independence
+
+Institutional architecture shall avoid unnecessary dependency upon individual vendors.
+
+---
+
+### Composability
+
+Technologies shall compose naturally into one operational environment.
+
+---
+
+### Maintainability
+
+Engineering teams shall maintain the technology ecosystem without excessive complexity.
+
+---
+
+### Upgradability
+
+Technology upgrades shall minimise architectural disruption.
+
+---
+
+### Testability
+
+Technologies shall support deterministic testing.
+
+---
+
+### Observability
+
+Technology behaviour shall remain observable and diagnosable.
+
+---
+
+### Operational Stability
+
+The technology ecosystem shall remain reliable during prolonged institutional operation.
+
+---
+
+### Engineering Sustainability
+
+Technology choices shall remain maintainable throughout years of institutional evolution.
+
+---
+
+# SECTION 11 — SCALABILITY
+
+## Scalability
+
+Technology shall support every scalability dimension defined by the COREI Anchor Law.
+
+Scalability therefore extends beyond software performance.
+
+---
+
+## Capability Scalability
+
+Support continuous growth in:
+
+* capabilities,
+* workspaces,
+* services,
+* visualisations,
+* intelligence modules.
+
+---
+
+## Technology Scalability
+
+New technologies shall integrate without redesigning the Workbench Architecture.
+
+---
+
+## Data Scalability
+
+Support:
+
+* millions of records,
+* continuous market streams,
+* historical analysis,
+* large investigations,
+* institutional datasets.
+
+---
+
+## Rendering Scalability
+
+Support:
+
+* high-density information,
+* multiple displays,
+* simultaneous workspaces,
+* complex visualisations.
+
+---
+
+## Operational Scalability
+
+Support institutional operation across:
+
+* departments,
+* terminals,
+* operators,
+* business units,
+* geographical regions.
+
+---
+
+## Extension Scalability
+
+Future extension technologies shall integrate through common architectural contracts.
+
+---
+
+## Evolutionary Scalability
+
+Technology ecosystems shall evolve continuously while preserving institutional architecture.
+
+---
+
+## Institutional Scalability
+
+Technology decisions shall support:
+
+* Multi Account
+* Multi Broker
+* Multi Strategy
+* Multi Portfolio
+* Multi Asset
+* Multi Exchange
+* Multi Market
+* Multi Currency
+* Multi Region
+* Multi Team
+* Multi Role
+* Multi Monitor
+* Multi Custodian
+* Multi Jurisdiction
+* 24×7 Institutional Operations
+
+Technology must strengthen these constitutional objectives.
+
+---
+
+# SECTION 12 — FUTURE EVOLUTION
+
+## Future Evolution
+
+Technology evolves faster than architecture.
+
+The Technology Landscape therefore defines an evolutionary framework rather than a fixed technology stack.
+
+---
+
+## Continuous Technology Review
+
+Every selected technology shall undergo periodic institutional review.
+
+Evaluation considers:
+
+* architectural alignment,
+* operational quality,
+* ecosystem maturity,
+* institutional risk,
+* replacement opportunities.
+
+---
+
+## Emerging Technology Integration
+
+Future technologies shall enter COREI through the established constitutional evaluation process.
+
+Innovation shall strengthen architecture.
+
+Innovation shall never replace architecture.
+
+---
+
+## Technology Lifecycle Management
+
+Each technology shall possess:
+
+* adoption criteria,
+* support policy,
+* upgrade strategy,
+* replacement strategy,
+* retirement plan.
+
+Technology becomes actively governed.
+
+---
+
+## Capability Preservation
+
+If technology changes:
+
+Capabilities remain.
+
+Operator workflows remain.
+
+Experience remains.
+
+Architecture remains.
+
+Only implementation changes.
+
+---
+
+## Engineering Knowledge Evolution
+
+Every technology decision becomes part of the institutional engineering knowledge base.
+
+Future engineers inherit architectural reasoning rather than isolated implementation choices.
+
+---
+
+## Sustainable Ecosystem
+
+The technology ecosystem shall continuously evolve while remaining:
+
+* coherent,
+* modular,
+* governed,
+* composable,
+* replaceable.
+
+---
+
+## Long-Term Vision
+
+The Technology Landscape ultimately enables COREI to evolve over decades without architectural instability.
+
+Individual technologies will inevitably change.
+
+Institutional architecture should not.
+
+The constitutional chain remains intact:
+
+Constitution
+
+↓
+
+Architecture
+
+↓
+
+Capability
+
+↓
+
+Technology
+
+↓
+
+Implementation
+
+↓
+
+Code
+
+Every future technology shall strengthen this chain rather than bypass it.
+
+### Architectural Observation
+
+I think we have now arrived at something that is rarely documented in software architecture but is common in long-lived engineering disciplines such as aerospace, automotive, and industrial automation.
+
+There are actually three independent lifecycles inside COREI.
+Lifecycle 1
+Institution
+        │
+        ▼
+Constitution
+        │
+        ▼
+Architecture
+        │
+        ▼
+Capability
+
+(Changes very slowly)
+
+↓
+
+Lifecycle 2
+Technology
+        │
+        ▼
+Framework
+        │
+        ▼
+Library
+        │
+        ▼
+Integration
+
+(Changes every few years)
+
+↓
+
+Lifecycle 3
+Implementation
+        │
+        ▼
+Code
+        │
+        ▼
+Refactoring
+        │
+        ▼
+Optimization
+
+(Changes continuously)
+
+This separation is extremely powerful.
+
+It means:
+
+The Constitution may remain valid for 20+ years.
+The Architecture may evolve every 5–10 years.
+The Technology Stack may evolve every 2–5 years.
+The Code may evolve every week.
+
+Yet all four remain aligned because they change at different velocities.
+
+I believe this "multi-velocity architecture" should become another institutional engineering principle of COREI. It explains how a platform can continuously adopt better technologies while preserving its identity, operator workflows, and institutional operating model over decades.
+
+# SECTION 13 — DEPENDENCIES
+
+## Dependencies
+
+Phase-05 transforms the architectural vision established throughout the previous phases into an institutional technology strategy.
+
+It depends upon all architectural foundations while becoming the technological foundation for every implementation phase that follows.
+
+Technology therefore exists as the implementation bridge between architecture and engineering.
+
+---
+
+## 13.1 Constitutional Dependencies
+
+Technology selection shall always inherit constitutional authority from Phase-00.
+
+Every selected technology shall strengthen:
+
+* COREI Mission
+* COREI Vision
+* COREI Anchor Law
+* Institutional Engineering Principles
+* Governance Standards
+* Scalability Principles
+
+Technology shall never weaken constitutional architecture.
+
+---
+
+## 13.2 Discovery Dependencies
+
+Technology evaluation depends upon engineering knowledge acquired during Phase-01.
+
+This includes lessons from:
+
+* institutional workbenches,
+* engineering IDEs,
+* trading platforms,
+* observability platforms,
+* industrial control environments,
+* command centres,
+* collaborative operational systems.
+
+Technology evaluation shall be evidence-driven rather than trend-driven.
+
+---
+
+## 13.3 Operator Dependencies
+
+Technology exists to improve operator effectiveness.
+
+Technology selection shall therefore satisfy the operator requirements defined in Phase-02.
+
+Technology shall improve:
+
+* decision quality,
+* workflow continuity,
+* operational understanding,
+* investigation,
+* collaboration,
+* long-duration professional operation.
+
+---
+
+## 13.4 Environment Dependencies
+
+Technology shall faithfully implement the Operational Environment Architecture established in Phase-03.
+
+The environment remains architecturally authoritative.
+
+Technology provides implementation capability.
+
+---
+
+## 13.5 Experience Dependencies
+
+Technology shall implement the behavioural requirements established in Phase-04.
+
+Every selected technology must support:
+
+* behavioural consistency,
+* contextual interaction,
+* operational continuity,
+* cognitive efficiency,
+* institutional confidence.
+
+---
+
+## 13.6 Forward Dependencies
+
+Every remaining implementation phase depends upon the Technology Landscape.
+
+Examples include:
+
+### Phase-06
+
+Workbench Architecture
+
+↓
+
+Technology becomes architectural infrastructure.
+
+---
+
+### Phase-07
+
+Design System
+
+↓
+
+Technology renders institutional visual language.
+
+---
+
+### Phase-08
+
+Component Ecosystem
+
+↓
+
+Technologies provide reusable implementation capability.
+
+---
+
+### Phase-09
+
+Workspace Library
+
+↓
+
+Technologies compose complete operational workspaces.
+
+---
+
+### Phase-10
+
+Intelligence Layer
+
+↓
+
+Technologies host institutional intelligence.
+
+---
+
+### Phase-11
+
+Operator Optimisation
+
+↓
+
+Technology enables measurement and continuous improvement.
+
+Technology therefore becomes a governed institutional asset rather than a development convenience.
+
+---
+
+# SECTION 14 — DELIVERABLES
+
+## Deliverables
+
+Completion of Phase-05 shall establish the authoritative technology strategy for the Institutional Operator Workstation.
+
+These deliverables guide all future implementation activities.
+
+---
+
+## Primary Deliverables
+
+### Technology Landscape
+
+A complete institutional technology architecture.
+
+---
+
+### Technology Constitution Matrix
+
+A governed evaluation matrix documenting every approved technology.
+
+Each record shall include:
+
+* Capability Domain
+* Architectural Requirement
+* Capability Contract
+* Candidate Technologies
+* Evaluation Criteria
+* Technical Assessment
+* Performance Assessment
+* Integration Assessment
+* Scalability Assessment
+* Licensing Review
+* Operational Risk
+* Governance Review
+* Final Decision
+* Architectural Reasoning
+
+This matrix becomes the authoritative institutional record for every technology decision.
+
+---
+
+### Capability-to-Technology Map
+
+Mapping between:
+
+Architectural Capability
+
+↓
+
+Selected Technology
+
+↓
+
+Integration Layer
+
+↓
+
+Workbench Service
+
+↓
+
+Future Components
+
+---
+
+### Technology Governance Policy
+
+Institutional rules governing:
+
+* adoption,
+* review,
+* upgrades,
+* replacement,
+* retirement.
+
+---
+
+### Technology Integration Standards
+
+Common engineering standards describing how technologies integrate with the COREI Workbench.
+
+---
+
+### Technology Lifecycle Model
+
+Definition of:
+
+* introduction,
+* maturity,
+* maintenance,
+* replacement,
+* retirement.
+
+---
+
+### Stage-23 Technology Baseline
+
+A frozen technology baseline supporting implementation phases.
+
+---
+
+# SECTION 15 — ACCEPTANCE CRITERIA
+
+## Acceptance Criteria
+
+Phase-05 shall be considered complete only when the institutional technology strategy fully supports the constitutional architecture of COREI.
+
+Completion is determined through architectural confidence rather than technology quantity.
+
+---
+
+## Constitutional Compliance
+
+Every selected technology demonstrates alignment with:
+
+* COREI Anchor Law
+* Master Trader Persona
+* Constitutional Foundation
+
+---
+
+## Architectural Traceability
+
+Every technology can be traced through the complete constitutional chain:
+
+Constitution
+
+↓
+
+Architecture
+
+↓
+
+Capability
+
+↓
+
+Technology
+
+No technology exists without architectural justification.
+
+---
+
+## Capability Coverage
+
+Every architectural capability has an identified implementation strategy.
+
+No capability remains technologically undefined.
+
+---
+
+## Governance Completeness
+
+Every technology possesses:
+
+* evaluation,
+* approval,
+* documentation,
+* lifecycle management,
+* replacement strategy.
+
+---
+
+## Replaceability Validation
+
+Every selected technology can be replaced without modifying constitutional architecture.
+
+---
+
+## Institutional Readiness
+
+The technology ecosystem supports:
+
+* continuous institutional growth,
+* operational stability,
+* engineering sustainability,
+* future technological evolution.
+
+---
+
+## Technology Freeze
+
+Following review and approval,
+
+Phase-05 establishes the authoritative institutional technology strategy.
+
+Future technology adoption shall extend this strategy rather than bypass it.
+
+---
+
+# SECTION 16 — RELATED DOCUMENTS
+
+## Related Documents
+
+Phase-05 completes the strategic architectural layer of Stage-23.
+
+It transforms institutional architecture into governed implementation strategy.
+
+---
+
+## Constitutional References
+
+* Stage-23 Phase-00 — Constitutional Foundation
+* COREI Anchor Law
+* Master Trader Persona
+
+---
+
+## Discovery References
+
+* Stage-23 Phase-01 — Discovery & Reverse Engineering
+* Engineering Principle Catalogue
+* Institutional Discovery Repository
+
+---
+
+## Human References
+
+* Stage-23 Phase-02 — Operator Architecture
+* Operator Capability Matrix
+* Workflow Catalogue
+
+---
+
+## Environmental References
+
+* Stage-23 Phase-03 — Operational Environment Architecture
+* Environmental Service Model
+
+---
+
+## Experience References
+
+* Stage-23 Phase-04 — Experience Architecture
+* Behavioural Service Model
+
+---
+
+## Future Architecture References
+
+Phase-06
+
+Workbench Architecture
+
+↓
+
+Phase-07
+
+Design System
+
+↓
+
+Phase-08
+
+Component Ecosystem
+
+↓
+
+Phase-09
+
+Workspace Library
+
+↓
+
+Phase-10
+
+Intelligence Layer
+
+↓
+
+Phase-11
+
+Operator Optimisation
+
+Each implementation phase shall reference the Technology Landscape whenever selecting, integrating, extending, upgrading, or replacing technologies.
+
+The Technology Constitution Matrix shall remain the authoritative institutional source governing every implementation decision.
+
+---
+
+## Closing Statement
+
+Phase-05 establishes the Technology Landscape of the COREI Institutional Operator Workstation.
+
+Technology is no longer viewed as a collection of frameworks or libraries.
+
+Instead, it is recognised as a governed institutional ecosystem whose sole responsibility is to implement the constitutional architecture of COREI.
+
+Every technology now exists within a disciplined chain of authority:
+
+Constitution
+
+↓
+
+Architecture
+
+↓
+
+Capability
+
+↓
+
+Technology
+
+↓
+
+Implementation
+
+↓
+
+Code
+
+This chain ensures that COREI can evolve technologically for decades without compromising its institutional identity, operational philosophy, or professional operator experience.
+
+With the completion and constitutional freeze of Phase-05, Stage-23 has completed the **Strategic Foundation** of the Institutional Operator Workstation.
+
+Phase-06 therefore begins the **Workbench Architecture**—the software architecture that assembles every environmental service, capability, technology, workspace, command, extension, and operational engine into a single institutional operating system. It answers not *what technologies we use*, but *how those technologies cooperate to become one coherent COREI Workbench*.
+
+### Architectural Review (After Phase-05)
+
+I think we've now completed the Strategic Architecture Layer of Stage-23.
+
+Phase	Outcome	Primary Question
+Phase-00	Constitutional Architecture	Why does COREI exist?
+Phase-01	Discovery Architecture	How does COREI learn?
+Phase-02	Operator Architecture	Who are we building for?
+Phase-03	Operational Environment Architecture	Where does institutional work happen?
+Phase-04	Experience Architecture	How should institutional work be experienced?
+Phase-05	Technology Landscape	Which technologies are worthy of implementing the architecture?
+
+I also think we've uncovered what could become the COREI Engineering Hierarchy, which should probably be documented once in the Anchor Law or a Stage-23 governing document because it explains the entire engineering philosophy:
+
+Institution
+      │
+      ▼
+Mission
+      │
+      ▼
+Constitution
+      │
+      ▼
+Architecture
+      │
+      ▼
+Operational Capability
+      │
+      ▼
+Capability Contract
+      │
+      ▼
+Technology Selection
+      │
+      ▼
+Workbench Architecture
+      │
+      ▼
+Implementation Architecture
+      │
+      ▼
+Components
+      │
+      ▼
+Code
+
+This hierarchy goes one step beyond what we've documented so far by introducing Operational Capability and Capability Contract as explicit layers between Architecture and Technology.
+
+I believe these two layers are strategically important because they ensure that:
+
+Architecture never directly depends on a library.
+Technologies compete to satisfy capability contracts.
+Workbench Architecture assembles technologies into one coherent operating system.
+Components become implementation details rather than architectural units.
+
+That hierarchy is, in my view, a defining characteristic of an institutional engineering platform and provides a durable framework for COREI's evolution over many years.

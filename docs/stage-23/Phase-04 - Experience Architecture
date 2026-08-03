@@ -1,0 +1,1607 @@
+# STAGE-23 — INSTITUTIONAL OPERATOR WORKSTATION
+
+## Phase-04 — Experience Architecture
+
+**Document Status:** Authoritative
+**Stage:** 23
+**Phase:** 04
+**Sections Covered:** 01–04 (Message 1 of 4)
+
+**Authoritative References**
+
+* Stage-23 Phase-00 — Constitutional Foundation
+* Stage-23 Phase-01 — Discovery & Reverse Engineering
+* Stage-23 Phase-02 — Operator Architecture
+* Stage-23 Phase-03 — Operational Environment Architecture
+* COREI Anchor Law
+* Master Trader Persona
+
+
+
+# SECTION 01 — PURPOSE
+
+## Purpose
+
+The purpose of Phase-04 is to establish the Experience Architecture governing every interaction between professional operators and the COREI Institutional Operator Workstation.
+
+The previous phase established the institutional workplace.
+
+This phase defines how operators experience that workplace.
+
+Experience Architecture does not concern visual appearance.
+
+It concerns the quality of professional operation.
+
+Every interaction within the workstation shall contribute toward:
+
+* improved understanding,
+* reduced cognitive effort,
+* increased operational confidence,
+* preserved situational awareness,
+* faster investigation,
+* disciplined execution,
+* continuous institutional learning.
+
+The objective is not to create an attractive interface.
+
+The objective is to create an operational experience that becomes almost invisible to experienced professionals.
+
+Operators should focus upon institutional work rather than software operation.
+
+The workstation should become an extension of professional thinking.
+
+Consistent with the COREI Anchor Law, the Experience Architecture shall continuously reinforce the institutional operating sequence:
+
+Observe
+
+↓
+
+Discover
+
+↓
+
+Understand
+
+↓
+
+Decide
+
+↓
+
+Act
+
+↓
+
+Monitor
+
+↓
+
+Learn
+
+↓
+
+Improve
+
+Every interaction should strengthen this operational cycle rather than interrupt it.
+
+
+
+# SECTION 02 — MISSION
+
+## Mission
+
+The mission of Phase-04 is to establish a professional interaction model that enables institutional operators to perform complex operational work with maximum clarity, confidence, continuity, and efficiency.
+
+The Experience Architecture shall define:
+
+* navigation philosophy,
+* interaction philosophy,
+* cognitive architecture,
+* attention management,
+* workflow transitions,
+* operational feedback,
+* command execution,
+* search behaviour,
+* contextual awareness,
+* environmental continuity.
+
+These principles become mandatory architectural requirements for every future workstation capability.
+
+The workstation should gradually disappear from conscious attention.
+
+Professional work becomes central.
+
+Software becomes secondary.
+
+In accordance with the Master Trader Persona, the workstation shall encourage disciplined observation, structured investigation, contextual understanding, measured execution, and continuous review rather than reactive interaction.
+
+The experience should actively reinforce institutional operational behaviour.
+
+Success is measured by the operator's ability to think more clearly, make higher-quality decisions, maintain concentration for prolonged periods, and operate confidently within increasingly complex institutional environments.
+
+
+
+# SECTION 03 — PROBLEM STATEMENT
+
+## Problem Statement
+
+Traditional enterprise software frequently measures success through feature quantity.
+
+Professional operators measure success differently.
+
+They evaluate:
+
+* how easily understanding develops,
+* how naturally work progresses,
+* how confidently decisions can be made,
+* how effectively interruptions are handled,
+* how quickly investigations occur,
+* how comfortably prolonged operation can continue.
+
+Many existing systems introduce friction through:
+
+* excessive navigation,
+* inconsistent interaction,
+* fragmented workflows,
+* repeated context switching,
+* competing visual priorities,
+* unnecessary notifications,
+* duplicated actions,
+* unpredictable behaviour.
+
+These problems reduce institutional effectiveness regardless of software capability.
+
+The COREI Anchor Law requires that operators continuously understand institutional reality rather than continuously manage software.
+
+Likewise, the Master Trader Persona demands disciplined decision-making supported by context, structure, and operational awareness.
+
+The fundamental problem therefore is not insufficient functionality.
+
+The problem is poor operational experience.
+
+Phase-04 solves this problem by establishing an institutional Experience Architecture that governs every future interaction inside the Operational Environment.
+
+
+
+# SECTION 04 — BACKGROUND
+
+## Background
+
+Stage-23 has progressively established the foundations required before designing operator experience.
+
+Phase-00 established constitutional authority.
+
+Phase-01 established institutional engineering knowledge.
+
+Phase-02 established the professional operator.
+
+Phase-03 established the operational workplace.
+
+With these foundations complete, Phase-04 now defines how professional work is experienced inside that workplace.
+
+This distinction is important.
+
+The Operational Environment defines:
+
+**Where professional work occurs.**
+
+The Experience Architecture defines:
+
+**How professional work flows through that environment.**
+
+Every future workstation capability shall therefore be evaluated through the following architectural sequence.
+
+Professional Operator
+
+↓
+
+Professional Workflow
+
+↓
+
+Operational Environment
+
+↓
+
+Professional Experience
+
+↓
+
+Workbench Architecture
+
+↓
+
+Technology
+
+↓
+
+Implementation
+
+This sequence prevents technology from determining experience.
+
+Instead, professional operation determines experience, and experience guides implementation.
+
+Experience Architecture therefore becomes the institutional contract governing every future interaction.
+
+No component, workspace, command, workflow, notification, search result, navigation model, AI interaction, or visual behaviour shall be introduced unless it strengthens professional operational experience while remaining fully aligned with the COREI Anchor Law and the Master Trader Persona.
+
+Phase-04 establishes that contract.
+
+# SECTION 05 — ARCHITECTURAL CONTEXT
+
+## Architectural Context
+
+The Experience Architecture defines the behavioural layer of the Institutional Operator Workstation.
+
+If Phase-03 defines the workplace,
+
+Phase-04 defines how professional operators move, think, interact, understand, investigate, decide, execute, recover, and continuously operate within that workplace.
+
+Its architectural position is illustrated below.
+
+```text
+Stage-23
+
+Phase-00
+Constitution
+
+        │
+
+Phase-01
+Discovery
+
+        │
+
+Phase-02
+Operator Architecture
+
+        │
+
+Phase-03
+Operational Environment
+
+        │
+
+▼
+
+Phase-04
+Experience Architecture
+
+        │
+
+▼
+
+Phase-05
+Technology Landscape
+
+        │
+
+▼
+
+Remaining Architecture
+```
+
+Experience Architecture forms the behavioural contract between:
+
+Professional Operator
+
+↓
+
+Operational Environment
+
+↓
+
+Software Behaviour
+
+It defines how every future capability should behave from the perspective of professional work.
+
+This architecture governs:
+
+* navigation,
+* interaction,
+* workflow progression,
+* contextual awareness,
+* operator attention,
+* environmental feedback,
+* operational continuity,
+* institutional cognition.
+
+Every future implementation shall conform to this behavioural architecture.
+
+
+
+## Experience Philosophy
+
+Experience is not visual design.
+
+Experience is professional behaviour.
+
+Every interaction should help operators answer one or more institutional questions.
+
+Examples include:
+
+What changed?
+
+Why did it change?
+
+What is affected?
+
+What requires my attention?
+
+What should I investigate?
+
+What decision is required?
+
+What action is appropriate?
+
+What happened after execution?
+
+The Experience Architecture therefore organises interactions around professional reasoning rather than software functionality.
+
+
+
+## Relationship with Operational Environment
+
+The Operational Environment provides the workplace.
+
+The Experience Architecture determines how operators live inside that workplace.
+
+The environment remains stable.
+
+Experience remains fluid.
+
+Professional work continuously flows through the environment without forcing operators to think about software mechanics.
+
+
+
+# SECTION 06 — OPERATOR PERSPECTIVE
+
+## Operator Perspective
+
+Professional operators do not consciously evaluate interfaces.
+
+They evaluate whether the environment helps them perform professional work.
+
+Consequently, every interaction should reduce effort while increasing understanding.
+
+
+
+## Natural Progression
+
+The workstation should naturally guide operators through professional thinking.
+
+Observe
+
+↓
+
+Understand
+
+↓
+
+Investigate
+
+↓
+
+Evaluate
+
+↓
+
+Decide
+
+↓
+
+Execute
+
+↓
+
+Monitor
+
+↓
+
+Improve
+
+Software should never interrupt this progression.
+
+
+
+## Attention Management
+
+Operator attention is the institution's most valuable resource.
+
+The workstation should actively protect it.
+
+Attention should move only when:
+
+* institutional priority changes,
+* operational state changes,
+* investigation requires progression,
+* execution requires confirmation.
+
+Everything else remains unobtrusive.
+
+
+
+## Cognitive Flow
+
+Professional thought should remain uninterrupted.
+
+Operators should not repeatedly ask:
+
+Where am I?
+
+What was I doing?
+
+Where did this come from?
+
+What changed?
+
+The workstation should always answer these questions without requiring additional effort.
+
+
+
+## Confidence
+
+Every interaction should increase confidence.
+
+Confidence develops through:
+
+* predictable behaviour,
+* contextual understanding,
+* reliable information,
+* transparent reasoning,
+* consistent interaction.
+
+Professional confidence becomes an architectural objective.
+
+
+
+## Recovery
+
+Operational interruptions inevitably occur.
+
+Examples include:
+
+* urgent alerts,
+* context switching,
+* investigations,
+* operator handover,
+* unexpected events.
+
+The workstation shall enable immediate recovery without reconstructing previous understanding.
+
+
+
+## Long-Duration Operation
+
+Professional operators frequently remain inside the workstation for entire working days.
+
+Experience Architecture shall therefore minimise:
+
+* fatigue,
+* repetitive interaction,
+* visual instability,
+* unnecessary movement,
+* excessive memory load.
+
+The environment should remain mentally comfortable throughout continuous institutional operation.
+
+
+
+# SECTION 07 — ENGINEERING PERSPECTIVE
+
+## Engineering Perspective
+
+Experience Architecture establishes behavioural engineering standards.
+
+Every interaction implemented throughout COREI shall satisfy these standards.
+
+
+
+## Behaviour Before Interface
+
+Engineering shall first define behaviour.
+
+Only then shall visual implementation occur.
+
+Behaviour governs presentation.
+
+Presentation shall never govern behaviour.
+
+
+
+## Workflow-Centred Engineering
+
+Engineering should model workflows rather than screens.
+
+The workflow becomes the architectural unit.
+
+Interfaces become representations of workflow.
+
+
+
+## State-Aware Experience
+
+Every interaction shall understand:
+
+* current operator,
+* operational context,
+* institutional state,
+* active workflow,
+* historical actions,
+* environmental conditions.
+
+The workstation should behave intelligently because it understands context.
+
+
+
+## Predictable Behaviour
+
+Operators should accurately anticipate workstation behaviour.
+
+Engineering should minimise surprises.
+
+Consistency creates confidence.
+
+
+
+## Progressive Disclosure
+
+Information should appear according to operational need.
+
+Operators initially see only information necessary for current work.
+
+Additional detail becomes available naturally through investigation.
+
+
+
+## Intelligent Assistance
+
+The workstation should assist rather than interrupt.
+
+Assistance includes:
+
+* contextual recommendations,
+* relationship discovery,
+* operational explanations,
+* workflow guidance,
+* anomaly detection.
+
+Assistance should remain contextual and non-intrusive.
+
+
+
+## Behavioural Consistency
+
+Regardless of:
+
+* workspace,
+* terminal,
+* operator role,
+* institutional capability,
+
+the behavioural principles remain identical.
+
+Experience consistency becomes an engineering responsibility.
+
+
+
+# SECTION 08 — INSTITUTIONAL PERSPECTIVE
+
+## Institutional Perspective
+
+Institutions require operational behaviour that remains consistent across:
+
+* departments,
+* teams,
+* terminals,
+* operational domains,
+* geographical regions,
+* organisational growth.
+
+Experience Architecture provides this consistency.
+
+
+
+## Institutional Experience
+
+Every operator should experience one coherent institution.
+
+Not separate applications.
+
+Not separate interfaces.
+
+One institutional operating environment.
+
+
+
+## Organisational Continuity
+
+Experience should remain familiar despite:
+
+* organisational change,
+* operator turnover,
+* capability expansion,
+* technological evolution.
+
+Institutional memory is strengthened through experiential consistency.
+
+
+
+## Professional Discipline
+
+The Experience Architecture shall reinforce disciplined institutional behaviour.
+
+Examples include:
+
+* confirmation before critical execution,
+* contextual understanding before decision,
+* evidence before conclusion,
+* continuous monitoring after action,
+* structured review after completion.
+
+These behaviours reflect the Master Trader Persona and institutional operational excellence.
+
+
+
+## Cross-Domain Consistency
+
+Whether operating:
+
+* Trading,
+* Infrastructure,
+* Risk,
+* Research,
+* Governance,
+* Executive Intelligence,
+
+operators should experience identical behavioural principles.
+
+Only operational context changes.
+
+Behaviour remains consistent.
+
+
+
+## Institutional Trust
+
+Professional trust develops through repeated positive operational experience.
+
+The workstation shall therefore become:
+
+predictable,
+
+reliable,
+
+transparent,
+
+consistent,
+
+understandable,
+
+and continuously supportive.
+
+The Experience Architecture exists to ensure that every future workstation interaction strengthens institutional confidence while preserving the constitutional principles established throughout Stage-23.
+
+# SECTION 09 — FUNCTIONAL REQUIREMENTS
+
+## Functional Requirements
+
+The Experience Architecture establishes the behavioural requirements governing every interaction inside the Institutional Operator Workstation.
+
+Every interaction shall improve professional operation.
+
+Software interactions that do not improve professional work shall not become part of COREI.
+
+
+
+## 9.1 Continuous Situational Awareness
+
+The workstation shall continuously maintain operator awareness of institutional reality.
+
+Operators should immediately understand:
+
+* current operational state,
+* changing priorities,
+* active investigations,
+* institutional health,
+* execution status,
+* operational risks.
+
+Situational awareness shall remain continuous rather than event-driven.
+
+
+
+## 9.2 Workflow Continuity
+
+Professional workflows shall progress naturally.
+
+Operators should never experience artificial interruption caused by software boundaries.
+
+Typical workflow progression:
+
+Observe
+
+↓
+
+Discover
+
+↓
+
+Understand
+
+↓
+
+Investigate
+
+↓
+
+Evaluate
+
+↓
+
+Decide
+
+↓
+
+Execute
+
+↓
+
+Monitor
+
+↓
+
+Learn
+
+↓
+
+Improve
+
+The workstation shall preserve this progression.
+
+
+
+## 9.3 Context Preservation
+
+Context shall remain persistent throughout:
+
+* navigation,
+* workspace changes,
+* investigations,
+* interruptions,
+* collaboration,
+* operator handover.
+
+Professional understanding shall never require unnecessary reconstruction.
+
+
+
+## 9.4 Intelligent Navigation
+
+Navigation shall follow professional reasoning.
+
+Operators navigate through:
+
+* relationships,
+* workflows,
+* operational realities,
+* institutional context,
+
+rather than application hierarchy.
+
+
+
+## 9.5 Intelligent Search
+
+Search shall become institutional understanding rather than keyword lookup.
+
+Search should locate:
+
+* objects,
+* relationships,
+* investigations,
+* commands,
+* knowledge,
+* workflows,
+* institutional context.
+
+Search therefore becomes part of professional thinking.
+
+
+
+## 9.6 Adaptive Interaction
+
+Interactions shall adapt according to:
+
+* operator role,
+* operational responsibility,
+* institutional context,
+* workflow stage,
+* environmental conditions.
+
+The workstation should understand who is working and why.
+
+
+
+## 9.7 Operational Feedback
+
+Every significant interaction shall provide immediate professional feedback.
+
+Examples include:
+
+* execution confirmation,
+* operational state changes,
+* investigation progress,
+* workflow completion,
+* institutional consequences.
+
+Feedback should improve confidence rather than generate noise.
+
+
+
+## 9.8 Progressive Understanding
+
+The workstation shall progressively reveal information.
+
+Operators initially understand the operational situation.
+
+Further interaction reveals:
+
+* relationships,
+* dependencies,
+* causes,
+* evidence,
+* historical context,
+* recommendations.
+
+Progressive understanding becomes a fundamental experience principle.
+
+
+
+## 9.9 Human-AI Collaboration
+
+Artificial Intelligence shall participate naturally within professional workflows.
+
+AI assists through:
+
+* explanation,
+* summarisation,
+* investigation,
+* recommendations,
+* operational guidance.
+
+Professional authority remains human.
+
+
+
+## 9.10 Environmental Continuity
+
+Every experience shall reinforce the perception of one continuous institutional environment rather than disconnected applications.
+
+
+
+# SECTION 10 — NON-FUNCTIONAL REQUIREMENTS
+
+## Non-Functional Requirements
+
+The Experience Architecture establishes behavioural quality standards governing every future workstation interaction.
+
+
+
+### Behavioural Consistency
+
+Equivalent actions shall produce equivalent experiences across every terminal and workspace.
+
+
+
+### Cognitive Efficiency
+
+The workstation shall minimise:
+
+* unnecessary thinking,
+* repeated navigation,
+* memory burden,
+* information searching,
+* operational uncertainty.
+
+
+
+### Professional Predictability
+
+Operators shall confidently anticipate workstation behaviour.
+
+Unexpected behaviour shall be exceptional.
+
+
+
+### Trustworthiness
+
+Every interaction shall strengthen operator trust through:
+
+* transparency,
+* reliability,
+* contextual explanation,
+* consistent outcomes.
+
+
+
+### Responsiveness
+
+Behaviour shall remain responsive regardless of institutional complexity.
+
+
+
+### Recoverability
+
+Operators shall recover rapidly following:
+
+* interruption,
+* context switching,
+* operational incidents,
+* environmental change.
+
+
+
+### Learnability
+
+Professional expertise shall develop naturally through continued use.
+
+Experience should reward growing institutional knowledge.
+
+
+
+### Accessibility
+
+Professional interaction shall remain effective for diverse operators across prolonged operational sessions.
+
+
+
+### Behavioural Stability
+
+Experience principles shall remain stable despite technological evolution.
+
+
+
+### Technology Independence
+
+Behavioural architecture shall remain independent of implementation technology.
+
+Technology implements experience.
+
+Technology does not define experience.
+
+
+
+# SECTION 11 — SCALABILITY
+
+## Scalability
+
+Experience Architecture must remain effective as institutional complexity continuously increases.
+
+Scalability therefore applies to behaviour rather than infrastructure alone.
+
+
+
+## Experience Scalability
+
+Professional experience shall remain understandable despite increasing:
+
+* workspaces,
+* capabilities,
+* operators,
+* intelligence systems,
+* institutional realities.
+
+
+
+## Cognitive Scalability
+
+Increasing capability shall not proportionally increase mental effort.
+
+Experience should simplify complexity.
+
+
+
+## Interaction Scalability
+
+Future interaction models shall integrate naturally into the existing behavioural framework.
+
+
+
+## Workflow Scalability
+
+New institutional workflows shall inherit existing experience principles.
+
+Professional familiarity shall remain intact.
+
+
+
+## Intelligence Scalability
+
+Future AI systems shall extend operator understanding without overwhelming professional judgement.
+
+
+
+## Organisational Scalability
+
+Behavioural consistency shall remain independent of:
+
+* organisational size,
+* geographical distribution,
+* institutional complexity.
+
+
+
+## Experience Evolution Scalability
+
+Experience principles shall remain valid across many years of institutional evolution.
+
+
+
+## Cross-Terminal Scalability
+
+Every future COREI terminal shall inherit one common behavioural philosophy while adapting only its operational context.
+
+
+
+# SECTION 12 — FUTURE EVOLUTION
+
+## Future Evolution
+
+Professional operational experience continuously evolves.
+
+The Experience Architecture therefore establishes a framework capable of adapting without losing behavioural consistency.
+
+
+
+## Invisible Technology
+
+Future technological advances should become progressively less visible.
+
+Professional work becomes increasingly central.
+
+Software becomes increasingly transparent.
+
+
+
+## Adaptive Experience
+
+The workstation shall continuously improve according to:
+
+* operator behaviour,
+* workflow analytics,
+* institutional observations,
+* operational metrics.
+
+Adaptation should enhance understanding without disrupting familiarity.
+
+
+
+## Human-AI Evolution
+
+AI shall evolve from passive assistance toward proactive operational partnership.
+
+Future intelligence may:
+
+* anticipate investigations,
+* prepare operational context,
+* identify hidden relationships,
+* recommend workflow progression.
+
+Human judgement remains constitutionally authoritative.
+
+
+
+## Institutional Learning
+
+Experience Architecture shall evolve through accumulated institutional knowledge.
+
+Operational learning becomes part of the workstation itself.
+
+
+
+## Behavioural Preservation
+
+Although capabilities continuously evolve,
+
+operators should continue recognising the workstation as fundamentally familiar.
+
+Behaviour evolves through refinement rather than reinvention.
+
+
+
+## Professional Mastery
+
+The workstation should increasingly reward professional expertise.
+
+Experienced operators should naturally become more effective over time without requiring continual relearning.
+
+
+
+## Long-Term Vision
+
+The ultimate objective is an experience where institutional professionals no longer consciously interact with software.
+
+Instead they continuously interact with:
+
+* institutional reality,
+* operational intelligence,
+* collaborative knowledge,
+* informed decision-making.
+
+The workstation becomes an intelligent operational partner supporting disciplined institutional excellence while remaining almost invisible during everyday professional work.
+
+# SECTION 13 — DEPENDENCIES
+
+## Dependencies
+
+Phase-04 establishes the behavioural architecture governing every interaction inside the COREI Institutional Operator Workstation.
+
+It transforms the professional workplace established in Phase-03 into a coherent operational experience.
+
+The Experience Architecture therefore depends upon all previous architectural foundations while becoming the behavioural reference for every subsequent implementation phase.
+
+
+
+## 13.1 Constitutional Dependencies
+
+Phase-04 inherits its constitutional authority from Phase-00.
+
+The Experience Architecture shall continuously reinforce:
+
+* COREI Mission
+* COREI Vision
+* COREI Values
+* COREI Anchor Law
+* Institutional Engineering Principles
+* Constitutional Scalability
+* Institutional Governance
+
+Every interaction shall remain constitutionally aligned.
+
+Behaviour may evolve.
+
+Constitution shall not.
+
+
+
+## 13.2 Discovery Dependencies
+
+Phase-04 depends upon the engineering principles discovered in Phase-01.
+
+These include knowledge regarding:
+
+* professional workflows,
+* command environments,
+* engineering workbenches,
+* operational cognition,
+* human attention,
+* long-duration productivity,
+* professional interaction models.
+
+These discoveries become behavioural engineering evidence rather than implementation constraints.
+
+
+
+## 13.3 Operator Dependencies
+
+Phase-04 directly depends upon the Operator Architecture established in Phase-02.
+
+The Experience Architecture exists solely to improve:
+
+* operator thinking,
+* professional workflows,
+* institutional decision-making,
+* operational confidence,
+* collaboration,
+* continuous institutional learning.
+
+Every behavioural decision shall be traceable to documented operator requirements.
+
+
+
+## 13.4 Operational Environment Dependencies
+
+Phase-04 directly depends upon the Operational Environment Architecture established in Phase-03.
+
+The Operational Environment defines:
+
+the workplace.
+
+The Experience Architecture defines:
+
+life inside that workplace.
+
+Every interaction shall strengthen the Operational Environment rather than compete with it.
+
+
+
+## 13.5 Forward Dependencies
+
+Every remaining Stage-23 phase depends upon the Experience Architecture.
+
+Examples include:
+
+### Phase-05
+
+Technology Landscape
+
+↓
+
+Technology must support behavioural requirements.
+
+
+
+### Phase-06
+
+Workbench Architecture
+
+↓
+
+Workbench services implement behavioural architecture.
+
+
+
+### Phase-07
+
+Design System
+
+↓
+
+Visual language communicates behavioural intent.
+
+
+
+### Phase-08
+
+Component Ecosystem
+
+↓
+
+Reusable components inherit behavioural contracts.
+
+
+
+### Phase-09
+
+Workspace Library
+
+↓
+
+Professional workspaces inherit behavioural consistency.
+
+
+
+### Phase-10
+
+Intelligence Layer
+
+↓
+
+Institutional intelligence integrates into behavioural workflows.
+
+
+
+### Phase-11
+
+Operator Optimisation
+
+↓
+
+Operational analytics evaluate behavioural effectiveness.
+
+Experience Architecture therefore becomes the behavioural constitution of the workstation.
+
+
+
+# SECTION 14 — DELIVERABLES
+
+## Deliverables
+
+The completion of Phase-04 shall establish the complete behavioural architecture of the Institutional Operator Workstation.
+
+These deliverables govern how professional work is experienced throughout COREI.
+
+
+
+## Primary Deliverables
+
+### Experience Architecture
+
+A comprehensive behavioural specification governing professional interaction.
+
+
+
+### Behavioural Principles
+
+A permanent institutional specification describing:
+
+* interaction,
+* navigation,
+* workflow progression,
+* attention management,
+* contextual awareness,
+* operational continuity.
+
+
+
+### Experience Model
+
+Definition of professional operational experience throughout the complete institutional workflow.
+
+
+
+### Navigation Philosophy
+
+Definition of:
+
+* contextual navigation,
+* workflow navigation,
+* relationship navigation,
+* command navigation,
+* investigation navigation.
+
+
+
+### Attention Management Model
+
+Definition of:
+
+* focus,
+* interruption,
+* prioritisation,
+* notification behaviour,
+* cognitive protection.
+
+
+
+### Behavioural Service Model
+
+Definition of shared behavioural services including:
+
+* search,
+* command,
+* workflow,
+* context,
+* recommendations,
+* assistance,
+* collaboration,
+* history.
+
+
+
+### Experience Governance
+
+Architectural rules governing future behavioural evolution.
+
+
+
+### Stage-23 Behavioural Baseline
+
+A frozen behavioural architecture supporting every future workstation implementation.
+
+
+
+# SECTION 15 — ACCEPTANCE CRITERIA
+
+## Acceptance Criteria
+
+Phase-04 shall be considered complete only when the Experience Architecture fully supports professional institutional operation.
+
+Completion is measured through behavioural completeness rather than interface implementation.
+
+
+
+## Constitutional Compliance
+
+Every behavioural principle remains aligned with:
+
+* COREI Anchor Law
+* Master Trader Persona
+* Stage-23 Constitutional Foundation
+
+
+
+## Human Validation
+
+Every interaction directly improves documented professional workflows.
+
+Interactions shall never exist solely because technology permits them.
+
+
+
+## Behavioural Completeness
+
+The Experience Architecture fully defines:
+
+* interaction,
+* workflow progression,
+* navigation,
+* attention,
+* contextual awareness,
+* behavioural consistency,
+* operational continuity.
+
+
+
+## Technology Independence
+
+Behavioural architecture remains independent of:
+
+* frontend framework,
+* component library,
+* rendering technology,
+* implementation language.
+
+Experience governs technology.
+
+Technology implements experience.
+
+
+
+## Professional Validation
+
+The Experience Architecture supports prolonged institutional operation without introducing unnecessary cognitive burden.
+
+
+
+## Cross-Terminal Validation
+
+The behavioural principles remain equally valid for:
+
+* Trading Terminal
+* Infrastructure Terminal
+* Research Terminal
+* Risk Terminal
+* Executive Terminal
+* Compliance Terminal
+
+Operational context changes.
+
+Behaviour remains consistent.
+
+
+
+## Architectural Freeze
+
+Following review and approval,
+
+Phase-04 becomes the authoritative behavioural architecture of the COREI Institutional Operator Workstation.
+
+Future behavioural improvements extend the architecture without redefining its constitutional principles.
+
+
+
+# SECTION 16 — RELATED DOCUMENTS
+
+## Related Documents
+
+Phase-04 completes the foundational architecture of the Institutional Operator Workstation.
+
+It provides the behavioural layer connecting professional operators with future implementation architecture.
+
+
+
+## Constitutional References
+
+* Stage-23 Phase-00 — Constitutional Foundation
+* COREI Anchor Law
+* Master Trader Persona
+
+
+
+## Discovery References
+
+* Stage-23 Phase-01 — Discovery & Reverse Engineering
+* Engineering Principle Catalogue
+* Institutional Knowledge Repository
+
+
+
+## Human Architecture References
+
+* Stage-23 Phase-02 — Operator Architecture
+* Operator Workflow Catalogue
+* Decision Architecture
+* Information Requirement Catalogue
+
+
+
+## Environmental References
+
+* Stage-23 Phase-03 — Operational Environment Architecture
+* Operational Environment Principles
+* Environmental Service Model
+
+
+
+## Future Architecture References
+
+Phase-05
+
+Technology Landscape
+
+↓
+
+Phase-06
+
+Workbench Architecture
+
+↓
+
+Phase-07
+
+Design System
+
+↓
+
+Phase-08
+
+Component Ecosystem
+
+↓
+
+Phase-09
+
+Workspace Library
+
+↓
+
+Phase-10
+
+Intelligence Layer
+
+↓
+
+Phase-11
+
+Operator Optimisation
+
+Every remaining phase shall inherit the Experience Architecture as the behavioural contract governing every interaction inside the Institutional Operator Workstation.
+
+
+
+## Closing Statement
+
+Phase-04 establishes the Experience Architecture of COREI.
+
+With this phase complete, the workstation is now defined from four complementary architectural perspectives:
+
+* **Constitution** — Why the workstation exists.
+* **Knowledge** — How institutional engineering knowledge is acquired.
+* **Human** — Who the workstation serves.
+* **Environment** — Where institutional work occurs.
+* **Experience** — How professional work is lived within that environment.
+
+The Experience Architecture ensures that every interaction strengthens institutional understanding, protects professional attention, reinforces disciplined operational behaviour, and continuously improves operator confidence.
+
+The workstation therefore evolves beyond conventional user interfaces into a professional operational experience that remains stable, predictable, scalable, and aligned with the COREI Anchor Law and the Master Trader Persona.
+
+With the architectural freeze of Phase-04, Stage-23 now transitions from **experience definition** to **technology strategy**.
+
+Phase-05 begins the **Technology Landscape**, where every library, framework, runtime, engine, and third-party technology required by the Institutional Operator Workstation will be evaluated against the constitutional, operational, environmental, and behavioural principles established in Phases 00–04.
+
+No technology will be selected because it is popular.
+
+Every technology will be selected because it demonstrably strengthens the institutional architecture defined throughout Stage-23.
+
+# Architectural Review (After Phase-04)
+
+I think we have now completed what I would call the Architectural Foundation Layer of Stage-23.
+
+Phase	Architectural Outcome	Primary Question
+Phase-00	Constitutional Architecture	Why does COREI exist?
+Phase-01	Discovery Architecture	How do we learn?
+Phase-02	Human Architecture	Who are we building for?
+Phase-03	Operational Environment Architecture	Where does institutional work happen?
+Phase-04	Experience Architecture	How should institutional work be experienced?
+
+These five phases are intentionally technology-independent. They define the enduring architecture that should remain valid even as frameworks, libraries, and implementation techniques evolve.
+
+The next transition is significant.
+
+Phase-05 moves from architectural thinking to technology strategy. It answers a fundamentally different question:
+
+"Given everything we now know about COREI, which technologies are architecturally worthy of becoming part of the Institutional Operator Workstation?"
+
+This is where React, Monaco, AG Grid, FlexLayout, GoldenLayout, xterm.js, React Flow, Plotly, TradingView, Grafana integration, and every other technology will be evaluated—not as isolated tools, but as candidates to implement the architecture established by the COREI Anchor Law and the Master Trader Persona. This ensures technology always serves the institution, never the other way around.

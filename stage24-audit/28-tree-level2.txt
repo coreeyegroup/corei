@@ -1,0 +1,553 @@
+/home/coreeye/corei
+├── argocd
+│   ├── apps
+│   └── projects
+├── artifacts
+│   ├── backups
+│   ├── configuration
+│   ├── events
+│   ├── execution_gate
+│   ├── exports
+│   ├── install
+│   ├── n8n-live-deployment.yaml
+│   ├── n8n-live-services.yaml
+│   ├── operations
+│   ├── platform
+│   ├── portfolio
+│   ├── recovery
+│   ├── releases
+│   ├── replay
+│   ├── resilience
+│   ├── runtime-images
+│   ├── snapshots
+│   ├── stage-14
+│   └── testing
+├── audit
+│   └── stage-14
+├── authoritative-stage-index.md
+├── authoritative-stage-index.md.md
+├── backups
+│   └── n8n
+├── broker-adapter-stage16.tar
+├── brokers
+├── chaos
+│   ├── artifacts
+│   ├── database
+│   ├── engine
+│   ├── kafka
+│   ├── network
+│   ├── pods
+│   ├── recovery
+│   └── scenarios
+├── cicd
+│   ├── github-actions
+│   ├── pipelines
+│   ├── README.md
+│   ├── release
+│   └── validation
+├── compliance
+├── config
+│   ├── execution
+│   └── platform
+├── contracts
+│   └── events
+├── copy-trade-engine-stage16.tar
+├── corei-full-tree.txt
+├── corei-tree.txt
+├── core_platform
+│   ├── config-control
+│   ├── config_governance
+│   ├── contracts
+│   ├── deployment-governance
+│   ├── determinism
+│   ├── deterministic_replay
+│   ├── event_bus
+│   ├── event_governance
+│   ├── execution_gate
+│   ├── flow_control
+│   ├── governance
+│   ├── __init__.py
+│   ├── lineage
+│   ├── mode-governance
+│   ├── operations
+│   ├── policy-runtime
+│   ├── portfolio
+│   ├── __pycache__
+│   ├── README.md
+│   ├── replay
+│   ├── resilience
+│   ├── resilience_runtime
+│   ├── runtime
+│   ├── runtime_governance
+│   ├── sdk
+│   ├── security
+│   ├── services
+│   ├── service-template
+│   ├── shared
+│   ├── system
+│   ├── system_registry
+│   ├── system-state
+│   └── workflow_engine
+├── datasets
+├── deployments
+├── docs
+│   ├── adr
+│   ├── architecture
+│   ├── audits
+│   ├── blueprints
+│   ├── continuity
+│   ├── COREI Anchor Law
+│   ├── COREI IDENTITY
+│   ├── COREI Institutional Vocabulary
+│   ├── COREI Manifesto
+│   ├── COREI Persona V.1
+│   ├── COREI Persona V.2
+│   ├── COREI Pholosophy
+│   ├── governance
+│   ├── host
+│   ├── infrastructure
+│   ├── inventories
+│   ├── lineage
+│   ├── machine-spec.md
+│   ├── observability
+│   ├── operations
+│   ├── recovery
+│   ├── replay
+│   ├── runbooks
+│   ├── runtime
+│   ├── schemas
+│   ├── security
+│   ├── services
+│   ├── stage-01
+│   ├── stage-02
+│   ├── stage-03
+│   ├── stage-04
+│   ├── stage-05
+│   ├── stage-06
+│   ├── stage-10a
+│   ├── stage-12
+│   ├── stage-20
+│   ├── stage-21
+│   ├── stage-23
+│   ├── stage-23A
+│   ├── stage-24
+│   ├── stages
+│   ├── standards
+│   ├── testing
+│   └── ui
+├── ems-stage16.tar
+├── environments
+│   ├── dev
+│   ├── development
+│   ├── disaster-recovery
+│   ├── production
+│   └── staging
+├── events
+│   ├── audit_stream
+│   ├── dead_letter_stream
+│   ├── ingress
+│   └── replay
+├── feature-store
+├── fill-handler-stage16.tar
+├── final-argocd-state.txt
+├── final-platform-state.txt
+├── final-rs-state.txt
+├── generated
+├── gitops
+│   ├── argocd
+│   ├── base
+│   ├── DEPLOYMENT_POLICY.md
+│   └── overlays
+├── governance
+│   ├── chaos
+│   ├── compliance
+│   ├── deployment
+│   ├── determinism
+│   ├── events
+│   ├── naming
+│   ├── orchestration
+│   ├── performance
+│   ├── platform
+│   ├── replay
+│   ├── repository-governance
+│   ├── runtime
+│   ├── schema
+│   ├── sdk
+│   ├── security
+│   ├── services
+│   ├── simulation
+│   ├── technical-debt
+│   ├── testing
+│   └── versioning
+├── infrastructure
+│   ├── audit
+│   ├── backups
+│   ├── bootstrap
+│   ├── capital-governance
+│   ├── components
+│   ├── config
+│   ├── documentation
+│   ├── freeze
+│   ├── governance
+│   ├── host
+│   ├── kubernetes
+│   ├── locks
+│   ├── logs
+│   ├── migrations
+│   ├── orchestrator
+│   ├── persistence
+│   ├── phases
+│   ├── recovery
+│   ├── replay
+│   ├── research
+│   ├── scripts
+│   ├── services
+│   ├── stages
+│   ├── state
+│   ├── tools
+│   ├── validation
+│   └── workflows
+├── init-git.sh
+├── install.state
+├── institutional-stage-execution-lifecycle.md
+├── institutional-stage-execution-lifecycle.md.md
+├── kafka
+│   └── stage-14
+├── kafka-0
+├── kubernetes
+│   ├── admission
+│   ├── autoscaling
+│   ├── backup
+│   ├── chaos
+│   ├── cicd
+│   ├── cluster-config
+│   ├── execution
+│   ├── messaging
+│   ├── n8n
+│   ├── namespaces
+│   ├── network
+│   ├── network-policies
+│   ├── observability
+│   ├── platform
+│   ├── pod-disruption-budgets
+│   ├── policies
+│   ├── portfolio
+│   ├── priority-classes
+│   ├── rbac
+│   ├── resource-quotas
+│   ├── security
+│   ├── service-accounts
+│   ├── storage
+│   ├── testing
+│   ├── trading-infra
+│   └── trading-logic
+├── libraries
+├── lineage
+├── logs
+├── Makefile
+├── -n
+├── -o
+├── observability
+├── oms-stage16.tar
+├── operations
+│   ├── alerts
+│   ├── backups
+│   ├── incidents
+│   ├── logs
+│   ├── runbooks
+│   ├── snapshots
+│   └── state
+├── ops
+│   ├── live-activation
+│   └── runtime-authority
+├── orchestration
+│   ├── engine
+│   ├── graphs
+│   ├── reports
+│   └── state
+├── performance
+│   ├── artifacts
+│   ├── engine
+│   ├── latency
+│   └── throughput
+├── phase23-audit
+│   ├── 01-full-directory-tree.txt
+│   ├── 02-all-files.txt
+│   ├── 03-source-files.txt
+│   ├── 04-config-files.txt
+│   ├── 05-directories.txt
+│   └── 06-file-statistics.txt
+├── phase23-audit.tar.gz
+├── phase23-extraction
+│   ├── archive
+│   ├── infrastructure-reality
+│   ├── shared-review
+│   └── terminal-experience
+├── platform
+│   ├── automation
+│   ├── backend
+│   ├── frontend
+│   └── services
+├── platform-continuity-restoration-block.md
+├── platform-continuity-restoration-block.md.md
+├── platform-manifest.yaml
+├── policies
+│   ├── deployment
+│   ├── orchestration
+│   ├── replay
+│   ├── retry
+│   ├── risk
+│   ├── routing
+│   ├── runtime
+│   ├── security
+│   └── testing
+├── portfolio
+│   ├── events
+│   ├── snapshots
+│   └── state
+├── post-recovery-nodes.txt
+├── post-recovery-pods.txt
+├── post-recovery-pvc.txt
+├── post-recovery-services.txt
+├── README.md
+├── reconciliation-stage16.tar
+├── replay
+│   ├── artifacts
+│   ├── engine
+│   ├── events
+│   ├── hashes
+│   ├── lineage
+│   ├── sessions
+│   ├── snapshots
+│   ├── stage-14
+│   ├── state
+│   ├── validation
+│   └── verification
+├── repos
+│   ├── corei-core
+│   ├── corei-infrastructure
+│   ├── corei-schemas
+│   ├── corei-sdk
+│   └── corei-services
+├── research
+│   ├── backtesting
+│   ├── backtest_registry
+│   ├── backtests
+│   ├── catalog
+│   ├── datasets
+│   ├── dataset_versions
+│   ├── experiments
+│   ├── features
+│   ├── feature_versions
+│   ├── lineage
+│   ├── metadata
+│   ├── mlflow
+│   ├── notebooks
+│   ├── promotion_registry
+│   ├── README.md
+│   ├── replay
+│   └── sdk
+├── resilience
+│   ├── events
+│   ├── recovery
+│   └── state
+├── runbooks
+├── runtime
+│   ├── events
+│   ├── market-data
+│   ├── platform
+│   ├── portfolio
+│   ├── python
+│   ├── sessions
+│   ├── stage-14
+│   ├── state
+│   ├── streams
+│   └── telemetry
+├── schemas
+│   ├── avro
+│   ├── compatibility
+│   ├── monitoring
+│   ├── portfolio
+│   ├── README.md
+│   ├── registry
+│   ├── screening
+│   ├── signal
+│   ├── stage-16
+│   ├── strategy
+│   └── trade_intent
+├── scratch
+│   └── legacy-cleanup
+├── scripts
+│   ├── backup
+│   ├── broker
+│   ├── chaos
+│   ├── config
+│   ├── deploy
+│   ├── deployment
+│   ├── execution
+│   ├── foundation
+│   ├── gitops
+│   ├── governance
+│   ├── health
+│   ├── host
+│   ├── infrastructure
+│   ├── kubernetes
+│   ├── messaging
+│   ├── migration
+│   ├── network
+│   ├── performance
+│   ├── platform
+│   ├── recovery
+│   ├── rollback
+│   ├── schema
+│   ├── security
+│   ├── testing
+│   ├── tooling
+│   └── validation
+├── secrets
+│   └── gitops
+├── security
+├── services
+│   ├── alert-service
+│   ├── audit-service
+│   ├── capital-partition-service
+│   ├── config-service
+│   ├── config-snapshot-service
+│   ├── event-ingestion-service
+│   ├── event-ordering-service
+│   ├── event-validation-service
+│   ├── execution
+│   ├── exposure-service
+│   ├── failure-handling-service
+│   ├── identity-service
+│   ├── market-data-service
+│   ├── orchestration-service
+│   ├── platform
+│   ├── portfolio-service
+│   ├── README.md
+│   ├── replay-engine-service
+│   ├── snapshot-service
+│   └── _template
+├── shared
+│   ├── audit-engine
+│   ├── authorization-engine
+│   ├── design-system
+│   ├── state-engine
+│   ├── websocket-engine
+│   └── workspace-engine
+├── simulation
+│   ├── broker
+│   ├── broker-runtime
+│   ├── market-data
+│   ├── market-runtime
+│   └── replay
+├── smart-order-router-stage16.tar
+├── stage24-audit
+│   ├── 01-repository-tree.txt
+│   ├── 02-ui-tree.txt
+│   ├── 03-ui-files.txt
+│   ├── 04-package-json.txt
+│   ├── 05-pnpm-workspace.txt
+│   ├── 06-tsconfig.txt
+│   ├── 07-vite-config.txt
+│   ├── 08-tailwind.txt
+│   ├── 09-eslint.txt
+│   ├── 10-prettier.txt
+│   ├── 11-runtime.txt
+│   ├── 12-contracts.txt
+│   ├── 13-providers.txt
+│   ├── 14-hooks.txt
+│   ├── 15-state.txt
+│   ├── 16-adapters.txt
+│   ├── 17-services.txt
+│   ├── 18-components.txt
+│   ├── 19-workspaces.txt
+│   ├── 20-design-system.txt
+│   ├── 21-terminals.txt
+│   ├── 22-shared.txt
+│   ├── 23-libraries.txt
+│   ├── 24-build.txt
+│   ├── 25-git.txt
+│   ├── 26-total-files.txt
+│   ├── 27-total-folders.txt
+│   └── 28-tree-level2.txt
+├── state
+│   ├── configuration
+│   ├── corei-full-authoritative-tree.txt
+│   ├── corei-full-tree-detailed.txt
+│   ├── governance
+│   ├── install.state
+│   ├── live-activation
+│   ├── live-validation
+│   ├── resilience
+│   ├── runtime
+│   ├── security
+│   ├── security-backup
+│   ├── stage-10a
+│   ├── stage-11
+│   ├── stage-12
+│   ├── stage-18-tree.txt
+│   ├── stage-20-authoritative-tree.txt
+│   ├── stage21c-image-governance-audit
+│   ├── stage21d-vault-audit
+│   └── tools
+├── storage-minimal-available-percentage
+├── storage-over-provisioning-percentage
+├── strategies
+│   ├── forex_momentum_strategy
+│   ├── gold_timing_strategy
+│   ├── mean_reversion_strategy
+│   └── stock_momentum_strategy
+├── telemetry
+│   ├── audits
+│   ├── metrics
+│   ├── observability
+│   ├── operations
+│   ├── reconciliation
+│   ├── replay
+│   ├── reports
+│   ├── runtime-authority
+│   └── validation
+├── terminals
+│   ├── compliance-terminal
+│   ├── executive-terminal
+│   ├── infra-terminal
+│   ├── research-terminal
+│   ├── risk-terminal
+│   └── trading-terminal
+├── terraform
+│   ├── environments
+│   ├── modules
+│   └── shared
+├── tests
+│   ├── chaos
+│   ├── config
+│   ├── contracts
+│   ├── determinism
+│   ├── emergency
+│   ├── fixtures
+│   ├── integration
+│   ├── lineage
+│   ├── live
+│   ├── live-replay
+│   ├── load
+│   ├── mock-services
+│   ├── orchestration
+│   ├── performance
+│   ├── reconciliation
+│   ├── replay
+│   ├── reports
+│   ├── schemas
+│   ├── stage-15
+│   ├── state
+│   ├── synthetic
+│   └── validation
+├── tools
+├── ui
+│   ├── corei-os
+│   └── corei-terminal-final-archive-20260619-165044.tar.gz
+├── VERSION
+├── workflows
+└── -X
+
+458 directories, 92 files

@@ -1,0 +1,37 @@
+# RUNTIME RESOLUTION MATRIX
+
+COMPONENT
+
+Listener Authentication
+
+STATUS
+
+UNDER REVIEW
+
+COMPONENT
+
+JAAS Context Resolution
+
+STATUS
+
+UNDER REVIEW
+
+COMPONENT
+
+SCRAM Binding Resolution
+
+STATUS
+
+UNDER REVIEW
+
+COMPONENT
+
+Kerberos Fallback Resolution
+
+STATUS
+
+UNDER REVIEW
+
+ROOT CAUSE
+
+PENDING

@@ -4,35 +4,21 @@
  *
  * STAGE-25
  * PHASE-17
- * STEP-10
+ * STEP-02
  *
  * FILE:
  * BottomRegion.tsx
  *
  * PURPOSE:
- * Institutional Bottom Timeline Shell Integration
+ * Institutional Operations Surface Boundary
  *
  * DESCRIPTION:
- * Defines the authoritative integration boundary between the Institutional
- * Shell bottom region and the existing Timeline Event Stream subsystem.
+ * Defines the Phase-17 bottom operational surface.
  *
- * The Shell consumes only the Timeline public API.
+ * Future events, activity and operational history attach here.
  *
- * The Shell does not directly consume timeline provider, runtime, engine,
- * event store, event model, Event Platform, State Platform, or persistence
- * internals.
- *
- * AUTHORITATIVE COMPOSITION:
- *
- * ShellLayout
- *     ↓
- * BottomRegion
- *     ↓
- * Timeline Public API
- *     ↓
- * TimelineEventStream
- *     ↓
- * Existing Timeline Event Stream Foundation
+ * OWNERSHIP:
+ * Institutional Shell
  *
  ******************************************************************************/
 
@@ -48,15 +34,14 @@ export function BottomRegion(): ReactElement {
 
     return (
 
-        <footer
-            className="corei-shell-region corei-shell-region-bottom"
-            data-region="bottom"
-            data-shell-integration="timeline-event-stream"
+        <section
+            className="corei-region corei-region-bottom"
+            data-shell-surface="operations"
         >
 
             <TimelineEventStream />
 
-        </footer>
+        </section>
 
     );
 

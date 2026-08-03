@@ -1,0 +1,28 @@
+# GENERATOR IMPLEMENTATION PLAN
+
+OBJECTIVE
+
+Move from direct property injection
+to profile-driven security generation.
+
+PROFILES
+
+RECOVERY
+
+PRODUCTION
+
+RECOVERY PROFILE
+
+Client SASL_SSL
+
+Broker PLAINTEXT
+
+PRODUCTION PROFILE
+
+Client SASL_SSL
+
+Broker SASL_SSL
+
+GENERATOR OWNERSHIP
+
+REQUIRED

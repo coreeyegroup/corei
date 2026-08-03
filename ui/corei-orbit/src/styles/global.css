@@ -1,0 +1,41 @@
+/* src/styles/layout.css */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+.main-panels {
+  flex: 1;
+  min-height: 0;
+}
+.bottom-panel-group {
+  height: 200px;
+  min-height: 80px;
+  max-height: 400px;
+  flex-shrink: 0;
+}
+.resize-handle-horizontal {
+  width: 4px;
+  background: var(--border-color);
+  cursor: col-resize;
+  transition: background 0.2s;
+}
+.resize-handle-horizontal:hover {
+  background: var(--accent-teal);
+}
+.resize-handle-vertical {
+  height: 4px;
+  background: var(--border-color);
+  cursor: row-resize;
+  transition: background 0.2s;
+}
+.resize-handle-vertical:hover {
+  background: var(--accent-teal);
+}

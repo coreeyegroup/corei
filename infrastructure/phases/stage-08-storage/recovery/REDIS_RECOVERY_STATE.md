@@ -1,0 +1,28 @@
+RECOVERY PROGRAM
+
+08R.1 Audit
+COMPLETE
+
+08R.2 Validation
+COMPLETE
+
+08R.3 Recovery Plan
+COMPLETE
+
+08R.4 Manifest Remediation
+COMPLETE
+
+08R.5 Package Review
+COMPLETE
+
+08R.6 Deployment
+COMPLETE
+
+08R.7 Validation
+COMPLETE
+
+08R.8 Certification
+COMPLETE
+
+STATUS:
+CLOSED

@@ -3,7 +3,7 @@ service:
 
 image:
   repository: config-snapshot-service
-  tag: latest
+  tag: 34edefc
   pullPolicy: Never
 
 replicaCount: 1

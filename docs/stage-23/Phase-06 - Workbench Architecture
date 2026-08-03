@@ -1,0 +1,1869 @@
+# STAGE-23 — INSTITUTIONAL OPERATOR WORKSTATION
+
+## Phase-06 — Workbench Architecture
+
+**Document Status:** Authoritative
+**Stage:** 23
+**Phase:** 06
+**Sections Covered:** 01–04 (Message 1 of 4)
+
+**Authoritative References**
+
+* Stage-23 Phase-00 — Constitutional Foundation
+* Stage-23 Phase-01 — Discovery & Reverse Engineering
+* Stage-23 Phase-02 — Operator Architecture
+* Stage-23 Phase-03 — Operational Environment Architecture
+* Stage-23 Phase-04 — Experience Architecture
+* Stage-23 Phase-05 — Technology Landscape
+* COREI Anchor Law
+* Master Trader Persona
+
+---
+
+# SECTION 01 — PURPOSE
+
+## Purpose
+
+The purpose of Phase-06 is to establish the Workbench Architecture of the COREI Institutional Operator Workstation.
+
+The Workbench is the software architecture that transforms constitutional principles, operator workflows, operational environments, behavioural models, and governed technologies into one unified institutional operating environment.
+
+It is not a frontend application.
+
+It is not a dashboard.
+
+It is not a browser page.
+
+It is not a window manager.
+
+It is the operational foundation upon which every institutional capability executes.
+
+The Workbench provides the common runtime that hosts:
+
+* operational workspaces,
+* institutional intelligence,
+* workflow engines,
+* environmental services,
+* operator context,
+* command systems,
+* extension capabilities,
+* visual composition,
+* operational orchestration.
+
+Every professional operator interacts with the institution through the Workbench.
+
+The Workbench itself remains largely invisible.
+
+Operators interact with institutional reality.
+
+The Workbench continuously manages the environment behind the scenes.
+
+---
+
+# SECTION 02 — MISSION
+
+## Mission
+
+The mission of the Workbench is to provide one coherent software architecture capable of supporting every institutional capability throughout years of continuous evolution.
+
+The Workbench shall become the permanent operating foundation for COREI.
+
+Its mission includes providing:
+
+* environmental composition,
+* workspace lifecycle,
+* layout orchestration,
+* capability hosting,
+* contextual awareness,
+* operator sessions,
+* institutional state,
+* command execution,
+* extension management,
+* service coordination,
+* runtime governance.
+
+Unlike traditional applications, the Workbench does not implement business functionality.
+
+Instead, it provides the environment within which business capabilities operate.
+
+Consistent with the COREI Anchor Law, the Workbench exists to make institutional operation coherent rather than fragmented.
+
+Consistent with the Master Trader Persona, the Workbench should disappear behind professional operation, allowing disciplined analysis, investigation, execution, and continuous operational awareness to remain central.
+
+The success of the Workbench is therefore measured by institutional coherence rather than visible software features.
+
+---
+
+# SECTION 03 — PROBLEM STATEMENT
+
+## Problem Statement
+
+Traditional enterprise software typically evolves through independent applications.
+
+Each application introduces:
+
+* its own navigation,
+* its own state,
+* its own notifications,
+* its own search,
+* its own permissions,
+* its own workflows.
+
+As capability increases, the operator experiences fragmentation.
+
+Even when individual applications perform well, the institution becomes operationally disconnected.
+
+For COREI this approach is unacceptable.
+
+The Institutional Operator Workstation must support:
+
+* hundreds of capabilities,
+* dozens of intelligence engines,
+* multiple terminals,
+* multiple operational realities,
+* AI systems,
+* collaborative workflows,
+* continuous institutional operation.
+
+Without a Workbench Architecture, these capabilities inevitably become loosely connected software rather than one institutional operating environment.
+
+The problem therefore is not building better components.
+
+The problem is providing one architectural foundation through which every capability behaves as part of one institution.
+
+Phase-06 solves this problem by defining the COREI Workbench.
+
+---
+
+# SECTION 04 — BACKGROUND
+
+## Background
+
+The previous five phases progressively established the architectural prerequisites for the Workbench.
+
+Phase-00 defined constitutional authority.
+
+Phase-01 defined institutional engineering knowledge.
+
+Phase-02 defined professional operators.
+
+Phase-03 defined the Operational Environment.
+
+Phase-04 defined behavioural architecture.
+
+Phase-05 defined the Technology Landscape.
+
+The Workbench now assembles these independent architectural layers into one executable software architecture.
+
+The architectural progression therefore becomes:
+
+Constitution
+
+↓
+
+Operator
+
+↓
+
+Operational Environment
+
+↓
+
+Experience
+
+↓
+
+Technology
+
+↓
+
+Workbench
+
+↓
+
+Capabilities
+
+↓
+
+Components
+
+↓
+
+Implementation
+
+↓
+
+Code
+
+This progression is deliberate.
+
+The Workbench is not simply another architectural layer.
+
+It is the institutional runtime that transforms architecture into operation.
+
+Every workspace, command, service, extension, investigation, intelligence engine, operational workflow, and future capability shall execute within the Workbench rather than independently.
+
+The Workbench therefore becomes the software embodiment of the COREI Constitution.
+
+It operationalises every architectural principle established throughout the previous phases while remaining flexible enough to support decades of institutional evolution.
+
+### Architectural Observation
+
+I think we've now reached the point where the terminology itself becomes extremely important.
+
+Most software products have:
+
+UI
+Frontend
+Dashboard
+Application
+Shell
+
+COREI should deliberately adopt different terminology because it reflects a fundamentally different architecture.
+
+Traditional Software	COREI
+Frontend	Workbench
+Application	Operational Capability
+Screen	Workspace
+Page	Operational Surface
+Widget	Capability Component
+Menu	Command System
+Settings	Environment Configuration
+Session	Operational Session
+Layout	Operational Environment
+Plugin	Institutional Extension
+
+I would even go one step further.
+
+I think "COREI Workbench" should become a first-class architectural concept, just like:
+
+Kubernetes Control Plane
+VS Code Workbench
+Eclipse Workbench
+
+Years from now, engineers should naturally say:
+
+"This capability integrates with the COREI Workbench."
+
+not
+
+"Add this React component to the UI."
+
+That subtle language shift reinforces the architecture you've been driving toward for weeks: we are not building a frontend—we are building the institutional operating environment through which finance and technology are continuously understood and operated.
+
+# SECTION 05 — ARCHITECTURAL CONTEXT
+
+## Architectural Context
+
+The COREI Workbench is the institutional runtime of the Operator Workstation.
+
+It provides the architectural foundation that coordinates every operational capability while maintaining one coherent institutional operating environment.
+
+Unlike conventional frontend architectures, the Workbench does not own business logic.
+
+Business intelligence remains inside the backend platform.
+
+The Workbench owns operational orchestration.
+
+Its responsibilities include:
+
+* composing operational environments,
+* managing workspaces,
+* hosting capabilities,
+* coordinating environmental services,
+* maintaining operator context,
+* orchestrating institutional workflows,
+* preserving operational continuity.
+
+The Workbench therefore separates:
+
+Institutional Intelligence
+
+↓
+
+Operational Experience
+
+↓
+
+Technology Runtime
+
+↓
+
+Visual Composition
+
+Each layer remains independently evolvable.
+
+---
+
+## Workbench Architectural Layers
+
+The Workbench shall be organised into four architectural layers.
+
+### Layer 1 — Foundation Services
+
+Institution-wide runtime services.
+
+Examples include:
+
+* Session Management
+* Context Engine
+* State Engine
+* Permission Engine
+* Theme Engine
+* Identity Engine
+* Configuration Engine
+* Audit Engine
+
+These services exist once.
+
+Every capability consumes them.
+
+---
+
+### Layer 2 — Environmental Services
+
+Services controlling the operational environment.
+
+Examples include:
+
+* Workspace Engine
+* Layout Engine
+* Window Manager
+* Docking Manager
+* Command Engine
+* Search Engine
+* Notification Engine
+* History Engine
+* Navigation Engine
+
+These services define the behaviour of the Workbench itself.
+
+---
+
+### Layer 3 — Capability Runtime
+
+The execution environment for institutional capabilities.
+
+Examples include:
+
+* Trading Runtime
+* Infrastructure Runtime
+* Research Runtime
+* Risk Runtime
+* AI Runtime
+* Documentation Runtime
+* Collaboration Runtime
+* Executive Runtime
+
+Capabilities operate here.
+
+They never directly manipulate the Workbench.
+
+---
+
+### Layer 4 — Presentation Layer
+
+The visible institutional environment.
+
+Examples include:
+
+* Workspaces
+* Operational Surfaces
+* Panels
+* Views
+* Editors
+* Dashboards
+* Visualisations
+* Command Interfaces
+
+Presentation becomes the final layer.
+
+Not the architectural foundation.
+
+---
+
+## Workbench Responsibilities
+
+The Workbench shall coordinate:
+
+* capability lifecycle,
+* workspace lifecycle,
+* layout lifecycle,
+* operator lifecycle,
+* session lifecycle,
+* extension lifecycle,
+* environmental state,
+* command routing,
+* contextual awareness.
+
+Everything else belongs elsewhere.
+
+---
+
+# SECTION 06 — OPERATOR PERSPECTIVE
+
+## Operator Perspective
+
+Operators should experience one seamless institutional environment.
+
+They should never wonder:
+
+Which application owns this?
+
+Which service created this?
+
+Which module controls this?
+
+Those questions belong to engineering.
+
+The operator experiences only professional work.
+
+---
+
+## One Operational Workspace
+
+Every investigation begins inside the Workbench.
+
+Whether investigating:
+
+* markets,
+* execution,
+* infrastructure,
+* AI,
+* research,
+* governance,
+
+the environment remains familiar.
+
+Only operational context changes.
+
+---
+
+## Continuous Context
+
+The Workbench remembers:
+
+* current investigations,
+* open workspaces,
+* operational history,
+* institutional context,
+* collaborative state,
+* operator preferences.
+
+Professional work continues naturally.
+
+---
+
+## Unified Commands
+
+Operators interact through one command architecture.
+
+Regardless of capability.
+
+Examples include:
+
+Search
+
+Open
+
+Compare
+
+Investigate
+
+Execute
+
+Review
+
+Monitor
+
+Navigate
+
+Commands remain behaviourally identical across every terminal.
+
+---
+
+## Persistent Environment
+
+Operators should feel as though they leave their workplace overnight and return to exactly the same institutional environment the next morning.
+
+The Workbench restores:
+
+* layouts,
+* workspaces,
+* investigations,
+* context,
+* sessions.
+
+Institutional continuity becomes natural.
+
+---
+
+## Invisible Infrastructure
+
+The Workbench continuously manages:
+
+* runtime,
+* services,
+* orchestration,
+* communication,
+* recovery,
+
+without requiring operator attention.
+
+---
+
+# SECTION 07 — ENGINEERING PERSPECTIVE
+
+## Engineering Perspective
+
+Engineering shall treat the Workbench as an operating platform rather than a frontend application.
+
+Capabilities integrate with the Workbench.
+
+They never become the Workbench.
+
+---
+
+## Service-Oriented Runtime
+
+Every major Workbench responsibility shall exist as an independent runtime service.
+
+Examples include:
+
+Context Service
+
+Workspace Service
+
+Layout Service
+
+Command Service
+
+Notification Service
+
+Search Service
+
+History Service
+
+Extension Service
+
+Collaboration Service
+
+Each service owns one responsibility.
+
+---
+
+## Capability Isolation
+
+Capabilities shall remain isolated.
+
+They communicate only through:
+
+* contracts,
+* events,
+* service interfaces,
+* shared environmental services.
+
+Direct coupling between capabilities is prohibited.
+
+---
+
+## Runtime Composition
+
+Capabilities become dynamically composable.
+
+The Workbench determines:
+
+* where they execute,
+* how they interact,
+* how they communicate,
+* when they activate,
+* when they suspend,
+* when they terminate.
+
+Capabilities remain portable.
+
+---
+
+## Environmental Ownership
+
+The Workbench owns:
+
+* layout,
+* context,
+* navigation,
+* lifecycle,
+* orchestration.
+
+Capabilities own:
+
+* business behaviour,
+* operational functionality,
+* domain intelligence.
+
+Responsibilities remain clearly separated.
+
+---
+
+## Extension Runtime
+
+Every future capability shall integrate through a common extension model.
+
+The Workbench remains unchanged.
+
+Capabilities evolve independently.
+
+---
+
+## Runtime Governance
+
+Engineering shall continuously monitor:
+
+* capability health,
+* runtime performance,
+* service integrity,
+* extension compatibility,
+* environmental stability.
+
+The Workbench governs institutional execution.
+
+---
+
+# SECTION 08 — INSTITUTIONAL PERSPECTIVE
+
+## Institutional Perspective
+
+Institutions require operational stability independent of organisational growth.
+
+The Workbench provides this stability.
+
+---
+
+## Institutional Standardisation
+
+Every terminal shall inherit one Workbench.
+
+Examples include:
+
+Trading Terminal
+
+Infrastructure Terminal
+
+Research Terminal
+
+Risk Terminal
+
+Executive Terminal
+
+Compliance Terminal
+
+Only domain capabilities differ.
+
+The Workbench remains identical.
+
+---
+
+## Operational Consistency
+
+Institutional operators moving between terminals should never relearn interaction models.
+
+Behaviour remains common.
+
+Capabilities change.
+
+---
+
+## Long-Term Evolution
+
+New institutional capabilities shall integrate into the Workbench rather than creating new architectural foundations.
+
+Growth occurs through extension.
+
+Not fragmentation.
+
+---
+
+## Institutional Governance
+
+Every capability entering COREI must satisfy:
+
+Workbench Contracts
+
+↓
+
+Capability Contracts
+
+↓
+
+Operational Contracts
+
+↓
+
+Security Contracts
+
+↓
+
+Extension Contracts
+
+This ensures institutional consistency.
+
+---
+
+## Institutional Runtime
+
+Ultimately, the Workbench becomes the permanent runtime of COREI.
+
+It hosts:
+
+* operators,
+* operational environments,
+* intelligence,
+* capabilities,
+* workflows,
+* institutional services,
+
+inside one governed architectural ecosystem.
+
+The Workbench therefore becomes the software embodiment of the COREI operating model rather than merely the frontend of the institutional platform.
+
+### Architectural Observation
+
+I think we have just identified another architectural principle that distinguishes COREI from most enterprise systems.
+
+Most systems are built like this:
+
+Application
+    │
+    ▼
+Components
+    │
+    ▼
+Libraries
+
+COREI should instead be built like this:
+
+Workbench
+      │
+      ▼
+Workbench Services
+      │
+      ▼
+Capability Runtime
+      │
+      ▼
+Operational Capabilities
+      │
+      ▼
+Capability Components
+      │
+      ▼
+Technology
+
+Notice something important.
+
+Components are no longer architectural units.
+
+They become implementation details.
+
+The architectural unit becomes the Operational Capability.
+
+For example:
+
+"Portfolio Investigation" is a capability.
+"Market Structure Analysis" is a capability.
+"Kafka Cluster Monitoring" is a capability.
+"Risk Limit Review" is a capability.
+
+Each capability may internally use:
+
+AG Grid,
+React Flow,
+Monaco,
+xterm.js,
+TradingView,
+Plotly,
+
+but the operator never sees those technologies.
+
+They simply experience one institutional capability inside one Workbench.
+
+I believe this is one of the strongest architectural shifts we've made throughout Stage-23 because it changes the primary unit of engineering from UI components to institutional operational capabilities. That aligns directly with the COREI Anchor Law, the Master Trader Persona, and your original vision of building a true institutional operating system rather than another frontend application.
+
+# SECTION 09 — FUNCTIONAL REQUIREMENTS
+
+## Functional Requirements
+
+The COREI Workbench shall provide the institutional runtime required to operate every professional capability within one coherent operational environment.
+
+Every capability, regardless of domain, shall inherit the same runtime behaviour and architectural guarantees.
+
+---
+
+## 9.1 Unified Runtime
+
+The Workbench shall provide one shared runtime for all institutional capabilities.
+
+Every capability shall execute within the same operational environment while remaining logically isolated.
+
+The runtime shall support:
+
+* Trading
+* Infrastructure
+* Risk
+* Research
+* Executive
+* Compliance
+* AI
+* Governance
+* Future Domains
+
+without architectural duplication.
+
+---
+
+## 9.2 Workspace Lifecycle Management
+
+The Workbench shall manage the complete lifecycle of every workspace.
+
+Lifecycle stages include:
+
+Create
+
+↓
+
+Load
+
+↓
+
+Initialize
+
+↓
+
+Activate
+
+↓
+
+Suspend
+
+↓
+
+Resume
+
+↓
+
+Persist
+
+↓
+
+Restore
+
+↓
+
+Close
+
+↓
+
+Archive
+
+The lifecycle shall be consistent across every workspace.
+
+---
+
+## 9.3 Capability Lifecycle Management
+
+Every operational capability shall follow a common lifecycle.
+
+Examples include:
+
+Registration
+
+↓
+
+Validation
+
+↓
+
+Loading
+
+↓
+
+Dependency Resolution
+
+↓
+
+Activation
+
+↓
+
+Execution
+
+↓
+
+Monitoring
+
+↓
+
+Suspension
+
+↓
+
+Termination
+
+↓
+
+Recovery
+
+The Workbench shall coordinate this lifecycle automatically.
+
+---
+
+## 9.4 Environmental Services
+
+The Workbench shall expose shared institutional services.
+
+Examples include:
+
+* Context Service
+* Search Service
+* Command Service
+* Notification Service
+* Session Service
+* Permission Service
+* History Service
+* Configuration Service
+* Audit Service
+* Collaboration Service
+
+Capabilities consume these services.
+
+They never recreate them.
+
+---
+
+## 9.5 Context Management
+
+The Workbench shall continuously maintain:
+
+* operator context,
+* workspace context,
+* institutional context,
+* investigation context,
+* execution context,
+* collaboration context.
+
+Context shall remain authoritative across the entire operational session.
+
+---
+
+## 9.6 Command Architecture
+
+Every command executed within COREI shall pass through one institutional command system.
+
+Commands shall support:
+
+* discovery,
+* execution,
+* permissions,
+* audit,
+* undo,
+* automation,
+* keyboard invocation,
+* AI invocation.
+
+The command architecture becomes a first-class institutional service.
+
+---
+
+## 9.7 Extension Architecture
+
+Every future capability shall integrate through one governed extension framework.
+
+Extensions shall support:
+
+* registration,
+* versioning,
+* dependency declaration,
+* permissions,
+* lifecycle management,
+* capability discovery.
+
+The Workbench shall remain stable regardless of extension growth.
+
+---
+
+## 9.8 State Persistence
+
+The Workbench shall preserve:
+
+* workspace layouts,
+* operational sessions,
+* investigations,
+* preferences,
+* context,
+* environment configuration.
+
+Operators should resume work exactly where they previously stopped.
+
+---
+
+## 9.9 Multi-Environment Support
+
+The Workbench shall simultaneously support:
+
+* multiple workspaces,
+* multiple monitors,
+* multiple layouts,
+* multiple operator perspectives,
+* multiple institutional realities.
+
+All environments remain coordinated through one runtime.
+
+---
+
+## 9.10 Runtime Governance
+
+The Workbench shall continuously govern:
+
+* service health,
+* capability health,
+* extension compatibility,
+* runtime integrity,
+* environmental consistency,
+* resource utilisation.
+
+Governance becomes an inherent runtime responsibility.
+
+---
+
+# SECTION 10 — NON-FUNCTIONAL REQUIREMENTS
+
+## Non-Functional Requirements
+
+The Workbench Architecture establishes the engineering qualities required for long-term institutional operation.
+
+---
+
+### Runtime Stability
+
+The Workbench shall remain operational during continuous institutional workloads.
+
+---
+
+### High Availability
+
+Failure of one capability shall not compromise the overall Workbench.
+
+Isolation is mandatory.
+
+---
+
+### Modularity
+
+Every Workbench subsystem shall evolve independently.
+
+---
+
+### Composability
+
+Capabilities shall compose naturally without requiring architectural modification.
+
+---
+
+### Extensibility
+
+Future capabilities shall integrate through existing Workbench contracts.
+
+---
+
+### Performance
+
+The runtime shall efficiently support:
+
+* high-frequency updates,
+* streaming market data,
+* large operational datasets,
+* simultaneous investigations,
+* multi-monitor environments.
+
+---
+
+### Observability
+
+Every Workbench service shall expose:
+
+* metrics,
+* logs,
+* traces,
+* health,
+* lifecycle events.
+
+The Workbench itself becomes observable.
+
+---
+
+### Security
+
+Authentication, authorisation, permissions, auditing, and policy enforcement shall integrate into the runtime.
+
+---
+
+### Maintainability
+
+Engineering teams shall modify Workbench services without disrupting institutional capabilities.
+
+---
+
+### Technology Independence
+
+Workbench contracts shall remain stable despite future technology replacement.
+
+---
+
+# SECTION 11 — SCALABILITY
+
+## Scalability
+
+The Workbench shall become the permanent execution platform for institutional operations.
+
+Its architecture shall support decades of continuous capability growth.
+
+---
+
+## Capability Scalability
+
+Support thousands of operational capabilities.
+
+Capabilities should register dynamically without architectural redesign.
+
+---
+
+## Workspace Scalability
+
+Support unlimited:
+
+* workspaces,
+* layouts,
+* operational surfaces,
+* investigations,
+* collaborative sessions.
+
+---
+
+## Terminal Scalability
+
+Support future institutional terminals through one shared Workbench runtime.
+
+Examples include:
+
+* Trading
+* Infrastructure
+* Research
+* Executive
+* Cyber Security
+* Treasury
+* Operations
+* Regulatory
+* Future Domains
+
+The runtime remains common.
+
+---
+
+## Service Scalability
+
+Workbench services shall scale independently.
+
+No single service becomes an architectural bottleneck.
+
+---
+
+## Extension Scalability
+
+Support continuous extension growth through governed capability contracts.
+
+---
+
+## Operational Scalability
+
+Support increasing institutional complexity while preserving:
+
+* operator experience,
+* environmental consistency,
+* behavioural continuity.
+
+---
+
+## Engineering Scalability
+
+Development teams shall independently build capabilities without compromising Workbench integrity.
+
+---
+
+## Constitutional Scalability
+
+The Workbench shall inherently support every constitutional scalability dimension defined within the COREI Anchor Law, including:
+
+* Multi Account
+* Multi Broker
+* Multi Strategy
+* Multi Portfolio
+* Multi Asset
+* Multi Exchange
+* Multi Market
+* Multi Currency
+* Multi Region
+* Multi Team
+* Multi Role
+* Multi Monitor
+* Multi Custodian
+* Multi Jurisdiction
+* 24×7 Institutional Operations
+
+---
+
+# SECTION 12 — FUTURE EVOLUTION
+
+## Future Evolution
+
+The COREI Workbench is intended to become a long-lived institutional platform.
+
+Its architecture shall continuously evolve while preserving constitutional stability.
+
+---
+
+## Stable Runtime Core
+
+The runtime core shall remain stable.
+
+Future evolution occurs through services and capabilities rather than Workbench redesign.
+
+---
+
+## Service Evolution
+
+Workbench services shall evolve independently through versioned contracts.
+
+Service improvements shall remain backward compatible whenever practical.
+
+---
+
+## Capability Evolution
+
+Institutional capabilities shall continuously expand without modifying Workbench foundations.
+
+The Workbench hosts capabilities.
+
+Capabilities do not redefine the Workbench.
+
+---
+
+## Extension Evolution
+
+Future extension ecosystems shall integrate through the established extension architecture.
+
+New capability categories should require registration rather than redesign.
+
+---
+
+## Runtime Intelligence
+
+The Workbench shall become progressively more intelligent.
+
+Future enhancements may include:
+
+* adaptive workspace orchestration,
+* predictive capability loading,
+* intelligent resource allocation,
+* contextual runtime optimisation,
+* AI-assisted workflow composition.
+
+---
+
+## Institutional Longevity
+
+The Workbench shall remain the stable software foundation of COREI despite continuous organisational, technological, and operational evolution.
+
+---
+
+## Long-Term Vision
+
+The long-term objective is a Workbench that functions as the institutional operating system of COREI.
+
+Operators should perceive one coherent professional environment.
+
+Engineers should perceive one governed runtime.
+
+Capabilities should perceive one stable execution platform.
+
+Technologies should perceive one architectural host.
+
+Together these principles ensure that the Workbench remains the enduring software foundation upon which the COREI Institution continues to evolve.
+
+### Architectural Observation
+
+I think we've now reached what may become the COREI Runtime Law.
+
+Instead of thinking in terms of applications, COREI should think in terms of institutional runtime.
+
+Institution
+        │
+        ▼
+COREI Workbench
+        │
+        ▼
+Workbench Runtime
+        │
+        ├──────────────┐
+        │              │
+        ▼              ▼
+Workbench Services   Extension Runtime
+        │              │
+        └──────┬───────┘
+               ▼
+      Operational Capabilities
+               │
+               ▼
+     Capability Components
+               │
+               ▼
+          Technologies
+
+Notice the inversion.
+
+In most frontend systems:
+
+Components are the centre.
+
+In COREI:
+
+Runtime is the centre.
+
+Everything else orbits around it.
+
+I also think we should introduce one additional engineering principle that will influence every repository we build:
+
+Capabilities never communicate directly with each other.
+
+Instead, they communicate through the Workbench Runtime using well-defined services, events, commands, and contracts.
+
+That gives COREI several long-term advantages:
+
+Independent capability development.
+Safe capability upgrades.
+Deterministic lifecycle management.
+Better observability.
+Easier testing.
+Simpler replacement of technologies.
+Strong institutional governance.
+
+This is very similar to how operating systems manage applications: applications don't own the OS—they execute within it. Likewise, COREI capabilities shouldn't own the Workbench—they should execute within it. I believe this is one of the defining architectural characteristics that will distinguish COREI OS from a conventional React application.
+
+# SECTION 13 — DEPENDENCIES
+
+## Dependencies
+
+Phase-06 converts the constitutional architecture established throughout the previous phases into an executable institutional runtime.
+
+The Workbench depends upon every architectural layer defined earlier while becoming the software foundation for every implementation phase that follows.
+
+---
+
+## 13.1 Constitutional Dependencies
+
+The Workbench inherits all constitutional authority from Phase-00.
+
+Every runtime service, capability, extension, and operational workflow shall reinforce:
+
+* COREI Mission
+* COREI Vision
+* COREI Anchor Law
+* Institutional Engineering Principles
+* Scalability Principles
+* Governance Standards
+
+The Workbench operationalises the Constitution.
+
+It does not redefine it.
+
+---
+
+## 13.2 Discovery Dependencies
+
+Workbench Architecture incorporates engineering knowledge established in Phase-01.
+
+This includes architectural principles derived from:
+
+* engineering workbenches,
+* institutional trading platforms,
+* observability environments,
+* operating systems,
+* integrated development environments,
+* command centres.
+
+The Workbench is therefore informed by proven engineering practice while remaining uniquely constitutional.
+
+---
+
+## 13.3 Operator Dependencies
+
+The Workbench exists to serve the professional operators defined in Phase-02.
+
+Every runtime service ultimately supports:
+
+* professional workflows,
+* institutional decisions,
+* collaborative operation,
+* continuous situational awareness,
+* operational efficiency.
+
+Operators remain the primary beneficiaries of the Workbench.
+
+---
+
+## 13.4 Environmental Dependencies
+
+The Workbench implements the Operational Environment Architecture established in Phase-03.
+
+The Operational Environment defines:
+
+the institutional workplace.
+
+The Workbench provides:
+
+the executable runtime supporting that workplace.
+
+---
+
+## 13.5 Experience Dependencies
+
+The Workbench implements the behavioural requirements established in Phase-04.
+
+Every runtime service shall preserve:
+
+* behavioural consistency,
+* contextual continuity,
+* operational confidence,
+* workflow progression,
+* professional interaction.
+
+The runtime exists to realise the Experience Architecture.
+
+---
+
+## 13.6 Technology Dependencies
+
+The Workbench consumes the governed technology ecosystem established in Phase-05.
+
+Technologies remain implementation assets.
+
+The Workbench remains architecturally authoritative.
+
+Technology serves the Workbench.
+
+Never the reverse.
+
+---
+
+## 13.7 Forward Dependencies
+
+Every remaining implementation phase depends directly upon the Workbench.
+
+Examples include:
+
+### Phase-07
+
+Institutional Design System
+
+↓
+
+Rendered through the Workbench.
+
+---
+
+### Phase-08
+
+Component Ecosystem
+
+↓
+
+Hosted by the Workbench.
+
+---
+
+### Phase-09
+
+Workspace Library
+
+↓
+
+Executed by the Workbench.
+
+---
+
+### Phase-10
+
+Intelligence Layer
+
+↓
+
+Integrated into the Workbench.
+
+---
+
+### Phase-11
+
+Operator Optimisation
+
+↓
+
+Measured through the Workbench.
+
+The Workbench therefore becomes the permanent runtime foundation of the Institutional Operator Workstation.
+
+---
+
+# SECTION 14 — DELIVERABLES
+
+## Deliverables
+
+Completion of Phase-06 shall establish the executable architecture of the COREI Institutional Operator Workstation.
+
+The following artefacts become authoritative engineering references.
+
+---
+
+## Primary Deliverables
+
+### COREI Workbench Architecture
+
+The complete architectural specification of the institutional runtime.
+
+---
+
+### Workbench Runtime Model
+
+Definition of:
+
+* runtime layers,
+* service architecture,
+* lifecycle management,
+* orchestration model,
+* execution model.
+
+---
+
+### Workbench Service Catalogue
+
+Complete specification of every Workbench service including:
+
+* Workspace Service
+* Layout Service
+* Context Service
+* Search Service
+* Command Service
+* Session Service
+* Notification Service
+* History Service
+* Configuration Service
+* Permission Service
+* Extension Service
+* Audit Service
+
+---
+
+### Runtime Contract Specification
+
+Authoritative contracts governing:
+
+* services,
+* capabilities,
+* extensions,
+* lifecycle,
+* communication,
+* orchestration.
+
+---
+
+### Capability Integration Model
+
+Definition of how institutional capabilities integrate into the Workbench.
+
+---
+
+### Runtime Governance Policy
+
+Rules governing:
+
+* service ownership,
+* runtime evolution,
+* compatibility,
+* lifecycle,
+* operational governance.
+
+---
+
+### Stage-23 Workbench Baseline
+
+The frozen architectural baseline of the COREI Workbench.
+
+---
+
+# SECTION 15 — ACCEPTANCE CRITERIA
+
+## Acceptance Criteria
+
+Phase-06 shall be considered complete only when the Workbench Architecture fully supports institutional operation independent of implementation technology.
+
+---
+
+## Constitutional Compliance
+
+The Workbench remains fully aligned with:
+
+* COREI Anchor Law
+* Master Trader Persona
+* Stage-23 Constitutional Foundation
+
+---
+
+## Architectural Completeness
+
+The Workbench fully defines:
+
+* runtime,
+* services,
+* orchestration,
+* capability hosting,
+* lifecycle management,
+* environmental management,
+* extension management.
+
+---
+
+## Runtime Independence
+
+Capabilities execute independently inside the Workbench.
+
+No capability owns runtime responsibilities.
+
+---
+
+## Service Completeness
+
+Every shared institutional responsibility is represented by one authoritative Workbench service.
+
+Service duplication is prohibited.
+
+---
+
+## Technology Independence
+
+Workbench contracts remain stable regardless of technology replacement.
+
+---
+
+## Scalability Validation
+
+The Workbench demonstrates architectural readiness for constitutional scalability including:
+
+* Multi Account
+* Multi Broker
+* Multi Strategy
+* Multi Portfolio
+* Multi Asset
+* Multi Exchange
+* Multi Market
+* Multi Currency
+* Multi Region
+* Multi Team
+* Multi Role
+* Multi Monitor
+* Multi Custodian
+* Multi Jurisdiction
+* 24×7 Institutional Operations
+
+---
+
+## Architectural Freeze
+
+Upon approval,
+
+Phase-06 establishes the authoritative runtime architecture of the COREI Institutional Operator Workstation.
+
+Future enhancements extend the Workbench.
+
+They do not redefine it.
+
+---
+
+# SECTION 16 — RELATED DOCUMENTS
+
+## Related Documents
+
+Phase-06 completes the runtime architecture of the Institutional Operator Workstation.
+
+It provides the executable software foundation for every remaining implementation phase.
+
+---
+
+## Constitutional References
+
+* Stage-23 Phase-00 — Constitutional Foundation
+* COREI Anchor Law
+* Master Trader Persona
+
+---
+
+## Discovery References
+
+* Stage-23 Phase-01 — Discovery & Reverse Engineering
+
+---
+
+## Human References
+
+* Stage-23 Phase-02 — Operator Architecture
+* Operator Workflow Catalogue
+
+---
+
+## Environmental References
+
+* Stage-23 Phase-03 — Operational Environment Architecture
+
+---
+
+## Experience References
+
+* Stage-23 Phase-04 — Experience Architecture
+
+---
+
+## Technology References
+
+* Stage-23 Phase-05 — Technology Landscape
+* Technology Constitution Matrix
+
+---
+
+## Future Architecture References
+
+Phase-07
+
+Institutional Design System
+
+↓
+
+Phase-08
+
+Component Ecosystem
+
+↓
+
+Phase-09
+
+Workspace Library
+
+↓
+
+Phase-10
+
+Intelligence Layer
+
+↓
+
+Phase-11
+
+Operator Optimisation
+
+Every future implementation phase shall integrate through the Workbench Runtime and shall conform to the Runtime Contract Specification defined in this phase.
+
+---
+
+## Closing Statement
+
+Phase-06 establishes the COREI Workbench—the executable software architecture that transforms constitutional principles into institutional operation.
+
+The Workbench is no longer viewed as a frontend framework, browser application, or user interface.
+
+It is recognised as the institutional runtime through which professional operators, operational environments, governed technologies, and institutional capabilities cooperate within one coherent operating system.
+
+Every capability now has a permanent architectural home.
+
+Every service has a defined responsibility.
+
+Every extension has a governed lifecycle.
+
+Every workspace executes within one common runtime.
+
+This architecture ensures that COREI can continue growing for years while preserving operational consistency, engineering discipline, and constitutional integrity.
+
+With the completion and architectural freeze of Phase-06, the Institutional Operator Workstation now possesses:
+
+* Constitutional Foundation
+* Discovery Framework
+* Operator Architecture
+* Operational Environment
+* Experience Architecture
+* Technology Landscape
+* Workbench Runtime
+
+These seven phases together establish the complete architectural foundation of COREI OS.
+
+Phase-07 therefore begins the **Institutional Design System**—not merely a visual style guide, but the architectural language through which the Workbench communicates institutional reality. It defines typography, colour, spacing, motion, iconography, visual hierarchy, semantic tokens, interaction states, and presentation principles so that every capability, workspace, and terminal expresses one coherent institutional identity while remaining fully aligned with the COREI Constitution, the Workbench Architecture, the COREI Anchor Law, and the Master Trader Persona.
+
+### Architectural Review (After Phase-06)
+
+I think we've now crossed a major milestone.
+
+The first six phases have progressively answered the six fundamental architectural questions of COREI:
+
+Phase	Defines	Question
+00	Constitution	Why are we building this?
+01	Discovery	How do we acquire architectural knowledge?
+02	Operator	Who performs the work?
+03	Operational Environment	Where does the work happen?
+04	Experience	How should the work feel?
+05	Technology	Which technologies implement the architecture?
+06	Workbench	What software runtime hosts the institution?
+
+I also think we've now completed what could be called the COREI Architecture Pyramid:
+
+                    Institution
+                         │
+                  Constitutional Law
+                         │
+                  Operator Architecture
+                         │
+              Operational Environment
+                         │
+              Experience Architecture
+                         │
+                Technology Landscape
+                         │
+                 COREI Workbench Runtime
+                         │
+               Operational Capabilities
+                         │
+                Capability Components
+                         │
+                 Implementation Code
+One recommendation before Phase-07
+
+I would add one more constitutional principle that naturally emerges from everything we've built so far:
+
+The Workbench owns the environment.
+
+Capabilities own business behaviour.
+
+Components own presentation.
+
+Technologies own implementation.
+
+This creates exceptionally clear architectural boundaries:
+
+The Workbench never contains trading logic.
+A Trading Capability never manages layouts or global navigation.
+A Component never owns institutional workflows.
+A Library never defines architecture.
+
+That separation of responsibilities is, in my view, one of the strongest architectural characteristics of COREI and provides a durable foundation for the remaining phases of Stage-23.

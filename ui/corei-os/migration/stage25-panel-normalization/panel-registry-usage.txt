@@ -1,0 +1,8 @@
+src/workbench/services/workbench-service.ts:    panelRegistry,
+src/workbench/services/workbench-service.ts:    panels: panelRegistry,
+src/workbench/panels/registry/panel-registry.ts:    panelRegistry
+src/workbench/panels/runtime/panel-runtime.ts:    panelRegistry
+src/workbench/panels/runtime/panel-runtime.ts:        panelRegistry.register(
+src/workbench/panels/runtime/panel-runtime.ts:        return panelRegistry.get(
+src/workbench/panels/runtime/panel-runtime.ts:        return panelRegistry.list();
+src/workbench/registries/panel-registry.ts:export const panelRegistry =

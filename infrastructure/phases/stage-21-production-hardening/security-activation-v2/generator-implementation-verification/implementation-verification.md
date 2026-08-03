@@ -1,0 +1,23 @@
+# GENERATOR IMPLEMENTATION VERIFICATION
+
+STATUS
+
+ACTIVE
+
+OBJECTIVE
+
+Verify current implementation
+against approved generator
+redesign specification.
+
+RESULT
+
+UNDER REVIEW
+
+OUTCOMES
+
+IMPLEMENTATION_REQUIRED
+
+OR
+
+IMPLEMENTATION_ALREADY_PRESENT

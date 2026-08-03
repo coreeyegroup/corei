@@ -4,63 +4,29 @@
  *
  * STAGE-25
  * PHASE-17
- * STEP-12
+ * STEP-02
  *
  * FILE:
  * ShellLayout.tsx
  *
  * PURPOSE:
- * Institutional Theme-Aware Responsive Shell Layout
- *
- * DESCRIPTION:
- * Defines the authoritative six-region Institutional Shell layout.
- *
- * The layout preserves the established Shell region architecture:
- *
- * - Top Region
- * - Left Region
- * - Center Region
- * - Right Region
- * - Bottom Region
- * - Status Region
- *
- * Responsive behavior changes only region presentation and layout geometry.
- *
- * Region ownership, subsystem ownership, runtime ownership and public API
- * boundaries remain unchanged.
- *
- * OWNERSHIP:
- * Institutional Shell
+ * Institutional Shell Region Composition
  *
  ******************************************************************************/
-
-/*=============================================================================
-    IMPORTS
-=============================================================================*/
 
 import type {
     ReactElement
 } from "react";
 
 import {
-
     TopRegion,
-
     LeftRegion,
-
     CenterRegion,
-
     RightRegion,
-
     BottomRegion,
-
     StatusRegion
-
 } from "../regions";
 
-/*=============================================================================
-    COMPONENT
-=============================================================================*/
 
 export function ShellLayout(): ReactElement {
 
@@ -68,55 +34,62 @@ export function ShellLayout(): ReactElement {
 
         <div
             className="corei-shell-layout"
-            data-shell-layout="six-region"
+            data-corei-shell-layout="institutional"
         >
 
-            <header
+            <div
                 className="shell-top"
-                data-shell-layout-region="top"
+                data-shell-region="top"
             >
                 <TopRegion />
-            </header>
+            </div>
 
-            <aside
+
+            <div
                 className="shell-left"
-                data-shell-layout-region="left"
+                data-shell-region="left"
             >
                 <LeftRegion />
-            </aside>
+            </div>
 
-            <main
+
+            <div
                 className="shell-center"
-                data-shell-layout-region="center"
+                data-shell-region="center"
             >
                 <CenterRegion />
-            </main>
+            </div>
 
-            <aside
+
+            <div
                 className="shell-right"
-                data-shell-layout-region="right"
+                data-shell-region="right"
             >
                 <RightRegion />
-            </aside>
+            </div>
 
-            <footer
+
+            <div
                 className="shell-bottom"
-                data-shell-layout-region="bottom"
+                data-shell-region="bottom"
             >
                 <BottomRegion />
-            </footer>
+            </div>
 
-            <section
+
+            <div
                 className="shell-status"
-                data-shell-layout-region="status"
+                data-shell-region="status"
             >
                 <StatusRegion />
-            </section>
+            </div>
+
 
         </div>
 
     );
 
 }
+
 
 export default ShellLayout;

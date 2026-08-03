@@ -1,0 +1,54 @@
+/* src/components/StatusBar/StatusBar.css */
+.status-bar {
+  height: 22px;
+  background: var(--bg-secondary, #0F151E);
+  border-top: 1px solid var(--border-color, #1F2937);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  font-size: 11px;
+  color: var(--text-muted, #94A3B8);
+  flex-shrink: 0;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+.status-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.status-left .separator {
+  color: var(--border-color);
+  margin: 0 4px;
+}
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 500;
+}
+.status-indicator .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.status-right {
+  display: flex;
+  align-items: center;
+}
+.notification-bell {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+  transition: background 0.15s;
+  display: flex;
+  align-items: center;
+}
+.notification-bell:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}

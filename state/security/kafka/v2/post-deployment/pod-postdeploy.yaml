@@ -1,0 +1,256 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    cni.projectcalico.org/containerID: 9fdbb04aa2d8975f45d303ea0daaf046809e87a05e4ae9a5d72c9f98b3cf5c5c
+    cni.projectcalico.org/podIP: 192.168.117.181/32
+    cni.projectcalico.org/podIPs: 192.168.117.181/32
+    kubectl.kubernetes.io/restartedAt: "2026-05-26T13:29:09Z"
+  creationTimestamp: "2026-05-29T20:22:06Z"
+  generateName: kafka-
+  labels:
+    app: kafka
+    apps.kubernetes.io/pod-index: "0"
+    controller-revision-hash: kafka-7584f844db
+    statefulset.kubernetes.io/pod-name: kafka-0
+  name: kafka-0
+  namespace: kafka
+  ownerReferences:
+  - apiVersion: apps/v1
+    blockOwnerDeletion: true
+    controller: true
+    kind: StatefulSet
+    name: kafka
+    uid: defb0818-914c-4172-b75f-667e680ddd40
+  resourceVersion: "579339"
+  uid: c2ddbb16-67f9-447f-aeb8-0000dd81d963
+spec:
+  containers:
+  - args:
+    - |
+      cat <<KAFKAEOF > /tmp/server.properties
+      node.id=0
+
+      process.roles=broker,controller
+
+      controller.quorum.voters=0@kafka-0.kafka-headless.kafka.svc.cluster.local:9093
+
+      listeners=PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
+
+      advertised.listeners=PLAINTEXT://kafka.kafka.svc.cluster.local:9092
+
+      listener.security.protocol.map=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
+
+      controller.listener.names=CONTROLLER
+
+      inter.broker.listener.name=PLAINTEXT
+
+      log.dirs=/var/lib/kafka/data/logs
+
+      offsets.topic.replication.factor=1
+
+      transaction.state.log.replication.factor=1
+
+      transaction.state.log.min.isr=1
+      KAFKAEOF
+
+      /opt/kafka/bin/kafka-storage.sh format \
+        --ignore-formatted \
+        --cluster-id $CLUSTER_ID \
+        --config /tmp/server.properties
+
+      exec /opt/kafka/bin/kafka-server-start.sh \
+        /tmp/server.properties
+    command:
+    - /bin/bash
+    - -c
+    env:
+    - name: CLUSTER_ID
+      value: MkU3OEVBNTcwNTJENDM2Qk
+    - name: KAFKA_OPTS
+      value: -Djava.security.auth.login.config=/etc/kafka/security/kafka_jaas.conf
+    image: apache/kafka:3.7.1
+    imagePullPolicy: IfNotPresent
+    livenessProbe:
+      failureThreshold: 3
+      initialDelaySeconds: 30
+      periodSeconds: 20
+      successThreshold: 1
+      tcpSocket:
+        port: 9092
+      timeoutSeconds: 1
+    name: kafka
+    ports:
+    - containerPort: 9092
+      name: broker
+      protocol: TCP
+    - containerPort: 9093
+      name: controller
+      protocol: TCP
+    - containerPort: 9094
+      name: sasl-ssl
+      protocol: TCP
+    readinessProbe:
+      failureThreshold: 3
+      initialDelaySeconds: 15
+      periodSeconds: 10
+      successThreshold: 1
+      tcpSocket:
+        port: 9092
+      timeoutSeconds: 1
+    resources:
+      limits:
+        cpu: "1"
+        memory: 2Gi
+      requests:
+        cpu: 500m
+        memory: 1Gi
+    securityContext:
+      runAsGroup: 1000
+      runAsUser: 1000
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /var/lib/kafka/data
+      name: kafka-data
+    - mountPath: /etc/kafka/tls
+      name: kafka-runtime-tls
+      readOnly: true
+    - mountPath: /etc/kafka/security
+      name: kafka-security-runtime
+      readOnly: true
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-2jljc
+      readOnly: true
+  dnsPolicy: ClusterFirst
+  enableServiceLinks: true
+  hostname: kafka-0
+  initContainers:
+  - command:
+    - sh
+    - -c
+    - |
+      mkdir -p /var/lib/kafka/data/logs
+
+      chown -R 1000:1000 /var/lib/kafka/data/logs
+    image: busybox:1.36
+    imagePullPolicy: IfNotPresent
+    name: volume-permissions
+    resources: {}
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /var/lib/kafka/data
+      name: kafka-data
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-2jljc
+      readOnly: true
+  nodeName: core-node
+  preemptionPolicy: PreemptLowerPriority
+  priority: 0
+  restartPolicy: Always
+  schedulerName: default-scheduler
+  securityContext:
+    fsGroup: 1000
+  serviceAccount: default
+  serviceAccountName: default
+  subdomain: kafka-headless
+  terminationGracePeriodSeconds: 30
+  tolerations:
+  - effect: NoExecute
+    key: node.kubernetes.io/not-ready
+    operator: Exists
+    tolerationSeconds: 300
+  - effect: NoExecute
+    key: node.kubernetes.io/unreachable
+    operator: Exists
+    tolerationSeconds: 300
+  volumes:
+  - name: kafka-data
+    persistentVolumeClaim:
+      claimName: kafka-data-kafka-0
+  - name: kafka-runtime-tls
+    secret:
+      defaultMode: 420
+      secretName: kafka-runtime-tls
+  - name: kafka-security-runtime
+    secret:
+      defaultMode: 420
+      secretName: kafka-security-runtime
+  - name: kube-api-access-2jljc
+    projected:
+      defaultMode: 420
+      sources:
+      - serviceAccountToken:
+          expirationSeconds: 3607
+          path: token
+      - configMap:
+          items:
+          - key: ca.crt
+            path: ca.crt
+          name: kube-root-ca.crt
+      - downwardAPI:
+          items:
+          - fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+            path: namespace
+status:
+  conditions:
+  - lastProbeTime: null
+    lastTransitionTime: "2026-05-29T20:22:08Z"
+    status: "True"
+    type: PodReadyToStartContainers
+  - lastProbeTime: null
+    lastTransitionTime: "2026-05-29T20:22:08Z"
+    status: "True"
+    type: Initialized
+  - lastProbeTime: null
+    lastTransitionTime: "2026-05-29T20:22:27Z"
+    status: "True"
+    type: Ready
+  - lastProbeTime: null
+    lastTransitionTime: "2026-05-29T20:22:27Z"
+    status: "True"
+    type: ContainersReady
+  - lastProbeTime: null
+    lastTransitionTime: "2026-05-29T20:22:06Z"
+    status: "True"
+    type: PodScheduled
+  containerStatuses:
+  - containerID: containerd://afd0e9e487cfa5eb196a0b811602340e2e74fa5e2afdc5bccf0724ad2044a197
+    image: docker.io/apache/kafka:3.7.1
+    imageID: docker.io/apache/kafka@sha256:ed74d7d115968d5e8b00ba6822ac6a384cbaaf54ca38991828647000d7089b68
+    lastState: {}
+    name: kafka
+    ready: true
+    restartCount: 0
+    started: true
+    state:
+      running:
+        startedAt: "2026-05-29T20:22:08Z"
+  hostIP: 192.168.1.10
+  hostIPs:
+  - ip: 192.168.1.10
+  initContainerStatuses:
+  - containerID: containerd://6337de3a5621e23bccd7ac254c644d6bd8845f35b7d65b53ffb073d8a47ea357
+    image: docker.io/library/busybox:1.36
+    imageID: docker.io/library/busybox@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662
+    lastState: {}
+    name: volume-permissions
+    ready: true
+    restartCount: 0
+    started: false
+    state:
+      terminated:
+        containerID: containerd://6337de3a5621e23bccd7ac254c644d6bd8845f35b7d65b53ffb073d8a47ea357
+        exitCode: 0
+        finishedAt: "2026-05-29T20:22:07Z"
+        reason: Completed
+        startedAt: "2026-05-29T20:22:07Z"
+  phase: Running
+  podIP: 192.168.117.181
+  podIPs:
+  - ip: 192.168.117.181
+  qosClass: Burstable
+  startTime: "2026-05-29T20:22:06Z"

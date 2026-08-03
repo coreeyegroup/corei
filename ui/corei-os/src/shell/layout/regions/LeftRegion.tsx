@@ -4,22 +4,28 @@
  *
  * STAGE-25
  * PHASE-17
- * STEP-07
+ * STEP-04
  *
  * FILE:
  * LeftRegion.tsx
  *
  * PURPOSE:
- * Institutional Shell Left Navigation Region
+ * Institutional Navigation Workspace Boundary
  *
  * DESCRIPTION:
- * Defines the authoritative Shell integration boundary for the institutional
- * Navigation subsystem.
+ * Defines the Phase-17 left shell region.
  *
- * The Shell owns region placement.
- * The Navigation domain owns navigation composition and behavior.
+ * Composes:
  *
- * The Navigation subsystem is consumed exclusively through its public API.
+ * Activity Ribbon
+ * Navigation Surface
+ *
+ * Activity ownership remains with Workbench Activity Platform.
+ *
+ * Navigation ownership remains with Navigation Platform.
+ *
+ * This component only composes existing capabilities into the
+ * Institutional Shell boundary.
  *
  * OWNERSHIP:
  * Institutional Shell
@@ -31,29 +37,41 @@ import type {
 } from "react";
 
 import {
-    Navigation
-} from "../../../navigation";
+    ActivityBar
+} from "../../../workbench/activity-bar/ActivityBar";
 
-/*=============================================================================
-    COMPONENT
-=============================================================================*/
+import {
+    Navigation
+} from "../../../navigation/components/Navigation";
+
 
 export function LeftRegion(): ReactElement {
 
     return (
 
-        <aside
-            className="corei-shell-region corei-shell-region-left"
-            data-region="left"
+        <section
+
+            className="corei-region corei-region-left"
+
             data-shell-surface="navigation"
+
         >
 
-            <Navigation />
+            <div
+                className="corei-left-navigation-container"
+            >
 
-        </aside>
+                <ActivityBar />
+
+                <Navigation />
+
+            </div>
+
+        </section>
 
     );
 
 }
+
 
 export default LeftRegion;

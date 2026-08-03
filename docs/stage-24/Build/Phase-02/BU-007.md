@@ -1,0 +1,492 @@
+# BUILD UNIT-007
+
+## Title
+
+COREI OS Window Manager
+
+---
+
+## Objective
+
+Implement the COREI OS Window Manager responsible for managing the lifecycle of application windows within the operating environment.
+
+The Window Manager provides the runtime abstraction for window creation, registration, state management, lifecycle control, and hosting. It establishes the institutional framework upon which docking, layout management, multi-monitor support, and workspace composition will be built.
+
+---
+
+## Scope
+
+This Build Unit establishes the Window Manager.
+
+Implemented:
+
+- Window Repository
+- Window Contracts
+- Window Models
+- Window Registry
+- Runtime State
+- Runtime Model
+- Lifecycle
+- Persistence
+- Provider
+- Components
+- Hooks
+- Public API
+
+---
+
+# Window Manager Architecture
+
+```
+Window Manager
+
+│
+
+├── Contracts
+
+├── Models
+
+├── Registry
+
+├── Runtime
+
+├── Lifecycle
+
+├── Persistence
+
+├── State
+
+├── Provider
+
+├── Components
+
+└── Hooks
+```
+
+The Window Manager is responsible for runtime window ownership.
+
+Future modules extending this runtime include:
+
+- Docking Engine
+- Tab Groups
+- Floating Windows
+- Detached Windows
+- Multi-monitor Support
+- Focus Manager
+- Z-Order Manager
+- Layout Restoration
+
+---
+
+# Repository Structure
+
+Implemented
+
+```
+src/windowing/
+
+components/
+    Window.tsx
+    WindowHost.tsx
+
+contracts/
+    window-contract.ts
+    window-layout-contract.ts
+
+hooks/
+    use-window.ts
+
+lifecycle/
+    window-lifecycle.ts
+
+models/
+    window.ts
+
+persistence/
+    window-persistence.ts
+
+providers/
+    window-provider.tsx
+
+registry/
+    window-registry.ts
+
+runtime/
+    window-runtime.ts
+
+state/
+    window-state.ts
+
+index.ts
+```
+
+---
+
+# Window Contracts
+
+Implemented:
+
+```
+window-contract.ts
+```
+
+Defines the institutional window contract.
+
+Current properties:
+
+- Window Identifier
+- Title
+- Visibility
+- Active State
+
+Future extensions:
+
+- Window Type
+- Dock State
+- Focus State
+- Parent Window
+- Workspace Ownership
+
+---
+
+# Window Layout Contract
+
+Implemented:
+
+```
+window-layout-contract.ts
+```
+
+Defines runtime layout metadata.
+
+Current properties:
+
+- X Position
+- Y Position
+- Width
+- Height
+
+Future extensions:
+
+- Minimum Size
+- Maximum Size
+- Dock Region
+- Floating State
+- Monitor Assignment
+
+---
+
+# Window Model
+
+Implemented:
+
+```
+window.ts
+```
+
+Provides the runtime model for window management.
+
+Current implementation maps directly to the Window Contract.
+
+Future versions will include:
+
+- Runtime Metadata
+- Layout State
+- Focus Information
+- Dock Metadata
+- Persistence Metadata
+
+---
+
+# Window Registry
+
+Implemented:
+
+```
+window-registry.ts
+```
+
+Created the authoritative runtime registry for windows.
+
+Current implementation initializes an empty institutional registry.
+
+Future responsibility:
+
+- Window Registration
+- Runtime Discovery
+- Host Registration
+- Component Registration
+
+---
+
+# Runtime State
+
+Implemented:
+
+```
+window-state.ts
+```
+
+Built using Zustand.
+
+Current state:
+
+- Registered Windows
+
+Current actions:
+
+- Register Window
+
+Future state additions:
+
+- Active Window
+- Focus Stack
+- Z-Order
+- Minimized Windows
+- Maximized Windows
+- Docked Windows
+- Floating Windows
+
+---
+
+# Runtime Model
+
+Implemented:
+
+```
+window-runtime.ts
+```
+
+Introduced the runtime model responsible for tracking Window Manager initialization.
+
+Current property:
+
+- initialized
+
+Future runtime properties:
+
+- Loaded
+- Running
+- Suspended
+- Restored
+
+---
+
+# Lifecycle
+
+Implemented:
+
+```
+window-lifecycle.ts
+```
+
+Provides the initialization entry point.
+
+Future lifecycle phases:
+
+- Initialize
+- Register
+- Activate
+- Focus
+- Minimize
+- Maximize
+- Restore
+- Close
+- Dispose
+
+---
+
+# Persistence
+
+Implemented:
+
+```
+window-persistence.ts
+```
+
+Created persistence interface.
+
+Current operations:
+
+- Load Windows
+- Save Windows
+
+Future implementation will integrate:
+
+- Workspace Layout Storage
+- Session Restore
+- Runtime Snapshots
+- Multi-device Profiles
+
+---
+
+# Provider
+
+Implemented:
+
+```
+window-provider.tsx
+```
+
+Provides the Window Manager runtime boundary.
+
+Future responsibilities:
+
+- Runtime Initialization
+- Registry Integration
+- Persistence Restoration
+- Window Lifecycle Management
+
+---
+
+# Components
+
+Implemented
+
+### Window
+
+Institutional window root.
+
+---
+
+### WindowHost
+
+Host container responsible for future window composition.
+
+Future responsibilities:
+
+- Floating Windows
+- Docked Windows
+- Modal Windows
+- Overlay Windows
+
+---
+
+# Hook
+
+Implemented
+
+```
+useWindow()
+```
+
+Provides access to Window Manager runtime state.
+
+---
+
+# Public API
+
+Created
+
+```
+src/windowing/index.ts
+```
+
+Exports:
+
+- Components
+- Provider
+- Hooks
+- Contracts
+
+This becomes the public integration point for the Window Manager.
+
+---
+
+# Validation
+
+Successfully validated:
+
+- TypeScript Compilation
+- Window Contracts
+- Registry
+- Runtime
+- Lifecycle
+- Persistence
+- Provider
+- Components
+- Public API
+- Vite Production Build
+
+Validation Result
+
+```
+TypeScript Compilation     PASS
+
+Vite Production Build      PASS
+```
+
+---
+
+# Deliverables
+
+Completed:
+
+- Window Repository
+- Window Contracts
+- Window Layout Contract
+- Window Model
+- Window Registry
+- Runtime State
+- Runtime Model
+- Lifecycle
+- Persistence
+- Provider
+- Components
+- Hooks
+- Public API
+
+---
+
+# Repository Impact
+
+Created the complete Window Manager under:
+
+```
+src/windowing/
+```
+
+The Window Manager now becomes the authoritative runtime responsible for all application windows within COREI OS.
+
+---
+
+# Result
+
+COREI OS now supports a structured runtime for managing application windows.
+
+This Build Unit establishes the operational foundation required for:
+
+- Docking Engine
+- Split Views
+- Floating Windows
+- Window Focus Management
+- Window Persistence
+- Layout Restoration
+- Multi-monitor Expansion
+
+The Window Manager is now the runtime bridge between the Workspace Engine and the future Docking Engine.
+
+---
+
+# Next Build Unit
+
+**BU-008 – Docking Engine**
+
+Implementation Order
+
+- Dock Contracts
+- Dock Models
+- Dock Registry
+- Dock Runtime
+- Dock State
+- Dock Lifecycle
+- Dock Persistence
+- Dock Provider
+- Dock Components
+- Validation
+
+---
+
+# Status
+
+**COMPLETED**

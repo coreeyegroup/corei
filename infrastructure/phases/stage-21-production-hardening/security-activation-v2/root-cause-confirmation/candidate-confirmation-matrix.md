@@ -1,0 +1,37 @@
+# CANDIDATE CONFIRMATION MATRIX
+
+CANDIDATE
+
+Kerberos Service Name Requirement
+
+STATUS
+
+UNDER REVIEW
+
+CANDIDATE
+
+Kafka Listener Scoped JAAS Requirement
+
+STATUS
+
+UNDER REVIEW
+
+CANDIDATE
+
+Kafka SASL Login Context Requirement
+
+STATUS
+
+UNDER REVIEW
+
+CANDIDATE
+
+Kafka 3.7.1 Startup Behavior
+
+STATUS
+
+UNDER REVIEW
+
+ROOT CAUSE
+
+UNCONFIRMED

@@ -1,4 +1,11 @@
 #!/usr/bin/env bash
+
 set -euo pipefail
 
-echo "[INFO] redis inventory.sh placeholder"
+echo "===== REDIS INVENTORY ====="
+
+kubectl get pods -n database | grep redis || true
+
+kubectl get pvc -n database | grep redis || true
+
+kubectl get statefulset -n database | grep redis || true

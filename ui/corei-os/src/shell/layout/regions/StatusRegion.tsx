@@ -4,33 +4,21 @@
  *
  * STAGE-25
  * PHASE-17
- * STEP-11
+ * STEP-02
  *
  * FILE:
  * StatusRegion.tsx
  *
  * PURPOSE:
- * Institutional Shell Status Region Integration
+ * Institutional System Status Surface Boundary
  *
  * DESCRIPTION:
- * Defines the authoritative boundary between the Institutional Shell status
- * region and the Shell operational status surface.
+ * Defines the Phase-17 system awareness surface.
  *
- * The StatusRegion consumes only the Status public API.
+ * Future runtime health and operational indicators attach here.
  *
- * It does not directly consume Platform Runtime, System Integration Engine,
- * observability, health engines, service state, event state, or infrastructure
- * telemetry.
- *
- * AUTHORITATIVE COMPOSITION:
- *
- * ShellLayout
- *     ↓
- * StatusRegion
- *     ↓
- * Status Public API
- *     ↓
- * OperationalStatusBar
+ * OWNERSHIP:
+ * Institutional Shell
  *
  ******************************************************************************/
 
@@ -47,9 +35,8 @@ export function StatusRegion(): ReactElement {
     return (
 
         <section
-            className="corei-shell-region corei-shell-region-status"
-            data-region="status"
-            data-shell-integration="operational-status"
+            className="corei-region corei-region-status"
+            data-shell-surface="status"
         >
 
             <OperationalStatusBar />

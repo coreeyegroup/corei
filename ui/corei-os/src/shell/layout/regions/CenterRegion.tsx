@@ -4,74 +4,41 @@
  *
  * STAGE-25
  * PHASE-17
- * STEP-18
+ * STEP-06-A
  *
  * FILE:
  * CenterRegion.tsx
  *
  * PURPOSE:
- * Institutional Center Workspace Host Integration
- *
- * DESCRIPTION:
- * Defines the authoritative integration boundary between the Institutional
- * Shell center region and the existing Workbench operating surface.
- *
- * The Shell does not consume Workbench internals, workspace runtimes,
- * workspace loaders, docking runtimes, panel implementations, or workspace
- * platform internals directly.
- *
- * The Center Region consumes only the Workbench public API and delegates
- * workspace hosting to the Workspace Host.
- *
- * AUTHORITATIVE COMPOSITION:
- *
- * ShellLayout
- *     ↓
- * CenterRegion
- *     ↓
- * Workbench Public API
- *     ↓
- * WorkspaceHost
- *     ↓
- * WorkbenchCenter
- *     ↓
- * Existing Workbench / Workspace Infrastructure
- *
- * OWNERSHIP:
- * Institutional Shell
+ * Institutional Workspace Surface Boundary
  *
  ******************************************************************************/
-
-/*=============================================================================
-    IMPORTS
-=============================================================================*/
 
 import type {
     ReactElement
 } from "react";
 
 import {
-    WorkspaceHost
-} from "../../../workbench";
+    WorkbenchLayout
+} from "../../../workbench/layout/WorkbenchLayout";
 
-/*=============================================================================
-    COMPONENT
-=============================================================================*/
 
 export function CenterRegion(): ReactElement {
 
     return (
 
-        <main
-            className="corei-shell-region corei-shell-region-center"
-            data-region="center"
-            data-shell-integration="workspace-host"
+        <section
+            className="corei-region corei-region-center"
+            data-shell-surface="workspace"
         >
-            <WorkspaceHost />
-        </main>
+
+            <WorkbenchLayout />
+
+        </section>
 
     );
 
 }
+
 
 export default CenterRegion;

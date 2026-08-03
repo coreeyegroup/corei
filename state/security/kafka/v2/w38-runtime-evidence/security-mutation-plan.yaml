@@ -1,0 +1,6 @@
+tls_volume: kafka-runtime-tls
+jaas_volume: kafka-security-runtime
+tls_mount: /etc/kafka/tls
+jaas_mount: /etc/kafka/security
+env_var: KAFKA_OPTS
+listener: SASL_SSL

@@ -1,0 +1,1573 @@
+# STAGE-23 — INSTITUTIONAL OPERATOR WORKSTATION
+
+## Phase-02 — Operator Architecture
+
+**Document Status:** Authoritative
+**Stage:** 23
+**Phase:** 02
+**Sections Covered:** 01–04 (Message 1 of 4)
+
+**Authoritative References**
+
+* Stage-23 Phase-00 Constitutional Foundation
+* Stage-23 Phase-01 Discovery & Reverse Engineering
+* COREI Anchor Law
+* Master Trader Persona
+* Existing COREI Platform Architecture
+
+
+
+# SECTION 01 — PURPOSE
+
+## Purpose
+
+The purpose of Phase-02 is to establish the architectural model of the professional operators who will use the COREI Institutional Operator Workstation.
+
+The workstation is not designed around software features, technologies, or visual components.
+
+It is designed around professional operational work.
+
+Before defining layouts, workspaces, windows, navigation, commands, or interaction models, COREI must first understand the people who perform institutional operations every day.
+
+Every professional operator possesses:
+
+* responsibilities,
+* objectives,
+* decision authority,
+* operational workflows,
+* information requirements,
+* cognitive behaviours,
+* collaboration patterns,
+* operational constraints.
+
+These characteristics collectively define how the workstation should behave.
+
+Phase-02 therefore establishes the human architecture of COREI.
+
+It defines the operators whom the workstation exists to support.
+
+The objective is not to classify users by job title.
+
+The objective is to understand professional operational behaviour.
+
+The workstation shall ultimately adapt to operators rather than requiring operators to adapt to software.
+
+
+
+# SECTION 02 — MISSION
+
+## Mission
+
+The mission of Phase-02 is to create a comprehensive institutional model describing how professional operators think, work, decide, collaborate, monitor, investigate, execute, and continuously improve institutional operations.
+
+This phase transforms human operational behaviour into architectural requirements.
+
+Its mission includes establishing:
+
+* operator personas,
+* operational responsibilities,
+* daily workflows,
+* decision models,
+* cognitive requirements,
+* information requirements,
+* collaboration requirements,
+* operational context,
+* workload characteristics,
+* attention models.
+
+These operator models become the primary architectural drivers for every subsequent workstation design decision.
+
+No workstation capability shall be introduced unless it demonstrably improves one or more operator workflows identified within this phase.
+
+Likewise, no architectural decision shall increase operator complexity without corresponding institutional benefit.
+
+The success of Phase-02 is measured by how accurately the workstation reflects professional operational reality rather than software implementation preferences.
+
+
+
+# SECTION 03 — PROBLEM STATEMENT
+
+## Problem Statement
+
+Traditional software systems are frequently designed around features.
+
+Examples include:
+
+* menus,
+* dashboards,
+* pages,
+* reports,
+* applications,
+* modules.
+
+Professional operators, however, do not think in terms of software features.
+
+They think in terms of work.
+
+A trader thinks about:
+
+* markets,
+* opportunities,
+* positions,
+* execution,
+* risk,
+* portfolio exposure.
+
+An infrastructure engineer thinks about:
+
+* platform health,
+* deployments,
+* incidents,
+* observability,
+* resilience.
+
+A researcher thinks about:
+
+* hypotheses,
+* datasets,
+* experimentation,
+* validation,
+* model development.
+
+An executive thinks about:
+
+* institutional performance,
+* organisational risk,
+* strategic direction,
+* operational readiness.
+
+Each operator performs fundamentally different work while using the same institutional platform.
+
+If the workstation is organised around software components instead of professional work, several long-term problems emerge:
+
+* fragmented workflows,
+* excessive navigation,
+* duplicated information,
+* unnecessary cognitive effort,
+* poor situational awareness,
+* reduced operator confidence,
+* declining productivity as the platform grows.
+
+The problem is therefore not interface design.
+
+The problem is understanding professional operational behaviour.
+
+Phase-02 addresses this problem by establishing a formal operator architecture from which every future workstation capability shall be derived.
+
+
+
+# SECTION 04 — BACKGROUND
+
+## Background
+
+Phase-00 established the constitutional identity of the Institutional Operator Workstation.
+
+Phase-01 established the institutional discovery methodology and extracted engineering principles from mature professional environments.
+
+Those two phases collectively answer:
+
+* why COREI exists,
+* how COREI learns.
+
+Phase-02 answers the next fundamental question:
+
+**Who is COREI being built for?**
+
+The Master Trader Persona establishes the professional benchmark for institutional trading expertise.
+
+However, COREI serves a broader institutional ecosystem.
+
+The platform supports multiple professional disciplines operating together within a single institutional environment.
+
+Representative operator groups include:
+
+* Institutional Traders
+* Portfolio Managers
+* Risk Managers
+* Quantitative Researchers
+* Infrastructure Engineers
+* Platform Engineers
+* Operations Engineers
+* Compliance Officers
+* Executive Leadership
+* Institutional Administrators
+
+Each role contributes to institutional operations while maintaining distinct responsibilities.
+
+Despite these differences, all operators share common expectations:
+
+* immediate situational awareness,
+* reliable operational information,
+* efficient workflows,
+* preserved operational context,
+* low cognitive friction,
+* trustworthy decision support,
+* continuous operational confidence.
+
+Phase-02 therefore establishes a unified operator architecture that captures both the specialised needs of individual roles and the shared characteristics of institutional professional work.
+
+This operator architecture becomes the human foundation upon which the Operational Environment Architecture (Phase-03), Experience Architecture (Phase-04), and every subsequent Stage-23 phase will be constructed.
+
+# SECTION 05 — ARCHITECTURAL CONTEXT
+
+## Architectural Context
+
+The Operator Architecture is the first architecture within Stage-23 that models human operation rather than software systems.
+
+Every subsequent workstation architecture derives directly from the understanding established within this phase.
+
+Its architectural position is illustrated below.
+
+```text
+Stage-23
+
+Phase-00
+Constitutional Foundation
+        │
+        ▼
+Phase-01
+Discovery & Reverse Engineering
+        │
+        ▼
+Phase-02
+Operator Architecture
+        │
+        ▼
+Phase-03
+Operational Environment Architecture
+        │
+        ▼
+Phase-04
+Experience Architecture
+        │
+        ▼
+Remaining Workstation Architecture
+```
+
+Phase-02 establishes the human reference model for COREI.
+
+This model defines:
+
+* who operates the institution,
+* what work they perform,
+* how they think,
+* how they make decisions,
+* how they collaborate,
+* how information flows through their work,
+* how responsibilities change throughout the operational day.
+
+Unlike traditional user modelling, the Operator Architecture does not focus on permissions or job titles.
+
+Instead, it models professional operational behaviour.
+
+The architectural purpose is to ensure that every future workstation capability originates from operator needs rather than software implementation preferences.
+
+Every later phase shall reference this architecture before introducing new capabilities.
+
+If a capability does not improve an identified operator workflow, it shall not become part of the workstation.
+
+
+
+## Operator Architecture Model
+
+The Operator Architecture consists of five interconnected layers.
+
+### Professional Identity
+
+Who performs the work?
+
+Examples:
+
+* Trader
+* Portfolio Manager
+* Researcher
+* Infrastructure Engineer
+* Risk Manager
+* Compliance Officer
+* Executive
+* Administrator
+
+
+
+### Operational Responsibilities
+
+What outcomes is the operator responsible for?
+
+Responsibilities define purpose rather than software usage.
+
+
+
+### Operational Workflows
+
+What sequence of professional activities is performed?
+
+Examples:
+
+Observe
+
+↓
+
+Analyse
+
+↓
+
+Investigate
+
+↓
+
+Decide
+
+↓
+
+Execute
+
+↓
+
+Monitor
+
+↓
+
+Review
+
+↓
+
+Improve
+
+
+
+### Decision Architecture
+
+What decisions are repeatedly made?
+
+Examples:
+
+Trading decisions
+
+Infrastructure decisions
+
+Risk decisions
+
+Research decisions
+
+Operational decisions
+
+Strategic decisions
+
+
+
+### Information Architecture
+
+What information must be continuously available to support those decisions?
+
+The workstation ultimately exists to satisfy these information requirements.
+
+
+
+# SECTION 06 — OPERATOR PERSPECTIVE
+
+## Operator Perspective
+
+Professional operators do not arrive at work intending to use software.
+
+They arrive to perform institutional work.
+
+The workstation therefore becomes an extension of professional thinking rather than an application to operate.
+
+Regardless of discipline, every operator progresses through a continuous operational cycle.
+
+
+
+## Observe
+
+The operator first develops situational awareness.
+
+Questions include:
+
+* What is happening?
+* What changed?
+* What requires attention?
+* Is everything operating normally?
+
+The workstation should answer these questions immediately.
+
+
+
+## Understand
+
+Observation is followed by understanding.
+
+The operator investigates:
+
+* relationships,
+* dependencies,
+* causes,
+* impact,
+* context.
+
+Information should naturally lead to understanding.
+
+
+
+## Decide
+
+Operators evaluate alternatives.
+
+Examples:
+
+* Should I trade?
+* Should I intervene?
+* Should I investigate?
+* Should I escalate?
+* Should I approve?
+
+The workstation supports decision quality rather than replacing decision-making.
+
+
+
+## Execute
+
+Following a decision, the operator performs controlled action.
+
+Execution may include:
+
+* trading,
+* deployment,
+* workflow initiation,
+* operational intervention,
+* approvals,
+* orchestration.
+
+Execution should occur with confidence.
+
+
+
+## Monitor
+
+Following execution, operators supervise outcomes.
+
+Questions include:
+
+* Did execution succeed?
+* What changed?
+* Has risk changed?
+* Is intervention required?
+
+
+
+## Learn
+
+Professional operators continuously improve.
+
+Historical information, operational memory, research, and previous investigations should remain accessible.
+
+The workstation therefore supports institutional learning rather than isolated task completion.
+
+
+
+## Operator Expectations
+
+Regardless of role, operators consistently expect:
+
+* clarity,
+* confidence,
+* speed,
+* consistency,
+* contextual awareness,
+* operational continuity,
+* trustworthy information,
+* minimal cognitive interruption.
+
+These expectations become mandatory design requirements for every future workstation capability.
+
+
+
+# SECTION 07 — ENGINEERING PERSPECTIVE
+
+## Engineering Perspective
+
+From an engineering perspective, the Operator Architecture transforms professional behaviour into architectural contracts.
+
+Every identified operator activity becomes an engineering requirement.
+
+The workstation shall therefore be engineered around professional workflows rather than software modules.
+
+
+
+## Workflow-Driven Engineering
+
+Instead of asking:
+
+"What screen should we build?"
+
+Engineering asks:
+
+"What work must the operator perform?"
+
+The workflow becomes the primary design unit.
+
+
+
+## Context-Driven Engineering
+
+Operators rarely perform isolated actions.
+
+Every action occurs within operational context.
+
+Engineering shall therefore preserve:
+
+* operational state,
+* investigative state,
+* decision context,
+* execution history,
+* collaboration context.
+
+
+
+## Event-Driven Operation
+
+Operator activity is driven by institutional events.
+
+Examples include:
+
+* market movement,
+* infrastructure incidents,
+* risk threshold breaches,
+* AI recommendations,
+* compliance requests,
+* research discoveries.
+
+The workstation should respond intelligently to operational events rather than forcing operators to search for them.
+
+
+
+## Cognitive Engineering
+
+Engineering decisions shall minimise unnecessary mental effort.
+
+The workstation should reduce:
+
+* navigation,
+* repetitive actions,
+* context switching,
+* information hunting,
+* duplicated effort.
+
+Every engineering decision should increase professional understanding.
+
+
+
+## Human-System Partnership
+
+COREI is not designed to replace professional judgement.
+
+Instead:
+
+The operator provides:
+
+* experience,
+* intuition,
+* accountability,
+* institutional responsibility.
+
+COREI provides:
+
+* intelligence,
+* context,
+* relationships,
+* operational awareness,
+* recommendations,
+* automation.
+
+This partnership defines the engineering philosophy of the workstation.
+
+
+
+# SECTION 08 — INSTITUTIONAL PERSPECTIVE
+
+## Institutional Perspective
+
+Institutions are not collections of independent users.
+
+They are coordinated operational systems.
+
+Every operator contributes to institutional objectives through specialised responsibilities.
+
+The workstation must therefore optimise institutional effectiveness rather than individual software usage.
+
+
+
+## Shared Operational Reality
+
+Every operator should understand the same institutional reality while viewing it through role-specific perspectives.
+
+The underlying truth remains consistent.
+
+Only presentation changes.
+
+
+
+## Collaborative Operation
+
+Institutional work is collaborative.
+
+Examples include:
+
+Trader
+
+↓
+
+Risk
+
+↓
+
+Compliance
+
+↓
+
+Execution
+
+↓
+
+Infrastructure
+
+↓
+
+Operations
+
+↓
+
+Executive Oversight
+
+The workstation should support seamless coordination across these responsibilities.
+
+
+
+## Institutional Memory
+
+Operational knowledge should remain institutional rather than personal.
+
+Investigations, decisions, observations, and operational learning should become reusable organisational assets.
+
+
+
+## Role Adaptation
+
+Different operators require different operational environments.
+
+However:
+
+The underlying workstation architecture remains identical.
+
+Only:
+
+* workspace composition,
+* information priority,
+* permissions,
+* operational tools,
+* workflow emphasis
+
+adapt according to responsibility.
+
+
+
+## Institutional Continuity
+
+Operators change.
+
+Teams expand.
+
+Markets evolve.
+
+Technology advances.
+
+The workstation architecture must preserve institutional continuity independently of individual personnel.
+
+
+
+## Professional Excellence
+
+The Operator Architecture ultimately supports one institutional objective:
+
+Enable professional operators to consistently make higher-quality decisions with greater confidence, reduced cognitive effort, improved collaboration, and continuous operational awareness.
+
+Every subsequent Stage-23 phase shall measure success against this objective rather than against software functionality alone.
+
+# SECTION 09 — FUNCTIONAL REQUIREMENTS
+
+## Functional Requirements
+
+The Operator Architecture establishes the functional requirements that define how the Institutional Operator Workstation shall support professional operational work.
+
+Unlike traditional software requirements, these requirements are derived from operator behaviour rather than software features.
+
+Every capability introduced in later phases shall demonstrably improve one or more of these functional requirements.
+
+
+
+## 9.1 Professional Workflow Support
+
+The workstation shall support complete professional workflows rather than isolated software functions.
+
+Every operator shall be able to perform an end-to-end operational cycle without unnecessary interruption.
+
+Representative workflow stages include:
+
+* Observe
+* Understand
+* Investigate
+* Analyse
+* Decide
+* Execute
+* Monitor
+* Review
+* Improve
+
+The workstation shall support the complete workflow rather than optimising only individual stages.
+
+
+
+## 9.2 Continuous Situational Awareness
+
+Operators shall continuously understand:
+
+* current operational state,
+* system health,
+* market conditions,
+* portfolio condition,
+* infrastructure condition,
+* organisational priorities,
+* active risks,
+* ongoing activities.
+
+Situational awareness shall remain persistent throughout the operational day.
+
+
+
+## 9.3 Context Preservation
+
+The workstation shall preserve context across:
+
+* workspace changes,
+* investigations,
+* execution activities,
+* collaboration,
+* interruptions,
+* operator transitions.
+
+Professional work should never require operators to repeatedly reconstruct mental context.
+
+
+
+## 9.4 Decision Support
+
+The workstation shall support institutional decision-making by providing:
+
+* contextual information,
+* historical information,
+* related information,
+* dependencies,
+* recommendations,
+* operational consequences,
+* confidence indicators.
+
+The workstation supports decisions.
+
+It does not replace professional judgement.
+
+
+
+## 9.5 Operational Navigation
+
+Navigation shall follow professional workflows rather than software hierarchy.
+
+Operators navigate through:
+
+* responsibilities,
+* investigations,
+* operational context,
+* relationships,
+* workflows,
+
+instead of application menus.
+
+
+
+## 9.6 Collaborative Operation
+
+Operators shall collaborate through shared operational context.
+
+The workstation shall support:
+
+* shared investigations,
+* shared workspaces,
+* shared operational memory,
+* institutional communication,
+* coordinated decision-making.
+
+
+
+## 9.7 Institutional Memory
+
+The workstation shall preserve:
+
+* operational history,
+* investigations,
+* research,
+* decisions,
+* workflows,
+* knowledge,
+* reasoning.
+
+Institutional knowledge shall become a permanent organisational asset.
+
+
+
+## 9.8 Adaptive Workspaces
+
+The workstation shall adapt according to:
+
+* operator role,
+* operational responsibility,
+* institutional context,
+* active workflow,
+
+while preserving architectural consistency.
+
+
+
+## 9.9 Human-AI Collaboration
+
+Artificial Intelligence shall augment professional operators through:
+
+* contextual assistance,
+* recommendations,
+* relationship discovery,
+* operational explanations,
+* workflow acceleration.
+
+Human operators remain responsible for institutional decisions.
+
+
+
+## 9.10 Institutional Workflow Integration
+
+Every workstation capability shall contribute toward institutional operational effectiveness.
+
+Capabilities shall never exist solely because technology permits them.
+
+
+
+# SECTION 10 — NON-FUNCTIONAL REQUIREMENTS
+
+## Non-Functional Requirements
+
+The Operator Architecture establishes quality expectations governing every future workstation capability.
+
+
+
+### Professional Usability
+
+Professional operators shall remain productive throughout prolonged operational sessions.
+
+
+
+### Cognitive Efficiency
+
+The workstation shall minimise unnecessary mental effort.
+
+Engineering decisions should reduce:
+
+* searching,
+* remembering,
+* repetitive navigation,
+* context reconstruction,
+* operational uncertainty.
+
+
+
+### Operational Consistency
+
+Operator experiences shall remain consistent across:
+
+* workspaces,
+* capabilities,
+* workflows,
+* navigation,
+* interaction models.
+
+
+
+### Predictability
+
+Operators should confidently anticipate workstation behaviour.
+
+Unexpected interaction patterns shall be avoided.
+
+
+
+### Responsiveness
+
+Operational information shall remain timely and responsive regardless of workload complexity.
+
+
+
+### Reliability
+
+The workstation shall remain dependable throughout continuous institutional operation.
+
+
+
+### Learnability
+
+Professional operators should progressively master the workstation without extensive retraining.
+
+
+
+### Discoverability
+
+Capabilities shall remain naturally discoverable through:
+
+* context,
+* search,
+* command systems,
+* relationships.
+
+
+
+### Accessibility
+
+Operator diversity shall be supported through adaptable interaction methods.
+
+
+
+### Trustworthiness
+
+Operators shall trust:
+
+* displayed information,
+* recommendations,
+* operational state,
+* execution results.
+
+Trust becomes a fundamental engineering requirement.
+
+
+
+# SECTION 11 — SCALABILITY
+
+## Scalability
+
+The Operator Architecture must remain valid as institutional complexity increases.
+
+Scalability therefore applies to human operation rather than infrastructure alone.
+
+
+
+## Operator Scalability
+
+Support increasing numbers of:
+
+* traders,
+* engineers,
+* researchers,
+* executives,
+* operational teams.
+
+without reducing usability.
+
+
+
+## Responsibility Scalability
+
+Future operator roles shall integrate without redesigning workstation architecture.
+
+Examples may include:
+
+* AI supervisors,
+* regulatory analysts,
+* cyber intelligence operators,
+* quantitative governance teams.
+
+
+
+## Workflow Scalability
+
+New professional workflows shall compose naturally from existing architectural principles.
+
+
+
+## Information Scalability
+
+Increasing information volume shall improve operational understanding rather than increase cognitive burden.
+
+
+
+## Collaboration Scalability
+
+Institutional collaboration shall remain effective as organisations grow.
+
+
+
+## Knowledge Scalability
+
+Institutional knowledge shall continue expanding without becoming fragmented or inaccessible.
+
+
+
+## Cognitive Scalability
+
+The workstation shall remain understandable despite increasing operational complexity.
+
+Growth in institutional capability must not produce proportional growth in operator effort.
+
+
+
+## Architectural Scalability
+
+Future workstation phases shall extend operator capabilities without modifying constitutional operator principles.
+
+
+
+# SECTION 12 — FUTURE EVOLUTION
+
+## Future Evolution
+
+Professional operation continuously evolves.
+
+Markets evolve.
+
+Technology evolves.
+
+Institutions evolve.
+
+Consequently, the Operator Architecture must evolve while preserving constitutional stability.
+
+
+
+## Expanding Professional Roles
+
+Future institutional roles shall integrate into the Operator Architecture through extension rather than redesign.
+
+
+
+## Human-AI Partnership Evolution
+
+Artificial Intelligence will increasingly assist operators.
+
+Future evolution shall strengthen collaboration between:
+
+* human expertise,
+* institutional intelligence,
+* automated reasoning,
+* operational automation.
+
+Professional accountability remains human.
+
+
+
+## Organisational Evolution
+
+The workstation shall support changing organisational structures without architectural disruption.
+
+
+
+## Operational Evolution
+
+Future operational models, workflows, and responsibilities shall integrate into the existing operator framework.
+
+
+
+## Knowledge Evolution
+
+Institutional knowledge shall continuously improve through accumulated operational experience.
+
+Learning becomes part of everyday operation.
+
+
+
+## Experience Evolution
+
+Operator experience shall continuously improve based upon:
+
+* workflow observation,
+* operational feedback,
+* institutional metrics,
+* engineering improvements.
+
+
+
+## Constitutional Stability
+
+Although operator capabilities evolve, the constitutional principles established within Phase-00 remain authoritative.
+
+Future evolution strengthens the architecture without replacing its foundation.
+
+
+
+## Long-Term Vision
+
+The long-term objective is to create an Institutional Operator Workstation that understands professional work as effectively as professional operators themselves.
+
+Technology becomes increasingly invisible.
+
+Operational understanding becomes increasingly natural.
+
+Professional expertise remains central.
+
+The workstation evolves into an intelligent institutional partner rather than simply a collection of software capabilities.
+
+# SECTION 13 — DEPENDENCIES
+
+## Dependencies
+
+Phase-02 transforms constitutional principles and institutional engineering knowledge into a formal model of professional operators.
+
+It establishes the human architecture upon which every future workstation capability shall be constructed.
+
+Consequently, Phase-02 both depends upon previous phases and becomes a foundational dependency for every subsequent Stage-23 phase.
+
+
+
+## 13.1 Constitutional Dependencies
+
+Phase-02 inherits its governing principles from Phase-00.
+
+Specifically:
+
+* COREI Mission
+* Institutional Philosophy
+* Architectural Laws
+* Engineering Principles
+* Scalability Principles
+* Governance Standards
+
+These principles define the boundaries within which operator architecture is developed.
+
+No operator model may contradict the constitutional foundation.
+
+
+
+## 13.2 Discovery Dependencies
+
+Phase-02 depends upon engineering knowledge established during Phase-01.
+
+Discovery contributes understanding regarding:
+
+* professional workflows,
+* long-duration productivity,
+* operational cognition,
+* engineering workbenches,
+* institutional operations,
+* command environments,
+* collaborative operation.
+
+The operator architecture transforms these engineering observations into institutional operator models.
+
+
+
+## 13.3 Platform Dependencies
+
+Operator Architecture assumes the existence of the institutional COREI platform.
+
+Representative platform domains include:
+
+* Market Intelligence
+* Signal Intelligence
+* Decision Intelligence
+* Risk Intelligence
+* Portfolio Intelligence
+* Execution Intelligence
+* Position Intelligence
+* Performance Intelligence
+* Infrastructure Intelligence
+* AI Intelligence
+* Governance
+* Automation
+
+Operators exist to perform professional work across these institutional domains.
+
+
+
+## 13.4 Forward Dependencies
+
+Every remaining Stage-23 phase depends upon the Operator Architecture.
+
+Examples include:
+
+### Phase-03
+
+Operational Environment Architecture
+
+↓
+
+Designing environments around operator workflows.
+
+
+
+### Phase-04
+
+Experience Architecture
+
+↓
+
+Designing interactions around operator behaviour.
+
+
+
+### Phase-05
+
+Technology Landscape
+
+↓
+
+Selecting technologies supporting professional work.
+
+
+
+### Phase-06
+
+Workbench Architecture
+
+↓
+
+Building the workstation around operator workflows.
+
+
+
+### Phase-07
+
+Design System
+
+↓
+
+Supporting professional cognition through consistent visual language.
+
+
+
+### Phase-08
+
+Component Ecosystem
+
+↓
+
+Developing reusable components supporting operator responsibilities.
+
+
+
+### Phase-09
+
+Workspace Library
+
+↓
+
+Assembling workspaces matching operator workflows.
+
+
+
+### Phase-10
+
+Intelligence Layer
+
+↓
+
+Delivering contextual intelligence supporting operator decisions.
+
+
+
+### Phase-11
+
+Operator Optimisation
+
+↓
+
+Measuring and improving real operator effectiveness.
+
+Phase-02 therefore becomes the permanent human reference architecture of Stage-23.
+
+
+
+# SECTION 14 — DELIVERABLES
+
+## Deliverables
+
+The completion of Phase-02 shall establish a comprehensive institutional operator architecture.
+
+The deliverables shall provide the architectural foundation for every subsequent workstation design decision.
+
+
+
+## Primary Deliverables
+
+### Institutional Operator Model
+
+A complete architectural model describing all professional operator categories within COREI.
+
+
+
+### Operator Workflow Catalogue
+
+A structured catalogue describing professional operational workflows.
+
+Examples include:
+
+* Trading
+* Portfolio Management
+* Research
+* Infrastructure
+* Operations
+* Risk
+* Compliance
+* Executive Oversight
+
+
+
+### Decision Architecture
+
+Documentation describing:
+
+* decision types,
+* decision frequency,
+* decision dependencies,
+* decision authority,
+* operational consequences.
+
+
+
+### Information Requirement Catalogue
+
+Definition of information required by operators throughout every operational workflow.
+
+
+
+### Collaboration Architecture
+
+Definition of institutional collaboration patterns between professional operators.
+
+
+
+### Human-System Interaction Principles
+
+Engineering principles governing interaction between operators and the workstation.
+
+
+
+### Operator Capability Matrix
+
+Mapping between:
+
+Operator
+
+↓
+
+Responsibilities
+
+↓
+
+Workflows
+
+↓
+
+Information
+
+↓
+
+Capabilities
+
+↓
+
+Future Workspaces
+
+
+
+### Stage-23 Human Architecture Baseline
+
+A frozen architectural baseline defining the professional operators that the workstation exists to support.
+
+
+
+# SECTION 15 — ACCEPTANCE CRITERIA
+
+## Acceptance Criteria
+
+Phase-02 shall be considered complete only when the Operator Architecture accurately represents institutional professional work.
+
+Completion is measured through architectural completeness rather than implementation.
+
+
+
+## Professional Coverage
+
+All major institutional operator categories have been architecturally modelled.
+
+
+
+## Workflow Coverage
+
+Professional workflows have been documented from observation through continuous improvement.
+
+
+
+## Decision Coverage
+
+Institutional decision models have been identified and documented.
+
+
+
+## Information Coverage
+
+Operator information requirements have been defined independently of software implementation.
+
+
+
+## Collaboration Coverage
+
+Institutional collaboration requirements have been identified.
+
+
+
+## Constitutional Compliance
+
+Operator Architecture remains fully aligned with:
+
+* Phase-00 Constitution
+* COREI Anchor Law
+* Master Trader Persona
+
+
+
+## Architectural Readiness
+
+Future workstation architecture can proceed without requiring additional operator modelling.
+
+
+
+## Human-Centred Validation
+
+Every identified workstation capability can be traced back to a documented operator requirement.
+
+No capability exists without professional justification.
+
+
+
+## Architectural Freeze
+
+Upon approval, Phase-02 becomes the authoritative human architecture for the Institutional Operator Workstation.
+
+Future enhancements shall extend rather than redefine the established operator model.
+
+
+
+# SECTION 16 — RELATED DOCUMENTS
+
+## Related Documents
+
+Phase-02 occupies the transition point between constitutional planning and workstation architecture.
+
+It establishes the permanent human model that guides every future engineering decision.
+
+
+
+## Constitutional References
+
+* Stage-23 Phase-00 Constitutional Foundation
+* COREI Anchor Law
+* Master Trader Persona
+
+
+
+## Discovery References
+
+* Stage-23 Phase-01 Discovery & Reverse Engineering
+* Engineering Principle Catalogue
+* Comparative Evaluation Matrix
+* Architectural Recommendation Reports
+
+
+
+## Platform References
+
+* Institutional Trading Platform Architecture
+* Domain Architecture
+* Existing Operational Services
+* Intelligence Domains
+* Governance Architecture
+
+
+
+## Future Phase References
+
+Phase-03
+
+Operational Environment Architecture
+
+↓
+
+Phase-04
+
+Experience Architecture
+
+↓
+
+Phase-05
+
+Technology Landscape
+
+↓
+
+Phase-06
+
+Workbench Architecture
+
+↓
+
+Phase-07
+
+Design System
+
+↓
+
+Phase-08
+
+Component Ecosystem
+
+↓
+
+Phase-09
+
+Workspace Library
+
+↓
+
+Phase-10
+
+Intelligence Layer
+
+↓
+
+Phase-11
+
+Operator Optimisation
+
+Every future phase shall reference the Operator Architecture whenever architectural decisions affect professional workflows, information presentation, interaction models, workspace organisation, collaboration, or operational effectiveness.
+
+
+
+## Closing Statement
+
+Phase-02 establishes the human architecture of the COREI Institutional Operator Workstation.
+
+The workstation is no longer viewed as a collection of interfaces, pages, or software modules.
+
+Instead, it is understood as a professional operational environment designed around the realities of institutional work.
+
+By defining operators in terms of their responsibilities, workflows, decisions, information requirements, and collaboration patterns, Phase-02 ensures that every future engineering decision serves professional operational effectiveness rather than software convenience.
+
+With the completion and architectural freeze of Phase-02, Stage-23 now possesses:
+
+* a constitutional foundation (Phase-00),
+* an institutional engineering knowledge framework (Phase-01),
+* and a comprehensive human operator architecture (Phase-02).
+
+These three phases together establish the philosophical, engineering, and human foundations of the Institutional Operator Workstation.
+
+Phase-03 therefore begins the design of the **Operational Environment Architecture**—the professional workplace in which these operators perform their daily institutional responsibilities. Rather than asking *who* the operators are, Phase-03 asks *where and how* institutional work should take place, defining the operational environment that will support professional activity for years of continuous evolution.

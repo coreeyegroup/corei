@@ -1,0 +1,31 @@
+# GENERATOR REDESIGN SPECIFICATION
+
+CURRENT MODEL
+
+String Injection
+
+TARGET MODEL
+
+Security Profile Builder
+
+SUPPORTED PROFILES
+
+RECOVERY
+
+PRODUCTION
+
+PROFILE SELECTION
+
+Generator Controlled
+
+LISTENER CONFIGURATION
+
+Profile Controlled
+
+AUTHENTICATION CONFIGURATION
+
+Profile Controlled
+
+TLS CONFIGURATION
+
+Profile Controlled

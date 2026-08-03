@@ -1,0 +1,32 @@
+# =============================================================================
+# COREI OPERATING SYSTEM
+#
+# Stage       : 25
+# Phase       : 03A
+# Step        : 01
+#
+# File        : repository-map.yaml
+# Purpose     : Repository Module Map
+#
+# =============================================================================
+
+modules:
+
+  - bootstrap
+  - foundation
+  - shell
+  - viewport
+  - ribbon
+  - navigation
+  - workspace
+  - intelligence
+  - timeline
+  - system
+
+state:
+
+  architecture: certified
+
+  repository: stable
+
+  ownership: certified

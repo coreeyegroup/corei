@@ -1,0 +1,389 @@
+/******************************************************************************
+ *
+ * COREI OPERATING SYSTEM
+ *
+ * STAGE-25
+ * PHASE-17
+ * STEP-07
+ *
+ * FILE:
+ * timeline-event-stream.css
+ *
+ * PURPOSE:
+ * Institutional Timeline Visual Polish
+ *
+ ******************************************************************************/
+
+.corei-timeline {
+
+    width:100%;
+
+    height:100%;
+
+    display:flex;
+
+    flex-direction:column;
+
+    overflow:hidden;
+
+    background:
+        var(--corei-color-surface-1);
+
+    color:
+        var(--corei-color-text-primary);
+
+}
+
+
+.corei-timeline-header {
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    height:28px;
+
+    flex:0 0 28px;
+
+    padding:0 8px;
+
+    background:
+        var(--corei-color-surface-1);
+
+    border-bottom:
+        1px solid var(--corei-color-border);
+
+}
+
+.corei-timeline-timestamp {
+
+    width:72px;
+
+    flex-shrink:0;
+
+    font-size:10px;
+
+    font-weight:400;
+
+    color:
+        var(--corei-color-text-muted);
+
+}
+
+.corei-timeline-message {
+
+    flex:1;
+
+    min-width:0;
+
+    font-size:12px;
+
+    font-weight:400;
+
+    color:
+        var(--corei-color-text-primary);
+
+}
+
+
+.corei-timeline-header-identity {
+
+    display:flex;
+
+    align-items:center;
+
+    gap:6px;
+
+}
+
+
+.corei-timeline-header-label {
+
+    font-size:12px;
+
+    font-weight:500;
+
+    letter-spacing:.04em;
+
+    text-transform:uppercase;
+
+}
+
+
+.corei-timeline-header-mode {
+
+    font-size:12px;
+
+    font-weight:400;
+
+    color:
+        var(--corei-color-text-muted);
+
+}
+
+.corei-timeline-body {
+
+    flex:1;
+
+    min-height:0;
+
+    overflow:auto;
+
+    padding:3px 0;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:0;
+
+}
+
+
+.corei-timeline-controls {
+
+    height:20px;
+
+    font-size:11px;
+
+    font-weight:400;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:0 8px;
+
+}
+
+
+.corei-timeline-control-separator {
+
+    color:
+        var(--corei-color-border);
+
+}
+
+.corei-timeline-event {
+
+    display:flex;
+
+    align-items:center;
+
+    min-height:20px;
+
+    padding:2px 8px;
+
+    gap:6px;
+
+    background:transparent;
+
+    border:none;
+
+    border-radius:0;
+
+}
+
+
+.corei-timeline-event-track {
+
+    flex: 0 0 auto;
+
+    position:relative;
+
+    overflow-x: auto;
+
+    overflow-y: hidden;
+
+    padding: 0 8px;
+
+}
+
+.corei-timeline-event--active {
+
+    background:
+        var(--corei-color-surface-2);
+
+    border-left:
+        2px solid var(--corei-color-accent-primary);
+
+}
+
+
+.corei-timeline-track-line {
+
+    display: none;
+
+    position:absolute;
+
+    left:20px;
+
+    top:0;
+
+    bottom:0;
+
+    width:1px;
+
+    background:
+        var(--corei-color-border);
+
+}
+
+
+.corei-timeline-event-categories {
+
+    display: flex;
+
+    align-items: center;
+
+    flex-wrap: nowrap;
+
+    gap: 12px;
+
+    min-height: 16px;
+
+    margin-bottom: 0;
+
+    padding: 0;
+
+    white-space: nowrap;
+
+}
+
+
+.corei-timeline-event-category {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 2px 0px;
+
+    min-height: 24px;
+
+    cursor: pointer;
+
+    font-weight: 500;
+
+    white-space: nowrap;
+
+    border-bottom: 1px solid transparent;
+
+    color: var(--corei-color-text-secondary);
+
+    transition: color .15s ease,
+                border-color .15s ease;
+
+}
+
+
+.corei-timeline-event-category:hover {
+
+    background: var(--corei-color-surface-2);
+
+}
+
+.corei-timeline-event-category--active {
+
+    color: var(--corei-color-accent-primary);
+
+    border-bottom: 1px solid var(--corei-color-accent-primary);
+
+    font-weight: 600;
+
+}
+
+.corei-timeline-event:hover {
+
+    background:
+        var(--corei-color-surface-2);
+
+}
+
+
+.corei-timeline-event-node {
+
+    display: none;
+
+    width:8px;
+
+    height:8px;
+
+    flex-shrink:0;
+
+    border-radius:50%;
+
+    background:
+        var(--corei-color-accent-primary);
+
+}
+
+
+.corei-timeline-event-label {
+
+    font-size:12px;
+
+    font-weight:500;
+
+    letter-spacing:.02em;
+
+    line-height:1.2;
+
+    color: inherit;
+
+}
+
+
+.corei-timeline-status {
+
+    display:flex;
+
+    align-items:center;
+
+    gap:4px;
+
+}
+
+
+.corei-timeline-status-indicator {
+
+    width:8px;
+
+    height:8px;
+
+    border-radius:50%;
+
+}
+
+
+.corei-timeline-status-label {
+
+    font-size:10px;
+
+}
+
+.corei-timeline-event-stream {
+
+    display:flex;
+
+    flex-direction:column;
+
+    width:100%;
+
+    height:100%;
+
+    overflow:hidden;
+
+    background:
+        var(--corei-color-surface-1);
+
+    border-top:
+        1px solid var(--corei-color-border);
+
+}

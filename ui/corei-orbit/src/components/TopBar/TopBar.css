@@ -1,0 +1,108 @@
+/* src/components/TopBar/TopBar.css */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 28px; /* reduced from 32px */
+  padding: 0 10px;
+  background: rgba(15, 21, 30, 0.85);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.logo {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.logo .accent {
+  color: var(--accent-teal);
+}
+.menu {
+  display: flex;
+  gap: 2px;
+}
+.menu span {
+  padding: 2px 10px;
+  font-size: 12px;
+  color: var(--text-muted);
+  cursor: default;
+  border-radius: 4px;
+}
+.menu span:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+.topbar-center {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 100%; /* or use line-height */
+}
+.strategy-select {
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 400;
+  height: 24px;
+  outline: none;
+  box-sizing: border-box;
+}
+.btn {
+  background: var(--bg-input);
+  border: none;
+  color: var(--text-muted);
+  padding: 2px 14px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  height: 24px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+.btn.primary {
+  background: var(--accent-teal);
+  color: var(--bg-primary);
+}
+.btn.primary:hover {
+  background: #00CCA0;
+}
+.btn.danger {
+  background: var(--danger-red);
+  color: var(--bg-primary);
+}
+.btn.danger:hover {
+  background: #E04444;
+}
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  vertical-align: middle;
+}
+.status-dot.running {
+  background: var(--accent-teal);
+  box-shadow: 0 0 8px var(--accent-teal);
+}
+.status-label {
+  font-size: 11px;
+  color: var(--text-muted);
+}

@@ -1,0 +1,175 @@
+ M ../../infrastructure/components/redis/install.sh
+ M ../../infrastructure/components/redis/inventory.sh
+ M ../../infrastructure/components/redis/validate.sh
+ M ../../infrastructure/kubernetes/storage/redis-pvc.yaml
+ M ../../infrastructure/kubernetes/storage/redis-secret.yaml
+ M ../../infrastructure/kubernetes/storage/redis-statefulset.yaml
+ M ../../infrastructure/phases/stage-08-storage/validate.sh
+ M ../../infrastructure/phases/stage-09-observability/values/loki-values.yaml
+ M ../../kubernetes/n8n/deployment.yaml
+ D ../../platform/backend/websocket-gateway/package-lock.json
+ D ../../platform/frontend/trading-dashboard/.dockerignore
+ D ../../platform/frontend/trading-dashboard/Dockerfile
+ D ../../platform/frontend/trading-dashboard/index.html
+ D ../../platform/frontend/trading-dashboard/package-lock.json
+ D ../../platform/frontend/trading-dashboard/package.json
+ D ../../platform/frontend/trading-dashboard/src/App.tsx
+ D ../../platform/frontend/trading-dashboard/src/main.tsx
+ D ../../platform/frontend/trading-dashboard/src/styles.css
+ D ../../platform/frontend/trading-dashboard/src/websocket/client.ts
+ D ../../platform/frontend/trading-dashboard/tsconfig.json
+ D ../../platform/frontend/trading-dashboard/vite.config.ts
+ M ../../services/audit-service/helm/values.yaml
+ M ../../services/config-service/helm/values.yaml
+ M ../../services/config-snapshot-service/helm/values.yaml
+ M ../../services/event-ingestion-service/helm/values.yaml
+ M ../../services/identity-service/helm/values.yaml
+ M src/shell/components/ShellFrame.tsx
+ M src/shell/layout/components/ShellLayout.tsx
+ M src/shell/layout/styles/shell-layout.css
+?? ../../-X
+?? ../../-n
+?? ../../-o
+?? ../../archive/
+?? ../../backups/
+?? ../../core_platform/config_governance/runtime/
+?? ../../core_platform/deterministic_replay/runtime/
+?? ../../core_platform/event_bus/runtime/
+?? ../../core_platform/event_governance/runtime/
+?? ../../core_platform/execution_gate/runtime/
+?? ../../core_platform/flow_control/runtime/
+?? ../../core_platform/lineage/runtime/
+?? ../../core_platform/operations/runtime/
+?? ../../core_platform/portfolio/runtime/
+?? ../../core_platform/replay/runtime/
+?? ../../core_platform/resilience/runtime/
+?? ../../core_platform/resilience_runtime/runtime/
+?? ../../core_platform/runtime/
+?? ../../core_platform/system_registry/runtime/
+?? ../../core_platform/workflow_engine/runtime/
+?? "../../docs/COREI Anchor Law"
+?? "../../docs/COREI IDENTITY"
+?? "../../docs/COREI Institutional Vocabulary"
+?? "../../docs/COREI Manifesto"
+?? "../../docs/COREI Persona V.1"
+?? "../../docs/COREI Persona V.2"
+?? "../../docs/COREI Pholosophy"
+?? ../../docs/governance/engineering-authority-model.md
+?? ../../docs/governance/engineering-completion-standard.md
+?? ../../docs/governance/engineering-decision-matrix.md
+?? ../../docs/governance/engineering-escalation-matrix.md
+?? ../../docs/stage-21/
+?? ../../docs/stage-23/
+?? ../../docs/stage-23A/
+?? ../../docs/stage-24/
+?? ../../docs/stage-25/
+?? ../../docs/ui/
+?? ../../infrastructure/documentation/
+?? ../../infrastructure/phases/stage-08-storage/recovery/
+?? ../../infrastructure/phases/stage-10a-testing-foundation/runtime/
+?? ../../infrastructure/phases/stage-17-paper-trading-validation/runtime/
+?? ../../infrastructure/phases/stage-17a-runtime-hardening/runtime/
+?? ../../infrastructure/phases/stage-21-production-hardening/security-activation-v2/
+?? ../../infrastructure/tools/
+?? ../../knowledge/
+?? ../../kubernetes/n8n/service-nodeport.yaml
+?? ../../kubernetes/n8n/service.yaml.bak
+?? ../../kubernetes/platform/network-policy-n8n-access.yaml
+?? ../../kubernetes/platform/python-execution-service/
+?? ../../package.json
+?? ../../phase23-audit/
+?? ../../platform/automation/n8n/docker/
+?? ../../platform/automation/n8n/docs/
+?? ../../platform/automation/n8n/documentation/
+?? ../../platform/automation/n8n/scripts/
+?? ../../platform/services/
+?? ../../pnpm-lock.yaml
+?? ../../pnpm-workspace.yaml
+?? ../../scripts/security/kafka/v2/
+?? ../../shared/
+?? ../../stage24-audit/
+?? ../../state/security/kafka/v2/
+?? ../../state/stage-10a/runtime/
+?? ../../state/stage-11/runtime/
+?? ../../state/stage21c-image-governance-audit/
+?? ../../state/stage21d-vault-audit/
+?? ../../terminals/
+?? .backup/
+?? COREI_PHASE_03_SNAPSHOT.txt
+?? PHASE_03_LOCK.txt
+?? PROVIDERS_PHASE04_AUDIT.txt
+?? PROVIDERS_PHASE04_FILES.txt
+?? PROVIDER_PLATFORM_CERTIFIED.md
+?? architecture/
+?? components.json
+?? docs/
+?? index.html
+?? legacy/
+?? migration/
+?? package.json
+?? repo-tree.txt
+?? src-dump/
+?? src/app/
+?? src/applications/
+?? src/architecture/
+?? src/bootstrap/
+?? src/capabilities/
+?? src/command-center/
+?? src/docking/
+?? src/domains/
+?? src/engines/
+?? src/experience/
+?? src/experiences/
+?? src/extensions/
+?? src/foundation/
+?? src/index.css
+?? src/intelligence/
+?? src/kernel/
+?? src/main.tsx
+?? src/modules/
+?? src/monitor/
+?? src/navigation/
+?? src/operator-productivity/
+?? src/panel-platform/
+?? src/platform-bootstrap/
+?? src/platform-configuration/
+?? src/platform-registry/
+?? src/platform-runtime/
+?? src/platform/
+?? src/providers/
+?? src/rendering/
+?? src/ribbon/
+?? src/runtime/
+?? src/sdk/
+?? src/services/
+?? src/shell/layout/components/ShellFrame.tsx
+?? src/shell/layout/styles/shell-frame.css
+?? src/shell/layout/styles/shell-geometry.css
+?? src/shell/layout/styles/shell-layout.phase17.backup.css
+?? src/shell/layout/styles/shell-regions.css
+?? src/shell/layout/styles/shell-viewport.css
+?? src/status/
+?? src/system/
+?? src/timeline/
+?? src/trading/
+?? src/viewport-platform/
+?? src/viewport/
+?? src/visualization/
+?? src/windowing/
+?? src/workbench/
+?? src/workspace/
+?? src/workspaces/
+?? stage17-ux-reset-step01-git-status.txt
+?? stage25-backup/
+?? stage25-dependencies.txt
+?? stage25-final-repository.txt
+?? stage25-foundation-audit.txt
+?? stage25-foundation.txt
+?? stage25-phase02-tech-stack.txt
+?? stage25-phase17-step01/
+?? stage25-shell.txt
+?? stage25-workspace.txt
+?? state/
+?? tsconfig.json
+?? tsconfig.tsbuildinfo
+?? vite.config.ts

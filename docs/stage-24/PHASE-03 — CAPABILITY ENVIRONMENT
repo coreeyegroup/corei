@@ -1,0 +1,2182 @@
+STAGE-24
+PHASE-03 — CAPABILITY ENVIRONMENT
+STEP-01 — PHASE OVERVIEW
+1. Purpose
+
+The Capability Environment is responsible for transforming every COREI business function into a reusable, governed, independently deployable institutional capability.
+
+Unlike the previous phases, this phase is implementation-centric.
+
+Its primary outcome is a repository containing production-ready capability infrastructure rather than additional architectural documentation.
+
+2. Objective
+
+Create the institutional capability framework that allows every business domain to expose functionality through standardized capability contracts.
+
+Examples include:
+
+Market Intelligence
+Signal Intelligence
+Decision Intelligence
+Risk Intelligence
+Portfolio Intelligence
+Execution Intelligence
+Position Intelligence
+Performance Intelligence
+System Intelligence
+
+and future institutional capabilities.
+
+3. Scope
+
+This phase implements:
+
+Capability Framework
+Capability Registry
+Capability Manager
+Capability Contracts
+Capability Runtime
+Capability Lifecycle
+Capability Discovery
+Capability Dependency Management
+Capability Versioning
+Capability Validation
+
+This phase does not implement individual business logic.
+
+Domain logic remains inside existing domain repositories.
+
+4. Repository Ownership
+Repository	Responsibility
+platform	Capability framework, runtime, contracts, managers, registry
+corei-os	Capability presentation and UI consumption
+terminals/*	Capability consumers
+domains/*	Business capability implementations
+infrastructure	Platform runtime services consumed by capabilities
+5. Deliverables
+
+At completion this phase will produce:
+
+Capability Framework
+Capability Runtime
+Capability Registry
+Capability Manager
+Capability Contracts
+Capability Discovery
+Capability Validation Framework
+Integration Layer
+6. Dependencies
+
+Consumes:
+
+Phase-00 Engineering Environment
+Phase-01 Operating Environment
+Phase-02 Operator Environment
+
+No architectural redesign.
+
+Only implementation.
+
+7. Implementation Strategy
+
+Execution order:
+
+Overview
+        ↓
+Repository Architecture
+        ↓
+Directory Structure
+        ↓
+File Structure
+        ↓
+Interfaces
+        ↓
+Contracts
+        ↓
+Managers
+        ↓
+Runtime
+        ↓
+Integration
+        ↓
+Implementation
+        ↓
+Validation
+8. Success Criteria
+
+Phase-03 is complete when:
+
+every institutional capability follows one common framework
+capabilities are discoverable through one registry
+capabilities expose standardized contracts
+capabilities participate in runtime, governance, observability, and lifecycle
+domain implementations can plug into the framework without modification
+Next
+
+Now we move directly to STEP-02 — Repository Architecture, where we will define the actual repository layout, directory structure, file ownership, and integration with your existing codebase. From that point onward, the work becomes concrete engineering: folders, files, interfaces, contracts, and production implementation.
+
+STAGE-24
+PHASE-03 — CAPABILITY ENVIRONMENT
+STEP-02 — REPOSITORY ARCHITECTURE
+
+Implementation Phase Begins
+
+From this point onward, we are no longer defining institutional philosophy. We are defining the repository that will be implemented.
+
+1. Implementation Philosophy
+
+The Capability Environment is not another application.
+
+It is an institutional framework responsible for hosting every business capability of COREI.
+
+It provides:
+
+capability lifecycle
+capability registration
+capability discovery
+capability contracts
+capability runtime
+capability dependency resolution
+
+It does not contain trading algorithms or business logic.
+
+2. Repository Ownership
+
+Following the architecture already established in COREI:
+
+COREI
+
+├── corei-os
+│      UI Framework
+│
+├── platform
+│      Institutional Runtime
+│
+├── domains
+│      Business Domains
+│
+├── terminals
+│      Capability Consumers
+│
+├── infrastructure
+│      Infrastructure Runtime
+│
+└── shared
+       Common Components
+
+The Capability Environment primarily belongs to the Platform Repository.
+
+3. Repository Placement
+platform/
+
+src/
+
+capability/
+
+Everything related to institutional capabilities lives under one bounded context.
+
+No capability framework code should exist in:
+
+terminals
+UI
+domains
+infrastructure
+
+Those repositories consume it.
+
+4. Repository Structure
+platform/
+
+src/
+
+capability/
+
+├── manager/
+├── registry/
+├── runtime/
+├── contracts/
+├── interfaces/
+├── models/
+├── services/
+├── lifecycle/
+├── dependency/
+├── discovery/
+├── validation/
+├── events/
+├── state/
+├── adapters/
+├── factories/
+├── exceptions/
+├── telemetry/
+├── permissions/
+├── utilities/
+├── constants/
+├── configuration/
+├── types/
+└── index.ts
+
+This becomes the institutional Capability Framework.
+
+5. Responsibilities
+manager/
+
+Institutional coordination.
+
+Responsible for:
+
+lifecycle coordination
+registration
+loading
+activation
+suspension
+shutdown
+registry/
+
+Institutional inventory.
+
+Responsible for:
+
+registration
+lookup
+discovery
+metadata
+ownership
+runtime/
+
+Capability runtime.
+
+Responsible for:
+
+execution context
+runtime lifecycle
+runtime state
+runtime orchestration
+contracts/
+
+Institutional contracts.
+
+Defines:
+
+public interfaces
+metadata contracts
+lifecycle contracts
+runtime contracts
+
+No implementation.
+
+interfaces/
+
+Developer interfaces.
+
+Contains:
+
+interfaces
+abstract definitions
+extension points
+models/
+
+Domain models.
+
+Examples:
+
+Capability
+
+CapabilityMetadata
+
+CapabilityContext
+
+CapabilityDependency
+
+CapabilityDescriptor
+services/
+
+Reusable services.
+
+Examples:
+
+DiscoveryService
+
+RegistryService
+
+DependencyService
+
+VersionService
+lifecycle/
+
+Institutional lifecycle.
+
+Responsible for:
+
+Register
+
+↓
+
+Validate
+
+↓
+
+Initialize
+
+↓
+
+Activate
+
+↓
+
+Suspend
+
+↓
+
+Resume
+
+↓
+
+Terminate
+
+↓
+
+Unload
+dependency/
+
+Dependency graph.
+
+Responsible for:
+
+dependency resolution
+cycle detection
+ordering
+validation
+discovery/
+
+Capability discovery.
+
+Responsible for:
+
+scanning
+loading
+indexing
+publishing
+validation/
+
+Validation framework.
+
+Responsible for:
+
+schema validation
+dependency validation
+contract validation
+runtime validation
+events/
+
+Institutional events.
+
+Examples:
+
+CapabilityRegistered
+
+CapabilityActivated
+
+CapabilityLoaded
+
+CapabilityStopped
+
+CapabilityFailed
+state/
+
+Capability state.
+
+Examples:
+
+REGISTERED
+
+INITIALIZED
+
+ACTIVE
+
+PAUSED
+
+FAILED
+
+STOPPED
+
+UNLOADED
+adapters/
+
+External adapters.
+
+Examples:
+
+domain adapter
+workspace adapter
+runtime adapter
+factories/
+
+Object creation.
+
+Responsible for:
+
+capability factory
+runtime factory
+metadata factory
+exceptions/
+
+Framework exceptions.
+
+Examples:
+
+CapabilityNotFound
+
+DuplicateCapability
+
+DependencyFailure
+
+RegistrationFailure
+telemetry/
+
+Observability integration.
+
+Consumes:
+
+OpenTelemetry
+Metrics
+Tracing
+Logging
+permissions/
+
+Capability authorization.
+
+Consumes:
+
+Operating Environment security.
+
+No independent authorization.
+
+utilities/
+
+Shared helpers.
+
+No business logic.
+
+constants/
+
+Framework constants.
+
+Examples:
+
+Capability Types
+
+Lifecycle States
+
+Registration Status
+
+Validation Status
+configuration/
+
+Framework configuration.
+
+Examples:
+
+Discovery Configuration
+
+Runtime Configuration
+
+Registry Configuration
+types/
+
+TypeScript types.
+
+6. Repository Ownership Rules
+
+Only the Capability Environment may own:
+
+capability runtime
+capability registry
+capability manager
+capability lifecycle
+capability discovery
+dependency resolution
+
+No other repository may duplicate these components.
+
+7. Repository Consumers
+
+This repository is consumed by:
+
+Domains
+
+↓
+
+Trading Terminal
+
+↓
+
+Infrastructure Terminal
+
+↓
+
+Research Terminal
+
+↓
+
+Executive Terminal
+
+↓
+
+Automation
+
+↓
+
+Monitoring
+
+↓
+
+Production
+
+Everything consumes one framework.
+
+8. Integration Points
+
+Consumes:
+
+Operating Environment
+
+↓
+
+Operator Environment
+
+↓
+
+Infrastructure Runtime
+
+↓
+
+Shared Contracts
+
+Provides:
+
+Capability Runtime
+
+↓
+
+Capability Registry
+
+↓
+
+Capability Contracts
+
+↓
+
+Capability Discovery
+
+↓
+
+Capability Lifecycle
+
+9. Repository Boundary
+
+The Capability Environment owns the framework.
+
+The business domains own the implementations.
+
+For example:
+
+Capability Environment
+        │
+        ├── CapabilityManager
+        ├── Registry
+        ├── Runtime
+        ├── Contracts
+        └── Lifecycle
+
+                │
+
+                ▼
+
+Market Intelligence Domain
+
+Risk Domain
+
+Trading Domain
+
+Portfolio Domain
+
+Execution Domain
+
+The framework never contains business logic.
+
+10. Completion Criteria
+
+STEP-02 is complete when:
+
+Repository location is frozen.
+Folder ownership is frozen.
+Responsibilities are assigned.
+Integration boundaries are defined.
+Repository duplication is prevented.
+The framework is ready for detailed file architecture.
+Next Step
+
+STEP-03 — File Architecture
+
+This is where we enumerate every source file (manager, registry, contracts, runtime, lifecycle, services, etc.), define its purpose, ownership, dependencies, and public API before writing any code. This is the point where the implementation becomes directly actionable.
+
+STAGE-24
+PHASE-03 — CAPABILITY ENVIRONMENT
+STEP-03 — FILE ARCHITECTURE
+
+This step freezes every source file that belongs to the Capability Framework before implementation begins.
+
+Unlike previous documentation, this directly maps to repository implementation.
+
+1. Capability Framework
+platform/
+
+src/
+
+capability/
+│
+├── manager/
+│
+├── registry/
+│
+├── runtime/
+│
+├── contracts/
+│
+├── interfaces/
+│
+├── models/
+│
+├── services/
+│
+├── lifecycle/
+│
+├── dependency/
+│
+├── discovery/
+│
+├── validation/
+│
+├── events/
+│
+├── state/
+│
+├── adapters/
+│
+├── factories/
+│
+├── telemetry/
+│
+├── permissions/
+│
+├── exceptions/
+│
+├── configuration/
+│
+├── utilities/
+│
+├── constants/
+│
+├── types/
+│
+└── index.ts
+2. manager/
+capability-manager.ts
+
+Purpose
+
+Institutional coordinator for every capability.
+
+Responsibilities
+
+register capability
+initialize capability
+activate capability
+suspend capability
+terminate capability
+health management
+
+Consumes
+
+registry
+runtime
+lifecycle
+
+Produces
+
+authoritative capability state
+capability-supervisor.ts
+
+Purpose
+
+Supervise all active capabilities.
+
+Responsibilities
+
+runtime supervision
+lifecycle supervision
+health supervision
+3. registry/
+capability-registry.ts
+
+Purpose
+
+Institutional inventory.
+
+Responsibilities
+
+register
+unregister
+lookup
+metadata
+ownership
+capability-catalog.ts
+
+Purpose
+
+Authoritative catalog.
+
+Contains
+
+capability metadata
+descriptions
+versions
+dependencies
+4. runtime/
+capability-runtime.ts
+
+Purpose
+
+Runtime coordinator.
+
+Responsibilities
+
+execution context
+runtime state
+activation
+deactivation
+capability-runtime-context.ts
+
+Purpose
+
+Runtime context object.
+
+Contains
+
+identity
+runtime
+dependencies
+configuration
+capability-runtime-state.ts
+
+Purpose
+
+Authoritative runtime state.
+
+5. lifecycle/
+capability-lifecycle-manager.ts
+
+Purpose
+
+Lifecycle coordinator.
+
+Implements
+
+Register
+
+↓
+
+Validate
+
+↓
+
+Initialize
+
+↓
+
+Activate
+
+↓
+
+Suspend
+
+↓
+
+Resume
+
+↓
+
+Terminate
+
+↓
+
+Unload
+capability-lifecycle-state.ts
+
+Lifecycle states.
+
+6. registry/
+capability-index.ts
+
+Institutional index.
+
+Supports
+
+discovery
+searching
+filtering
+7. discovery/
+capability-discovery.ts
+
+Purpose
+
+Discovers capabilities.
+
+Responsible for
+
+scanning
+loading
+indexing
+capability-loader.ts
+
+Purpose
+
+Loads capability modules.
+
+8. dependency/
+dependency-manager.ts
+
+Purpose
+
+Dependency coordinator.
+
+Responsible for
+
+graph creation
+dependency ordering
+cycle detection
+dependency-graph.ts
+
+Stores dependency graph.
+
+dependency-validator.ts
+
+Validates graph.
+
+9. validation/
+capability-validator.ts
+
+Purpose
+
+Capability validation.
+
+Checks
+
+contracts
+metadata
+runtime
+dependency-validator.ts
+
+Dependency validation.
+
+lifecycle-validator.ts
+
+Lifecycle validation.
+
+10. contracts/
+capability-contract.ts
+
+Defines
+
+Institutional capability interface.
+
+runtime-contract.ts
+
+Runtime interface.
+
+lifecycle-contract.ts
+
+Lifecycle interface.
+
+registry-contract.ts
+
+Registry interface.
+
+dependency-contract.ts
+
+Dependency interface.
+
+discovery-contract.ts
+
+Discovery interface.
+
+validation-contract.ts
+
+Validation interface.
+
+11. interfaces/
+capability.ts
+
+Developer interface.
+
+capability-runtime.ts
+
+Runtime interface.
+
+capability-context.ts
+
+Context interface.
+
+capability-descriptor.ts
+
+Capability descriptor.
+
+12. models/
+capability.ts
+
+Capability model.
+
+capability-metadata.ts
+
+Metadata model.
+
+capability-context.ts
+
+Runtime context model.
+
+capability-health.ts
+
+Health model.
+
+capability-version.ts
+
+Version model.
+
+capability-owner.ts
+
+Ownership model.
+
+13. state/
+capability-state.ts
+
+Authoritative capability state.
+
+runtime-state.ts
+
+Runtime state.
+
+lifecycle-state.ts
+
+Lifecycle state.
+
+14. services/
+registry-service.ts
+
+Registry operations.
+
+discovery-service.ts
+
+Discovery operations.
+
+lifecycle-service.ts
+
+Lifecycle operations.
+
+dependency-service.ts
+
+Dependency operations.
+
+runtime-service.ts
+
+Runtime operations.
+
+validation-service.ts
+
+Validation operations.
+
+15. adapters/
+domain-adapter.ts
+
+Connects Domains.
+
+workspace-adapter.ts
+
+Connects Workspace Environment.
+
+operator-adapter.ts
+
+Connects Operator Environment.
+
+runtime-adapter.ts
+
+Connects Operating Environment.
+
+16. events/
+capability-events.ts
+
+Institutional events.
+
+Examples
+
+CapabilityRegistered
+
+CapabilityLoaded
+
+CapabilityValidated
+
+CapabilityInitialized
+
+CapabilityActivated
+
+CapabilitySuspended
+
+CapabilityResumed
+
+CapabilityStopped
+
+CapabilityFailed
+
+CapabilityRemoved
+17. telemetry/
+capability-metrics.ts
+
+Metrics.
+
+capability-tracing.ts
+
+Tracing.
+
+capability-logging.ts
+
+Logging.
+
+18. permissions/
+capability-permissions.ts
+
+Consumes
+
+Operating Environment Security.
+
+Never owns security.
+
+19. factories/
+capability-factory.ts
+
+Creates capabilities.
+
+runtime-factory.ts
+
+Creates runtime.
+
+metadata-factory.ts
+
+Creates metadata.
+
+20. exceptions/
+capability-not-found.ts
+duplicate-capability.ts
+dependency-cycle.ts
+runtime-failure.ts
+registration-failure.ts
+21. configuration/
+capability-config.ts
+
+Framework configuration.
+
+discovery-config.ts
+
+Discovery configuration.
+
+runtime-config.ts
+
+Runtime configuration.
+
+22. utilities/
+capability-utils.ts
+
+Framework helpers.
+
+validation-utils.ts
+
+Validation helpers.
+
+runtime-utils.ts
+
+Runtime helpers.
+
+23. constants/
+capability-constants.ts
+lifecycle-constants.ts
+runtime-constants.ts
+validation-constants.ts
+24. types/
+capability.types.ts
+lifecycle.types.ts
+runtime.types.ts
+registry.types.ts
+25. Root
+index.ts
+
+Public exports.
+
+Nothing else.
+
+Summary
+
+This step freezes the implementation inventory for the Capability Framework:
+
+20+ directories with clearly defined ownership.
+Approximately 55–65 source files, each with a single responsibility.
+Clear separation between framework infrastructure (owned by the Capability Environment) and business implementations (owned by domain repositories).
+A deterministic foundation for the next step, where we define the interfaces and contracts before writing production code.
+
+Observation: This is much closer to the implementation-oriented Stage-24 you described. From the next step onward, we should avoid expanding documentation further and instead define the interfaces/contracts needed for these files, followed immediately by implementation.
+
+STAGE-24
+PHASE-03 — CAPABILITY ENVIRONMENT
+STEP-04 — REPOSITORY ALIGNMENT
+
+Purpose: Before creating a single interface or writing code, align the Capability Environment with the existing COREI repositories to prevent duplicate frameworks, managers, registries, runtimes, and contracts.
+
+1. Alignment Philosophy
+
+COREI is not a greenfield project.
+
+The Capability Environment shall:
+
+Extend existing platform architecture.
+Reuse existing runtime infrastructure.
+Consume existing institutional services.
+Preserve architectural consistency.
+Avoid introducing parallel frameworks.
+
+The default decision is:
+
+Reuse
+    ↓
+Extend
+    ↓
+Compose
+    ↓
+Create (only if necessary)
+
+Creation is the last option.
+
+2. Repository Alignment Matrix
+
+Before implementing any component, every artifact shall be classified.
+
+Decision	Meaning
+Reuse	Existing implementation satisfies requirement.
+Extend	Existing implementation is enhanced.
+Compose	New component orchestrates existing components.
+Replace	Existing implementation is retired through approved migration.
+Create	No suitable implementation exists.
+
+Every file shall have exactly one alignment decision.
+
+3. Capability Manager Alignment
+
+Questions to answer:
+
+Does a generic Manager Framework already exist?
+Does Runtime already coordinate managers?
+Does Operating Environment already expose lifecycle managers?
+Does Operator Environment already expose participation managers?
+
+Decision process:
+
+Existing Manager
+        │
+        ├── Suitable
+        │        ↓
+        │      Extend
+        │
+        ├── Partially Suitable
+        │        ↓
+        │     Compose
+        │
+        └── Missing
+                 ↓
+              Create
+
+No duplicate manager hierarchy.
+
+4. Registry Alignment
+
+Review existing registries.
+
+Examples:
+
+Workspace Registry
+Experience Registry
+Component Registry
+Service Registry
+Runtime Registry
+Domain Registry
+
+Questions:
+
+Can Capability Registry inherit registry infrastructure?
+Can metadata format be reused?
+Can lookup mechanism be shared?
+
+Registry implementation shall follow one institutional pattern.
+
+5. Runtime Alignment
+
+Review existing runtime.
+
+Already defined:
+
+Operating Runtime
+Workspace Runtime
+Experience Runtime
+Session Runtime
+
+Capability Runtime shall determine:
+
+What is inherited?
+What is composed?
+What is capability-specific?
+
+Capability Runtime shall never become another platform runtime.
+
+6. Lifecycle Alignment
+
+Review lifecycle already defined.
+
+Examples:
+
+Operating Lifecycle
+Workspace Lifecycle
+Session Lifecycle
+Operator Lifecycle
+
+Capability Lifecycle shall reuse:
+
+lifecycle state machine
+transition validation
+event publication
+recovery mechanisms
+
+Only capability-specific transitions may be added.
+
+7. Contract Alignment
+
+Review existing contracts.
+
+Examples:
+
+Workspace Contract
+Experience Contract
+Runtime Contract
+Component Contract
+Service Contract
+
+Capability Contracts shall:
+
+follow existing contract conventions
+reuse shared interfaces
+preserve naming consistency
+
+No competing contract styles.
+
+8. State Alignment
+
+Review existing state framework.
+
+Questions:
+
+Is there already an authoritative state engine?
+Are Zustand stores already standardized?
+Are runtime states already modeled?
+
+Capability state shall integrate with the institutional state model.
+
+9. Event Alignment
+
+Review existing event infrastructure.
+
+Examples:
+
+Kafka events
+Internal runtime events
+UI events
+Domain events
+
+Capability events shall integrate with existing event infrastructure.
+
+No parallel event bus.
+
+10. Service Alignment
+
+Review shared platform services.
+
+Examples:
+
+Configuration
+Logging
+Metrics
+Tracing
+Validation
+Discovery
+
+Capability Environment shall consume these services rather than implement replacements.
+
+11. Security Alignment
+
+Review Operating Environment.
+
+Already owns:
+
+Authentication
+Authorization
+Identity
+Permissions
+Policies
+
+Capability Environment shall consume security.
+
+It shall never own security.
+
+12. Telemetry Alignment
+
+Review existing observability.
+
+Already implemented:
+
+OpenTelemetry
+Prometheus
+Loki
+Jaeger
+
+Capability telemetry shall publish through existing observability infrastructure.
+
+13. Configuration Alignment
+
+Review configuration framework.
+
+Questions:
+
+Is configuration centralized?
+Is environment loading standardized?
+Are feature flags already implemented?
+
+Capability configuration shall reuse existing configuration services.
+
+14. Repository Alignment Checklist
+
+Every implementation artifact must answer the following before creation.
+
+Question	Required
+Does this already exist?	✔
+Which repository owns it?	✔
+Can it be reused?	✔
+Can it be extended?	✔
+Can it be composed?	✔
+Does it introduce duplication?	Must be No
+Does it preserve architecture?	✔
+Does it follow existing contracts?	✔
+
+If any answer is unresolved, implementation pauses until alignment is complete.
+
+15. Expected Alignment Output
+
+At the end of this step, every planned file from STEP-03 will have an explicit implementation decision.
+
+Example:
+
+Planned Component	Existing Owner	Decision	Action
+Capability Manager	Existing Manager Framework	Extend	Add capability coordination
+Capability Registry	Registry Framework	Extend	Register capability metadata
+Capability Runtime	Operating Runtime	Compose	Create capability execution layer
+Capability Contracts	Shared Contracts	Extend	Add capability-specific interfaces
+Capability Events	Existing Event System	Reuse	Define new event types only
+Capability Telemetry	Observability Framework	Reuse	Publish capability metrics
+16. Completion Criteria
+
+STEP-04 is complete when:
+
+Every planned file has been mapped to an existing COREI component or explicitly justified as new.
+No duplicate frameworks remain in the design.
+Ownership boundaries are confirmed.
+Reuse, extension, and composition decisions are frozen.
+The Capability Environment is fully aligned with the existing COREI architecture.
+Next Step
+
+Only after this alignment is complete do we proceed to STEP-05 — Interface & Contract Design, where every file receives a concrete TypeScript interface and public API based on the existing COREI architecture rather than on newly invented abstractions. This ensures the implementation evolves the platform instead of creating parallel systems.
+
+STAGE-24
+PHASE-03 — CAPABILITY ENVIRONMENT
+STEP-05 — RUNTIME CONSTRUCTION ORDER
+
+Purpose: Define the deterministic engineering build sequence for the Capability Environment. Every implementation artifact is built in dependency order, validated, and frozen before the next level begins.
+
+1. Engineering Philosophy
+
+The Capability Environment is not implemented by writing files in arbitrary order.
+
+It is assembled as a deterministic runtime.
+
+Every implementation unit has prerequisites.
+
+No implementation shall bypass its dependency chain.
+
+The construction order itself becomes part of the architecture.
+
+2. Construction Principles
+
+Every build level must satisfy:
+
+Previous level is complete.
+Previous level passes compilation.
+Previous level passes validation.
+Previous level exposes stable public APIs.
+Previous level is frozen before the next level begins.
+
+No downstream implementation may modify upstream contracts.
+
+3. Construction Hierarchy
+LEVEL-01
+Foundation
+
+↓
+
+LEVEL-02
+Models
+
+↓
+
+LEVEL-03
+Contracts
+
+↓
+
+LEVEL-04
+Interfaces
+
+↓
+
+LEVEL-05
+Registry
+
+↓
+
+LEVEL-06
+Factory
+
+↓
+
+LEVEL-07
+Discovery
+
+↓
+
+LEVEL-08
+Dependency
+
+↓
+
+LEVEL-09
+Runtime
+
+↓
+
+LEVEL-10
+Lifecycle
+
+↓
+
+LEVEL-11
+State
+
+↓
+
+LEVEL-12
+Manager
+
+↓
+
+LEVEL-13
+Services
+
+↓
+
+LEVEL-14
+Events
+
+↓
+
+LEVEL-15
+Adapters
+
+↓
+
+LEVEL-16
+Telemetry
+
+↓
+
+LEVEL-17
+Validation
+
+↓
+
+LEVEL-18
+Public API
+LEVEL-01 — Foundation
+
+Purpose:
+
+Establish framework primitives.
+
+Implement:
+
+configuration/
+
+constants/
+
+types/
+
+utilities/
+
+Output:
+
+Stable framework foundation.
+
+LEVEL-02 — Models
+
+Purpose:
+
+Institutional data structures.
+
+Implement:
+
+Capability
+
+Metadata
+
+Descriptor
+
+Context
+
+Version
+
+Owner
+
+Health
+
+Output:
+
+Canonical models.
+
+LEVEL-03 — Contracts
+
+Purpose:
+
+Institutional contracts.
+
+Implement:
+
+CapabilityContract
+
+RuntimeContract
+
+LifecycleContract
+
+RegistryContract
+
+ValidationContract
+
+Output:
+
+Frozen public contracts.
+
+LEVEL-04 — Interfaces
+
+Purpose:
+
+Developer APIs.
+
+Implement:
+
+Capability
+
+CapabilityContext
+
+CapabilityRuntime
+
+CapabilityDescriptor
+
+Output:
+
+Implementation interfaces.
+
+LEVEL-05 — Registry
+
+Purpose:
+
+Institutional inventory.
+
+Implement:
+
+CapabilityRegistry
+
+CapabilityCatalog
+
+CapabilityIndex
+
+Depends on:
+
+Models
+Contracts
+Interfaces
+
+Output:
+
+Capability registration.
+
+LEVEL-06 — Factory
+
+Purpose:
+
+Object construction.
+
+Implement:
+
+CapabilityFactory
+
+RuntimeFactory
+
+MetadataFactory
+
+Output:
+
+Deterministic object creation.
+
+LEVEL-07 — Discovery
+
+Purpose:
+
+Capability discovery.
+
+Implement:
+
+DiscoveryService
+
+CapabilityLoader
+
+Depends on:
+
+Registry
+Factory
+
+Output:
+
+Automatic capability discovery.
+
+LEVEL-08 — Dependency
+
+Purpose:
+
+Dependency resolution.
+
+Implement:
+
+DependencyManager
+
+DependencyGraph
+
+DependencyValidator
+
+Output:
+
+Dependency graph.
+
+LEVEL-09 — Runtime
+
+Purpose:
+
+Capability execution.
+
+Implement:
+
+CapabilityRuntime
+
+RuntimeContext
+
+RuntimeState
+
+Depends on:
+
+Registry
+Dependency
+Contracts
+
+Output:
+
+Executable runtime.
+
+LEVEL-10 — Lifecycle
+
+Purpose:
+
+Institutional lifecycle.
+
+Implement:
+
+LifecycleManager
+
+LifecycleState
+
+Depends on:
+
+Runtime
+
+Output:
+
+Lifecycle transitions.
+
+LEVEL-11 — State
+
+Purpose:
+
+Authoritative state.
+
+Implement:
+
+CapabilityState
+
+LifecycleState
+
+RuntimeState
+
+Output:
+
+Institutional state.
+
+LEVEL-12 — Manager
+
+Purpose:
+
+Institutional coordination.
+
+Implement:
+
+CapabilityManager
+
+CapabilitySupervisor
+
+Consumes:
+
+Registry
+Runtime
+Lifecycle
+State
+
+Output:
+
+Operational coordination.
+
+LEVEL-13 — Services
+
+Purpose:
+
+Business services.
+
+Implement:
+
+RegistryService
+
+DiscoveryService
+
+RuntimeService
+
+LifecycleService
+
+ValidationService
+
+Output:
+
+Service layer.
+
+LEVEL-14 — Events
+
+Purpose:
+
+Institutional event publication.
+
+Implement:
+
+CapabilityEvents
+
+Events:
+
+Registered
+Activated
+Suspended
+Failed
+Removed
+
+Output:
+
+Event integration.
+
+LEVEL-15 — Adapters
+
+Purpose:
+
+Integration.
+
+Implement:
+
+DomainAdapter
+
+WorkspaceAdapter
+
+OperatorAdapter
+
+RuntimeAdapter
+
+Output:
+
+Platform integration.
+
+LEVEL-16 — Telemetry
+
+Purpose:
+
+Observability.
+
+Implement:
+
+Metrics
+
+Tracing
+
+Logging
+
+Consumes:
+
+Existing observability.
+
+Output:
+
+Institutional monitoring.
+
+LEVEL-17 — Validation
+
+Purpose:
+
+Institutional validation.
+
+Implement:
+
+CapabilityValidator
+
+RuntimeValidator
+
+DependencyValidator
+
+LifecycleValidator
+
+Output:
+
+Framework validation.
+
+LEVEL-18 — Public API
+
+Purpose:
+
+Framework exports.
+
+Implement:
+
+index.ts
+
+Only public exports.
+
+Internal implementation remains encapsulated.
+
+4. Validation Gates
+
+Each construction level must pass four gates before the next level begins.
+
+Gate	Requirement
+Compilation	No build errors
+Dependency	No circular dependencies
+Contract	Public API unchanged
+Architecture	Repository alignment preserved
+
+Failure blocks the next level.
+
+5. Build Pipeline
+Implement Level
+
+↓
+
+Compile
+
+↓
+
+Static Analysis
+
+↓
+
+Dependency Validation
+
+↓
+
+Architecture Validation
+
+↓
+
+Freeze
+
+↓
+
+Next Level
+
+Every level becomes stable before construction continues.
+
+6. Engineering Rules
+No skipping levels.
+No forward references.
+No circular dependencies.
+No unpublished contracts.
+No runtime before contracts.
+No managers before runtime.
+No services before managers.
+No adapters before services.
+No exports before validation.
+7. Completion Criteria
+
+STEP-05 is complete when:
+
+The complete dependency-based construction order is frozen.
+Every implementation artifact belongs to one construction level.
+Every level has explicit prerequisites.
+Validation gates are defined for every level.
+The Capability Environment is ready for interface design and production implementation.
+Next Step
+
+STEP-06 — Interface & Contract Design
+
+At this point, implementation becomes deterministic. We will define the exact TypeScript public interfaces and contracts for each Level-01 through Level-18 component, after which the work transitions into production code with no further architectural expansion.
+
+STAGE-24
+PHASE-03 — CAPABILITY ENVIRONMENT
+STEP-06 — IMPLEMENTATION PACKAGE PLAN
+Package-01 — Foundation Layer (Level-01)
+
+This is the first package to implement. It contains no business logic and has no dependencies on higher-level components.
+
+1. Objective
+
+Establish the immutable foundation upon which the entire Capability Framework is built.
+
+This package provides:
+
+configuration
+constants
+shared types
+utilities
+
+Every other package depends on this one.
+
+2. Repository Location
+platform/
+
+src/
+
+capability/
+
+configuration/
+constants/
+types/
+utilities/
+3. Files to Implement
+configuration/
+capability-config.ts
+
+Purpose
+
+Capability Framework configuration.
+
+Responsibilities
+
+framework configuration
+runtime options
+discovery configuration
+validation configuration
+
+Dependencies
+
+None
+
+Consumers
+
+Entire Capability Framework
+
+constants/
+capability.constants.ts
+
+Contains
+
+capability names
+lifecycle identifiers
+registry keys
+event names
+
+Dependencies
+
+None
+
+constants/
+lifecycle.constants.ts
+
+Contains
+
+REGISTERED
+INITIALIZED
+ACTIVE
+PAUSED
+FAILED
+STOPPED
+UNLOADED
+
+Dependencies
+
+None
+
+constants/
+runtime.constants.ts
+
+Contains
+
+Runtime defaults.
+
+Dependencies
+
+None.
+
+types/
+capability.types.ts
+
+Contains
+
+Shared TypeScript types.
+
+No runtime.
+
+types/
+runtime.types.ts
+
+Contains
+
+Runtime type definitions.
+
+types/
+registry.types.ts
+
+Contains
+
+Registry type definitions.
+
+utilities/
+capability-utils.ts
+
+Shared helper functions.
+
+Pure functions only.
+
+utilities/
+runtime-utils.ts
+
+Runtime helper utilities.
+
+utilities/
+validation-utils.ts
+
+Validation helper utilities.
+
+4. Public Exports
+index.ts
+
+Exports
+
+constants
+types
+configuration
+utilities
+
+Nothing else.
+
+5. Internal Rules
+
+This package shall not contain:
+
+manager
+runtime
+registry
+services
+lifecycle
+events
+discovery
+dependency resolution
+
+Those belong to later construction levels.
+
+6. Validation
+
+Package must satisfy:
+
+Build
+npm run build
+
+No errors.
+
+TypeScript
+
+Strict mode passes.
+
+Circular Dependencies
+
+None.
+
+Public API
+
+Frozen after approval.
+
+7. Package Completion Criteria
+
+Package-01 is complete when:
+
+Configuration compiles.
+Constants compile.
+Types compile.
+Utilities compile.
+Public exports are frozen.
+Zero runtime dependencies exist.
+All downstream packages can safely import from this foundation.
+What happens next?
+
+This is where the biggest change in our workflow occurs.
+
+We no longer produce another document.
+
+Instead, the next response should be the actual implementation of Package-01:
+
+Create the directory structure.
+Implement capability-config.ts.
+Implement capability.constants.ts.
+Implement lifecycle.constants.ts.
+Implement runtime.constants.ts.
+Implement the shared type files.
+Implement the utility files.
+Create index.ts.
+Validate the package.
+
+From this point onward, every response should produce working repository artifacts rather than additional conceptual documentation. That is the transition from Stage-24 specification into Stage-24 engineering.
+

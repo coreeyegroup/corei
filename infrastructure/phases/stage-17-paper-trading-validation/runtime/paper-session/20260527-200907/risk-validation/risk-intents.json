@@ -1,0 +1,62 @@
+[
+  {
+    "intent_id": "intent-1",
+    "violation_type": "max_daily_loss",
+    "risk_status": "risk_rejected",
+    "event_time_ns": 1748376541000000000
+  },
+  {
+    "intent_id": "intent-2",
+    "violation_type": "max_drawdown",
+    "risk_status": "risk_rejected",
+    "event_time_ns": 1748376541000000000
+  },
+  {
+    "intent_id": "intent-3",
+    "violation_type": "max_position_size",
+    "risk_status": "risk_rejected",
+    "event_time_ns": 1748376541000000000
+  },
+  {
+    "intent_id": "intent-4",
+    "violation_type": "max_margin",
+    "risk_status": "risk_rejected",
+    "event_time_ns": 1748376541000000000
+  },
+  {
+    "intent_id": "intent-5",
+    "violation_type": "instrument_blacklist",
+    "risk_status": "risk_rejected",
+    "event_time_ns": 1748376541000000000
+  },
+  {
+    "intent_id": "intent-6",
+    "violation_type": "external_stricter_threshold",
+    "risk_status": "risk_rejected",
+    "event_time_ns": 1748376541000000000
+  },
+  {
+    "intent_id": "intent-7",
+    "violation_type": "correlation_limit",
+    "risk_status": "risk_rejected",
+    "event_time_ns": 1748376541000000000
+  },
+  {
+    "intent_id": "intent-8",
+    "violation_type": "leverage_limit",
+    "risk_status": "risk_rejected",
+    "event_time_ns": 1748376541000000000
+  },
+  {
+    "intent_id": "intent-9",
+    "violation_type": "concentration_limit",
+    "risk_status": "risk_rejected",
+    "event_time_ns": 1748376541000000000
+  },
+  {
+    "intent_id": "intent-10",
+    "violation_type": "session_restriction",
+    "risk_status": "risk_rejected",
+    "event_time_ns": 1748376541000000000
+  }
+]

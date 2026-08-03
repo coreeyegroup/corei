@@ -1,0 +1,12 @@
+40:          listeners=PLAINTEXT://0.0.0.0:9092,SASL_SSL://0.0.0.0:9094,CONTROLLER://0.0.0.0:9093
+42:          advertised.listeners=PLAINTEXT://kafka.kafka.svc.cluster.local:9092,SASL_SSL://kafka.kafka.svc.cluster.local:9094
+44:          listener.security.protocol.map=PLAINTEXT:PLAINTEXT,SASL_SSL:SASL_SSL,CONTROLLER:PLAINTEXT
+82:        - name: KAFKA_OPTS
+126:        volumeMounts:
+145:        volumeMounts:
+149:          name: kafka-runtime-tls
+152:          name: kafka-security-runtime
+155:      - name: kafka-runtime-tls
+157:          secretName: kafka-runtime-tls
+158:      - name: kafka-security-runtime
+160:          secretName: kafka-security-runtime

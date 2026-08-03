@@ -1,0 +1,23 @@
+# RUNTIME PROPERTY EVIDENCE REGISTRY
+
+STATUS
+
+ACTIVE
+
+OBJECTIVE
+
+Collect authoritative Kafka 3.7.1
+runtime authentication property
+requirements.
+
+CURRENT STATUS
+
+Property Set Not Yet Approved
+
+GENERATOR REDESIGN
+
+NOT AUTHORIZED
+
+VALIDATOR REDESIGN
+
+NOT AUTHORIZED

@@ -1,0 +1,148 @@
+Name:             kafka-0
+Namespace:        kafka
+Priority:         0
+Service Account:  default
+Node:             core-node/192.168.1.10
+Start Time:       Fri, 29 May 2026 20:45:13 +0000
+Labels:           app=kafka
+                  apps.kubernetes.io/pod-index=0
+                  controller-revision-hash=kafka-74f65868d7
+                  statefulset.kubernetes.io/pod-name=kafka-0
+Annotations:      cni.projectcalico.org/containerID: 2c7dc82e6772caaddf99c1ed23ac75de49b6bfa4f7c1d293df9701b481475ea2
+                  cni.projectcalico.org/podIP: 192.168.117.180/32
+                  cni.projectcalico.org/podIPs: 192.168.117.180/32
+                  kubectl.kubernetes.io/restartedAt: 2026-05-26T13:29:09Z
+Status:           Running
+IP:               192.168.117.180
+IPs:
+  IP:           192.168.117.180
+Controlled By:  StatefulSet/kafka
+Init Containers:
+  volume-permissions:
+    Container ID:  containerd://357c93012e00cdab3937f171e78eae6eb4a96e5c297f32642223383ac303fee9
+    Image:         busybox:1.36
+    Image ID:      docker.io/library/busybox@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      sh
+      -c
+      mkdir -p /var/lib/kafka/data/logs
+
+      chown -R 1000:1000 /var/lib/kafka/data/logs
+
+    State:          Terminated
+      Reason:       Completed
+      Exit Code:    0
+      Started:      Fri, 29 May 2026 20:45:14 +0000
+      Finished:     Fri, 29 May 2026 20:45:14 +0000
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /var/lib/kafka/data from kafka-data (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-9fnbz (ro)
+Containers:
+  kafka:
+    Container ID:  containerd://76ae662d8ea726c58a937461dd59fee40671119650e93917a34ce1f8288a5284
+    Image:         apache/kafka:3.7.1
+    Image ID:      docker.io/apache/kafka@sha256:ed74d7d115968d5e8b00ba6822ac6a384cbaaf54ca38991828647000d7089b68
+    Ports:         9092/TCP, 9093/TCP, 9094/TCP
+    Host Ports:    0/TCP, 0/TCP, 0/TCP
+    Command:
+      /bin/bash
+      -c
+    Args:
+      cat <<KAFKAEOF > /tmp/server.properties
+      node.id=0
+
+      process.roles=broker,controller
+
+      controller.quorum.voters=0@kafka-0.kafka-headless.kafka.svc.cluster.local:9093
+
+      listeners=PLAINTEXT://0.0.0.0:9092,SASL_SSL://0.0.0.0:9094,CONTROLLER://0.0.0.0:9093
+
+      advertised.listeners=PLAINTEXT://kafka.kafka.svc.cluster.local:9092,SASL_SSL://kafka.kafka.svc.cluster.local:9094
+
+      listener.security.protocol.map=PLAINTEXT:PLAINTEXT,SASL_SSL:SASL_SSL,CONTROLLER:PLAINTEXT
+
+      controller.listener.names=CONTROLLER
+
+      inter.broker.listener.name=PLAINTEXT
+
+      log.dirs=/var/lib/kafka/data/logs
+
+      offsets.topic.replication.factor=1
+
+      transaction.state.log.replication.factor=1
+
+      transaction.state.log.min.isr=1
+      KAFKAEOF
+
+      /opt/kafka/bin/kafka-storage.sh format \
+        --ignore-formatted \
+        --cluster-id $CLUSTER_ID \
+        --config /tmp/server.properties
+
+      exec /opt/kafka/bin/kafka-server-start.sh \
+        /tmp/server.properties
+
+    State:          Waiting
+      Reason:       CrashLoopBackOff
+    Last State:     Terminated
+      Reason:       Error
+      Exit Code:    1
+      Started:      Fri, 29 May 2026 21:54:36 +0000
+      Finished:     Fri, 29 May 2026 21:54:45 +0000
+    Ready:          False
+    Restart Count:  18
+    Limits:
+      cpu:     1
+      memory:  2Gi
+    Requests:
+      cpu:      500m
+      memory:   1Gi
+    Liveness:   tcp-socket :9092 delay=30s timeout=1s period=20s #success=1 #failure=3
+    Readiness:  tcp-socket :9092 delay=15s timeout=1s period=10s #success=1 #failure=3
+    Environment:
+      CLUSTER_ID:  MkU3OEVBNTcwNTJENDM2Qk
+      KAFKA_OPTS:  -Djava.security.auth.login.config=/etc/kafka/security/kafka_jaas.conf
+    Mounts:
+      /etc/kafka/security from kafka-security-runtime (ro)
+      /etc/kafka/tls from kafka-runtime-tls (ro)
+      /var/lib/kafka/data from kafka-data (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-9fnbz (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True
+  Initialized                 True
+  Ready                       False
+  ContainersReady             False
+  PodScheduled                True
+Volumes:
+  kafka-data:
+    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+    ClaimName:  kafka-data-kafka-0
+    ReadOnly:   false
+  kafka-runtime-tls:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  kafka-runtime-tls
+    Optional:    false
+  kafka-security-runtime:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  kafka-security-runtime
+    Optional:    false
+  kube-api-access-9fnbz:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason   Age                  From     Message
+  ----     ------   ----                 ----     -------
+  Warning  BackOff  63s (x321 over 70m)  kubelet  Back-off restarting failed container kafka in pod kafka-0_kafka(a7cf9b73-47d2-4405-9f16-618ff1083700)

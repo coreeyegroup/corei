@@ -1,0 +1,15 @@
+/*
+------------------------------------------------------------
+COREI
+Stage 25
+Phase 19
+
+Window Styles
+------------------------------------------------------------
+*/
+
+@import "./window-container.css";
+@import "./window-surface.css";
+@import "./window-frame.css";
+@import "./window-client-area.css";
+@import "./window-content.css";

@@ -1,0 +1,804 @@
+/******************************************************************************
+ *
+ * COREI OPERATING SYSTEM
+ *
+ * STAGE-25
+ * PHASE-17
+ * STEP-06-C
+ *
+ ******************************************************************************/
+
+.corei-workspace-surface {
+
+    width:100%;
+
+    height:100%;
+
+    display:flex;
+
+    flex-direction:column;
+
+    min-width:0;
+
+    min-height:0;
+
+    overflow:hidden;
+
+    background:
+        var(--corei-color-background-primary);
+
+    color:
+        var(--corei-color-text-primary);
+
+}
+
+
+.corei-workspace-context {
+
+    height:26px;
+
+    display:flex;
+
+    align-items:center;
+
+    padding:0 10px;
+
+    font-size:10px;
+
+    font-weight:500;
+
+    letter-spacing:.04em;
+
+    border-bottom:
+        1px solid var(--corei-color-border);
+
+}
+
+
+
+/******************************************************************************
+ *
+ * FINAL VISUAL REFINEMENT
+ *
+ * Workspace Density
+ *
+ ******************************************************************************/
+
+.corei-workspace-container {
+
+    flex:1;
+
+    display:flex;
+
+    flex-direction:column;
+
+    min-width:0;
+
+    min-height:0;
+
+    overflow:hidden;
+
+    padding:2px;
+
+    gap:0;
+
+    background:
+        var(--corei-color-background-primary);
+
+}
+
+
+.corei-workspace-state {
+
+    height:24px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:0 8px;
+
+    font-size:10px;
+
+    border-top:
+        1px solid var(--corei-color-border);
+
+}
+
+.corei-workspace-state__label {
+
+    color:
+        var(--corei-color-text-muted);
+
+    font-size:
+        10px;
+
+}
+
+
+.corei-workspace-state__value {
+
+    color:
+        var(--corei-color-text-secondary);
+
+    font-size:
+        10px;
+
+}
+
+
+.corei-workspace-state__separator {
+
+    color:
+        var(--corei-color-border);
+
+}
+
+/******************************************************************************
+ *
+ * STEP-06-E
+ * Workspace Switching Surface
+ *
+ ******************************************************************************/
+
+.corei-workspace-switcher {
+
+    display:flex;
+
+    align-items:center;
+
+    gap:1px;
+
+    padding:0 4px;
+
+    height:24px;
+
+    border-bottom:
+        1px solid var(--corei-color-border);
+
+    overflow:hidden;
+
+}
+
+
+.corei-workspace-switch {
+
+    height:22px;
+
+    padding:0 8px;
+
+    border:none;
+
+    background:transparent;
+
+    color:var(--corei-color-text-secondary);
+
+    font-size:11px;
+
+    cursor:pointer;
+
+    white-space:nowrap;
+
+}
+
+
+.corei-workspace-switch:hover {
+
+    color:var(--corei-color-text-primary);
+
+}
+
+
+.corei-workspace-switch.active {
+
+    background:var(--corei-color-surface-2);
+
+    color:var(--corei-color-text-primary);
+
+    border-bottom:1px solid var(--corei-color-border);
+
+}
+
+.corei-window-header {
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    height:28px;
+
+    flex:0 0 28px;
+
+    padding:0 8px;
+
+    background:
+        var(--corei-color-surface-1);
+
+    border-bottom:
+        1px solid var(--corei-color-border);
+
+}
+
+.corei-window-title {
+
+    margin:0;
+
+    font-size:11px;
+
+    font-weight:600;
+
+    letter-spacing:.02em;
+
+    text-transform:uppercase;
+
+    color:
+        var(--corei-color-text-primary);
+
+}
+
+.corei-window-actions {
+
+    display:flex;
+
+    align-items:center;
+
+    gap:2px;
+
+    flex-shrink:0;
+
+}
+
+.corei-window-actions button {
+
+    width:18px;
+
+    height:18px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:0;
+
+    border:none;
+
+    background:transparent;
+
+    color:
+        var(--corei-color-text-secondary);
+
+}
+
+
+.corei-window-actions button:hover {
+
+    background:
+        var(--corei-color-surface-2);
+
+    color:
+        var(--corei-color-text-primary);
+
+}
+
+/******************************************************************************
+ *
+ * STEP-05
+ * Workspace Empty State Visual Polish
+ *
+ ******************************************************************************/
+
+.corei-window-body {
+
+    flex:1;
+
+    min-width:0;
+
+    min-height:0;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    overflow:hidden;
+
+    padding:8px;
+
+    background:
+        var(--corei-color-background-primary);
+
+    color:
+        var(--corei-color-text-secondary);
+
+    font-size:11px;
+
+    text-align:center;
+
+}
+
+.corei-window {
+
+    display:flex;
+
+    flex-direction:column;
+
+    flex:1 1 auto;
+
+    min-width:0;
+
+    min-height:0;
+
+    overflow:hidden;
+
+    background:
+        var(--corei-color-surface-1);
+
+    border:
+        1px solid var(--corei-color-border);
+
+    border-radius:0;
+
+    box-shadow:none;
+
+}
+
+/******************************************************************************
+ *
+ * STEP-07-D
+ * Focus Visualization
+ *
+ ******************************************************************************/
+
+.corei-window:not(.corei-window--active) {
+
+    opacity:1;
+
+}
+
+/******************************************************************************
+ *
+ * STEP-07-E
+ * Window Host Refinement
+ *
+ ******************************************************************************/
+
+.corei-window-host {
+
+    flex:1;
+
+    display:flex;
+
+    flex-direction:column;
+
+    min-width:0;
+
+    min-height:0;
+
+    align-items:stretch;
+
+    justify-content:stretch;
+
+    overflow:hidden;
+
+    gap:0px;
+
+}
+
+.corei-window + .corei-window {
+
+    margin-top:0;
+
+}
+
+
+/******************************************************************************
+ *
+ * STEP-08
+ * Panel Platform UX Integration
+ *
+ ******************************************************************************/
+
+.corei-panel-host {
+
+    flex:1;
+
+    display:flex;
+
+    flex-direction:column;
+
+    min-width:0;
+
+    min-height:0;
+
+    overflow:hidden;
+
+    padding:8px;
+
+}
+
+.corei-panel {
+
+    flex:1;
+
+    display:flex;
+
+    flex-direction:column;
+
+    min-width:0;
+
+    min-height:0;
+
+    overflow:hidden;
+
+    border:1px solid var(--corei-color-border);
+
+    border-radius:4px;
+
+    background:
+        var(--corei-color-surface-1);
+
+}
+
+.corei-panel-header {
+
+    height:30px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:0 10px;
+
+    border-bottom:
+        1px solid var(--corei-color-border);
+
+    background:
+        var(--corei-color-surface-2);
+
+}
+
+.corei-panel-title {
+
+    font-size:11px;
+
+    font-weight:500;
+
+    letter-spacing:.03em;
+
+    text-transform:uppercase;
+
+}
+
+.corei-panel-surface {
+
+    flex:1;
+
+    min-width:0;
+
+    min-height:0;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    overflow:hidden;
+
+    background:
+        var(--corei-color-background-primary);
+
+    color:
+        var(--corei-color-text-secondary);
+
+    font-size:11px;
+
+}
+
+.corei-panel--active {
+
+    border-color:
+        var(--corei-color-accent-subtle);
+
+}
+
+.corei-panel:not(.corei-panel--active) {
+
+    opacity:.94;
+
+}
+
+.corei-panel-host[data-layout="vertical"] {
+
+    gap:8px;
+
+}
+
+.corei-panel-host[data-layout="horizontal"] {
+
+    gap:8px;
+
+}
+
+/******************************************************************************
+ *
+ * STEP-09
+ * Workbench UX Foundation
+ *
+ ******************************************************************************/
+
+.corei-workbench {
+
+    flex:1;
+
+    display:flex;
+
+    flex-direction:column;
+
+    min-width:0;
+
+    min-height:0;
+
+    overflow:hidden;
+
+}
+
+/******************************************************************************
+ *
+ * STEP-05
+ * Workspace Toolbar Visual Polish
+ *
+ ******************************************************************************/
+
+.corei-command-surface {
+
+    height:28px;
+
+    flex:0 0 32px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:0 8px;
+
+    border-bottom:
+        1px solid var(--corei-color-border);
+
+    background:
+        var(--corei-color-surface-2);
+
+    color:
+        var(--corei-color-text-secondary);
+
+    font-size:11px;
+
+}
+
+/******************************************************************************
+ *
+ * STEP-05
+ * Workspace Tabs Visual Polish
+ *
+ ******************************************************************************/
+
+.corei-editor-tabs {
+
+    flex:0 0 32px;
+
+    display:flex;
+
+    align-items:flex-end;
+
+    gap:2px;
+
+    padding:0 8px;
+
+    border-bottom:
+        1px solid var(--corei-color-border);
+
+    overflow:hidden;
+
+}
+
+
+.corei-editor-tab {
+
+    height:26px;
+
+    display:flex;
+
+    align-items:center;
+
+    padding:0 10px;
+
+    border:none;
+
+    border-top-left-radius:0;
+
+    border-top-right-radius:0;
+
+    background:transparent;
+
+    color:
+        var(--corei-color-text-secondary);
+
+    font-size:11px;
+
+    font-weight:500;
+
+    cursor:pointer;
+
+}
+
+
+.corei-editor-tab:hover {
+
+    background:
+        var(--corei-color-surface-2);
+
+    color:
+        var(--corei-color-text-primary);
+
+}
+
+
+.corei-editor-tab--active {
+
+    background:
+        var(--corei-color-surface-1);
+
+    color:
+        var(--corei-color-text-primary);
+
+    font-weight:600;
+
+    border-bottom:
+        1px solid var(--corei-color-border);
+
+}
+
+.corei-editor-area {
+
+    flex:1;
+
+    min-width:0;
+
+    min-height:0;
+
+    display:flex;
+
+    align-items:flex-start;
+
+    justify-content:flex-start;
+
+    overflow:hidden;
+
+    border-top:
+        1px solid var(--corei-color-border);
+
+    background:
+        var(--corei-color-background-primary);
+
+    color:
+        var(--corei-color-text-secondary);
+
+    font-size:10px;
+
+}
+
+.corei-bottom-panel {
+
+    flex:0 0 140px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:0 8px;
+
+    gap:8px;
+
+    border-top:
+        1px solid var(--corei-color-border);
+
+    background:
+        var(--corei-color-surface-1);
+
+    color:
+        var(--corei-color-text-secondary);
+
+    font-size:10px;
+
+}
+
+/******************************************************************************
+ *
+ * STEP-10
+ * Command Palette
+ *
+ ******************************************************************************/
+
+.corei-command-palette {
+
+    width:100%;
+
+    height:26px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:0 8px;
+
+    border:none;
+
+    border-radius:0;
+
+    background:
+
+        var(--corei-color-surface-1);
+
+    color:
+
+        var(--corei-color-text-secondary);
+
+    cursor:pointer;
+
+}
+
+.corei-keyboard-surface {
+
+    height:22px;
+
+    display:flex;
+
+    align-items:center;
+
+    padding:0 8px;
+
+    border-bottom:
+
+        1px solid var(--corei-color-border);
+
+    font-size:10px;
+
+    color:
+
+        var(--corei-color-text-secondary);
+
+}
+
+
+.corei-productivity-status {
+
+    font-size:10px;
+
+    font-weight:500;
+
+}
+
+.corei-operator-feedback {
+
+    color:
+
+        var(--corei-color-text-secondary);
+
+    font-size:10px;
+
+}

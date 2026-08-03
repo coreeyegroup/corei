@@ -1,0 +1,2059 @@
+# STAGE-23 — INSTITUTIONAL OPERATOR WORKSTATION
+
+## Phase-09 — Institutional Workspace Architecture
+
+**Document Status:** Authoritative
+**Stage:** 23
+**Phase:** 09
+**Sections Covered:** 01–04 (Message 1 of 4)
+
+**Authoritative References**
+
+* Stage-23 Phase-00 — Constitutional Foundation
+* Stage-23 Phase-01 — Discovery & Reverse Engineering
+* Stage-23 Phase-02 — Operator Architecture
+* Stage-23 Phase-03 — Operational Environment Architecture
+* Stage-23 Phase-04 — Experience Architecture
+* Stage-23 Phase-05 — Technology Landscape
+* Stage-23 Phase-06 — COREI Workbench Architecture
+* Stage-23 Phase-07 — Institutional Design System
+* Stage-23 Phase-08 — Institutional Capability Ecosystem
+* COREI Anchor Law
+* Master Trader Persona
+
+---
+
+# SECTION 01 — PURPOSE
+
+## Purpose
+
+The purpose of Phase-09 is to establish the Institutional Workspace Architecture of the COREI Workbench.
+
+The Workspace Architecture defines how governed institutional capabilities are composed into complete professional operational environments.
+
+A workspace is not a screen.
+
+A workspace is not a dashboard.
+
+A workspace is not a page.
+
+A workspace is a purpose-built operational environment supporting a specific institutional objective.
+
+Examples include:
+
+* Trading Operations
+* Infrastructure Operations
+* Risk Operations
+* Research Operations
+* Executive Operations
+* Compliance Operations
+
+Each workspace provides the operator with:
+
+* relevant capabilities,
+* operational context,
+* workflow continuity,
+* institutional awareness,
+* decision support,
+* execution tools.
+
+The Workspace Architecture therefore becomes the operational composition layer of the COREI Workbench.
+
+---
+
+# SECTION 02 — MISSION
+
+## Mission
+
+The mission of the Institutional Workspace Architecture is to enable professional operators to perform complete institutional workflows inside purpose-built operational environments.
+
+Every workspace shall satisfy five objectives.
+
+### Operational Focus
+
+Each workspace shall optimise one primary institutional responsibility.
+
+Examples:
+
+Trade.
+
+Monitor.
+
+Investigate.
+
+Research.
+
+Govern.
+
+Execute.
+
+Review.
+
+---
+
+### Capability Composition
+
+Workspaces shall be composed entirely from governed capabilities.
+
+Workspaces shall not implement independent business behaviour.
+
+---
+
+### Context Awareness
+
+Every workspace shall understand:
+
+* operator,
+* institution,
+* account,
+* broker,
+* strategy,
+* portfolio,
+* market,
+* operational state.
+
+Context shall continuously adapt the workspace.
+
+---
+
+### Workflow Continuity
+
+Professional work shall flow naturally across capabilities.
+
+Operators shall experience one continuous operational environment.
+
+---
+
+### Institutional Consistency
+
+Regardless of workspace,
+
+operators shall recognise:
+
+* behaviour,
+* navigation,
+* commands,
+* interaction,
+* visual language,
+* operational principles.
+
+Every workspace therefore becomes a specialised expression of one institutional operating system.
+
+---
+
+# SECTION 03 — PROBLEM STATEMENT
+
+## Problem Statement
+
+Traditional enterprise systems frequently organise software around pages.
+
+Examples include:
+
+Dashboard
+
+Orders
+
+Positions
+
+Risk
+
+Reports
+
+Settings
+
+This organisation reflects software structure rather than professional work.
+
+Institutional operators rarely work page by page.
+
+Instead they work through continuous operational workflows.
+
+For example:
+
+A trader simultaneously monitors:
+
+* markets,
+* positions,
+* executions,
+* news,
+* AI,
+* portfolio,
+* risk,
+* brokers,
+* watchlists.
+
+These activities cannot be separated into independent pages.
+
+Likewise,
+
+an infrastructure engineer simultaneously observes:
+
+* Kubernetes,
+* Kafka,
+* Grafana,
+* Vault,
+* logs,
+* deployments,
+* telemetry,
+* alerts,
+* terminals.
+
+Professional work is inherently compositional.
+
+The Workspace Architecture solves this problem by allowing operators to assemble purpose-built operational environments from governed capabilities.
+
+The workspace becomes the operator's working environment rather than a software page.
+
+---
+
+# SECTION 04 — BACKGROUND
+
+## Background
+
+The previous phases progressively established the constitutional architecture of the COREI Institutional Operator Workstation.
+
+Phase-00 established constitutional authority.
+
+Phase-01 established institutional engineering knowledge.
+
+Phase-02 established professional operators.
+
+Phase-03 established the Operational Environment.
+
+Phase-04 established the Experience Architecture.
+
+Phase-05 established the Technology Landscape.
+
+Phase-06 established the COREI Workbench Runtime.
+
+Phase-07 established the Institutional Design System.
+
+Phase-08 established the Institutional Capability Ecosystem.
+
+Phase-09 now defines how those capabilities become complete professional operational environments.
+
+The architectural progression therefore becomes:
+
+Constitution
+
+↓
+
+Operator
+
+↓
+
+Operational Environment
+
+↓
+
+Experience
+
+↓
+
+Technology
+
+↓
+
+Workbench Runtime
+
+↓
+
+Institutional Design System
+
+↓
+
+Institutional Capability Ecosystem
+
+↓
+
+Institutional Workspace Architecture
+
+↓
+
+Professional Institutional Operation
+
+The Workspace Architecture is therefore the architectural bridge between reusable capabilities and real institutional work.
+
+Every workspace is an orchestrated composition of capabilities operating inside the COREI Workbench.
+
+This architecture ensures that COREI can support an unlimited number of professional operational environments while preserving constitutional consistency, engineering governance, operator familiarity, and long-term scalability in accordance with the COREI Anchor Law and the Master Trader Persona.
+
+### Architectural Observation
+
+I think we've reached another significant architectural distinction.
+
+Most software products think like this:
+
+Application
+      │
+      ▼
+Pages
+      │
+      ▼
+Components
+
+COREI should think like this:
+
+Institution
+      │
+      ▼
+Operational Objective
+      │
+      ▼
+Workspace
+      │
+      ▼
+Capabilities
+      │
+      ▼
+Capability Components
+      │
+      ▼
+Workbench Runtime
+
+The most important difference is that a workspace is not navigation.
+
+A workspace is the professional environment in which an operator performs a complete institutional responsibility.
+
+For example:
+
+Trading Workspace is not a chart page—it is the complete environment for market observation, analysis, execution, and position management.
+Infrastructure Workspace is not a monitoring page—it is the environment for operating Kubernetes, Kafka, Vault, Grafana, observability, deployments, and platform health.
+Research Workspace is not a notebook—it is the environment for datasets, AI, models, backtesting, and hypothesis validation.
+
+This distinction aligns naturally with the COREI Anchor Law and the Master Trader Persona because it organizes the system around professional operational objectives, not around software navigation. I believe that will make the COREI Workbench feel much closer to an institutional operating floor than to a traditional enterprise web application.
+
+# SECTION 05 — ARCHITECTURAL CONTEXT
+
+## Architectural Context
+
+The Institutional Workspace Architecture defines how the COREI Workbench assembles operational capabilities into complete professional working environments.
+
+A workspace is not merely a visual arrangement.
+
+It is an executable operational environment that combines:
+
+* institutional objective,
+* operator context,
+* governed capabilities,
+* operational workflows,
+* environmental state,
+* runtime services,
+* institutional intelligence.
+
+The Workspace Architecture therefore becomes the composition architecture of COREI.
+
+---
+
+## Workspace Composition Model
+
+Every workspace shall be composed from six architectural layers.
+
+### Layer 1 — Operational Objective
+
+Every workspace exists to satisfy one primary institutional objective.
+
+Examples include:
+
+* Trade Markets
+* Monitor Infrastructure
+* Research Strategies
+* Control Risk
+* Executive Oversight
+* Compliance Operations
+
+The objective governs everything else.
+
+---
+
+### Layer 2 — Operational Context
+
+The workspace continuously understands:
+
+* active operator,
+* accounts,
+* brokers,
+* exchanges,
+* portfolios,
+* strategies,
+* markets,
+* regions,
+* permissions,
+* institutional state.
+
+Context determines what the operator sees and how capabilities behave.
+
+---
+
+### Layer 3 — Capability Composition
+
+The workspace assembles only governed capabilities.
+
+Examples:
+
+Trading Workspace
+
+↓
+
+Market Investigation
+
+Portfolio
+
+Execution
+
+Watchlists
+
+News
+
+AI
+
+Risk
+
+Orders
+
+Positions
+
+Workspace behaviour emerges from capability composition rather than bespoke implementation.
+
+---
+
+### Layer 4 — Workflow Orchestration
+
+Capabilities cooperate to support complete institutional workflows.
+
+Examples:
+
+Observe
+
+↓
+
+Investigate
+
+↓
+
+Analyse
+
+↓
+
+Decide
+
+↓
+
+Execute
+
+↓
+
+Monitor
+
+↓
+
+Review
+
+↓
+
+Improve
+
+The workspace orchestrates these workflows without operators needing to switch applications.
+
+---
+
+### Layer 5 — Environmental State
+
+The workspace maintains:
+
+* layout,
+* panel state,
+* investigations,
+* selected objects,
+* filters,
+* bookmarks,
+* history,
+* active workflows.
+
+Operational continuity becomes automatic.
+
+---
+
+### Layer 6 — Institutional Intelligence
+
+Every workspace integrates:
+
+* AI assistance,
+* contextual recommendations,
+* dependency awareness,
+* relationship discovery,
+* workflow suggestions,
+* decision support.
+
+The workspace therefore becomes progressively more intelligent over time.
+
+---
+
+## Workspace Lifecycle
+
+Every workspace follows a governed lifecycle.
+
+Workspace Definition
+
+↓
+
+Composition
+
+↓
+
+Validation
+
+↓
+
+Activation
+
+↓
+
+Operation
+
+↓
+
+Persistence
+
+↓
+
+Restoration
+
+↓
+
+Evolution
+
+The Workbench Runtime manages this lifecycle.
+
+---
+
+# SECTION 06 — OPERATOR PERSPECTIVE
+
+## Operator Perspective
+
+Professional operators should perceive the workspace as their operational environment rather than software.
+
+The workspace should feel familiar, persistent, and deeply personal while remaining institutionally governed.
+
+---
+
+## Operational Identity
+
+Operators identify with workspaces rather than pages.
+
+Examples include:
+
+"My Trading Workspace"
+
+"My Infrastructure Workspace"
+
+"My Research Workspace"
+
+"My Risk Workspace"
+
+The workspace becomes the operator's professional environment.
+
+---
+
+## Workspace Memory
+
+The workspace shall remember:
+
+* open investigations,
+* active positions,
+* monitored instruments,
+* operational layouts,
+* terminal state,
+* selected capabilities,
+* recent workflows,
+* collaborative context.
+
+Professional work resumes naturally.
+
+---
+
+## Adaptive Environment
+
+The workspace adapts according to:
+
+* market conditions,
+* operational events,
+* operator role,
+* institutional priorities,
+* active workflow.
+
+Adaptation supports professional work without disrupting familiarity.
+
+---
+
+## Continuous Focus
+
+Operators should remain focused on institutional work.
+
+The workspace quietly manages:
+
+* layout,
+* services,
+* persistence,
+* capability orchestration,
+* contextual updates.
+
+Attention remains on operations.
+
+---
+
+## Workspace Ownership
+
+Operators should feel that the workspace belongs to them professionally.
+
+However,
+
+institutional governance ensures:
+
+* consistency,
+* security,
+* compliance,
+* operational standards.
+
+Personalisation exists within institutional boundaries.
+
+---
+
+# SECTION 07 — ENGINEERING PERSPECTIVE
+
+## Engineering Perspective
+
+Engineering shall treat workspaces as executable architectural compositions.
+
+Workspaces are configuration-driven operational environments.
+
+They are not hardcoded screens.
+
+---
+
+## Workspace Definition
+
+Every workspace shall possess a Workspace Definition.
+
+The definition includes:
+
+* Workspace Identity
+* Operational Objective
+* Supported Operators
+* Required Capabilities
+* Layout Model
+* Context Model
+* Workflow Model
+* Runtime Requirements
+* Permissions
+* Extension Points
+
+The definition becomes the authoritative specification.
+
+---
+
+## Workspace Composition
+
+Workspaces compose capabilities through declarative configuration.
+
+The Workbench Runtime resolves:
+
+* capability loading,
+* dependency validation,
+* layout,
+* runtime services,
+* lifecycle.
+
+Engineering focuses on capability development.
+
+The Workbench handles composition.
+
+---
+
+## Workspace Contracts
+
+Every workspace shall publish:
+
+* Workspace Contract
+* Capability Map
+* Context Contract
+* Workflow Contract
+* Runtime Contract
+* Persistence Contract
+
+These contracts enable deterministic composition.
+
+---
+
+## Runtime Integration
+
+Workspaces integrate with:
+
+* Workspace Engine
+* Layout Engine
+* Context Engine
+* Search Engine
+* Command Engine
+* Notification Engine
+* Session Engine
+* Extension Engine
+* AI Runtime
+
+The Workbench provides the runtime.
+
+The workspace consumes it.
+
+---
+
+## Workspace Isolation
+
+Each workspace remains operationally isolated.
+
+Failures inside one workspace shall not compromise unrelated workspaces.
+
+---
+
+## Workspace Observability
+
+Every workspace shall expose:
+
+* lifecycle,
+* health,
+* runtime metrics,
+* capability metrics,
+* composition status,
+* performance,
+* audit events.
+
+Workspaces become observable operational environments.
+
+---
+
+# SECTION 08 — INSTITUTIONAL PERSPECTIVE
+
+## Institutional Perspective
+
+Workspaces become the primary operational environments through which institutions perform professional work.
+
+Institutional growth therefore becomes workspace evolution rather than application proliferation.
+
+---
+
+## Institutional Standardisation
+
+Core institutional workspaces shall become governed organisational standards.
+
+Examples include:
+
+* Institutional Trading Workspace
+* Institutional Infrastructure Workspace
+* Institutional Research Workspace
+* Institutional Risk Workspace
+* Institutional Executive Workspace
+* Institutional Compliance Workspace
+
+These become reference operational environments.
+
+---
+
+## Institutional Flexibility
+
+Institutions may compose specialised workspaces for:
+
+* individual desks,
+* regional operations,
+* asset classes,
+* broker-specific operations,
+* strategy teams,
+* executive functions.
+
+Specialisation shall occur through composition rather than architectural divergence.
+
+---
+
+## Institutional Governance
+
+Every workspace shall undergo architectural governance.
+
+Review includes:
+
+* constitutional compliance,
+* capability composition,
+* operator value,
+* runtime integration,
+* security,
+* scalability,
+* maintainability.
+
+---
+
+## Institutional Evolution
+
+As institutional responsibilities evolve,
+
+new workspaces shall primarily emerge through recombination of existing governed capabilities.
+
+Creation through composition becomes the preferred engineering model.
+
+---
+
+## Institutional Knowledge
+
+Every workspace becomes part of the institutional operating model.
+
+Future engineers and operators should understand:
+
+* why the workspace exists,
+* what objective it serves,
+* which capabilities it assembles,
+* how workflows operate,
+* how it evolves.
+
+The Institutional Workspace Architecture therefore becomes the operational blueprint through which COREI translates reusable capabilities into complete professional operating environments.
+
+### Architectural Observation
+
+I think we've now reached one of the strongest concepts in the entire COREI architecture.
+
+A workspace should not be viewed as a saved layout.
+
+It should be viewed as an Operational Digital Twin of a professional working environment.
+
+For example:
+
+Institutional Trading Workspace
+
+├── Operational Objective
+├── Operator Context
+├── Capability Composition
+├── Workflow Model
+├── Runtime State
+├── Institutional Intelligence
+├── Historical Memory
+├── Commands
+├── Search
+├── Notifications
+├── AI Context
+├── Audit
+└── Persistence
+
+Notice what's missing.
+
+There is no mention of:
+
+React
+Tabs
+Panels
+CSS
+Components
+
+Those are implementation details.
+
+The architecture only knows that it is executing an Institutional Workspace.
+
+I believe this is exactly how an institutional operating system should think. A workspace becomes the digital equivalent of a real trading desk, infrastructure operations room, research laboratory, or executive command center—each with its own purpose, memory, context, tools, and workflows, yet all sharing one common Workbench, one constitutional architecture, and one operational language.
+
+# SECTION 09 — FUNCTIONAL REQUIREMENTS
+
+## Functional Requirements
+
+The Institutional Workspace Architecture shall provide a governed framework for constructing complete professional operational environments inside the COREI Workbench.
+
+Every workspace shall support the complete lifecycle of institutional work rather than simply displaying information.
+
+---
+
+## 9.1 Workspace Registration
+
+Every workspace shall register with the COREI Workbench.
+
+Registration shall include:
+
+* Workspace Identifier
+* Workspace Name
+* Operational Objective
+* Supported Operator Roles
+* Required Capabilities
+* Required Runtime Services
+* Context Model
+* Workflow Model
+* Permission Model
+* Version
+* Owner
+
+Registration makes the workspace discoverable and governable.
+
+---
+
+## 9.2 Workspace Composition
+
+Every workspace shall be composed exclusively from governed Institutional Capabilities.
+
+The Workbench shall compose:
+
+Operational Objective
+
+↓
+
+Capabilities
+
+↓
+
+Runtime Services
+
+↓
+
+Design System
+
+↓
+
+Context
+
+↓
+
+Workflow
+
+↓
+
+Operational Environment
+
+No workspace shall bypass this composition model.
+
+---
+
+## 9.3 Workspace Context
+
+Every workspace shall maintain continuous awareness of:
+
+* Operator
+* Account
+* Broker
+* Portfolio
+* Strategy
+* Asset Class
+* Exchange
+* Region
+* Time Zone
+* Session
+* Market State
+* Institutional State
+
+Context shall remain authoritative throughout the workspace lifecycle.
+
+---
+
+## 9.4 Workspace Workflow
+
+Every workspace shall support one or more complete institutional workflows.
+
+Examples include:
+
+Trading
+
+Observe
+
+↓
+
+Investigate
+
+↓
+
+Analyse
+
+↓
+
+Execute
+
+↓
+
+Monitor
+
+↓
+
+Review
+
+Infrastructure
+
+Observe
+
+↓
+
+Diagnose
+
+↓
+
+Investigate
+
+↓
+
+Resolve
+
+↓
+
+Validate
+
+↓
+
+Monitor
+
+Research
+
+Collect
+
+↓
+
+Explore
+
+↓
+
+Hypothesise
+
+↓
+
+Model
+
+↓
+
+Validate
+
+↓
+
+Publish
+
+Workspaces organise workflows.
+
+Capabilities perform workflow steps.
+
+---
+
+## 9.5 Workspace Persistence
+
+Every workspace shall persist:
+
+* layout,
+* capability state,
+* selected objects,
+* investigation history,
+* filters,
+* bookmarks,
+* operational context,
+* workflow progress.
+
+The operator shall resume work exactly where it previously stopped.
+
+---
+
+## 9.6 Workspace Collaboration
+
+The architecture shall support collaborative workspaces.
+
+Examples include:
+
+* shared investigations,
+* shared layouts,
+* collaborative reviews,
+* team annotations,
+* operator handover,
+* institutional knowledge sharing.
+
+---
+
+## 9.7 Workspace Intelligence
+
+Every workspace shall integrate with the Institutional Intelligence Layer.
+
+Capabilities include:
+
+* AI recommendations,
+* contextual assistance,
+* workflow guidance,
+* anomaly detection,
+* dependency analysis,
+* operational insights.
+
+---
+
+## 9.8 Workspace Commands
+
+Every workspace shall expose a common command interface.
+
+Examples include:
+
+Open
+
+Close
+
+Duplicate
+
+Export
+
+Save Layout
+
+Reset
+
+Share
+
+Investigate
+
+Execute
+
+Review
+
+Workspace commands integrate into the Workbench Command System.
+
+---
+
+## 9.9 Workspace Search
+
+Every workspace shall expose searchable operational knowledge.
+
+Search includes:
+
+* capabilities,
+* commands,
+* operational objects,
+* investigations,
+* documentation,
+* workflows,
+* history.
+
+Search becomes workspace-aware.
+
+---
+
+## 9.10 Workspace Governance
+
+Every workspace shall continuously validate:
+
+* capability compatibility,
+* runtime integrity,
+* security,
+* permissions,
+* version compatibility,
+* architectural compliance.
+
+Governance becomes part of workspace execution.
+
+---
+
+# SECTION 10 — NON-FUNCTIONAL REQUIREMENTS
+
+## Non-Functional Requirements
+
+Every workspace shall satisfy institutional operational quality standards.
+
+---
+
+### Operational Continuity
+
+Professional work shall continue without unnecessary interruption.
+
+---
+
+### Runtime Stability
+
+Workspace failures shall remain isolated.
+
+The Workbench continues operating.
+
+---
+
+### Composability
+
+Capabilities shall be added or removed without redesigning the workspace architecture.
+
+---
+
+### Adaptability
+
+Workspaces shall adapt dynamically to institutional context while preserving familiarity.
+
+---
+
+### Performance
+
+Support:
+
+* continuous market streaming,
+* large operational datasets,
+* multiple simultaneous investigations,
+* high-density visual environments.
+
+---
+
+### Observability
+
+Every workspace shall expose:
+
+* metrics,
+* logs,
+* traces,
+* lifecycle,
+* composition events,
+* health.
+
+---
+
+### Security
+
+Permissions, authentication, audit, and governance shall integrate seamlessly.
+
+---
+
+### Maintainability
+
+Workspace definitions shall remain configuration-driven.
+
+Engineering avoids hardcoded workspace behaviour.
+
+---
+
+### Technology Independence
+
+Workspace architecture shall remain independent of rendering technology.
+
+---
+
+### Institutional Consistency
+
+Every workspace shall behave consistently regardless of operational domain.
+
+---
+
+# SECTION 11 — SCALABILITY
+
+## Scalability
+
+Workspace Architecture shall support unlimited institutional expansion.
+
+Growth occurs through governed composition.
+
+Not architectural redesign.
+
+---
+
+## Workspace Scalability
+
+Support thousands of workspaces.
+
+Each remains independently configurable.
+
+---
+
+## Capability Scalability
+
+Support continuous capability expansion without modifying workspace architecture.
+
+---
+
+## Operator Scalability
+
+Support:
+
+* individual operators,
+* teams,
+* desks,
+* departments,
+* global operations.
+
+---
+
+## Terminal Scalability
+
+Workspaces shall operate across:
+
+* Trading
+* Infrastructure
+* Research
+* Risk
+* Executive
+* Compliance
+* Cyber Security
+* Treasury
+* Future Domains
+
+---
+
+## Multi-Monitor Scalability
+
+Support:
+
+* distributed workspaces,
+* synchronized workspaces,
+* shared context,
+* monitor-aware layouts.
+
+---
+
+## Organisational Scalability
+
+Workspace Architecture shall support:
+
+* multiple business units,
+* regional offices,
+* institutional subsidiaries,
+* operational centres.
+
+---
+
+## Constitutional Scalability
+
+The Workspace Architecture shall inherently support every scalability dimension defined within the COREI Anchor Law including:
+
+* Multi Account
+* Multi Broker
+* Multi Strategy
+* Multi Portfolio
+* Multi Asset
+* Multi Exchange
+* Multi Market
+* Multi Currency
+* Multi Region
+* Multi Team
+* Multi Role
+* Multi Monitor
+* Multi Custodian
+* Multi Jurisdiction
+* 24×7 Institutional Operations
+
+Workspace composition shall remain constitutionally scalable.
+
+---
+
+# SECTION 12 — FUTURE EVOLUTION
+
+## Future Evolution
+
+The Institutional Workspace Architecture shall evolve through composition rather than reconstruction.
+
+Future workspaces inherit constitutional architecture automatically.
+
+---
+
+## Workspace Evolution
+
+Existing workspaces evolve through:
+
+* capability additions,
+* workflow improvements,
+* contextual intelligence,
+* runtime enhancements.
+
+Architectural identity remains stable.
+
+---
+
+## Dynamic Workspaces
+
+Future workspaces may assemble dynamically according to:
+
+* market events,
+* operator responsibilities,
+* institutional priorities,
+* AI recommendations.
+
+The Workbench orchestrates dynamic composition.
+
+---
+
+## AI-Orchestrated Workspaces
+
+Future intelligence systems may recommend:
+
+* workspace layouts,
+* capability combinations,
+* workflow optimisations,
+* operational shortcuts,
+* investigation paths.
+
+Human operators retain constitutional authority.
+
+---
+
+## Adaptive Workspaces
+
+Workspaces shall increasingly adapt to:
+
+* operator expertise,
+* operational behaviour,
+* market conditions,
+* institutional events.
+
+Adaptation shall enhance professional efficiency without compromising familiarity.
+
+---
+
+## Workspace Marketplace
+
+The architecture shall support a governed institutional workspace catalogue.
+
+Workspaces may eventually be:
+
+* shared,
+* versioned,
+* certified,
+* approved,
+* deployed,
+* archived.
+
+---
+
+## Institutional Longevity
+
+Workspace Architecture shall remain stable across decades of institutional evolution.
+
+Workspaces change.
+
+Capabilities evolve.
+
+The Workbench remains.
+
+The Constitution endures.
+
+---
+
+## Long-Term Vision
+
+The Institutional Workspace Architecture shall become the digital equivalent of professional operating environments.
+
+Every workspace becomes:
+
+* purposeful,
+* intelligent,
+* contextual,
+* composable,
+* governed,
+* persistent,
+* collaborative.
+
+Professional operators therefore work inside institutional environments rather than software applications.
+
+### Architectural Observation
+
+I think we've now arrived at another COREI engineering principle.
+
+A workspace should never be considered a saved layout.
+
+It should be considered a Persistent Operational Environment.
+
+That distinction changes everything.
+
+Persistent Workspace
+
+├── Operational Objective
+├── Capability Composition
+├── Workflow Model
+├── Context Model
+├── Runtime State
+├── Institutional Memory
+├── AI Context
+├── Collaboration
+├── Search
+├── Commands
+├── Audit
+├── Permissions
+├── Notifications
+├── Persistence
+└── Workbench Runtime
+
+Notice that layout is only one item among many.
+
+The workspace is actually a living operational environment with memory, intelligence, workflows, governance, and institutional context.
+
+I also think we've identified another constitutional law that fits naturally into Stage-23:
+
+The Workbench hosts operational environments.
+
+Workspaces host institutional work.
+
+Capabilities perform institutional responsibilities.
+
+Components present capabilities.
+
+Technologies implement components.
+
+This creates a clean, layered architecture where every responsibility has a clear owner, ensuring COREI can continue to grow in capability and complexity without becoming architecturally fragmented. It is fully aligned with the COREI Anchor Law and the Master Trader Persona, preserving institutional discipline while allowing continuous evolution.
+
+# SECTION 13 — DEPENDENCIES
+
+## Dependencies
+
+The Institutional Workspace Architecture depends upon every architectural layer established during the previous phases of Stage-23.
+
+A workspace is not an independent software artifact.
+
+It is the architectural convergence point where constitutional principles, operator requirements, governed capabilities, Workbench services, institutional intelligence, and operational workflows become one executable professional environment.
+
+---
+
+## 13.1 Constitutional Dependencies
+
+Every workspace shall inherit the constitutional authority established in Phase-00.
+
+Every workspace shall reinforce:
+
+* COREI Mission
+* COREI Vision
+* COREI Anchor Law
+* Institutional Engineering Principles
+* Constitutional Scalability
+* Institutional Governance
+
+Workspaces shall never violate constitutional architecture.
+
+---
+
+## 13.2 Discovery Dependencies
+
+Workspace Architecture incorporates institutional engineering knowledge established during Phase-01.
+
+Workspace design shall continuously benefit from proven operational practices derived from:
+
+* institutional trading floors,
+* engineering operations centres,
+* research laboratories,
+* observability platforms,
+* command-and-control environments,
+* collaborative professional workstations.
+
+---
+
+## 13.3 Operator Dependencies
+
+Every workspace exists solely to improve the professional work defined during Phase-02.
+
+Workspace architecture shall improve:
+
+* observation,
+* investigation,
+* analysis,
+* execution,
+* monitoring,
+* collaboration,
+* institutional decision-making.
+
+The operator remains the primary architectural beneficiary.
+
+---
+
+## 13.4 Operational Environment Dependencies
+
+Every workspace executes within the Operational Environment established during Phase-03.
+
+The Operational Environment defines the permanent workplace.
+
+The workspace defines the operational activity occurring inside that workplace.
+
+---
+
+## 13.5 Experience Dependencies
+
+Workspace behaviour shall fully implement the Experience Architecture established during Phase-04.
+
+Every workspace shall preserve:
+
+* workflow continuity,
+* contextual awareness,
+* interaction consistency,
+* cognitive efficiency,
+* operator confidence.
+
+---
+
+## 13.6 Technology Dependencies
+
+Workspace implementations utilise the governed technologies established during Phase-05.
+
+Technology enables workspaces.
+
+Technology never defines workspace architecture.
+
+---
+
+## 13.7 Workbench Dependencies
+
+Every workspace executes exclusively inside the COREI Workbench Runtime established during Phase-06.
+
+The Workbench owns:
+
+* lifecycle,
+* orchestration,
+* runtime,
+* services,
+* persistence.
+
+The workspace consumes these services.
+
+---
+
+## 13.8 Design System Dependencies
+
+Every workspace communicates through the Institutional Design System established during Phase-07.
+
+No workspace shall introduce independent visual language.
+
+Institutional communication remains unified.
+
+---
+
+## 13.9 Capability Dependencies
+
+Every workspace is composed entirely from governed Institutional Capabilities established during Phase-08.
+
+No workspace shall contain business behaviour outside the Capability Ecosystem.
+
+Composition remains the governing architectural principle.
+
+---
+
+## 13.10 Forward Dependencies
+
+Every remaining Stage-23 implementation phase depends directly upon the Workspace Architecture.
+
+Examples include:
+
+### Phase-10
+
+Institutional Intelligence Layer
+
+↓
+
+AI operates inside workspaces.
+
+---
+
+### Phase-11
+
+Operator Optimisation
+
+↓
+
+Workspace usage becomes measurable, optimisable, and continuously improved.
+
+The Workspace Architecture therefore becomes the permanent operational environment of COREI.
+
+---
+
+# SECTION 14 — DELIVERABLES
+
+## Deliverables
+
+Completion of Phase-09 establishes the authoritative architectural framework governing every professional workspace executed by the COREI Workbench.
+
+---
+
+## Primary Deliverables
+
+### Institutional Workspace Architecture
+
+The complete constitutional specification governing workspace composition, behaviour, lifecycle, persistence, governance, and evolution.
+
+---
+
+### Workspace Taxonomy
+
+Authoritative classification of institutional workspaces including:
+
+* Trading Workspace
+* Infrastructure Workspace
+* Research Workspace
+* Risk Workspace
+* Executive Workspace
+* Compliance Workspace
+* Cyber Security Workspace
+* Treasury Workspace
+* AI Operations Workspace
+* Future Institutional Workspaces
+
+---
+
+### Workspace Blueprint Specification
+
+Every workspace shall possess a formal blueprint defining:
+
+* operational objective,
+* supported operator roles,
+* capability composition,
+* workflow model,
+* context model,
+* layout model,
+* runtime model,
+* persistence model,
+* intelligence model,
+* governance model.
+
+The Workspace Blueprint becomes the implementation-independent architectural specification.
+
+---
+
+### Workspace Registry
+
+Institutional registry responsible for:
+
+* workspace discovery,
+* version management,
+* ownership,
+* certification,
+* lifecycle,
+* compatibility.
+
+---
+
+### Workspace Composition Standards
+
+Engineering standards governing:
+
+* capability composition,
+* runtime integration,
+* Workbench integration,
+* Design System compliance,
+* operational workflow composition,
+* context propagation.
+
+---
+
+### Workspace Governance Policy
+
+Institutional policies governing:
+
+* workspace approval,
+* certification,
+* versioning,
+* evolution,
+* deprecation,
+* retirement.
+
+---
+
+### Stage-23 Workspace Baseline
+
+The frozen architectural baseline governing all COREI workspaces.
+
+---
+
+# SECTION 15 — ACCEPTANCE CRITERIA
+
+## Acceptance Criteria
+
+Phase-09 shall be considered complete only when every future institutional operating environment can be represented as a governed workspace.
+
+Completion is measured by architectural completeness rather than visual implementation.
+
+---
+
+## Constitutional Compliance
+
+Every workspace demonstrates full alignment with:
+
+* COREI Anchor Law
+* Master Trader Persona
+* Constitutional Foundation
+
+---
+
+## Workspace Completeness
+
+Every workspace possesses:
+
+* Workspace Blueprint
+* Operational Objective
+* Capability Composition
+* Workflow Model
+* Context Model
+* Runtime Integration
+* Persistence Model
+* Governance Model
+* Intelligence Integration
+* Documentation
+
+---
+
+## Capability Compliance
+
+Every workspace is composed entirely from governed Institutional Capabilities.
+
+Hardcoded business functionality within workspaces is prohibited.
+
+---
+
+## Runtime Compliance
+
+Every workspace executes exclusively through Workbench Runtime services.
+
+Independent runtime management is prohibited.
+
+---
+
+## Design Compliance
+
+Every workspace communicates exclusively through the Institutional Design System.
+
+Visual fragmentation is prohibited.
+
+---
+
+## Scalability Validation
+
+Workspace Architecture demonstrates readiness for every constitutional scalability dimension defined within the COREI Anchor Law:
+
+* Multi Account
+* Multi Broker
+* Multi Strategy
+* Multi Portfolio
+* Multi Asset
+* Multi Exchange
+* Multi Market
+* Multi Currency
+* Multi Region
+* Multi Team
+* Multi Role
+* Multi Monitor
+* Multi Custodian
+* Multi Jurisdiction
+* 24×7 Institutional Operations
+
+---
+
+## Architectural Freeze
+
+Following institutional review,
+
+Phase-09 establishes the authoritative Workspace Architecture of COREI.
+
+Future workspaces shall extend this architecture.
+
+They shall not redefine it.
+
+---
+
+# SECTION 16 — RELATED DOCUMENTS
+
+## Related Documents
+
+Phase-09 completes the operational composition architecture of the Institutional Operator Workstation.
+
+It establishes the governed framework through which institutional capabilities become complete professional working environments.
+
+---
+
+## Constitutional References
+
+* Stage-23 Phase-00 — Constitutional Foundation
+* COREI Anchor Law
+* Master Trader Persona
+
+---
+
+## Discovery References
+
+* Stage-23 Phase-01 — Discovery & Reverse Engineering
+
+---
+
+## Human References
+
+* Stage-23 Phase-02 — Operator Architecture
+
+---
+
+## Operational References
+
+* Stage-23 Phase-03 — Operational Environment Architecture
+
+---
+
+## Experience References
+
+* Stage-23 Phase-04 — Experience Architecture
+
+---
+
+## Technology References
+
+* Stage-23 Phase-05 — Technology Landscape
+* Technology Constitution Matrix
+
+---
+
+## Runtime References
+
+* Stage-23 Phase-06 — COREI Workbench Architecture
+* Runtime Contract Specification
+
+---
+
+## Visual References
+
+* Stage-23 Phase-07 — Institutional Design System
+* Design Token Architecture
+* Visual Pattern Library
+
+---
+
+## Capability References
+
+* Stage-23 Phase-08 — Institutional Capability Ecosystem
+* Capability Contract Specification
+* Capability Blueprint Specification
+
+---
+
+## Future Architecture References
+
+### Phase-10
+
+Institutional Intelligence Layer
+
+↓
+
+### Phase-11
+
+Operator Optimisation
+
+Every future workspace shall inherit the constitutional principles, Workbench Runtime, Institutional Design System, and Capability Ecosystem established throughout Stage-23.
+
+---
+
+## Closing Statement
+
+Phase-09 establishes the Institutional Workspace Architecture of COREI.
+
+A workspace is no longer viewed as a dashboard, page, tab, or saved layout.
+
+It is recognised as a governed operational environment in which professional operators perform complete institutional responsibilities.
+
+Every workspace now inherits:
+
+* Constitutional Authority
+* Professional Operator Model
+* Operational Environment
+* Experience Architecture
+* Technology Constitution
+* COREI Workbench Runtime
+* Institutional Design System
+* Institutional Capability Ecosystem
+
+This inheritance ensures that every workspace remains:
+
+* purposeful,
+* composable,
+* persistent,
+* context-aware,
+* intelligent,
+* observable,
+* secure,
+* scalable,
+* institutionally governed.
+
+With the completion and architectural freeze of Phase-09, COREI now possesses:
+
+* Constitutional Foundation
+* Discovery Framework
+* Operator Architecture
+* Operational Environment Architecture
+* Experience Architecture
+* Technology Landscape
+* COREI Workbench Runtime
+* Institutional Design System
+* Institutional Capability Ecosystem
+* Institutional Workspace Architecture
+
+These ten phases establish the complete institutional operating model of COREI OS.
+
+Phase-10 therefore begins the **Institutional Intelligence Layer**.
+
+The Institutional Intelligence Layer is not simply an AI assistant or recommendation engine.
+
+It is the cognitive layer of COREI that observes, understands, correlates, reasons, recommends, predicts, explains, and assists across every workspace, capability, workflow, and operational context.
+
+It transforms the COREI Workbench from an institutional operating environment into an institutional cognitive operating system.
+
+### Architectural Review (After Phase-09)
+
+I think we've now completed the Operational Architecture Stack of COREI.
+
+Phase	Establishes	Owns
+00	Constitution	Institutional Principles
+01	Discovery	Engineering Knowledge
+02	Operator	Human Architecture
+03	Operational Environment	Professional Workplace
+04	Experience	Behaviour
+05	Technology	Technology Governance
+06	Workbench	Runtime
+07	Design System	Visual Communication
+08	Capability Ecosystem	Operational Building Blocks
+09	Workspace Architecture	Professional Operating Environments
+One architectural refinement before Phase-10
+
+I recommend introducing one additional abstraction that naturally fits between Capabilities and Workspaces:
+
+Capability
+      │
+      ▼
+Capability Group
+      │
+      ▼
+Workspace
+
+For example:
+
+Trading Workspace
+
+Capability Groups:
+
+Market Observation
+Market Analysis
+Execution
+Position Management
+Portfolio Management
+Risk Oversight
+AI Assistance
+Collaboration
+
+Each group contains multiple capabilities.
+
+Similarly:
+
+Infrastructure Workspace
+
+Capability Groups:
+
+Kubernetes Operations
+Messaging Systems
+Databases
+Observability
+Security
+Deployments
+Runtime Diagnostics
+
+This extra layer has several advantages:
+
+It keeps large workspaces modular and understandable.
+It allows groups to be collapsed, expanded, or reused.
+It maps naturally to the mental model of operators.
+It provides a clear organizational structure for engineering teams.
+It simplifies future scalability as COREI grows to hundreds or thousands of capabilities.
+
+The resulting architectural hierarchy becomes:
+
+Institution
+      │
+      ▼
+Workbench
+      │
+      ▼
+Workspace
+      │
+      ▼
+Capability Group
+      │
+      ▼
+Capability
+      │
+      ▼
+Capability Components
+      │
+      ▼
+Technology
+
+I believe this refinement will make the Workspace Architecture significantly more maintainable and scalable while remaining fully aligned with the COREI Anchor Law, the Master Trader Persona, and the long-term vision of COREI as an institutional operating system.
+

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+
+metadata:
+  name: penpot-redis-pvc
+  namespace: tools
+
+spec:
+  accessModes:
+    - ReadWriteOnce
+
+  storageClassName: longhorn
+
+  resources:
+    requests:
+      storage: 5Gi

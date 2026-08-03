@@ -1,0 +1,1551 @@
+.
+├── architecture
+│   └── repository
+│       ├── layer-map.yaml
+│       ├── ownership-manifest.yaml
+│       ├── README.md
+│       └── repository-map.yaml
+├── components.json
+├── COREI_PHASE_03_SNAPSHOT.txt
+├── docs
+│   └── architecture
+│       ├── stage-freeze
+│       │   └── stage25-phase02-freeze.md
+│       └── ui-stack
+│           └── technology-stack.md
+├── index.html
+├── legacy
+│   └── workbench
+│       └── panels
+│           └── register-default-panels.ts
+├── migration
+│   └── stage25-panel-normalization
+│       ├── panel-registry-usage.txt
+│       ├── panels-files.txt
+│       ├── register-default-panels.txt
+│       └── registries-files.txt
+├── package.json
+├── PHASE_03_LOCK.txt
+├── repo-tree.txt
+├── src
+│   ├── app
+│   │   ├── AppProvider.tsx
+│   │   ├── App.tsx
+│   │   ├── bootstrap
+│   │   │   ├── bootstrap-composition.ts
+│   │   │   └── bootstrap-context.ts
+│   │   ├── components
+│   │   │   └── ApplicationRoot.tsx
+│   │   ├── context
+│   │   │   └── application-context.ts
+│   │   ├── contracts
+│   │   │   └── application-contract.ts
+│   │   ├── models
+│   │   │   └── application.ts
+│   │   ├── platform
+│   │   │   ├── platform-composition.ts
+│   │   │   └── platform-context.ts
+│   │   ├── providers
+│   │   │   ├── contracts
+│   │   │   │   └── provider-contract.ts
+│   │   │   ├── models
+│   │   │   │   └── provider.ts
+│   │   │   └── registry
+│   │   │       └── provider-registry.ts
+│   │   ├── runtime
+│   │   │   ├── runtime-composition.ts
+│   │   │   └── runtime-context.ts
+│   │   ├── sdk
+│   │   │   ├── sdk-composition.ts
+│   │   │   └── sdk-context.ts
+│   │   └── startup
+│   │       ├── startup-context.ts
+│   │       ├── startup-state.ts
+│   │       └── startup.ts
+│   ├── architecture
+│   │   ├── architecture-baseline.ts
+│   │   ├── architecture-manager.ts
+│   │   ├── certification
+│   │   │   ├── certification-contract.ts
+│   │   │   ├── certification-manager.ts
+│   │   │   ├── certification-model.ts
+│   │   │   ├── certification-registry.ts
+│   │   │   └── index.ts
+│   │   ├── dependency
+│   │   │   ├── dependency-contract.ts
+│   │   │   ├── dependency-manager.ts
+│   │   │   ├── dependency-model.ts
+│   │   │   ├── dependency-registry.ts
+│   │   │   └── index.ts
+│   │   ├── index.ts
+│   │   ├── layers
+│   │   │   ├── index.ts
+│   │   │   ├── layer-contract.ts
+│   │   │   ├── layer-manager.ts
+│   │   │   ├── layer-model.ts
+│   │   │   └── layer-registry.ts
+│   │   ├── lifecycle
+│   │   │   ├── index.ts
+│   │   │   ├── lifecycle-contract.ts
+│   │   │   ├── lifecycle-manager.ts
+│   │   │   ├── lifecycle-model.ts
+│   │   │   └── lifecycle-registry.ts
+│   │   ├── ownership
+│   │   │   ├── index.ts
+│   │   │   ├── ownership-contract.ts
+│   │   │   ├── ownership-manager.ts
+│   │   │   ├── ownership-model.ts
+│   │   │   └── ownership-registry.ts
+│   │   ├── repository
+│   │   │   ├── index.ts
+│   │   │   ├── repository-contract.ts
+│   │   │   ├── repository-manager.ts
+│   │   │   ├── repository-model.ts
+│   │   │   └── repository-registry.ts
+│   │   ├── standards
+│   │   │   ├── index.ts
+│   │   │   ├── standards-contract.ts
+│   │   │   ├── standards-manager.ts
+│   │   │   ├── standards-model.ts
+│   │   │   └── standards-registry.ts
+│   │   └── validation
+│   │       ├── index.ts
+│   │       ├── validation-contract.ts
+│   │       ├── validation-manager.ts
+│   │       ├── validation-model.ts
+│   │       └── validation-registry.ts
+│   ├── assets
+│   ├── bootstrap
+│   │   ├── bootstrap.ts
+│   │   ├── environment.ts
+│   │   └── startup.ts
+│   ├── command-center
+│   │   ├── adapters
+│   │   │   └── infrastructure-command-center.ts
+│   │   ├── components
+│   │   │   ├── CommandCenter.tsx
+│   │   │   ├── CommandItem.tsx
+│   │   │   └── CommandPalette.tsx
+│   │   ├── contracts
+│   │   │   ├── command-context-contract.ts
+│   │   │   ├── command-contract.ts
+│   │   │   └── command-group-contract.ts
+│   │   ├── dispatcher
+│   │   │   └── command-dispatcher.ts
+│   │   ├── executor
+│   │   │   └── command-executor.ts
+│   │   ├── hooks
+│   │   │   └── use-command.ts
+│   │   ├── index.ts
+│   │   ├── lifecycle
+│   │   │   └── command-lifecycle.ts
+│   │   ├── models
+│   │   │   ├── command-context.ts
+│   │   │   ├── command-group.ts
+│   │   │   └── command.ts
+│   │   ├── persistence
+│   │   │   └── command-persistence.ts
+│   │   ├── providers
+│   │   │   └── command-provider.tsx
+│   │   ├── registry
+│   │   │   └── command-registry.ts
+│   │   ├── rendering
+│   │   │   └── command-renderer.ts
+│   │   ├── runtime
+│   │   │   └── command-runtime.ts
+│   │   ├── shortcuts
+│   │   │   └── shortcut-registry.ts
+│   │   ├── state
+│   │   │   └── command-state.ts
+│   │   └── styles
+│   ├── contracts
+│   ├── docking
+│   │   ├── components
+│   │   │   ├── DockHost.tsx
+│   │   │   └── Dock.tsx
+│   │   ├── contracts
+│   │   │   ├── dock-contract.ts
+│   │   │   └── dock-layout-contract.ts
+│   │   ├── hooks
+│   │   │   └── use-dock.ts
+│   │   ├── index.ts
+│   │   ├── lifecycle
+│   │   │   └── dock-lifecycle.ts
+│   │   ├── models
+│   │   │   └── dock.ts
+│   │   ├── persistence
+│   │   │   └── dock-persistence.ts
+│   │   ├── providers
+│   │   │   └── dock-provider.tsx
+│   │   ├── registry
+│   │   │   └── dock-registry.ts
+│   │   ├── runtime
+│   │   │   └── dock-runtime.ts
+│   │   └── state
+│   │       └── dock-state.ts
+│   ├── experience
+│   │   └── workspace
+│   │       └── center-workspace
+│   │           ├── adapters
+│   │           │   └── navigation-adapter.ts
+│   │           ├── core
+│   │           │   ├── workspace-state.ts
+│   │           │   └── workspace-types.ts
+│   │           ├── index.ts
+│   │           ├── layout
+│   │           │   └── workspace-container.tsx
+│   │           ├── manager
+│   │           │   └── workspace-manager.ts
+│   │           ├── provider
+│   │           │   └── workspace-provider.tsx
+│   │           ├── registry
+│   │           │   └── workspace-registry.ts
+│   │           └── runtime
+│   │               └── workspace-runtime.ts
+│   ├── experiences
+│   │   ├── infrastructure
+│   │   │   ├── components
+│   │   │   │   └── InfrastructureRoot.tsx
+│   │   │   ├── hooks
+│   │   │   │   └── use-infrastructure.ts
+│   │   │   ├── integration
+│   │   │   │   ├── infrastructure-platform.ts
+│   │   │   │   ├── infrastructure-runtime.ts
+│   │   │   │   └── infrastructure-workspace.ts
+│   │   │   └── providers
+│   │   │       └── infrastructure-provider.tsx
+│   │   └── trading
+│   │       ├── components
+│   │       │   └── TradingRoot.tsx
+│   │       ├── hooks
+│   │       │   └── use-trading.ts
+│   │       ├── integration
+│   │       │   ├── trading-platform.ts
+│   │       │   ├── trading-runtime.ts
+│   │       │   └── trading-workspace.ts
+│   │       └── providers
+│   │           └── trading-provider.tsx
+│   ├── extensions
+│   │   ├── adapters
+│   │   │   └── infrastructure-extension.ts
+│   │   ├── assets
+│   │   ├── components
+│   │   │   ├── ExtensionHost.tsx
+│   │   │   ├── ExtensionSlot.tsx
+│   │   │   └── ExtensionSurface.tsx
+│   │   ├── contracts
+│   │   │   ├── extension-context-contract.ts
+│   │   │   ├── extension-contract.ts
+│   │   │   └── extension-point-contract.ts
+│   │   ├── hooks
+│   │   │   └── use-extension.ts
+│   │   ├── index.ts
+│   │   ├── lifecycle
+│   │   │   └── extension-lifecycle.ts
+│   │   ├── loader
+│   │   │   └── extension-loader.ts
+│   │   ├── manager
+│   │   │   └── extension-manager.ts
+│   │   ├── models
+│   │   │   ├── extension-context.ts
+│   │   │   ├── extension-point.ts
+│   │   │   └── extension.ts
+│   │   ├── permissions
+│   │   │   └── permission-resolver.ts
+│   │   ├── providers
+│   │   │   └── extension-provider.tsx
+│   │   ├── registry
+│   │   │   └── extension-registry.ts
+│   │   ├── runtime
+│   │   │   └── extension-runtime.ts
+│   │   └── state
+│   │       └── extension-state.ts
+│   ├── foundation
+│   │   ├── bootstrap
+│   │   │   ├── bootstrap.ts
+│   │   │   ├── context
+│   │   │   │   └── bootstrap-context.ts
+│   │   │   ├── controller
+│   │   │   │   └── bootstrap-controller.ts
+│   │   │   ├── events
+│   │   │   │   └── bootstrap-events.ts
+│   │   │   ├── index.ts
+│   │   │   ├── lifecycle
+│   │   │   │   └── lifecycle.ts
+│   │   │   ├── pipeline
+│   │   │   │   └── bootstrap-pipeline.ts
+│   │   │   ├── types.ts
+│   │   │   └── validation
+│   │   │       └── startup-validator.ts
+│   │   ├── capabilities
+│   │   │   ├── container
+│   │   │   │   └── capability-container.ts
+│   │   │   ├── contracts
+│   │   │   │   └── capability-provider.ts
+│   │   │   ├── index.ts
+│   │   │   ├── providers
+│   │   │   │   └── dockview
+│   │   │   │       └── dockview-provider.ts
+│   │   │   └── registry
+│   │   │       └── capability-registry.ts
+│   │   ├── colors
+│   │   │   ├── index.ts
+│   │   │   ├── raw.ts
+│   │   │   └── semantic.ts
+│   │   ├── components
+│   │   │   └── ui
+│   │   │       ├── accordion.tsx
+│   │   │       ├── avatar.tsx
+│   │   │       ├── badge.tsx
+│   │   │       ├── breadcrumb.tsx
+│   │   │       ├── button.tsx
+│   │   │       ├── card.tsx
+│   │   │       ├── collapsible.tsx
+│   │   │       ├── command.tsx
+│   │   │       ├── context-menu.tsx
+│   │   │       ├── dialog.tsx
+│   │   │       ├── dropdown-menu.tsx
+│   │   │       ├── input-group.tsx
+│   │   │       ├── input.tsx
+│   │   │       ├── popover.tsx
+│   │   │       ├── resizable.tsx
+│   │   │       ├── scroll-area.tsx
+│   │   │       ├── separator.tsx
+│   │   │       ├── sheet.tsx
+│   │   │       ├── sonner.tsx
+│   │   │       ├── tabs.tsx
+│   │   │       ├── textarea.tsx
+│   │   │       └── tooltip.tsx
+│   │   ├── configuration
+│   │   │   ├── diagnostics
+│   │   │   │   └── configuration-diagnostics.ts
+│   │   │   ├── index.ts
+│   │   │   ├── loader
+│   │   │   │   └── configuration-loader.ts
+│   │   │   ├── model
+│   │   │   │   └── platform-configuration.ts
+│   │   │   ├── registry
+│   │   │   │   └── configuration-registry.ts
+│   │   │   └── service
+│   │   │       └── configuration-service.ts
+│   │   ├── context
+│   │   │   └── platform-foundation-context.ts
+│   │   ├── diagnostics
+│   │   │   ├── api.ts
+│   │   │   ├── context
+│   │   │   │   └── diagnostic-context.ts
+│   │   │   ├── contracts
+│   │   │   │   └── diagnostics-contract.ts
+│   │   │   ├── diagnostics
+│   │   │   │   ├── diagnostics-reporter.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── index.ts
+│   │   │   ├── manager
+│   │   │   │   ├── diagnostics-manager.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── model
+│   │   │   │   ├── diagnostics-descriptor.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── state
+│   │   │   │   └── diagnostic-status.ts
+│   │   │   └── validation
+│   │   │       ├── diagnostics-validation.ts
+│   │   │       └── index.ts
+│   │   ├── editor
+│   │   │   ├── components
+│   │   │   │   └── MonacoEditor.tsx
+│   │   │   ├── contracts
+│   │   │   │   └── editor-contract.ts
+│   │   │   ├── index.ts
+│   │   │   ├── models
+│   │   │   │   └── editor.ts
+│   │   │   ├── monaco.ts
+│   │   │   ├── runtime
+│   │   │   │   └── editor-runtime.ts
+│   │   │   ├── theme
+│   │   │   │   └── editor-theme.ts
+│   │   │   └── types
+│   │   │       └── editor-language.ts
+│   │   ├── elevation
+│   │   │   ├── elevation.ts
+│   │   │   └── index.ts
+│   │   ├── event
+│   │   │   ├── api.ts
+│   │   │   ├── context
+│   │   │   │   └── event-context.ts
+│   │   │   ├── contracts
+│   │   │   │   └── event-contract.ts
+│   │   │   ├── diagnostics
+│   │   │   │   ├── event-diagnostics.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── index.ts
+│   │   │   ├── manager
+│   │   │   │   ├── event-manager.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── model
+│   │   │   │   ├── event-descriptor.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── state
+│   │   │   │   └── event-state.ts
+│   │   │   └── validation
+│   │   │       ├── event-validation.ts
+│   │   │       └── index.ts
+│   │   ├── extension
+│   │   │   ├── api.ts
+│   │   │   ├── context
+│   │   │   │   └── extension-context.ts
+│   │   │   ├── contracts
+│   │   │   │   └── extension-contract.ts
+│   │   │   ├── diagnostics
+│   │   │   │   ├── extension-diagnostics.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── index.ts
+│   │   │   ├── manager
+│   │   │   │   ├── extension-manager.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── model
+│   │   │   │   ├── extension-descriptor.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── state
+│   │   │   │   └── extension-state.ts
+│   │   │   └── validation
+│   │   │       ├── extension-validation.ts
+│   │   │       └── index.ts
+│   │   ├── health
+│   │   │   ├── api.ts
+│   │   │   ├── context
+│   │   │   │   └── health-context.ts
+│   │   │   ├── contracts
+│   │   │   │   └── health-contract.ts
+│   │   │   ├── health
+│   │   │   │   ├── health-reporter.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── index.ts
+│   │   │   ├── manager
+│   │   │   │   ├── health-manager.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── model
+│   │   │   │   ├── health-descriptor.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── state
+│   │   │   │   └── health-status.ts
+│   │   │   └── validation
+│   │   │       ├── health-validation.ts
+│   │   │       └── index.ts
+│   │   ├── icons
+│   │   │   ├── index.ts
+│   │   │   └── registry.ts
+│   │   ├── index.ts
+│   │   ├── kernel
+│   │   │   ├── context
+│   │   │   │   └── kernel-context.ts
+│   │   │   ├── contracts
+│   │   │   ├── controller
+│   │   │   │   └── kernel-controller.ts
+│   │   │   ├── diagnostics
+│   │   │   │   └── kernel-diagnostics.ts
+│   │   │   ├── engine
+│   │   │   │   └── kernel-engine.ts
+│   │   │   ├── index.ts
+│   │   │   ├── registry
+│   │   │   │   └── kernel-registry.ts
+│   │   │   └── state
+│   │   │       └── kernel-state.ts
+│   │   ├── logging
+│   │   │   ├── api.ts
+│   │   │   ├── context
+│   │   │   │   └── log-context.ts
+│   │   │   ├── contracts
+│   │   │   │   └── logging-contract.ts
+│   │   │   ├── diagnostics
+│   │   │   │   ├── index.ts
+│   │   │   │   └── logging-diagnostics.ts
+│   │   │   ├── index.ts
+│   │   │   ├── manager
+│   │   │   │   ├── index.ts
+│   │   │   │   └── logging-manager.ts
+│   │   │   ├── model
+│   │   │   │   ├── index.ts
+│   │   │   │   └── logging-descriptor.ts
+│   │   │   ├── state
+│   │   │   │   └── log-level.ts
+│   │   │   └── validation
+│   │   │       ├── index.ts
+│   │   │       └── logging-validation.ts
+│   │   ├── registry
+│   │   │   ├── api.ts
+│   │   │   ├── context
+│   │   │   │   └── registry-context.ts
+│   │   │   ├── contracts
+│   │   │   │   └── registry-contract.ts
+│   │   │   ├── controller
+│   │   │   ├── diagnostics
+│   │   │   │   ├── index.ts
+│   │   │   │   └── registry-diagnostics.ts
+│   │   │   ├── index.ts
+│   │   │   ├── manager
+│   │   │   │   ├── index.ts
+│   │   │   │   └── registry-manager.ts
+│   │   │   ├── model
+│   │   │   │   ├── index.ts
+│   │   │   │   └── registry-descriptor.ts
+│   │   │   ├── state
+│   │   │   │   └── registry-state.ts
+│   │   │   └── validation
+│   │   │       ├── index.ts
+│   │   │       └── registry-validation.ts
+│   │   ├── runtime
+│   │   │   ├── context
+│   │   │   │   └── runtime-context.ts
+│   │   │   ├── contracts
+│   │   │   ├── controller
+│   │   │   │   └── runtime-controller.ts
+│   │   │   ├── diagnostics
+│   │   │   │   └── runtime-diagnostics.ts
+│   │   │   ├── engine
+│   │   │   │   └── runtime-engine.ts
+│   │   │   ├── events
+│   │   │   ├── index.ts
+│   │   │   ├── registry
+│   │   │   │   └── runtime-registry.ts
+│   │   │   └── state
+│   │   │       └── runtime-state.ts
+│   │   ├── services
+│   │   │   ├── container
+│   │   │   │   └── service-container.ts
+│   │   │   ├── contracts
+│   │   │   │   └── platform-service.ts
+│   │   │   ├── diagnostics
+│   │   │   │   └── diagnostics-service.ts
+│   │   │   ├── events
+│   │   │   │   └── event-service.ts
+│   │   │   ├── index.ts
+│   │   │   ├── logging
+│   │   │   │   └── logging-service.ts
+│   │   │   ├── notifications
+│   │   │   │   └── notification-service.ts
+│   │   │   └── registry
+│   │   │       └── service-registry.ts
+│   │   ├── spacing
+│   │   │   ├── index.ts
+│   │   │   └── spacing.ts
+│   │   ├── state
+│   │   │   ├── api.ts
+│   │   │   ├── context
+│   │   │   │   └── state-context.ts
+│   │   │   ├── contracts
+│   │   │   │   └── state-contract.ts
+│   │   │   ├── diagnostics
+│   │   │   │   ├── index.ts
+│   │   │   │   └── state-diagnostics.ts
+│   │   │   ├── index.ts
+│   │   │   ├── manager
+│   │   │   │   ├── index.ts
+│   │   │   │   └── state-manager.ts
+│   │   │   ├── model
+│   │   │   │   ├── index.ts
+│   │   │   │   └── state-descriptor.ts
+│   │   │   ├── state
+│   │   │   │   └── platform-state.ts
+│   │   │   └── validation
+│   │   │       ├── index.ts
+│   │   │       └── state-validation.ts
+│   │   ├── terminal
+│   │   │   ├── components
+│   │   │   │   └── Terminal.tsx
+│   │   │   ├── contracts
+│   │   │   │   └── terminal-contract.ts
+│   │   │   ├── index.ts
+│   │   │   ├── models
+│   │   │   │   └── terminal.ts
+│   │   │   ├── runtime
+│   │   │   │   └── terminal-runtime.ts
+│   │   │   ├── theme
+│   │   │   │   └── terminal-theme.ts
+│   │   │   ├── types
+│   │   │   │   └── terminal-options.ts
+│   │   │   └── xterm.ts
+│   │   ├── theme
+│   │   │   ├── dark.ts
+│   │   │   ├── engine.ts
+│   │   │   ├── index.ts
+│   │   │   ├── light.ts
+│   │   │   └── provider.tsx
+│   │   ├── tokens
+│   │   │   └── index.ts
+│   │   ├── typography
+│   │   │   ├── index.ts
+│   │   │   └── typography.ts
+│   │   ├── utils
+│   │   │   ├── index.ts
+│   │   │   └── utils.ts
+│   │   ├── validation
+│   │   │   ├── certification
+│   │   │   │   ├── index.ts
+│   │   │   │   └── platform-foundation-certification.ts
+│   │   │   ├── index.ts
+│   │   │   ├── integration
+│   │   │   │   ├── index.ts
+│   │   │   │   └── platform-integration-verifier.ts
+│   │   │   ├── platform-foundation-validator.ts
+│   │   │   └── runner
+│   │   │       ├── index.ts
+│   │   │       └── platform-validation-runner.ts
+│   │   └── workspace
+│   │       ├── adapters
+│   │       │   └── dockview-adapter.tsx
+│   │       ├── dockview.ts
+│   │       └── index.ts
+│   ├── hooks
+│   ├── index.css
+│   ├── intelligence
+│   │   └── right-panel
+│   │       ├── core
+│   │       │   ├── intelligence-model.ts
+│   │       │   └── intelligence-types.ts
+│   │       ├── engine
+│   │       │   └── intelligence-engine.ts
+│   │       ├── index.ts
+│   │       ├── layout
+│   │       │   └── right-panel.tsx
+│   │       ├── provider
+│   │       │   └── intelligence-provider.tsx
+│   │       ├── registry
+│   │       │   └── intelligence-registry.ts
+│   │       └── runtime
+│   │           └── intelligence-runtime.ts
+│   ├── _legacy
+│   │   └── workbench
+│   │       └── panels
+│   ├── main.tsx
+│   ├── navigation
+│   │   ├── adapters
+│   │   │   └── infrastructure-navigation.ts
+│   │   ├── components
+│   │   │   ├── NavigationGroup.tsx
+│   │   │   ├── NavigationItem.tsx
+│   │   │   └── Navigation.tsx
+│   │   ├── contracts
+│   │   │   ├── navigation-contract.ts
+│   │   │   ├── navigation-group-contract.ts
+│   │   │   └── navigation-item-contract.ts
+│   │   ├── hooks
+│   │   │   └── use-navigation.ts
+│   │   ├── index.ts
+│   │   ├── layout
+│   │   │   └── navigation-layout.ts
+│   │   ├── lifecycle
+│   │   │   └── navigation-lifecycle.ts
+│   │   ├── manager
+│   │   │   └── navigation-manager.ts
+│   │   ├── models
+│   │   │   ├── navigation-group.ts
+│   │   │   ├── navigation-item.ts
+│   │   │   └── navigation.ts
+│   │   ├── persistence
+│   │   │   └── navigation-persistence.ts
+│   │   ├── provider
+│   │   │   └── navigation-provider.tsx
+│   │   ├── providers
+│   │   │   └── navigation-provider.tsx
+│   │   ├── registry
+│   │   │   └── navigation-registry.ts
+│   │   ├── rendering
+│   │   │   └── navigation-renderer.ts
+│   │   ├── runtime
+│   │   │   └── navigation-runtime.ts
+│   │   ├── state
+│   │   │   └── navigation-state.ts
+│   │   └── styles
+│   ├── platform
+│   │   ├── adapters
+│   │   │   └── infrastructure-platform.ts
+│   │   ├── bootstrap
+│   │   │   └── platform-bootstrap.ts
+│   │   ├── components
+│   │   │   ├── PlatformRoot.tsx
+│   │   │   ├── PlatformRuntime.tsx
+│   │   │   └── PlatformShell.tsx
+│   │   ├── composition
+│   │   │   └── platform-composition.ts
+│   │   ├── contracts
+│   │   │   ├── platform-context-contract.ts
+│   │   │   └── platform-contract.ts
+│   │   ├── hooks
+│   │   │   └── use-platform.ts
+│   │   ├── host
+│   │   ├── index.ts
+│   │   ├── lifecycle
+│   │   │   └── platform-lifecycle.ts
+│   │   ├── models
+│   │   │   ├── platform-context.ts
+│   │   │   └── platform.ts
+│   │   ├── permissions
+│   │   ├── providers
+│   │   │   └── platform-provider.tsx
+│   │   ├── registry
+│   │   │   └── platform-registry.ts
+│   │   ├── routing
+│   │   └── runtime
+│   │       └── platform-runtime.ts
+│   ├── providers
+│   ├── registry
+│   ├── rendering
+│   │   ├── adapters
+│   │   │   └── infrastructure-rendering.ts
+│   │   ├── components
+│   │   │   ├── RenderLayer.tsx
+│   │   │   ├── RenderRoot.tsx
+│   │   │   └── RenderSurface.tsx
+│   │   ├── contracts
+│   │   │   ├── render-context-contract.ts
+│   │   │   ├── render-contract.ts
+│   │   │   └── render-layer-contract.ts
+│   │   ├── hooks
+│   │   │   └── use-render.ts
+│   │   ├── index.ts
+│   │   ├── lifecycle
+│   │   │   └── render-lifecycle.ts
+│   │   ├── models
+│   │   │   ├── render-context.ts
+│   │   │   ├── render-layer.ts
+│   │   │   └── render.ts
+│   │   ├── pipeline
+│   │   │   └── render-pipeline.ts
+│   │   ├── providers
+│   │   │   └── render-provider.tsx
+│   │   ├── registry
+│   │   │   └── render-registry.ts
+│   │   ├── rendering
+│   │   │   └── render-engine.ts
+│   │   ├── runtime
+│   │   │   └── render-runtime.ts
+│   │   ├── scheduler
+│   │   │   └── render-scheduler.ts
+│   │   ├── state
+│   │   │   └── render-state.ts
+│   │   └── styles
+│   ├── ribbon
+│   │   ├── adapters
+│   │   │   └── infrastructure-ribbon.ts
+│   │   ├── components
+│   │   │   ├── RibbonDivider.tsx
+│   │   │   ├── Ribbon.tsx
+│   │   │   ├── RibbonWidget.tsx
+│   │   │   └── RibbonZone.tsx
+│   │   ├── configuration
+│   │   ├── contracts
+│   │   │   ├── index.ts
+│   │   │   ├── ribbon-contract.ts
+│   │   │   ├── widget-contract.ts
+│   │   │   └── zone-contract.ts
+│   │   ├── hooks
+│   │   │   └── use-ribbon.ts
+│   │   ├── index.ts
+│   │   ├── layout
+│   │   │   └── ribbon-layout.ts
+│   │   ├── lifecycle
+│   │   │   └── ribbon-lifecycle.ts
+│   │   ├── manager
+│   │   │   ├── index.ts
+│   │   │   └── ribbon-manager.ts
+│   │   ├── models
+│   │   │   ├── index.ts
+│   │   │   ├── ribbon.ts
+│   │   │   ├── widget.ts
+│   │   │   └── zone.ts
+│   │   ├── persistence
+│   │   │   └── ribbon-persistence.ts
+│   │   ├── providers
+│   │   │   ├── index.ts
+│   │   │   └── ribbon-provider.tsx
+│   │   ├── registry
+│   │   │   └── ribbon-registry.ts
+│   │   ├── rendering
+│   │   │   └── ribbon-renderer.ts
+│   │   ├── runtime
+│   │   │   ├── index.ts
+│   │   │   └── ribbon-runtime.ts
+│   │   ├── state
+│   │   │   └── ribbon-state.ts
+│   │   └── styles
+│   ├── runtime
+│   │   ├── adapters
+│   │   │   └── infrastructure-runtime.ts
+│   │   ├── components
+│   │   │   ├── RuntimeHealth.tsx
+│   │   │   ├── RuntimeRoot.tsx
+│   │   │   └── RuntimeService.tsx
+│   │   ├── contracts
+│   │   │   ├── event-contract.ts
+│   │   │   ├── runtime-contract.ts
+│   │   │   └── service-contract.ts
+│   │   ├── dependency
+│   │   │   └── dependency-resolver.ts
+│   │   ├── events
+│   │   │   └── event-bus.ts
+│   │   ├── health
+│   │   │   └── health-monitor.ts
+│   │   ├── hooks
+│   │   │   └── use-runtime.ts
+│   │   ├── index.ts
+│   │   ├── lifecycle
+│   │   │   └── runtime-lifecycle.ts
+│   │   ├── models
+│   │   │   ├── event.ts
+│   │   │   ├── runtime.ts
+│   │   │   └── service.ts
+│   │   ├── providers
+│   │   │   └── runtime-provider.tsx
+│   │   ├── registry
+│   │   │   └── runtime-registry.ts
+│   │   ├── runtime
+│   │   │   └── runtime-engine.ts
+│   │   ├── services
+│   │   │   └── service-registry.ts
+│   │   └── state
+│   │       └── runtime-state.ts
+│   ├── sdk
+│   │   ├── adapters
+│   │   │   └── infrastructure-sdk.ts
+│   │   ├── components
+│   │   │   ├── SDKRoot.tsx
+│   │   │   ├── SDKTerminal.tsx
+│   │   │   └── SDKWorkspace.tsx
+│   │   ├── contracts
+│   │   │   ├── module-contract.ts
+│   │   │   ├── terminal-contract.ts
+│   │   │   └── workspace-contract.ts
+│   │   ├── hooks
+│   │   │   └── use-sdk.ts
+│   │   ├── index.ts
+│   │   ├── lifecycle
+│   │   │   └── sdk-lifecycle.ts
+│   │   ├── models
+│   │   │   ├── module.ts
+│   │   │   ├── terminal.ts
+│   │   │   └── workspace.ts
+│   │   ├── providers
+│   │   │   └── sdk-provider.tsx
+│   │   ├── registry
+│   │   │   └── sdk-registry.ts
+│   │   ├── runtime
+│   │   │   └── sdk-runtime.ts
+│   │   ├── services
+│   │   │   └── sdk-service.ts
+│   │   └── state
+│   │       └── sdk-state.ts
+│   ├── services
+│   ├── shell
+│   │   ├── components
+│   │   │   ├── ShellBoundary.tsx
+│   │   │   ├── ShellFrame.tsx
+│   │   │   ├── ShellRegion.tsx
+│   │   │   └── Shell.tsx
+│   │   ├── configuration
+│   │   │   └── shell-configuration.ts
+│   │   ├── context
+│   │   │   └── shell-context.ts
+│   │   ├── contracts
+│   │   │   ├── layout-contract.ts
+│   │   │   ├── region-contract.ts
+│   │   │   └── shell-contract.ts
+│   │   ├── events
+│   │   │   └── shell-events.ts
+│   │   ├── hooks
+│   │   │   └── use-shell.ts
+│   │   ├── index.ts
+│   │   ├── layout
+│   │   │   ├── adapters
+│   │   │   │   └── top-ribbon-adapter.tsx
+│   │   │   ├── components
+│   │   │   │   └── ShellLayout.tsx
+│   │   │   ├── context
+│   │   │   │   └── layout-context.ts
+│   │   │   ├── contracts
+│   │   │   │   └── layout-contract.ts
+│   │   │   ├── models
+│   │   │   │   └── layout.ts
+│   │   │   ├── region-layout.ts
+│   │   │   ├── regions
+│   │   │   │   ├── BottomRegion.tsx
+│   │   │   │   ├── CenterRegion.tsx
+│   │   │   │   ├── index.ts
+│   │   │   │   ├── LeftRegion.tsx
+│   │   │   │   ├── RightRegion.tsx
+│   │   │   │   ├── StatusRegion.tsx
+│   │   │   │   └── TopRegion.tsx
+│   │   │   ├── shell-layout.ts
+│   │   │   └── viewport-layout.ts
+│   │   ├── lifecycle
+│   │   │   └── shell-lifecycle.ts
+│   │   ├── manager
+│   │   │   └── shell-manager.ts
+│   │   ├── models
+│   │   │   ├── shell-descriptor.ts
+│   │   │   └── shell.ts
+│   │   ├── providers
+│   │   │   └── shell-provider.tsx
+│   │   ├── registry
+│   │   │   └── shell-registry.ts
+│   │   ├── runtime
+│   │   │   └── shell-runtime.ts
+│   │   └── state
+│   │       └── shell-state.ts
+│   ├── state
+│   ├── styles
+│   ├── system
+│   │   └── integration-engine
+│   │       ├── adapters
+│   │       │   ├── intelligence-adapter.ts
+│   │       │   ├── navigation-adapter.ts
+│   │       │   ├── ribbon-adapter.ts
+│   │       │   └── workspace-adapter.ts
+│   │       ├── core
+│   │       │   └── system-event-bus.ts
+│   │       ├── engine
+│   │       │   └── integration-engine.ts
+│   │       ├── index.ts
+│   │       ├── provider
+│   │       │   └── system-provider.tsx
+│   │       └── runtime
+│   │           └── system-runtime.ts
+│   ├── terminals
+│   │   └── trading
+│   │       └── workspace
+│   │           ├── layouts
+│   │           ├── panels
+│   │           └── runtime
+│   ├── timeline
+│   │   └── event-stream
+│   │       ├── core
+│   │       │   ├── event-model.ts
+│   │       │   └── event-types.ts
+│   │       ├── engine
+│   │       │   └── event-engine.ts
+│   │       ├── index.ts
+│   │       ├── layout
+│   │       │   └── timeline-bar.tsx
+│   │       ├── provider
+│   │       │   └── timeline-provider.tsx
+│   │       ├── runtime
+│   │       │   └── timeline-runtime.ts
+│   │       └── store
+│   │           └── event-store.ts
+│   ├── trading
+│   │   └── chart
+│   │       └── ChartPanel.tsx
+│   ├── types
+│   ├── utils
+│   ├── viewport
+│   │   ├── components
+│   │   │   ├── index.ts
+│   │   │   └── Viewport.tsx
+│   │   ├── configuration
+│   │   │   ├── index.ts
+│   │   │   └── viewport-configuration.ts
+│   │   ├── context
+│   │   ├── contracts
+│   │   │   ├── index.ts
+│   │   │   └── viewport-contract.ts
+│   │   ├── index.ts
+│   │   ├── layout
+│   │   │   ├── index.ts
+│   │   │   └── viewport-layout.ts
+│   │   ├── manager
+│   │   │   ├── index.ts
+│   │   │   └── viewport-manager.ts
+│   │   ├── models
+│   │   │   ├── index.ts
+│   │   │   └── viewport.ts
+│   │   ├── providers
+│   │   │   ├── index.ts
+│   │   │   └── viewport-provider.tsx
+│   │   └── runtime
+│   │       ├── index.ts
+│   │       └── viewport-runtime.ts
+│   ├── visualization
+│   │   ├── adapters
+│   │   │   └── infrastructure-visualization.ts
+│   │   ├── assets
+│   │   ├── components
+│   │   │   ├── VisualizationRoot.tsx
+│   │   │   ├── VisualizationSurface.tsx
+│   │   │   └── VisualizationViewport.tsx
+│   │   ├── contracts
+│   │   │   ├── engine-contract.ts
+│   │   │   ├── view-contract.ts
+│   │   │   └── visualization-contract.ts
+│   │   ├── engines
+│   │   │   ├── canvas
+│   │   │   │   └── canvas-engine.ts
+│   │   │   ├── chart
+│   │   │   │   └── chart-engine.ts
+│   │   │   ├── flow
+│   │   │   │   └── flow-engine.ts
+│   │   │   ├── map
+│   │   │   │   └── map-engine.ts
+│   │   │   ├── pixi
+│   │   │   │   └── pixi-engine.ts
+│   │   │   ├── three
+│   │   │   │   └── three-engine.ts
+│   │   │   └── timeline
+│   │   │       └── timeline-engine.ts
+│   │   ├── hooks
+│   │   │   └── use-visualization.ts
+│   │   ├── index.ts
+│   │   ├── lifecycle
+│   │   │   └── visualization-lifecycle.ts
+│   │   ├── models
+│   │   │   ├── engine.ts
+│   │   │   ├── view.ts
+│   │   │   └── visualization.ts
+│   │   ├── providers
+│   │   │   └── visualization-provider.tsx
+│   │   ├── registry
+│   │   │   └── visualization-registry.ts
+│   │   ├── rendering
+│   │   │   └── visualization-renderer.ts
+│   │   ├── runtime
+│   │   │   └── visualization-runtime.ts
+│   │   └── state
+│   │       └── visualization-state.ts
+│   ├── windowing
+│   │   ├── components
+│   │   │   ├── WindowHost.tsx
+│   │   │   └── Window.tsx
+│   │   ├── contracts
+│   │   │   ├── window-contract.ts
+│   │   │   └── window-layout-contract.ts
+│   │   ├── hooks
+│   │   │   └── use-window.ts
+│   │   ├── index.ts
+│   │   ├── lifecycle
+│   │   │   └── window-lifecycle.ts
+│   │   ├── models
+│   │   │   └── window.ts
+│   │   ├── persistence
+│   │   │   └── window-persistence.ts
+│   │   ├── providers
+│   │   │   └── window-provider.tsx
+│   │   ├── registry
+│   │   │   └── window-registry.ts
+│   │   ├── runtime
+│   │   │   └── window-runtime.ts
+│   │   └── state
+│   │       └── window-state.ts
+│   ├── workbench
+│   │   ├── activity-bar
+│   │   │   ├── ActivityBar.tsx
+│   │   │   ├── components
+│   │   │   ├── contracts
+│   │   │   │   └── activity-contract.ts
+│   │   │   ├── events
+│   │   │   │   ├── activity-events.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── persistence
+│   │   │   │   └── activity-persistence.ts
+│   │   │   ├── registry
+│   │   │   ├── runtime
+│   │   │   │   ├── activity-runtime.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── services
+│   │   │   │   ├── activity-service.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── state
+│   │   │   │   ├── activity-state.ts
+│   │   │   │   └── index.ts
+│   │   │   └── types
+│   │   │       └── activity-runtime-state.ts
+│   │   ├── bottom-panel
+│   │   │   └── BottomPanel.tsx
+│   │   ├── command-palette
+│   │   │   └── CommandPalette.tsx
+│   │   ├── components
+│   │   │   ├── WorkbenchCenter.tsx
+│   │   │   └── Workbench.tsx
+│   │   ├── contracts
+│   │   │   ├── index.ts
+│   │   │   └── workbench-contract.ts
+│   │   ├── docking
+│   │   │   ├── components
+│   │   │   │   ├── index.ts
+│   │   │   │   └── ResizeHandle.tsx
+│   │   │   ├── contracts
+│   │   │   │   ├── dock-layout.ts
+│   │   │   │   ├── dock-node.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── engine
+│   │   │   │   ├── docking-engine.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── events
+│   │   │   │   ├── dock-events.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── index.ts
+│   │   │   ├── models
+│   │   │   │   ├── dock-tree.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── runtime
+│   │   │   │   ├── dock-runtime.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── services
+│   │   │   │   ├── dock-service.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── state
+│   │   │   │   ├── dock-state.ts
+│   │   │   │   ├── dock-tree-state.ts
+│   │   │   │   └── index.ts
+│   │   │   └── storage
+│   │   │       ├── index.ts
+│   │   │       └── layout-storage.ts
+│   │   ├── editor-area
+│   │   │   └── EditorArea.tsx
+│   │   ├── events
+│   │   │   ├── event-bus.ts
+│   │   │   ├── event-contract.ts
+│   │   │   └── index.ts
+│   │   ├── hooks
+│   │   │   └── use-workbench.ts
+│   │   ├── index.ts
+│   │   ├── layout
+│   │   │   ├── index.ts
+│   │   │   ├── layout-contract.ts
+│   │   │   ├── layout-runtime.ts
+│   │   │   ├── layout-service.ts
+│   │   │   ├── register-default-layouts.ts
+│   │   │   └── WorkbenchLayout.tsx
+│   │   ├── panels
+│   │   │   ├── AIPanel.tsx
+│   │   │   ├── catalog
+│   │   │   │   ├── index.ts
+│   │   │   │   └── panel-catalog.ts
+│   │   │   ├── components
+│   │   │   │   ├── index.ts
+│   │   │   │   └── WelcomePanel.tsx
+│   │   │   ├── contracts
+│   │   │   │   └── panel-definition.ts
+│   │   │   ├── events
+│   │   │   │   ├── index.ts
+│   │   │   │   └── panel-focus-events.ts
+│   │   │   ├── factory
+│   │   │   │   ├── index.ts
+│   │   │   │   └── panel-factory.ts
+│   │   │   ├── index.ts
+│   │   │   ├── library
+│   │   │   │   ├── calendar
+│   │   │   │   │   ├── CalendarPanel.tsx
+│   │   │   │   │   └── index.ts
+│   │   │   │   ├── charts
+│   │   │   │   │   ├── ChartsPanel.tsx
+│   │   │   │   │   └── index.ts
+│   │   │   │   ├── execution
+│   │   │   │   │   ├── ExecutionPanel.tsx
+│   │   │   │   │   └── index.ts
+│   │   │   │   ├── logs
+│   │   │   │   │   ├── index.ts
+│   │   │   │   │   └── LogsPanel.tsx
+│   │   │   │   ├── news
+│   │   │   │   │   ├── index.ts
+│   │   │   │   │   └── NewsPanel.tsx
+│   │   │   │   ├── orders
+│   │   │   │   │   ├── index.ts
+│   │   │   │   │   └── OrdersPanel.tsx
+│   │   │   │   ├── portfolio
+│   │   │   │   │   ├── index.ts
+│   │   │   │   │   └── PortfolioPanel.tsx
+│   │   │   │   ├── positions
+│   │   │   │   │   ├── index.ts
+│   │   │   │   │   └── PositionsPanel.tsx
+│   │   │   │   ├── risk
+│   │   │   │   │   ├── index.ts
+│   │   │   │   │   └── RiskPanel.tsx
+│   │   │   │   ├── scanner
+│   │   │   │   │   ├── index.ts
+│   │   │   │   │   └── ScannerPanel.tsx
+│   │   │   │   └── watchlist
+│   │   │   │       ├── index.ts
+│   │   │   │       └── WatchlistPanel.tsx
+│   │   │   ├── metadata
+│   │   │   │   ├── index.ts
+│   │   │   │   ├── panel-category.ts
+│   │   │   │   ├── panel-descriptor.ts
+│   │   │   │   └── panel-location.ts
+│   │   │   ├── models
+│   │   │   ├── panel-contract.ts
+│   │   │   ├── registry
+│   │   │   │   └── panel-registry.ts
+│   │   │   ├── runtime
+│   │   │   │   ├── index.ts
+│   │   │   │   ├── panel-focus-runtime.ts
+│   │   │   │   ├── panel-runtime.ts
+│   │   │   │   └── register-default-panels.ts
+│   │   │   ├── services
+│   │   │   │   ├── index.ts
+│   │   │   │   └── panel-focus-service.ts
+│   │   │   ├── state
+│   │   │   │   ├── index.ts
+│   │   │   │   └── panel-focus-state.ts
+│   │   │   ├── StrategyPanel.tsx
+│   │   │   ├── TerminalPanel.tsx
+│   │   │   ├── TradingPanel.tsx
+│   │   │   └── WelcomePanel.tsx
+│   │   ├── providers
+│   │   │   └── workbench-provider.tsx
+│   │   ├── registries
+│   │   │   ├── activity-registry.ts
+│   │   │   ├── command-registry.ts
+│   │   │   ├── index.ts
+│   │   │   ├── layout-registry.ts
+│   │   │   ├── panel-registry.ts
+│   │   │   └── workspace-registry.ts
+│   │   ├── registry
+│   │   │   └── widget-registry.ts
+│   │   ├── runtime
+│   │   │   ├── index.ts
+│   │   │   ├── workbench-runtime.ts
+│   │   │   ├── workbench-state-manager.ts
+│   │   │   └── workspace-state.ts
+│   │   ├── search
+│   │   │   └── Search.tsx
+│   │   ├── services
+│   │   │   ├── index.ts
+│   │   │   └── workbench-service.ts
+│   │   ├── sidebar
+│   │   │   ├── events
+│   │   │   │   ├── explorer-events.ts
+│   │   │   │   ├── index.ts
+│   │   │   │   └── sidebar-events.ts
+│   │   │   ├── ExplorerItem.tsx
+│   │   │   ├── ExplorerSection.tsx
+│   │   │   ├── Explorer.tsx
+│   │   │   ├── index.ts
+│   │   │   ├── runtime
+│   │   │   │   ├── explorer-runtime.ts
+│   │   │   │   ├── index.ts
+│   │   │   │   └── sidebar-runtime.ts
+│   │   │   ├── services
+│   │   │   │   ├── explorer-service.ts
+│   │   │   │   ├── index.ts
+│   │   │   │   └── sidebar-service.ts
+│   │   │   ├── Sidebar.tsx
+│   │   │   └── state
+│   │   │       ├── explorer-state.ts
+│   │   │       ├── index.ts
+│   │   │       └── sidebar-state.ts
+│   │   ├── state
+│   │   │   ├── index.ts
+│   │   │   └── workbench-state.ts
+│   │   ├── status-bar
+│   │   │   └── StatusBar.tsx
+│   │   ├── tabs
+│   │   │   ├── components
+│   │   │   │   └── WorkbenchTabs.tsx
+│   │   │   ├── contracts
+│   │   │   │   └── tab-contract.ts
+│   │   │   ├── events
+│   │   │   │   └── tab-events.ts
+│   │   │   ├── index.ts
+│   │   │   ├── runtime
+│   │   │   │   ├── index.ts
+│   │   │   │   └── tab-runtime.ts
+│   │   │   ├── services
+│   │   │   └── state
+│   │   │       ├── index.ts
+│   │   │       └── tab-state.ts
+│   │   ├── widgets
+│   │   ├── window-manager
+│   │   │   └── window-manager.ts
+│   │   ├── workspace
+│   │   │   ├── components
+│   │   │   ├── composition
+│   │   │   │   ├── default-trading-workspace.ts
+│   │   │   │   ├── index.ts
+│   │   │   │   ├── runtime
+│   │   │   │   │   └── workspace-composition-runtime.ts
+│   │   │   │   └── workspace-composition.ts
+│   │   │   ├── contracts
+│   │   │   │   └── workspace-panel.ts
+│   │   │   ├── index.ts
+│   │   │   ├── models
+│   │   │   │   └── workspace-layout.ts
+│   │   │   ├── persistence
+│   │   │   │   ├── builder
+│   │   │   │   │   ├── index.ts
+│   │   │   │   │   └── workspace-snapshot-builder.ts
+│   │   │   │   ├── contracts
+│   │   │   │   │   ├── index.ts
+│   │   │   │   │   ├── workspace-persistence.ts
+│   │   │   │   │   └── workspace-snapshot.ts
+│   │   │   │   ├── models
+│   │   │   │   ├── runtime
+│   │   │   │   │   └── persistence-runtime.ts
+│   │   │   │   ├── serializer
+│   │   │   │   │   ├── index.ts
+│   │   │   │   │   ├── workspace-deserializer.ts
+│   │   │   │   │   └── workspace-serializer.ts
+│   │   │   │   └── storage
+│   │   │   │       └── workspace-storage.ts
+│   │   │   ├── registry
+│   │   │   │   └── workspace-registry.ts
+│   │   │   ├── runtime
+│   │   │   │   ├── register-default-workspace.ts
+│   │   │   │   ├── workspace-loader.ts
+│   │   │   │   └── workspace-runtime.ts
+│   │   │   └── state
+│   │   └── workspaces
+│   │       ├── index.ts
+│   │       ├── register-default-workspaces.ts
+│   │       ├── workspace-contract.ts
+│   │       └── workspace-manager.ts
+│   └── workspace
+│       ├── adapters
+│       │   ├── infrastructure-workspace.ts
+│       │   └── trading-workspace.ts
+│       └── center
+│           ├── core
+│           │   ├── workspace-state.ts
+│           │   └── workspace-types.ts
+│           ├── index.ts
+│           ├── layout
+│           │   └── workspace-container.tsx
+│           ├── manager
+│           │   └── workspace-manager.ts
+│           ├── provider
+│           │   └── workspace-provider.tsx
+│           ├── registry
+│           │   └── workspace-registry.ts
+│           └── runtime
+│               └── workspace-runtime.ts
+├── src-dump
+│   ├── dump
+│   │   └── phase22
+│   ├── foundation
+│   │   └── theme
+│   │       └── colors.ts
+│   └── stage24-prebuild
+│       ├── corei-os-inventory.txt
+│       └── src
+│           ├── App.tsx
+│           ├── assets
+│           ├── cognitive
+│           │   ├── bottom-memory
+│           │   ├── center-understanding
+│           │   ├── left-reality
+│           │   ├── right-intelligence
+│           │   └── top-consciousness
+│           │       ├── components
+│           │       │   ├── cluster
+│           │       │   │   ├── cluster-builder.ts
+│           │       │   │   └── types.ts
+│           │       │   ├── index.ts
+│           │       │   ├── RibbonDivider.tsx
+│           │       │   ├── Ribbon.tsx
+│           │       │   ├── RibbonWidget.tsx
+│           │       │   └── RibbonZone.tsx
+│           │       ├── contracts
+│           │       │   ├── index.ts
+│           │       │   ├── ribbon-contract.ts
+│           │       │   ├── widget-contract.ts
+│           │       │   └── zone-contract.ts
+│           │       ├── hooks
+│           │       │   ├── index.ts
+│           │       │   └── use-ribbon.ts
+│           │       ├── index.ts
+│           │       ├── layout
+│           │       │   ├── build-ribbon-layout.ts
+│           │       │   ├── compute-widget-layout.ts
+│           │       │   ├── compute-zone-layout.ts
+│           │       │   ├── index.ts
+│           │       │   ├── layout-engine.ts
+│           │       │   ├── metrics.ts
+│           │       │   └── models
+│           │       │       ├── index.ts
+│           │       │       ├── ribbon-layout.ts
+│           │       │       ├── widget-layout.ts
+│           │       │       └── zone-layout.ts
+│           │       ├── models
+│           │       │   ├── index.ts
+│           │       │   ├── ribbon.ts
+│           │       │   ├── widget.ts
+│           │       │   └── zone.ts
+│           │       ├── providers
+│           │       │   ├── index.ts
+│           │       │   └── ribbon-provider.tsx
+│           │       ├── registry
+│           │       │   ├── index.ts
+│           │       │   └── ribbon-registry.ts
+│           │       ├── runtime
+│           │       │   ├── index.ts
+│           │       │   ├── ribbon-runtime.ts
+│           │       │   ├── widget-runtime.ts
+│           │       │   └── zone-runtime.ts
+│           │       ├── state
+│           │       │   ├── index.ts
+│           │       │   ├── ribbon-state.ts
+│           │       │   └── zone-state.ts
+│           │       ├── styles
+│           │       │   ├── index.ts
+│           │       │   └── ribbon.css
+│           │       ├── utils
+│           │       │   ├── constants.ts
+│           │       │   ├── index.ts
+│           │       │   └── layout.ts
+│           │       └── view
+│           │           ├── widget-view.mapper.ts
+│           │           └── widget-view.model.ts
+│           ├── composition
+│           ├── contracts
+│           ├── experience
+│           │   ├── interaction
+│           │   ├── layout
+│           │   ├── navigation
+│           │   ├── rendering
+│           │   ├── shell
+│           │   ├── windowing
+│           │   └── workspace
+│           ├── experiences
+│           │   ├── compliance
+│           │   ├── executive
+│           │   ├── infrastructure
+│           │   │   ├── runtime
+│           │   │   │   ├── index.ts
+│           │   │   │   ├── provider.tsx
+│           │   │   │   └── ribbon-runtime.ts
+│           │   │   └── top-consciousness
+│           │   │       ├── configuration
+│           │   │       │   ├── index.ts
+│           │   │       │   ├── ribbon.ts
+│           │   │       │   ├── widgets.ts
+│           │   │       │   └── zones
+│           │   │       │       ├── authority.ts
+│           │   │       │       ├── context.ts
+│           │   │       │       ├── continuity.ts
+│           │   │       │       ├── existence.ts
+│           │   │       │       ├── identity.ts
+│           │   │       │       ├── index.ts
+│           │   │       │       ├── mission.ts
+│           │   │       │       ├── readiness.ts
+│           │   │       │       ├── reality.ts
+│           │   │       │       └── risk.ts
+│           │   │       ├── index.ts
+│           │   │       ├── README.md
+│           │   │       └── specification
+│           │   │           ├── widget-data-sources.ts
+│           │   │           └── widget-resolver.ts
+│           │   ├── research
+│           │   ├── risk
+│           │   └── trading
+│           ├── foundation
+│           │   ├── bootstrap
+│           │   ├── composition
+│           │   ├── configuration
+│           │   ├── initialization
+│           │   └── lifecycle
+│           ├── main.tsx
+│           ├── services
+│           ├── state
+│           ├── styles
+│           └── visualization
+│               ├── analytics
+│               ├── comparison
+│               ├── components
+│               │   └── index.ts
+│               ├── containers
+│               ├── contracts
+│               │   ├── color-contract.ts
+│               │   ├── design-token.ts
+│               │   ├── index.ts
+│               │   ├── spacing-contract.ts
+│               │   ├── theme-contract.ts
+│               │   └── typography-contract.ts
+│               ├── feedback
+│               ├── grammar
+│               │   ├── attention.ts
+│               │   ├── emphasis.ts
+│               │   ├── grouping.ts
+│               │   ├── hierarchy.ts
+│               │   ├── index.ts
+│               │   ├── interaction.ts
+│               │   └── visibility.ts
+│               ├── graphics
+│               ├── icons
+│               │   └── index.ts
+│               ├── index.ts
+│               ├── information
+│               ├── interaction
+│               ├── primitives
+│               │   ├── divider
+│               │   │   ├── Divider.tsx
+│               │   │   ├── Divider.types.ts
+│               │   │   └── index.ts
+│               │   ├── index.ts
+│               │   ├── inline
+│               │   │   ├── index.ts
+│               │   │   ├── Inline.tsx
+│               │   │   └── Inline.types.ts
+│               │   ├── surface
+│               │   │   ├── index.ts
+│               │   │   ├── Surface.tsx
+│               │   │   └── Surface.types.ts
+│               │   └── text
+│               │       ├── index.ts
+│               │       ├── Text.tsx
+│               │       └── Text.types.ts
+│               ├── semantics
+│               │   ├── border.ts
+│               │   ├── color.ts
+│               │   ├── elevation.ts
+│               │   ├── index.ts
+│               │   ├── motion.ts
+│               │   ├── state.ts
+│               │   ├── surface.ts
+│               │   └── text.ts
+│               ├── themes
+│               │   ├── index.ts
+│               │   ├── institutional-dark.ts
+│               │   └── theme-engine.ts
+│               └── tokens
+│                   ├── borders
+│                   │   └── index.ts
+│                   ├── colors
+│                   │   ├── charts.ts
+│                   │   ├── index.ts
+│                   │   └── raw.ts
+│                   ├── density
+│                   ├── elevation
+│                   │   └── index.ts
+│                   ├── index.ts
+│                   ├── motion
+│                   │   └── index.ts
+│                   ├── opacity
+│                   │   └── index.ts
+│                   ├── radius
+│                   │   └── index.ts
+│                   ├── sizing
+│                   ├── spacing
+│                   │   ├── density.ts
+│                   │   ├── grid.ts
+│                   │   ├── index.ts
+│                   │   ├── sizing.ts
+│                   │   └── spacing.ts
+│                   └── typography
+│                       ├── font-families.ts
+│                       ├── font-sizes.ts
+│                       ├── font-weights.ts
+│                       ├── index.ts
+│                       ├── letter-spacing.ts
+│                       └── line-heights.ts
+├── stage25-backup
+│   ├── panel-registry.legacy.ts
+│   └── panel-registry.panels.ts
+├── stage25-dependencies.txt
+├── stage25-final-repository.txt
+├── stage25-foundation-audit.txt
+├── stage25-foundation.txt
+├── stage25-phase02-tech-stack.txt
+├── stage25-shell.txt
+├── stage25-workspace.txt
+├── tsconfig.json
+└── vite.config.ts
+
+622 directories, 926 files

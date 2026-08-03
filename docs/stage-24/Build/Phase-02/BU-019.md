@@ -1,0 +1,385 @@
+# BUILD UNIT-019
+
+## Title
+
+COREI OS Trading Terminal Integration
+
+---
+
+## Objective
+
+Integrate the Trading Terminal into the COREI OS platform through the institutional Platform Integration layer, Runtime Services, Workspace Engine, and Terminal SDK.
+
+This Build Unit establishes the Trading Terminal as the second operational experience hosted by COREI OS. It follows the same integration architecture introduced for the Infrastructure Terminal, ensuring a deterministic, scalable, and maintainable platform design.
+
+---
+
+## Scope
+
+This Build Unit establishes the Trading Terminal integration layer.
+
+Implemented:
+
+- Trading Integration Repository
+- Platform Registration
+- Runtime Integration
+- Workspace Integration
+- Trading Workspace Adapter
+- Trading Provider
+- Trading Hook
+- Trading Root Component
+- Platform Validation
+
+---
+
+# Integration Architecture
+
+```
+COREI OS
+
+│
+
+├── Bootstrap
+
+├── Runtime Services
+
+├── Platform Integration
+
+├── Terminal SDK
+
+├── Workspace Engine
+
+│
+
+├───────────────┬──────────────────┐
+
+│               │                  │
+
+Infrastructure  Trading        Future Terminals
+
+Terminal        Terminal
+
+│               │
+
+Platform Adapter
+
+Runtime Adapter
+
+Workspace Adapter
+
+Provider
+
+Hook
+
+Root Component
+```
+
+The Trading Terminal now becomes the second hosted experience within COREI OS.
+
+---
+
+# Repository Structure
+
+Implemented
+
+```
+src/experiences/trading/
+
+integration/
+    trading-platform.ts
+    trading-runtime.ts
+    trading-workspace.ts
+
+providers/
+    trading-provider.tsx
+
+hooks/
+    use-trading.ts
+
+components/
+    TradingRoot.tsx
+```
+
+Additional adapter introduced:
+
+```
+src/workspace/adapters/
+
+trading-workspace.ts
+```
+
+---
+
+# Platform Registration
+
+Implemented:
+
+```
+trading-platform.ts
+```
+
+Current responsibility:
+
+- Register the Trading Terminal with the Platform Integration layer.
+
+Future responsibilities:
+
+- Terminal Metadata
+- Startup Configuration
+- Environment Binding
+- Runtime Policies
+
+---
+
+# Runtime Integration
+
+Implemented:
+
+```
+trading-runtime.ts
+```
+
+Current responsibility:
+
+- Connect the Trading Terminal to Runtime Services.
+
+Future responsibilities:
+
+- Runtime Lifecycle
+- Event Processing
+- Health Monitoring
+- Service Coordination
+
+---
+
+# Workspace Integration
+
+Implemented:
+
+```
+trading-workspace.ts
+```
+
+Current responsibility:
+
+- Bind the Trading Terminal to the Workspace Engine.
+
+Future responsibilities:
+
+- Workspace Persistence
+- Session Restoration
+- Multi-layout Support
+- Multi-monitor Configuration
+
+---
+
+# Trading Workspace Adapter
+
+Implemented:
+
+```
+src/workspace/adapters/trading-workspace.ts
+```
+
+Current responsibility:
+
+- Map the generic Workspace Registry to the Trading experience.
+
+Future adapters:
+
+- research-workspace.ts
+- risk-workspace.ts
+- executive-workspace.ts
+- compliance-workspace.ts
+
+This maintains a consistent adapter pattern across every hosted experience.
+
+---
+
+# Trading Provider
+
+Implemented:
+
+```
+trading-provider.tsx
+```
+
+Provides the runtime boundary for the Trading Terminal.
+
+Future responsibilities:
+
+- Runtime Context
+- Dependency Injection
+- Trading Services
+- Shared Platform Services
+
+---
+
+# Trading Hook
+
+Implemented:
+
+```
+useTrading()
+```
+
+Current responsibility:
+
+- Provide SDK access for Trading components.
+
+Future capabilities:
+
+- Runtime APIs
+- Workspace APIs
+- Navigation APIs
+- Ribbon APIs
+- Trading Context APIs
+
+---
+
+# Trading Root
+
+Implemented:
+
+```
+TradingRoot.tsx
+```
+
+The Trading Root becomes the entry point for the Trading Terminal inside COREI OS.
+
+Future responsibilities:
+
+- Shell Composition
+- Workspace Mounting
+- Domain Initialization
+- Runtime Composition
+- Trading Experience Bootstrap
+
+---
+
+# Validation
+
+Successfully validated:
+
+- Platform Registration
+- Runtime Integration
+- Workspace Integration
+- Trading Workspace Adapter
+- Trading Provider
+- Trading Hook
+- Trading Root
+- TypeScript Compilation
+- Vite Production Build
+
+Validation Result
+
+```
+TypeScript Compilation     PASS
+
+Vite Production Build      PASS
+```
+
+---
+
+# Deliverables
+
+Completed:
+
+- Trading Integration Repository
+- Platform Integration
+- Runtime Integration
+- Workspace Integration
+- Trading Workspace Adapter
+- Provider
+- Hook
+- Root Component
+
+---
+
+# Repository Impact
+
+Created the Trading integration layer under:
+
+```
+src/experiences/trading/
+```
+
+Added the Trading Workspace adapter:
+
+```
+src/workspace/adapters/trading-workspace.ts
+```
+
+This adapter follows the same institutional integration pattern introduced with the Infrastructure Terminal, ensuring architectural consistency.
+
+---
+
+# Result
+
+COREI OS now successfully hosts the Trading Terminal through a clean integration layer.
+
+The Trading Terminal communicates with the platform exclusively through Platform, Runtime, Workspace, and SDK adapters, preserving strict separation between platform infrastructure and trading business logic.
+
+This Build Unit confirms that the COREI OS architecture supports multiple hosted terminal experiences using a unified integration model.
+
+---
+
+# Architecture Status
+
+With BU-019 complete, COREI OS now hosts:
+
+- Infrastructure Terminal
+- Trading Terminal
+
+Both terminals integrate using the identical institutional pattern:
+
+```
+Platform Adapter
+
+↓
+
+Runtime Adapter
+
+↓
+
+Workspace Adapter
+
+↓
+
+Provider
+
+↓
+
+Hook
+
+↓
+
+Root Component
+```
+
+This architecture becomes the standard integration blueprint for all future terminals.
+
+---
+
+# Next Build Unit
+
+**BU-020 – Institutional Validation**
+
+Implementation Order
+
+- Repository Audit
+- Architecture Validation
+- Framework Validation
+- Platform Validation
+- SDK Validation
+- Experience Validation
+- Build Validation
+- Dependency Validation
+- Documentation Validation
+- Final Readiness Assessment
+
+---
+
+# Status
+
+**COMPLETED**

@@ -1,0 +1,8 @@
+kind: StatefulSet
+metadata:
+  name: kafka
+  namespace: kafka
+kafka_container_found: true
+container_count: 1
+init_container_count: 1
+volume_count: 0

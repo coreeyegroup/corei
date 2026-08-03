@@ -4,34 +4,21 @@
  *
  * STAGE-25
  * PHASE-17
- * STEP-09
+ * STEP-02
  *
  * FILE:
  * RightRegion.tsx
  *
  * PURPOSE:
- * Institutional Right Intelligence Panel Shell Integration
+ * Institutional Intelligence Surface Boundary
  *
  * DESCRIPTION:
- * Defines the authoritative integration boundary between the Institutional
- * Shell right region and the existing Intelligence Right Panel subsystem.
+ * Defines the Phase-17 intelligence mounting boundary.
  *
- * The Shell consumes only the Intelligence Right Panel public API.
+ * Future intelligence and contextual capabilities attach here.
  *
- * The Shell does not directly consume intelligence provider, runtime, engine,
- * registry, state, event, service, agent, or cognitive internals.
- *
- * AUTHORITATIVE COMPOSITION:
- *
- * ShellLayout
- *     ↓
- * RightRegion
- *     ↓
- * Intelligence Right Panel Public API
- *     ↓
- * IntelligenceRightPanel
- *     ↓
- * Existing Intelligence Foundation
+ * OWNERSHIP:
+ * Institutional Shell
  *
  ******************************************************************************/
 
@@ -47,15 +34,14 @@ export function RightRegion(): ReactElement {
 
     return (
 
-        <aside
-            className="corei-shell-region corei-shell-region-right"
-            data-region="right"
-            data-shell-integration="intelligence-right-panel"
+        <section
+            className="corei-region corei-region-right"
+            data-shell-surface="intelligence"
         >
 
             <IntelligenceRightPanel />
 
-        </aside>
+        </section>
 
     );
 

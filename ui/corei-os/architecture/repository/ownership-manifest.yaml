@@ -1,0 +1,57 @@
+# =============================================================================
+# COREI OPERATING SYSTEM
+#
+# Stage       : 25
+# Phase       : 03A
+# Step        : 01
+#
+# File        : ownership-manifest.yaml
+# Purpose     : Repository Ownership Manifest
+#
+# =============================================================================
+
+repository: corei-os
+
+ownership:
+
+  bootstrap:
+    owner: Bootstrap Layer
+    phase: Phase-01
+
+  foundation:
+    owner: Foundation Layer
+    phase: Phase-02
+
+  shell:
+    owner: Composition Layer
+    phase: Phase-03
+
+  viewport:
+    owner: Composition Layer
+    phase: Phase-03
+
+  ribbon:
+    owner: Composition Layer
+    phase: Phase-03
+
+  navigation:
+    owner: Composition Layer
+    phase: Phase-03
+
+  workspace:
+    owner: Composition Layer
+    phase: Phase-03
+
+  intelligence:
+    owner: Composition Layer
+    phase: Phase-03
+
+  timeline:
+    owner: Composition Layer
+    phase: Phase-03
+
+  system:
+    owner: Runtime Layer
+    phase: Phase-03
+
+status: certified

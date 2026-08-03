@@ -1,0 +1,408 @@
+COREI Institutional Vocabulary
+Why this document is important
+
+One of the biggest reasons large systems fail after 5–10 years is that every engineer starts using different words for the same thing.
+
+For example:
+
+Engineer A says:
+
+Dashboard
+
+Engineer B says:
+
+Workspace
+
+Engineer C says:
+
+View
+
+Engineer D says:
+
+Screen
+
+Engineer E says:
+
+Page
+
+Suddenly the architecture becomes inconsistent.
+
+The same thing happens with:
+
+Module
+Service
+Engine
+Runtime
+Component
+Widget
+Plugin
+Extension
+Tool
+
+Nobody knows the exact meaning anymore.
+
+Institutions avoid this by defining a controlled vocabulary.
+
+Example
+❌ BAD
+
+Dashboard
+
+What does dashboard mean?
+
+Nobody knows.
+
+✅ GOOD
+
+Workspace
+
+Definition:
+
+A governed operational environment composed from Institutional Capabilities for achieving one professional operational objective.
+
+There is only one meaning.
+
+Another Example
+
+Capability
+
+Not:
+
+React Component.
+
+Definition:
+
+A governed institutional responsibility executed inside the Workbench Runtime and presented through one or more UI Components.
+
+Huge difference.
+
+Another Example
+
+Component
+
+Definition:
+
+A reusable presentation element used to render part of a Capability.
+
+A Component has no institutional responsibility.
+
+Now engineers immediately understand the difference.
+
+Another Example
+
+Workbench
+
+Definition:
+
+The constitutional runtime responsible for hosting, orchestrating and governing Institutional Workspaces.
+
+Not:
+
+Shell.
+
+Not:
+
+Application.
+
+Not:
+
+Dashboard.
+
+Another Example
+
+Operator
+
+Definition:
+
+A professional institutional user responsible for observation, investigation, decision-making, execution or governance.
+
+Not:
+
+User.
+
+Another Example
+
+Workspace
+
+Definition:
+
+A persistent operational environment supporting one institutional objective.
+
+Not:
+
+Page.
+
+Another Example
+
+Capability Group
+
+Definition:
+
+A logical collection of related Institutional Capabilities serving one operational responsibility.
+
+Another Example
+
+Capability
+
+Definition:
+
+The smallest governed operational responsibility reusable across multiple Workspaces.
+
+Another Example
+
+Panel
+
+Definition:
+
+A visual container used to display one Capability.
+
+Panel is visual.
+
+Capability is architectural.
+
+Never mix them.
+
+Another Example
+
+Widget
+
+Definition:
+
+A small reusable visual element contained within a Panel.
+
+Widget is UI.
+
+Capability is institution.
+
+Another Example
+
+Tool
+
+Definition:
+
+An external system integrated into COREI.
+
+Examples:
+
+Kubernetes
+Grafana
+Vault
+PostgreSQL
+TradingView
+Kafka
+
+COREI does not replace these.
+
+COREI orchestrates them.
+
+This matches everything we've discussed over the last several days.
+
+Another Example
+
+Engine
+
+Definition:
+
+A deterministic processing subsystem responsible for producing institutional outcomes.
+
+Examples:
+
+Risk Engine
+Decision Engine
+Execution Engine
+Another Example
+
+Service
+
+Definition:
+
+A runtime subsystem providing shared institutional functionality.
+
+Examples:
+
+Context Service
+Search Service
+Notification Service
+Another Example
+
+Runtime
+
+Definition:
+
+The execution environment responsible for lifecycle management, orchestration, communication and governance.
+
+Another Example
+
+Extension
+
+Definition:
+
+A governed package that introduces additional Capabilities into the Workbench without modifying the constitutional architecture.
+
+Another Example
+
+Layout
+
+Definition:
+
+A visual arrangement of Panels.
+
+Nothing more.
+
+Never confuse Layout with Workspace.
+
+Another Example
+
+Workspace Blueprint
+
+Definition:
+
+An implementation-independent specification describing:
+
+objective
+capabilities
+workflows
+context
+layout
+runtime
+persistence
+Another Example
+
+Institutional Memory
+
+Definition:
+
+The accumulated operational knowledge of COREI.
+
+Not operator memory.
+
+Institution memory.
+
+I think every architectural object should have one official definition
+
+For example:
+
+Workbench
+
+Definition
+
+Purpose
+
+Responsibilities
+
+Does
+
+Does Not
+
+Owned By
+
+Depends On
+
+Used By
+
+Related Terms
+
+Every single word.
+
+Exactly like that.
+
+I would actually create a dictionary
+A
+
+Architecture
+Audit
+Authority
+Automation
+
+B
+
+Blueprint
+Broker
+Business Capability
+
+C
+
+Capability
+Capability Group
+Command
+Context
+Contract
+Component
+Constitution
+
+D
+
+Dashboard (Deprecated)
+Decision
+Domain
+
+E
+
+Engine
+Entity
+Event
+Evolution
+Extension
+
+F
+
+Framework
+
+G
+
+Governance
+
+H
+
+Hierarchy
+
+I
+
+Institution
+Investigation
+Intelligence
+
+L
+
+Layout
+Lifecycle
+
+M
+
+Manifesto
+Meta Model
+
+O
+
+Observation
+Operator
+Operational Environment
+
+P
+
+Panel
+Persona
+Platform
+
+R
+
+Runtime
+Registry
+
+S
+
+Service
+Shell
+State
+
+T
+
+Technology
+Tool
+
+W
+
+Workbench
+Workspace
+Workflow
+Widget

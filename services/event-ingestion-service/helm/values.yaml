@@ -3,7 +3,7 @@ service:
 
 image:
   repository: event-ingestion-service
-  tag: latest
+  tag: 34edefc
   pullPolicy: Never
 
 replicaCount: 1

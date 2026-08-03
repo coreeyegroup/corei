@@ -1,0 +1,26 @@
+# SASL SSL REMEDIATION IMPLEMENTATION DESIGN
+
+STATUS
+
+ACTIVE
+
+OBJECTIVE
+
+Implement deterministic Kafka SASL_SSL
+startup configuration generation.
+
+IMPLEMENTATION MODEL
+
+Generator Driven
+
+VALIDATION MODEL
+
+Validator Driven
+
+DEPLOYMENT MODEL
+
+Package Driven
+
+MANUAL CHANGES
+
+FORBIDDEN

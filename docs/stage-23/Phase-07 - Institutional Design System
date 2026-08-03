@@ -1,0 +1,1953 @@
+# STAGE-23 — INSTITUTIONAL OPERATOR WORKSTATION
+
+## Phase-07 — Institutional Design System
+
+**Document Status:** Authoritative
+**Stage:** 23
+**Phase:** 07
+**Sections Covered:** 01–04 (Message 1 of 4)
+
+**Authoritative References**
+
+* Stage-23 Phase-00 — Constitutional Foundation
+* Stage-23 Phase-01 — Discovery & Reverse Engineering
+* Stage-23 Phase-02 — Operator Architecture
+* Stage-23 Phase-03 — Operational Environment Architecture
+* Stage-23 Phase-04 — Experience Architecture
+* Stage-23 Phase-05 — Technology Landscape
+* Stage-23 Phase-06 — Workbench Architecture
+* COREI Anchor Law
+* Master Trader Persona
+
+---
+
+# SECTION 01 — PURPOSE
+
+## Purpose
+
+The purpose of Phase-07 is to establish the Institutional Design System of the COREI Operator Workstation.
+
+The Design System defines the complete visual language through which the Workbench communicates institutional reality to professional operators.
+
+It is not a UI kit.
+
+It is not a component library.
+
+It is not a style guide.
+
+It is not a branding document.
+
+It is the architectural language governing how institutional information becomes visual understanding.
+
+Every colour, spacing rule, typography scale, icon, animation, layout token, interaction state, surface, elevation, visual hierarchy, and component shall originate from this Design System.
+
+The Design System therefore becomes the constitutional visual language of COREI.
+
+Its purpose is to ensure that every operator experiences one coherent institution regardless of:
+
+* terminal,
+* workspace,
+* capability,
+* technology,
+* implementation team,
+* future extensions.
+
+Visual consistency is therefore an architectural requirement rather than a design preference.
+
+---
+
+# SECTION 02 — MISSION
+
+## Mission
+
+The mission of the Institutional Design System is to translate institutional architecture into visual communication.
+
+The Design System shall enable operators to understand institutional reality through visual consistency rather than visual complexity.
+
+Its mission includes defining:
+
+* visual hierarchy,
+* semantic colour language,
+* institutional typography,
+* spatial rhythm,
+* operational density,
+* interaction feedback,
+* motion principles,
+* iconography,
+* component foundations,
+* accessibility,
+* responsive behaviour,
+* visual governance.
+
+Every visual element shall strengthen:
+
+* operational understanding,
+* professional confidence,
+* cognitive efficiency,
+* institutional discipline,
+* environmental continuity.
+
+In accordance with the COREI Anchor Law, visual communication shall reveal institutional reality rather than decorate software.
+
+In accordance with the Master Trader Persona, visual communication shall reinforce disciplined professional operation rather than emotional reaction.
+
+The Design System therefore communicates meaning before aesthetics.
+
+---
+
+# SECTION 03 — PROBLEM STATEMENT
+
+## Problem Statement
+
+Most modern design systems primarily focus upon visual consistency.
+
+Examples include:
+
+* buttons,
+* colours,
+* typography,
+* icons,
+* spacing,
+* components.
+
+While necessary, these are insufficient for institutional operations.
+
+Professional operators continuously interpret:
+
+* market state,
+* portfolio state,
+* infrastructure state,
+* execution state,
+* operational state,
+* organisational state,
+* system health,
+* institutional risk.
+
+If visual language is inconsistent,
+
+operators spend unnecessary cognitive effort translating software rather than understanding institutional reality.
+
+Traditional design systems rarely define:
+
+* operational hierarchy,
+* institutional semantics,
+* cognitive prioritisation,
+* information confidence,
+* environmental continuity,
+* long-duration operational comfort.
+
+For COREI, these become constitutional requirements.
+
+The challenge therefore is not producing attractive interfaces.
+
+The challenge is creating one visual language capable of supporting continuous institutional operation throughout years of organisational evolution.
+
+Phase-07 solves this challenge by establishing the Institutional Design System.
+
+---
+
+# SECTION 04 — BACKGROUND
+
+## Background
+
+The previous phases progressively established the constitutional foundations of the Institutional Operator Workstation.
+
+Phase-00 defined constitutional principles.
+
+Phase-01 defined institutional engineering methodology.
+
+Phase-02 defined professional operators.
+
+Phase-03 defined the Operational Environment.
+
+Phase-04 defined Experience Architecture.
+
+Phase-05 defined the Technology Landscape.
+
+Phase-06 defined the COREI Workbench Runtime.
+
+With these foundations complete,
+
+Phase-07 now defines how the Workbench visually communicates institutional reality.
+
+The Design System therefore occupies the following architectural position.
+
+Constitution
+
+↓
+
+Operator
+
+↓
+
+Operational Environment
+
+↓
+
+Experience
+
+↓
+
+Technology
+
+↓
+
+Workbench
+
+↓
+
+Design Language
+
+↓
+
+Capabilities
+
+↓
+
+Components
+
+↓
+
+Implementation
+
+↓
+
+Code
+
+The Design System does not exist independently.
+
+It becomes the visual expression of every architectural principle established throughout Stage-23.
+
+Every future capability shall therefore communicate through one common institutional visual language regardless of implementation technology.
+
+### Architectural Observation
+
+I think we've reached another important architectural distinction.
+
+Most design systems answer questions like:
+
+What colour should a button be?
+What font should we use?
+How much padding should a card have?
+
+COREI's Design System should answer much deeper questions.
+
+For example:
+
+Traditional Design System	COREI Institutional Design System
+What color?	What institutional meaning does this color communicate?
+What icon?	What operational state does this icon represent?
+Typography	How should information authority be communicated?
+Layout	How should professional attention flow?
+Animation	What operational event deserves motion?
+Component	What institutional capability does it express?
+Theme	How does the institution communicate its current state?
+
+I think this introduces another constitutional principle that should guide every future visual decision:
+
+The Design System does not decorate the Workbench.
+
+The Design System communicates institutional reality.
+
+That single sentence fundamentally changes the role of visual design.
+
+Instead of making software look professional, the Design System helps operators immediately understand:
+
+what is happening,
+what changed,
+what matters,
+what requires attention,
+what can wait,
+what should happen next.
+
+That, in my view, is the visual embodiment of both the COREI Anchor Law and the Master Trader Persona, and it is what will ultimately distinguish COREI OS from conventional enterprise interfaces.
+
+# SECTION 05 — ARCHITECTURAL CONTEXT
+
+## Architectural Context
+
+The Institutional Design System is the visual communication layer of the COREI Workbench.
+
+The Workbench governs operation.
+
+The Design System governs perception.
+
+It transforms institutional architecture into visual understanding.
+
+Unlike conventional design systems, COREI does not begin with components.
+
+It begins with institutional meaning.
+
+Visual elements become expressions of operational concepts rather than isolated interface objects.
+
+The Design System therefore translates:
+
+Institution
+
+↓
+
+Architecture
+
+↓
+
+Operational Meaning
+
+↓
+
+Visual Language
+
+↓
+
+Components
+
+↓
+
+Rendered Interface
+
+Meaning always precedes appearance.
+
+---
+
+## Visual Communication Architecture
+
+The Design System shall be organised into hierarchical communication layers.
+
+### Layer 1 — Institutional Meaning
+
+Defines what the institution intends to communicate.
+
+Examples include:
+
+* Authority
+* Trust
+* Risk
+* Stability
+* Attention
+* Opportunity
+* Warning
+* Confirmation
+* Investigation
+* Execution
+* Continuity
+
+These meanings remain constant.
+
+---
+
+### Layer 2 — Semantic Language
+
+Maps institutional meaning into reusable semantics.
+
+Examples include:
+
+* Critical
+* Warning
+* Advisory
+* Healthy
+* Active
+* Passive
+* Pending
+* Locked
+* Verified
+* Informational
+
+Semantics remain independent of colours.
+
+---
+
+### Layer 3 — Visual Tokens
+
+Semantic meaning becomes visual tokens.
+
+Examples include:
+
+* Colour Tokens
+* Typography Tokens
+* Elevation Tokens
+* Motion Tokens
+* Border Tokens
+* Shadow Tokens
+* Icon Tokens
+* Surface Tokens
+* Density Tokens
+* Spacing Tokens
+
+Tokens remain independent of implementation technology.
+
+---
+
+### Layer 4 — Visual Patterns
+
+Tokens compose reusable communication patterns.
+
+Examples include:
+
+* Investigation Pattern
+* Execution Pattern
+* Monitoring Pattern
+* Comparison Pattern
+* Review Pattern
+* Alert Pattern
+* Timeline Pattern
+* Approval Pattern
+
+Patterns communicate operational intent.
+
+---
+
+### Layer 5 — Components
+
+Only now do components appear.
+
+Components inherit:
+
+Institutional Meaning
+
+↓
+
+Semantics
+
+↓
+
+Tokens
+
+↓
+
+Patterns
+
+↓
+
+Implementation
+
+Components never define visual language.
+
+They inherit it.
+
+---
+
+## Relationship with the Workbench
+
+The Workbench hosts operation.
+
+The Design System communicates operation.
+
+Neither should redefine the other.
+
+The Workbench owns behaviour.
+
+The Design System owns visual expression.
+
+---
+
+# SECTION 06 — OPERATOR PERSPECTIVE
+
+## Operator Perspective
+
+Professional operators should interpret institutional reality almost instinctively.
+
+Visual communication should reduce conscious interpretation.
+
+Operators should immediately recognise:
+
+* importance,
+* urgency,
+* authority,
+* relationships,
+* operational health,
+* workflow stage,
+* execution state,
+* confidence.
+
+The Design System should make understanding immediate.
+
+---
+
+## Cognitive Recognition
+
+Professional operators gradually develop visual memory.
+
+Over time they should recognise:
+
+colour,
+
+shape,
+
+spacing,
+
+motion,
+
+hierarchy,
+
+without conscious analysis.
+
+Visual familiarity becomes operational efficiency.
+
+---
+
+## Visual Calm
+
+The Design System shall minimise unnecessary visual competition.
+
+Only operationally significant information deserves attention.
+
+Everything else remains visually quiet.
+
+Professional environments reward clarity.
+
+Not stimulation.
+
+---
+
+## Information Hierarchy
+
+Every screen should immediately answer:
+
+What is most important?
+
+↓
+
+What changed?
+
+↓
+
+Why?
+
+↓
+
+What requires action?
+
+↓
+
+What can wait?
+
+Visual hierarchy shall answer these questions before operators consciously ask them.
+
+---
+
+## Visual Confidence
+
+Operators should trust visual communication.
+
+Equivalent situations should always appear equivalent.
+
+Consistency creates confidence.
+
+---
+
+## Long-Duration Comfort
+
+The Design System shall support prolonged institutional operation.
+
+Visual fatigue shall be minimised through:
+
+* controlled contrast,
+* disciplined spacing,
+* stable hierarchy,
+* restrained motion,
+* consistent density.
+
+Professional comfort becomes a constitutional design objective.
+
+---
+
+# SECTION 07 — ENGINEERING PERSPECTIVE
+
+## Engineering Perspective
+
+Engineering shall implement the Design System through governed architectural layers.
+
+No implementation shall bypass institutional visual semantics.
+
+---
+
+## Token-First Architecture
+
+Every visual property shall originate from tokens.
+
+Never hardcoded values.
+
+Examples include:
+
+Typography
+
+↓
+
+Semantic Typography Token
+
+↓
+
+Typography Scale
+
+↓
+
+Rendered Text
+
+The same principle applies to:
+
+* colours,
+* spacing,
+* sizing,
+* borders,
+* motion,
+* elevation.
+
+---
+
+## Semantic Rendering
+
+Engineering renders semantic intent.
+
+Examples:
+
+Risk.High
+
+↓
+
+Semantic Token
+
+↓
+
+Theme Resolution
+
+↓
+
+Rendered Colour
+
+Instead of:
+
+Red.
+
+Semantics remain implementation-independent.
+
+---
+
+## Component Inheritance
+
+Components inherit visual language.
+
+They never define it.
+
+Component development therefore follows:
+
+Meaning
+
+↓
+
+Semantic
+
+↓
+
+Token
+
+↓
+
+Pattern
+
+↓
+
+Component
+
+↓
+
+Implementation
+
+---
+
+## Theme Resolution
+
+Themes shall modify presentation.
+
+They shall never modify institutional meaning.
+
+Example:
+
+Critical
+
+remains Critical
+
+regardless of:
+
+* Dark Theme
+* Light Theme
+* High Contrast Theme
+* Executive Theme
+* Trading Theme
+
+Meaning remains stable.
+
+Presentation adapts.
+
+---
+
+## Runtime Integration
+
+The Design System integrates directly into the Workbench Runtime.
+
+Visual updates become runtime services rather than isolated CSS modifications.
+
+---
+
+## Engineering Governance
+
+Every visual contribution shall demonstrate:
+
+* semantic correctness,
+* token compliance,
+* accessibility,
+* behavioural consistency,
+* architectural alignment.
+
+Visual governance becomes an engineering responsibility.
+
+---
+
+# SECTION 08 — INSTITUTIONAL PERSPECTIVE
+
+## Institutional Perspective
+
+Institutions communicate through consistency.
+
+The Design System ensures that every capability expresses one institutional identity.
+
+---
+
+## One Institutional Language
+
+Regardless of:
+
+* terminal,
+* capability,
+* workspace,
+* engineering team,
+* future extension,
+
+operators experience one coherent institution.
+
+---
+
+## Institutional Authority
+
+Visual language shall communicate institutional confidence.
+
+Professional systems should appear:
+
+stable,
+
+predictable,
+
+disciplined,
+
+trustworthy,
+
+authoritative.
+
+Authority emerges through consistency rather than ornamentation.
+
+---
+
+## Institutional Memory
+
+Operators should develop long-term familiarity with the visual language.
+
+Institutional knowledge becomes visually reinforced through repeated exposure.
+
+---
+
+## Governance
+
+The Design System shall become a governed institutional asset.
+
+Every future visual contribution shall satisfy:
+
+Meaning
+
+↓
+
+Semantic
+
+↓
+
+Token
+
+↓
+
+Pattern
+
+↓
+
+Component
+
+↓
+
+Workbench
+
+↓
+
+Institution
+
+This chain becomes mandatory.
+
+---
+
+## Institutional Identity
+
+Ultimately, the Institutional Design System becomes more than visual styling.
+
+It becomes the visual identity of COREI's operational philosophy.
+
+Every colour, icon, animation, layout, and interaction communicates institutional thinking rather than interface decoration.
+
+The Design System therefore becomes the visual embodiment of the COREI Constitution.
+
+### Architectural Observation
+
+I think we've now identified something that makes the COREI Design System fundamentally different from conventional design systems.
+
+Most systems follow this hierarchy:
+
+Colors
+      │
+Typography
+      │
+Components
+      │
+Pages
+
+COREI should follow a much deeper hierarchy:
+
+Institutional Meaning
+          │
+          ▼
+Operational Semantics
+          │
+          ▼
+Design Tokens
+          │
+          ▼
+Visual Patterns
+          │
+          ▼
+Components
+          │
+          ▼
+Workspaces
+          │
+          ▼
+Workbench
+
+Notice the critical inversion.
+
+In most systems, colour defines meaning.
+
+In COREI, meaning defines colour.
+
+That one architectural decision has enormous long-term value:
+
+Themes can change without changing institutional meaning.
+Brand updates won't affect operator cognition.
+Accessibility modes preserve semantics.
+New visual technologies can be adopted without redefining behaviour.
+Every engineering team communicates using the same institutional language.
+
+I believe this Meaning → Semantic → Token → Pattern → Component pipeline should become one of the defining engineering principles of COREI's Design System and will give the platform a level of consistency and longevity comparable to mature operating systems rather than typical web applications.
+
+# SECTION 09 — FUNCTIONAL REQUIREMENTS
+
+## Functional Requirements
+
+The Institutional Design System shall provide one governed visual language for the entire COREI Workbench.
+
+Every rendered element shall communicate institutional meaning consistently across all terminals, workspaces, capabilities, and future extensions.
+
+---
+
+## 9.1 Institutional Meaning First
+
+Every visual element shall originate from institutional meaning.
+
+Meaning shall always precede:
+
+* colour,
+* typography,
+* spacing,
+* iconography,
+* motion,
+* component selection.
+
+Visual implementation shall never define meaning.
+
+---
+
+## 9.2 Semantic Consistency
+
+Equivalent institutional situations shall always communicate through identical semantics.
+
+Examples include:
+
+Critical
+
+↓
+
+Warning
+
+↓
+
+Attention
+
+↓
+
+Normal
+
+↓
+
+Healthy
+
+↓
+
+Completed
+
+↓
+
+Archived
+
+These semantics shall remain stable across the entire Workbench.
+
+---
+
+## 9.3 Unified Token System
+
+Every visual property shall resolve through the Design Token System.
+
+Mandatory token categories include:
+
+* Colour
+* Typography
+* Spacing
+* Radius
+* Border
+* Elevation
+* Shadow
+* Motion
+* Duration
+* Opacity
+* Icon
+* Density
+* Surface
+* Layout
+* Breakpoint
+
+No visual value shall bypass the token system.
+
+---
+
+## 9.4 Pattern-Based Composition
+
+Reusable visual patterns shall be established for institutional workflows.
+
+Examples include:
+
+* Investigation Pattern
+* Execution Pattern
+* Monitoring Pattern
+* Comparison Pattern
+* Approval Pattern
+* Timeline Pattern
+* Alert Pattern
+* Audit Pattern
+* Research Pattern
+* Collaboration Pattern
+
+Patterns shall become reusable institutional language.
+
+---
+
+## 9.5 Component Consistency
+
+Every component shall inherit the Design System.
+
+Examples include:
+
+* Buttons
+* Inputs
+* Cards
+* Tables
+* Charts
+* Trees
+* Graphs
+* Editors
+* Terminals
+* Dialogs
+* Side Panels
+* Toolbars
+* Context Menus
+
+No component shall establish independent visual behaviour.
+
+---
+
+## 9.6 Multi-Terminal Consistency
+
+The Design System shall remain visually consistent across:
+
+* Trading Terminal
+* Infrastructure Terminal
+* Risk Terminal
+* Research Terminal
+* Executive Terminal
+* Compliance Terminal
+
+Operational context changes.
+
+Visual language remains common.
+
+---
+
+## 9.7 Adaptive Themes
+
+Themes shall support different presentation environments while preserving institutional semantics.
+
+Examples include:
+
+* Institutional Dark
+* Institutional Light
+* High Contrast
+* Presentation Mode
+* Operations Centre Mode
+* Future Accessibility Themes
+
+Themes modify appearance.
+
+Institutional meaning remains unchanged.
+
+---
+
+## 9.8 Accessibility
+
+Every visual element shall support:
+
+* readable typography,
+* colour accessibility,
+* keyboard operation,
+* screen readers,
+* focus visibility,
+* interaction clarity.
+
+Accessibility becomes a constitutional requirement.
+
+---
+
+## 9.9 Runtime Integration
+
+The Design System shall integrate directly into the COREI Workbench Runtime.
+
+Visual changes become runtime configuration rather than implementation changes.
+
+---
+
+## 9.10 Institutional Governance
+
+Every visual contribution shall pass institutional review before becoming part of the Design System.
+
+Visual consistency becomes an engineering responsibility.
+
+---
+
+# SECTION 10 — NON-FUNCTIONAL REQUIREMENTS
+
+## Non-Functional Requirements
+
+The Design System establishes quality characteristics governing every visual implementation.
+
+---
+
+### Consistency
+
+Equivalent situations shall always produce equivalent visual communication.
+
+---
+
+### Predictability
+
+Operators shall immediately recognise institutional meaning through visual familiarity.
+
+---
+
+### Cognitive Efficiency
+
+Visual language shall minimise interpretation effort.
+
+Operators should understand before consciously analysing.
+
+---
+
+### Long-Duration Comfort
+
+Visual communication shall support prolonged institutional operation without unnecessary fatigue.
+
+---
+
+### Accessibility
+
+Accessibility shall remain integral rather than optional.
+
+---
+
+### Theme Independence
+
+Institutional semantics shall remain stable across every theme.
+
+---
+
+### Technology Independence
+
+The Design System shall remain independent of rendering technology.
+
+Tokens survive framework replacement.
+
+---
+
+### Maintainability
+
+Engineering teams shall extend the Design System without introducing inconsistency.
+
+---
+
+### Performance
+
+Visual rendering shall remain efficient under high-density institutional workloads.
+
+---
+
+### Institutional Stability
+
+The Design System shall remain recognisable despite years of organisational evolution.
+
+---
+
+# SECTION 11 — SCALABILITY
+
+## Scalability
+
+The Institutional Design System shall support decades of institutional growth.
+
+Scalability therefore applies to communication rather than simply interface size.
+
+---
+
+## Capability Scalability
+
+Future capabilities shall inherit existing visual language automatically.
+
+---
+
+## Component Scalability
+
+Thousands of components shall compose from one governed Design System.
+
+---
+
+## Workspace Scalability
+
+Future workspaces shall communicate through identical visual principles.
+
+---
+
+## Terminal Scalability
+
+Every future terminal shall inherit one common institutional visual language.
+
+---
+
+## Theme Scalability
+
+Future themes shall integrate without modifying institutional semantics.
+
+---
+
+## Engineering Scalability
+
+Independent engineering teams shall contribute visual capabilities while preserving consistency.
+
+---
+
+## Organisational Scalability
+
+The Design System shall support:
+
+* multiple teams,
+* multiple products,
+* multiple institutional domains,
+
+without fragmentation.
+
+---
+
+## Constitutional Scalability
+
+The Design System shall visually support every constitutional scalability dimension defined within the COREI Anchor Law including:
+
+* Multi Account
+* Multi Broker
+* Multi Strategy
+* Multi Portfolio
+* Multi Asset
+* Multi Exchange
+* Multi Market
+* Multi Currency
+* Multi Region
+* Multi Team
+* Multi Role
+* Multi Monitor
+* Multi Custodian
+* Multi Jurisdiction
+* 24×7 Institutional Operations
+
+Visual language shall remain coherent regardless of institutional scale.
+
+---
+
+# SECTION 12 — FUTURE EVOLUTION
+
+## Future Evolution
+
+The Institutional Design System is designed for continuous evolution while preserving visual identity.
+
+---
+
+## Stable Meaning Layer
+
+Institutional meaning shall remain the most stable layer.
+
+Meaning changes only through constitutional review.
+
+---
+
+## Semantic Evolution
+
+New institutional semantics shall extend the existing semantic framework rather than replacing it.
+
+---
+
+## Token Evolution
+
+Token implementations may evolve to support:
+
+* new display technologies,
+* future rendering engines,
+* accessibility improvements,
+* institutional branding evolution.
+
+---
+
+## Pattern Evolution
+
+Future operational workflows shall introduce new visual patterns through governed composition.
+
+---
+
+## Component Evolution
+
+Components continuously evolve.
+
+Patterns remain stable.
+
+Semantics remain stable.
+
+Meaning remains stable.
+
+---
+
+## Theme Evolution
+
+Themes shall evolve independently of institutional communication.
+
+Presentation changes.
+
+Meaning remains constant.
+
+---
+
+## Visual Intelligence
+
+Future versions of the Design System may incorporate:
+
+* adaptive density,
+* contextual emphasis,
+* intelligent visual prioritisation,
+* AI-assisted accessibility,
+* environmental adaptation.
+
+These enhancements shall reinforce rather than redefine institutional communication.
+
+---
+
+## Long-Term Vision
+
+The Institutional Design System shall become a timeless visual language.
+
+Technologies may change.
+
+Themes may change.
+
+Components may change.
+
+Visual style may evolve.
+
+Institutional communication shall remain immediately recognisable to professional operators.
+
+The Design System therefore becomes the enduring visual identity of the COREI Institution.
+
+### Architectural Observation
+
+I think we've now discovered something that elevates the Design System from a frontend asset to an institutional engineering asset.
+
+Most systems treat visual layers like this:
+
+Theme
+   │
+Components
+   │
+CSS
+
+COREI should instead define the following constitutional communication chain:
+
+Institution
+      │
+      ▼
+Institutional Meaning
+      │
+      ▼
+Operational Semantics
+      │
+      ▼
+Design Tokens
+      │
+      ▼
+Visual Patterns
+      │
+      ▼
+Workbench Components
+      │
+      ▼
+Operational Workspaces
+      │
+      ▼
+Institutional Experience
+
+Notice what sits at the very top.
+
+Not Theme.
+
+Not Colour.
+
+Not Components.
+
+The top of the hierarchy is Institutional Meaning.
+
+That changes everything.
+
+It means:
+
+Colours become implementation details.
+Components become communication vehicles.
+Themes become presentation strategies.
+The Design System becomes the visual operating language of the institution.
+
+I also think this naturally leads to another COREI engineering law:
+
+The Workbench executes institutional operations.
+
+The Design System communicates institutional operations.
+
+That distinction creates a clean separation of responsibilities:
+
+The Workbench owns behaviour.
+The Design System owns communication.
+The Capabilities own domain intelligence.
+The Technologies own implementation.
+
+Together, these four architectural responsibilities provide a stable foundation for every future workspace, panel, chart, graph, table, and operational surface that COREI will build over the coming years.
+
+# SECTION 13 — DEPENDENCIES
+
+## Dependencies
+
+Phase-07 establishes the Institutional Design System that visually communicates every architectural principle defined throughout Stage-23.
+
+The Design System depends upon all previous architectural phases while becoming the visual foundation for every implementation phase that follows.
+
+It does not introduce new institutional meaning.
+
+It expresses existing institutional meaning through governed visual communication.
+
+---
+
+## 13.1 Constitutional Dependencies
+
+The Design System derives its authority from the Constitutional Foundation established in Phase-00.
+
+Every visual decision shall reinforce:
+
+* COREI Mission
+* COREI Vision
+* COREI Anchor Law
+* Institutional Engineering Principles
+* Constitutional Scalability
+* Institutional Governance
+
+Visual communication shall never contradict constitutional architecture.
+
+---
+
+## 13.2 Discovery Dependencies
+
+The Design System incorporates institutional engineering knowledge established during Phase-01.
+
+This includes principles learned from:
+
+* professional workbenches,
+* trading platforms,
+* engineering IDEs,
+* operational command centres,
+* observability environments,
+* mission-critical operational systems.
+
+The Design System transforms these engineering observations into one institutional visual language.
+
+---
+
+## 13.3 Operator Dependencies
+
+The Design System exists to improve the professional operator experience defined within Phase-02.
+
+Visual communication shall improve:
+
+* understanding,
+* investigation,
+* decision quality,
+* workflow continuity,
+* situational awareness,
+* long-duration operational comfort.
+
+The operator remains the primary beneficiary.
+
+---
+
+## 13.4 Operational Environment Dependencies
+
+The Design System visually expresses the Operational Environment established during Phase-03.
+
+The environment defines:
+
+where institutional work occurs.
+
+The Design System defines:
+
+how that environment communicates.
+
+---
+
+## 13.5 Experience Dependencies
+
+The Design System implements the behavioural principles established during Phase-04.
+
+Every visual interaction shall reinforce:
+
+* behavioural consistency,
+* contextual awareness,
+* workflow progression,
+* operator confidence,
+* cognitive efficiency.
+
+---
+
+## 13.6 Technology Dependencies
+
+The Design System utilises the governed technology ecosystem established during Phase-05.
+
+Technologies render the Design System.
+
+They never define it.
+
+---
+
+## 13.7 Workbench Dependencies
+
+The Design System integrates directly into the COREI Workbench established during Phase-06.
+
+The Workbench owns:
+
+runtime behaviour.
+
+The Design System owns:
+
+visual communication.
+
+Both remain constitutionally independent while operating together.
+
+---
+
+## 13.8 Forward Dependencies
+
+Every remaining Stage-23 implementation phase depends upon the Institutional Design System.
+
+Examples include:
+
+### Phase-08
+
+Component Ecosystem
+
+↓
+
+Components inherit institutional language.
+
+---
+
+### Phase-09
+
+Workspace Library
+
+↓
+
+Workspaces compose institutional communication.
+
+---
+
+### Phase-10
+
+Intelligence Layer
+
+↓
+
+AI communicates through institutional semantics.
+
+---
+
+### Phase-11
+
+Operator Optimisation
+
+↓
+
+Visual effectiveness becomes measurable.
+
+The Design System therefore becomes the permanent visual constitution of COREI.
+
+---
+
+# SECTION 14 — DELIVERABLES
+
+## Deliverables
+
+Completion of Phase-07 establishes the complete visual communication architecture of the Institutional Operator Workstation.
+
+The following artefacts become authoritative engineering references.
+
+---
+
+## Primary Deliverables
+
+### Institutional Design System
+
+The complete constitutional specification governing visual communication.
+
+---
+
+### Institutional Meaning Catalogue
+
+The authoritative catalogue defining institutional visual meaning.
+
+Examples include:
+
+* Authority
+* Confidence
+* Investigation
+* Risk
+* Execution
+* Approval
+* Continuity
+* Observation
+* Intelligence
+* Collaboration
+
+This catalogue becomes the highest visual authority.
+
+---
+
+### Semantic Language Specification
+
+The institutional semantic vocabulary mapping meaning into reusable operational semantics.
+
+---
+
+### Design Token Architecture
+
+Complete specification for:
+
+* colour tokens,
+* typography tokens,
+* spacing tokens,
+* elevation tokens,
+* motion tokens,
+* icon tokens,
+* layout tokens,
+* density tokens,
+* accessibility tokens.
+
+---
+
+### Visual Pattern Library
+
+Authoritative specification for reusable operational patterns.
+
+Examples include:
+
+* Monitoring
+* Investigation
+* Execution
+* Review
+* Comparison
+* Timeline
+* Audit
+* Collaboration
+* Approval
+
+Patterns become reusable institutional grammar.
+
+---
+
+### Component Visual Contracts
+
+Rules governing how every future component inherits institutional communication.
+
+---
+
+### Design Governance Policy
+
+Institutional rules governing:
+
+* visual evolution,
+* semantic integrity,
+* accessibility,
+* consistency,
+* review,
+* approval.
+
+---
+
+### Stage-23 Design Baseline
+
+The frozen institutional visual language of COREI.
+
+---
+
+# SECTION 15 — ACCEPTANCE CRITERIA
+
+## Acceptance Criteria
+
+Phase-07 shall be considered complete only when every future visual implementation can inherit one consistent institutional language.
+
+Completion is measured through communication quality rather than visual appearance.
+
+---
+
+## Constitutional Compliance
+
+The Design System remains fully aligned with:
+
+* COREI Anchor Law
+* Master Trader Persona
+* Stage-23 Constitutional Foundation
+
+---
+
+## Semantic Completeness
+
+Every institutional meaning has:
+
+* semantic definition,
+* visual representation,
+* token mapping,
+* implementation guidance.
+
+---
+
+## Token Completeness
+
+Every visual property resolves through governed design tokens.
+
+Hardcoded visual values are prohibited.
+
+---
+
+## Pattern Completeness
+
+Every major institutional workflow possesses reusable visual patterns.
+
+---
+
+## Theme Independence
+
+Institutional meaning remains stable regardless of theme implementation.
+
+---
+
+## Technology Independence
+
+The Design System remains independent of:
+
+* CSS framework,
+* frontend library,
+* rendering engine,
+* future technologies.
+
+---
+
+## Cross-Terminal Validation
+
+Every terminal expresses one common institutional visual language.
+
+Only operational context changes.
+
+---
+
+## Architectural Freeze
+
+Following institutional review,
+
+Phase-07 establishes the authoritative Design System of COREI.
+
+Future enhancements extend the Design System.
+
+They never redefine its constitutional principles.
+
+---
+
+# SECTION 16 — RELATED DOCUMENTS
+
+## Related Documents
+
+Phase-07 completes the visual architecture of the Institutional Operator Workstation.
+
+It provides the communication language through which every capability, workspace, and operational environment expresses institutional meaning.
+
+---
+
+## Constitutional References
+
+* Stage-23 Phase-00 — Constitutional Foundation
+* COREI Anchor Law
+* Master Trader Persona
+
+---
+
+## Discovery References
+
+* Stage-23 Phase-01 — Discovery & Reverse Engineering
+
+---
+
+## Human References
+
+* Stage-23 Phase-02 — Operator Architecture
+
+---
+
+## Environmental References
+
+* Stage-23 Phase-03 — Operational Environment Architecture
+
+---
+
+## Experience References
+
+* Stage-23 Phase-04 — Experience Architecture
+
+---
+
+## Technology References
+
+* Stage-23 Phase-05 — Technology Landscape
+* Technology Constitution Matrix
+
+---
+
+## Runtime References
+
+* Stage-23 Phase-06 — COREI Workbench Architecture
+* Runtime Contract Specification
+
+---
+
+## Future Architecture References
+
+Phase-08
+
+Component Ecosystem
+
+↓
+
+Phase-09
+
+Workspace Library
+
+↓
+
+Phase-10
+
+Intelligence Layer
+
+↓
+
+Phase-11
+
+Operator Optimisation
+
+Every remaining implementation phase shall inherit the Institutional Design System as the authoritative visual communication framework.
+
+No capability, component, or workspace shall introduce independent visual language outside the governance of the Design System.
+
+---
+
+## Closing Statement
+
+Phase-07 establishes the Institutional Design System of COREI.
+
+The Design System is no longer viewed as a collection of colours, typography, icons, or reusable interface elements.
+
+It is recognised as the visual language through which the COREI Workbench communicates institutional reality.
+
+Every visual decision now follows one constitutional communication chain:
+
+Institution
+
+↓
+
+Institutional Meaning
+
+↓
+
+Operational Semantics
+
+↓
+
+Design Tokens
+
+↓
+
+Visual Patterns
+
+↓
+
+Workbench Components
+
+↓
+
+Operational Workspaces
+
+↓
+
+Professional Understanding
+
+This chain ensures that every operator experiences a coherent institutional language regardless of terminal, capability, engineering team, implementation technology, or future organisational growth.
+
+With the completion and architectural freeze of Phase-07, the Institutional Operator Workstation now possesses:
+
+* Constitutional Foundation
+* Discovery Framework
+* Operator Architecture
+* Operational Environment
+* Experience Architecture
+* Technology Landscape
+* COREI Workbench Runtime
+* Institutional Design System
+
+These eight phases together establish the constitutional, operational, behavioural, technological, runtime, and visual foundations of COREI OS.
+
+Phase-08 therefore begins the **Component Ecosystem**.
+
+Unlike traditional UI libraries, the COREI Component Ecosystem is not a catalogue of reusable interface controls.
+
+It is a governed ecosystem of **institutional operational capabilities**, where every component exists to communicate, analyse, investigate, execute, monitor, collaborate, or understand institutional reality.
+
+Every component shall inherit the Constitution, Workbench Architecture, Experience Architecture, and Institutional Design System, becoming a composable building block of the COREI Institutional Operator Workstation.
+
+### Architectural Review (After Phase-07)
+
+I think we've now completed the entire Foundation Stack of COREI OS.
+
+Phase	Establishes	Owns
+00	Constitution	Institutional Principles
+01	Discovery	Engineering Knowledge
+02	Operator	Human Architecture
+03	Operational Environment	Professional Workplace
+04	Experience	Behaviour
+05	Technology	Technology Governance
+06	Workbench	Runtime
+07	Design System	Visual Communication
+
+Looking at these eight phases together, I think a deeper architecture emerges:
+
+                    COREI Institution
+                           │
+                    Constitutional Law
+                           │
+                 Human & Operational Model
+                           │
+              Operational Environment
+                           │
+               Experience Architecture
+                           │
+               Technology Constitution
+                           │
+                 COREI Workbench Runtime
+                           │
+             Institutional Design Language
+                           │
+          Operational Capability Ecosystem
+                           │
+                 Professional Workspaces
+                           │
+               Institutional Intelligence
+                           │
+                    Continuous Evolution
+One recommendation before Phase-08
+
+I think we should deliberately avoid calling the next phase "UI Components."
+
+Instead, I recommend keeping the name Component Ecosystem, but redefining what a component means.
+
+For COREI, a component should never be merely a reusable visual control.
+
+Instead, every component should be classified as an Institutional Capability Component with a clearly defined operational responsibility.
+
+For example, instead of organizing by technical type:
+
+Button
+Card
+Table
+Chart
+
+we should organize by institutional purpose:
+
+Observation Components — KPI strips, gauges, timelines, health indicators.
+Analysis Components — relationship graphs, comparison matrices, dependency trees.
+Execution Components — order tickets, approval panels, command consoles, action bars.
+Monitoring Components — event streams, alerts, logs, telemetry views.
+Knowledge Components — notebooks, documentation viewers, research panels.
+Navigation Components — command palette, workspace switcher, breadcrumbs, object explorer.
+Collaboration Components — comments, assignments, shared sessions, operator presence.
+
+This continues the architectural principle we've established throughout Stage-23:
+
+Institutional responsibility defines architecture.
+
+Technical implementation follows architecture.
+
+I believe that philosophy will make the COREI Component Ecosystem fundamentally different from a traditional component library and will provide a much stronger foundation for the remaining phases of the Institutional Operator Workstation.
+
+
+
+
+
+

@@ -1,25 +1,6 @@
-/******************************************************************************
- *
- * COREI OPERATING SYSTEM
- *
- * STAGE-25
- * PHASE-17
- * STEP-01
- *
- * FILE:
- * index.ts
- *
- * PURPOSE:
- * Institutional Shell Region Public Exports
- *
- * AUTHOR:
- * COREI Architecture
- *
- ******************************************************************************/
-
-export * from "./TopRegion";
-export * from "./LeftRegion";
-export * from "./CenterRegion";
-export * from "./RightRegion";
-export * from "./BottomRegion";
-export * from "./StatusRegion";
+export { TopRegion } from "./TopRegion";
+export { LeftRegion } from "./LeftRegion";
+export { CenterRegion } from "./CenterRegion";
+export { RightRegion } from "./RightRegion";
+export { BottomRegion } from "./BottomRegion";
+export { StatusRegion } from "./StatusRegion";

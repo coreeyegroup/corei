@@ -1,0 +1,178 @@
+COREI Technology Stack v1.0 (Frozen)
+#	Category	        Recommended Technology	Open Source	     License	    Primary Purpose	    Good Alternatives	        Replaceable	    Decision
+1	Core Framework	    React	                ✅	            MIT	            UI Framework	    Vue, Angular, Svelte	    ✅	        Freeze
+2	Language	        TypeScript	            ✅	            Apache 2.0	    Type Safety	        JavaScript	                ❌	        Freeze
+3	Runtime	            Node.js	                ✅	            MIT	            Runtime	            Bun, Deno	                ✅	        Freeze
+4	Build Tool	        Vite	                ✅	            MIT	            Fast Build	        Rsbuild, Webpack	        ✅	        Freeze
+5	Package Manager	    pnpm	                ✅	            MIT	            Dependency Management	npm, Yarn	            ✅	        Freeze
+6	Monorepo	        TurboRepo	            ✅	            MIT	            Monorepo Build	     Nx	                        ✅	        Freeze
+7	Design System	    Tailwind CSS	        ✅	            MIT	            Styling	            UnoCSS	                    ✅	        Freeze
+8	Theme Engine	    CSS Variables	        ✅	            Web Standard	Dynamic Themes	    next-themes	                ✅	        Freeze
+9	CSS Processing	    PostCSS	                ✅	            MIT	            CSS Pipeline	    Lightning CSS	            ✅	        Freeze
+10	Component Variants	CVA	                    ✅	            Apache 2.0	    Variant Management	Custom	                    ✅	        Freeze
+11	Conditional Classes	clsx	                ✅	            MIT	            Utility Classes	    classnames	                ✅	        Freeze
+12	Tailwind Merge	    tailwind-merge	        ✅	            MIT	            Merge Classes	    Custom	                    ✅	        Freeze
+13	UI Primitives	    Radix UI	            ✅	            MIT	            Accessible Components	React Aria	            ✅	        Freeze
+14	Component Templates	shadcn/ui	            ✅	            MIT	            Component Source	Mantine	                    ✅	        Freeze
+15	Icons	            Lucide React	        ✅	            ISC	            Icon Library	    Tabler Icons	            ✅	        Freeze
+16	Window Management	react-rnd	            ✅	            MIT	            Floating Windows	react-draggable	            ✅	        Freeze
+17	Docking Layout	    FlexLayout	            ✅	            BSD-3	        IDE Docking	        Golden Layout, rc-dock, Lumino	✅	    Freeze
+18	Ribbon / Toolbar	Radix Toolbar	        ✅	            MIT	            Toolbar Foundation	Headless UI	                ✅	        Freeze
+19	Navigation	        React Router	        ✅	            MIT	            Routing	            TanStack Router	            ✅	        Freeze
+20	Command Palette	    cmdk	                ✅	            MIT	            Universal Commands	kbar	                    ✅	        Freeze
+21	Search	            Fuse.js	                ✅	            Apache 2.0	    Fuzzy Search	    FlexSearch	                ✅	        Freeze
+22	State Management	Zustand	                ✅	            MIT	            Client State	    Redux Toolkit	            ✅	        Freeze
+23	Server State	    TanStack Query	        ✅	            MIT	            API State	        SWR	                        ✅	        Freeze
+24	Tables	            TanStack Table	        ✅	            MIT	            Data Tables	        AG Grid Community	        ✅	        Freeze
+25	Data Grid	        Glide Data Grid	        ✅	            MIT	            Large Grids	        AG Grid	                    ✅	        Freeze
+26	Tree Views	        React Arborist	        ✅	            MIT	            Hierarchies	        react-complex-tree	        ✅	        Freeze
+27	Charts	            Apache ECharts	        ✅	            Apache 2.0	    Business Charts	    Nivo, Recharts	            ✅	        Freeze
+28	Financial Charts	Lightweight Charts	    ✅	            Apache 2.0	    Trading Charts	    TradingView Charting Library	✅	    Freeze
+29	Graph Visualization	React Flow	            ✅	            MIT	            Node Graphs	        Cytoscape.js	            ✅	        Freeze
+30	Canvas / Whiteboard	React Konva	            ✅	            MIT	            Canvas UI	        Fabric.js	                ✅	        Freeze
+31	GPU Rendering	    PixiJS	                ✅	            MIT	            High-performance Rendering	Canvas API	        ✅	        Freeze
+32	3D Visualization	Three.js	            ✅	            MIT	            3D Views	        Babylon.js	                ✅	        Optional
+33	Maps	            MapLibre GL	            ✅	            BSD	            Maps	            Leaflet	                    ✅	        Freeze
+34	Timeline	        vis-timeline	        ✅	            MIT	            Timelines	        React Calendar Timeline	    ✅	        Freeze
+35	Forms	            React Hook Form	        ✅	            MIT	            Forms	            Formik	                    ✅	        Freeze
+36	Validation	        Zod	                    ✅	            MIT	            Validation	        Yup	                        ✅	        Freeze
+37	Notifications	    Sonner	                ✅	            MIT	            Toasts	            React Hot Toast	            ✅	        Freeze
+38	Animation	        Framer Motion	        ✅	            MIT	            Animations	        Motion One, React Spring	✅	        Freeze
+39	Virtualization	    TanStack Virtual	    ✅	            MIT	            Large Lists	        react-window	            ✅	        Freeze
+40	Editor	            Monaco Editor	        ✅	            MIT         	Code Editor	        CodeMirror	                ✅	        Freeze
+41	Rich Text	        TipTap	                ✅	            MIT	            Rich Documents	    Lexical	                    ✅	        Freeze
+42	Terminal	        xterm.js	            ✅	            MIT	            Embedded Terminal	Custom	                    ✅	        Freeze
+43	Markdown	        react-markdown	        ✅	            MIT	            Markdown Rendering	MDX	                        ✅	        Freeze
+44	Drag & Drop	        dnd-kit	                ✅	            MIT	            Drag System	        react-dnd	                ✅	        Freeze
+45	File Handling	    react-dropzone	        ✅	            MIT	            File Upload	        Native File API	            ✅	        Freeze
+46	Keyboard Shortcuts	react-hotkeys-hook	    ✅	            MIT	            Shortcuts	        hotkeys-js	                ✅	        Freeze
+47	Internationalization	i18next	            ✅	            MIT	            Multi-language	    react-intl	                ✅	        Freeze
+48	Logging & Monitoring	OpenTelemetry JS	✅	            Apache 2.0	    UI Telemetry	    Sentry SDK	                ✅	        Freeze
+49	Real-time Communication	Native WebSocket	✅	            Web Standard	Live Data	        Socket.IO	                ✅	        Freeze
+50	Testing & Quality	    Vitest + Playwright + ESLint + Prettier	✅	MIT	    Testing & Quality	Cypress, Biome	            ✅          	Freeze
+
+
+Recommended installation order
+Layer 01 — Platform Foundation
+
+Install first because everything depends on it.
+
+Node.js (LTS)
+pnpm
+TypeScript
+Vite
+React
+
+Validation
+
+pnpm dev
+pnpm build
+
+Layer 02 — COREI Foundation
+Tailwind CSS
+PostCSS
+Autoprefixer
+clsx
+tailwind-merge
+CVA
+
+Validation
+
+Theme renders correctly.
+
+Layer 03 — UI Foundation
+Radix UI
+shadcn/ui
+Lucide React
+
+Validation
+
+Buttons, dialogs, dropdowns render correctly.
+
+Layer 04 — Application Foundation
+React Router
+Zustand
+TanStack Query
+
+Validation
+
+Routing, state, and async queries work.
+
+Layer 05 — Workspace Foundation
+react-resizable-panels
+dnd-kit
+react-rnd
+FlexLayout
+
+Validation
+
+Resizable panels, drag/drop, floating windows, docking.
+
+Layer 06 — Data Foundation
+TanStack Table
+Glide Data Grid
+React Arborist
+TanStack Virtual
+
+Validation
+
+Large tables, trees, virtualization.
+
+Layer 07 — Visualization Foundation
+Apache ECharts
+Lightweight Charts
+React Flow
+React Konva
+PixiJS
+Three.js
+MapLibre
+vis-timeline
+
+Validation
+
+All visual components render independently.
+
+Layer 08 — Productivity Foundation
+Monaco Editor
+xterm.js
+react-markdown
+TipTap
+
+Validation
+
+Editor, terminal, markdown, rich text.
+
+Layer 09 — Utility Foundation
+Fuse.js
+React Hook Form
+Zod
+Sonner
+Framer Motion
+react-hotkeys-hook
+react-dropzone
+i18next
+
+Validation
+
+Forms, search, notifications, animation, shortcuts.
+
+Layer 10 — Quality Foundation
+Vitest
+Playwright
+ESLint
+Prettier
+
+Validation
+
+Tests pass, lint passes.
+
+Rule for every layer
+
+For every layer we follow the same lifecycle:
+
+Install packages
+Build
+Fix errors
+Commit
+Tag the milestone
+Proceed to the next layer

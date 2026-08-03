@@ -1,0 +1,32 @@
+# AUTHENTICATION AUTHORITY DETERMINATION
+
+W42 RESULT
+
+GLOBAL JAAS ONLY
+
+FAILED
+
+OBSERVATION
+
+KerberosLogin Failure
+Remained Present
+
+CONCLUSION
+
+Global JAAS Only
+Cannot Be Considered
+Authoritative
+
+MODEL STATUS
+
+MODEL A
+Listener JAAS
+ACTIVE REVIEW
+
+MODEL B
+Global JAAS
+REJECTED
+
+MODEL C
+Hybrid
+ACTIVE REVIEW

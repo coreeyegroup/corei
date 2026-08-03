@@ -1,0 +1,2018 @@
+# STAGE-23 — INSTITUTIONAL OPERATOR WORKSTATION
+
+## Phase-08 — Institutional Capability Ecosystem
+
+**Document Status:** Authoritative
+**Stage:** 23
+**Phase:** 08
+**Sections Covered:** 01–04 (Message 1 of 4)
+
+**Authoritative References**
+
+* Stage-23 Phase-00 — Constitutional Foundation
+* Stage-23 Phase-01 — Discovery & Reverse Engineering
+* Stage-23 Phase-02 — Operator Architecture
+* Stage-23 Phase-03 — Operational Environment Architecture
+* Stage-23 Phase-04 — Experience Architecture
+* Stage-23 Phase-05 — Technology Landscape
+* Stage-23 Phase-06 — Workbench Architecture
+* Stage-23 Phase-07 — Institutional Design System
+* COREI Anchor Law
+* Master Trader Persona
+
+---
+
+# SECTION 01 — PURPOSE
+
+## Purpose
+
+The purpose of Phase-08 is to establish the Institutional Capability Ecosystem of the COREI Workbench.
+
+The Capability Ecosystem defines every reusable operational capability available to institutional operators.
+
+Unlike traditional frontend component libraries, this ecosystem is not organised around interface controls.
+
+It is organised around institutional work.
+
+Every capability exists because it enables operators to:
+
+* observe,
+* understand,
+* investigate,
+* analyse,
+* decide,
+* execute,
+* monitor,
+* collaborate,
+* govern,
+* improve.
+
+The Capability Ecosystem therefore becomes the operational vocabulary of COREI.
+
+Every workspace is assembled from capabilities.
+
+Every capability inherits:
+
+* the Constitutional Foundation,
+* the Workbench Runtime,
+* the Experience Architecture,
+* the Institutional Design System,
+* the Technology Constitution.
+
+Capabilities remain operationally meaningful regardless of implementation technology.
+
+---
+
+# SECTION 02 — MISSION
+
+## Mission
+
+The mission of the Institutional Capability Ecosystem is to provide a governed collection of reusable operational capabilities that can be composed into any institutional workspace.
+
+Every capability shall satisfy four objectives.
+
+### Operational Value
+
+Every capability shall improve professional work.
+
+Capabilities shall never exist merely to demonstrate technology.
+
+---
+
+### Composability
+
+Capabilities shall compose naturally with other capabilities.
+
+No capability shall assume ownership of an entire workspace.
+
+---
+
+### Reusability
+
+Capabilities shall operate across:
+
+* Trading
+* Infrastructure
+* Risk
+* Research
+* Executive
+* Compliance
+* Future Institutional Domains
+
+A capability is developed once and reused wherever its operational responsibility exists.
+
+---
+
+### Institutional Consistency
+
+Every capability shall communicate, behave and integrate consistently with the COREI Workbench.
+
+Operators shall recognise familiar operational behaviour regardless of workspace.
+
+The Capability Ecosystem therefore becomes the operational toolbox of the institution.
+
+---
+
+# SECTION 03 — PROBLEM STATEMENT
+
+## Problem Statement
+
+Traditional software ecosystems organise reusable artefacts around technical implementation.
+
+Examples include:
+
+* Buttons
+* Inputs
+* Tables
+* Cards
+* Dialogs
+* Charts
+
+While technically reusable, these artefacts do not represent professional work.
+
+Professional operators think differently.
+
+A trader thinks:
+
+"I need to investigate liquidity."
+
+Not:
+
+"I need a data grid."
+
+An infrastructure engineer thinks:
+
+"I need to understand Kubernetes health."
+
+Not:
+
+"I need a tree view."
+
+A risk manager thinks:
+
+"I need portfolio exposure."
+
+Not:
+
+"I need a dashboard."
+
+The difference is fundamental.
+
+Operators think in capabilities.
+
+Engineers often think in components.
+
+COREI shall adopt the operator's perspective.
+
+Every reusable element shall therefore represent an institutional capability rather than a technical widget.
+
+This architectural decision ensures that implementation always follows operational responsibility.
+
+---
+
+# SECTION 04 — BACKGROUND
+
+## Background
+
+The previous phases progressively established the constitutional architecture of the COREI Institutional Operator Workstation.
+
+Phase-00 established constitutional principles.
+
+Phase-01 established institutional engineering knowledge.
+
+Phase-02 established professional operators.
+
+Phase-03 established the Operational Environment.
+
+Phase-04 established Experience Architecture.
+
+Phase-05 established the Technology Landscape.
+
+Phase-06 established the COREI Workbench Runtime.
+
+Phase-07 established the Institutional Design System.
+
+Phase-08 now introduces the operational building blocks that populate the Workbench.
+
+The architectural progression therefore becomes:
+
+Constitution
+
+↓
+
+Operator
+
+↓
+
+Operational Environment
+
+↓
+
+Experience
+
+↓
+
+Technology
+
+↓
+
+Workbench
+
+↓
+
+Design Language
+
+↓
+
+Institutional Capability Ecosystem
+
+↓
+
+Operational Workspaces
+
+↓
+
+Institutional Operation
+
+The Capability Ecosystem occupies a pivotal architectural position.
+
+Above it are architectural principles.
+
+Below it are concrete workspaces.
+
+Every workspace is therefore assembled from governed capabilities rather than handcrafted interface layouts.
+
+This enables the COREI Workbench to continuously evolve while preserving constitutional consistency, engineering discipline, operational familiarity, and institutional scalability across every terminal, workspace, operator role, and future capability.
+
+### Architectural Observation
+
+I think this phase introduces what may become one of the most important concepts in the entire COREI architecture.
+
+Today, almost every frontend framework says:
+
+Build components.
+
+COREI should instead say:
+
+Build capabilities.
+
+A capability may internally contain:
+
+20 React components
+AG Grid
+TradingView
+React Flow
+Monaco
+xterm.js
+Plotly
+AI services
+Backend APIs
+Streaming data
+Commands
+Context
+
+Yet, to the Workbench, it is simply one Operational Capability.
+
+For example:
+
+Market Investigation Capability
+│
+├── Chart Surface
+├── Order Flow Surface
+├── Market Depth Surface
+├── Liquidity Surface
+├── News Surface
+├── AI Analysis Surface
+├── Command Integration
+├── Search Integration
+├── Notification Integration
+├── Context Integration
+└── Workbench Contracts
+
+Notice that React completely disappears from the architecture.
+
+This is exactly where we want to be.
+
+The engineer may think about React.
+
+The architecture thinks about Institutional Capabilities.
+
+The operator thinks about professional work.
+
+That separation of concerns is, in my view, one of the strongest architectural decisions we've made throughout Stage-23 and is fully consistent with the COREI Anchor Law, the Master Trader Persona, and the long-term vision of COREI as an institutional operating system rather than a collection of web components.
+
+# SECTION 05 — ARCHITECTURAL CONTEXT
+
+## Architectural Context
+
+The Institutional Capability Ecosystem occupies the architectural layer immediately below the COREI Workbench and immediately above Operational Workspaces.
+
+It represents the governed collection of reusable operational capabilities from which every institutional workspace is assembled.
+
+Unlike conventional UI architectures, capabilities are not visual controls.
+
+They are complete operational units.
+
+Each capability combines:
+
+* business responsibility,
+* runtime behaviour,
+* visual communication,
+* operator interaction,
+* institutional governance.
+
+The Capability Ecosystem therefore transforms architecture into operational functionality.
+
+---
+
+## Capability Architecture
+
+Every capability shall inherit the complete architectural chain established throughout Stage-23.
+
+```text
+Institution
+
+↓
+
+Constitution
+
+↓
+
+Operator Requirements
+
+↓
+
+Operational Environment
+
+↓
+
+Experience Architecture
+
+↓
+
+Technology Landscape
+
+↓
+
+Workbench Runtime
+
+↓
+
+Institutional Design System
+
+↓
+
+Operational Capability
+
+↓
+
+Capability Components
+
+↓
+
+Rendered Interface
+```
+
+Capabilities become the first executable expression of institutional architecture.
+
+---
+
+## Capability Categories
+
+The Capability Ecosystem shall be organised according to institutional responsibility rather than implementation technology.
+
+Primary capability families include:
+
+### Observation Capabilities
+
+Responsible for institutional awareness.
+
+Examples include:
+
+* KPI Panels
+* Metric Strips
+* Health Indicators
+* Dashboards
+* Status Boards
+* Event Streams
+* Timelines
+* Gauges
+* Heatmaps
+* Watchlists
+
+---
+
+### Analysis Capabilities
+
+Responsible for professional understanding.
+
+Examples include:
+
+* Relationship Graphs
+* Dependency Maps
+* Comparison Views
+* Correlation Analysis
+* Root Cause Analysis
+* Portfolio Attribution
+* Risk Decomposition
+* Market Structure Analysis
+* AI Insight Panels
+
+---
+
+### Execution Capabilities
+
+Responsible for institutional action.
+
+Examples include:
+
+* Order Entry
+* Execution Console
+* Approval Workflows
+* Kill Switches
+* Position Controls
+* Deployment Controls
+* Service Operations
+* Broker Management
+
+---
+
+### Monitoring Capabilities
+
+Responsible for continuous operational awareness.
+
+Examples include:
+
+* Live Logs
+* Alerts
+* Telemetry
+* Infrastructure Health
+* Market Monitoring
+* Execution Monitoring
+* Risk Monitoring
+* AI Monitoring
+
+---
+
+### Knowledge Capabilities
+
+Responsible for institutional memory.
+
+Examples include:
+
+* Documentation
+* Research Notes
+* ADR Viewer
+* Playbooks
+* SOP Viewer
+* Knowledge Explorer
+* Notebook Workspace
+
+---
+
+### Collaboration Capabilities
+
+Responsible for coordinated institutional work.
+
+Examples include:
+
+* Shared Investigations
+* Comments
+* Assignments
+* Team Presence
+* Review Workflows
+* Decision Threads
+
+---
+
+### Navigation Capabilities
+
+Responsible for institutional movement.
+
+Examples include:
+
+* Object Explorer
+* Command Palette
+* Workspace Explorer
+* Search
+* Breadcrumbs
+* Context Navigator
+
+---
+
+## Architectural Composition
+
+Workspaces shall never implement functionality directly.
+
+They compose capabilities.
+
+Capabilities compose capability components.
+
+Capability components compose visual elements.
+
+Responsibilities remain layered.
+
+---
+
+# SECTION 06 — OPERATOR PERSPECTIVE
+
+## Operator Perspective
+
+Professional operators do not think in software objects.
+
+They think in operational tasks.
+
+The Capability Ecosystem therefore mirrors professional thinking.
+
+Examples include:
+
+"I want to investigate this market."
+
+↓
+
+Market Investigation Capability
+
+---
+
+"I want to review exposure."
+
+↓
+
+Exposure Analysis Capability
+
+---
+
+"I want to monitor infrastructure."
+
+↓
+
+Infrastructure Monitoring Capability
+
+---
+
+"I want to compare strategies."
+
+↓
+
+Strategy Comparison Capability
+
+---
+
+"I want to execute."
+
+↓
+
+Execution Capability
+
+---
+
+The operator thinks in work.
+
+The Workbench provides capabilities.
+
+Technology remains invisible.
+
+---
+
+## Composable Workspaces
+
+Operators shall freely assemble capabilities according to operational needs.
+
+Examples:
+
+Trading Workspace
+
+↓
+
+Chart
+
+*
+
+Order Entry
+
+*
+
+Watchlist
+
+*
+
+Portfolio
+
+*
+
+News
+
+*
+
+AI
+
+---
+
+Infrastructure Workspace
+
+↓
+
+Cluster Topology
+
+*
+
+Logs
+
+*
+
+Metrics
+
+*
+
+Deployments
+
+*
+
+Alerts
+
+*
+
+Terminal
+
+---
+
+Every workspace becomes unique.
+
+Every capability remains reusable.
+
+---
+
+## Operational Familiarity
+
+Capabilities shall behave consistently regardless of workspace.
+
+Operators should immediately recognise:
+
+* interactions,
+* commands,
+* visual language,
+* navigation,
+* workflows.
+
+Consistency strengthens professional confidence.
+
+---
+
+## Progressive Mastery
+
+As operators gain experience, capabilities should become increasingly powerful without becoming increasingly complex.
+
+Professional expertise should be rewarded through depth rather than additional interface complexity.
+
+---
+
+# SECTION 07 — ENGINEERING PERSPECTIVE
+
+## Engineering Perspective
+
+Engineering shall build capabilities as independent operational modules.
+
+Capabilities become the primary engineering unit of the COREI Workbench.
+
+---
+
+## Capability Contract
+
+Every capability shall publish a formal capability contract.
+
+Minimum contract sections include:
+
+* Capability Identity
+* Institutional Responsibility
+* Supported Operators
+* Required Permissions
+* Runtime Dependencies
+* Commands
+* Search Integration
+* Context Integration
+* AI Integration
+* Events
+* Extension Points
+* Audit Requirements
+* Performance Requirements
+* Lifecycle
+
+No capability enters the Workbench without a contract.
+
+---
+
+## Runtime Integration
+
+Every capability shall integrate through Workbench services.
+
+Capabilities consume:
+
+* Context Service
+* Search Service
+* Command Service
+* Notification Service
+* Workspace Service
+* History Service
+* Permission Service
+* Configuration Service
+
+Capabilities shall never duplicate Workbench responsibilities.
+
+---
+
+## Capability Lifecycle
+
+Every capability follows one governed lifecycle.
+
+Registration
+
+↓
+
+Validation
+
+↓
+
+Dependency Resolution
+
+↓
+
+Initialization
+
+↓
+
+Activation
+
+↓
+
+Execution
+
+↓
+
+Monitoring
+
+↓
+
+Suspension
+
+↓
+
+Termination
+
+↓
+
+Recovery
+
+The lifecycle is managed by the Workbench Runtime.
+
+---
+
+## Capability Isolation
+
+Capabilities shall remain isolated.
+
+Communication occurs only through:
+
+* contracts,
+* commands,
+* events,
+* Workbench services.
+
+Direct capability coupling is prohibited.
+
+---
+
+## Capability Observability
+
+Every capability shall expose:
+
+* health,
+* metrics,
+* logs,
+* lifecycle events,
+* performance,
+* audit information.
+
+Capabilities become fully observable institutional assets.
+
+---
+
+# SECTION 08 — INSTITUTIONAL PERSPECTIVE
+
+## Institutional Perspective
+
+The Capability Ecosystem represents the operational vocabulary of the institution.
+
+Institutional growth therefore becomes capability growth rather than application growth.
+
+---
+
+## Institutional Standardisation
+
+Equivalent operational responsibilities shall reuse identical capabilities.
+
+Duplicate capabilities shall be avoided unless justified through constitutional review.
+
+---
+
+## Institutional Reuse
+
+Capabilities shall be reusable across:
+
+* terminals,
+* departments,
+* teams,
+* institutional domains,
+* future organisations.
+
+Reuse becomes institutional efficiency.
+
+---
+
+## Institutional Governance
+
+Every capability shall undergo governance review.
+
+Approval shall verify:
+
+* constitutional compliance,
+* operator value,
+* Workbench integration,
+* Design System compliance,
+* security,
+* observability,
+* lifecycle completeness.
+
+---
+
+## Institutional Evolution
+
+Future institutional requirements shall primarily result in:
+
+new capabilities,
+
+rather than
+
+new applications.
+
+The Workbench grows through capability composition.
+
+---
+
+## Institutional Knowledge
+
+Every capability becomes part of the institutional knowledge base.
+
+Future engineers should understand:
+
+* why it exists,
+* what responsibility it owns,
+* how it integrates,
+* how it evolves,
+* how it may eventually be replaced.
+
+The Capability Ecosystem therefore becomes the governed operational library of the COREI Institution.
+
+### Architectural Observation
+
+I think we've now arrived at what may become the COREI Capability Law.
+
+Instead of treating everything as a React component, every reusable unit inside COREI should satisfy this hierarchy:
+
+Institutional Responsibility
+           │
+           ▼
+Capability Contract
+           │
+           ▼
+Workbench Integration
+           │
+           ▼
+Capability Runtime
+           │
+           ▼
+Capability Components
+           │
+           ▼
+Technology Implementation
+
+Notice something important.
+
+A capability is not defined by what it renders.
+
+A capability is defined by what institutional responsibility it owns.
+
+For example, Market Investigation is not a chart.
+
+It is an operational capability that may internally orchestrate:
+
+TradingView charts
+Order book visualization
+Volume profile
+Time & sales
+News
+AI commentary
+Search integration
+Commands
+Notifications
+Workspace context
+Audit events
+
+To the Workbench, all of those form one governed capability.
+
+I believe this is the architectural leap that transforms COREI from a collection of UI modules into a true institutional operating system. It keeps the focus exactly where the COREI Anchor Law and the Master Trader Persona demand it: on professional operational capability rather than technical implementation.
+
+# SECTION 09 — FUNCTIONAL REQUIREMENTS
+
+## Functional Requirements
+
+The Institutional Capability Ecosystem shall provide a complete, governed, reusable collection of operational capabilities that collectively enable every professional activity performed inside the COREI Workbench.
+
+Every capability shall satisfy one or more institutional responsibilities.
+
+Capabilities shall never exist without operational purpose.
+
+---
+
+## 9.1 Capability Registration
+
+Every capability shall register with the COREI Workbench.
+
+Registration shall include:
+
+* Capability Identifier
+* Capability Name
+* Capability Category
+* Version
+* Owner
+* Runtime Requirements
+* Dependencies
+* Permissions
+* Supported Operators
+* Extension Points
+
+Registration makes the capability discoverable by the Workbench.
+
+---
+
+## 9.2 Capability Discovery
+
+The Workbench shall support institutional discovery of capabilities.
+
+Capabilities shall be discoverable through:
+
+* Command Palette
+* Global Search
+* Workspace Builder
+* Extension Registry
+* AI Assistant
+* Context Recommendations
+
+Capabilities should be easy to locate without requiring operators to remember implementation details.
+
+---
+
+## 9.3 Capability Composition
+
+Capabilities shall compose naturally with other capabilities.
+
+Examples include:
+
+Market Investigation
+
+*
+
+Risk Analysis
+
+*
+
+Portfolio Overview
+
+*
+
+Execution Console
+
+↓
+
+Trading Workspace
+
+Every capability shall remain independent while participating in larger operational workflows.
+
+---
+
+## 9.4 Capability Communication
+
+Capabilities shall communicate exclusively through governed Workbench mechanisms.
+
+Approved communication methods include:
+
+* Commands
+* Events
+* Shared Context
+* Runtime Services
+* Extension Contracts
+
+Direct capability-to-capability dependencies are prohibited.
+
+---
+
+## 9.5 Capability Context
+
+Every capability shall continuously understand:
+
+* active operator,
+* workspace,
+* institution,
+* selected object,
+* investigation state,
+* permissions,
+* environmental context.
+
+Capabilities should behave intelligently because they understand context.
+
+---
+
+## 9.6 Capability Commands
+
+Every capability shall expose institutional commands.
+
+Examples include:
+
+Open
+
+Refresh
+
+Investigate
+
+Compare
+
+Analyse
+
+Execute
+
+Export
+
+Share
+
+Bookmark
+
+Pin
+
+Commands shall integrate into the common Workbench Command System.
+
+---
+
+## 9.7 Capability Search
+
+Capabilities shall expose searchable knowledge.
+
+Search shall include:
+
+* capability metadata,
+* operational objects,
+* documentation,
+* commands,
+* configuration,
+* historical context.
+
+Search becomes capability-aware.
+
+---
+
+## 9.8 Capability AI Integration
+
+Every capability shall expose structured context to the COREI Intelligence Layer.
+
+AI shall understand:
+
+* capability state,
+* operator context,
+* current investigation,
+* operational objectives.
+
+Capabilities become AI-native.
+
+---
+
+## 9.9 Capability Audit
+
+Institutional actions performed within capabilities shall be auditable.
+
+Examples include:
+
+* execution,
+* approvals,
+* configuration changes,
+* workflow progression,
+* investigations,
+* operator actions.
+
+Audit becomes part of capability behaviour.
+
+---
+
+## 9.10 Capability Health
+
+Every capability shall publish operational health information.
+
+Examples include:
+
+* availability,
+* runtime status,
+* dependency status,
+* performance,
+* version,
+* compatibility.
+
+The Workbench continuously evaluates capability health.
+
+---
+
+# SECTION 10 — NON-FUNCTIONAL REQUIREMENTS
+
+## Non-Functional Requirements
+
+Every capability shall satisfy institutional engineering quality standards.
+
+---
+
+### Reusability
+
+Capabilities shall operate across multiple workspaces without modification.
+
+---
+
+### Replaceability
+
+Capabilities shall remain replaceable without affecting Workbench architecture.
+
+---
+
+### Isolation
+
+Capability failures shall not compromise unrelated capabilities.
+
+---
+
+### Composability
+
+Capabilities shall naturally compose into increasingly sophisticated operational environments.
+
+---
+
+### Maintainability
+
+Capabilities shall remain independently maintainable.
+
+---
+
+### Testability
+
+Every capability shall support deterministic testing.
+
+---
+
+### Observability
+
+Capabilities shall expose metrics, logs, traces, health and lifecycle events.
+
+---
+
+### Security
+
+Capabilities shall integrate with Workbench authentication, authorisation and governance.
+
+---
+
+### Performance
+
+Capabilities shall support institutional-scale workloads.
+
+---
+
+### Technology Independence
+
+Capability contracts shall remain independent of implementation technology.
+
+---
+
+# SECTION 11 — SCALABILITY
+
+## Scalability
+
+The Capability Ecosystem shall become the primary mechanism through which COREI grows.
+
+Growth shall occur by introducing new capabilities rather than redesigning the Workbench.
+
+---
+
+## Capability Scalability
+
+Support thousands of institutional capabilities.
+
+Capability quantity shall not increase architectural complexity.
+
+---
+
+## Workspace Scalability
+
+Support unlimited capability combinations.
+
+Every workspace becomes capability composition.
+
+---
+
+## Terminal Scalability
+
+Capabilities shall operate across every institutional terminal.
+
+Examples include:
+
+* Trading
+* Infrastructure
+* Risk
+* Research
+* Executive
+* Compliance
+* Cyber Security
+* Treasury
+* Future Domains
+
+---
+
+## Team Scalability
+
+Independent engineering teams shall develop capabilities concurrently.
+
+Workbench contracts ensure architectural consistency.
+
+---
+
+## Extension Scalability
+
+Future capability categories shall integrate through existing Workbench extension mechanisms.
+
+---
+
+## Organisational Scalability
+
+Capabilities shall support institutional expansion across:
+
+* business units,
+* geographical regions,
+* subsidiaries,
+* operational centres.
+
+---
+
+## Constitutional Scalability
+
+The Capability Ecosystem shall inherently support every scalability dimension defined within the COREI Anchor Law including:
+
+* Multi Account
+* Multi Broker
+* Multi Strategy
+* Multi Portfolio
+* Multi Asset
+* Multi Exchange
+* Multi Market
+* Multi Currency
+* Multi Region
+* Multi Team
+* Multi Role
+* Multi Monitor
+* Multi Custodian
+* Multi Jurisdiction
+* 24×7 Institutional Operations
+
+---
+
+# SECTION 12 — FUTURE EVOLUTION
+
+## Future Evolution
+
+The Institutional Capability Ecosystem is designed for continuous institutional growth.
+
+Capabilities shall evolve independently while remaining governed by common architectural contracts.
+
+---
+
+## Capability Evolution
+
+Individual capabilities shall evolve through versioned contracts.
+
+Backward compatibility should be maintained whenever practical.
+
+---
+
+## New Capability Categories
+
+Future institutional needs may introduce entirely new capability families.
+
+Examples include:
+
+* Digital Asset Intelligence
+* Regulatory Intelligence
+* Treasury Operations
+* ESG Analytics
+* Quantitative Research
+* Autonomous Agents
+
+These shall integrate through the existing Capability Architecture.
+
+---
+
+## AI-Native Capabilities
+
+Future capabilities shall increasingly collaborate with institutional AI.
+
+Capabilities become:
+
+* context providers,
+* recommendation providers,
+* reasoning participants,
+* operational assistants.
+
+Human authority remains constitutionally supreme.
+
+---
+
+## Capability Marketplace
+
+The architecture shall support a governed institutional capability marketplace.
+
+Capabilities may eventually be:
+
+* developed internally,
+* certified,
+* versioned,
+* shared,
+* approved,
+* deployed,
+* retired,
+
+without modifying the Workbench.
+
+---
+
+## Capability Intelligence
+
+Future capabilities shall increasingly understand:
+
+* operator behaviour,
+* institutional workflows,
+* collaborative patterns,
+* operational efficiency.
+
+Capabilities become progressively smarter while preserving operator control.
+
+---
+
+## Institutional Longevity
+
+The Capability Ecosystem shall remain stable despite continuous technological evolution.
+
+Capability responsibility survives.
+
+Technology implementation evolves.
+
+---
+
+## Long-Term Vision
+
+The Institutional Capability Ecosystem shall become the operational vocabulary of COREI.
+
+Every future institutional function will first be defined as a capability.
+
+Only afterwards will engineering determine its implementation.
+
+This ensures that institutional thinking permanently precedes software implementation.
+
+### Architectural Observation
+
+I think we've now identified another architectural principle that is usually missing from enterprise systems.
+
+Most software evolves like this:
+
+Feature
+    │
+    ▼
+Screen
+    │
+    ▼
+Code
+
+COREI should instead evolve like this:
+
+Institutional Need
+          │
+          ▼
+Operational Responsibility
+          │
+          ▼
+Capability Contract
+          │
+          ▼
+Operational Capability
+          │
+          ▼
+Workbench Integration
+          │
+          ▼
+Implementation
+
+Notice what this achieves.
+
+When someone in the future says:
+
+"We need an AI Portfolio Attribution capability."
+
+The engineering process becomes deterministic:
+
+Define the institutional responsibility.
+Create the Capability Contract.
+Integrate with the Workbench Runtime.
+Inherit the Design System.
+Connect to Commands, Search, AI, Context, Audit, Permissions, Notifications.
+Implement the capability using the most appropriate technology.
+
+No architectural discussions need to be repeated.
+
+I think this is exactly the kind of engineering discipline that institutions like Bloomberg, BlackRock, or large trading firms strive for internally. It ensures that every new capability strengthens the existing platform rather than becoming another isolated feature, remaining fully aligned with the COREI Anchor Law and the Master Trader Persona.
+
+# SECTION 13 — DEPENDENCIES
+
+## Dependencies
+
+The Institutional Capability Ecosystem is the first architectural layer where institutional principles become executable operational functionality.
+
+Capabilities inherit every architectural decision established throughout Stage-23 and become the reusable operational assets from which every institutional workspace is assembled.
+
+---
+
+## 13.1 Constitutional Dependencies
+
+Every capability shall inherit the constitutional principles established during Phase-00.
+
+Capabilities shall continuously reinforce:
+
+* COREI Mission
+* COREI Vision
+* COREI Anchor Law
+* Institutional Engineering Principles
+* Governance Standards
+* Constitutional Scalability
+
+Capabilities exist to serve the institution.
+
+Never individual implementation preferences.
+
+---
+
+## 13.2 Discovery Dependencies
+
+Capability architecture incorporates engineering knowledge established during Phase-01.
+
+This includes lessons learned from:
+
+* institutional trading platforms,
+* engineering workbenches,
+* operational command centres,
+* observability platforms,
+* collaborative systems,
+* mission-critical operational environments.
+
+Capability design shall remain evidence-driven.
+
+---
+
+## 13.3 Operator Dependencies
+
+Every capability exists to improve the professional work defined during Phase-02.
+
+Capabilities shall improve:
+
+* observation,
+* investigation,
+* analysis,
+* execution,
+* monitoring,
+* collaboration,
+* institutional understanding.
+
+Professional work remains the architectural driver.
+
+---
+
+## 13.4 Operational Environment Dependencies
+
+Capabilities execute inside the Operational Environment defined during Phase-03.
+
+Capabilities shall never redefine environmental behaviour.
+
+The Workbench owns the environment.
+
+Capabilities perform institutional work.
+
+---
+
+## 13.5 Experience Dependencies
+
+Capabilities shall fully implement the Experience Architecture established during Phase-04.
+
+Every capability shall preserve:
+
+* workflow continuity,
+* behavioural consistency,
+* contextual awareness,
+* professional confidence,
+* cognitive efficiency.
+
+---
+
+## 13.6 Technology Dependencies
+
+Capabilities utilise the governed technologies established during Phase-05.
+
+Technologies remain implementation assets.
+
+Capabilities remain institutional responsibilities.
+
+---
+
+## 13.7 Workbench Dependencies
+
+Every capability executes inside the COREI Workbench Runtime established during Phase-06.
+
+Capabilities consume Workbench services.
+
+They never duplicate runtime responsibilities.
+
+---
+
+## 13.8 Design System Dependencies
+
+Capabilities inherit the Institutional Design System established during Phase-07.
+
+Capabilities communicate through one institutional visual language.
+
+No capability shall introduce independent visual semantics.
+
+---
+
+## 13.9 Forward Dependencies
+
+Every remaining implementation phase depends directly upon the Capability Ecosystem.
+
+Examples include:
+
+### Phase-09
+
+Workspace Library
+
+↓
+
+Workspaces compose governed capabilities.
+
+---
+
+### Phase-10
+
+Intelligence Layer
+
+↓
+
+AI collaborates with capabilities.
+
+---
+
+### Phase-11
+
+Operator Optimisation
+
+↓
+
+Capability usage becomes measurable and continuously improvable.
+
+The Capability Ecosystem therefore becomes the permanent operational vocabulary of COREI.
+
+---
+
+# SECTION 14 — DELIVERABLES
+
+## Deliverables
+
+Completion of Phase-08 establishes the authoritative operational capability architecture of the COREI Workbench.
+
+These artefacts become permanent institutional engineering references.
+
+---
+
+## Primary Deliverables
+
+### Institutional Capability Ecosystem
+
+The complete catalogue of governed operational capabilities.
+
+---
+
+### Capability Taxonomy
+
+A hierarchical classification of capability families including:
+
+* Observation
+* Analysis
+* Execution
+* Monitoring
+* Knowledge
+* Collaboration
+* Navigation
+* Administration
+* Intelligence
+* Future Capability Domains
+
+This taxonomy becomes the operational map of the Workbench.
+
+---
+
+### Capability Contract Specification
+
+The authoritative engineering contract defining:
+
+* identity,
+* responsibility,
+* lifecycle,
+* runtime integration,
+* commands,
+* search,
+* context,
+* AI,
+* events,
+* audit,
+* permissions,
+* observability,
+* extension points.
+
+---
+
+### Capability Registry
+
+The institutional registry responsible for:
+
+* capability discovery,
+* version management,
+* ownership,
+* dependency management,
+* lifecycle tracking.
+
+---
+
+### Capability Integration Standards
+
+Engineering standards governing how capabilities integrate into:
+
+* Workbench Runtime
+* Design System
+* Command System
+* Search
+* Context
+* Notifications
+* AI
+* Workspace Engine
+
+---
+
+### Capability Governance Policy
+
+Institutional rules governing:
+
+* creation,
+* approval,
+* certification,
+* evolution,
+* deprecation,
+* retirement.
+
+---
+
+### Stage-23 Capability Baseline
+
+The frozen institutional capability architecture of COREI.
+
+---
+
+# SECTION 15 — ACCEPTANCE CRITERIA
+
+## Acceptance Criteria
+
+Phase-08 shall be considered complete only when every future institutional function can be represented as a governed operational capability.
+
+Completion is measured through operational completeness rather than component quantity.
+
+---
+
+## Constitutional Compliance
+
+Every capability demonstrates alignment with:
+
+* COREI Anchor Law
+* Master Trader Persona
+* Constitutional Foundation
+
+---
+
+## Capability Completeness
+
+Every capability possesses:
+
+* institutional responsibility,
+* capability contract,
+* lifecycle,
+* runtime integration,
+* governance,
+* observability,
+* documentation.
+
+---
+
+## Workbench Integration
+
+Every capability integrates exclusively through Workbench services.
+
+Direct runtime ownership by capabilities is prohibited.
+
+---
+
+## Design Compliance
+
+Every capability communicates through the Institutional Design System.
+
+Independent visual languages are prohibited.
+
+---
+
+## Architectural Independence
+
+Capability contracts remain independent of:
+
+* frontend framework,
+* rendering technology,
+* implementation language,
+* UI libraries.
+
+---
+
+## Reusability Validation
+
+Capabilities demonstrate reuse across:
+
+* terminals,
+* workspaces,
+* operator roles,
+* institutional domains.
+
+---
+
+## Governance Validation
+
+Every capability is traceable through:
+
+Institution
+
+↓
+
+Constitution
+
+↓
+
+Operational Responsibility
+
+↓
+
+Capability Contract
+
+↓
+
+Workbench Runtime
+
+↓
+
+Capability
+
+↓
+
+Implementation
+
+---
+
+## Architectural Freeze
+
+Following institutional review,
+
+Phase-08 establishes the authoritative Capability Ecosystem of COREI.
+
+Future capabilities shall extend this ecosystem.
+
+They shall not redefine its architectural principles.
+
+---
+
+# SECTION 16 — RELATED DOCUMENTS
+
+## Related Documents
+
+Phase-08 completes the operational capability architecture of the Institutional Operator Workstation.
+
+It provides the reusable operational building blocks from which every future workspace and institutional workflow will be assembled.
+
+---
+
+## Constitutional References
+
+* Stage-23 Phase-00 — Constitutional Foundation
+* COREI Anchor Law
+* Master Trader Persona
+
+---
+
+## Discovery References
+
+* Stage-23 Phase-01 — Discovery & Reverse Engineering
+
+---
+
+## Human References
+
+* Stage-23 Phase-02 — Operator Architecture
+
+---
+
+## Operational References
+
+* Stage-23 Phase-03 — Operational Environment Architecture
+
+---
+
+## Experience References
+
+* Stage-23 Phase-04 — Experience Architecture
+
+---
+
+## Technology References
+
+* Stage-23 Phase-05 — Technology Landscape
+* Technology Constitution Matrix
+
+---
+
+## Runtime References
+
+* Stage-23 Phase-06 — COREI Workbench Architecture
+* Runtime Contract Specification
+
+---
+
+## Visual References
+
+* Stage-23 Phase-07 — Institutional Design System
+* Design Token Architecture
+* Visual Pattern Library
+
+---
+
+## Future Architecture References
+
+Phase-09
+
+Workspace Library
+
+↓
+
+Phase-10
+
+Institutional Intelligence Layer
+
+↓
+
+Phase-11
+
+Operator Optimisation
+
+Every remaining implementation phase shall compose and orchestrate the Institutional Capability Ecosystem rather than introducing isolated functionality.
+
+The Capability Ecosystem becomes the permanent operational vocabulary of COREI.
+
+---
+
+## Closing Statement
+
+Phase-08 establishes the Institutional Capability Ecosystem of COREI.
+
+Capabilities are no longer viewed as interface widgets or reusable frontend components.
+
+They are recognised as governed institutional responsibilities executed within the COREI Workbench.
+
+Every capability now inherits:
+
+* Constitutional Authority
+* Operator Requirements
+* Operational Environment
+* Experience Architecture
+* Technology Constitution
+* Workbench Runtime
+* Institutional Design System
+
+This inheritance ensures that every future capability behaves, communicates, integrates, and evolves consistently across the entire institutional platform.
+
+With the completion and architectural freeze of Phase-08, COREI now possesses:
+
+* Constitutional Foundation
+* Discovery Framework
+* Operator Architecture
+* Operational Environment
+* Experience Architecture
+* Technology Landscape
+* COREI Workbench Runtime
+* Institutional Design System
+* Institutional Capability Ecosystem
+
+These nine phases establish the complete institutional operating foundation of COREI OS.
+
+Phase-09 therefore begins the **Workspace Library**.
+
+The Workspace Library is not a collection of predefined screens.
+
+It is the institutional composition framework through which governed capabilities are assembled into professional operational environments.
+
+Every workspace becomes a purpose-built operational environment supporting specific institutional objectives while remaining fully composable, extensible, context-aware, and governed by the COREI Workbench.
+
+### Architectural Review (After Phase-08)
+
+I think we've now completed what I would call the Institutional Foundation Stack.
+
+Phase	Establishes	Owns
+00	Constitution	Institutional Principles
+01	Discovery	Engineering Knowledge
+02	Operator	Human Architecture
+03	Operational Environment	Professional Workplace
+04	Experience	Behaviour
+05	Technology	Technology Governance
+06	Workbench	Runtime
+07	Design System	Visual Communication
+08	Capability Ecosystem	Operational Building Blocks
+
+Looking across these phases, there is one architectural refinement I recommend before entering Phase-09.
+
+Add one explicit layer: Capability Blueprint
+
+Between the Capability Contract and the implemented Capability, introduce a formal Capability Blueprint.
+
+The engineering chain becomes:
+
+Institution
+      │
+      ▼
+Constitution
+      │
+      ▼
+Operational Responsibility
+      │
+      ▼
+Capability Contract
+      │
+      ▼
+Capability Blueprint
+      │
+      ▼
+Workbench Integration
+      │
+      ▼
+Capability Runtime
+      │
+      ▼
+Capability Implementation
+
+The Capability Blueprint is implementation-independent and should define:
+
+Purpose
+Scope
+Inputs
+Outputs
+Operator workflows
+Runtime interactions
+Commands
+Search model
+Context model
+AI integration
+Permission model
+Audit model
+Event model
+State model
+Visual composition
+Performance expectations
+
+This additional layer creates a clean separation between what a capability is and how it is implemented.
+
+It also provides a stable architectural artifact that can be reviewed, governed, tested, versioned, and evolved before any code is written.
+
+I believe this fits naturally with the engineering philosophy established throughout Stage-23: institutional intent is defined first, implementation follows afterward.

@@ -3,7 +3,7 @@ kind: StatefulSet
 
 metadata:
   name: redis
-  namespace: storage
+  namespace: database
 
 spec:
   serviceName: redis

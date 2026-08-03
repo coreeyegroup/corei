@@ -1,0 +1,38 @@
+[
+  {
+    "master_trade_intent_id": "master-intent-001",
+    "master_lot": 10,
+    "master_equity": 1000000,
+    "follower_account": "follower-1",
+    "follower_equity": 500000,
+    "expected_follower_lot": 5,
+    "actual_follower_lot": 5,
+    "parent_trade_intent_id": "master-intent-001",
+    "propagation_latency_ms": 12,
+    "master_fill_ns": 1779914184461200349
+  },
+  {
+    "master_trade_intent_id": "master-intent-001",
+    "master_lot": 10,
+    "master_equity": 1000000,
+    "follower_account": "follower-2",
+    "follower_equity": 2000000,
+    "expected_follower_lot": 20,
+    "actual_follower_lot": 20,
+    "parent_trade_intent_id": "master-intent-001",
+    "propagation_latency_ms": 12,
+    "master_fill_ns": 1779914184461200349
+  },
+  {
+    "master_trade_intent_id": "master-intent-001",
+    "master_lot": 10,
+    "master_equity": 1000000,
+    "follower_account": "follower-3",
+    "follower_equity": 1500000,
+    "expected_follower_lot": 15,
+    "actual_follower_lot": 15,
+    "parent_trade_intent_id": "master-intent-001",
+    "propagation_latency_ms": 12,
+    "master_fill_ns": 1779914184461200349
+  }
+]

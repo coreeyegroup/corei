@@ -1,0 +1,80 @@
+src/providers
+├── adapters
+├── contracts
+│   ├── index.ts
+│   └── provider-contract.ts
+├── implementations
+│   ├── foundation
+│   │   ├── index.ts
+│   │   ├── lucide
+│   │   │   └── index.ts
+│   │   ├── motion
+│   │   │   └── index.ts
+│   │   ├── radix-ui
+│   │   │   └── index.ts
+│   │   ├── react
+│   │   │   └── index.ts
+│   │   ├── shadcn-ui
+│   │   │   └── index.ts
+│   │   ├── tailwind
+│   │   │   └── index.ts
+│   │   ├── tanstack-query
+│   │   │   └── index.ts
+│   │   └── zustand
+│   │       └── index.ts
+│   ├── index.ts
+│   └── ui
+│       ├── ag-grid
+│       │   ├── ag-grid-provider.ts
+│       │   └── index.ts
+│       ├── dockview
+│       │   ├── dockview-provider.ts
+│       │   └── index.ts
+│       ├── echarts
+│       │   ├── echarts-provider.ts
+│       │   └── index.ts
+│       ├── index.ts
+│       ├── monaco
+│       │   ├── index.ts
+│       │   └── monaco-provider.ts
+│       ├── react-flow
+│       │   ├── index.ts
+│       │   └── react-flow-provider.ts
+│       └── xterm
+│           ├── index.ts
+│           └── xterm-provider.ts
+├── index.ts
+├── manager
+│   ├── index.ts
+│   └── provider-manager.ts
+├── models
+│   ├── index.ts
+│   └── provider.ts
+├── registry
+│   ├── index.ts
+│   └── provider-registry.ts
+├── runtime
+│   ├── index.ts
+│   └── provider-runtime.ts
+└── ui
+    ├── contracts
+    │   ├── index.ts
+    │   └── ui-provider-contract.ts
+    ├── index.ts
+    ├── lifecycle
+    │   ├── index.ts
+    │   └── ui-provider-lifecycle.ts
+    ├── manager
+    │   ├── index.ts
+    │   └── ui-provider-manager.ts
+    ├── models
+    │   ├── index.ts
+    │   └── ui-provider.ts
+    ├── registry
+    │   ├── index.ts
+    │   └── ui-provider-registry.ts
+    └── runtime
+        ├── index.ts
+        └── ui-provider-runtime.ts
+
+30 directories, 47 files

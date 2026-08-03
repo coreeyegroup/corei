@@ -1,0 +1,288 @@
+COREI MANIFESTO
+
+Version: 1.0
+
+Status: Constitutional
+
+WHY WE EXIST
+
+COREI exists to build an institutional operating system that enables professional operators to observe, understand, decide, execute, govern, and continuously improve complex financial and technological operations.
+
+We do not build software for its own sake.
+
+We build environments in which institutions perform professional work with clarity, confidence, discipline, and precision.
+
+WHAT WE BELIEVE
+
+We believe that:
+
+Technology should serve institutions.
+
+Institutions should serve professionals.
+
+Professionals should make informed decisions.
+
+Systems should amplify human capability rather than replace human judgement.
+
+Software should become more understandable as it becomes more powerful.
+
+Complexity should exist inside architecture rather than inside operators.
+
+Scalability should be designed from the beginning.
+
+Institutional quality is never accidental.
+
+WHAT WE DO NOT BUILD
+
+COREI does not build:
+
+dashboards
+admin panels
+CRUD applications
+collections of widgets
+disconnected tools
+feature factories
+
+COREI builds:
+
+Institutional Operating Environments.
+
+OUR FIRST PRINCIPLE
+
+Architecture precedes implementation.
+
+Implementation never precedes architecture.
+
+OUR SECOND PRINCIPLE
+
+Professional work precedes software.
+
+Software exists because professional work exists.
+
+Never the opposite.
+
+OUR THIRD PRINCIPLE
+
+Institutional responsibility precedes technology.
+
+Choose responsibility.
+
+Then architecture.
+
+Then implementation.
+
+Technology comes last.
+
+OUR FOURTH PRINCIPLE
+
+Capabilities precede components.
+
+Components are implementation.
+
+Capabilities are architecture.
+
+OUR FIFTH PRINCIPLE
+
+Workspaces precede layouts.
+
+Layouts display work.
+
+Workspaces enable work.
+
+OUR SIXTH PRINCIPLE
+
+Understanding precedes automation.
+
+Automation without understanding creates institutional risk.
+
+OUR SEVENTH PRINCIPLE
+
+Evidence precedes improvement.
+
+We improve because the institution demonstrates a need.
+
+Not because trends change.
+
+OUR EIGHTH PRINCIPLE
+
+The Constitution precedes preference.
+
+No personal coding style may override institutional architecture.
+
+OUR NINTH PRINCIPLE
+
+Every implementation must survive ten years.
+
+We are never building for today.
+
+OUR TENTH PRINCIPLE
+
+Technology will change.
+
+COREI must not.
+
+ENGINEERING PHILOSOPHY
+
+Every engineer shall ask:
+
+What institutional responsibility does this own?
+
+Not:
+
+What React component should I create?
+
+Every engineer shall ask:
+
+Can this scale to every dimension of the Anchor Law?
+
+Before implementation.
+
+Every engineer shall ask:
+
+Does this reduce operator effort?
+
+If not,
+
+it should not exist.
+
+Every engineer shall ask:
+
+Can another team reuse this?
+
+If not,
+
+it is probably implemented at the wrong level.
+
+OPERATOR PHILOSOPHY
+
+Operators should never think about:
+
+architecture
+rendering
+frameworks
+runtimes
+services
+APIs
+
+Operators should think only about:
+
+markets
+research
+risk
+execution
+infrastructure
+governance
+decisions
+
+The system should hide engineering complexity.
+
+AI PHILOSOPHY
+
+AI exists to strengthen professional judgement.
+
+Never replace it.
+
+AI may:
+
+explain
+correlate
+predict
+recommend
+educate
+automate approved workflows
+
+AI shall never become constitutional authority.
+
+ARCHITECTURAL PHILOSOPHY
+
+Everything in COREI belongs to one hierarchy.
+
+Institution
+
+↓
+
+Constitution
+
+↓
+
+Architecture
+
+↓
+
+Engineering
+
+↓
+
+Implementation
+
+↓
+
+Operation
+
+↓
+
+Observation
+
+↓
+
+Understanding
+
+↓
+
+Evolution
+
+↓
+
+Institutional Excellence
+
+Nothing shall bypass this hierarchy.
+
+THE DEFINITION OF DONE
+
+A feature is not complete when it works.
+
+A feature is complete only when it is:
+
+constitutional
+architecturally correct
+operationally valuable
+professionally usable
+observable
+explainable
+governed
+scalable
+documented
+evolvable
+THE COREI PROMISE
+
+COREI shall never optimise for:
+
+speed over correctness
+convenience over governance
+novelty over reliability
+fashion over architecture
+frameworks over institutions
+
+COREI shall always optimise for:
+
+institutional excellence
+professional operators
+long-term maintainability
+constitutional consistency
+disciplined engineering
+continuous evolution
+FINAL STATEMENT
+
+COREI is not a trading application.
+
+It is not an infrastructure dashboard.
+
+It is not an AI assistant.
+
+It is not a collection of tools.
+
+COREI is an Institutional Operating System.
+
+Its purpose is to create an environment where professional operators, intelligent systems, and institutional governance work together through one constitutional architecture.
+
+Every decision, every capability, every workspace, every service, every line of code, and every future evolution shall strengthen that purpose.

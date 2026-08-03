@@ -20,7 +20,14 @@ spec:
     spec:
       containers:
         - name: n8n
-          image: docker.n8n.io/n8nio/n8n:1.98.2
+          image: docker.n8n.io/n8nio/n8n:2.22.4
+
+          env:
+            - name: N8N_SECURE_COOKIE
+              value: "false"
+
+            - name: GENERIC_TIMEZONE
+              value: "Asia/Kolkata"
 
           ports:
             - containerPort: 5678

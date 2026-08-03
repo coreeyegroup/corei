@@ -1,0 +1,16 @@
+{
+  "session_id": "20260527-205400",
+  "portfolio": {
+    "cash_balance": 100000000,
+    "positions": [
+      {
+        "symbol": "NIFTY",
+        "quantity": 10,
+        "avg_price": 2450010
+      }
+    ],
+    "realized_pnl": 500000,
+    "unrealized_pnl": 200000
+  },
+  "runtime_source": "live-kafka-streams"
+}

@@ -1,0 +1,1802 @@
+[
+  {
+    "event_id": "runtime-event-1",
+    "topic": "portfolio_state",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609428783,
+    "event_index": 1,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-2",
+    "topic": "portfolio_state",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609430869,
+    "event_index": 2,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-3",
+    "topic": "risk_events",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609431955,
+    "event_index": 3,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-4",
+    "topic": "kill_switch_stream",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609432842,
+    "event_index": 4,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-5",
+    "topic": "ticks",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609433578,
+    "event_index": 5,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-6",
+    "topic": "signals",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609445897,
+    "event_index": 6,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-7",
+    "topic": "kill_switch_stream",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609446646,
+    "event_index": 7,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-8",
+    "topic": "kill_switch_stream",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609447447,
+    "event_index": 8,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-9",
+    "topic": "alerts",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609448313,
+    "event_index": 9,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-10",
+    "topic": "ticks",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609449251,
+    "event_index": 10,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-11",
+    "topic": "risk_events",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609449950,
+    "event_index": 11,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-12",
+    "topic": "orders",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609450651,
+    "event_index": 12,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-13",
+    "topic": "fills",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609451317,
+    "event_index": 13,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-14",
+    "topic": "copy_trade_events",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609451924,
+    "event_index": 14,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-15",
+    "topic": "portfolio_state",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609454141,
+    "event_index": 15,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-16",
+    "topic": "orders",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609455006,
+    "event_index": 16,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-17",
+    "topic": "portfolio_state",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609455687,
+    "event_index": 17,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-18",
+    "topic": "portfolio_state",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609456597,
+    "event_index": 18,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-19",
+    "topic": "kill_switch_stream",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609457311,
+    "event_index": 19,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-20",
+    "topic": "portfolio_state",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609459319,
+    "event_index": 20,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-21",
+    "topic": "kill_switch_stream",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609460015,
+    "event_index": 21,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-22",
+    "topic": "kill_switch_stream",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609460665,
+    "event_index": 22,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-23",
+    "topic": "risk_events",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609461332,
+    "event_index": 23,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-24",
+    "topic": "fills",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609461960,
+    "event_index": 24,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-25",
+    "topic": "orders",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609462582,
+    "event_index": 25,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-26",
+    "topic": "orders",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609463359,
+    "event_index": 26,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-27",
+    "topic": "fills",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609464031,
+    "event_index": 27,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-28",
+    "topic": "portfolio_state",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609464702,
+    "event_index": 28,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-29",
+    "topic": "ticks",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609465349,
+    "event_index": 29,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-30",
+    "topic": "orders",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609466002,
+    "event_index": 30,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-31",
+    "topic": "orders",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609466622,
+    "event_index": 31,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-32",
+    "topic": "orders",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609467294,
+    "event_index": 32,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-33",
+    "topic": "copy_trade_events",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609469611,
+    "event_index": 33,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-34",
+    "topic": "alerts",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609470291,
+    "event_index": 34,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-35",
+    "topic": "portfolio_state",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609470916,
+    "event_index": 35,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-36",
+    "topic": "portfolio_state",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609471547,
+    "event_index": 36,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-37",
+    "topic": "fills",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609472214,
+    "event_index": 37,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-38",
+    "topic": "portfolio_state",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609472834,
+    "event_index": 38,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-39",
+    "topic": "kill_switch_stream",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609473555,
+    "event_index": 39,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-40",
+    "topic": "fills",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609474172,
+    "event_index": 40,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-41",
+    "topic": "kill_switch_stream",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609474780,
+    "event_index": 41,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-42",
+    "topic": "signals",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609475487,
+    "event_index": 42,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-43",
+    "topic": "alerts",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609476121,
+    "event_index": 43,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-44",
+    "topic": "risk_events",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609476801,
+    "event_index": 44,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-45",
+    "topic": "risk_events",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609477426,
+    "event_index": 45,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-46",
+    "topic": "alerts",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609479429,
+    "event_index": 46,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-47",
+    "topic": "portfolio_state",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609481456,
+    "event_index": 47,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-48",
+    "topic": "ticks",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609482349,
+    "event_index": 48,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-49",
+    "topic": "kill_switch_stream",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609483029,
+    "event_index": 49,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-50",
+    "topic": "risk_events",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609483724,
+    "event_index": 50,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-51",
+    "topic": "fills",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609484348,
+    "event_index": 51,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-52",
+    "topic": "portfolio_state",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609485108,
+    "event_index": 52,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-53",
+    "topic": "signals",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609485792,
+    "event_index": 53,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-54",
+    "topic": "copy_trade_events",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609486633,
+    "event_index": 54,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-55",
+    "topic": "kill_switch_stream",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609487358,
+    "event_index": 55,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-56",
+    "topic": "orders",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609488016,
+    "event_index": 56,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-57",
+    "topic": "signals",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609488651,
+    "event_index": 57,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-58",
+    "topic": "kill_switch_stream",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609489272,
+    "event_index": 58,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-59",
+    "topic": "signals",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609491320,
+    "event_index": 59,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-60",
+    "topic": "portfolio_state",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609491943,
+    "event_index": 60,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-61",
+    "topic": "ticks",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609492586,
+    "event_index": 61,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-62",
+    "topic": "fills",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609493301,
+    "event_index": 62,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-63",
+    "topic": "orders",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609493919,
+    "event_index": 63,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-64",
+    "topic": "ticks",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609494556,
+    "event_index": 64,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-65",
+    "topic": "fills",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609495154,
+    "event_index": 65,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-66",
+    "topic": "alerts",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609495872,
+    "event_index": 66,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-67",
+    "topic": "signals",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609496499,
+    "event_index": 67,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-68",
+    "topic": "alerts",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609497115,
+    "event_index": 68,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-69",
+    "topic": "alerts",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609497831,
+    "event_index": 69,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-70",
+    "topic": "risk_events",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609498514,
+    "event_index": 70,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-71",
+    "topic": "orders",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609499179,
+    "event_index": 71,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-72",
+    "topic": "fills",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609501133,
+    "event_index": 72,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-73",
+    "topic": "portfolio_state",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609503085,
+    "event_index": 73,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-74",
+    "topic": "orders",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609503720,
+    "event_index": 74,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-75",
+    "topic": "risk_events",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609504330,
+    "event_index": 75,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-76",
+    "topic": "copy_trade_events",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609504953,
+    "event_index": 76,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-77",
+    "topic": "signals",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609505561,
+    "event_index": 77,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-78",
+    "topic": "kill_switch_stream",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609506641,
+    "event_index": 78,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-79",
+    "topic": "fills",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609508763,
+    "event_index": 79,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-80",
+    "topic": "kill_switch_stream",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609509553,
+    "event_index": 80,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-81",
+    "topic": "fills",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609510204,
+    "event_index": 81,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-82",
+    "topic": "orders",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609510878,
+    "event_index": 82,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-83",
+    "topic": "orders",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609511518,
+    "event_index": 83,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-84",
+    "topic": "signals",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609512193,
+    "event_index": 84,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-85",
+    "topic": "fills",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609512903,
+    "event_index": 85,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-86",
+    "topic": "copy_trade_events",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609514953,
+    "event_index": 86,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-87",
+    "topic": "kill_switch_stream",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609515649,
+    "event_index": 87,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-88",
+    "topic": "risk_events",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609516278,
+    "event_index": 88,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-89",
+    "topic": "kill_switch_stream",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609516917,
+    "event_index": 89,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-90",
+    "topic": "portfolio_state",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609517543,
+    "event_index": 90,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-91",
+    "topic": "kill_switch_stream",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609518185,
+    "event_index": 91,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-92",
+    "topic": "orders",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609518843,
+    "event_index": 92,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-93",
+    "topic": "risk_events",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609519536,
+    "event_index": 93,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-94",
+    "topic": "orders",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609520243,
+    "event_index": 94,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-95",
+    "topic": "kill_switch_stream",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609520883,
+    "event_index": 95,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-96",
+    "topic": "ticks",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609521632,
+    "event_index": 96,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-97",
+    "topic": "risk_events",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609522248,
+    "event_index": 97,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-98",
+    "topic": "orders",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609524351,
+    "event_index": 98,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-99",
+    "topic": "portfolio_state",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609526479,
+    "event_index": 99,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-100",
+    "topic": "fills",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609527148,
+    "event_index": 100,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-101",
+    "topic": "risk_events",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609527786,
+    "event_index": 101,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-102",
+    "topic": "orders",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609528477,
+    "event_index": 102,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-103",
+    "topic": "alerts",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609529085,
+    "event_index": 103,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-104",
+    "topic": "alerts",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609529722,
+    "event_index": 104,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-105",
+    "topic": "kill_switch_stream",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609530324,
+    "event_index": 105,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-106",
+    "topic": "orders",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609530954,
+    "event_index": 106,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-107",
+    "topic": "alerts",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609531569,
+    "event_index": 107,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-108",
+    "topic": "copy_trade_events",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609532204,
+    "event_index": 108,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-109",
+    "topic": "portfolio_state",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609532976,
+    "event_index": 109,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-110",
+    "topic": "orders",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609533958,
+    "event_index": 110,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-111",
+    "topic": "fills",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609534615,
+    "event_index": 111,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-112",
+    "topic": "fills",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609536720,
+    "event_index": 112,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-113",
+    "topic": "copy_trade_events",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609537363,
+    "event_index": 113,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-114",
+    "topic": "copy_trade_events",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609538008,
+    "event_index": 114,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-115",
+    "topic": "alerts",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609538674,
+    "event_index": 115,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-116",
+    "topic": "kill_switch_stream",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609539404,
+    "event_index": 116,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-117",
+    "topic": "ticks",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609540151,
+    "event_index": 117,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-118",
+    "topic": "kill_switch_stream",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609540908,
+    "event_index": 118,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-119",
+    "topic": "portfolio_state",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609541554,
+    "event_index": 119,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-120",
+    "topic": "kill_switch_stream",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609542180,
+    "event_index": 120,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-121",
+    "topic": "copy_trade_events",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609542813,
+    "event_index": 121,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-122",
+    "topic": "risk_events",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609543486,
+    "event_index": 122,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-123",
+    "topic": "kill_switch_stream",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609544101,
+    "event_index": 123,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-124",
+    "topic": "fills",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609544835,
+    "event_index": 124,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-125",
+    "topic": "risk_events",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609545449,
+    "event_index": 125,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-126",
+    "topic": "orders",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609547831,
+    "event_index": 126,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-127",
+    "topic": "portfolio_state",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609548471,
+    "event_index": 127,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-128",
+    "topic": "orders",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609549146,
+    "event_index": 128,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-129",
+    "topic": "orders",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609549773,
+    "event_index": 129,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-130",
+    "topic": "signals",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609550480,
+    "event_index": 130,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-131",
+    "topic": "fills",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609551151,
+    "event_index": 131,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-132",
+    "topic": "risk_events",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609551775,
+    "event_index": 132,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-133",
+    "topic": "signals",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609552405,
+    "event_index": 133,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-134",
+    "topic": "fills",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609553032,
+    "event_index": 134,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-135",
+    "topic": "fills",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609553969,
+    "event_index": 135,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-136",
+    "topic": "alerts",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609554644,
+    "event_index": 136,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-137",
+    "topic": "fills",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609555310,
+    "event_index": 137,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-138",
+    "topic": "risk_events",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609555958,
+    "event_index": 138,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-139",
+    "topic": "orders",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609558835,
+    "event_index": 139,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-140",
+    "topic": "ticks",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609559482,
+    "event_index": 140,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-141",
+    "topic": "fills",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609560251,
+    "event_index": 141,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-142",
+    "topic": "signals",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609560865,
+    "event_index": 142,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-143",
+    "topic": "ticks",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609562939,
+    "event_index": 143,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-144",
+    "topic": "fills",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609563709,
+    "event_index": 144,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-145",
+    "topic": "risk_events",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609564347,
+    "event_index": 145,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-146",
+    "topic": "kill_switch_stream",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609564956,
+    "event_index": 146,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-147",
+    "topic": "signals",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609565564,
+    "event_index": 147,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-148",
+    "topic": "risk_events",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609566238,
+    "event_index": 148,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-149",
+    "topic": "risk_events",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609568278,
+    "event_index": 149,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-150",
+    "topic": "risk_events",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609569121,
+    "event_index": 150,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-151",
+    "topic": "signals",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609569790,
+    "event_index": 151,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-152",
+    "topic": "fills",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609571856,
+    "event_index": 152,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-153",
+    "topic": "copy_trade_events",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609572482,
+    "event_index": 153,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-154",
+    "topic": "signals",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609573109,
+    "event_index": 154,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-155",
+    "topic": "portfolio_state",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609573777,
+    "event_index": 155,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-156",
+    "topic": "ticks",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609574449,
+    "event_index": 156,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-157",
+    "topic": "kill_switch_stream",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609576560,
+    "event_index": 157,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-158",
+    "topic": "risk_events",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609577219,
+    "event_index": 158,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-159",
+    "topic": "alerts",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609577960,
+    "event_index": 159,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-160",
+    "topic": "ticks",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609578813,
+    "event_index": 160,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-161",
+    "topic": "orders",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609579465,
+    "event_index": 161,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-162",
+    "topic": "risk_events",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609580109,
+    "event_index": 162,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-163",
+    "topic": "alerts",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609580747,
+    "event_index": 163,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-164",
+    "topic": "copy_trade_events",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609581408,
+    "event_index": 164,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-165",
+    "topic": "ticks",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609583575,
+    "event_index": 165,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-166",
+    "topic": "orders",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609584250,
+    "event_index": 166,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-167",
+    "topic": "signals",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609584985,
+    "event_index": 167,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-168",
+    "topic": "copy_trade_events",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609585620,
+    "event_index": 168,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-169",
+    "topic": "risk_events",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609586244,
+    "event_index": 169,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-170",
+    "topic": "alerts",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609586947,
+    "event_index": 170,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-171",
+    "topic": "orders",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609587582,
+    "event_index": 171,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-172",
+    "topic": "ticks",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609588255,
+    "event_index": 172,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-173",
+    "topic": "kill_switch_stream",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609588891,
+    "event_index": 173,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-174",
+    "topic": "portfolio_state",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609589594,
+    "event_index": 174,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-175",
+    "topic": "signals",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609590252,
+    "event_index": 175,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-176",
+    "topic": "fills",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609590896,
+    "event_index": 176,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-177",
+    "topic": "alerts",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609591549,
+    "event_index": 177,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-178",
+    "topic": "ticks",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609592216,
+    "event_index": 178,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-179",
+    "topic": "alerts",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609594683,
+    "event_index": 179,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-180",
+    "topic": "risk_events",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609595402,
+    "event_index": 180,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-181",
+    "topic": "signals",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609596025,
+    "event_index": 181,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-182",
+    "topic": "copy_trade_events",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609596678,
+    "event_index": 182,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-183",
+    "topic": "fills",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609597300,
+    "event_index": 183,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-184",
+    "topic": "ticks",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609598010,
+    "event_index": 184,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-185",
+    "topic": "kill_switch_stream",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609598630,
+    "event_index": 185,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-186",
+    "topic": "kill_switch_stream",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609599350,
+    "event_index": 186,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-187",
+    "topic": "portfolio_state",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609599990,
+    "event_index": 187,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-188",
+    "topic": "orders",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609600618,
+    "event_index": 188,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-189",
+    "topic": "alerts",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609601260,
+    "event_index": 189,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-190",
+    "topic": "copy_trade_events",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609601894,
+    "event_index": 190,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-191",
+    "topic": "risk_events",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609602516,
+    "event_index": 191,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-192",
+    "topic": "kill_switch_stream",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609604502,
+    "event_index": 192,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-193",
+    "topic": "fills",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609605215,
+    "event_index": 193,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-194",
+    "topic": "copy_trade_events",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609605830,
+    "event_index": 194,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-195",
+    "topic": "fills",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609606461,
+    "event_index": 195,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-196",
+    "topic": "orders",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609607190,
+    "event_index": 196,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-197",
+    "topic": "fills",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609607809,
+    "event_index": 197,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-198",
+    "topic": "kill_switch_stream",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609608425,
+    "event_index": 198,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-199",
+    "topic": "ticks",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609609130,
+    "event_index": 199,
+    "serialization_valid": true,
+    "schema_valid": true
+  },
+  {
+    "event_id": "runtime-event-200",
+    "topic": "signals",
+    "capture_source": "real-runtime-stream",
+    "event_time_ns": 1779915743609609831,
+    "event_index": 200,
+    "serialization_valid": true,
+    "schema_valid": true
+  }
+]

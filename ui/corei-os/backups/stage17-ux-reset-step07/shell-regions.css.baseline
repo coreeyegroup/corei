@@ -1,0 +1,90 @@
+/******************************************************************************
+ *
+ * COREI OPERATING SYSTEM
+ *
+ * STAGE-25
+ * PHASE-17
+ * STEP-04
+ *
+ * FILE:
+ * shell-regions.css
+ *
+ * PURPOSE:
+ * Institutional Region Framework
+ *
+ ******************************************************************************/
+
+.shell-top {
+    grid-area: top;
+
+    display: flex;
+    flex-direction: row;
+
+    width: 100%;
+    height: 100%;
+
+    overflow: hidden;
+}
+
+.shell-left {
+    grid-area: left;
+
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    height: 100%;
+
+    overflow: hidden;
+}
+
+.shell-center {
+    grid-area: center;
+
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    height: 100%;
+
+    min-width: var(--corei-workspace-min-width);
+    min-height: var(--corei-workspace-min-height);
+
+    overflow: hidden;
+}
+
+.shell-right {
+    grid-area: right;
+
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    height: 100%;
+
+    overflow: hidden;
+}
+
+.shell-bottom {
+    grid-area: bottom;
+
+    display: flex;
+    flex-direction:column;
+
+    width:100%;
+    height:100%;
+
+    overflow:hidden;
+}
+
+.shell-status {
+    grid-area: status;
+
+    display:flex;
+    flex-direction:row;
+
+    width:100%;
+    height:100%;
+
+    overflow:hidden;
+}

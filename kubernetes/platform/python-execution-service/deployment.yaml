@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: python-execution-service
+  namespace: platform
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: python-execution-service
+
+  template:
+    metadata:
+      labels:
+        app: python-execution-service
+
+    spec:
+      containers:
+        - name: python-execution-service
+
+          image: localhost:5000/core-python-execution-service:1.0
+
+          imagePullPolicy: Always
+
+          ports:
+            - containerPort: 8000
+
+          readinessProbe:
+            httpGet:
+              path: /docs
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+
+          livenessProbe:
+            httpGet:
+              path: /docs
+              port: 8000
+            initialDelaySeconds: 15
+            periodSeconds: 15

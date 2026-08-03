@@ -1,0 +1,1315 @@
+# STAGE-23 — INSTITUTIONAL OPERATOR WORKSTATION
+
+## Phase-00 — Constitutional Foundation
+
+**Document Status:** Authoritative
+**Stage:** 23
+**Phase:** 00
+**Sections Covered:** 01–04 (Message 1 of 4)
+
+**Authoritative References**
+
+* COREI Anchor Law
+* Master Trader Persona
+* Institutional Trading Platform Architecture
+* Previous COREI Stages (01–22)
+
+
+
+# SECTION 01 — PURPOSE
+
+## Purpose
+
+The purpose of Stage-23 Phase-00 is to establish the constitutional foundation for the COREI Institutional Operator Workstation.
+
+Previous COREI stages successfully established the institutional trading platform, including market intelligence, decision intelligence, portfolio management, execution, infrastructure, observability, governance, automation, artificial intelligence, and supporting operational services. These stages collectively produced a mature institutional backend platform capable of supporting professional trading operations.
+
+However, a backend platform alone does not constitute an operational environment.
+
+Professional operators—including traders, portfolio managers, researchers, infrastructure engineers, risk managers, compliance officers, executives, and operations teams—require a unified environment through which they continuously observe, analyze, decide, execute, monitor, collaborate, and improve institutional operations.
+
+Stage-23 exists to architect that environment.
+
+Phase-00 specifically establishes the constitutional principles upon which every future workstation decision shall be based.
+
+Its purpose is not to define implementation.
+
+Its purpose is not to define user interface components.
+
+Its purpose is not to select technologies.
+
+Instead, Phase-00 defines the permanent architectural foundation that governs every future workstation capability.
+
+Every subsequent Stage-23 phase shall inherit its direction, assumptions, terminology, architectural boundaries, engineering philosophy, and design principles from this constitutional foundation.
+
+This document therefore becomes the highest-level architectural reference for the Institutional Operator Workstation.
+
+
+
+# SECTION 02 — MISSION
+
+## Mission
+
+The mission of Phase-00 is to transform the existing institutional trading platform into a complete Institutional Operator Workstation by first defining the constitutional architecture that governs its long-term evolution.
+
+This phase establishes a common understanding of:
+
+* what COREI represents,
+* what the Institutional Operator Workstation represents,
+* why it exists,
+* who it serves,
+* what principles guide every architectural decision,
+* how the workstation shall evolve without architectural drift,
+* how future scalability shall be achieved,
+* how institutional quality shall be preserved over years of continuous development.
+
+The mission is therefore to eliminate ambiguity before implementation begins.
+
+No future workspace, panel, workflow, interaction model, extension, component, technology selection, or implementation decision should contradict the constitutional principles established within Phase-00.
+
+The success of Phase-00 is measured not by software produced, but by architectural clarity.
+
+If future engineering teams can independently extend COREI while remaining aligned with its institutional philosophy, then Phase-00 has achieved its mission.
+
+
+
+# SECTION 03 — PROBLEM STATEMENT
+
+## Problem Statement
+
+The COREI platform currently possesses a comprehensive institutional backend.
+
+Its services collectively provide professional-grade capabilities including:
+
+* Market Intelligence
+* Signal Intelligence
+* Decision Intelligence
+* Risk Intelligence
+* Portfolio Intelligence
+* Execution Intelligence
+* Infrastructure Intelligence
+* Observability
+* Governance
+* Automation
+* Artificial Intelligence
+* Security
+* Institutional Data Management
+
+These capabilities represent the operational engines of COREI.
+
+However, the platform currently lacks a unified operational environment through which institutional professionals perform their daily work.
+
+Without such an environment, operators would be forced to interact directly with numerous independent systems, tools, dashboards, consoles, and interfaces.
+
+This creates several long-term risks:
+
+* fragmented operator workflows,
+* duplicated functionality,
+* inconsistent interaction patterns,
+* increasing cognitive load,
+* poor long-duration usability,
+* architectural drift,
+* reduced discoverability,
+* difficult future scalability,
+* inconsistent user experiences across teams.
+
+Traditional dashboard approaches are insufficient because they present isolated information rather than supporting complete operational workflows.
+
+Similarly, simply integrating existing tools into a single screen does not create a professional operational environment.
+
+The fundamental problem is therefore architectural rather than visual.
+
+COREI requires an Institutional Operator Workstation that unifies observation, analysis, execution, orchestration, monitoring, governance, collaboration, and continuous improvement into a single coherent professional environment.
+
+Phase-00 addresses this problem by establishing the constitutional architecture required before implementation can responsibly begin.
+
+
+
+# SECTION 04 — BACKGROUND
+
+## Background
+
+COREI has progressed through multiple institutional development stages.
+
+Those stages collectively established:
+
+* institutional platform architecture,
+* distributed service architecture,
+* event-driven communication,
+* market intelligence,
+* execution systems,
+* portfolio management,
+* broker connectivity,
+* infrastructure automation,
+* governance,
+* observability,
+* resilience,
+* security,
+* operational continuity.
+
+The platform is therefore no longer an architectural concept.
+
+It is an operational institutional trading platform.
+
+The next stage of evolution is fundamentally different.
+
+Stage-23 does not primarily build additional backend capabilities.
+
+Instead, it establishes the human operational environment through which all existing and future capabilities are understood, coordinated, and operated.
+
+This distinction is critical.
+
+The Institutional Operator Workstation is not intended to replace:
+
+* Kubernetes,
+* Grafana,
+* PostgreSQL,
+* Redis,
+* Kafka,
+* Vault,
+* FastAPI,
+* AI systems,
+* Broker platforms,
+* Research tools,
+* Infrastructure tooling,
+* or any other specialist technology.
+
+Those systems remain authoritative within their respective operational domains.
+
+Stage-23 instead provides the professional environment through which institutional operators understand those systems, interact with them, orchestrate them, and perform their daily responsibilities without unnecessary fragmentation.
+
+This philosophy aligns directly with the COREI Anchor Law, which defines COREI as an institutional intelligence platform focused on discovering and operating the underlying realities of finance and technology rather than replacing the technologies themselves.
+
+Similarly, the Master Trader Persona establishes the professional standard expected from the workstation.
+
+Stage-23 therefore serves as the architectural bridge between the institutional platform that has already been built and the institutional operational environment that will enable professionals to use that platform comfortably, efficiently, and confidently over years of continuous operation.
+
+# SECTION 05 — ARCHITECTURAL CONTEXT
+
+## Architectural Context
+
+The Institutional Operator Workstation exists as the human operational layer of the COREI ecosystem.
+
+It is not an independent application.
+
+It is not a replacement for existing technologies.
+
+It is not another dashboard.
+
+It is the operational environment through which institutional professionals interact with the complete COREI platform.
+
+Its architectural position can be represented as follows:
+
+```text
+Institutional Operators
+        │
+        ▼
+────────────────────────────────────────────
+COREI Institutional Operator Workstation
+(Stage-23)
+────────────────────────────────────────────
+        │
+        ▼
+COREI Platform Intelligence Layer
+        │
+        ▼
+Trading Platform
+Infrastructure Platform
+AI Platform
+Automation Platform
+Governance Platform
+Research Platform
+Security Platform
+        │
+        ▼
+External Technologies
+(Kubernetes, Kafka, Grafana, Vault,
+Redis, PostgreSQL, FastAPI,
+TradingView, Brokers, Exchanges,
+Cloud Infrastructure, etc.)
+```
+
+The workstation provides a unified operational environment while preserving the authority of every underlying platform.
+
+Each subsystem continues to perform its own specialised responsibility.
+
+Examples include:
+
+* Kubernetes manages container orchestration.
+* Kafka manages event streaming.
+* Grafana provides observability.
+* PostgreSQL manages relational data.
+* Redis manages distributed caching.
+* Vault manages secrets.
+* Broker platforms execute trades.
+* AI models perform reasoning.
+
+The workstation does not replace these capabilities.
+
+Instead, it provides:
+
+* unified visibility,
+* operational context,
+* cross-system intelligence,
+* workflow orchestration,
+* institutional decision support,
+* execution management,
+* operational governance.
+
+The workstation therefore becomes the primary interface between human operators and institutional technology.
+
+Its architecture must remain independent from any individual technology so that future technologies can be introduced without requiring workstation redesign.
+
+
+
+# SECTION 06 — OPERATOR PERSPECTIVE
+
+## Operator Perspective
+
+The Institutional Operator Workstation is designed from the perspective of professionals whose primary responsibility is institutional decision-making rather than software operation.
+
+Operators should spend their attention on:
+
+* understanding markets,
+* managing risk,
+* analysing information,
+* executing decisions,
+* monitoring operations,
+* collaborating with teams,
+* improving institutional performance.
+
+They should not spend their time navigating complex software.
+
+The workstation therefore has one primary objective:
+
+**Reduce operational friction while increasing operational understanding.**
+
+Professional operators may include:
+
+* Institutional Traders
+* Portfolio Managers
+* Risk Managers
+* Quantitative Researchers
+* Infrastructure Engineers
+* Operations Engineers
+* Compliance Officers
+* Executive Management
+* Platform Administrators
+
+Although their responsibilities differ, they all share common operational expectations.
+
+The workstation shall therefore provide:
+
+### Continuous Situational Awareness
+
+Operators should immediately understand the current institutional state without searching across multiple systems.
+
+### Context Preservation
+
+The workstation should preserve operational context during investigation, analysis, execution, monitoring, and review.
+
+Context switching should minimise cognitive interruption.
+
+### Long-Duration Comfort
+
+Professional operators routinely spend entire working days within the workstation.
+
+The environment shall therefore minimise unnecessary clicks, repetitive navigation, excessive visual noise, and fragmented workflows.
+
+### Progressive Information Disclosure
+
+Operators should initially see only information required for their current responsibility.
+
+Additional detail should become available through investigation rather than overwhelming the primary workspace.
+
+### Operational Confidence
+
+Every action performed through the workstation should provide sufficient context, validation, traceability, and feedback to support confident institutional decision-making.
+
+The workstation is therefore designed around professional operational workflows rather than around software features.
+
+
+
+# SECTION 07 — ENGINEERING PERSPECTIVE
+
+## Engineering Perspective
+
+From an engineering perspective, Stage-23 establishes the architectural framework required to build a workstation capable of evolving for many years without architectural degradation.
+
+The engineering objective is not to create another React application.
+
+The engineering objective is to create a reusable institutional workbench capable of supporting continuously expanding operational capabilities.
+
+The workstation shall therefore be engineered around several fundamental architectural principles.
+
+### Composition over Monolithic Design
+
+Every capability shall be composable.
+
+New capabilities should be introduced without redesigning the workstation.
+
+
+
+### Extension over Modification
+
+Future growth shall occur through extensions rather than modifications to the workstation core.
+
+The core shell should remain stable while capabilities evolve independently.
+
+
+
+### Configuration over Hardcoding
+
+Layouts, workspaces, commands, permissions, workflows, and operational behaviour should be configurable wherever practical.
+
+
+
+### Separation of Concerns
+
+The workstation shall clearly separate:
+
+* presentation,
+* operational workflows,
+* business logic,
+* intelligence,
+* infrastructure integration,
+* data management.
+
+Each layer shall evolve independently.
+
+
+
+### Contract-Driven Architecture
+
+Every subsystem shall communicate through explicit contracts.
+
+No subsystem should depend upon implementation details of another subsystem.
+
+
+
+### Technology Independence
+
+The workstation architecture shall remain independent of individual libraries or frameworks.
+
+React, charting libraries, data grids, terminals, editors, or other technologies are implementation choices rather than architectural foundations.
+
+
+
+### Evolution Without Redesign
+
+Every engineering decision shall be evaluated against one question:
+
+"Will this architecture remain valid after several years of continuous institutional growth?"
+
+If the answer is uncertain, the design shall be reconsidered before implementation.
+
+
+
+# SECTION 08 — INSTITUTIONAL PERSPECTIVE
+
+## Institutional Perspective
+
+The Institutional Operator Workstation is designed for institutional-scale operation rather than individual software usage.
+
+Its architecture must therefore support organisational growth across people, systems, markets, regions, and operational complexity.
+
+The workstation shall support the institutional scalability principles established by the COREI Anchor Law.
+
+These include, but are not limited to:
+
+* Multi Account
+* Multi Broker
+* Multi Strategy
+* Multi Portfolio
+* Multi Asset
+* Multi Exchange
+* Multi Market
+* Multi Currency
+* Multi Region
+* Multi Jurisdiction
+* Multi Team
+* Multi Role
+* Multi Monitor
+* Multi Workspace
+* Multi Intelligence Engine
+* 24×7 Institutional Operations
+
+Institutional operation also requires:
+
+### Governance
+
+Operational consistency across all users and teams.
+
+
+
+### Auditability
+
+Every significant action should be traceable and reviewable.
+
+
+
+### Standardisation
+
+Common operational patterns should be shared across all workspaces while allowing controlled customisation where necessary.
+
+
+
+### Operational Continuity
+
+The workstation should preserve operational awareness during failures, recoveries, deployments, maintenance, and organisational growth.
+
+
+
+### Knowledge Preservation
+
+Institutional knowledge should remain embedded within the operational environment rather than residing solely within individuals.
+
+
+
+### Long-Term Sustainability
+
+The workstation must remain understandable, maintainable, and extensible throughout years of institutional evolution.
+
+The ultimate objective is not merely to build professional software.
+
+The objective is to establish a durable institutional operating environment capable of supporting continuously expanding operational capabilities while maintaining clarity, consistency, confidence, and professional efficiency for every operator.
+
+# SECTION 09 — FUNCTIONAL REQUIREMENTS
+
+## Functional Requirements
+
+The Institutional Operator Workstation shall function as the primary operational environment through which institutional professionals perform every aspect of daily operations.
+
+Its purpose is not to provide isolated dashboards or disconnected tools, but to deliver a unified operational workspace capable of supporting complete institutional workflows from observation through execution and continuous improvement.
+
+The workstation shall satisfy the following functional requirements.
+
+
+
+## 9.1 Unified Operational Environment
+
+The workstation shall provide a single operational environment through which all institutional activities can be performed.
+
+Operators shall not be required to continuously switch between unrelated applications simply to understand operational state.
+
+The workstation shall unify:
+
+* Trading
+* Research
+* Portfolio Management
+* Risk Management
+* Infrastructure Operations
+* Platform Operations
+* AI Intelligence
+* Automation
+* Governance
+* Knowledge
+* Monitoring
+* Operational Control
+
+within one coherent environment.
+
+
+
+## 9.2 Workspace-Centric Operation
+
+All professional work shall occur inside configurable workspaces.
+
+Each workspace represents an operational context rather than an application.
+
+Examples include:
+
+* Trading Workspace
+* Infrastructure Workspace
+* Research Workspace
+* Risk Workspace
+* Executive Workspace
+* Compliance Workspace
+
+Additional workspaces shall be supported without requiring workstation redesign.
+
+
+
+## 9.3 Unified Operational Context
+
+The workstation shall preserve operator context across:
+
+* navigation,
+* investigation,
+* analysis,
+* execution,
+* monitoring,
+* review.
+
+Changing tasks should not require rebuilding mental context.
+
+
+
+## 9.4 Integrated Intelligence
+
+The workstation shall integrate intelligence rather than merely display information.
+
+Capabilities shall include:
+
+* contextual understanding,
+* relationships,
+* dependencies,
+* recommendations,
+* impact analysis,
+* operational awareness.
+
+The workstation shall continuously assist professional decision-making.
+
+
+
+## 9.5 Cross-System Visibility
+
+Operators shall observe the complete institutional platform through one environment.
+
+Visibility shall extend across:
+
+* trading,
+* infrastructure,
+* AI,
+* automation,
+* research,
+* governance,
+* operational health.
+
+No subsystem shall become operationally isolated.
+
+
+
+## 9.6 Workflow Continuity
+
+Professional workflows shall remain continuous.
+
+The workstation shall minimise interruptions caused by:
+
+* software boundaries,
+* application switching,
+* duplicated workflows,
+* inconsistent interaction models.
+
+
+
+## 9.7 Extensible Capability Model
+
+Every future capability shall integrate into the workstation through defined architectural contracts.
+
+The addition of new capabilities shall not require redesign of the workstation shell.
+
+
+
+## 9.8 Institutional Collaboration
+
+The workstation shall support collaborative institutional operation through:
+
+* shared workspaces,
+* shared operational context,
+* shared investigation,
+* shared knowledge,
+* controlled permissions,
+* governance-aware collaboration.
+
+
+
+## 9.9 Persistent Operational Memory
+
+The workstation shall preserve:
+
+* layouts,
+* workspaces,
+* investigations,
+* operational history,
+* contextual state,
+
+allowing operators to resume work without unnecessary reconstruction.
+
+
+
+## 9.10 Operational Command Center
+
+The workstation shall function as the institutional command center for COREI.
+
+Every operational capability should be observable, understandable, controllable, and orchestrated from within the workstation.
+
+
+
+# SECTION 10 — NON-FUNCTIONAL REQUIREMENTS
+
+## Non-Functional Requirements
+
+Institutional quality depends not only upon capability but also upon operational characteristics.
+
+The workstation shall therefore satisfy the following non-functional requirements.
+
+
+
+### Reliability
+
+The workstation shall operate consistently under prolonged institutional use.
+
+Operational reliability shall remain independent of workload complexity.
+
+
+
+### Availability
+
+The workstation shall support continuous institutional operation with minimal interruption.
+
+Availability shall align with 24×7 operational requirements.
+
+
+
+### Performance
+
+Information presentation, navigation, interaction, search, and workspace management shall remain responsive regardless of operational scale.
+
+
+
+### Scalability
+
+The architecture shall support continuous institutional growth without redesign.
+
+Scalability applies equally to technology, users, workspaces, data, and operational complexity.
+
+
+
+### Adaptability
+
+Future capabilities shall integrate through architectural extension rather than architectural modification.
+
+
+
+### Maintainability
+
+Subsystems shall remain independently maintainable through clear architectural boundaries.
+
+
+
+### Consistency
+
+Interaction patterns, workflows, navigation, commands, terminology, and visual language shall remain consistent across the entire workstation.
+
+
+
+### Security
+
+The workstation shall respect institutional security architecture including:
+
+* authentication,
+* authorization,
+* auditability,
+* policy enforcement,
+* operational governance.
+
+
+
+### Observability
+
+Every workstation subsystem shall support operational observability and diagnostic visibility.
+
+
+
+### Accessibility
+
+Professional operators shall remain productive during extended operational sessions.
+
+Accessibility includes:
+
+* visual clarity,
+* keyboard efficiency,
+* reduced cognitive load,
+* adaptable presentation,
+* operator comfort.
+
+
+
+### Testability
+
+Every subsystem shall support deterministic validation before production deployment.
+
+
+
+### Technology Independence
+
+Architectural principles shall remain independent from implementation technologies.
+
+Technology may evolve.
+
+Architecture shall remain stable.
+
+
+
+# SECTION 11 — SCALABILITY
+
+## Scalability
+
+Scalability within COREI extends beyond infrastructure.
+
+Institutional operation requires simultaneous scalability across multiple dimensions.
+
+The workstation architecture shall therefore support the following scalability domains.
+
+
+
+## Technical Scalability
+
+Support increasing:
+
+* services,
+* events,
+* infrastructure,
+* integrations,
+* computational capacity.
+
+
+
+## Functional Scalability
+
+Support continuous introduction of:
+
+* capabilities,
+* workflows,
+* intelligence engines,
+* operational tools.
+
+without redesign.
+
+
+
+## Organizational Scalability
+
+Support institutional growth across:
+
+* teams,
+* departments,
+* operators,
+* business units,
+* global operations.
+
+
+
+## Operational Scalability
+
+Support increasing operational complexity including:
+
+* accounts,
+* brokers,
+* portfolios,
+* exchanges,
+* markets,
+* jurisdictions,
+* execution venues.
+
+
+
+## Workspace Scalability
+
+Support:
+
+* unlimited workspace templates,
+* custom layouts,
+* role-specific workspaces,
+* shared workspaces,
+* multi-monitor environments.
+
+
+
+## Information Scalability
+
+Present increasing operational information without increasing cognitive overload.
+
+Information density shall improve understanding rather than reduce it.
+
+
+
+## Cognitive Scalability
+
+The workstation shall continue to feel understandable as institutional complexity grows.
+
+Growth in capability must never produce proportional growth in operator confusion.
+
+
+
+## Evolutionary Scalability
+
+The architecture shall remain extensible over many years without requiring foundational redesign.
+
+
+
+# SECTION 12 — FUTURE EVOLUTION
+
+## Future Evolution
+
+The Institutional Operator Workstation is designed as a continuously evolving institutional environment rather than a completed software product.
+
+Future evolution shall occur through architecture rather than redesign.
+
+The workstation shall evolve according to the following principles.
+
+
+
+## Stable Core
+
+The workstation shell shall remain architecturally stable.
+
+Core architectural principles shall not change in response to individual feature requests.
+
+
+
+## Continuous Capability Growth
+
+New capabilities shall integrate through extension mechanisms rather than modifications to the workstation core.
+
+
+
+## Technology Evolution
+
+Implementation technologies may evolve throughout the lifetime of COREI.
+
+Architectural principles shall remain technology independent.
+
+
+
+## Institutional Adaptation
+
+The workstation shall continuously adapt to:
+
+* new markets,
+* new regulations,
+* new technologies,
+* new operator workflows,
+* new intelligence models,
+* organisational growth.
+
+
+
+## Human-Centered Evolution
+
+Future improvements shall prioritise operator effectiveness over visual novelty.
+
+Every evolution shall improve:
+
+* understanding,
+* efficiency,
+* confidence,
+* operational comfort.
+
+
+
+## Long-Term Sustainability
+
+The workstation shall remain maintainable over many years through disciplined architecture, explicit contracts, institutional governance, and constitutional adherence.
+
+The objective is not simply to create software that functions today.
+
+The objective is to establish an institutional operating environment capable of supporting the continuous evolution of COREI for the next decade and beyond without compromising architectural integrity or professional operational quality.
+
+# SECTION 13 — DEPENDENCIES
+
+## Dependencies
+
+Phase-00 is the constitutional foundation of Stage-23.
+
+It deliberately contains **no implementation dependencies**, because constitutional principles must remain stable regardless of implementation technologies.
+
+Instead, Phase-00 depends upon the institutional knowledge and architectural standards established by the COREI platform.
+
+The following documents constitute the authoritative inputs for Phase-00.
+
+
+
+## 13.1 Constitutional Dependencies
+
+The following documents establish the constitutional principles from which Phase-00 derives its architectural philosophy.
+
+### COREI Anchor Law
+
+Defines:
+
+* institutional mission,
+* engineering philosophy,
+* architectural laws,
+* scalability principles,
+* governance,
+* operational standards,
+* institutional quality.
+
+Every constitutional principle defined within Phase-00 shall remain consistent with the Anchor Law.
+
+
+
+### Master Trader Persona
+
+Defines:
+
+* institutional trading philosophy,
+* professional operator expectations,
+* operational discipline,
+* decision quality,
+* analytical depth,
+* institutional thinking.
+
+The workstation shall be engineered to support professionals operating at this standard.
+
+
+
+## 13.2 Platform Dependencies
+
+Phase-00 assumes completion of the COREI institutional backend platform.
+
+This includes:
+
+* Market Intelligence
+* Signal Intelligence
+* Decision Intelligence
+* Risk Intelligence
+* Portfolio Intelligence
+* Execution Intelligence
+* Infrastructure Platform
+* Observability Platform
+* Governance Platform
+* Security Platform
+* Automation Platform
+* AI Platform
+
+These platforms provide operational capability.
+
+Stage-23 provides the professional environment through which those capabilities are utilised.
+
+
+
+## 13.3 Architectural Dependencies
+
+Phase-00 also depends upon existing institutional architectural documentation including:
+
+* Platform Architecture
+* Infrastructure Architecture
+* Stage Architecture
+* Institutional Execution Model
+* Continuity Architecture
+* Existing Terminal Architecture
+
+These establish the operational ecosystem within which the workstation shall operate.
+
+
+
+## 13.4 Future Dependencies
+
+Every subsequent Stage-23 phase shall depend upon Phase-00.
+
+Specifically:
+
+Phase-01 through Phase-11 shall inherit:
+
+* terminology,
+* architectural principles,
+* constitutional laws,
+* engineering philosophy,
+* institutional standards,
+* scalability principles,
+* governance model,
+
+without contradiction.
+
+No future Stage-23 phase may redefine constitutional principles established by Phase-00.
+
+
+
+# SECTION 14 — DELIVERABLES
+
+## Deliverables
+
+The completion of Phase-00 shall produce the constitutional foundation for the Institutional Operator Workstation.
+
+The deliverables include both documentation and architectural outcomes.
+
+
+
+## Primary Deliverables
+
+### Constitutional Architecture
+
+A permanent constitutional definition of the Institutional Operator Workstation.
+
+
+
+### Common Vocabulary
+
+A shared institutional vocabulary for:
+
+* architects,
+* engineers,
+* operators,
+* designers,
+* future contributors.
+
+
+
+### Architectural Principles
+
+A permanent set of workstation architectural principles governing all future development.
+
+
+
+### Engineering Principles
+
+A consistent engineering philosophy supporting long-term maintainability and evolution.
+
+
+
+### Institutional Standards
+
+Definition of institutional quality expectations for every workstation capability.
+
+
+
+### Scalability Principles
+
+A complete scalability model covering:
+
+* technical,
+* operational,
+* organisational,
+* functional,
+* cognitive,
+* evolutionary scalability.
+
+
+
+### Governance Model
+
+Definition of how Stage-23 architectural decisions shall be governed.
+
+
+
+### Stage-23 Constitutional Baseline
+
+A frozen constitutional baseline against which all future workstation phases shall be validated.
+
+
+
+# SECTION 15 — ACCEPTANCE CRITERIA
+
+## Acceptance Criteria
+
+Phase-00 shall be considered complete only when the constitutional architecture has been reviewed, validated, and formally accepted.
+
+Completion is determined through architectural quality rather than implementation.
+
+The following acceptance criteria shall be satisfied.
+
+
+
+## Constitutional Completeness
+
+The constitutional purpose of the Institutional Operator Workstation has been clearly defined.
+
+
+
+## Architectural Consistency
+
+All constitutional principles remain fully aligned with:
+
+* COREI Anchor Law
+* Master Trader Persona
+
+No conflicts exist.
+
+
+
+## Institutional Clarity
+
+The workstation has been clearly distinguished from:
+
+* dashboards,
+* applications,
+* user interfaces,
+* visualisations,
+* underlying technologies.
+
+Its role as the Institutional Operator Workstation is unambiguous.
+
+
+
+## Engineering Readiness
+
+Future engineering teams possess sufficient architectural guidance to begin detailed workstation architecture without introducing constitutional ambiguity.
+
+
+
+## Scalability Validation
+
+The constitutional architecture demonstrates support for long-term institutional scalability including:
+
+* additional operators,
+* additional workspaces,
+* additional capabilities,
+* additional technologies,
+* organisational growth.
+
+
+
+## Future Phase Readiness
+
+Every subsequent Stage-23 phase can begin using Phase-00 as its authoritative constitutional reference.
+
+
+
+## Constitutional Freeze
+
+Following review and approval, Phase-00 becomes frozen.
+
+Future modifications require formal architectural review because constitutional changes affect every subsequent workstation phase.
+
+
+
+# SECTION 16 — RELATED DOCUMENTS
+
+## Related Documents
+
+Phase-00 exists within the broader COREI institutional documentation hierarchy.
+
+The following documents are considered authoritative references.
+
+
+
+## Constitutional References
+
+* COREI Anchor Law
+* Master Trader Persona
+
+
+
+## Platform References
+
+* Platform Architecture
+* Infrastructure Architecture
+* Institutional Execution Lifecycle
+* Stage Architecture
+* Existing Backend Services
+* Existing Intelligence Domains
+
+
+
+## Stage References
+
+Previous Stages:
+
+Stage-01 through Stage-22
+
+These establish the institutional backend platform.
+
+
+
+Current Stage:
+
+Stage-23
+
+Institutional Operator Workstation
+
+Phase-00 establishes the constitutional foundation.
+
+
+
+Future Phases
+
+Phase-01
+
+Discovery & Reverse Engineering
+
+↓
+
+Phase-02
+
+Operator Architecture
+
+↓
+
+Phase-03
+
+Operational Environment Architecture
+
+↓
+
+Phase-04
+
+Experience Architecture
+
+↓
+
+Phase-05
+
+Technology Landscape
+
+↓
+
+Phase-06
+
+Workbench Architecture
+
+↓
+
+Phase-07
+
+Design System
+
+↓
+
+Phase-08
+
+Component Ecosystem
+
+↓
+
+Phase-09
+
+Workspace Library
+
+↓
+
+Phase-10
+
+Intelligence Layer
+
+↓
+
+Phase-11
+
+Operator Optimisation
+
+Each future phase shall derive its constitutional authority from Phase-00.
+
+
+
+## Closing Statement
+
+Phase-00 is not an implementation phase.
+
+It is not a technology phase.
+
+It is not a user interface phase.
+
+It is the constitutional foundation of the COREI Institutional Operator Workstation.
+
+The purpose of this phase is to ensure that every future architectural, engineering, design, operational, and implementation decision remains aligned with the long-term institutional vision established by the COREI Anchor Law and embodied by the Master Trader Persona.
+
+With the completion and constitutional freeze of Phase-00, Stage-23 transitions from defining *why* the Institutional Operator Workstation exists to discovering *how* the world's best operational environments solve similar problems.
+
+Phase-01 therefore begins the structured discovery and reverse engineering of institutional workstations, with every finding evaluated against the constitutional principles established within Phase-00.
+
+# Phase-00 Review
+
+After completing all sixteen sections, I think Phase-00 has become the constitutional document of Stage-23, but I would make one observation before we proceed.
+
+I believe Phase-01 (Discovery & Reverse Engineering) will be the first phase where COREI starts becoming truly unique. Rather than simply researching VS Code, Bloomberg, TradingView, Grafana, JetBrains, and institutional platforms, we will reverse engineer why they are successful, extract reusable engineering principles, compare them against the Anchor Law and Master Trader Persona, and determine what belongs in COREI and what does not.
+
+In other words:
+
+Phase-00 defines the Constitution.
+Phase-01 discovers the world's best engineering practices.
+Phase-02 begins designing the operator itself.
+
+That creates a logical and traceable progression for the remainder of Stage-23.

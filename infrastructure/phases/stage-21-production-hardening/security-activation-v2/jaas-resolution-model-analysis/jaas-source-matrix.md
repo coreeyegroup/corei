@@ -1,0 +1,29 @@
+# JAAS SOURCE MATRIX
+
+SOURCE
+
+listener.name.sasl_ssl.scram-sha-256.sasl.jaas.config
+
+STATUS
+
+PRESENT
+
+SOURCE
+
+KafkaServer JAAS
+
+STATUS
+
+PRESENT
+
+SOURCE
+
+KAFKA_OPTS
+
+STATUS
+
+PRESENT
+
+RESOLUTION SOURCE
+
+UNDER INVESTIGATION

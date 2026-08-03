@@ -1,0 +1,35 @@
+# AUTHENTICATION DECISION TREE
+
+LISTENER STARTUP
+
+↓
+
+SaslChannelBuilder
+
+↓
+
+LoginManager
+
+↓
+
+Authentication Selection
+
+↓
+
+SCRAM
+
+OR
+
+Kerberos
+
+CURRENT RESULT
+
+Kerberos
+
+TARGET RESULT
+
+SCRAM
+
+STATUS
+
+UNDER INVESTIGATION

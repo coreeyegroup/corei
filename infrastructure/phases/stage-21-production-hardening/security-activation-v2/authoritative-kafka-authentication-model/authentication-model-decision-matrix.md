@@ -1,0 +1,35 @@
+# AUTHENTICATION MODEL DECISION MATRIX
+
+OPTION A
+
+Listener JAAS Only
+
+STATUS
+
+OPEN
+
+OPTION B
+
+KafkaServer Global JAAS Only
+
+STATUS
+
+OPEN
+
+OPTION C
+
+Listener JAAS
++
+KafkaServer Global JAAS
+
+STATUS
+
+OPEN
+
+TARGET
+
+Select one authoritative model.
+
+STATUS
+
+UNDER REVIEW

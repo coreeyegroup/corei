@@ -1,0 +1,98 @@
+/* src/styles/layout.css */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+.main-panels {
+  flex: 1;
+  min-height: 0;
+}
+.bottom-panel-group {
+  height: 200px;
+  min-height: 80px;
+  max-height: 400px;
+  flex-shrink: 0;
+}
+.resize-handle-horizontal {
+  width: 4px;
+  background: var(--border-color);
+  cursor: col-resize;
+  transition: background 0.2s;
+}
+.resize-handle-horizontal:hover {
+  background: var(--accent-teal);
+}
+.resize-handle-vertical {
+  height: 4px;
+  background: var(--border-color);
+  cursor: row-resize;
+  transition: background 0.2s;
+}
+.resize-handle-vertical:hover {
+  background: var(--accent-teal);
+}
+.main-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+.left-sidebar-wrapper {
+  width: 220px;
+  min-width: 120px;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border-color);
+  overflow: hidden;
+}
+.workspace-wrapper {
+  flex: 1;
+  background: var(--bg-primary);
+  overflow: hidden;
+}
+.right-sidebar-wrapper {
+  width: 200px;
+  min-width: 100px;
+  background: var(--bg-secondary);
+  border-left: 1px solid var(--border-color);
+  overflow: hidden;
+}
+.bottom-panel-wrapper {
+  height: 160px;
+  min-height: 80px;
+  border-top: 1px solid var(--border-color);
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+/* ─── Professional scrollbars ─── */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.3); /* #94A3B8 with opacity */
+  border-radius: 2px;
+  transition: background 0.2s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.6);
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.3) transparent;
+}

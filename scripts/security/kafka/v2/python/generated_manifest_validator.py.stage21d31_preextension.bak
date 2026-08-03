@@ -1,0 +1,150 @@
+#!/usr/bin/env python3
+
+import yaml
+from pathlib import Path
+
+
+INPUT_FILE = Path(
+    "state/security/kafka/v2/manifests/secured-statefulset.yaml"
+)
+
+OUTPUT_FILE = Path(
+    "state/security/kafka/v2/reports/generated-manifest-validation.yaml"
+)
+
+
+def count_by_name(items, target):
+
+    total = 0
+
+    for item in items:
+        if item.get("name") == target:
+            total += 1
+
+    return total
+
+
+def main():
+
+    manifest = yaml.safe_load(
+        INPUT_FILE.read_text()
+    )
+
+    pod_spec = (
+        manifest["spec"]
+        ["template"]
+        ["spec"]
+    )
+
+    kafka_container = None
+
+    for container in pod_spec["containers"]:
+        if container["name"] == "kafka":
+            kafka_container = container
+            break
+
+    if kafka_container is None:
+        raise RuntimeError(
+            "kafka container missing"
+        )
+
+    volumes = pod_spec.get(
+        "volumes",
+        []
+    )
+
+    mounts = kafka_container.get(
+        "volumeMounts",
+        []
+    )
+
+    env = kafka_container.get(
+        "env",
+        []
+    )
+
+    ports = kafka_container.get(
+        "ports",
+        []
+    )
+
+    checks = {
+
+        "tls_volume_once":
+            count_by_name(
+                volumes,
+                "kafka-runtime-tls"
+            ) == 1,
+
+        "jaas_volume_once":
+            count_by_name(
+                volumes,
+                "kafka-security-runtime"
+            ) == 1,
+
+        "tls_mount_once":
+            count_by_name(
+                mounts,
+                "kafka-runtime-tls"
+            ) == 1,
+
+        "jaas_mount_once":
+            count_by_name(
+                mounts,
+                "kafka-security-runtime"
+            ) == 1,
+
+        "kafka_opts_once":
+            count_by_name(
+                env,
+                "KAFKA_OPTS"
+            ) == 1,
+
+        "port_9094_once":
+            len([
+                p
+                for p in ports
+                if p.get(
+                    "containerPort"
+                ) == 9094
+            ]) == 1
+    }
+
+    passed = all(
+        checks.values()
+    )
+
+    report = {
+        "status":
+            "PASS" if passed else "FAIL",
+        "checks":
+            checks
+    }
+
+    OUTPUT_FILE.parent.mkdir(
+        parents=True,
+        exist_ok=True
+    )
+
+    with open(
+        OUTPUT_FILE,
+        "w"
+    ) as f:
+        yaml.safe_dump(
+            report,
+            f,
+            sort_keys=False
+        )
+
+    if not passed:
+        raise RuntimeError(
+            "generated manifest validation failed"
+        )
+
+    print(
+        "[PASS] generated manifest validated"
+    )
+
+
+if __name__ == "__main__":
+    main()

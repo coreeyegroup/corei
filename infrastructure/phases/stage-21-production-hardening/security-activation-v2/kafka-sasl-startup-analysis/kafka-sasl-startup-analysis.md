@@ -1,0 +1,30 @@
+# KAFKA SASL STARTUP ANALYSIS
+
+STATUS
+
+ACTIVE
+
+OBJECTIVE
+
+Determine exact Kafka startup requirement
+for SASL_SSL listener initialization.
+
+OBSERVED FAILURE
+
+No serviceName defined in either JAAS or Kafka config
+
+RUNTIME COMPONENT
+
+SocketServer
+
+AUTHENTICATION LAYER
+
+SASL
+
+SECURITY PROFILE
+
+RECOVERY
+
+ROOT CAUSE
+
+UNDER INVESTIGATION

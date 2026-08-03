@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>COREI · Builder (Columns)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      height: 100%; overflow: hidden;
+      background: #0b0e14; color: #e2e8f0;
+      font-family: 'Inter', system-ui, sans-serif; font-size: 13px; line-height: 1.4;
+    }
+    ::-webkit-scrollbar { width: 3px; height: 3px; }
+    ::-webkit-scrollbar-thumb { background: #1f2937; border-radius: 2px; }
+
+    .app {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      height: 100vh; overflow: hidden;
+    }
+
+    /* Sidebar (same) */
+    .sidebar {
+      background: #0f1620; border-right: 1px solid #1f2937;
+      padding: 12px 10px; display: flex; flex-direction: column; overflow-y: auto;
+    }
+    .sidebar-logo {
+      display: flex; align-items: center; gap: 8px;
+      padding-bottom: 12px; border-bottom: 1px solid #1f2937; margin-bottom: 12px;
+    }
+    .sidebar-logo-icon { font-size: 20px; font-weight: 800; color: #00e5a0; }
+    .sidebar-logo-text { font-weight: 700; font-size: 15px; color: #f0f6fc; }
+    .sidebar-logo-text span { font-weight: 400; color: #6b7a8f; font-size: 12px; }
+    .nav { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+    .nav-item {
+      display: flex; align-items: center; gap: 10px; padding: 6px 10px;
+      border-radius: 4px; color: #8b9ab0; font-size: 12px; font-weight: 500;
+      cursor: pointer; transition: 0.15s;
+    }
+    .nav-item:hover { background: #1a2432; color: #e2e8f0; }
+    .nav-item.active { background: #1a2432; color: #00e5a0; }
+    .nav-icon { font-size: 16px; width: 24px; text-align: center; }
+    .quick-stats {
+      border-top: 1px solid #1f2937; padding-top: 10px;
+      display: flex; flex-direction: column; gap: 2px;
+    }
+    .quick-stat {
+      display: flex; justify-content: space-between; font-size: 11px; padding: 2px 4px;
+    }
+    .quick-stat-label { color: #6b7a8f; }
+    .quick-stat-value { font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+    .quick-stat-value.green { color: #00e5a0; }
+    .quick-stat-value.red { color: #ff4d4d; }
+    .quick-stat-value.yellow { color: #f59e0b; }
+    .sidebar-footer {
+      border-top: 1px solid #1f2937; padding-top: 8px; font-size: 10px;
+      color: #6b7a8f; display: flex; justify-content: space-between;
+    }
+
+    /* Main content */
+    .main {
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      grid-template-columns: 1fr;
+      gap: 4px; padding: 6px 8px; overflow: hidden;
+      background: #0b0e14;
+    }
+
+    /* Top bar */
+    .topbar {
+      display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid #1f2937; padding-bottom: 4px; margin-bottom: 2px;
+    }
+    .topbar-title { font-weight: 700; font-size: 15px; color: #f0f6fc; display: flex; align-items: center; gap: 8px; }
+    .topbar-title .env-badge {
+      font-size: 9px; font-weight: 600; text-transform: uppercase;
+      background: #1a2432; color: #00e5a0; padding: 0 8px; border-radius: 10px; line-height: 18px;
+    }
+    .topbar-right { display: flex; align-items: center; gap: 12px; font-size: 12px; color: #8b9ab0; }
+    .topbar-right .clock { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #e2e8f0; font-weight: 500; }
+    .topbar-right .avatar {
+      width: 28px; height: 28px; border-radius: 50%; background: #1f2937;
+      display: flex; align-items: center; justify-content: center; font-weight: 600; color: #00e5a0;
+      border: 1px solid #2d3a4f;
+    }
+
+    /* KPI */
+    .kpi-grid {
+      display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 4px; margin-bottom: 2px;
+    }
+    .kpi-card {
+      background: #131a24; border: 1px solid #1f2937; border-radius: 4px; padding: 6px 10px;
+    }
+    .kpi-label { font-size: 9px; font-weight: 600; text-transform: uppercase; color: #6b7a8f; }
+    .kpi-value { font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 700; color: #f0f6fc; line-height: 1.2; }
+    .kpi-value.green { color: #00e5a0; }
+    .kpi-value.red { color: #ff4d4d; }
+    .kpi-value.yellow { color: #f59e0b; }
+    .kpi-sub { font-size: 9px; color: #6b7a8f; }
+
+    /* Builder Panel – multi-column form */
+    .builder-panel {
+      background: #131a24; border: 1px solid #1f2937; border-radius: 4px;
+      padding: 6px 10px; display: flex; flex-direction: column; overflow: hidden;
+      min-height: 200px;
+    }
+    .panel-header {
+      display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid #1f2937; padding-bottom: 3px; margin-bottom: 4px;
+      flex-wrap: wrap; gap: 4px;
+    }
+    .panel-header .title { font-size: 10px; font-weight: 600; text-transform: uppercase; color: #6b7a8f; }
+    .panel-header .actions {
+      display: flex; gap: 6px; align-items: center;
+    }
+    .panel-header .actions button {
+      background: #00e5a0; border: none; border-radius: 3px; color: #0b0e14;
+      font-weight: 700; font-size: 11px; padding: 2px 14px; height: 24px; line-height: 24px;
+      cursor: pointer; font-family: 'Inter', sans-serif; transition: 0.15s;
+    }
+    .panel-header .actions button:hover:not(:disabled) { background: #00cc8f; }
+    .panel-header .actions button:disabled { opacity: 0.35; cursor: not-allowed; }
+    .panel-header .actions .secondary {
+      background: transparent; border: 1px solid #1f2937; color: #8b9ab0;
+    }
+    .panel-header .actions .secondary:hover { background: #1f2937; color: #e2e8f0; }
+
+    /* Form in a grid with 3 columns */
+    .form-grid {
+      flex: 1; overflow-y: auto; padding-right: 2px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px 16px;
+      align-content: start;
+    }
+    .form-grid .section {
+      border: 1px solid #1a2432; border-radius: 3px; padding: 4px 8px;
+      background: #0f1620;
+    }
+    .form-grid .section-title {
+      font-size: 8px; font-weight: 700; text-transform: uppercase;
+      color: #6b7a8f; letter-spacing: 0.4px; border-bottom: 1px solid #1a2432;
+      padding-bottom: 2px; margin-bottom: 4px;
+    }
+    .field-row {
+      display: flex; align-items: center; gap: 4px 6px;
+      padding: 1px 0; flex-wrap: wrap;
+    }
+    .field-row label {
+      font-size: 9px; font-weight: 500; color: #8b9ab0; min-width: 50px;
+    }
+    .field-row input,
+    .field-row select {
+      background: #0b0e14; border: 1px solid #1f2937; border-radius: 2px;
+      color: #e2e8f0; font-size: 11px; padding: 1px 4px; height: 20px;
+      font-family: 'Inter', sans-serif; flex: 1; min-width: 60px; outline: none;
+    }
+    .field-row input:focus,
+    .field-row select:focus { border-color: #00e5a0; }
+    .field-row input[type="checkbox"] {
+      width: 14px; height: 14px; cursor: pointer; flex: 0 0 auto;
+      accent-color: #00e5a0;
+    }
+    .field-row .hint { font-size: 8px; color: #6b7a8f; margin-left: auto; }
+
+    /* Make some sections span multiple columns if needed */
+    .section-full { grid-column: 1 / -1; }
+
+    /* Bottom Ribbon with Tabs */
+    .bottom-ribbon {
+      background: #0f1620; border: 1px solid #1f2937; border-radius: 4px;
+      display: flex; flex-direction: column;
+      min-height: 100px; max-height: 160px; overflow: hidden;
+    }
+    .ribbon-tabs {
+      display: flex; border-bottom: 1px solid #1f2937; padding: 0 8px;
+      flex-shrink: 0;
+    }
+    .ribbon-tabs .tab {
+      font-size: 9px; font-weight: 600; text-transform: uppercase;
+      padding: 3px 12px; cursor: pointer; color: #6b7a8f;
+      border-bottom: 2px solid transparent; transition: 0.15s;
+      font-family: 'Inter', sans-serif;
+    }
+    .ribbon-tabs .tab:hover { color: #e2e8f0; }
+    .ribbon-tabs .tab.active { color: #00e5a0; border-bottom-color: #00e5a0; }
+    .ribbon-tabs .tab-actions {
+      margin-left: auto; display: flex; gap: 8px; align-items: center;
+    }
+    .ribbon-tabs .tab-actions button {
+      background: none; border: none; color: #6b7a8f; font-size: 9px;
+      cursor: pointer; text-decoration: underline; font-family: 'Inter', sans-serif;
+    }
+    .ribbon-tabs .tab-actions button:hover { color: #e2e8f0; }
+
+    .tab-content {
+      flex: 1; overflow-y: auto; padding: 4px 8px;
+      font-family: 'JetBrains Mono', monospace; font-size: 10px; line-height: 1.6;
+      white-space: pre-wrap; word-break: break-all;
+    }
+    .tab-content.hidden { display: none; }
+
+    .log-line { display: flex; gap: 8px; padding: 0 2px; }
+    .log-line .log-time { color: #4a5a72; flex-shrink: 0; font-size: 9px; }
+    .log-line .log-level { font-weight: 600; flex-shrink: 0; font-size: 9px; min-width: 36px; }
+    .log-line .log-level.info { color: #60a5fa; }
+    .log-line .log-level.success { color: #00e5a0; }
+    .log-line .log-level.error { color: #ff4d4d; }
+    .log-line .log-level.warn { color: #f59e0b; }
+    .log-line .log-message { color: #e2e8f0; }
+
+    /* Responsive: switch to 2 columns on smaller screens */
+    @media (max-width: 1100px) {
+      .form-grid { grid-template-columns: 1fr 1fr; }
+      .section-full { grid-column: 1 / -1; }
+    }
+    @media (max-width: 780px) {
+      .app { grid-template-columns: 48px 1fr; }
+      .sidebar { width: 48px; padding: 10px 6px; }
+      .sidebar-logo-text, .nav-item .nav-label, .quick-stat-label, .quick-stat-value, .sidebar-footer { display: none; }
+      .nav-item { justify-content: center; padding: 6px 0; }
+      .quick-stat { justify-content: center; }
+      .form-grid { grid-template-columns: 1fr; }
+      .kpi-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <span class="sidebar-logo-icon">⌘</span>
+      <span class="sidebar-logo-text">COREI <span>· builder</span></span>
+    </div>
+    <nav class="nav">
+      <div class="nav-item active"><span class="nav-icon">◇</span><span class="nav-label">Builder</span></div>
+      <div class="nav-item"><span class="nav-icon">⊞</span><span class="nav-label">Workflows</span></div>
+      <div class="nav-item"><span class="nav-icon">⏱</span><span class="nav-label">History</span></div>
+      <div class="nav-item"><span class="nav-icon">⚙</span><span class="nav-label">Settings</span></div>
+    </nav>
+    <div class="quick-stats">
+      <div class="quick-stat"><span class="quick-stat-label">Workflows</span><span class="quick-stat-value">12</span></div>
+      <div class="quick-stat"><span class="quick-stat-label">Active</span><span class="quick-stat-value green">3</span></div>
+      <div class="quick-stat"><span class="quick-stat-label">Queue</span><span class="quick-stat-value yellow">1</span></div>
+      <div class="quick-stat"><span class="quick-stat-label">Errors</span><span class="quick-stat-value red">0</span></div>
+    </div>
+    <div class="sidebar-footer">
+      <span>v1.0.0</span>
+      <span><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#00e5a0;margin-right:4px;"></span>n8n</span>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <!-- Top bar -->
+    <header class="topbar">
+      <div class="topbar-title">
+        Request Builder <span class="env-badge">● live</span>
+      </div>
+      <div class="topbar-right">
+        <span class="clock" id="liveClock">--:--:--</span>
+        <div class="avatar">JD</div>
+      </div>
+    </header>
+
+    <!-- KPI -->
+    <section class="kpi-grid">
+      <div class="kpi-card"><span class="kpi-label">Total Executions</span><span class="kpi-value">1,284</span><span class="kpi-sub">+12%</span></div>
+      <div class="kpi-card"><span class="kpi-label">Avg. Duration</span><span class="kpi-value green">142ms</span><span class="kpi-sub">-8ms</span></div>
+      <div class="kpi-card"><span class="kpi-label">Success Rate</span><span class="kpi-value green">99.2%</span><span class="kpi-sub">+0.3%</span></div>
+      <div class="kpi-card"><span class="kpi-label">Active Workflows</span><span class="kpi-value">6</span><span class="kpi-sub">2 paused</span></div>
+    </section>
+
+    <!-- Builder Panel -->
+    <section class="builder-panel">
+      <div class="panel-header">
+        <span class="title">Market Request · WF001</span>
+        <div class="actions">
+          <button class="secondary" id="previewBtn">Preview JSON</button>
+          <button id="executeBtn">▶ Execute</button>
+        </div>
+      </div>
+
+      <!-- Form in 3‑column grid -->
+      <div class="form-grid" id="formGrid">
+        <!-- Workflow -->
+        <div class="section">
+          <div class="section-title">Workflow</div>
+          <div class="field-row"><label>ID</label><input type="text" id="wf_id" value="WF001" /></div>
+          <div class="field-row"><label>Name</label><input type="text" id="wf_name" value="MARKET_REQUEST_ENGINE" /></div>
+          <div class="field-row"><label>Version</label><input type="text" id="wf_version" value="1.0.0" /></div>
+          <div class="field-row"><label>Schema</label><input type="text" id="wf_schema" value="market_request_v1" /></div>
+        </div>
+
+        <!-- Runtime -->
+        <div class="section">
+          <div class="section-title">Runtime</div>
+          <div class="field-row"><label>Environment</label><input type="text" id="runtime_env" value="PRODUCTION" /></div>
+          <div class="field-row"><label>Timeout (ms)</label><input type="number" id="runtime_timeout" value="30000" /></div>
+          <div class="field-row"><label>Retry</label><input type="checkbox" id="runtime_retry" checked /></div>
+          <div class="field-row"><label>Count</label><input type="number" id="runtime_retry_count" value="3" /></div>
+        </div>
+
+        <!-- Market (spans 2 columns) -->
+        <div class="section section-full">
+          <div class="section-title">Market</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:2px 10px;">
+            <div class="field-row"><label>Exchange</label><input type="text" id="market_exchange" value="NSE" /></div>
+            <div class="field-row"><label>Segment</label><input type="text" id="market_segment" value="INDEX" /></div>
+            <div class="field-row"><label>Asset Class</label><input type="text" id="market_asset" value="INDEX" /></div>
+            <div class="field-row" style="grid-column:1/3;"><label>Primary Key</label><input type="text" id="market_primary" value="NSE_INDEX|Nifty 50" /></div>
+            <div class="field-row"><label>Secondary</label><input type="text" id="market_secondary" value="NSE_INDEX|Nifty Bank" /></div>
+            <div class="field-row"><label>Volatility</label><input type="text" id="market_volatility" value="NSE_INDEX|India VIX" /></div>
+          </div>
+        </div>
+
+        <!-- Provider (spans 2 columns) -->
+        <div class="section section-full">
+          <div class="section-title">Provider</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:2px 10px;">
+            <div class="field-row"><label>Name</label><input type="text" id="provider_name" value="UPSTOX" /></div>
+            <div class="field-row"><label>Version</label><input type="text" id="provider_version" value="v2" /></div>
+            <div class="field-row"><label>Env</label><input type="text" id="provider_env" value="PRODUCTION" /></div>
+            <div class="field-row" style="grid-column:1/2;"><label>Base v2</label><input type="text" id="provider_url_v2" value="https://api.upstox.com/v2" /></div>
+            <div class="field-row" style="grid-column:2/3;"><label>Base v3</label><input type="text" id="provider_url_v3" value="https://api.upstox.com/v3" /></div>
+            <div class="field-row"><label>Method</label>
+              <select id="provider_method"><option value="GET" selected>GET</option><option value="POST">POST</option></select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Request (spans 2 columns) -->
+        <div class="section section-full">
+          <div class="section-title">Request</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:2px 10px;">
+            <div class="field-row"><label>Type</label>
+              <select id="req_type">
+                <option value="MARKET_REQUEST" selected>MARKET_REQUEST</option>
+                <option value="HISTORICAL_REQUEST">HISTORICAL_REQUEST</option>
+                <option value="INTRADAY_REQUEST">INTRADAY_REQUEST</option>
+              </select>
+            </div>
+            <div class="field-row"><label>Mode</label>
+              <select id="req_mode"><option value="LIVE" selected>LIVE</option><option value="BACKTEST">BACKTEST</option></select>
+            </div>
+            <div class="field-row"><label>Source</label><input type="text" id="req_source" value="WORKFLOW" /></div>
+            <div class="field-row"><label>Priority</label>
+              <select id="req_priority"><option value="NORMAL" selected>NORMAL</option><option value="HIGH">HIGH</option><option value="LOW">LOW</option></select>
+            </div>
+            <div class="field-row"><label>Requested By</label><input type="text" id="req_by" value="SYSTEM" /></div>
+            <div class="field-row"><label>Schema Ver</label><input type="text" id="req_schema" value="market_request_v1" /></div>
+          </div>
+          <!-- Historical sub-block -->
+          <div style="border-left:2px solid #1f2937;padding-left:8px;margin-top:4px;display:grid; grid-template-columns:1fr 1fr 1fr; gap:2px 10px;">
+            <div class="field-row"><label>Hist Enabled</label><input type="checkbox" id="hist_enabled" checked /></div>
+            <div class="field-row"><label>Interval</label>
+              <select id="hist_interval"><option value="day" selected>day</option><option value="week">week</option><option value="month">month</option></select>
+            </div>
+            <div class="field-row"><label>From</label><input type="date" id="hist_from" value="2026-02-01" /></div>
+            <div class="field-row"><label>To</label><input type="date" id="hist_to" value="2026-08-01" /></div>
+          </div>
+        </div>
+
+        <!-- Validation (spans 2 columns) -->
+        <div class="section section-full">
+          <div class="section-title">Validation</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:2px 10px;">
+            <div class="field-row"><label>Status</label><input type="text" id="val_status" value="PASS" /></div>
+            <div class="field-row"><label>Validated</label><input type="checkbox" id="val_validated" checked /></div>
+            <div class="field-row"><label>Version</label><input type="text" id="val_version" value="1.0.0" /></div>
+            <div class="field-row" style="grid-column:1/3;"><label>Timestamp</label><input type="datetime-local" id="val_timestamp" value="2026-07-31T21:43:19" /></div>
+          </div>
+        </div>
+
+        <!-- Audit (spans 2 columns) -->
+        <div class="section section-full">
+          <div class="section-title">Audit</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:2px 10px;">
+            <div class="field-row"><label>Version</label><input type="text" id="audit_version" value="1.0.0" /></div>
+            <div class="field-row"><label>WF ID</label><input type="text" id="audit_wf_id" value="WF001" /></div>
+            <div class="field-row"><label>WF Name</label><input type="text" id="audit_wf_name" value="MARKET_REQUEST_ENGINE" /></div>
+            <div class="field-row"><label>Event</label><input type="text" id="audit_event" value="MARKET_REQUEST_CREATED" /></div>
+            <div class="field-row"><label>Status</label><input type="text" id="audit_status" value="SUCCESS" /></div>
+            <div class="field-row"><label>Trace</label><input type="checkbox" id="audit_trace" checked /></div>
+            <div class="field-row"><label>Logging</label><input type="checkbox" id="audit_logging" checked /></div>
+            <div class="field-row" style="grid-column:1/3;"><label>Created</label><input type="datetime-local" id="audit_created" value="2026-07-31T21:43:19" /></div>
+          </div>
+        </div>
+
+        <!-- Handoff (spans 2 columns) -->
+        <div class="section section-full">
+          <div class="section-title">Handoff</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:2px 10px;">
+            <div class="field-row"><label>Source WF</label><input type="text" id="handoff_source_wf" value="WF001" /></div>
+            <div class="field-row"><label>Source Name</label><input type="text" id="handoff_source_name" value="MARKET_REQUEST_ENGINE" /></div>
+            <div class="field-row"><label>Source Node</label><input type="text" id="handoff_source_node" value="WF001_204_HANDOFF_DATA_COLLECTION" /></div>
+            <div class="field-row"><label>Target WF</label><input type="text" id="handoff_target_wf" value="WF002_DATA_COLLECTION" /></div>
+            <div class="field-row"><label>Target Entry</label><input type="text" id="handoff_target_node" value="WF002_001_REQUEST_ROUTER" /></div>
+            <div class="field-row"><label>Status</label><input type="text" id="handoff_status" value="READY" /></div>
+            <div class="field-row"><label>Payload Ver</label><input type="text" id="handoff_payload" value="1.0.0" /></div>
+            <div class="field-row" style="grid-column:1/3;"><label>Handoff TS</label><input type="datetime-local" id="handoff_timestamp" value="2026-07-31T21:43:19" /></div>
+            <div class="field-row" style="grid-column:1/3;"><label>Correlation ID</label><input type="text" id="handoff_corr" value="WF001-1785534199121" /></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bottom Ribbon with Tabs -->
+    <section class="bottom-ribbon">
+      <div class="ribbon-tabs">
+        <span class="tab active" data-tab="log">Communication Log</span>
+        <span class="tab" data-tab="preview">Preview JSON</span>
+        <div class="tab-actions">
+          <button id="logClear">Clear</button>
+          <button id="logFollow" style="text-decoration:none;color:#00e5a0;">● Follow</button>
+        </div>
+      </div>
+      <!-- Log Tab -->
+      <div class="tab-content" id="tab-log">
+        <div id="logBody"><div class="log-line"><span class="log-time">--:--:--</span><span class="log-level info">INFO</span><span class="log-message">Ready. Build your request and execute.</span></div></div>
+      </div>
+      <!-- Preview Tab -->
+      <div class="tab-content hidden" id="tab-preview">
+        <div id="previewContent" style="color:#6b7a8f;">Click "Preview JSON" or execute to see the request payload.</div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+  (function() {
+    'use strict';
+
+    // ---- DOM refs ----
+    const $ = (id) => document.getElementById(id);
+    const logBody = document.getElementById('logBody');
+    const previewContent = document.getElementById('previewContent');
+    const logClear = document.getElementById('logClear');
+    const logFollow = document.getElementById('logFollow');
+    const executeBtn = document.getElementById('executeBtn');
+    const previewBtn = document.getElementById('previewBtn');
+    const clockEl = document.getElementById('liveClock');
+    const tabs = document.querySelectorAll('.tab');
+    const tabLog = document.getElementById('tab-log');
+    const tabPreview = document.getElementById('tab-preview');
+
+    let follow = true;
+    let logs = [];
+
+    // ---- Logging ----
+    function addLog(level, message) {
+      const ts = new Date().toISOString().replace('T',' ').slice(0,19);
+      logs.push({ ts, level, message });
+      if (logs.length > 300) logs.shift();
+      renderLogs();
+    }
+
+    function renderLogs() {
+      if (!follow) return;
+      const html = logs.map(l =>
+        `<div class="log-line">
+          <span class="log-time">${l.ts}</span>
+          <span class="log-level ${l.level}">${l.level.toUpperCase()}</span>
+          <span class="log-message">${l.message}</span>
+        </div>`
+      ).join('');
+      logBody.innerHTML = html || '<div style="color:#4a5a72;font-size:10px;padding:4px 0;">No logs yet.</div>';
+      logBody.scrollTop = logBody.scrollHeight;
+    }
+
+    function clearLogs() {
+      logs = [];
+      renderLogs();
+      addLog('info', 'Log cleared.');
+    }
+
+    // ---- Build request ----
+    function buildRequest() {
+      const getVal = (id) => document.getElementById(id).value;
+      const getCheck = (id) => document.getElementById(id).checked;
+      return {
+        workflow: {
+          id: getVal('wf_id'),
+          name: getVal('wf_name'),
+          version: getVal('wf_version'),
+          schema: getVal('wf_schema')
+        },
+        runtime: {
+          environment: getVal('runtime_env'),
+          timeout_ms: parseInt(getVal('runtime_timeout'), 10),
+          retry_enabled: getCheck('runtime_retry'),
+          retry_count: parseInt(getVal('runtime_retry_count'), 10)
+        },
+        market: {
+          exchange: getVal('market_exchange'),
+          segment: getVal('market_segment'),
+          asset_class: getVal('market_asset'),
+          primary_instrument_key: getVal('market_primary'),
+          secondary_instrument_key: getVal('market_secondary'),
+          volatility_instrument_key: getVal('market_volatility')
+        },
+        provider: {
+          provider_name: getVal('provider_name'),
+          provider_version: getVal('provider_version'),
+          provider_environment: getVal('provider_env'),
+          base_url_v2: getVal('provider_url_v2'),
+          base_url_v3: getVal('provider_url_v3'),
+          http_method: getVal('provider_method')
+        },
+        request: {
+          request_type: getVal('req_type'),
+          request_mode: getVal('req_mode'),
+          request_source: getVal('req_source'),
+          priority: getVal('req_priority'),
+          requested_by: getVal('req_by'),
+          schema_version: getVal('req_schema'),
+          historical: {
+            enabled: getCheck('hist_enabled'),
+            interval: getVal('hist_interval'),
+            from_date: getVal('hist_from'),
+            to_date: getVal('hist_to')
+          }
+        },
+        validation: {
+          status: getVal('val_status'),
+          validated: getCheck('val_validated'),
+          validation_version: getVal('val_version'),
+          validation_timestamp: new Date(getVal('val_timestamp')).toISOString(),
+          checks: {
+            workflow: true,
+            runtime: true,
+            market: true,
+            provider: true,
+            request: true
+          },
+          errors: [],
+          warnings: []
+        },
+        audit: {
+          audit_version: getVal('audit_version'),
+          workflow_id: getVal('audit_wf_id'),
+          workflow_name: getVal('audit_wf_name'),
+          event: getVal('audit_event'),
+          status: getVal('audit_status'),
+          trace_enabled: getCheck('audit_trace'),
+          logging_enabled: getCheck('audit_logging'),
+          created_at: new Date(getVal('audit_created')).toISOString()
+        },
+        handoff: {
+          source_workflow: getVal('handoff_source_wf'),
+          source_workflow_name: getVal('handoff_source_name'),
+          source_node: getVal('handoff_source_node'),
+          target_workflow: getVal('handoff_target_wf'),
+          target_entry_node: getVal('handoff_target_node'),
+          handoff_status: getVal('handoff_status'),
+          payload_version: getVal('handoff_payload'),
+          handoff_timestamp: new Date(getVal('handoff_timestamp')).toISOString(),
+          correlation_id: getVal('handoff_corr')
+        }
+      };
+    }
+
+    // ---- Update preview tab ----
+    function updatePreview(json) {
+      previewContent.textContent = json;
+    }
+
+    // ---- Show preview ----
+    function showPreview() {
+      const obj = buildRequest();
+      const json = JSON.stringify(obj, null, 2);
+      updatePreview(json);
+      // Switch to preview tab
+      switchTab('preview');
+      addLog('info', 'Preview generated.');
+    }
+
+    // ---- Execute ----
+    async function execute() {
+      const obj = buildRequest();
+      const json = JSON.stringify(obj, null, 2);
+      addLog('info', 'Executing request...');
+      addLog('info', 'Payload:\n' + json);
+
+      // Update preview tab with payload
+      updatePreview(json);
+
+      executeBtn.disabled = true;
+      executeBtn.textContent = '⏳ Running…';
+      try {
+        await new Promise(resolve => setTimeout(resolve, 1200));
+        const mockResponse = {
+          status: 'success',
+          message: 'Workflow executed successfully',
+          data: { summary: 'Processed 1,234 records', metrics: { avg: 42, max: 87 } }
+        };
+        addLog('success', 'Execution completed.');
+        addLog('info', 'Response: ' + JSON.stringify(mockResponse, null, 2));
+        // Update preview with response
+        updatePreview(JSON.stringify(mockResponse, null, 2));
+        switchTab('preview');
+        alert('Execution successful!\n\n' + JSON.stringify(mockResponse, null, 2));
+      } catch (err) {
+        addLog('error', 'Execution failed: ' + err.message);
+      } finally {
+        executeBtn.disabled = false;
+        executeBtn.textContent = '▶ Execute';
+      }
+    }
+
+    // ---- Tab switching ----
+    function switchTab(tabId) {
+      tabs.forEach(t => t.classList.remove('active'));
+      document.querySelector(`.tab[data-tab="${tabId}"]`).classList.add('active');
+      tabLog.classList.toggle('hidden', tabId !== 'log');
+      tabPreview.classList.toggle('hidden', tabId !== 'preview');
+    }
+
+    // ---- Clock ----
+    function updateClock() {
+      clockEl.textContent = new Date().toLocaleTimeString('en-US', { hour12: false });
+    }
+
+    // ---- Init ----
+    function init() {
+      addLog('info', 'Request Builder ready (3‑column layout).');
+      updateClock();
+      setInterval(updateClock, 1000);
+
+      // Tabs
+      tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+          switchTab(this.dataset.tab);
+        });
+      });
+
+      // Buttons
+      executeBtn.addEventListener('click', execute);
+      previewBtn.addEventListener('click', showPreview);
+      logClear.addEventListener('click', clearLogs);
+      logFollow.addEventListener('click', function() {
+        follow = !follow;
+        this.textContent = follow ? '● Follow' : '○ Follow';
+        this.style.color = follow ? '#00e5a0' : '#6b7a8f';
+        if (follow) renderLogs();
+      });
+
+      // Keyboard shortcut
+      document.addEventListener('keydown', function(e) {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+          e.preventDefault();
+          execute();
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+  })();
+</script>
+</body>
+</html>

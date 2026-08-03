@@ -1,0 +1,102 @@
+/******************************************************************************
+ *
+ * COREI OPERATING SYSTEM
+ *
+ * STAGE-25
+ * PHASE-17
+ * STEP-04
+ *
+ * FILE:
+ * workspace-navigation.css
+ *
+ * PURPOSE:
+ * Institutional Activity Ribbon Visual Foundation
+ *
+ * DESCRIPTION:
+ * Provides the visual boundary for the existing Workbench ActivityBar.
+ *
+ * OWNERSHIP:
+ * Workbench Activity Platform
+ *
+ ******************************************************************************/
+
+.corei-activity-bar {
+
+    width:48px;
+
+    height:100%;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:8px 0;
+
+    background:
+        var(--corei-color-surface-0);
+
+    border-right:
+        1px solid var(--corei-color-border);
+
+}
+
+
+.corei-activity-items {
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+
+}
+
+
+.corei-activity-item {
+
+    width:32px;
+
+    height:32px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:transparent;
+
+    color:
+        var(--corei-color-text-secondary);
+
+    border:none;
+
+    cursor:pointer;
+
+}
+
+
+.corei-activity-item:hover {
+
+    background:
+        var(--corei-color-surface-2);
+
+    color:
+        var(--corei-color-text-primary);
+
+}
+
+
+.corei-activity-item.active {
+
+    background:
+        var(--corei-color-surface-3);
+
+    color:
+        var(--corei-color-text-primary);
+
+}

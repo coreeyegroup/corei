@@ -1,0 +1,61 @@
+# VALIDATION RULE MATRIX
+
+RULE 1
+
+TLS Secret
+
+REQUIRED
+
+RULE 2
+
+JAAS Secret
+
+REQUIRED
+
+RULE 3
+
+KAFKA_OPTS
+
+REQUIRED
+
+RULE 4
+
+Port 9094
+
+REQUIRED
+
+RULE 5
+
+SASL_SSL Listener
+
+REQUIRED
+
+RULE 6
+
+Advertised SASL_SSL
+
+REQUIRED
+
+RULE 7
+
+Listener Protocol Map
+
+REQUIRED
+
+RULE 8
+
+Profile Detection
+
+REQUIRED
+
+RULE 9
+
+Mixed Profile
+
+FORBIDDEN
+
+RULE 10
+
+Unknown Profile
+
+FORBIDDEN

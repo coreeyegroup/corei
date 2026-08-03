@@ -1,0 +1,51 @@
+# =============================================================================
+# COREI OPERATING SYSTEM
+#
+# Stage       : 25
+# Phase       : 03A
+# Step        : 01
+#
+# File        : layer-map.yaml
+# Purpose     : Repository Layer Mapping
+#
+# =============================================================================
+
+layers:
+
+  bootstrap:
+
+    modules:
+
+      - bootstrap
+
+  foundation:
+
+    modules:
+
+      - foundation
+
+  composition:
+
+    modules:
+
+      - shell
+      - viewport
+      - ribbon
+      - navigation
+      - workspace
+      - intelligence
+      - timeline
+
+  runtime:
+
+    modules:
+
+      - system
+
+  capability:
+
+    modules: []
+
+  experience:
+
+    modules: []
