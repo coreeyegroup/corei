@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>COREI Stage‑25 – Phase‑17 Reference</title>
+    <style>
+        /* ============================================================
+           COREI INSTITUTIONAL DOCUMENTATION SYSTEM
+           ============================================================ */
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            background: #0A0D12;
+            color: #E3E7EC;
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+            font-size: 13px;
+            line-height: 1.5;
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .sidebar-wrapper {
+            display: flex;
+            flex-shrink: 0;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            overflow: hidden;
+        }
+        .sidebar {
+            width: 200px;
+            min-width: 140px;
+            max-width: 320px;
+            background: #0E1219;
+            border-right: 1px solid #28303C;
+            padding: 0.8rem 0.3rem 0.8rem 0.5rem;
+            overflow-y: auto;
+            overflow-x: hidden;
+            resize: horizontal;
+            height: 100vh;
+            flex-shrink: 0;
+        }
+        .sidebar::-webkit-scrollbar { width:4px; }
+        .sidebar::-webkit-scrollbar-thumb { background:#28303C; border-radius:2px; }
+        .sidebar::-webkit-scrollbar-track { background:transparent; }
+        .sidebar::-webkit-resizer { background:#28303C; border-radius:0 0 4px 0; }
+        .sidebar .brand {
+            font-size:13px; font-weight:600; color:#C6A46A; letter-spacing:0.04em;
+            padding:0 0.3rem 0.4rem 0.3rem; border-bottom:1px solid #28303C; margin-bottom:0.6rem;
+        }
+        .sidebar .brand span { color:#E3E7EC; font-weight:300; }
+        .sidebar-nav { display:flex; flex-direction:column; gap:0.1rem; }
+        .sidebar-nav a {
+            display:flex; align-items:center; padding:0.2rem 0.3rem;
+            color:#9AA5B1; text-decoration:none; font-size:12px; border-radius:3px;
+            transition:background 0.1s,color 0.1s; line-height:1.3; white-space:nowrap;
+        }
+        .sidebar-nav a:hover { background:#1E2834; color:#E3E7EC; }
+        .sidebar-nav a.active { background:#28303C; color:#E3E7EC; font-weight:500; }
+        .sidebar-nav .section-number { display:inline-block; width:22px; color:#6E7883; font-size:11px; flex-shrink:0; }
+        .main-content { flex:1; padding:2rem 2.5rem; max-width:1200px; min-width:0; overflow-x:auto; }
+        h1 { font-size:26px; font-weight:600; color:#E3E7EC; margin-bottom:0.25rem; }
+        h2 { font-size:18px; font-weight:600; color:#C6A46A; margin:1.8rem 0 0.8rem 0; border-bottom:1px solid #28303C; padding-bottom:0.3rem; }
+        h3 { font-size:15px; font-weight:500; color:#C6A46A; margin:1.2rem 0 0.5rem 0; }
+        h4 { font-size:13px; font-weight:500; color:#9AA5B1; margin:1rem 0 0.3rem 0; }
+        p { margin-bottom:0.4rem; }
+        a { color:#8BB4F0; text-decoration:none; }
+        a:hover { text-decoration:underline; }
+        code { font-family:'JetBrains Mono','Fira Code',monospace; font-size:12px; background:#121821; padding:0.1rem 0.4rem; border:1px solid #28303C; border-radius:3px; color:#E3E7EC; }
+        pre { background:#0E1219; border:1px solid #28303C; border-radius:6px; padding:0.8rem 1rem; overflow:auto; font-family:'JetBrains Mono',monospace; font-size:12px; line-height:1.5; color:#C5CED9; max-height:400px; overflow-y:auto; white-space:pre-wrap; word-break:break-all; }
+        hr { border:none; border-top:1px solid #28303C; margin:1.5rem 0; }
+        .document-header { background:#121821; border:1px solid #28303C; border-radius:6px; padding:1rem 1.5rem; margin-bottom:1.5rem; }
+        .document-header .org { font-size:14px; font-weight:600; color:#C6A46A; letter-spacing:0.05em; }
+        .document-header .title { font-size:26px; font-weight:600; color:#E3E7EC; margin:0.2rem 0; }
+        .document-header .subtitle { font-size:16px; color:#9AA5B1; }
+        .document-header .meta-line { display:flex; flex-wrap:wrap; gap:1.2rem; margin-top:0.6rem; font-size:13px; }
+        .document-header .meta-line .item { display:flex; align-items:baseline; gap:0.3rem; }
+        .document-header .meta-line .label { color:#6E7883; text-transform:uppercase; font-size:11px; letter-spacing:0.04em; }
+        .document-header .meta-line .value { color:#E3E7EC; font-weight:500; }
+        .badge { display:inline-block; background:#28303C; padding:0.1rem 0.6rem; border-radius:12px; font-size:11px; font-weight:600; color:#C6A46A; letter-spacing:0.02em; margin-left:0.3rem; }
+        .badge.success { background:#1F3A2A; color:#52A36B; }
+        .badge.warning { background:#3D3420; color:#D1A64A; }
+        .badge.danger { background:#3D2020; color:#B95A5A; }
+        .executive-summary { background:#121821; border:1px solid #28303C; border-radius:6px; padding:0.8rem 1.2rem; margin-bottom:1.5rem; display:grid; grid-template-columns:1fr 1fr; gap:0.3rem 2rem; }
+        .executive-summary .item { display:flex; flex-direction:column; }
+        .executive-summary .item .label { font-size:11px; text-transform:uppercase; color:#6E7883; letter-spacing:0.04em; }
+        .executive-summary .item .value { font-size:14px; font-weight:500; color:#E3E7EC; }
+        table { width:100%; border-collapse:collapse; font-size:12px; margin:0.6rem 0 1rem 0; }
+        th { background:#18202A; color:#9AA5B1; font-weight:600; text-align:left; padding:0.3rem 0.5rem; border:1px solid #28303C; font-size:11px; text-transform:uppercase; letter-spacing:0.04em; }
+        td { padding:0.25rem 0.5rem; border:1px solid #28303C; vertical-align:top; background:#0E1219; }
+        tr:nth-child(even) td { background:#121821; }
+        details { background:#0E1219; border:1px solid #28303C; border-radius:4px; margin:0.6rem 0; }
+        summary { padding:0.3rem 0.6rem; cursor:pointer; font-weight:500; color:#C5CED9; background:#18202A; border-radius:4px; user-select:none; font-size:13px; }
+        summary:hover { background:#1E2834; }
+        details[open] summary { border-bottom:1px solid #28303C; border-radius:4px 4px 0 0; }
+        details .content { padding:0.5rem 0.6rem; font-size:12px; font-family:'JetBrains Mono',monospace; white-space:pre-wrap; word-break:break-all; color:#C5CED9; overflow-x:auto; max-height:500px; overflow-y:auto; }
+        .metadata-table td { padding:0.15rem 0.5rem; }
+        .metadata-table .label { color:#6E7883; width:140px; font-weight:400; }
+        .text-muted { color:#6E7883; }
+        .text-success { color:#52A36B; }
+        .text-warning { color:#D1A64A; }
+        .text-danger { color:#B95A5A; }
+        @media (max-width:768px) {
+            body { flex-direction:column; }
+            .sidebar-wrapper { height:auto; position:static; overflow:visible; }
+            .sidebar { width:100% !important; height:auto; max-width:none !important; min-width:unset; resize:none; border-right:none; border-bottom:1px solid #28303C; padding:0.5rem; }
+            .sidebar-nav { flex-direction:row; flex-wrap:wrap; gap:0.1rem; }
+            .sidebar-nav a { padding:0.15rem 0.4rem; font-size:11px; white-space:nowrap; }
+            .sidebar-nav .section-number { width:auto; margin-right:0.1rem; }
+            .main-content { padding:1rem; }
+            .executive-summary { grid-template-columns:1fr; }
+            .document-header .meta-line { flex-direction:column; gap:0.3rem; }
+        }
+        @media print {
+            .sidebar-wrapper { display:none; }
+            body { background:white; color:black; font-size:11px; }
+            .main-content { padding:1rem; max-width:100%; }
+            .document-header, .executive-summary, table, pre, details { border-color:#ccc; background:#fafafa; }
+            .document-header .meta-line .label { color:#666; }
+            .document-header .meta-line .value { color:#000; }
+            .badge { border:1px solid #999; background:transparent; color:#000; }
+            .badge.success { border-color:#2a7a3a; color:#2a7a3a; }
+            .badge.warning { border-color:#b08a3a; color:#b08a3a; }
+            .badge.danger { border-color:#b05a5a; color:#b05a5a; }
+            th { background:#eee; color:#333; border-color:#999; }
+            td { background:white; border-color:#999; }
+            tr:nth-child(even) td { background:#f5f5f5; }
+            .text-muted { color:#666; }
+            .text-success { color:#2a7a3a; }
+            .text-warning { color:#b08a3a; }
+            .text-danger { color:#b05a5a; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar-wrapper">
+        <aside class="sidebar">
+            <div class="brand">COREI <span>·</span> DOC</div>
+            <nav class="sidebar-nav">
+                <a href="#sec-01"><span class="section-number">01</span> Executive Summary</a>
+                <a href="#sec-02"><span class="section-number">02</span> Scope</a>
+                <a href="#sec-03"><span class="section-number">03</span> Architecture</a>
+                <a href="#sec-04"><span class="section-number">04</span> Ownership</a>
+                <a href="#sec-05"><span class="section-number">05</span> Responsibilities</a>
+                <a href="#sec-06"><span class="section-number">06</span> Dependencies</a>
+                <a href="#sec-07"><span class="section-number">07</span> Contracts</a>
+                <a href="#sec-08"><span class="section-number">08</span> Interfaces</a>
+                <a href="#sec-09"><span class="section-number">09</span> Runtime</a>
+                <a href="#sec-10"><span class="section-number">10</span> Public API</a>
+                <a href="#sec-11"><span class="section-number">11</span> Components</a>
+                <a href="#sec-12"><span class="section-number">12</span> File Inventory</a>
+                <a href="#sec-13"><span class="section-number">13</span> Validation</a>
+                <a href="#sec-14"><span class="section-number">14</span> Browser Validation</a>
+                <a href="#sec-15"><span class="section-number">15</span> Repository Tree</a>
+                <a href="#sec-16"><span class="section-number">16</span> Build Output</a>
+                <a href="#sec-17"><span class="section-number">17</span> Certification</a>
+                <a href="#sec-18"><span class="section-number">18</span> References</a>
+                <a href="#sec-19"><span class="section-number">19</span> Appendix</a>
+            </nav>
+        </aside>
+    </div>
+
+    <main class="main-content">
+
+        <header class="document-header">
+            <div class="org">COREI · Institutional Operating Platform</div>
+            <div class="title">Stage 25 · Phase 17</div>
+            <div class="subtitle">Institutional Shell Platform</div>
+            <div class="meta-line">
+                <span class="item"><span class="label">Status</span><span class="value"><span class="badge success">CERTIFIED</span></span></span>
+                <span class="item"><span class="label">Version</span><span class="value">25.17.0</span></span>
+                <span class="item"><span class="label">Repository</span><span class="value">corei</span></span>
+                <span class="item"><span class="label">Commit</span><span class="value">671cad22</span></span>
+                <span class="item"><span class="label">Tag</span><span class="value">stage25-phase17-institutional-shell-v1</span></span>
+                <span class="item"><span class="label">Generated</span><span class="value">2026-08-09</span></span>
+            </div>
+        </header>
+
+        <section class="executive-summary">
+            <div class="item"><span class="label">Purpose</span><span class="value">Build the permanent institutional shell environment.</span></div>
+            <div class="item"><span class="label">Ownership</span><span class="value">Shell Platform Team</span></div>
+            <div class="item"><span class="label">Consumers</span><span class="value">Workspace, Panels, Productivity, Intelligence</span></div>
+            <div class="item"><span class="label">Providers</span><span class="value">Platform Kernel (Phases 01–16)</span></div>
+            <div class="item"><span class="label">Protected Boundaries</span><span class="value">src/kernel/, src/platform/, src/providers/</span></div>
+            <div class="item"><span class="label">Repository Scope</span><span class="value">src/shell/ (63 files)</span></div>
+            <div class="item"><span class="label">Certification</span><span class="value"><span class="text-success">PASSED</span></span></div>
+            <div class="item"><span class="label">Validation</span><span class="value"><span class="text-success">PASSED</span></span></div>
+        </section>
+
+        <!-- ============================================================
+        SECTION 01 – EXECUTIVE SUMMARY
+        ============================================================ -->
+        <section id="sec-01" class="section">
+            <h2><span class="section-number">01</span> Executive Summary</h2>
+            <p>This phase builds the permanent institutional shell environment for COREI OS. It provides a full‑screen workstation with six regions, runtime, lifecycle, keyboard commands, persistence, instrumentation, and resilience.</p>
+            <table class="metadata-table">
+                <tr><td class="label">Purpose</td><td>Build the permanent institutional shell environment</td></tr>
+                <tr><td class="label">Ownership</td><td>Shell Platform Team</td></tr>
+                <tr><td class="label">Consumers</td><td>Workspace, Panels, Productivity, Intelligence</td></tr>
+                <tr><td class="label">Providers</td><td>Platform Kernel (Phases 01–16)</td></tr>
+                <tr><td class="label">Protected Boundaries</td><td>src/kernel/, src/platform/, src/providers/</td></tr>
+                <tr><td class="label">Repository Scope</td><td>src/shell/ (63 files)</td></tr>
+                <tr><td class="label">Certification</td><td><span class="text-success">PASSED</span></td></tr>
+                <tr><td class="label">Validation</td><td><span class="text-success">PASSED</span></td></tr>
+            </table>
+        </section>
+
+        <!-- ============================================================
+        SECTION 02 – SCOPE
+        ============================================================ -->
+        <section id="sec-02" class="section">
+            <h2><span class="section-number">02</span> Scope</h2>
+            <table>
+                <thead><tr><th>Category</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td>In Scope</td><td>Institutional Shell, Viewport, Ribbon, Navigation, Workspace Host, Intelligence Panel, Timeline, Layout, Responsiveness, Keyboard Shortcuts, Persistence, Instrumentation, Error Boundaries</td></tr>
+                    <tr><td>Out of Scope</td><td>Workspace runtime, Panels, Productivity tools, Intelligence logic, Authentication, Governance, Trading capabilities</td></tr>
+                    <tr><td>Consumes</td><td>Platform Kernel (Phases 01–16), Foundation Logging, Foundation Diagnostics, Foundation State, Foundation Events</td></tr>
+                    <tr><td>Provides</td><td>Shell Runtime, Shell Lifecycle, Shell Manager, Shell Provider, Shell State, Shell Events, Shell Contracts, Shell Models, Shell Registry, Shell Configuration, Shell Theme</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- ============================================================
+        SECTION 03 – ARCHITECTURE
+        ============================================================ -->
+        <section id="sec-03" class="section">
+            <h2><span class="section-number">03</span> Architecture</h2>
+            <p>The Shell follows a layered architecture with clear separation of concerns.</p>
+            <table>
+                <thead><tr><th>Layer</th><th>Responsibility</th></tr></thead>
+                <tbody>
+                    <tr><td>Presentation</td><td>React components (Shell, ShellFrame, ShellBoundary, ShellRegion)</td></tr>
+                    <tr><td>Orchestration</td><td>ShellManager, ShellRuntime, ShellLifecycle</td></tr>
+                    <tr><td>State</td><td>Shell state (lifecycle, ready, operational)</td></tr>
+                    <tr><td>Events</td><td>Shell events (initializing, started, stopped, failed)</td></tr>
+                    <tr><td>Contracts</td><td>ShellKernelContract, ShellLayoutContract, ShellRegionContract</td></tr>
+                    <tr><td>Persistence</td><td>Versioned snapshots, localStorage adapter</td></tr>
+                    <tr><td>Instrumentation</td><td>Logging, diagnostics, health reporting</td></tr>
+                </tbody>
+            </table>
+            <h3>Startup Flow</h3>
+            <pre>main.tsx → App → ShellBoundary → ShellProvider → ShellManager.init → ShellLifecycle.init → ShellRuntime.init → restore → keyboard init</pre>
+            <h3>Keyboard Command Flow</h3>
+            <pre>Keydown → ShellKeyboardRuntime → ShortcutResolver → CommandRouter → InteractionRuntime → WorkbenchStateManager → Workbench State</pre>
+            <h3>Persistence Flow</h3>
+            <pre>Startup: restore → set visibility from snapshot
+Disposal: save → localStorage
+On toggle: toggle → WorkbenchStateManager → save</pre>
+        </section>
+
+        <!-- ============================================================
+        SECTION 04 – OWNERSHIP
+        ============================================================ -->
+        <section id="sec-04" class="section">
+            <h2><span class="section-number">04</span> Ownership</h2>
+            <table>
+                <thead><tr><th>Component</th><th>Owner</th><th>Repository Path</th></tr></thead>
+                <tbody>
+                    <tr><td>Shell Runtime</td><td>Shell Platform Team</td><td>src/shell/runtime/</td></tr>
+                    <tr><td>Shell Lifecycle</td><td>Shell Platform Team</td><td>src/shell/lifecycle/</td></tr>
+                    <tr><td>Shell Manager</td><td>Shell Platform Team</td><td>src/shell/manager/</td></tr>
+                    <tr><td>Shell Provider</td><td>Shell Platform Team</td><td>src/shell/providers/</td></tr>
+                    <tr><td>Shell State</td><td>Shell Platform Team</td><td>src/shell/state/</td></tr>
+                    <tr><td>Shell Events</td><td>Shell Platform Team</td><td>src/shell/events/</td></tr>
+                    <tr><td>Shell Contracts</td><td>Shell Platform Team</td><td>src/shell/contracts/</td></tr>
+                    <tr><td>Shell Models</td><td>Shell Platform Team</td><td>src/shell/models/</td></tr>
+                    <tr><td>Shell Registry</td><td>Shell Platform Team</td><td>src/shell/registry/</td></tr>
+                    <tr><td>Shell Configuration</td><td>Shell Platform Team</td><td>src/shell/configuration/</td></tr>
+                    <tr><td>Shell Theme</td><td>Shell Platform Team</td><td>src/shell/theme/</td></tr>
+                    <tr><td>Shell Commands</td><td>Shell Platform Team</td><td>src/shell/commands/</td></tr>
+                    <tr><td>Shell Keyboard</td><td>Shell Platform Team</td><td>src/shell/keyboard/</td></tr>
+                    <tr><td>Shell Persistence</td><td>Shell Platform Team</td><td>src/shell/persistence/</td></tr>
+                    <tr><td>Shell Instrumentation</td><td>Shell Platform Team</td><td>src/shell/instrumentation/</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- ============================================================
+        SECTION 05 – RESPONSIBILITIES
+        ============================================================ -->
+        <section id="sec-05" class="section">
+            <h2><span class="section-number">05</span> Responsibilities</h2>
+            <table>
+                <thead><tr><th>Responsibility</th><th>Owner</th></tr></thead>
+                <tbody>
+                    <tr><td>Shell startup/shutdown lifecycle</td><td>Shell Platform Team</td></tr>
+                    <tr><td>Six‑region layout composition</td><td>Shell Platform Team</td></tr>
+                    <tr><td>Keyboard command routing</td><td>Shell Platform Team</td></tr>
+                    <tr><td>Persistence (save/restore)</td><td>Shell Platform Team</td></tr>
+                    <tr><td>Instrumentation &amp; diagnostics</td><td>Shell Platform Team</td></tr>
+                    <tr><td>Error boundaries &amp; recovery</td><td>Shell Platform Team</td></tr>
+                    <tr><td>Theme &amp; responsiveness</td><td>Shell Platform Team</td></tr>
+                    <tr><td>Consumption of Platform Kernel</td><td>Shell Platform Team</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- ============================================================
+        SECTION 06 – DEPENDENCIES
+        ============================================================ -->
+        <section id="sec-06" class="section">
+            <h2><span class="section-number">06</span> Dependencies</h2>
+            <table>
+                <thead><tr><th>Dependency</th><th>Type</th><th>Purpose</th></tr></thead>
+                <tbody>
+                    <tr><td>Platform Kernel (Phases 01–16)</td><td>Internal</td><td>Runtime, lifecycle, state, events, logging, diagnostics, health</td></tr>
+                    <tr><td>Foundation Logging</td><td>Internal</td><td>Structured logging</td></tr>
+                    <tr><td>Foundation Diagnostics</td><td>Internal</td><td>Runtime health reporting</td></tr>
+                    <tr><td>Foundation State</td><td>Internal</td><td>Authoritative state</td></tr>
+                    <tr><td>Foundation Events</td><td>Internal</td><td>Event communication</td></tr>
+                    <tr><td>React</td><td>External</td><td>UI rendering</td></tr>
+                    <tr><td>Vite</td><td>External</td><td>Build tool</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- ============================================================
+        SECTION 07 – CONTRACTS
+        ============================================================ -->
+        <section id="sec-07" class="section">
+            <h2><span class="section-number">07</span> Contracts</h2>
+            <details>
+                <summary>ShellKernelContract</summary>
+                <div class="content">
+export interface ShellKernelContract {
+    initialize(): void;
+    start(): void;
+    stop(): void;
+    getState(): ShellLifecycleState;
+}
+                </div>
+            </details>
+            <details>
+                <summary>ShellLayoutContract</summary>
+                <div class="content">
+export interface ShellLayoutContract {
+    regions: ShellRegion[];
+    currentLayout: LayoutConfig;
+    switchLayout(layoutId: string): void;
+}
+                </div>
+            </details>
+            <details>
+                <summary>ShellRegionContract</summary>
+                <div class="content">
+export interface ShellRegionContract {
+    id: string;
+    name: string;
+    component: React.ReactNode;
+    isVisible: boolean;
+}
+                </div>
+            </details>
+        </section>
+
+        <!-- ============================================================
+        SECTION 08 – INTERFACES
+        ============================================================ -->
+        <section id="sec-08" class="section">
+            <h2><span class="section-number">08</span> Interfaces</h2>
+            <table>
+                <thead><tr><th>Interface</th><th>File</th><th>Purpose</th></tr></thead>
+                <tbody>
+                    <tr><td><code>ShellManager</code></td><td>src/shell/manager/shell-manager.ts</td><td>Orchestrates shell lifecycle</td></tr>
+                    <tr><td><code>ShellRuntime</code></td><td>src/shell/runtime/shell-runtime.ts</td><td>Runtime execution</td></tr>
+                    <tr><td><code>ShellLifecycle</code></td><td>src/shell/lifecycle/shell-lifecycle.ts</td><td>State transitions</td></tr>
+                    <tr><td><code>ShellProvider</code></td><td>src/shell/providers/shell-provider.tsx</td><td>React context provider</td></tr>
+                    <tr><td><code>ShellState</code></td><td>src/shell/state/shell-state.ts</td><td>Lifecycle state management</td></tr>
+                    <tr><td><code>ShellEvents</code></td><td>src/shell/events/shell-events.ts</td><td>Event definitions</td></tr>
+                    <tr><td><code>ShellRegistry</code></td><td>src/shell/registry/shell-registry.ts</td><td>In‑memory collection</td></tr>
+                    <tr><td><code>ShellConfiguration</code></td><td>src/shell/configuration/shell-configuration.ts</td><td>Configuration loading</td></tr>
+                    <tr><td><code>ShellTheme</code></td><td>src/shell/theme/shell-theme.ts</td><td>Design tokens</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- ============================================================
+        SECTION 09 – RUNTIME
+        ============================================================ -->
+        <section id="sec-09" class="section">
+            <h2><span class="section-number">09</span> Runtime</h2>
+            <table>
+                <thead><tr><th>Runtime Component</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td>ShellRuntime</td><td>Main runtime orchestrator</td></tr>
+                    <tr><td>ShellKeyboardRuntime</td><td>Keydown listener, shortcut resolution</td></tr>
+                    <tr><td>ShellPersistenceRuntime</td><td>Save/restore snapshots</td></tr>
+                    <tr><td>ShellInteractionRuntime</td><td>Toggle/focus execution</td></tr>
+                    <tr><td>ShellInstrumentationRuntime</td><td>Logging, diagnostics, health</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- ============================================================
+        SECTION 10 – PUBLIC API
+        ============================================================ -->
+        <section id="sec-10" class="section">
+            <h2><span class="section-number">10</span> Public API</h2>
+            <p>All exports from <code>src/shell/index.ts</code>:</p>
+            <pre>
+export * from "./components";
+export * from "./runtime";
+export * from "./lifecycle";
+export * from "./manager";
+export * from "./providers";
+export * from "./state";
+export * from "./events";
+export * from "./contracts";
+export * from "./models";
+export * from "./registry";
+export * from "./configuration";
+export * from "./theme";
+export * from "./commands";
+export * from "./keyboard";
+export * from "./persistence";
+export * from "./instrumentation";
+            </pre>
+        </section>
+
+        <!-- ============================================================
+        SECTION 11 – COMPONENTS
+        ============================================================ -->
+        <section id="sec-11" class="section">
+            <h2><span class="section-number">11</span> Components</h2>
+            <table>
+                <thead><tr><th>Component</th><th>Path</th><th>Purpose</th></tr></thead>
+                <tbody>
+                    <tr><td><code>Shell</code></td><td>src/shell/components/Shell.tsx</td><td>Main shell component</td></tr>
+                    <tr><td><code>ShellFrame</code></td><td>src/shell/components/ShellFrame.tsx</td><td>Frame wrapper</td></tr>
+                    <tr><td><code>ShellBoundary</code></td><td>src/shell/components/ShellBoundary.tsx</td><td>Error boundary</td></tr>
+                    <tr><td><code>ShellRegion</code></td><td>src/shell/components/ShellRegion.tsx</td><td>Region renderer</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- ============================================================
+        SECTION 12 – FILE INVENTORY
+        ============================================================ -->
+        <section id="sec-12" class="section">
+            <h2><span class="section-number">12</span> File Inventory</h2>
+            <p><strong>Total:</strong> 63 files under <code>src/shell/</code></p>
+            <details>
+                <summary>Show / Hide full file list</summary>
+                <div class="content">
+src/shell/commands/shell-command-router.ts
+src/shell/commands/shell-command.ts
+src/shell/components/ShellBoundary.tsx
+src/shell/components/ShellFrame.tsx
+src/shell/components/ShellRegion.tsx
+src/shell/components/Shell.tsx
+src/shell/configuration/shell-configuration.ts
+src/shell/context/shell-context.ts
+src/shell/contracts/shell-contract.ts
+src/shell/contracts/shell-kernel-contract.ts
+src/shell/contracts/shell-layout-contract.ts
+src/shell/contracts/shell-region-contract.ts
+src/shell/events/shell-events.ts
+src/shell/hooks/use-shell.ts
+src/shell/index.ts
+src/shell/instrumentation/contracts/index.ts
+src/shell/instrumentation/contracts/shell-instrumentation-contract.ts
+src/shell/instrumentation/index.ts
+src/shell/instrumentation/runtime/index.ts
+src/shell/instrumentation/runtime/shell-instrumentation-runtime.ts
+src/shell/interactions/shell-interaction-runtime.ts
+src/shell/interactions/shell-interaction-state.ts
+src/shell/keyboard/shell-keyboard-runtime.ts
+src/shell/keyboard/shell-shortcut-resolver.ts
+src/shell/layout/components/ShellLayout.tsx
+src/shell/layout/context/layout-context.ts
+src/shell/layout/contracts/layout-contract.ts
+src/shell/layout/models/layout.ts
+src/shell/layout/region-layout.ts
+src/shell/layout/regions/BottomRegion.tsx
+src/shell/layout/regions/CenterRegion.tsx
+src/shell/layout/regions/CenterRegion.tsx.bak
+src/shell/layout/regions/index.ts
+src/shell/layout/regions/LeftRegion.tsx
+src/shell/layout/regions/RightRegion.tsx
+src/shell/layout/regions/StatusRegion.tsx
+src/shell/layout/regions/TopRegion.tsx
+src/shell/layout/shell-layout.ts
+src/shell/layout/styles/shell-geometry.css
+src/shell/layout/styles/shell-layout.css
+src/shell/layout/styles/shell-regions.css
+src/shell/layout/styles/shell-viewport.css
+src/shell/layout/viewport-layout.ts
+src/shell/lifecycle/shell-lifecycle.ts
+src/shell/manager/shell-manager.ts
+src/shell/models/shell-descriptor.ts
+src/shell/models/shell.ts
+src/shell/persistence/contracts/index.ts
+src/shell/persistence/contracts/shell-preference-snapshot.ts
+src/shell/persistence/index.ts
+src/shell/persistence/runtime/index.ts
+src/shell/persistence/runtime/shell-persistence-runtime.ts
+src/shell/persistence/storage/index.ts
+src/shell/persistence/storage/shell-preference-storage.ts
+src/shell/providers/shell-provider.tsx
+src/shell/registry/shell-registry.ts
+src/shell/runtime/connect-shell-kernel.ts
+src/shell/runtime/default-shell-kernel.ts
+src/shell/runtime/shell-kernel.ts
+src/shell/runtime/shell-runtime.ts
+src/shell/state/shell-state.ts
+src/shell/theme/shell-design-tokens.ts
+src/shell/theme/shell-theme-contract.ts
+                </div>
+            </details>
+        </section>
+
+        <!-- ============================================================
+        SECTION 13 – VALIDATION
+        ============================================================ -->
+        <section id="sec-13" class="section">
+            <h2><span class="section-number">13</span> Validation</h2>
+            <table>
+                <thead><tr><th>Validation Type</th><th>Status</th></tr></thead>
+                <tbody>
+                    <tr><td>TypeScript Compilation (tsc --noEmit)</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Production Build (pnpm build)</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Repository Structure</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Architecture Compliance</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Shell Circular Dependencies</td><td><span class="text-success">NONE</span></td></tr>
+                    <tr><td>Integration Verification</td><td><span class="text-success">PASS</span></td></tr>
+                </tbody>
+            </table>
+            <p><em>Note: Madge reported 2 circular dependencies in Workbench/Panels, which are outside the Shell boundary and are not introduced by Phase‑17.</em></p>
+        </section>
+
+        <!-- ============================================================
+        SECTION 14 – BROWSER VALIDATION
+        ============================================================ -->
+        <section id="sec-14" class="section">
+            <h2><span class="section-number">14</span> Browser Validation</h2>
+            <table>
+                <thead><tr><th>Browser</th><th>Status</th></tr></thead>
+                <tbody>
+                    <tr><td>Chromium (latest)</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Firefox (latest)</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>WebKit (latest)</td><td><span class="text-success">PASS</span></td></tr>
+                </tbody>
+            </table>
+            <p>Playwright tests: <strong>27/27 passed</strong> (9 viewport profiles × 3 browsers).</p>
+        </section>
+
+        <!-- ============================================================
+        SECTION 15 – REPOSITORY TREE
+        ============================================================ -->
+        <section id="sec-15" class="section">
+            <h2><span class="section-number">15</span> Repository Tree</h2>
+            <details>
+                <summary>Show / Hide tree</summary>
+                <div class="content">
+src/shell/
+├── commands/
+├── components/
+├── configuration/
+├── context/
+├── contracts/
+├── events/
+├── hooks/
+├── instrumentation/
+│   ├── contracts/
+│   └── runtime/
+├── interactions/
+├── keyboard/
+├── layout/
+│   ├── components/
+│   ├── context/
+│   ├── contracts/
+│   ├── models/
+│   ├── regions/
+│   └── styles/
+├── lifecycle/
+├── manager/
+├── models/
+├── persistence/
+│   ├── contracts/
+│   ├── runtime/
+│   └── storage/
+├── providers/
+├── registry/
+├── runtime/
+├── state/
+└── theme/
+
+31 directories
+                </div>
+            </details>
+        </section>
+
+        <!-- ============================================================
+        SECTION 16 – BUILD OUTPUT
+        ============================================================ -->
+        <section id="sec-16" class="section">
+            <h2><span class="section-number">16</span> Build Output</h2>
+            <pre>
+> @corei/corei-os@1.0.0 build
+> tsc -b && vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 2374 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                     0.43 kB │ gzip:   0.29 kB
+dist/assets/index-BSSyXHgG.css    134.51 kB │ gzip:  13.40 kB
+dist/assets/index-CHQ2bGpX.js   1,028.40 kB │ gzip: 257.58 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 5.66s
+            </pre>
+        </section>
+
+        <!-- ============================================================
+        SECTION 17 – CERTIFICATION
+        ============================================================ -->
+        <section id="sec-17" class="section">
+            <h2><span class="section-number">17</span> Certification</h2>
+            <table>
+                <thead><tr><th>Criteria</th><th>Status</th></tr></thead>
+                <tbody>
+                    <tr><td>Architecture Review</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Repository Audit</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Integration Test</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Browser Validation</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Documentation Completeness</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Institutional Sign‑off</td><td><span class="text-success">PASS</span></td></tr>
+                </tbody>
+            </table>
+            <p><strong>Status:</strong> <span class="badge success">CERTIFIED</span></p>
+        </section>
+
+        <!-- ============================================================
+        SECTION 18 – REFERENCES
+        ============================================================ -->
+        <section id="sec-18" class="section">
+            <h2><span class="section-number">18</span> References</h2>
+            <ul>
+                <li><a href="#">DOC-11: COREI Execution Constitution</a></li>
+                <li><a href="#">DOC-12: Phase-17 Implementation Blueprint</a></li>
+                <li><a href="#">DOC-17: Institutional Shell Architecture</a></li>
+                <li><a href="#">COREI_Phase17_Reference.html</a></li>
+            </ul>
+        </section>
+
+        <!-- ============================================================
+        SECTION 19 – APPENDIX
+        ============================================================ -->
+        <section id="sec-19" class="section">
+            <h2><span class="section-number">19</span> Appendix</h2>
+            <h3>A. Keyboard Shortcuts</h3>
+            <table>
+                <thead><tr><th>Shortcut</th><th>Command</th></tr></thead>
+                <tbody>
+                    <tr><td><code>Ctrl+B</code></td><td>Toggle Left Region</td></tr>
+                    <tr><td><code>Ctrl+Shift+B</code></td><td>Toggle Right Region</td></tr>
+                    <tr><td><code>Ctrl+J</code></td><td>Toggle Bottom Region</td></tr>
+                    <tr><td><code>Alt+1</code></td><td>Focus Top Region</td></tr>
+                    <tr><td><code>Alt+2</code></td><td>Focus Left Region</td></tr>
+                    <tr><td><code>Alt+3</code></td><td>Focus Center Region</td></tr>
+                    <tr><td><code>Alt+4</code></td><td>Focus Right Region</td></tr>
+                    <tr><td><code>Alt+5</code></td><td>Focus Bottom Region</td></tr>
+                    <tr><td><code>Alt+6</code></td><td>Focus Status Region</td></tr>
+                </tbody>
+            </table>
+            <h3>B. Version History</h3>
+            <table>
+                <thead><tr><th>Version</th><th>Date</th><th>Changes</th></tr></thead>
+                <tbody>
+                    <tr><td>25.17.0</td><td>2026-08-04</td><td>Initial certification</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <div style="text-align:center;font-size:11px;color:#6E7883;border-top:1px solid #28303C;padding-top:1rem;margin-top:2rem;">
+            <p>COREI Stage‑25 Phase‑17 Reference &bull; Generated 2026-08-09 &bull; Authoritative</p>
+        </div>
+
+    </main>
+
+</body>
+</html>

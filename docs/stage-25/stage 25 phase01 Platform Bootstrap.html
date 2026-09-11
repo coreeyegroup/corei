@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>COREI Stage‑25 – Phase‑01 Reference</title>
+    <style>
+        /* ============================================================
+           COREI INSTITUTIONAL DOCUMENTATION SYSTEM
+           ============================================================ */
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            background: #0A0D12;
+            color: #E3E7EC;
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+            font-size: 13px;
+            line-height: 1.5;
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .sidebar-wrapper {
+            display: flex;
+            flex-shrink: 0;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            overflow: hidden;
+        }
+        .sidebar {
+            width: 200px;
+            min-width: 140px;
+            max-width: 320px;
+            background: #0E1219;
+            border-right: 1px solid #28303C;
+            padding: 0.8rem 0.3rem 0.8rem 0.5rem;
+            overflow-y: auto;
+            overflow-x: hidden;
+            resize: horizontal;
+            height: 100vh;
+            flex-shrink: 0;
+        }
+        .sidebar::-webkit-scrollbar { width:4px; }
+        .sidebar::-webkit-scrollbar-thumb { background:#28303C; border-radius:2px; }
+        .sidebar::-webkit-scrollbar-track { background:transparent; }
+        .sidebar::-webkit-resizer { background:#28303C; border-radius:0 0 4px 0; }
+
+        .sidebar .brand {
+            font-size:13px; font-weight:600; color:#C6A46A; letter-spacing:0.04em;
+            padding:0 0.3rem 0.4rem 0.3rem; border-bottom:1px solid #28303C; margin-bottom:0.6rem;
+        }
+        .sidebar .brand span { color:#E3E7EC; font-weight:300; }
+        .sidebar-nav { display:flex; flex-direction:column; gap:0.1rem; }
+        .sidebar-nav a {
+            display:flex; align-items:center; padding:0.2rem 0.3rem;
+            color:#9AA5B1; text-decoration:none; font-size:12px; border-radius:3px;
+            transition:background 0.1s,color 0.1s; line-height:1.3; white-space:nowrap;
+        }
+        .sidebar-nav a:hover { background:#1E2834; color:#E3E7EC; }
+        .sidebar-nav a.active { background:#28303C; color:#E3E7EC; font-weight:500; }
+        .sidebar-nav .section-number { display:inline-block; width:22px; color:#6E7883; font-size:11px; flex-shrink:0; }
+
+        .main-content { flex:1; padding:2rem 2.5rem; max-width:1200px; min-width:0; overflow-x:auto; }
+
+        h1 { font-size:26px; font-weight:600; color:#E3E7EC; margin-bottom:0.25rem; }
+        h2 { font-size:18px; font-weight:600; color:#C6A46A; margin:1.8rem 0 0.8rem 0; border-bottom:1px solid #28303C; padding-bottom:0.3rem; }
+        h3 { font-size:15px; font-weight:500; color:#C6A46A; margin:1.2rem 0 0.5rem 0; }
+        h4 { font-size:13px; font-weight:500; color:#9AA5B1; margin:1rem 0 0.3rem 0; }
+        p { margin-bottom:0.4rem; }
+        a { color:#8BB4F0; text-decoration:none; }
+        a:hover { text-decoration:underline; }
+        code { font-family:'JetBrains Mono','Fira Code',monospace; font-size:12px; background:#121821; padding:0.1rem 0.4rem; border:1px solid #28303C; border-radius:3px; color:#E3E7EC; }
+        pre { background:#0E1219; border:1px solid #28303C; border-radius:6px; padding:0.8rem 1rem; overflow:auto; font-family:'JetBrains Mono',monospace; font-size:12px; line-height:1.5; color:#C5CED9; max-height:400px; overflow-y:auto; white-space:pre-wrap; word-break:break-all; }
+        hr { border:none; border-top:1px solid #28303C; margin:1.5rem 0; }
+
+        .document-header { background:#121821; border:1px solid #28303C; border-radius:6px; padding:1rem 1.5rem; margin-bottom:1.5rem; }
+        .document-header .org { font-size:14px; font-weight:600; color:#C6A46A; letter-spacing:0.05em; }
+        .document-header .title { font-size:26px; font-weight:600; color:#E3E7EC; margin:0.2rem 0; }
+        .document-header .subtitle { font-size:16px; color:#9AA5B1; }
+        .document-header .meta-line { display:flex; flex-wrap:wrap; gap:1.2rem; margin-top:0.6rem; font-size:13px; }
+        .document-header .meta-line .item { display:flex; align-items:baseline; gap:0.3rem; }
+        .document-header .meta-line .label { color:#6E7883; text-transform:uppercase; font-size:11px; letter-spacing:0.04em; }
+        .document-header .meta-line .value { color:#E3E7EC; font-weight:500; }
+
+        .badge { display:inline-block; background:#28303C; padding:0.1rem 0.6rem; border-radius:12px; font-size:11px; font-weight:600; color:#C6A46A; letter-spacing:0.02em; margin-left:0.3rem; }
+        .badge.success { background:#1F3A2A; color:#52A36B; }
+        .badge.warning { background:#3D3420; color:#D1A64A; }
+        .badge.danger { background:#3D2020; color:#B95A5A; }
+
+        .executive-summary { background:#121821; border:1px solid #28303C; border-radius:6px; padding:0.8rem 1.2rem; margin-bottom:1.5rem; display:grid; grid-template-columns:1fr 1fr; gap:0.3rem 2rem; }
+        .executive-summary .item { display:flex; flex-direction:column; }
+        .executive-summary .item .label { font-size:11px; text-transform:uppercase; color:#6E7883; letter-spacing:0.04em; }
+        .executive-summary .item .value { font-size:14px; font-weight:500; color:#E3E7EC; }
+
+        table { width:100%; border-collapse:collapse; font-size:12px; margin:0.6rem 0 1rem 0; }
+        th { background:#18202A; color:#9AA5B1; font-weight:600; text-align:left; padding:0.3rem 0.5rem; border:1px solid #28303C; font-size:11px; text-transform:uppercase; letter-spacing:0.04em; }
+        td { padding:0.25rem 0.5rem; border:1px solid #28303C; vertical-align:top; background:#0E1219; }
+        tr:nth-child(even) td { background:#121821; }
+
+        details { background:#0E1219; border:1px solid #28303C; border-radius:4px; margin:0.6rem 0; }
+        summary { padding:0.3rem 0.6rem; cursor:pointer; font-weight:500; color:#C5CED9; background:#18202A; border-radius:4px; user-select:none; font-size:13px; }
+        summary:hover { background:#1E2834; }
+        details[open] summary { border-bottom:1px solid #28303C; border-radius:4px 4px 0 0; }
+        details .content { padding:0.5rem 0.6rem; font-size:12px; font-family:'JetBrains Mono',monospace; white-space:pre-wrap; word-break:break-all; color:#C5CED9; overflow-x:auto; max-height:500px; overflow-y:auto; }
+
+        .metadata-table td { padding:0.15rem 0.5rem; }
+        .metadata-table .label { color:#6E7883; width:140px; font-weight:400; }
+
+        .text-muted { color:#6E7883; }
+        .text-success { color:#52A36B; }
+        .text-warning { color:#D1A64A; }
+        .text-danger { color:#B95A5A; }
+
+        @media (max-width:768px) {
+            body { flex-direction:column; }
+            .sidebar-wrapper { height:auto; position:static; overflow:visible; }
+            .sidebar { width:100% !important; height:auto; max-width:none !important; min-width:unset; resize:none; border-right:none; border-bottom:1px solid #28303C; padding:0.5rem; }
+            .sidebar-nav { flex-direction:row; flex-wrap:wrap; gap:0.1rem; }
+            .sidebar-nav a { padding:0.15rem 0.4rem; font-size:11px; white-space:nowrap; }
+            .sidebar-nav .section-number { width:auto; margin-right:0.1rem; }
+            .main-content { padding:1rem; }
+            .executive-summary { grid-template-columns:1fr; }
+            .document-header .meta-line { flex-direction:column; gap:0.3rem; }
+        }
+
+        @media print {
+            .sidebar-wrapper { display:none; }
+            body { background:white; color:black; font-size:11px; }
+            .main-content { padding:1rem; max-width:100%; }
+            .document-header, .executive-summary, table, pre, details { border-color:#ccc; background:#fafafa; }
+            .document-header .meta-line .label { color:#666; }
+            .document-header .meta-line .value { color:#000; }
+            .badge { border:1px solid #999; background:transparent; color:#000; }
+            .badge.success { border-color:#2a7a3a; color:#2a7a3a; }
+            .badge.warning { border-color:#b08a3a; color:#b08a3a; }
+            .badge.danger { border-color:#b05a5a; color:#b05a5a; }
+            th { background:#eee; color:#333; border-color:#999; }
+            td { background:white; border-color:#999; }
+            tr:nth-child(even) td { background:#f5f5f5; }
+            .text-muted { color:#666; }
+            .text-success { color:#2a7a3a; }
+            .text-warning { color:#b08a3a; }
+            .text-danger { color:#b05a5a; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================
+    SIDEBAR – Table of Contents
+    ============================================================ -->
+    <div class="sidebar-wrapper">
+        <aside class="sidebar">
+            <div class="brand">COREI <span>·</span> DOC</div>
+            <nav class="sidebar-nav">
+                <a href="#sec-01"><span class="section-number">01</span> Executive Summary</a>
+                <a href="#sec-02"><span class="section-number">02</span> Scope</a>
+                <a href="#sec-03"><span class="section-number">03</span> Architecture</a>
+                <a href="#sec-04"><span class="section-number">04</span> Ownership</a>
+                <a href="#sec-05"><span class="section-number">05</span> Responsibilities</a>
+                <a href="#sec-06"><span class="section-number">06</span> Dependencies</a>
+                <a href="#sec-07"><span class="section-number">07</span> Contracts</a>
+                <a href="#sec-08"><span class="section-number">08</span> Interfaces</a>
+                <a href="#sec-09"><span class="section-number">09</span> Runtime</a>
+                <a href="#sec-10"><span class="section-number">10</span> Public API</a>
+                <a href="#sec-11"><span class="section-number">11</span> Components</a>
+                <a href="#sec-12"><span class="section-number">12</span> File Inventory</a>
+                <a href="#sec-13"><span class="section-number">13</span> Validation</a>
+                <a href="#sec-14"><span class="section-number">14</span> Browser Validation</a>
+                <a href="#sec-15"><span class="section-number">15</span> Repository Tree</a>
+                <a href="#sec-16"><span class="section-number">16</span> Build Output</a>
+                <a href="#sec-17"><span class="section-number">17</span> Certification</a>
+                <a href="#sec-18"><span class="section-number">18</span> References</a>
+                <a href="#sec-19"><span class="section-number">19</span> Appendix</a>
+            </nav>
+        </aside>
+    </div>
+
+    <!-- ============================================================
+    MAIN CONTENT
+    ============================================================ -->
+    <main class="main-content">
+
+        <!-- ============================================================
+        HEADER
+        ============================================================ -->
+        <header class="document-header">
+            <div class="org">COREI · Institutional Operating Platform</div>
+            <div class="title">Stage 25 · Phase 01</div>
+            <div class="subtitle">Platform Bootstrap</div>
+            <div class="meta-line">
+                <span class="item"><span class="label">Status</span><span class="value"><span class="badge success">CERTIFIED</span></span></span>
+                <span class="item"><span class="label">Version</span><span class="value">25.01.0</span></span>
+                <span class="item"><span class="label">Repository</span><span class="value">corei</span></span>
+                <span class="item"><span class="label">Branch</span><span class="value">main</span></span>
+                <span class="item"><span class="label">Commit</span><span class="value">ac8e282</span></span>
+                <span class="item"><span class="label">Tag</span><span class="value">stage25-phase01-bootstrap-v1</span></span>
+                <span class="item"><span class="label">Generated</span><span class="value">2026-08-08</span></span>
+            </div>
+        </header>
+
+        <!-- ============================================================
+        EXECUTIVE SUMMARY
+        ============================================================ -->
+        <section class="executive-summary">
+            <div class="item"><span class="label">Purpose</span><span class="value">Establish deterministic bootstrap foundation for COREI OS</span></div>
+            <div class="item"><span class="label">Ownership</span><span class="value">Platform Kernel Team</span></div>
+            <div class="item"><span class="label">Consumers</span><span class="value">All later phases (02–32)</span></div>
+            <div class="item"><span class="label">Providers</span><span class="value">React, Vite, Browser environment</span></div>
+            <div class="item"><span class="label">Protected Boundaries</span><span class="value">src/foundation/bootstrap/, configuration/, services/, capabilities/, runtime/, kernel/</span></div>
+            <div class="item"><span class="label">Repository Scope</span><span class="value">43 files</span></div>
+            <div class="item"><span class="label">Certification</span><span class="value"><span class="text-success">PASSED</span></span></div>
+            <div class="item"><span class="label">Validation</span><span class="value"><span class="text-success">PASSED</span></span></div>
+        </section>
+
+        <!-- ============================================================
+        SECTION 01 – EXECUTIVE SUMMARY
+        ============================================================ -->
+        <section id="sec-01" class="section">
+            <h2><span class="section-number">01</span> Executive Summary</h2>
+            <p>Phase‑01 establishes the authoritative bootstrap foundation for the entire COREI OS. It provides deterministic startup, configuration loading, service container, capability provider abstraction, runtime lifecycle, and application kernel execution. All subsequent phases consume this foundation without rebuilding it.</p>
+            <table class="metadata-table">
+                <tr><td class="label">Purpose</td><td>Establish deterministic bootstrap and execution foundation</td></tr>
+                <tr><td class="label">Ownership</td><td>Platform Kernel Team</td></tr>
+                <tr><td class="label">Consumers</td><td>All later phases (02–32)</td></tr>
+                <tr><td class="label">Providers</td><td>React, Vite, Browser environment</td></tr>
+                <tr><td class="label">Protected Boundaries</td><td>src/foundation/bootstrap/, configuration/, services/, capabilities/, runtime/, kernel/</td></tr>
+                <tr><td class="label">Repository Scope</td><td>43 files</td></tr>
+                <tr><td class="label">Certification</td><td><span class="text-success">PASSED</span></td></tr>
+                <tr><td class="label">Validation</td><td><span class="text-success">PASSED</span></td></tr>
+            </table>
+        </section>
+
+        <!-- ============================================================
+        SECTION 02 – SCOPE
+        ============================================================ -->
+        <section id="sec-02" class="section">
+            <h2><span class="section-number">02</span> Scope</h2>
+            <table>
+                <thead><tr><th>Category</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td>In Scope</td><td>Bootstrap, Configuration, Platform Services (Logging, Events, Notifications, Diagnostics), Capability Providers, Runtime, Application Kernel, Startup Validation</td></tr>
+                    <tr><td>Out of Scope</td><td>UI rendering, Workspace, Panels, Intelligence, Authentication, Governance, Trading capabilities</td></tr>
+                    <tr><td>Consumes</td><td>React, Vite, Browser environment</td></tr>
+                    <tr><td>Provides</td><td>Bootstrap Runtime, Configuration Registry, Service Container, Capability Container, Runtime Engine, Kernel Engine, Startup Validator</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- ============================================================
+        SECTION 03 – ARCHITECTURE
+        ============================================================ -->
+        <section id="sec-03" class="section">
+            <h2><span class="section-number">03</span> Architecture</h2>
+            <p>The Phase‑01 architecture follows a strict layering that separates initialization from execution.</p>
+            <table>
+                <thead><tr><th>Layer</th><th>Responsibility</th></tr></thead>
+                <tbody>
+                    <tr><td>Bootstrap</td><td>Startup pipeline, lifecycle, context, events, controller</td></tr>
+                    <tr><td>Configuration</td><td>Load environment variables, validate, provide configuration</td></tr>
+                    <tr><td>Platform Services</td><td>Logging, Events, Notifications, Diagnostics</td></tr>
+                    <tr><td>Capability Providers</td><td>Abstraction for external providers (Dockview, etc.)</td></tr>
+                    <tr><td>Runtime</td><td>Platform lifecycle management (start/stop/fail)</td></tr>
+                    <tr><td>Application Kernel</td><td>Execution layer; future modules run on top</td></tr>
+                </tbody>
+            </table>
+            <h3>Startup Chain</h3>
+            <pre>Browser → main.tsx → Bootstrap → Configuration → Services → Capabilities → Runtime → Kernel → Platform Execution</pre>
+            <h3>Ownership Chain</h3>
+            <pre>Bootstrap → Runtime → Kernel → Future Modules</pre>
+        </section>
+
+        <!-- ============================================================
+        SECTION 04 – OWNERSHIP
+        ============================================================ -->
+        <section id="sec-04" class="section">
+            <h2><span class="section-number">04</span> Ownership</h2>
+            <table>
+                <thead><tr><th>Component</th><th>Owner</th><th>Repository Path</th></tr></thead>
+                <tbody>
+                    <tr><td>Bootstrap</td><td>Platform Kernel Team</td><td>src/foundation/bootstrap/</td></tr>
+                    <tr><td>Configuration</td><td>Platform Kernel Team</td><td>src/foundation/configuration/</td></tr>
+                    <tr><td>Platform Services</td><td>Platform Kernel Team</td><td>src/foundation/services/</td></tr>
+                    <tr><td>Capability Providers</td><td>Platform Kernel Team</td><td>src/foundation/capabilities/</td></tr>
+                    <tr><td>Runtime</td><td>Platform Kernel Team</td><td>src/foundation/runtime/</td></tr>
+                    <tr><td>Application Kernel</td><td>Platform Kernel Team</td><td>src/foundation/kernel/</td></tr>
+                    <tr><td>Startup Validator</td><td>Platform Kernel Team</td><td>src/foundation/bootstrap/validation/</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- ============================================================
+        SECTION 05 – RESPONSIBILITIES
+        ============================================================ -->
+        <section id="sec-05" class="section">
+            <h2><span class="section-number">05</span> Responsibilities</h2>
+            <table>
+                <thead><tr><th>Responsibility</th><th>Owner</th></tr></thead>
+                <tbody>
+                    <tr><td>Platform startup and shutdown</td><td>Bootstrap</td></tr>
+                    <tr><td>Load and provide configuration</td><td>Configuration</td></tr>
+                    <tr><td>Initialize logging, events, notifications, diagnostics</td><td>Platform Services</td></tr>
+                    <tr><td>Register and manage external capability providers</td><td>Capability Providers</td></tr>
+                    <tr><td>Manage runtime lifecycle</td><td>Runtime</td></tr>
+                    <tr><td>Execute application kernel</td><td>Application Kernel</td></tr>
+                    <tr><td>Validate startup success</td><td>Startup Validator</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- ============================================================
+        SECTION 06 – DEPENDENCIES
+        ============================================================ -->
+        <section id="sec-06" class="section">
+            <h2><span class="section-number">06</span> Dependencies</h2>
+            <table>
+                <thead><tr><th>Dependency</th><th>Type</th><th>Purpose</th></tr></thead>
+                <tbody>
+                    <tr><td>React</td><td>External</td><td>UI rendering foundation</td></tr>
+                    <tr><td>Vite</td><td>External</td><td>Build tool</td></tr>
+                    <tr><td>TypeScript</td><td>External</td><td>Static typing</td></tr>
+                    <tr><td>Platform Foundation (Phase‑02)</td><td>Future</td><td>Consumed by later phases, not this one</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- ============================================================
+        SECTION 07 – CONTRACTS
+        ============================================================ -->
+        <section id="sec-07" class="section">
+            <h2><span class="section-number">07</span> Contracts</h2>
+            <details>
+                <summary>BootstrapLifecycle (8 states)</summary>
+                <div class="content">
+export type BootstrapLifecycleState =
+    | 'CREATED'
+    | 'STARTING'
+    | 'INITIALIZING'
+    | 'READY'
+    | 'RUNNING'
+    | 'STOPPING'
+    | 'STOPPED'
+    | 'FAILED';
+                </div>
+            </details>
+            <details>
+                <summary>BootstrapContext</summary>
+                <div class="content">
+export interface BootstrapContext {
+    id: string;
+    mode: 'development' | 'production' | 'test';
+    lifecycle: BootstrapLifecycleState;
+    startTime: Date;
+    version: string;
+}
+                </div>
+            </details>
+            <details>
+                <summary>BootstrapController</summary>
+                <div class="content">
+export interface BootstrapController {
+    start(): void;
+    ready(): void;
+    run(): void;
+    stop(): void;
+    fail(error: Error): void;
+}
+                </div>
+            </details>
+            <details>
+                <summary>PlatformConfiguration</summary>
+                <div class="content">
+export interface PlatformConfiguration {
+    appName: string;
+    appVersion: string;
+    environment: 'development' | 'production' | 'test';
+}
+                </div>
+            </details>
+            <details>
+                <summary>BootstrapEvents (8 event types)</summary>
+                <div class="content">
+export const BOOT_STARTED = 'BOOT_STARTED';
+export const BOOT_INITIALIZING = 'BOOT_INITIALIZING';
+export const BOOT_READY = 'BOOT_READY';
+export const BOOT_RUNNING = 'BOOT_RUNNING';
+export const BOOT_STOPPING = 'BOOT_STOPPING';
+export const BOOT_STOPPED = 'BOOT_STOPPED';
+export const BOOT_FAILED = 'BOOT_FAILED';
+export const BOOT_RESTARTING = 'BOOT_RESTARTING';
+                </div>
+            </details>
+        </section>
+
+        <!-- ============================================================
+        SECTION 08 – INTERFACES
+        ============================================================ -->
+        <section id="sec-08" class="section">
+            <h2><span class="section-number">08</span> Interfaces</h2>
+            <table>
+                <thead><tr><th>Interface</th><th>File</th><th>Purpose</th></tr></thead>
+                <tbody>
+                    <tr><td><code>Bootstrap</code></td><td>src/foundation/bootstrap/bootstrap.ts</td><td>Main bootstrap runtime</td></tr>
+                    <tr><td><code>BootstrapController</code></td><td>src/foundation/bootstrap/controller/bootstrap-controller.ts</td><td>Controls startup/shutdown</td></tr>
+                    <tr><td><code>BootstrapContext</code></td><td>src/foundation/bootstrap/context/bootstrap-context.ts</td><td>Shared startup context</td></tr>
+                    <tr><td><code>BootstrapEvents</code></td><td>src/foundation/bootstrap/events/bootstrap-events.ts</td><td>Startup events</td></tr>
+                    <tr><td><code>BootstrapPipeline</code></td><td>src/foundation/bootstrap/pipeline/bootstrap-pipeline.ts</td><td>Startup pipeline stages</td></tr>
+                    <tr><td><code>ConfigurationLoader</code></td><td>src/foundation/configuration/loader/configuration-loader.ts</td><td>Loads configuration</td></tr>
+                    <tr><td><code>ServiceContainer</code></td><td>src/foundation/services/container/service-container.ts</td><td>Platform service container</td></tr>
+                    <tr><td><code>CapabilityContainer</code></td><td>src/foundation/capabilities/container/capability-container.ts</td><td>Capability provider container</td></tr>
+                    <tr><td><code>RuntimeEngine</code></td><td>src/foundation/runtime/engine/runtime-engine.ts</td><td>Runtime engine</td></tr>
+                    <tr><td><code>KernelEngine</code></td><td>src/foundation/kernel/engine/kernel-engine.ts</td><td>Application kernel engine</td></tr>
+                    <tr><td><code>StartupValidator</code></td><td>src/foundation/bootstrap/validation/startup-validator.ts</td><td>Validates startup success</td></tr>
+                    <tr><td><code>PlatformService</code></td><td>src/foundation/services/contracts/platform-service.ts</td><td>Common service contract</td></tr>
+                    <tr><td><code>CapabilityProvider</code></td><td>src/foundation/capabilities/contracts/capability-provider.ts</td><td>Common capability provider contract</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- ============================================================
+        SECTION 09 – RUNTIME
+        ============================================================ -->
+        <section id="sec-09" class="section">
+            <h2><span class="section-number">09</span> Runtime</h2>
+            <table>
+                <thead><tr><th>Runtime Component</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td>Bootstrap Runtime</td><td>Orchestrates entire startup sequence</td></tr>
+                    <tr><td>Configuration Runtime</td><td>Loads and provides configuration</td></tr>
+                    <tr><td>Service Container</td><td>Manages platform services (logging, events, notifications, diagnostics)</td></tr>
+                    <tr><td>Capability Container</td><td>Manages external capability providers</td></tr>
+                    <tr><td>Runtime Engine</td><td>Controls runtime lifecycle (start, stop, fail) – 6 states</td></tr>
+                    <tr><td>Kernel Engine</td><td>Executes the application kernel – 6 states</td></tr>
+                </tbody>
+            </table>
+            <h3>Runtime States</h3>
+            <pre>CREATED → STARTING → RUNNING → STOPPING → STOPPED → FAILED</pre>
+            <h3>Kernel States</h3>
+            <pre>CREATED → STARTING → RUNNING → STOPPING → STOPPED → FAILED</pre>
+        </section>
+
+        <!-- ============================================================
+        SECTION 10 – PUBLIC API
+        ============================================================ -->
+        <section id="sec-10" class="section">
+            <h2><span class="section-number">10</span> Public API</h2>
+            <p>All exports from Phase‑01 modules (43 files):</p>
+            <details>
+                <summary>Show / Hide Public API</summary>
+                <div class="content">
+--- Bootstrap (src/foundation/bootstrap/index.ts) ---
+export * from "./bootstrap";
+export * from "./types";
+export * from "./validation/startup-validator";
+
+--- Configuration (src/foundation/configuration/index.ts) ---
+export * from "./model/platform-configuration";
+export * from "./service/configuration-service";
+export * from "./registry/configuration-registry";
+export * from "./loader/configuration-loader";
+export * from "./diagnostics/configuration-diagnostics";
+
+--- Platform Services (src/foundation/services/index.ts) ---
+export * from "./contracts/platform-service";
+export * from "./registry/service-registry";
+export * from "./container/service-container";
+export * from "./logging/logging-service";
+export * from "./events/event-service";
+export * from "./notifications/notification-service";
+export * from "./diagnostics/diagnostics-service";
+
+--- Capabilities (src/foundation/capabilities/index.ts) ---
+export * from "./contracts/capability-provider";
+export * from "./registry/capability-registry";
+export * from "./container/capability-container";
+export * from "./providers/dockview/dockview-provider";
+
+--- Runtime (src/foundation/runtime/index.ts) ---
+export * from "./state/runtime-state";
+export * from "./context/runtime-context";
+export * from "./controller/runtime-controller";
+export * from "./registry/runtime-registry";
+export * from "./engine/runtime-engine";
+export * from "./diagnostics/runtime-diagnostics";
+
+--- Kernel (src/foundation/kernel/index.ts) ---
+export * from "./state/kernel-state";
+export * from "./context/kernel-context";
+export * from "./controller/kernel-controller";
+export * from "./registry/kernel-registry";
+export * from "./engine/kernel-engine";
+export * from "./diagnostics/kernel-diagnostics";
+                </div>
+            </details>
+        </section>
+
+        <!-- ============================================================
+        SECTION 11 – COMPONENTS (Phase‑01 has no UI components)
+        ============================================================ -->
+        <section id="sec-11" class="section">
+            <h2><span class="section-number">11</span> Components</h2>
+            <p><em>Phase‑01 does not include UI components; it is a pure infrastructure layer.</em></p>
+            <p>The entry point is <code>src/main.tsx</code>, which invokes the Bootstrap runtime.</p>
+            <h3>Application Activation</h3>
+            <pre>Browser → main.tsx → Bootstrap → React → ApplicationRoot → Shell</pre>
+        </section>
+
+        <!-- ============================================================
+        SECTION 12 – FILE INVENTORY
+        ============================================================ -->
+        <section id="sec-12" class="section">
+            <h2><span class="section-number">12</span> File Inventory</h2>
+            <p><strong>Total:</strong> 43 files across <code>src/foundation/</code> and <code>src/main.tsx</code></p>
+            <details>
+                <summary>Show / Hide full file list (43 files)</summary>
+                <div class="content">
+src/foundation/bootstrap/bootstrap.ts
+src/foundation/bootstrap/context/bootstrap-context.ts
+src/foundation/bootstrap/controller/bootstrap-controller.ts
+src/foundation/bootstrap/events/bootstrap-events.ts
+src/foundation/bootstrap/index.ts
+src/foundation/bootstrap/lifecycle/lifecycle.ts
+src/foundation/bootstrap/pipeline/bootstrap-pipeline.ts
+src/foundation/bootstrap/types.ts
+src/foundation/bootstrap/validation/startup-validator.ts
+src/foundation/capabilities/container/capability-container.ts
+src/foundation/capabilities/contracts/capability-provider.ts
+src/foundation/capabilities/index.ts
+src/foundation/capabilities/providers/dockview/dockview-provider.ts
+src/foundation/capabilities/registry/capability-registry.ts
+src/foundation/configuration/diagnostics/configuration-diagnostics.ts
+src/foundation/configuration/index.ts
+src/foundation/configuration/loader/configuration-loader.ts
+src/foundation/configuration/model/platform-configuration.ts
+src/foundation/configuration/registry/configuration-registry.ts
+src/foundation/configuration/service/configuration-service.ts
+src/foundation/kernel/context/kernel-context.ts
+src/foundation/kernel/controller/kernel-controller.ts
+src/foundation/kernel/diagnostics/kernel-diagnostics.ts
+src/foundation/kernel/engine/kernel-engine.ts
+src/foundation/kernel/index.ts
+src/foundation/kernel/registry/kernel-registry.ts
+src/foundation/kernel/state/kernel-state.ts
+src/foundation/runtime/context/runtime-context.ts
+src/foundation/runtime/controller/runtime-controller.ts
+src/foundation/runtime/diagnostics/runtime-diagnostics.ts
+src/foundation/runtime/engine/runtime-engine.ts
+src/foundation/runtime/index.ts
+src/foundation/runtime/registry/runtime-registry.ts
+src/foundation/runtime/state/runtime-state.ts
+src/foundation/services/container/service-container.ts
+src/foundation/services/contracts/platform-service.ts
+src/foundation/services/diagnostics/diagnostics-service.ts
+src/foundation/services/events/event-service.ts
+src/foundation/services/index.ts
+src/foundation/services/logging/logging-service.ts
+src/foundation/services/notifications/notification-service.ts
+src/foundation/services/registry/service-registry.ts
+src/main.tsx
+                </div>
+            </details>
+            <h3>File Count by Module</h3>
+            <table>
+                <thead><tr><th>Module</th><th>Files</th></tr></thead>
+                <tbody>
+                    <tr><td>Bootstrap</td><td>9</td></tr>
+                    <tr><td>Configuration</td><td>6</td></tr>
+                    <tr><td>Platform Services</td><td>8</td></tr>
+                    <tr><td>Capabilities</td><td>5</td></tr>
+                    <tr><td>Runtime</td><td>7</td></tr>
+                    <tr><td>Kernel</td><td>7</td></tr>
+                    <tr><td>Entry</td><td>1</td></tr>
+                    <tr><td><strong>Total</strong></td><td><strong>43</strong></td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- ============================================================
+        SECTION 13 – VALIDATION
+        ============================================================ -->
+        <section id="sec-13" class="section">
+            <h2><span class="section-number">13</span> Validation</h2>
+            <table>
+                <thead><tr><th>Validation Type</th><th>Status</th></tr></thead>
+                <tbody>
+                    <tr><td>TypeScript Compilation (tsc --noEmit)</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Production Build (pnpm build)</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Repository Structure</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Architecture Compliance</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Dependency Analysis (no circular)</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Startup Validation</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Configuration Validation</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Service Initialization</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Capability Registration</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Runtime Initialization</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Kernel Initialization</td><td><span class="text-success">PASS</span></td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- ============================================================
+        SECTION 14 – BROWSER VALIDATION
+        ============================================================ -->
+        <section id="sec-14" class="section">
+            <h2><span class="section-number">14</span> Browser Validation</h2>
+            <table>
+                <thead><tr><th>Browser</th><th>Status</th></tr></thead>
+                <tbody>
+                    <tr><td>Chromium (latest)</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Firefox (latest)</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>WebKit (latest)</td><td><span class="text-success">PASS</span></td></tr>
+                </tbody>
+            </table>
+            <p>Startup sequence completes, and the shell becomes visible. No regressions in existing workbench.</p>
+        </section>
+
+        <!-- ============================================================
+        SECTION 15 – REPOSITORY TREE
+        ============================================================ -->
+        <section id="sec-15" class="section">
+            <h2><span class="section-number">15</span> Repository Tree</h2>
+            <details>
+                <summary>Show / Hide tree</summary>
+                <div class="content">
+src/foundation/bootstrap
+├── context
+│   └── bootstrap-context.ts
+├── controller
+│   └── bootstrap-controller.ts
+├── events
+│   └── bootstrap-events.ts
+├── lifecycle
+│   └── lifecycle.ts
+├── pipeline
+│   └── bootstrap-pipeline.ts
+├── validation
+│   └── startup-validator.ts
+├── bootstrap.ts
+├── index.ts
+└── types.ts
+
+src/foundation/configuration
+├── diagnostics
+│   └── configuration-diagnostics.ts
+├── loader
+│   └── configuration-loader.ts
+├── model
+│   └── platform-configuration.ts
+├── registry
+│   └── configuration-registry.ts
+├── service
+│   └── configuration-service.ts
+└── index.ts
+
+src/foundation/services
+├── container
+│   └── service-container.ts
+├── contracts
+│   └── platform-service.ts
+├── diagnostics
+│   └── diagnostics-service.ts
+├── events
+│   └── event-service.ts
+├── logging
+│   └── logging-service.ts
+├── notifications
+│   └── notification-service.ts
+├── registry
+│   └── service-registry.ts
+└── index.ts
+
+src/foundation/capabilities
+├── container
+│   └── capability-container.ts
+├── contracts
+│   └── capability-provider.ts
+├── providers
+│   └── dockview
+│       └── dockview-provider.ts
+├── registry
+│   └── capability-registry.ts
+└── index.ts
+
+src/foundation/runtime
+├── context
+│   └── runtime-context.ts
+├── controller
+│   └── runtime-controller.ts
+├── diagnostics
+│   └── runtime-diagnostics.ts
+├── engine
+│   └── runtime-engine.ts
+├── registry
+│   └── runtime-registry.ts
+├── state
+│   └── runtime-state.ts
+└── index.ts
+
+src/foundation/kernel
+├── context
+│   └── kernel-context.ts
+├── controller
+│   └── kernel-controller.ts
+├── diagnostics
+│   └── kernel-diagnostics.ts
+├── engine
+│   └── kernel-engine.ts
+├── registry
+│   └── kernel-registry.ts
+├── state
+│   └── kernel-state.ts
+└── index.ts
+
+src/main.tsx
+                </div>
+            </details>
+        </section>
+
+        <!-- ============================================================
+        SECTION 16 – BUILD OUTPUT
+        ============================================================ -->
+        <section id="sec-16" class="section">
+            <h2><span class="section-number">16</span> Build Output</h2>
+            <pre>
+> @corei/corei-os@1.0.0 build
+> tsc -b && vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 2374 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                     0.43 kB │ gzip:   0.29 kB
+dist/assets/index-BSSyXHgG.css    134.51 kB │ gzip:  13.40 kB
+dist/assets/index-CHQ2bGpX.js   1,028.40 kB │ gzip: 257.58 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 4.04s
+            </pre>
+            <p>Build succeeds. Chunk size warning is informational and deferred to Phase‑30.</p>
+        </section>
+
+        <!-- ============================================================
+        SECTION 17 – CERTIFICATION
+        ============================================================ -->
+        <section id="sec-17" class="section">
+            <h2><span class="section-number">17</span> Certification</h2>
+            <table>
+                <thead><tr><th>Criteria</th><th>Status</th></tr></thead>
+                <tbody>
+                    <tr><td>Architecture Review</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Repository Audit</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Integration Test</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Browser Validation</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Documentation Completeness</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Institutional Sign‑off</td><td><span class="text-success">PASS</span></td></tr>
+                </tbody>
+            </table>
+            <p><strong>Status:</strong> <span class="badge success">CERTIFIED</span></p>
+        </section>
+
+        <!-- ============================================================
+        SECTION 18 – REFERENCES
+        ============================================================ -->
+        <section id="sec-18" class="section">
+            <h2><span class="section-number">18</span> References</h2>
+            <ul>
+                <li><a href="#">DOC-11: COREI Execution Constitution</a></li>
+                <li><a href="#">DOC-10: Stage‑25 Phase‑01-02 Blueprint</a></li>
+                <li><a href="#">COREI_Phase01_Reference_Enhanced.html</a></li>
+                <li><a href="#">COREI_Continuity_Handover.md</a></li>
+            </ul>
+        </section>
+
+        <!-- ============================================================
+        SECTION 19 – APPENDIX
+        ============================================================ -->
+        <section id="sec-19" class="section">
+            <h2><span class="section-number">19</span> Appendix</h2>
+            <h3>A. Bootstrap Lifecycle States</h3>
+            <table>
+                <thead><tr><th>State</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>CREATED</code></td><td>Bootstrap instance created</td></tr>
+                    <tr><td><code>STARTING</code></td><td>Startup initiated</td></tr>
+                    <tr><td><code>INITIALIZING</code></td><td>Initialization in progress</td></tr>
+                    <tr><td><code>READY</code></td><td>Initialization complete, ready to run</td></tr>
+                    <tr><td><code>RUNNING</code></td><td>Platform operational</td></tr>
+                    <tr><td><code>STOPPING</code></td><td>Shutdown initiated</td></tr>
+                    <tr><td><code>STOPPED</code></td><td>Shutdown complete</td></tr>
+                    <tr><td><code>FAILED</code></td><td>Unrecoverable error</td></tr>
+                </tbody>
+            </table>
+
+            <h3>B. Bootstrap Events (8)</h3>
+            <table>
+                <thead><tr><th>Event</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>BOOT_STARTED</code></td><td>Bootstrap started</td></tr>
+                    <tr><td><code>BOOT_INITIALIZING</code></td><td>Initialization phase</td></tr>
+                    <tr><td><code>BOOT_READY</code></td><td>Bootstrap ready</td></tr>
+                    <tr><td><code>BOOT_RUNNING</code></td><td>Platform running</td></tr>
+                    <tr><td><code>BOOT_STOPPING</code></td><td>Shutdown phase</td></tr>
+                    <tr><td><code>BOOT_STOPPED</code></td><td>Platform stopped</td></tr>
+                    <tr><td><code>BOOT_FAILED</code></td><td>Boot failure</td></tr>
+                    <tr><td><code>BOOT_RESTARTING</code></td><td>Restart initiated</td></tr>
+                </tbody>
+            </table>
+
+            <h3>C. Version History</h3>
+            <table>
+                <thead><tr><th>Version</th><th>Date</th><th>Changes</th></tr></thead>
+                <tbody>
+                    <tr><td>25.01.0</td><td>2026-08-04</td><td>Initial certification</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- ============================================================
+        FOOTER
+        ============================================================ -->
+        <div style="text-align:center;font-size:11px;color:#6E7883;border-top:1px solid #28303C;padding-top:1rem;margin-top:2rem;">
+            <p>COREI Stage‑25 Phase‑01 Reference &bull; Generated 2026-08-08 &bull; Authoritative</p>
+        </div>
+
+    </main>
+
+</body>
+</html>

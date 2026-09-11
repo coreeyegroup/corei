@@ -1,0 +1,40 @@
+NAMESPACE         NAME                                                READY   STATUS    RESTARTS      AGE
+auth              keycloak-5d687c65cc-b878l                           1/1     Running   0             47m
+auth              keycloak-postgres-64dd7479d5-9hvxp                  1/1     Running   0             69m
+cert-manager      cert-manager-b5ffdd788-pkrzp                        1/1     Running   0             22m
+cert-manager      cert-manager-cainjector-85796596b4-kqv6n            1/1     Running   0             22m
+cert-manager      cert-manager-webhook-78df589d59-g4w49               1/1     Running   0             22m
+istio-system      istio-ingressgateway-5db55d86c5-kx4sn               1/1     Running   0             36m
+istio-system      istiod-77fc5db7bb-cnh7r                             1/1     Running   0             36m
+kube-system       calico-kube-controllers-5fc7d6cf67-4k9k9            1/1     Running   0             27h
+kube-system       calico-node-5c5tb                                   1/1     Running   0             27h
+kube-system       coredns-76f75df574-9qgkd                            1/1     Running   0             27h
+kube-system       coredns-76f75df574-mjlf8                            1/1     Running   0             27h
+kube-system       etcd-core-node                                      1/1     Running   0             27h
+kube-system       kube-apiserver-core-node                            1/1     Running   0             27h
+kube-system       kube-controller-manager-core-node                   1/1     Running   0             27h
+kube-system       kube-proxy-h75d7                                    1/1     Running   0             27h
+kube-system       kube-scheduler-core-node                            1/1     Running   0             27h
+logging           falco-2d8nd                                         1/1     Running   0             95s
+longhorn-system   csi-attacher-777966c964-94nwb                       1/1     Running   1 (26h ago)   26h
+longhorn-system   csi-attacher-777966c964-bswjp                       1/1     Running   0             26h
+longhorn-system   csi-attacher-777966c964-ssxmz                       1/1     Running   0             26h
+longhorn-system   csi-provisioner-66cf876fb7-5xrvn                    1/1     Running   2 (25h ago)   26h
+longhorn-system   csi-provisioner-66cf876fb7-8nfgs                    1/1     Running   0             26h
+longhorn-system   csi-provisioner-66cf876fb7-lft72                    1/1     Running   1 (25h ago)   26h
+longhorn-system   csi-resizer-7684559497-n688c                        1/1     Running   0             26h
+longhorn-system   csi-resizer-7684559497-nv244                        1/1     Running   1 (26h ago)   26h
+longhorn-system   csi-resizer-7684559497-rmwcf                        1/1     Running   0             26h
+longhorn-system   csi-snapshotter-7fbfd46694-gfj72                    1/1     Running   0             26h
+longhorn-system   csi-snapshotter-7fbfd46694-jhhfg                    1/1     Running   0             26h
+longhorn-system   csi-snapshotter-7fbfd46694-wvtzf                    1/1     Running   1 (26h ago)   26h
+longhorn-system   engine-image-ei-c9fa6d45-vs9b8                      1/1     Running   0             26h
+longhorn-system   instance-manager-b5f2e48e13220065ab8d016faafc3eb7   1/1     Running   0             26h
+longhorn-system   longhorn-csi-plugin-lvnbg                           3/3     Running   0             26h
+longhorn-system   longhorn-driver-deployer-5f9c4bc5d4-g7st4           1/1     Running   0             26h
+longhorn-system   longhorn-manager-k54kn                              2/2     Running   0             26h
+longhorn-system   longhorn-ui-765655d4f8-ckdd9                        1/1     Running   0             26h
+longhorn-system   longhorn-ui-765655d4f8-gh2dw                        1/1     Running   0             26h
+platform          kong-kong-864d564d68-dtc2p                          2/2     Running   0             27m
+vault             vault-0                                             1/1     Running   0             21h
+vault             vault-agent-injector-8d6b668b4-9hgbf                1/1     Running   0             21h

@@ -1,0 +1,570 @@
+PHASE B — STEP 3: ARCHITECTURAL INTENT LAYER
+
+Reference ID:
+CORE-TRADING-SYSTEM-PHASE-B-STEP3-ARCHITECTURAL-INTENT-V1-2026-04-07
+
+1. PHASE IDENTITY LAYER
+	1.1 Phase Name
+
+		Phase B — Step 3: Architectural Intent Layer
+
+	1.2 Phase Role
+
+		Defines the deterministic architecture of the constraint system, including structure, evaluation model, and system positioning within the global trading lifecycle.
+
+	1.3 Phase Objective
+
+		Establish a deterministic, non-transformative constraint architecture that guarantees reproducible, replay-safe constraint evaluation.
+
+	1.4 Why This Phase Exists
+
+		Prevents:
+
+		ambiguous constraint system design
+		cross-phase leakage
+		non-deterministic constraint evaluation
+		architectural inconsistency across constraint enforcement
+
+2. PHASE SCOPE CONTROL
+	2.1 Included Scope (STRICT)
+		constraint system architecture definition
+		constraint evaluation model
+		architectural principles
+		system positioning across phases
+		constraint interaction model
+		evaluation determinism guarantees
+
+	2.2 Excluded Scope (STRICT)
+		constraint definitions (Step 4)
+		rule implementation (Section 5)
+		flow execution logic (Section 6 processing steps)
+		infrastructure design (Phase C)
+		execution logic (Phase D)
+
+3. ARCHITECTURAL INTENT LAYER
+	3.1 CORE DESIGN PRINCIPLES (MANDATORY — HARD CONSTRAINTS)
+
+		All principles are non-negotiable architectural constraints. Violation → Phase INVALID.
+
+		P1: Deterministic Constraint Enforcement
+
+			Definition:
+
+			For identical:
+
+				canonical_input_set
+
+			System MUST produce:
+
+				identical constraint evaluation output (bit-level identical)
+
+			Constraints:
+
+				No randomness allowed
+				No time-based variability
+				No environment-dependent behavior
+				No floating-point arithmetic
+
+			Numeric Model Constraint
+
+			All numeric computations MUST use:
+
+				fixed-point representation
+
+			Format:
+
+				value = integer / 10^6
+
+			Constraint:
+
+				floating-point arithmetic is strictly forbidden
+				numeric precision MUST be consistent across all executions
+
+			Violation:
+
+				→ NON-REPRODUCIBLE SYSTEM → PHASE FAILURE
+
+			No Hidden State Constraint
+
+				Constraint evaluation MUST NOT depend on:
+
+					cache
+					memory of previous runs
+					persisted intermediate state
+
+		P2: Constraint Isolation Principle
+
+			Definition:
+
+			Phase B MUST:
+
+				Define constraints ONLY
+				NOT perform transformation
+				NOT alter upstream outputs
+
+			Strict Separation:
+
+				Phase A → Generate logic (signals, decisions, intents)
+				Phase B → Define constraints
+				Phase C → Infrastructure
+				Phase D → Enforcement
+
+			Violation:
+
+				→ CROSS-PHASE LEAKAGE → ARCHITECTURE CORRUPTION
+
+		P3: Canonical Input Dependency Principle
+
+			All logic MUST depend ONLY on:
+
+				canonical_input_set
+
+			Defined in:
+
+				Section 6 — Flow Architecture
+
+			Constraints:
+
+				No hidden inputs
+				No external system calls
+				No runtime state access
+				No memory-based dependency
+
+			Violation:
+
+				→ NON-DETERMINISTIC BEHAVIOR
+
+			Canonical Completeness Constraint
+
+				canonical_input_set MUST be:
+
+					complete (no missing fields)
+					exact (no extra fields)
+
+				Constraint:
+
+					missing field → HARD FAILURE
+					unknown field → REJECT INPUT
+
+		P4: Immutability Principle
+
+			All inputs to Phase B MUST be:
+
+				immutable
+				versioned
+				hash-identifiable
+
+			Constraint:
+
+				input mutation during evaluation → FORBIDDEN
+
+			Violation:
+
+				→ INVALID EVALUATION STATE
+
+		P5: Complete Constraint Specification Principle
+
+			Every constraint MUST define:
+
+				exact condition
+				evaluation formula
+				numeric bounds (min / max)
+				edge behavior
+				invalid state behavior
+
+			As required by:
+
+				Boundary Definition Rule
+
+			Violation:
+
+				→ AMBIGUOUS CONSTRAINT → PHASE REJECTED
+
+		P6: Evaluation Order Principle
+
+			Constraint evaluation MUST follow a strictly defined execution order.
+
+			The execution order MUST be defined in:
+
+				Section 5 — Logic / Rule Engine
+
+			Constraint:
+
+				No implicit ordering allowed
+				No deviation permitted
+
+			Execution Binding Constraint
+
+				execution order defined in Section 5 is:
+
+					mandatory
+					globally binding
+
+		P7: No Execution Awareness Principle
+
+			Phase B MUST NOT include:
+
+				execution logic
+				broker behavior
+				order handling
+				latency assumptions
+
+			Violation:
+
+				→ ARCHITECTURAL DRIFT
+
+		P8: Constraint Composability Principle
+
+			All constraints MUST be:
+
+			independently evaluable
+			combinable without ambiguity
+			order-safe
+
+			Constraint:
+
+				Constraint_A + Constraint_B → deterministic combined output
+
+			Constraint Composition Rule (REFERENCE ONLY):
+
+				Constraint interaction and precedence MUST be defined in Section 5
+
+			Constraint:
+
+				No implicit composition allowed
+
+			Violation:
+
+				→ CONSTRAINT CONFLICT
+
+			Constraint Composition Constraint
+
+				constraints MUST be evaluated:
+
+					in deterministic sequence
+
+				merge logic MUST be defined in Section 5
+
+		P9: Replayability Principle
+
+			System MUST guarantee:
+
+				Replay(canonical_input_set) → identical constraint output
+
+			Across:
+
+				time
+				environment
+				system instances
+
+			Violation:
+
+				→ AUDIT FAILURE
+
+		P10: Zero Implicit Behavior Principle
+
+			System MUST NOT:
+
+				assume defaults
+				infer missing values
+				auto-correct invalid inputs
+
+			Constraint:
+
+				missing / invalid input → HARD FAILURE
+
+			Violation:
+
+				→ HIDDEN LOGIC → SYSTEM INVALID
+
+	3.2 ARCHITECTURAL MODEL (FORMAL DEFINITION)
+		Model Type
+
+		Constraint Evaluation Architecture (CEL)
+
+			Formal Representation
+			Constraint_Output = F(
+
+				canonical_input_set,
+
+				constraint_definition_set,
+
+				configuration_snapshot
+
+			)
+
+		Component Breakdown
+
+		1. Input Domain (Read-Only)
+			MUST operate on canonical_input_set
+			canonical_input_set is defined exclusively in Section 6
+
+			Constraint:
+
+				No alternative input definition allowed
+
+		2. Constraint Definition Layer
+
+			Defines:
+
+				constraint rules
+				constraint thresholds
+				evaluation formulas
+				precedence rules
+
+			Constraint:
+
+			purely declarative (NO execution logic)
+
+		3. Constraint Evaluation Engine (Logical)
+
+			Applies:
+
+				deterministic rule evaluation
+				fixed execution order
+				numeric-safe computation
+
+			Properties:
+
+				stateless
+				order-controlled
+				side-effect free
+
+		4. Conflict Resolution Layer
+
+			Handles:
+
+				overlapping constraints
+				contradictory conditions
+
+			Constraint:
+
+				MUST follow strict precedence hierarchy
+				No implicit overrides allowed
+
+			Tie-Break Rule:
+
+				If precedence equal:
+
+				resolve by constraint_id (ascending)
+
+		5. Output Layer
+
+			Produces:
+
+				constraint_evaluation_output
+
+			Which includes:
+
+				constraint flags
+				violation states
+				constraint scores (if defined)
+
+			Mathematical Properties
+
+			Determinism:
+
+				F(x) = y  (always)
+
+			Idempotence:
+
+				F(F(x)) = F(x)
+
+			Order Independence (Input):
+
+				Permutation(canonical_input_set) → same output
+
+			(when canonical ordering rules are enforced)
+
+			Monotonic Constraint Behavior:
+
+				increase risk → constraint severity MUST NOT decrease
+
+			Traceability Constraint (REFERENCE)
+
+			constraint_evaluation_output MUST support traceability.
+
+			Full trace definition MUST be specified in:
+
+				Section 18 — Auditability & Observability
+
+	3.3 SYSTEM POSITIONING (CRITICAL — CROSS-PHASE ALIGNMENT)
+		Global System Flow (Canonical)
+			Phase A:
+				Strategy → Signal → Decision → Trade Intent → Execution Behavior
+
+			Phase B:
+				Constraint Definition + Constraint Evaluation
+
+			Phase C:
+				System Architecture + Infrastructure
+
+			Phase D:
+				Execution + Risk Enforcement
+
+		Precise Position
+			(Phase A Output)
+					↓
+			trade_intent_snapshot
+			execution_instruction_snapshot
+			portfolio_state_snapshot
+					↓
+			PHASE B — Constraint Layer
+					↓
+			constraint_evaluation_output
+					↓
+			(Consumed by Phase D)
+
+		Data Flow
+			Input → Phase A outputs
+			Processing → Constraint evaluation
+			Output → Constraint directives
+
+		Decision Flow
+			Phase B does NOT create decisions
+			Phase B ONLY evaluates compliance
+
+		Execution Chain Positioning
+
+		Phase B is:
+
+			PRE-EXECUTION CONTROL LAYER
+
+		Ensures:
+
+			ONLY valid / compliant trade intents reach Phase D
+
+		Strict Boundary Definition
+			Capability						Allowed
+			Define constraints				✅
+			Evaluate constraints			✅
+			Modify trade intent				❌
+			Execute trades					❌
+			Allocate capital				❌
+			Apply real risk enforcement		❌
+
+		Upstream Dependency
+
+			Phase B depends on:
+
+				Signal Model
+				Decision Engine
+				Execution Behavior
+				Risk Philosophy
+
+		Downstream Dependency
+
+			Phase B outputs are consumed by:
+
+				Phase D — Execution + Risk Enforcement Engine
+
+		Isolation Rule (MANDATORY)
+
+			Phase B MUST NOT:
+
+				pull external data
+				depend on execution results
+				depend on runtime system state
+
+4 → 21 SECTIONS (STRUCTURE — NO DUPLICATION)
+4. DOMAIN MODEL DEFINITION
+
+	Owned by Step 4
+
+5. LOGIC / RULE ENGINE
+
+	Owned by Section 5
+
+6. FLOW ARCHITECTURE
+
+	Canonical contract enforced (defined in Section 6)
+
+7. PIPELINE STRUCTURE
+
+	Input → Constraint Evaluation → Output
+
+	Stages:
+
+		1 Input Validation
+		2 Constraint Pre-Validation
+		3 Constraint Evaluation
+		4 Conflict Resolution
+		5 Output Generation
+
+		Transitions:
+
+		sequential, deterministic, no skipping
+
+8. CONTROL & CONSTRAINTS
+
+	Defined in Section 8
+
+9. STATE & DATA MODEL
+
+	Stateless system
+
+10. FAILURE MODEL
+
+	Defined failure conditions (invalid input, ambiguity, non-determinism)
+
+	Each failure MUST define:
+
+		trigger condition
+		detection method
+		system response
+
+11. ASSUMPTION REGISTER
+	Phase A outputs valid
+	configuration complete
+
+12. VALIDATION FRAMEWORK
+	Red Team + Blue Team
+	PASS / FAIL
+
+13. OUTPUT
+
+	This step contributes to:
+
+		constraint_output.definition_layer.architectural_intent_spec
+
+		Standalone outputs → FORBIDDEN
+
+14. TRACEABILITY
+
+	Phase A → Step 3 → Step 4
+
+15. CROSS-PHASE CONSISTENCY
+
+	Owned: architecture
+	Referenced: Phase A outputs
+
+16. SCALABILITY MODEL
+
+	Supports multi-strategy constraint systems
+
+17. GOVERNANCE INTEGRATION
+
+	Version controlled, approval required
+
+18. AUDITABILITY & OBSERVABILITY
+
+	Deterministic replay + traceability
+
+19. RISK CONSIDERATIONS
+
+	Constraint misdesign risk controlled via determinism
+
+20. FAILURE CONDITION (PHASE LEVEL)
+
+Phase fails if:
+
+	ambiguity exists
+	determinism violated
+	canonical dependency broken
+	section missing
+
+21. PHASE LOCK CRITERIA
+	all sections complete
+	no ambiguity
+	deterministic
+	validation passed

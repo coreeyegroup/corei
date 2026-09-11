@@ -1,0 +1,375 @@
+🔵 PHASE 2 — KUBERNETES CLUSTER (CONTROL PLANE INITIALIZATION)
+	1. PHASE IDENTITY
+		1.1 Name
+
+			PHASE 2 — KUBERNETES CLUSTER
+
+		1.2 Role
+
+			Establish container orchestration layer for the entire trading platform
+
+		1.3 Objective
+
+			Create a deterministic, single-node Kubernetes control plane cluster with networking enabled
+
+		1.4 Failure Prevented
+				No orchestration (containers cannot scale/manage)
+				No service discovery
+				No network isolation
+				No deployment capability
+				Complete system unusable beyond Docker
+
+				📌 Kubernetes is the L3 orchestration authority
+
+	2. FINAL SYSTEM STATE (YOUR NODE)
+		Component			Value
+		Cluster Type		Single-node control plane
+		Node Name			core-node
+		Kubernetes Version	v1.29.15
+		Node Status			Ready
+		Runtime				containerd
+		Networking			Calico CNI
+		kubectl				Configured
+		Control Plane		Active
+
+	3. ARCHITECTURAL OWNERSHIP (CRITICAL)
+		LAYER OWNERSHIP MODEL
+
+		Layer	Component	Ownership				Responsibility
+		L1		Ubuntu		Host सिस्टम				OS, kernel, networking
+		L2		Docker		Container runtime base	Build + run containers
+		L2.5	containerd	Kubernetes CRI			Container execution interface
+		L3		Kubernetes	FULL OWNER				Orchestration
+
+		🔴 KUBERNETES OWNS (STRICT)
+			✔ Pod scheduling
+			✔ Container lifecycle
+			✔ Service discovery
+			✔ Cluster networking
+			✔ Health checks
+			✔ Scaling
+			✔ State reconciliation
+
+		🔴 KUBERNETES DOES NOT OWN
+			✘ Image building → Docker
+			✘ Business logic → services
+			✘ Data persistence → DB layer
+
+	4. CORE COMPONENTS (CONTROL PLANE)
+		Component					Role			Responsibility
+		kube-apiserver				Entry point		API control
+		etcd						State store		Cluster state
+		kube-scheduler				Scheduler		Pod placement
+		kube-controller-manager		Controller		State reconciliation
+		kubelet						Node agent		Executes pods
+		kube-proxy					Networking		Service routing
+
+	5. EXECUTION STEPS (DETAILED)
+		STEP 2.1 — SWAP VALIDATION
+
+			Action
+
+				sudo swapoff -a
+
+			Outcome
+
+				Kubernetes memory model enforced (swap = 0)
+
+		STEP 2.2 — KERNEL MODULES
+				sudo modprobe overlay
+				sudo modprobe br_netfilter
+
+			Outcome
+
+				Required networking hooks enabled
+
+		STEP 2.3 — KERNEL NETWORK CONFIG
+				cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
+				net.bridge.bridge-nf-call-iptables = 1
+				net.bridge.bridge-nf-call-ip6tables = 1
+				net.ipv4.ip_forward = 1
+				EOF
+
+				sudo sysctl --system
+
+			Outcome
+
+				Packet forwarding + iptables routing enabled
+
+		STEP 2.4 — CONTAINERD CONFIGURATION (CRITICAL FIX)
+				sudo mkdir -p /etc/containerd
+
+				containerd config default | sudo tee /etc/containerd/config.toml
+
+			Edit:
+
+				sudo nano /etc/containerd/config.toml
+
+			Change:
+
+				SystemdCgroup = true
+
+			Restart:
+
+				sudo systemctl restart containerd
+				sudo systemctl enable containerd
+
+			Outcome
+
+				Kubernetes CRI compatibility achieved
+
+		STEP 2.5 — INSTALL KUBERNETES
+			sudo apt update
+
+			sudo apt install -y kubelet kubeadm kubectl
+
+		STEP 2.6 — VERSION LOCK
+				sudo apt-mark hold kubelet kubeadm kubectl
+
+			Outcome
+
+				Prevents unintended upgrades
+
+		STEP 2.7 — CLUSTER INITIALIZATION
+				sudo kubeadm init --pod-network-cidr=192.168.0.0/16
+
+			Outcome
+
+				Control plane created
+				Certificates generated
+				etcd initialized
+
+		STEP 2.8 — KUBECTL CONFIG
+				mkdir -p $HOME/.kube
+
+				sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+
+				sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+			Outcome
+
+				Cluster accessible via kubectl
+
+		STEP 2.9 — NODE STATUS CHECK
+				kubectl get nodes
+
+			Initial State
+
+				NotReady
+
+		STEP 2.10 — CNI INSTALL (CALICO)
+				kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.0/manifests/calico.yaml
+
+			Outcome
+
+				Cluster networking enabled
+
+		STEP 2.11 — SYSTEM POD STABILIZATION
+				kubectl get pods -A
+
+			Observed progression:
+
+				Pending → Init → Running
+
+		STEP 2.12 — FINAL NODE VALIDATION
+				kubectl get nodes
+
+			Final:
+
+				Ready
+
+	6. PIPELINE STRUCTURE (CLUSTER BOOT FLOW)
+
+		kubeadm init
+			↓
+		control plane pods created
+			↓
+		kubelet starts pods
+			↓
+		kubectl configured
+			↓
+		CNI installed
+			↓
+		network ready
+			↓
+		pods scheduled
+			↓
+		node Ready
+
+	7. FINAL VALIDATION
+		Commands
+			kubectl get nodes
+			kubectl get pods -A
+			kubectl cluster-info
+
+		Expected Output
+			Check				Expected
+			Node				Ready
+			Pods				Running
+			API					reachable
+
+	8. HARD CONSTRAINTS ENFORCED
+
+		✔ Swap disabled
+		✔ containerd CRI aligned
+		✔ kernel networking enabled
+		✔ Kubernetes version locked
+		✔ CNI installed
+		✔ Node Ready state achieved
+
+	9. FAILURE MODEL (PHASE 2)
+		Failure						Impact
+		containerd misconfig		cluster init fails
+		missing kernel modules		networking failure
+		CNI not installed			node NotReady
+		kubectl misconfig			no cluster access
+		wrong cgroup driver			unstable cluster
+
+	10. OUTPUT (DELIVERABLE)
+		Deterministic Kubernetes Cluster:
+
+			→ Control plane initialized
+			→ Cluster networking active
+			→ Node ready for workloads
+			→ kubectl control established
+
+	11. TRACEABILITY
+		Phase 0 → OS baseline
+		Phase 1 → Docker runtime
+		Phase 2 → Kubernetes orchestration
+		Phase 3 → Ingress + security
+
+	12. PHASE LOCK CRITERIA
+
+		✔ kubeadm init success
+		✔ kubectl configured
+		✔ Calico installed
+		✔ system pods running
+		✔ node Ready
+
+	🔒 FINAL STATUS :
+	PHASE 2 = LOCKED
+
+	📋 13. COMMAND REFERENCE TABLE (PHASE 2)
+	Step				Command										Purpose						xpected Output
+	Disable Swap		sudo swapoff -a								enforce memory model		swap 0
+	Load Modules		sudo modprobe overlay						container support			no error
+	Load Modules		sudo modprobe br_netfilter					networking					no error
+	Sysctl Config		sudo sysctl --system						apply network config		values applied
+	Containerd Config	containerd config default					generate config	file 		created
+	Edit Config			nano /etc/containerd/config.toml			set systemd cgroup			updated
+	Restart Runtime		sudo systemctl restart containerd			apply config				running
+	Install K8s			sudo apt install kubelet kubeadm kubectl	install binaries			installed
+	Lock Versions		sudo apt-mark hold ...						prevent upgrade				held
+	Init Cluster		sudo kubeadm init --pod-network-cidr=192.168.0.0/16		create cluster	success
+	kubeconfig			cp /etc/kubernetes/admin.conf				configure kubectl			file copied
+	Permission			chown $(id -u):$(id -g)						access fix					no error
+	Node Check			kubectl get nodes							verify node					NotReady/Ready
+	Install CNI			kubectl apply -f calico.yaml				networking					resources created
+	Pod Check			kubectl get pods -A							system health				running
+	Final Check			kubectl get nodes							final state					Ready
+
+
+Phase C2 — ORCHESTRATION LAYER (KUBERNETES)
+
+	C2 - STEP 1 → Kubernetes baseline validation (cluster state)
+		kubectl get nodes
+
+		OUTPUT:
+			NAME        STATUS   ROLES           AGE    VERSION
+			core-node   Ready    control-plane   5d9h   v1.29.15
+
+	C2 — STEP 2: SYSTEM PODS VALIDATION
+		Verify all Kubernetes system pods are running
+		All namespaces (-A)
+
+			kubectl get pods -A
+
+				OUTPUT: STATUS = Running
+
+				CRITICAL PODS TO CHECK
+					should identify:
+						Control Plane:
+							kube-apiserver
+							kube-controller-manager
+							kube-scheduler
+							etcd
+						Node Agent:
+							proxy
+						Networking:
+							calico-node
+							calico-kube-controllers
+						DNS:
+							coredns
+
+	C2 — STEP 3: KUBERNETES NETWORKING (CNI) VALIDATION
+		kubectl get pods -n kube-system -l k8s-app=calico-node
+
+		kubectl describe node core-node | grep -i calico
+
+
+	C2 — STEP 4: CLUSTER DNS VALIDATION (COREDNS)
+		kubectl get pods -n kube-system -l k8s-app=kube-dns
+
+		kubectl run dns-test --image=busybox:1.36 --rm -it --restart=Never -- nslookup kubernetes.default
+
+		kubectl get svc -n kube-system
+
+		kubectl get configmap coredns -n kube-system -o yaml
+
+		kubectl run dns-debug --image=busybox:1.36 --rm -it --restart=Never -- cat /etc/resolv.conf
+
+		kubectl run dns-test --image=busybox:1.36 --rm -it --restart=Never -- nslookup kubernetes.default.svc.cluster.local 10.96.0.10
+
+
+	C2 — STEP 5: POD SCHEDULING VALIDATION
+
+		kubectl run test-pod --image=nginx --restart=Never
+
+		kubectl get pods
+
+		kubectl delete pod test-pod
+
+	C2 — STEP 6: KUBECTL CONTROL PLANE VALIDATION
+
+		kubectl cluster-info
+
+		kubectl get all
+
+		kubectl describe pod event-validation-service-964546f87-p8fdt
+
+		EXPECTED OUTPUT
+			cluster-info:
+				Kubernetes control plane is running
+			get all:
+				pods, services, deployments visible
+			describe pod:
+				full pod details
+				events section present
+
+	🔷 C2 — ORCHESTRATION LAYER (Kubernetes Core)
+		🧠 MACRO ROLE
+			Cluster control plane
+			→ scheduling, lifecycle, self-healing
+
+		✔ WHAT YOU DID
+			Validated Kubernetes cluster
+			Verified:
+				node readiness
+				control plane health
+				pod lifecycle
+			Confirmed:
+				etcd
+				API server
+				scheduler
+				controller-manager
+
+		⚙️ FINAL STATE
+			Cluster Type     → Single-node (control-plane)
+			Node Status      → Ready
+			Pod Lifecycle    → Healthy
+
+		🧠 VALUE
+			Self-healing infrastructure
+			Declarative deployment model
+			Deterministic scheduling

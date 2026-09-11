@@ -1,0 +1,615 @@
+PHASE B — STEP 8: CONSTRAINT FEEDBACK & SYSTEM INVARIANT STABILIZATION
+
+(FULL UPS 1–21 | INSTITUTIONAL GRADE | DETERMINISTIC | CEI-LOCK READY)
+
+1. PHASE IDENTITY LAYER
+1.1 Phase Name
+
+Phase B — Step 8: Constraint Feedback & System Invariant Stabilization
+
+	1.2 Phase Role
+
+		Defines the deterministic constraint feedback interpretation layer that:
+
+			evaluates constraint outcomes across system history
+			stabilizes constraint behavior across time
+			ensures invariant consistency under repeated evaluation
+			provides non-adaptive, versioned constraint diagnostics to Phase A Step 8 (Learning)
+
+	1.3 Phase Objective
+
+		Construct a fully deterministic constraint feedback system that:
+
+		aggregates constraint outcomes (PASS / FAIL / MODIFY / BLOCK)
+		evaluates constraint pressure, saturation, and violation patterns
+		generates constraint feedback signals (non-execution, non-adaptive)
+		ensures:
+			invariant stability
+			constraint consistency over time
+			CEI auditability
+
+	1.4 Why This Exists
+
+		Without Step 8:
+
+		Constraint system may be:
+			locally correct but globally unstable
+			over-restrictive or under-restrictive over time
+
+		No visibility into:
+			constraint saturation
+			repeated violations
+			ineffective parameterization
+
+		This step ensures:
+
+			constraint system self-diagnosis (deterministic, offline)
+			closed-loop consistency with Phase A Step 8
+			long-horizon system safety
+
+2. PHASE SCOPE CONTROL
+	2.1 INCLUDED (STRICT)
+		constraint outcome aggregation
+		violation pattern analysis
+		constraint pressure metrics
+		invariant stability evaluation
+		deterministic feedback signal generation
+		constraint performance scoring
+		cross-domain constraint interaction diagnostics
+
+	2.2 EXCLUDED (STRICT)
+		constraint modification (Phase A Step 8 only)
+		runtime adaptation
+		parameter tuning
+		execution enforcement (Phase D)
+		learning model execution
+
+	Boundary Rule (CRITICAL)
+
+	Step 8 produces:
+
+	diagnostic outputs only — NO system behavior change
+
+	Constraint Feedback Output MUST be:
+
+		READ-ONLY for Phase A
+
+		Constraint:
+
+		Phase A MUST NOT:
+
+			directly consume feedback_signal in runtime logic
+
+		Usage allowed ONLY in:
+
+			offline learning (Phase A Step 8)
+
+3. ARCHITECTURAL INTENT LAYER
+	3.1 Core Principles
+
+		P1 — Deterministic Feedback
+		P2 — No Runtime Influence
+		P3 — Full Replayability
+		P4 — Constraint-System Observability
+		P5 — Zero Cross-Phase Leakage
+		P6 — Versioned Feedback Output
+		P7 — Invariant Stability Enforcement
+
+	3.2 Architectural Model
+		Constraint Outputs (Step 5–7)
+				↓
+		Feedback Aggregation Engine
+				↓
+		Constraint Feedback Signals
+				↓
+		Phase A Step 8 (Learning Input Only)
+
+	3.3 System Position
+		Phase A → Logic
+		Phase B Step 1–7 → Constraint Definition + Evaluation
+		Phase B Step 8 → Constraint Feedback (THIS STEP)
+		Phase A Step 8 → Learning (consumes feedback)
+		Phase D → Enforcement
+
+4. DOMAIN MODEL DEFINITION
+	4.1 Core Entities
+
+		E1: Constraint Feedback Context
+		E2: Constraint Outcome History
+		E3: Constraint Pressure Metric
+		E4: Violation Pattern Profile
+		E5: Constraint Stability Index
+		E6: Constraint Feedback Signal
+		E7: Constraint Diagnostic Record
+		E8: Invariant Stability State
+		E9: Constraint Efficiency Score
+		E10: Feedback Output Object
+
+	4.2 Key Entity Definitions
+		E2: Constraint Outcome History
+			constraint_outcome_history = {
+				constraint_id
+				evaluation_window
+				outcome_sequence (ordered)
+				violation_sequence
+				decision_sequence
+			}
+
+		E3: Constraint Pressure Metric
+			pressure =
+				(#FAIL + weighted #MODIFY) / total_evaluations
+
+			Range: [0,1]
+
+		E4: Violation Pattern Profile
+			pattern = {
+				frequency
+				clustering_index
+				temporal_distribution
+			}
+
+		E5: Constraint Stability Index
+			stability_index = 1 - variance(outcome_sequence)
+
+		E6: Constraint Feedback Signal
+			feedback_signal = {
+				constraint_id
+				pressure_level
+				stability_index
+				violation_trend
+				severity_profile
+			}
+
+		E8: Invariant Stability State
+			invariant_state ∈ {
+				STABLE
+				STRESSED
+				CRITICAL
+			}
+
+5. LOGIC / RULE ENGINE
+	5.1 Canonical Input Set (MANDATORY)
+			Use canonical_input_set defined in Phase B Step 1
+
+				Constraint:
+
+					No step may redefine or extend canonical_input_set
+
+				Access MUST follow canonical structure defined in Step 1
+
+			Canonical Input Enforcement Rule (GLOBAL)
+
+				No step may redefine or extend canonical_input_set
+
+				Violation → PHASE INVALID
+
+		Constraints:
+
+			immutable
+			complete
+			time-aligned
+			CORE-only (CEIL excluded)
+
+		5.1.1 — Constraint Outcome History Construction Rule
+
+			constraint_outcome_history_set MUST be derived as:
+
+				constraint_outcome_history_set = f(
+					ordered_constraint_output_set
+				)
+
+				Where:
+
+				ordered_constraint_output_set MUST be:
+
+					sorted by:
+						1. evaluation_time ASC
+						2. constraint_id ASC
+
+				History window MUST define:
+
+					start_time_fp
+					end_time_fp
+
+				Selection rule:
+
+					include ALL constraint_output WHERE:
+
+						evaluation_time ∈ [start_time_fp, end_time_fp]
+
+				No partial inclusion allowed
+
+			Edge Cases:
+
+				IF no constraint_output in window:
+
+					→ REJECT (invalid history)
+
+				IF N = 1:
+
+					variance_fp = 0
+					trend_fp = 0
+
+		5.1.2 — History Identity & Hash Rule
+
+					Each constraint_outcome_history MUST include:
+
+						history_id
+						history_hash
+
+					history_id MUST be:
+
+						HASH_v1(
+							constraint_id +
+							start_time_fp +
+							end_time_fp
+						)
+
+					history_hash MUST be:
+
+						HASH_v1(
+							ordered_outcome_sequence +
+							ordered_violation_sequence +
+							ordered_decision_sequence +
+							version_identifiers
+						)
+
+					Constraint:
+
+						identical history → identical history_hash
+
+	5.2 Feedback Evaluation Pipeline
+		1. Input Validation
+		2. History Construction
+		3. Metric Computation
+		4. Pattern Analysis
+		5. Stability Evaluation
+		6. Feedback Signal Generation
+		7. Invariant Assessment
+		8. Output Generation
+
+		5.2.1 Deterministic Time Model
+			evaluation_time MUST be sourced from:
+
+					Phase B Step 1 Global Evaluation Time
+
+				Constraint:
+
+					aggregation MUST NOT redefine time
+
+				Tie-break rule:
+
+				HASH_v1(constraint_id + trade_intent_id)
+
+				System clock usage → FORBIDDEN
+
+	5.3 Constraint Pressure Computation
+		Let:
+
+		F = number of FAIL
+		M = number of MODIFY
+		A = total evaluations
+
+		pressure = (F + α*M) / A
+
+		Where:
+
+		α = deterministic constant ∈ [0,1]
+
+		α MUST be defined in configuration_snapshot:
+
+			α_fp ∈ [0,1]
+
+			Constraint:
+
+			α_fp MUST be fixed-point (scale 10^6)
+
+	5.4 Stability Evaluation
+			variance_fp =
+
+					(Σ (x_i - μ)^2 ) / N
+
+				Where:
+
+					x_i ∈ {0,1}
+					μ = mean_fp
+
+				All computations MUST use:
+
+					fixed-point scale = 10^6
+					INT128 intermediate
+					ROUND_HALF_UP
+
+				Ordering:
+
+					sequence index ASC
+
+				Overflow → HARD FAIL
+
+			mean_fp =
+
+					(Σ x_i) / N
+
+				Where:
+
+					x_i ∈ {0,1}
+					N = number of observations
+
+				Computation MUST follow:
+
+					INT128 intermediate
+					ROUND_HALF_UP
+					fixed-point scale = 10^6
+
+			stability_index_fp = 1 - variance_fp
+
+				Constraint:
+
+				variance_fp ∈ [0,1]
+				stability_index_fp ∈ [0,1]
+
+	5.5 Violation Trend
+
+		t_i = sequence index (integer)
+
+			Where:
+
+			t_i = i
+			i ∈ {1,2,...,N}
+
+			Ordering:
+
+			evaluation_time ASC
+			constraint_id ASC
+
+		violation_frequency_fp =
+
+				cumulative_violations / cumulative_observations
+
+			Where:
+
+			values MUST be computed per time index
+			using fixed-point arithmetic
+
+	5.6 Invariant Stability Classification
+		IF pressure < P1 AND stability_index ≥ S1:
+			STABLE
+
+		IF P1 ≤ pressure < P2:
+			STRESSED
+
+		IF pressure ≥ P2:
+			CRITICAL
+
+	5.7 Constraint Efficiency Score
+		useful_constraints =
+
+				constraints WHERE:
+
+					decision_status ∈ {MODIFY, BLOCK}
+
+			efficiency_fp =
+
+				useful_constraints / total_constraints
+
+		IF total_constraints = 0:
+
+			→ REJECT (invalid computation)
+
+	5.8 Determinism Rules
+		fixed-point arithmetic ONLY (scale = 10^6)
+		ordered evaluation:
+			constraint_id ASC
+			time ASC
+		no stochastic modeling
+		no sampling
+
+		ALL statistical computations MUST comply with:
+
+			Phase B Step 6 numeric model:
+
+				scale = 10^6
+				INT128 intermediate
+				ROUND_HALF_UP
+
+			Functions:
+
+				variance()
+				slope()
+				mean()
+
+			MUST be explicitly defined using fixed-point arithmetic
+
+6. FLOW ARCHITECTURE
+	6.1 Input
+		constraint_output_set (Step 5–7)
+		configuration_snapshot
+		version_identifiers
+
+	6.2 Processing
+		Constraint Outputs
+		→ History Aggregation
+		→ Metric Computation
+		→ Stability Analysis
+		→ Feedback Signal Generation
+
+	6.3 Output
+		constraint_feedback_output = {
+			feedback_signal_set
+			invariant_state
+			diagnostic_record_set
+			output_hash
+		}
+
+7. PIPELINE STRUCTURE
+
+Stages:
+
+	Collect
+	Validate
+	Aggregate
+	Analyze
+	Evaluate Stability
+	Generate Feedback
+	Emit Output
+
+8. CONTROL & CONSTRAINTS
+	8.1 Hard Rules
+		deterministic computation
+		no runtime influence
+		no parameter mutation
+		full traceability required
+
+	8.2 Soft Rules
+		prioritize long-horizon stability
+		minimize noise sensitivity
+
+	8.3 Guardrails
+		incomplete history → REJECT
+		inconsistent timestamps → REJECT
+		missing constraint_id → HARD FAIL
+
+9. STATE & DATA MODEL
+
+	States:
+
+		feedback_state ∈ {
+			PENDING
+			COMPUTED
+			FINALIZED
+		}
+
+10. FAILURE MODEL
+
+	Failure Cases:
+
+		incomplete history window
+		numeric overflow
+		inconsistent ordering
+		invalid parameter domain
+
+11. ASSUMPTION REGISTER
+	constraint outputs are valid (Step 5–7)
+	history window is fixed and deterministic
+	all constraints are uniquely identifiable
+
+12. INVARIANT DEFINITIONS
+	feedback MUST NOT affect runtime system
+	identical history → identical feedback output
+	constraint evaluation ordering preserved
+
+	pressure_fp ∈ [0,1]
+		efficiency_fp ∈ [0,1]
+		stability_index_fp ∈ [0,1]
+
+		Violation → HARD FAIL
+
+13. CROSS-LAYER CONSISTENCY
+
+	Aligned with:
+
+		Signal determinism
+		Decision determinism
+		Portfolio constraints
+
+14. TRACEABILITY MODEL
+	feedback_output
+	→ feedback_signal
+	→ constraint_output_history
+	→ constraint_output
+	→ evaluation_unit
+	→ trade_intent
+
+	constraint_output
+	→ constraint_decision
+	→ constraint_evaluation_unit
+	→ constraint_rule
+	→ constraint_parameter_set
+	→ parameter_id
+	→ configuration_snapshot
+
+15. DETERMINISTIC ORDERING
+	constraint_id ASC
+	evaluation_time ASC
+	severity DESC
+
+	feedback_signal_set MUST be ordered by:
+
+		1. constraint_id ASC
+
+16. VERSIONING MODEL
+	feedback_version_id =
+		HASH_v1(
+			constraint_output_history_set +
+			configuration_snapshot +
+			version_identifiers
+		)
+
+17. HASHING MODEL
+	canonical serialization required
+	fixed field ordering
+	no optional omission
+
+	output_hash MUST be:
+
+		HASH_v1(
+			feedback_signal_set (ordered) +
+			invariant_state +
+			constraint_efficiency_score +
+			diagnostic_record_set (ordered) +
+			version_identifiers
+		)
+
+18. AUDITABILITY & OBSERVABILITY
+
+	Feedback must expose:
+
+		constraint pressure per constraint
+		violation frequency
+		stability index
+		invariant classification
+
+19. CEIL ISOLATION
+	CEIL constraint outputs MUST NOT enter feedback system
+	CORE-only feedback generation
+
+	(Aligned with Phase B macro isolation rules )
+
+20. VALIDATION MODEL
+
+	Validation Order:
+
+		Input completeness
+		Ordering correctness
+		Numeric safety
+		Stability computation validity
+		Output integrity
+
+21. FINAL OUTPUT CONTRACT
+		constraint_feedback_output = {
+			feedback_signal_set
+			invariant_state
+			constraint_efficiency_score
+			diagnostic_record_set
+			version_id
+			output_hash
+		}
+
+	Constraint Enforcement Binding Rule (MANDATORY)
+
+		Phase D MUST operate as a pure execution engine:
+
+			execution_decision =
+				constraint_output.execution_decision
+
+			modification_vector =
+				constraint_output.modification_vector
+
+		Constraint:
+
+			Phase D MUST NOT:
+				- derive new decisions
+				- reinterpret constraint results
+				- override constraint_output
+
+		Violation → ARCHITECTURAL FAILURE

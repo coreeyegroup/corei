@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <title>docs docs docs docs docs docs docs docs docs docs docs stage 20 orchestration stage 20 execution model.md.md.md.md.md.md.md.md.md.md.md</title>
+  <style>
+  body {
+    background: #0A0D12;
+    color: #E3E7EC;
+    font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px 40px;
+  }
+
+  h1 {
+    font-size: 26px;
+    font-weight: 600;
+    color: #C6A46A;
+    margin: 24px 0 12px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 8px;
+  }
+
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #D4B88A;
+    margin: 20px 0 10px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 6px;
+  }
+
+  h3 {
+    font-size: 17px;
+    font-weight: 500;
+    color: #E3E7EC;
+    margin: 16px 0 8px 0;
+  }
+
+  h4 {
+    font-size: 15px;
+    font-weight: 500;
+    color: #C5CED9;
+    margin: 12px 0 6px 0;
+  }
+
+  p {
+    margin-bottom: 8px;
+    color: #C5CED9;
+  }
+
+  ul,
+  ol {
+    padding-left: 24px;
+    margin-bottom: 8px;
+    color: #C5CED9;
+  }
+
+  li {
+    margin-bottom: 2px;
+  }
+
+  code {
+    font-family: 'JetBrains Mono', 'Cascadia Code', monospace;
+    font-size: 13px;
+    background: rgba(255,255,255,0.05);
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid #28303C;
+    color: #C5CED9;
+  }
+
+  pre {
+    background: #18202A;
+    border: 1px solid #28303C;
+    border-radius: 6px;
+    padding: 16px 20px;
+    overflow: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 12px 0 16px 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #C5CED9;
+  }
+
+  pre code {
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 16px 0;
+    font-size: 13px;
+    color: #C5CED9;
+  }
+
+  th {
+    background: #18202A;
+    color: #C5CED9;
+    font-weight: 600;
+    text-align: left;
+    padding: 6px 12px;
+    border: 1px solid #28303C;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  td {
+    padding: 4px 12px;
+    border: 1px solid #28303C;
+    background: #0E1219;
+  }
+
+  tr:nth-child(even) td {
+    background: #121821;
+  }
+
+  blockquote {
+    border-left: 3px solid #C6A46A;
+    padding-left: 16px;
+    margin: 8px 0 12px 0;
+    color: #6E7883;
+    font-style: italic;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #28303C;
+    margin: 24px 0;
+  }
+
+  a {
+    color: #8BB4F0;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  strong {
+    color: #E3E7EC;
+    font-weight: 600;
+  }
+
+  img {
+    max-width: 100%;
+    border-radius: 4px;
+    border: 1px solid #28303C;
+  }
+
+  .doc-footer {
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid #28303C;
+    font-size: 12px;
+    color: #6E7883;
+    font-family: monospace;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+</style>
+</head>
+
+<body>
+
+  <div
+    class="doc-header"
+    style="
+      background:#121821;
+      border:1px solid #28303C;
+      border-radius:8px;
+      padding:1.2rem 1.8rem;
+      margin-bottom:1.8rem;
+    "
+  >
+
+    <div
+      style="
+        color:#C6A46A;
+        font-weight:600;
+        font-size:13px;
+        text-transform:uppercase;
+        letter-spacing:0.05em;
+      "
+    >
+      COREI · Stage Documentation
+    </div>
+
+
+
+    <h1
+      style="
+        font-size:28px;
+        font-weight:600;
+        color:#E3E7EC;
+        margin:0.1rem 0;
+        border-bottom:none;
+        padding-bottom:0;
+      "
+    >
+      docs docs docs docs docs docs docs docs docs docs docs stage 20 orchestration stage 20 execution model.md.md.md.md.md.md.md.md.md.md.md
+    </h1>
+
+    <div
+      style="
+        font-size:16px;
+        color:#C5CED9;
+      "
+    >
+      Stage Documentation
+      ·
+      Operational
+    </div>
+
+    <div
+      style="
+        display:flex;
+        flex-wrap:wrap;
+        gap:0.6rem 1.8rem;
+        margin-top:0.6rem;
+        font-size:13px;
+      "
+    >
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Status
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          Approved
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Version
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          1.0
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Classification
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          Operational
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Owner
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          COREI
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Repository
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+            font-family:monospace;
+          "
+        >
+          docs/docs_docs_docs_docs_docs_docs_docs_docs_docs_docs_docs_stage-20_orchestration_stage-20-execution-model.md.md.md.md.md.md.md.md.md.md.md.md
+        </span>
+      </span>
+
+    </div>
+
+
+
+  </div>
+
+
+
+  <h1>Stage 20 — Canonical Execution Model</h1>
+<h2>Institutional Objective</h2>
+<p>Transition the platform from:</p>
+<ul>
+<li>engineering infrastructure<br>
+to:</li>
+<li>controlled production trading infrastructure</li>
+</ul>
+<p>under:</p>
+<ul>
+<li>institutional governance</li>
+<li>semantic freeze certification</li>
+<li>operational lineage isolation</li>
+<li>deterministic activation controls</li>
+</ul>
+<hr>
+<h1>Canonical Execution Sequence</h1>
+<h2>20.1 — Foundation Initialization</h2>
+<p>Purpose:</p>
+<ul>
+<li>activation topology</li>
+<li>governance state</li>
+<li>telemetry lineage</li>
+<li>activation directories</li>
+</ul>
+<p>Gate:</p>
+<ul>
+<li>foundation validation must pass</li>
+</ul>
+<p>Status:</p>
+<ul>
+<li>COMPLETE</li>
+</ul>
+<hr>
+<h2>20.2 — Live Preconditions Validation</h2>
+<p>Purpose:</p>
+<ul>
+<li>Stage 17 validation gate</li>
+<li>Stage 19 recovery gate</li>
+<li>operational readiness validation</li>
+<li>freeze-governance validation</li>
+</ul>
+<p>Gate:</p>
+<ul>
+<li>semantic governance certification required</li>
+</ul>
+<p>Status:</p>
+<ul>
+<li>COMPLETE</li>
+</ul>
+<hr>
+<h2>20R — Governance Convergence Refactor</h2>
+<p>Purpose:</p>
+<ul>
+<li>repository topology governance</li>
+<li>runtime isolation</li>
+<li>artifact isolation</li>
+<li>telemetry isolation</li>
+<li>governance-state normalization</li>
+</ul>
+<p>Gate:</p>
+<ul>
+<li>runtime contamination validation</li>
+<li>artifact contamination validation</li>
+<li>telemetry contamination validation</li>
+</ul>
+<p>Status:</p>
+<ul>
+<li>COMPLETE</li>
+</ul>
+<hr>
+<h2>20C — Institutional Repository Convergence</h2>
+<p>Purpose:</p>
+<ul>
+<li>semantic freeze governance</li>
+<li>authoritative baseline convergence</li>
+<li>governance-aware repository certification</li>
+</ul>
+<p>Gate:</p>
+<ul>
+<li>semantic freeze governance certification</li>
+</ul>
+<p>Status:</p>
+<ul>
+<li>COMPLETE</li>
+</ul>
+<hr>
+<h2>20.3 — Broker Credential Onboarding</h2>
+<p>Purpose:</p>
+<ul>
+<li>Vault credential onboarding</li>
+<li>broker heartbeat validation</li>
+<li>live market tick validation</li>
+<li>synthetic execution probe</li>
+</ul>
+<p>Constraints:</p>
+<ul>
+<li>LIVE_AUTO forbidden</li>
+<li>unattended execution forbidden</li>
+</ul>
+<p>Gate:</p>
+<ul>
+<li>broker connectivity validation</li>
+<li>synthetic probe validation</li>
+</ul>
+<p>Status:</p>
+<ul>
+<li>NOT_STARTED</li>
+</ul>
+<hr>
+<h2>20.4 — LIVE_SEMI Activation</h2>
+<p>Purpose:</p>
+<ul>
+<li>human-supervised live execution</li>
+</ul>
+<p>Requirements:</p>
+<ul>
+<li>explicit operator confirmation</li>
+<li>risk-admin authorization</li>
+<li>audit lineage generation</li>
+</ul>
+<p>Constraints:</p>
+<ul>
+<li>every trade requires approval</li>
+</ul>
+<p>Status:</p>
+<ul>
+<li>NOT_STARTED</li>
+</ul>
+<hr>
+<h2>20.5 — 48h LIVE_SEMI Observation</h2>
+<p>Purpose:</p>
+<ul>
+<li>operational stability validation</li>
+</ul>
+<p>Requirements:</p>
+<ul>
+<li>zero reconciliation mismatches</li>
+<li>zero kill-switch events</li>
+<li>broker uptime &gt; 99%</li>
+<li>portfolio reconciliation correctness</li>
+</ul>
+<p>Status:</p>
+<ul>
+<li>NOT_STARTED</li>
+</ul>
+<hr>
+<h2>20.6 — LIVE_AUTO Activation</h2>
+<p>Purpose:</p>
+<ul>
+<li>controlled autonomous execution</li>
+</ul>
+<p>Requirements:</p>
+<ul>
+<li>successful 48h observation</li>
+<li>semantic governance certification still valid</li>
+<li>Stage 17 validation re-pass</li>
+<li>Stage 19 recovery re-pass</li>
+</ul>
+<p>Constraints:</p>
+<ul>
+<li>single account</li>
+<li>single strategy</li>
+<li>small capital</li>
+</ul>
+<p>Status:</p>
+<ul>
+<li>NOT_STARTED</li>
+</ul>
+<hr>
+<h1>Governance Doctrine</h1>
+<p>Stage 20 is the:</p>
+<ul>
+<li>operational transition boundary</li>
+<li>production-governance boundary</li>
+<li>live-capital governance boundary</li>
+</ul>
+<p>All Stage 20 operations are:</p>
+<ul>
+<li>audit-tracked</li>
+<li>lineage-tracked</li>
+<li>recovery-governed</li>
+<li>semantically certified</li>
+</ul>
+
+
+  <div class="doc-footer">
+
+    <span>DOCUMENT KEY: docs:docs_docs_docs_docs_docs_docs_docs_docs_docs_docs_docs_stage-20_orchestration_stage-20-execution-model.md.md.md.md.md.md.md.md.md.md.md.md</span>
+
+    <span>
+      DOCUMENT NAME: docs docs docs docs docs docs docs docs docs docs docs stage 20 orchestration stage 20 execution model.md.md.md.md.md.md.md.md.md.md.md
+    </span>
+
+    <span>
+      VERSION: 1.0
+    </span>
+
+  </div>
+
+</body>
+</html>

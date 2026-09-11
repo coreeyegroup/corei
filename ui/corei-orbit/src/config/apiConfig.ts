@@ -6,7 +6,7 @@ export const config = {
     apiKey: import.meta.env.VITE_N8N_API_KEY || '',
   },
   market: {
-    binanceWs: import.meta.env.VITE_BINANCE_WS_URL || 'wss://stream.binance.com:9443/ws',
+    binanceWs: import.meta.env.VITE_BINANCE_WS_URL || 'wss://stream.binance.com:443/ws',
     source: import.meta.env.VITE_DATA_SOURCE || 'mock', // 'real' or 'mock'
   },
 };

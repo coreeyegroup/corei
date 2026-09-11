@@ -1,0 +1,137 @@
+COREI UI IMPLEMENTATION RULES (FROZEN)
+RULE-01 — Every response starts with a header
+
+Example:
+
+STAGE-25
+STEP-01
+BUILD UNIT-02
+
+OBJECTIVE
+Build VS Code Workbench Shell
+RULE-02 — Full file replacement only
+
+Never give partial snippets.
+
+Always provide:
+
+File path
+Complete file content
+Validation commands
+RULE-03 — Never remove previous functionality
+
+If previous build has
+
+Activity Bar
+Theme
+Runtime
+Providers
+Workspace
+
+and next build adds
+
+Search
+
+Then
+
+✅ Keep everything.
+
+Only extend.
+
+Never overwrite unless I explicitly write
+
+REPLACE
+
+RULE-04 — Browser First
+
+Every BU must produce something visible.
+
+Never spend days building invisible architecture.
+
+RULE-05 — No placeholders
+
+Never
+
+return <></>
+
+Every component must render something useful.
+
+RULE-06 — VS Code Principle
+
+Everything must be
+
+Dockable
+Resizable
+Movable
+Hideable
+Restorable
+RULE-07 — Preserve compatibility
+
+Never break
+
+Providers
+
+Runtime
+
+SDK
+
+Platform
+
+Theme
+
+Shell
+
+Experiences
+
+Only extend them.
+
+RULE-08 — One Build Unit = One Visible Feature
+
+Example
+
+BU-02
+
+↓
+
+Activity Bar appears.
+
+BU-03
+
+↓
+
+Sidebar appears.
+
+BU-04
+
+↓
+
+Dockview works.
+
+BU-05
+
+↓
+
+Search works.
+
+RULE-09 — Validation
+
+Every response ends with
+
+pnpm exec tsc --noEmit
+
+pnpm exec vite build
+
+pnpm dev
+RULE-10 — COREI Principle
+
+We are not building React pages.
+
+We are building an Institutional Operating Workbench.
+
+Everything added must move us closer to:
+
+VS Code flexibility
+Bloomberg density
+TradingView usability
+Grafana observability
+Institutional scalability

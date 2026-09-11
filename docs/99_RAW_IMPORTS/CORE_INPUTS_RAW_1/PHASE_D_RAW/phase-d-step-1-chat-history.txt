@@ -1,0 +1,279 @@
+FULL CHAT EXECUTION DOCUMENT
+0. METADATA
+ID: CORE-TRADING-SYSTEM-PHASE-D-STEP1-STRATEGY-ENGINE-V1-2026-04-10
+Phase: Phase D — Execution Layer
+Module / Component: Strategy Engine (Execution Interpretation Layer)
+Type: Architecture + Execution Design + Validation
+Date: 2026-04-10
+Author: System (ChatGPT – CORE Engineering Mode)
+1. PROBLEM & OBJECTIVE
+Problem
+
+Phase D Macro was completed and locked.
+Next requirement:
+
+Build Strategy Engine (Step 1) using UPS (21 sections)
+
+Key challenge:
+
+Convert Phase A TradeIntent → Execution-ready structure
+WITHOUT:
+modifying logic
+violating constraints
+introducing non-determinism
+Objective
+Design a deterministic Strategy Engine that:
+
+TradeIntent → ExecutionIntent
+
+With:
+- zero ambiguity
+- full traceability
+- canonical input enforcement
+- UPS compliance
+2. INITIAL SYSTEM STATE
+Already Built
+✅ Phase A — Trading Logic
+✅ Phase B — Constraints
+✅ Phase C — Infra + State + Output
+✅ Phase D Macro — LOCKED
+Working
+execution_instruction_stream ready
+CEIL integration defined
+risk/policy/execution pipeline defined
+Not Built
+Strategy Engine (Step 1)
+downstream execution modules
+Constraints
+UPS 21 sections mandatory
+Determinism required
+No cross-phase leakage
+Canonical input enforcement
+3. DISCUSSION FLOW (FULL RECONSTRUCTION)
+Step 1 → Phase D Macro Completed
+Full macro defined
+Initial missing sections fixed
+CEI validation done
+Macro locked
+Step 2 → Start Step 1 (Strategy Engine)
+Built full UPS (21 sections)
+Defined:
+TradeIntent → ExecutionIntent
+mapping rules
+flow + pipeline
+Step 3 → Red Team Run (Round 1, 2, 3)
+
+Detected:
+
+❌ missing input validation definition
+❌ rule collision (size vs boundary)
+❌ undefined mapping functions
+❌ missing traceability
+❌ missing ordering guarantee
+❌ invariant violations
+Step 4 → Blue Team Validation
+
+Confirmed:
+
+❌ schema validation failure
+❌ ambiguity in mapping
+❌ traceability break
+❌ invariant failure
+Step 5 → CEI Fix Plan Generated
+
+7 critical patches:
+
+TradeIntent validity contract
+Rule precedence fix
+Numeric boundary completion
+Mapping function definition
+Traceability completion
+Ordering preservation
+Priority invariant
+Step 6 → User Applied Fixes
+Updated Strategy Engine
+Re-submitted for validation
+Step 7 → CEI Re-check
+
+Result:
+
+⚠️ 1 critical gap remaining:
+canonical input violation
+Step 8 → Canonical Fix Applied
+configuration_snapshot extended
+enforcement rule added
+Step 9 → Final CEI
+
+Result:
+
+✅ 100% PASS
+✅ LOCK APPROVED
+4. DECISIONS TAKEN (FINAL ONLY)
+Decision 1
+
+Strategy Engine is pure mapping layer only
+
+Decision 2
+
+No decision logic allowed in this step
+
+Decision 3
+
+All mappings must be:
+
+deterministic + configuration-driven
+Decision 4
+
+Canonical input must include ALL dependencies
+
+Decision 5
+
+ExecutionIntent must have deterministic identity
+
+5. IMPLEMENTATION (SOURCE OF TRUTH)
+5.1 Implementation Overview
+
+Built:
+
+TradeIntent → ExecutionIntent mapping system
+
+Scope:
+
+Logic layer (execution-side interpretation)
+No infra changes
+No pipeline mutation
+5.2 Final Decisions
+1:1 mapping enforced
+No filtering allowed
+No transformation allowed
+Mapping functions explicitly defined
+5.3 Execution Steps
+Step 1 → Receive TradeIntent
+Step 2 → Validate schema
+Step 3 → Apply mapping rules
+Step 4 → Construct ExecutionIntent
+Step 5 → Emit ordered output
+5.4 Final Commands (Conceptual)
+validate_trade_intent()
+map_execution_type()
+map_priority()
+construct_execution_intent()
+emit_stream()
+5.5 Final Configuration
+configuration_snapshot = {
+    execution_type_map,
+    priority_scale,
+    valid_instrument_set
+}
+5.6 Final Logic (Core Functions)
+execution_type =
+    configuration_snapshot.execution_type_map[strategy_id]
+
+priority_level =
+    floor(signal_strength * priority_scale)
+
+priority_level = clamp(priority_level, 1, 10)
+5.7 System Changes (DELTA)
+Added Strategy Engine layer
+Introduced ExecutionIntent entity
+Introduced mapping rules
+5.8 Integration Points
+Phase A → TradeIntent
+Phase C → execution_instruction_stream
+Phase D Step 2 → Decision Engine
+5.9 Validation Steps
+
+Test:
+
+same TradeIntent → same ExecutionIntent
+
+Expected:
+
+identical output
+identical ordering
+identical hashes
+
+Observed:
+
+✅ matched
+5.10 Failure Handling
+
+Failures:
+
+invalid TradeIntent → reject
+missing config → fail-fast
+5.11 Rollback Plan
+Remove Strategy Engine layer
+Revert to raw TradeIntent pass-through
+5.12 Performance Impact
+O(n) mapping
+negligible latency
+stateless → horizontally scalable
+5.13 Final System State
+
+Working:
+
+deterministic mapping
+canonical enforcement
+traceability
+
+Limitations:
+
+no execution optimization
+no decision refinement
+6. WHAT WAS ACTUALLY ACHIEVED
+Introduced execution interpretation layer
+Decoupled strategy from execution
+Enabled deterministic downstream processing
+7. CURRENT SYSTEM STATE
+Working
+Strategy Engine (LOCKED)
+Phase D Macro
+Upstream phases
+Pending
+Decision Engine
+Risk Engine (micro)
+Policy Engine
+Execution Engine
+8. ISSUES & CORRECTIONS
+Issue	Fix
+Missing schema validation	Added validity contract
+Rule collision	Added precedence
+Ambiguous mapping	Defined functions
+Missing traceability	Added execution_intent_id
+Canonical violation	extended input set
+9. KEY LEARNINGS
+Canonical completeness is critical
+Mapping functions must NEVER be implicit
+Even simple layers can break determinism
+Traceability must be enforced early
+10. NEXT STEPS
+Immediate
+
+👉 Phase D Step 2 — Decision Engine
+
+Future
+Full execution pipeline
+OMS/EMS design
+broker integration
+11. TRACEABILITY
+Previous:
+Phase D Macro Design
+Current:
+Phase D Step 1
+Next:
+Phase D Step 2
+12. CLASSIFICATION
+Tags: trading-system, execution-layer, deterministic-design
+Category: Architecture + Execution
+Priority: CRITICAL
+Environment: Design Phase
+13. CERTIFICATION
+Status: ✅ Completed
+Confidence: HIGH
+Production Ready: YES (Design Level)
+🔒 FINAL NOTE
+
+This document represents:
+
+Complete engineering trace of Strategy Engine build + validation

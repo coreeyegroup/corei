@@ -1,0 +1,77 @@
+/* src/components/infrastructure/HelmDetail.css */
+.helm-detail {
+  padding: 16px;
+  height: 100%;
+  overflow-y: auto;
+}
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.header-left .service-icon {
+  font-size: 24px;
+}
+.header-left h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.refresh-btn {
+  background: transparent;
+  border: 1px solid var(--border-default, #333);
+  padding: 4px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  color: var(--text-secondary, #ccc);
+}
+.refresh-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.tabs-container {
+  margin-bottom: 16px;
+}
+.tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--border-default, #333);
+  margin-bottom: 8px;
+}
+.tab {
+  background: transparent;
+  border: none;
+  padding: 8px 16px;
+  color: var(--text-secondary, #aaa);
+  cursor: pointer;
+  font-size: 0.85rem;
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s;
+}
+.tab:hover {
+  color: var(--text-primary, #fff);
+}
+.tab.active {
+  color: var(--text-primary, #fff);
+  border-bottom-color: var(--accent, #3b82f6);
+}
+.tab-content {
+  padding-top: 8px;
+}
+.operations-grid {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}

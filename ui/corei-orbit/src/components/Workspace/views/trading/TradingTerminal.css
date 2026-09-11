@@ -1,0 +1,651 @@
+/* ==========================================================================
+   COREI ORBIT — TRADING CONTROL SURFACE
+   STEP 1 — FRONTEND COMPOSITION
+   ========================================================================== */
+
+.trading-terminal {
+  --trading-bg: #090c10;
+  --trading-surface: #0d1117;
+  --trading-surface-2: #11161d;
+  --trading-surface-3: #151b23;
+  --trading-border: rgba(255, 255, 255, 0.075);
+  --trading-border-strong: rgba(255, 255, 255, 0.12);
+  --trading-text: #dce2e9;
+  --trading-muted: #7f8995;
+  --trading-dim: #59636e;
+  --trading-accent: #4da3ff;
+  --trading-positive: #35c995;
+  --trading-negative: #ef6262;
+  --trading-warning: #d9a441;
+
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+
+  background: var(--trading-bg);
+  color: var(--trading-text);
+
+  font-family:
+    Inter,
+    "Segoe UI",
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* --------------------------------------------------------------------------
+   INSTRUMENT REGION
+   -------------------------------------------------------------------------- */
+
+.trading-instrument-region {
+  flex: 0 0 auto;
+  min-width: 0;
+
+  border-bottom: 1px solid var(--trading-border);
+  background: var(--trading-surface);
+}
+
+/* --------------------------------------------------------------------------
+   COMMAND / NAVIGATION REGION
+   -------------------------------------------------------------------------- */
+
+.trading-command-region {
+  flex: 0 0 auto;
+  min-width: 0;
+
+  border-bottom: 1px solid var(--trading-border);
+  background: #0b0f14;
+}
+
+/* --------------------------------------------------------------------------
+   BODY
+   -------------------------------------------------------------------------- */
+
+.terminal-body {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+
+  overflow: hidden;
+
+  background: var(--trading-bg);
+}
+
+.terminal-content {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+
+  overflow: hidden;
+}
+
+/* --------------------------------------------------------------------------
+   MAIN TERMINAL
+   -------------------------------------------------------------------------- */
+
+.terminal-layout {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(190px, 15%)
+    minmax(0, 1fr)
+    minmax(270px, 23%);
+
+  gap: 1px;
+
+  background: var(--trading-border);
+}
+
+/* --------------------------------------------------------------------------
+   COLUMN OWNERS
+   -------------------------------------------------------------------------- */
+
+.terminal-left,
+.terminal-centre,
+.terminal-right {
+  min-width: 0;
+  min-height: 0;
+
+  overflow: hidden;
+
+  background: var(--trading-bg);
+}
+
+/* --------------------------------------------------------------------------
+   LEFT
+   -------------------------------------------------------------------------- */
+
+.terminal-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.terminal-watchlist {
+  height: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   CENTRE
+   -------------------------------------------------------------------------- */
+
+.terminal-centre {
+  display: grid;
+
+  grid-template-rows:
+    minmax(0, 1fr)
+    minmax(145px, 22%)
+    minmax(125px, 19%);
+
+  gap: 1px;
+
+  background: var(--trading-border);
+}
+
+/* --------------------------------------------------------------------------
+   RIGHT
+   -------------------------------------------------------------------------- */
+
+.terminal-right {
+  display: grid;
+
+  grid-template-rows:
+    minmax(0, 1fr)
+    minmax(150px, 34%);
+
+  gap: 1px;
+
+  background: var(--trading-border);
+}
+
+.terminal-right-grid {
+  min-width: 0;
+  min-height: 0;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1fr);
+
+  gap: 1px;
+
+  background: var(--trading-border);
+}
+
+/* --------------------------------------------------------------------------
+   PANEL SURFACE
+   -------------------------------------------------------------------------- */
+
+.terminal-panel {
+  min-width: 0;
+  min-height: 0;
+
+  overflow: hidden;
+
+  background: var(--trading-surface);
+  border: 0;
+
+  position: relative;
+}
+
+.terminal-panel::before {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  top: 0;
+  bottom: 0;
+
+  width: 1px;
+
+  background: rgba(255, 255, 255, 0.025);
+
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   COMMON INTERNAL SURFACES
+   -------------------------------------------------------------------------- */
+
+.terminal-panel > * {
+  min-width: 0;
+  min-height: 0;
+}
+
+/* --------------------------------------------------------------------------
+   FOOTER
+   -------------------------------------------------------------------------- */
+
+.terminal-footer {
+  flex: 0 0 26px;
+
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 10px;
+
+  border-top: 1px solid var(--trading-border);
+
+  background: #0b0f14;
+
+  color: var(--trading-muted);
+
+  font-size: 10px;
+  letter-spacing: 0.045em;
+}
+
+.footer-status-group {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  min-width: 0;
+}
+
+.footer-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+
+  white-space: nowrap;
+}
+
+.status-indicator {
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+
+  display: inline-block;
+}
+
+.status-indicator.operational {
+  background: var(--trading-positive);
+}
+
+.status-indicator.neutral {
+  background: var(--trading-dim);
+}
+
+.footer-meta {
+  color: var(--trading-dim);
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------------------------------
+   SECONDARY VIEW PAGES
+   -------------------------------------------------------------------------- */
+
+.trading-view-page {
+  width: 100%;
+  height: 100%;
+
+  min-width: 0;
+  min-height: 0;
+
+  overflow: auto;
+
+  padding: 14px;
+
+  box-sizing: border-box;
+
+  background: var(--trading-bg);
+}
+
+.view-page-header {
+  display: flex;
+  flex-direction: column;
+
+  gap: 3px;
+
+  margin-bottom: 14px;
+
+  padding-bottom: 10px;
+
+  border-bottom: 1px solid var(--trading-border);
+}
+
+.view-page-header h2 {
+  margin: 0;
+
+  color: var(--trading-text);
+
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.view-page-header span:last-child {
+  color: var(--trading-muted);
+  font-size: 11px;
+}
+
+.view-kicker {
+  color: var(--trading-accent);
+
+  font-size: 9px;
+  font-weight: 700;
+
+  letter-spacing: 0.11em;
+}
+
+.full-panel {
+  min-width: 0;
+
+  padding: 12px;
+
+  background: var(--trading-surface);
+
+  border: 1px solid var(--trading-border);
+}
+
+/* --------------------------------------------------------------------------
+   EXISTING COMPONENT NORMALISATION
+   -------------------------------------------------------------------------- */
+
+.trading-terminal h2,
+.trading-terminal h3,
+.trading-terminal h4 {
+  font-family: inherit;
+}
+
+.trading-terminal button {
+  font-family: inherit;
+}
+
+.trading-terminal input,
+.trading-terminal select {
+  font-family: inherit;
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVE CONSTRAINT
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 1100px) {
+  .terminal-layout {
+    grid-template-columns:
+      minmax(165px, 18%)
+      minmax(0, 1fr)
+      minmax(235px, 27%);
+  }
+}
+
+@media (max-width: 850px) {
+  .terminal-layout {
+    grid-template-columns:
+      minmax(150px, 22%)
+      minmax(0, 1fr);
+  }
+
+  .terminal-right {
+    display: none;
+  }
+}
+
+/* Broker Control Panel */
+
+.broker-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.broker-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.broker-status-badge {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: 12px;
+}
+.broker-status-badge.connected { background: #1F3A2A; color: #52A36B; }
+.broker-status-badge.disconnected { background: #3D2020; color: #B95A5A; }
+
+.connect-btn {
+  background: var(--trading-accent);
+  color: #0A0D12;
+  border: none;
+  padding: 4px 16px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 12px;
+  cursor: pointer;
+}
+.connect-btn:hover { opacity: 0.85; }
+.disconnect-btn {
+  background: #3D2020;
+  color: #B95A5A;
+  border: 1px solid #B95A5A;
+  padding: 3px 14px;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 12px;
+  cursor: pointer;
+}
+.disconnect-btn:hover { background: #4a2a2a; }
+
+.broker-details {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--trading-muted);
+}
+.broker-details > div {
+  display: flex;
+  justify-content: space-between;
+  padding: 2px 0;
+  border-bottom: 1px solid var(--trading-border);
+}
+.broker-details span {
+  color: var(--trading-text);
+}
+
+.funds-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 4px;
+}
+.funds-grid .stat-panel {
+  background: var(--trading-surface-2);
+  padding: 4px 6px;
+  border-radius: 3px;
+  margin: 0;
+}
+
+.broker-diagnostics {
+  margin-top: 12px;
+  padding: 8px;
+  background: var(--trading-surface-2);
+  border-radius: 4px;
+  font-size: 11px;
+}
+.diagnostic-row {
+  display: flex;
+  gap: 20px;
+  color: var(--trading-muted);
+}
+
+.broker-section .placeholder {
+  color: var(--trading-dim);
+  font-style: italic;
+  padding: 8px 0;
+}
+
+/* ─── Broker Control ─────────────────────────────────────────────────── */
+
+.broker-control {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 8px;
+}
+
+.broker-control-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--trading-border);
+}
+.broker-control-header h2 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+.broker-actions {
+  display: flex;
+  gap: 8px;
+}
+.action-btn {
+  background: var(--trading-surface-2);
+  border: 1px solid var(--trading-border);
+  color: var(--trading-text);
+  padding: 4px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+.action-btn:hover {
+  background: var(--trading-surface-3);
+}
+
+.broker-control-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--trading-border);
+}
+.broker-control-tabs button {
+  background: transparent;
+  border: none;
+  color: var(--trading-muted);
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+.broker-control-tabs button.active {
+  color: var(--trading-text);
+  border-bottom-color: var(--trading-accent);
+}
+.broker-control-tabs button:hover {
+  color: var(--trading-text);
+}
+
+.broker-control-content {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* ─── Overview ────────────────────────────────────────────────────────── */
+.broker-overview {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.overview-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 8px;
+}
+.overview-stats .stat-panel {
+  background: var(--trading-surface);
+  padding: 8px;
+  border-radius: 4px;
+  margin: 0;
+}
+
+/* ─── Status Badges ──────────────────────────────────────────────────── */
+.status-badge {
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  display: inline-block;
+}
+.status-badge.connected, .status-badge.healthy {
+  background: #1F3A2A;
+  color: #52A36B;
+}
+.status-badge.degraded {
+  background: #3D3420;
+  color: #D1A64A;
+}
+.status-badge.disconnected, .status-badge.offline {
+  background: #3D2020;
+  color: #B95A5A;
+}
+
+.risk-badge {
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.risk-badge.normal { background: #1F3A2A; color: #52A36B; }
+.risk-badge.restricted { background: #3D3420; color: #D1A64A; }
+.risk-badge.blocked { background: #3D2020; color: #B95A5A; }
+
+/* ─── Routing ────────────────────────────────────────────────────────── */
+.routing-view h3 {
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: var(--trading-muted);
+}
+.routing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.routing-item {
+  background: var(--trading-surface);
+  padding: 8px;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.routing-diagram {
+  background: var(--trading-surface-2);
+  padding: 12px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 12px;
+  color: var(--trading-muted);
+  text-align: center;
+}
+
+/* ─── Diagnostics ────────────────────────────────────────────────────── */
+.diagnostics-view h3 {
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: var(--trading-muted);
+}

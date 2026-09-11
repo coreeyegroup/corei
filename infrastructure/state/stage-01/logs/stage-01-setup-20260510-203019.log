@@ -1,0 +1,50 @@
+=========================================
+Stage 01 Machine Foundation
+=========================================
+[INFO] Runtime already evolved.
+[INFO] Applying safe deterministic normalization.
+[INFO] Validating hostname...
+ Static hostname: core-node
+       Icon name: computer-vm
+         Chassis: vm
+      Machine ID: 198d17abacb34c729f16c30f5ac4ab25
+         Boot ID: 7a01695499fc46b2940346912d631af2
+  Virtualization: vmware
+Operating System: Ubuntu 22.04.5 LTS
+          Kernel: Linux 5.15.0-176-generic
+    Architecture: x86-64
+ Hardware Vendor: VMware, Inc.
+  Hardware Model: VMware Virtual Platform
+[INFO] Validating sysctl...
+vm.swappiness = 0
+net.ipv4.ip_forward = 1
+[INFO] Validating Docker...
+Docker version 29.4.3, build 055a478
+[INFO] Validating containerd...
+containerd containerd.io v2.2.3 77c84241c7cbdd9b4eca2591793e3d4f4317c590
+[INFO] Validating Chrony...
+● chrony.service - chrony, an NTP client/server
+     Loaded: loaded (/lib/systemd/system/chrony.service; enabled; vendor preset: enabled)
+     Active: active (running) since Wed 2026-05-06 16:18:54 UTC; 4 days ago
+       Docs: man:chronyd(8)
+             man:chronyc(1)
+             man:chrony.conf(5)
+   Main PID: 1064 (chronyd)
+      Tasks: 2 (limit: 9335)
+     Memory: 2.1M
+        CPU: 2.577s
+     CGroup: /system.slice/chrony.service
+             ├─1064 /usr/sbin/chronyd -F 1
+             └─1067 /usr/sbin/chronyd -F 1
+
+May 10 16:14:39 core-node chronyd[1064]: Source 172.235.18.237 replaced with 172.236.180.15 (pool.ntp.org)
+May 10 16:39:18 core-node chronyd[1064]: Forward time jump detected!
+May 10 16:39:18 core-node chronyd[1064]: Can't synchronise: no selectable sources
+May 10 16:41:28 core-node chronyd[1064]: Selected source 157.245.102.2 (pool.ntp.org)
+May 10 18:49:57 core-node chronyd[1064]: Forward time jump detected!
+May 10 18:49:57 core-node chronyd[1064]: Can't synchronise: no selectable sources
+May 10 18:53:10 core-node chronyd[1064]: Selected source 157.245.102.2 (pool.ntp.org)
+May 10 19:42:52 core-node chronyd[1064]: Forward time jump detected!
+May 10 19:42:52 core-node chronyd[1064]: Can't synchronise: no selectable sources
+May 10 19:46:06 core-node chronyd[1064]: Selected source 157.245.102.2 (pool.ntp.org)
+[INFO] Stage 01 normalization complete.

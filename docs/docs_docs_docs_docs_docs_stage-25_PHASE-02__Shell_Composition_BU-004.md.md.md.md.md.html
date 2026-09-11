@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <title>docs docs docs docs stage 25 PHASE 02  Shell Composition BU 004.md.md.md.md</title>
+  <style>
+  body {
+    background: #0A0D12;
+    color: #E3E7EC;
+    font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px 40px;
+  }
+
+  h1 {
+    font-size: 26px;
+    font-weight: 600;
+    color: #C6A46A;
+    margin: 24px 0 12px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 8px;
+  }
+
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #D4B88A;
+    margin: 20px 0 10px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 6px;
+  }
+
+  h3 {
+    font-size: 17px;
+    font-weight: 500;
+    color: #E3E7EC;
+    margin: 16px 0 8px 0;
+  }
+
+  h4 {
+    font-size: 15px;
+    font-weight: 500;
+    color: #C5CED9;
+    margin: 12px 0 6px 0;
+  }
+
+  p {
+    margin-bottom: 8px;
+    color: #C5CED9;
+  }
+
+  ul,
+  ol {
+    padding-left: 24px;
+    margin-bottom: 8px;
+    color: #C5CED9;
+  }
+
+  li {
+    margin-bottom: 2px;
+  }
+
+  code {
+    font-family: 'JetBrains Mono', 'Cascadia Code', monospace;
+    font-size: 13px;
+    background: rgba(255,255,255,0.05);
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid #28303C;
+    color: #C5CED9;
+  }
+
+  pre {
+    background: #18202A;
+    border: 1px solid #28303C;
+    border-radius: 6px;
+    padding: 16px 20px;
+    overflow: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 12px 0 16px 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #C5CED9;
+  }
+
+  pre code {
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 16px 0;
+    font-size: 13px;
+    color: #C5CED9;
+  }
+
+  th {
+    background: #18202A;
+    color: #C5CED9;
+    font-weight: 600;
+    text-align: left;
+    padding: 6px 12px;
+    border: 1px solid #28303C;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  td {
+    padding: 4px 12px;
+    border: 1px solid #28303C;
+    background: #0E1219;
+  }
+
+  tr:nth-child(even) td {
+    background: #121821;
+  }
+
+  blockquote {
+    border-left: 3px solid #C6A46A;
+    padding-left: 16px;
+    margin: 8px 0 12px 0;
+    color: #6E7883;
+    font-style: italic;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #28303C;
+    margin: 24px 0;
+  }
+
+  a {
+    color: #8BB4F0;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  strong {
+    color: #E3E7EC;
+    font-weight: 600;
+  }
+
+  img {
+    max-width: 100%;
+    border-radius: 4px;
+    border: 1px solid #28303C;
+  }
+
+  .doc-footer {
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid #28303C;
+    font-size: 12px;
+    color: #6E7883;
+    font-family: monospace;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+</style>
+</head>
+
+<body>
+
+  <div
+    class="doc-header"
+    style="
+      background:#121821;
+      border:1px solid #28303C;
+      border-radius:8px;
+      padding:1.2rem 1.8rem;
+      margin-bottom:1.8rem;
+    "
+  >
+
+    <div
+      style="
+        color:#C6A46A;
+        font-weight:600;
+        font-size:13px;
+        text-transform:uppercase;
+        letter-spacing:0.05em;
+      "
+    >
+      COREI · Stage Documentation
+    </div>
+
+
+
+    <h1
+      style="
+        font-size:28px;
+        font-weight:600;
+        color:#E3E7EC;
+        margin:0.1rem 0;
+        border-bottom:none;
+        padding-bottom:0;
+      "
+    >
+      docs docs docs docs stage 25 PHASE 02  Shell Composition BU 004.md.md.md.md
+    </h1>
+
+    <div
+      style="
+        font-size:16px;
+        color:#C5CED9;
+      "
+    >
+      Stage Documentation
+      ·
+      Operational
+    </div>
+
+    <div
+      style="
+        display:flex;
+        flex-wrap:wrap;
+        gap:0.6rem 1.8rem;
+        margin-top:0.6rem;
+        font-size:13px;
+      "
+    >
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Status
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          Approved
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Version
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          1.0
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Classification
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          Operational
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Owner
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          COREI
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Repository
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+            font-family:monospace;
+          "
+        >
+          docs/docs_docs_docs_docs_stage-25_PHASE-02__Shell_Composition_BU-004.md.md.md.md.md
+        </span>
+      </span>
+
+    </div>
+
+
+
+  </div>
+
+
+
+  <p>Stage-25<br>
+Phase-02<br>
+BU-004</p>
+<p>Institutional Navigation Environment<br>
+OBJECTIVE</p>
+<p>Deliver a production-grade institutional navigation environment.</p>
+<p>Operator outcome:</p>
+<p>One Navigation</p>
+<p>↓</p>
+<p>All Experiences</p>
+<p>↓</p>
+<p>All Domains</p>
+<p>↓</p>
+<p>All Workspaces</p>
+<p>↓</p>
+<p>All Terminals<br>
+ENVIRONMENT DESIGN<br>
+┌────────────────────────────────────────────────────────────────────────────┐<br>
+│ TOP RIBBON                                                                │<br>
+├──────────────┬──────────────────────────────────────────┬──────────────────┤<br>
+│              │                                          │                  │<br>
+│              │                                          │                  │<br>
+│              │                                          │                  │<br>
+│              │                                          │                  │<br>
+│ NAVIGATION   │          WORKSPACE                       │  INTELLIGENCE    │<br>
+│              │                                          │                  │<br>
+│              │                                          │                  │<br>
+│              │                                          │                  │<br>
+│              │                                          │                  │<br>
+├──────────────┴──────────────────────────────────────────┴──────────────────┤<br>
+│ TIMELINE                                                                   │<br>
+└────────────────────────────────────────────────────────────────────────────┘<br>
+Navigation Width<br>
+Collapsed</p>
+<p>72px</p>
+<p>Expanded</p>
+<p>320px</p>
+<p>Resizable</p>
+<p>240px → 420px</p>
+<p>Persist width.</p>
+<p>Navigation Composition<br>
+Navigation</p>
+<p>├── Search<br>
+├── Favorites<br>
+├── Recent<br>
+├── Workspaces<br>
+├── Experiences<br>
+│<br>
+├── Infrastructure<br>
+├── Trading<br>
+├── Research<br>
+├── Risk<br>
+├── Executive<br>
+└── Compliance<br>
+Infrastructure Example<br>
+Infrastructure</p>
+<p>▼ Cluster</p>
+<p>▼ Compute</p>
+<p>▼ Network</p>
+<p>▼ Storage</p>
+<p>▼ Database</p>
+<p>▼ Messaging</p>
+<p>▼ Security</p>
+<p>▼ Platform</p>
+<p>▼ Observability</p>
+<p>▼ Delivery<br>
+Trading Example<br>
+Trading</p>
+<p>▼ Market</p>
+<p>▼ Signals</p>
+<p>▼ Decision</p>
+<p>▼ Risk</p>
+<p>▼ Portfolio</p>
+<p>▼ Orders</p>
+<p>▼ Execution</p>
+<p>▼ Positions</p>
+<p>▼ Performance<br>
+TOOL COMPOSITION<br>
+Tool	Usage<br>
+shadcn/ui	Sidebar, Collapsible, ScrollArea, Input<br>
+Radix UI	Accordion, Tooltip, Context Menu<br>
+Lucide	Icons<br>
+Zustand	Navigation State<br>
+React Router	Route Resolution<br>
+Existing Navigation Framework	Business Logic<br>
+Experience Registry	Dynamic Registration<br>
+Navigation Runtime<br>
+Experience Registry</p>
+<pre><code>    │
+
+    ▼
+</code></pre>
+<p>Navigation Registry</p>
+<pre><code>    │
+</code></pre>
+<p>Permission Filter</p>
+<pre><code>    │
+</code></pre>
+<p>Workspace Filter</p>
+<pre><code>    │
+</code></pre>
+<p>Search Engine</p>
+<pre><code>    │
+</code></pre>
+<p>Favorite Engine</p>
+<pre><code>    │
+</code></pre>
+<p>Recent Engine</p>
+<pre><code>    │
+</code></pre>
+<p>Sidebar UI<br>
+Visual Design<br>
+┌───────────────────────────────┐<br>
+│ 🔍 Search                     │<br>
+├───────────────────────────────┤<br>
+│ ★ Favorites                   │<br>
+├───────────────────────────────┤<br>
+│ 🕒 Recent                     │<br>
+├───────────────────────────────┤<br>
+│ ▼ Infrastructure              │<br>
+│     Cluster                   │<br>
+│     Compute                   │<br>
+│     Network                   │<br>
+│                               │<br>
+│ ▼ Trading                     │<br>
+│     Market                    │<br>
+│     Orders                    │<br>
+│     Portfolio                 │<br>
+│                               │<br>
+│ ▼ Research                    │<br>
+│                               │<br>
+│ ▼ Risk                        │<br>
+│                               │<br>
+│ ▼ Executive                   │<br>
+│                               │<br>
+│ ▼ Compliance                  │<br>
+└───────────────────────────────┘<br>
+Operator Features</p>
+<p>Every node supports</p>
+<p>✓ Icon</p>
+<p>✓ Badge</p>
+<p>✓ Alert Count</p>
+<p>✓ Running Tasks</p>
+<p>✓ Health Indicator</p>
+<p>✓ Tooltip</p>
+<p>✓ Keyboard Shortcut</p>
+<p>✓ Favorite</p>
+<p>✓ Pin</p>
+<p>✓ Permission</p>
+<p>✓ Search<br>
+Runtime Behavior<br>
+Click</p>
+<p>↓</p>
+<p>Expand</p>
+<p>↓</p>
+<p>Lazy Load</p>
+<p>↓</p>
+<p>Resolve Route</p>
+<p>↓</p>
+<p>Mount Experience</p>
+<p>↓</p>
+<p>Restore Workspace<br>
+Persistence</p>
+<p>Persist</p>
+<p>Expanded Nodes</p>
+<p>Favorites</p>
+<p>Pinned Modules</p>
+<p>Recent Pages</p>
+<p>Sidebar Width</p>
+<p>Collapsed State</p>
+<p>Selected Workspace</p>
+<p>Using existing Zustand persistence.</p>
+<p>Implementation (Compose, Don’t Build)</p>
+<ol>
+<li>Compose shadcn Sidebar<br>
+Sidebar<br>
+SidebarGroup<br>
+SidebarMenu<br>
+SidebarInset</li>
+<li>Compose Radix<br>
+Accordion<br>
+Tooltip<br>
+Context Menu</li>
+<li>Compose Navigation Framework</li>
+</ol>
+<p>Reuse</p>
+<p>src/navigation</p>
+<p>No new navigation engine.</p>
+<ol start="4">
+<li>Connect Experience Registry<br>
+Experience</li>
+</ol>
+<p>↓</p>
+<p>Navigation Node</p>
+<p>↓</p>
+<p>Route</p>
+<p>↓</p>
+<p>Workspace</p>
+<p>↓</p>
+<p>Terminal<br>
+5. Connect Router<br>
+Navigation</p>
+<p>↓</p>
+<p>React Router</p>
+<p>↓</p>
+<p>Experience</p>
+<p>↓</p>
+<p>Workspace<br>
+6. Connect Zustand</p>
+<p>Persist</p>
+<p>width<br>
+collapse<br>
+favorites<br>
+expanded<br>
+Validation<br>
+□ Sidebar renders</p>
+<p>□ Search works</p>
+<p>□ Accordion works</p>
+<p>□ Collapse works</p>
+<p>□ Resize works</p>
+<p>□ Favorites persist</p>
+<p>□ Navigation persists</p>
+<p>□ Experience registry connected</p>
+<p>□ TypeScript PASS</p>
+<p>□ Vite PASS<br>
+Deliverable</p>
+<p>After BU-004, the operator should no longer see a placeholder.</p>
+<p>They should see the first production navigation environment capable of hosting all COREI terminals, domains, and workspaces.</p>
+<p>This is the new execution model we’ll continue with: each Build Unit delivers a tangible operational capability by composing the frameworks and libraries we’ve already selected, rather than creating additional architectural scaffolding.</p>
+<p>Stage-25<br>
+Phase-02<br>
+BU-004<br>
+Institutional Navigation Environment<br>
+STEP-01 — First Design Freeze</p>
+<p>Before writing code, freeze the navigation architecture.</p>
+<p>Navigation is NOT a menu.</p>
+<p>It is an Institutional Operational Control System.</p>
+<p>It answers:</p>
+<p>Where am I?</p>
+<p>What can I operate?</p>
+<p>What requires attention?</p>
+<p>What is running?</p>
+<p>What changed?</p>
+<p>What is unhealthy?</p>
+<p>What should I open next?<br>
+STEP-02 — Information Architecture<br>
+Navigation<br>
+│<br>
+├── Search<br>
+├── Favorites<br>
+├── Recent<br>
+├── Workspaces<br>
+│<br>
+├── Infrastructure<br>
+│      ├── Cluster<br>
+│      ├── Compute<br>
+│      ├── Network<br>
+│      ├── Storage<br>
+│      ├── Database<br>
+│      ├── Messaging<br>
+│      ├── Security<br>
+│      ├── Platform<br>
+│      ├── Observability<br>
+│      └── Delivery<br>
+│<br>
+├── Trading<br>
+│      ├── Market<br>
+│      ├── Signals<br>
+│      ├── Decision<br>
+│      ├── Risk<br>
+│      ├── Portfolio<br>
+│      ├── Orders<br>
+│      ├── Execution<br>
+│      ├── Positions<br>
+│      └── Performance<br>
+│<br>
+├── Research<br>
+├── Risk<br>
+├── Executive<br>
+└── Compliance</p>
+<p>This is now frozen.</p>
+<p>STEP-03 — Component Composition</p>
+<p>We will not build a sidebar.</p>
+<p>We compose one.</p>
+<p>shadcn</p>
+<p>Compose:</p>
+<p>Sidebar<br>
+SidebarProvider<br>
+SidebarInset<br>
+SidebarRail<br>
+SidebarMenu<br>
+SidebarMenuButton<br>
+SidebarMenuItem<br>
+SidebarGroup<br>
+SidebarGroupLabel<br>
+SidebarGroupContent<br>
+ScrollArea<br>
+Input<br>
+Separator<br>
+Radix</p>
+<p>Compose:</p>
+<p>Accordion<br>
+Tooltip<br>
+Context Menu<br>
+Dropdown Menu<br>
+Lucide</p>
+<p>Compose icons.</p>
+<p>No SVGs.</p>
+<p>No custom icons.</p>
+<p>Zustand</p>
+<p>Compose:</p>
+<p>Navigation State</p>
+<p>↓</p>
+<p>Expanded</p>
+<p>↓</p>
+<p>Selected</p>
+<p>↓</p>
+<p>Favorites</p>
+<p>↓</p>
+<p>Pinned</p>
+<p>↓</p>
+<p>Collapsed</p>
+<p>↓</p>
+<p>Width<br>
+React Router</p>
+<p>Compose:</p>
+<p>Navigation</p>
+<p>↓</p>
+<p>Route</p>
+<p>↓</p>
+<p>Experience</p>
+<p>↓</p>
+<p>Workspace<br>
+STEP-04 — Navigation Runtime<br>
+Experience Registry<br>
+│<br>
+▼<br>
+Navigation Registry<br>
+│<br>
+Permission Engine<br>
+│<br>
+Workspace Engine<br>
+│<br>
+Search Index<br>
+│<br>
+Favorite Engine<br>
+│<br>
+Navigation UI<br>
+STEP-05 — UX Requirements</p>
+<p>Navigation must support:</p>
+<p>✓ Keyboard-first</p>
+<p>✓ Mouse</p>
+<p>✓ Search</p>
+<p>✓ Collapse</p>
+<p>✓ Resize</p>
+<p>✓ Favorites</p>
+<p>✓ Recent</p>
+<p>✓ Badges</p>
+<p>✓ Health Indicators</p>
+<p>✓ Permission-aware visibility</p>
+<p>✓ Workspace-aware filtering</p>
+<p>✓ Multi-terminal awareness</p>
+<p>✓ Instant switching</p>
+<p>STEP-06 — Visual Layout<br>
+┌──────────────────────────────┐<br>
+│ COREI                        │<br>
+├──────────────────────────────┤<br>
+│ 🔍 Search                    │<br>
+├──────────────────────────────┤<br>
+│ ★ Favorites                  │<br>
+├──────────────────────────────┤<br>
+│ 🕒 Recent                    │<br>
+├──────────────────────────────┤<br>
+│ ▼ Infrastructure             │<br>
+│    • Cluster                 │<br>
+│    • Compute                 │<br>
+│    • Network                 │<br>
+│                              │<br>
+│ ▼ Trading                    │<br>
+│    • Market                  │<br>
+│    • Orders                  │<br>
+│    • Portfolio               │<br>
+│                              │<br>
+│ ▼ Research                   │<br>
+│ ▼ Risk                       │<br>
+│ ▼ Executive                  │<br>
+│ ▼ Compliance                 │<br>
+└──────────────────────────────┘<br>
+STEP-07 — Implementation Strategy</p>
+<p>Now we stop designing.</p>
+<p>The next implementation work is composition, not invention.</p>
+<p>We will:</p>
+<p>Install and configure the official shadcn Sidebar (if not already present).<br>
+Connect it to the existing src/navigation framework.<br>
+Register experiences dynamically from the Experience Registry.<br>
+Connect routing with React Router.<br>
+Persist navigation state with Zustand.<br>
+Style it using the COREI design system.<br>
+Validate keyboard navigation, resizing, and persistence.</p>
+<p>No custom sidebar engine.</p>
+<p>No placeholder navigation.</p>
+<p>What I want to do before writing code</p>
+<p>I want the next Build Unit to start from the actual components we have installed, not assumptions.</p>
+<p>So the first action will be to audit the current UI stack and answer:</p>
+<p>Which shadcn components are already installed?<br>
+Which Radix primitives are already available?<br>
+Which docking library did we finally choose?<br>
+Which charting library is installed?<br>
+Which command palette is installed?<br>
+Which sidebar implementation is available?</p>
+<p>Then we compose from those exact assets instead of generating generic code.</p>
+<p>I believe this is the correct institutional workflow: inventory → compose → configure → integrate → validate. It keeps the implementation aligned with the tools we’ve deliberately chosen and avoids rebuilding capabilities that already exist.</p>
+
+
+  <div class="doc-footer">
+
+    <span>DOCUMENT KEY: docs:docs_docs_docs_docs_stage-25_PHASE-02__Shell_Composition_BU-004.md.md.md.md.md</span>
+
+    <span>
+      DOCUMENT NAME: docs docs docs docs stage 25 PHASE 02  Shell Composition BU 004.md.md.md.md
+    </span>
+
+    <span>
+      VERSION: 1.0
+    </span>
+
+  </div>
+
+</body>
+</html>

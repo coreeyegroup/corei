@@ -1,0 +1,556 @@
+PHASE 10 — STEP 1 - MULTI-SERVICE STANDARDIZATION + REGISTRY HARDENING
+	🎯 OBJECTIVE
+		Convert system from:
+			Single-service / unstable deployment
+			to:
+			Deterministic multi-service deployment platform
+
+		🔵 FINAL SYSTEM STATE
+			✔ decision-engine        → Running
+			✔ risk-engine            → Running
+			✔ event-service          → Running
+			✔ signal-service         → Running (worker model)
+			✔ alertmanager           → Running
+			✔ alertmanager-telegram  → Running
+			✔ prometheus             → Running
+
+	🔵 STEP 1 — EXECUTION BREAKDOWN
+
+	1. SERVICE STANDARDIZATION
+		📁 DIRECTORY STRUCTURE
+			~/core-system/services/
+
+		Each service:
+
+			services/<service-name>/
+
+			├── app/
+			│   └── main.py
+			├── Dockerfile
+			├── requirements.txt
+			├── helm/<service-name>/
+			│   ├── Chart.yaml
+			│   ├── values.yaml
+			│   └── templates/
+			│       ├── deployment.yaml
+			│       └── service.yaml
+			└── .github/workflows/deploy.yaml
+
+		🔧 COMMANDS USED
+
+			cd ~/core-system/services
+
+			mkdir -p decision-engine/app
+			mkdir -p decision-engine/helm/decision-engine/templates
+			mkdir -p decision-engine/.github/workflows
+
+			mkdir -p risk-engine/app
+			mkdir -p risk-engine/helm/risk-engine/templates
+			mkdir -p risk-engine/.github/workflows
+
+			mkdir -p event-service/app
+			mkdir -p event-service/helm/event-service/templates
+			mkdir -p event-service/.github/workflows
+
+	2. DOCKER IMAGE BUILD PIPELINE
+		🔧 COMMANDS
+			cd ~/core-system/services
+
+			docker build -t localhost:5000/decision-engine:latest ./decision-engine
+			docker push localhost:5000/decision-engine:latest
+
+			docker build -t localhost:5000/risk-engine:latest ./risk-engine
+			docker push localhost:5000/risk-engine:latest
+
+			docker build -t localhost:5000/event-service:latest ./event-service
+			docker push localhost:5000/event-service:latest
+
+		🔴 ISSUE ENCOUNTERED
+			ERROR: path not found
+
+			ROOT CAUSE
+				Wrong working directory
+
+			FIX
+				cd ~/core-system/services
+
+	3. HELM DEPLOYMENT
+		🔧 COMMANDS
+			helm upgrade --install decision-engine ./decision-engine/helm/decision-engine
+			helm upgrade --install risk-engine ./risk-engine/helm/risk-engine
+			helm upgrade --install event-service ./event-service/helm/event-service
+
+	4. REGISTRY FAILURE (CRITICAL)
+		❗ ERROR
+			ErrImageNeverPull
+			ImagePullBackOff
+
+		ROOT CAUSE
+			localhost:5000 is not accessible inside Kubernetes
+
+	5. REGISTRY HARDENING
+		🔧 STEP 1 — RETAG IMAGE
+			docker tag localhost:5000/alertmanager-telegram:v2 192.168.1.3:5000/alertmanager-telegram:v2
+
+		🔧 STEP 2 — CONFIGURE DOCKER
+			FILE
+				/etc/docker/daemon.json
+
+			CONTENT
+				{
+				  "insecure-registries": ["192.168.1.3:5000"]
+				}
+
+			🔧 COMMANDS
+				sudo systemctl restart docker
+				docker info | grep -i insecure
+
+		🔧 STEP 3 — CONFIGURE CONTAINERD
+			FILE
+				/etc/containerd/config.toml
+
+			🔴 IMPORTANT FIX
+
+			Correct section:
+
+				[plugins.'io.containerd.cri.v1.images'.registry]
+				  config_path = ''
+
+				  [plugins.'io.containerd.cri.v1.images'.registry.mirrors."192.168.1.3:5000"]
+					endpoint = ["http://192.168.1.3:5000"]
+
+				  [plugins.'io.containerd.cri.v1.images'.registry.configs."192.168.1.3:5000".tls]
+					insecure_skip_verify = true
+
+			🔧 COMMANDS
+				sudo systemctl restart containerd
+				kubectl delete pod -l app=alertmanager-telegram
+
+			✅ RESULT
+				ImagePullBackOff → RESOLVED
+
+	6. SIGNAL SERVICE FAILURE
+		❗ ERROR
+			CrashLoopBackOff
+			Exit Code: 137
+			Readiness probe failed
+
+		ROOT CAUSE
+			Worker service treated as HTTP service
+
+		🔧 FIX
+			COMMAND
+
+				kubectl patch deployment signal-service \
+				-p '{
+				  "spec": {
+					"template": {
+					  "spec": {
+						"containers": [
+						  {
+							"name": "signal-service",
+							"ports": [],
+							"livenessProbe": null,
+							"readinessProbe": null
+						  }
+						]
+					  }
+					}
+				  }
+				}'
+
+			🔁 RESTART
+				kubectl rollout restart deployment signal-service
+
+			✅ RESULT
+				CrashLoopBackOff → RESOLVED
+
+	7. SERVICE TYPE ARCHITECTURE
+		🔵 API SERVICES
+			decision-engine
+			risk-engine
+			event-service
+
+		✔ expose port
+		✔ have probes
+		✔ have service
+
+		🔵 WORKER SERVICES
+			signal-service
+
+		✔ no port
+		✔ no probes
+		✔ no service
+
+	8. FINAL VALIDATION COMMANDS
+		kubectl get pods
+		kubectl get svc
+		kubectl logs -l app.kubernetes.io/name=signal-service
+
+	9. SYSTEM LOGIC (IMPORTANT)
+		DEPLOYMENT FLOW
+			Code → Docker → Registry → Kubernetes → Helm → Running Pod
+
+		EXECUTION PIPELINE
+			Signal → Decision → Risk → Event
+
+		FAILURE RULE
+			If upstream fails → entire system invalid
+
+	10. CRITICAL LESSONS
+		🔴 LESSON 1
+			localhost registry ≠ cluster registry
+
+		🔴 LESSON 2
+			Docker config ≠ containerd config
+
+		🔴 LESSON 3
+			Service type matters (API vs Worker)
+
+		🔴 LESSON 4
+			Kubernetes probes must match application behavior
+
+		🔵 FINAL OUTPUT
+			✔ Multi-service architecture deployed
+			✔ Registry hardened (node-accessible)
+			✔ Container runtime configured
+			✔ Crash loops resolved
+			✔ Deterministic deployment achieved
+
+		🔒 STEP 1 LOCK SUMMARY
+			PHASE 10 — STEP 1
+
+			STATUS: COMPLETE
+
+			RESULT:
+			Production-grade deployment foundation achieved
+
+			SYSTEM CAPABILITIES:
+			✔ multi-service deployment
+			✔ reproducible builds
+			✔ cluster-wide image pull
+			✔ stable runtime
+			✔ service isolation
+
+PHASE 10 — STEP 2 - ENVIRONMENT STRUCTURE (DEV / STAGING / PROD)
+
+	OBJECTIVE
+
+		Transform deployment model from:
+
+		single static deployment per service
+
+		to:
+
+		multi-environment, isolated, Helm-controlled deployment architecture
+
+	FINAL OUTCOME:
+
+		Environment-based deployments:
+
+			decision-engine-dev
+			risk-engine-dev
+			event-service-dev
+
+		Each environment:
+
+			independently deployable
+			independently scalable
+			isolated via Helm release
+		configurable via values files
+
+	1. ARCHITECTURE DESIGN
+		CORE PRINCIPLE
+
+			Same Helm chart + different values + different release name = isolated environment
+
+		ENVIRONMENT MODEL
+
+		Per service:
+
+			decision-engine-dev
+			decision-engine-staging
+			decision-engine-prod
+
+			risk-engine-dev
+			risk-engine-staging
+		risk-engine-prod
+
+			event-service-dev
+			event-service-staging
+			event-service-prod
+
+			ISOLATION MECHANISM
+			Layer				Mechanism
+			Deployment			Helm release name
+			Configuration		values-*.yaml
+			Scaling				replicaCount
+			Resources			CPU / Memory
+			Naming				{{ .Release.Name }}
+
+	2. FILE STRUCTURE
+		PATH (EXAMPLE)
+			~/core-system/services/<service>/helm/<service>/
+
+		REQUIRED FILES
+			values-dev.yaml
+			values-staging.yaml
+			values-prod.yaml
+
+			templates/
+			  deployment.yaml
+			  service.yaml
+
+	3. VALUES FILES (PER SERVICE)
+		values-dev.yaml
+			Example (decision-engine):
+
+			image:
+			  repository: 192.168.1.3:5000/decision-engine
+			  tag: latest
+
+			replicaCount: 1
+
+			resources:
+			  limits:
+				cpu: "200m"
+				memory: "256Mi"
+
+			env:
+			  ENVIRONMENT: "dev"
+
+		values-staging.yaml
+
+			image:
+			  repository: 192.168.1.3:5000/decision-engine
+			  tag: latest
+
+			replicaCount: 2
+
+			resources:
+			  limits:
+				cpu: "300m"
+				memory: "512Mi"
+
+			env:
+			  ENVIRONMENT: "staging"
+
+		values-prod.yaml
+
+			image:
+			  repository: 192.168.1.3:5000/decision-engine
+			  tag: latest
+
+			replicaCount: 3
+
+			resources:
+			  limits:
+				cpu: "500m"
+				memory: "1Gi"
+
+			env:
+			  ENVIRONMENT: "prod"
+
+	4. DEPLOYMENT TEMPLATE STANDARDIZATION
+		FILE
+			templates/deployment.yaml
+
+		FINAL STRUCTURE:
+
+			apiVersion: apps/v1
+			kind: Deployment
+			metadata:
+			  name: {{ .Release.Name }}
+			  labels:
+				app: {{ .Release.Name }}
+
+			spec:
+			  replicas: {{ .Values.replicaCount }}
+
+			  selector:
+				matchLabels:
+				  app: {{ .Release.Name }}
+
+			  template:
+				metadata:
+				  labels:
+					app: {{ .Release.Name }}
+
+				spec:
+				  containers:
+					- name: {{ .Release.Name }}
+
+					  image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+
+					  ports:
+						- containerPort: 8000
+
+					  env:
+						- name: ENVIRONMENT
+						  value: "{{ .Values.env.ENVIRONMENT }}"
+
+					  resources:
+						limits:
+						  cpu: "{{ .Values.resources.limits.cpu }}"
+						  memory: "{{ .Values.resources.limits.memory }}"
+
+		KEY CHANGES
+		Static:
+			name: decision-engine
+			replicas: 1
+
+		Replaced with:
+			name: {{ .Release.Name }}
+			replicas: {{ .Values.replicaCount }}
+
+	5. SERVICE TEMPLATE STANDARDIZATION
+		FILE
+			templates/service.yaml
+
+		FINAL STRUCTURE
+			apiVersion: v1
+			kind: Service
+			metadata:
+			  name: {{ .Release.Name }}
+			  labels:
+				app: {{ .Release.Name }}
+
+			spec:
+			  selector:
+				app: {{ .Release.Name }}
+
+			  ports:
+				- port: 8000
+				  targetPort: 8000
+
+			CRITICAL RULE:
+			All Kubernetes resources must use:
+				{{ .Release.Name }}
+
+			Otherwise:
+				Helm ownership conflict
+				resource collision
+				deployment failure
+
+	6. DEPLOYMENT COMMANDS
+		DECISION ENGINE (DEV)
+			helm upgrade --install decision-engine-dev \
+			~/core-system/services/decision-engine/helm/decision-engine \
+			-f ~/core-system/services/decision-engine/helm/decision-engine/values-dev.yaml
+
+		RISK ENGINE (DEV)
+			helm upgrade --install risk-engine-dev \
+			~/core-system/services/risk-engine/helm/risk-engine \
+			-f ~/core-system/services/risk-engine/helm/risk-engine/values-dev.yaml
+
+		EVENT SERVICE (DEV)
+			helm upgrade --install event-service-dev \
+			~/core-system/services/event-service/helm/event-service \
+			-f ~/core-system/services/event-service/helm/event-service/values-dev.yaml
+
+	7. VALIDATION COMMANDS
+		CHECK PODS
+			kubectl get pods
+
+		CHECK SERVICES
+			kubectl get svc
+
+		CHECK HELM RELEASES
+			helm list
+
+		EXPECTED OUTPUT
+			Pods:
+			decision-engine-dev
+			risk-engine-dev
+			event-service-dev
+
+			Services:
+			decision-engine-dev
+			risk-engine-dev
+			event-service-dev
+
+	8. CLEANUP OF LEGACY DEPLOYMENTS
+		COMMANDS
+			helm uninstall risk-engine
+			helm uninstall event-service
+
+		PURPOSE
+			Remove:
+				static deployments
+				conflicting services
+				duplicate routing
+
+			RESULT
+				Only environment-based deployments remain.
+
+	9. SYSTEM LOGIC
+		DEPLOYMENT FLOW
+			Code → Docker Image → Registry → Helm → Kubernetes → Pod
+
+		ENVIRONMENT CONTROL
+			Release Name → identity
+			es File  → behavior
+
+		EXECUTION FLOW
+			signal-service (worker)
+			→ decision-engine-dev
+			→ risk-engine-dev
+			→ event-service-dev
+
+	10. CONFIGURATION MODEL
+			ENVIRONMENT DIFFERENCES
+			Environment		Replicas		Resources
+			dev				1				low
+			staging			2				medium
+			prod			3				high
+
+			BEHAVIOR CONTROL
+				ENVIRONMENT variable inside container
+
+			Used for:
+				logging
+				feature toggles
+				debugging
+
+	11. KEY ENGINEERING RULES
+			All resource names must be dynamic
+			No shared services across environments
+			Same image across environments
+			Behavior controlled via values files
+			Release name defines environment identity
+
+	12. FAILURE CASES ENCOUNTERED
+		ISSUE 1
+			Service already exists
+
+			Root cause: static service name
+			Fix: use {{ .Release.Name }}
+
+		ISSUE 2
+			Deployment invalid
+
+			Root cause: wrong YAML structure
+			Fix: correct spec.selector and template hierarchy
+
+		ISSUE 3
+			values-dev.yaml missing
+
+			Root cause: file not created
+			Fix: create per-service values files
+
+	13. FINAL STATE
+		System now supports:
+			parallel environments
+			isolated deployments
+			independent scaling
+			deterministic deployment model
+
+		STEP 2 STATUS
+			PHASE 10 — STEP 2
+			STATUS: COMPLETE
+
+		RESULT:
+			Environment isolation achieved
+			Deployment conflicts eliminated
+			Scalable deployment model established
+			Foundation ready for secrets, rollout control, and production hardening

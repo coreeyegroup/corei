@@ -1,40 +1,72 @@
 apiVersion: apps/v1
 kind: Deployment
-
 metadata:
   name: broker-adapter-service
   namespace: trading-infra
-
 spec:
   replicas: 1
-
   selector:
     matchLabels:
       app: broker-adapter-service
-
   template:
     metadata:
       labels:
         app: broker-adapter-service
-
     spec:
       containers:
-
         - name: broker-adapter-service
-
           image: broker-adapter:stage-16
-
-          imagePullPolicy: Never
-
+          imagePullPolicy: Never   # or Always if you push to a registry
           ports:
             - containerPort: 8003
+          env:
+            # Authoritative COREI PostgreSQL state store
+            - name: POSTGRES_HOST
+              value: "postgres.storage.svc.cluster.local"
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_DB
+              value: "coredb"
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: broker-adapter-postgres
+                  key: username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: broker-adapter-postgres
+                  key: password
 
-          readinessProbe:
-            httpGet:
-              path: /health/ready
-              port: 8003
+            # Select the broker adapter
+            - name: BROKER_ADAPTER
+              value: "upstox"
 
+            # Upstox OAuth credentials
+            - name: UPSTOX_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: upstox-credentials
+                  key: client_id
+            - name: UPSTOX_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: upstox-credentials
+                  key: client_secret
+            - name: UPSTOX_REDIRECT_URI
+              value: "http://broker-adapter-service.trading-infra.svc.cluster.local:8003/oauth/callback"
+
+            - name: BROKER_CREDENTIAL_NAMESPACE
+              value: "trading-infra"
           livenessProbe:
             httpGet:
               path: /health/live
               port: 8003
+            initialDelaySeconds: 30
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 8003
+            initialDelaySeconds: 15
+            periodSeconds: 10

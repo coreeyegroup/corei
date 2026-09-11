@@ -1,0 +1,44 @@
+==================================================
+STAGE-19 RECOVERY TEST 05 — DEADLETTER RECOVERY
+==================================================
+[STEP-1] GENERATE MALFORMED EVENT
+=========================================
+GENERATE MALFORMED EVENT
+=========================================
+[DLQ] Malformed event generated
+/home/coreeye/corei/infrastructure/phases/stage-19-recovery-validation/state/deadletter/malformed-events/malformed-event-20260528T133653Z.json
+=========================================
+[STEP-2] ROUTE EVENT TO DLQ
+=========================================
+SIMULATE DEADLETTER ROUTING
+=========================================
+[DLQ] Event routed to recoverable deadletter queue
+=========================================
+[STEP-3] CLASSIFY EVENT
+=========================================
+CLASSIFY DEADLETTER EVENT
+=========================================
+[DLQ] Event classified as unrecoverable
+=========================================
+[STEP-4] SIMULATE EVENT RECOVERY
+=========================================
+SIMULATE EVENT RECOVERY
+=========================================
+[DLQ] Recoverable event replay simulation complete
+=========================================
+[STEP-5] ESCALATE UNRECOVERABLE EVENTS
+=========================================
+ESCALATE UNRECOVERABLE EVENT
+=========================================
+[DLQ] Unrecoverable event escalated for human review
+=========================================
+[STEP-6] VALIDATE DLQ GOVERNANCE
+=========================================
+VALIDATE DEADLETTER GOVERNANCE
+=========================================
+[DLQ] Escalated event count: 1
+[PASS] Deadletter governance validation successful
+=========================================
+==================================================
+RECOVERY TEST 05 COMPLETE
+==================================================

@@ -1,0 +1,16 @@
+{
+  "type": "record",
+  "name": "PortfolioState",
+  "namespace": "core.portfolio",
+  "fields": [
+    {"name": "account_id", "type": "string"},
+    {"name": "strategy_id", "type": "string"},
+    {"name": "timestamp", "type": "long"},
+    {"name": "equity", "type": "long"},
+    {"name": "used_margin", "type": "long"},
+    {"name": "available_margin", "type": "long"},
+    {"name": "realized_pnl", "type": "long"},
+    {"name": "unrealized_pnl", "type": "long"},
+    {"name": "drawdown_pct_bps", "type": "long"}
+  ]
+}

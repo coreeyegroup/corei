@@ -1,0 +1,125 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations:
+      pv.kubernetes.io/bind-completed: "yes"
+      pv.kubernetes.io/bound-by-controller: "yes"
+      volume.beta.kubernetes.io/storage-provisioner: driver.longhorn.io
+      volume.kubernetes.io/storage-provisioner: driver.longhorn.io
+    creationTimestamp: "2026-05-26T11:28:58Z"
+    finalizers:
+    - kubernetes.io/pvc-protection
+    labels:
+      app: kafka
+    name: kafka-data-kafka-0
+    namespace: kafka
+    resourceVersion: "106750"
+    uid: 94aa2c07-d8c7-4293-97f6-461bea9c88fd
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 20Gi
+    storageClassName: longhorn
+    volumeMode: Filesystem
+    volumeName: pvc-94aa2c07-d8c7-4293-97f6-461bea9c88fd
+  status:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 20Gi
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations:
+      hub.jupyter.org/jupyterhub-version: 5.4.6
+      hub.jupyter.org/kubespawner-version: 7.0.0
+      hub.jupyter.org/username: coreeye
+      pv.kubernetes.io/bind-completed: "yes"
+      pv.kubernetes.io/bound-by-controller: "yes"
+      volume.beta.kubernetes.io/storage-class: longhorn
+      volume.beta.kubernetes.io/storage-provisioner: driver.longhorn.io
+      volume.kubernetes.io/storage-provisioner: driver.longhorn.io
+    creationTimestamp: "2026-05-26T16:59:21Z"
+    finalizers:
+    - kubernetes.io/pvc-protection
+    labels:
+      app: jupyterhub
+      app.kubernetes.io/component: singleuser-server
+      app.kubernetes.io/instance: jupyterhub
+      app.kubernetes.io/managed-by: kubespawner
+      app.kubernetes.io/name: jupyterhub
+      chart: jupyterhub-4.3.5
+      component: singleuser-storage
+      helm.sh/chart: jupyterhub-4.3.5
+      hub.jupyter.org/username: coreeye
+      release: jupyterhub
+    name: claim-coreeye
+    namespace: research
+    resourceVersion: "136628"
+    uid: 5ae553fe-8457-4806-9324-588758592dfb
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 10Gi
+    storageClassName: longhorn
+    volumeMode: Filesystem
+    volumeName: pvc-5ae553fe-8457-4806-9324-588758592dfb
+  status:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 10Gi
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: jupyterhub
+      meta.helm.sh/release-namespace: research
+      pv.kubernetes.io/bind-completed: "yes"
+      pv.kubernetes.io/bound-by-controller: "yes"
+      volume.beta.kubernetes.io/storage-provisioner: driver.longhorn.io
+      volume.kubernetes.io/storage-provisioner: driver.longhorn.io
+    creationTimestamp: "2026-05-26T15:48:09Z"
+    finalizers:
+    - kubernetes.io/pvc-protection
+    labels:
+      app: jupyterhub
+      app.kubernetes.io/component: hub
+      app.kubernetes.io/instance: jupyterhub
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: jupyterhub
+      chart: jupyterhub-4.3.5
+      component: hub
+      helm.sh/chart: jupyterhub-4.3.5
+      heritage: Helm
+      release: jupyterhub
+    name: hub-db-dir
+    namespace: research
+    resourceVersion: "134588"
+    uid: a2ab8b90-3ac2-4eab-a02d-d80949d83797
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+    storageClassName: longhorn
+    volumeMode: Filesystem
+    volumeName: pvc-a2ab8b90-3ac2-4eab-a02d-d80949d83797
+  status:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 1Gi
+    phase: Bound
+kind: List
+metadata:
+  resourceVersion: ""

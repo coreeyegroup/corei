@@ -1,0 +1,400 @@
+🔵 PHASE 1 — CONTAINER FOUNDATION (DOCKER)
+
+		MODE: STRICT EXECUTION
+		SCOPE: Docker runtime ONLY (no orchestration, no extras)
+
+	1. PHASE IDENTITY
+		1.1 Name
+
+			PHASE 1 — CONTAINER FOUNDATION (DOCKER)
+
+		1.2 Role
+
+			Establish deterministic container runtime layer for all future services
+
+		1.3 Objective
+
+			Install and validate Docker Engine (official repo) with production-safe configuration
+
+		1.4 Failure Prevented
+			Non-reproducible execution environments
+			Inconsistent service behavior across nodes
+			Kubernetes runtime incompatibility
+			Container lifecycle instability
+
+			📌 Phase 1 directly enables Phase 2 (Kubernetes)
+
+	2.1 SCOPE CONTROL
+
+		✅ INCLUDED
+			Docker Engine installation (official repo only)
+			Docker daemon configuration
+			Runtime validation
+			User permission model
+
+		❌ EXCLUDED
+			Kubernetes
+			Docker Compose (optional later)
+			Any infra services (Kafka, DB, etc.)
+			Registry setup
+
+	2.2 FINAL SYSTEM STATE (YOUR NODE)
+			Component			Value
+			Runtime	Docker 		Engine 29.4.0
+			Service Status		Active (running)
+			Storage Driver		overlay2
+			Cgroup Driver		systemd
+			Logging Driver		json-file
+			User Access			Non-root enabled
+			Container Test		hello-world successful
+
+	3. EXECUTION STEPS (DETAILED)
+		STEP 1.1 — CLEAN PREVIOUS DOCKER INSTALLATIONS
+
+			Action
+
+				Removed any existing Docker packages
+
+				sudo apt remove -y docker docker-engine docker.io containerd runc
+
+			Outcome
+
+				Clean environment ensured (no conflicting binaries)
+
+		STEP 1.2 — INSTALL SYSTEM DEPENDENCIES
+				sudo apt update
+				sudo apt install -y ca-certificates curl gnupg lsb-release
+
+			Outcome
+
+				System prepared for secure repository integration
+
+		STEP 1.3 — ADD DOCKER GPG KEY
+				sudo mkdir -p /etc/apt/keyrings
+
+				curl -fsSL https://download.docker.com/linux/ubuntu/gpg | \
+				sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+			Outcome
+
+				Trusted package verification enabled
+
+		STEP 1.4 — ADD OFFICIAL DOCKER REPOSITORY
+				echo \
+				"deb [arch=$(dpkg --print-architecture) \
+				signed-by=/etc/apt/keyrings/docker.gpg] \
+				https://download.docker.com/linux/ubuntu \
+				$(lsb_release -cs) stable" | \
+				sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+			Outcome
+
+				Official Docker repository configured
+
+		STEP 1.5 — INSTALL DOCKER ENGINE
+				sudo apt update
+
+				sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+			Outcome
+
+				Docker Engine + CLI + container runtime installed
+
+		STEP 1.6 — ENABLE & START DOCKER SERVICE
+				sudo systemctl enable docker
+				sudo systemctl start docker
+
+			Outcome
+
+				Docker auto-start enabled
+				Service running
+
+		STEP 1.7 — VERIFY DOCKER SERVICE
+				sudo systemctl status docker
+
+			Result
+
+				Active: active (running)
+
+			Outcome
+
+				Docker daemon operational
+
+		STEP 1.8 — CONFIGURE NON-ROOT USER ACCESS
+				sudo usermod -aG docker $USER
+				newgrp docker
+
+			Outcome
+
+				Docker commands executable without sudo
+
+		STEP 1.9 — RUNTIME VALIDATION (HELLO WORLD)
+				docker run hello-world
+
+			Result
+
+				Hello from Docker!
+
+			Outcome
+
+				Container lifecycle fully validated:
+				image pull
+				container creation
+				execution
+				output streaming
+
+		STEP 1.10 — VERIFY DOCKER VERSION
+				docker --version
+
+			Output
+
+				Docker version 29.4.0
+
+		STEP 1.11 — VERIFY DOCKER INFO (INITIAL)
+				docker info
+
+			Observation
+
+				Storage Driver: overlayfs ❌ (not acceptable for K8s)
+
+		STEP 1.12 — DOCKER DAEMON CONFIGURATION (CRITICAL FIX)
+				sudo nano /etc/docker/daemon.json
+
+			Added Configuration
+
+				{
+				  "log-driver": "json-file",
+				  "log-opts": {
+					"max-size": "100m",
+					"max-file": "3"
+				  },
+				  "exec-opts": ["native.cgroupdriver=systemd"],
+				  "storage-driver": "overlay2"
+				}
+
+		STEP 1.13 — APPLY CONFIGURATION
+				sudo systemctl restart docker
+
+		STEP 1.14 — FINAL VALIDATION
+				docker info | grep -E "Storage Driver|Cgroup Driver"
+
+			Output
+
+				Storage Driver: overlay2
+				Cgroup Driver: systemd
+
+			Outcome
+
+				Kubernetes-compatible runtime achieved
+
+	4. FINAL VALIDATION
+			Commands
+				docker --version
+				docker run hello-world
+				docker info | grep -E "Storage Driver|Cgroup Driver"
+				systemctl status docker
+
+			Expected Output
+				Check				Expected
+				Docker Version		Installed
+				Hello World			Success
+				Storage Driver		overlay2
+				Cgroup Driver		systemd
+				Service Status		active
+
+	5. HARD CONSTRAINTS ENFORCED
+
+		✔ Docker installed from official repo
+		✔ No legacy Docker packages
+		✔ overlay2 storage enforced
+		✔ systemd cgroup enforced
+		✔ Non-root execution enabled
+		✔ Logging controlled (json-file rotation)
+
+	6. FAILURE MODEL (PHASE 1)
+			Failure							Impact
+			Wrong install source			unstable runtime
+			overlayfs instead of overlay2	K8s failure
+			wrong cgroup driver				cluster instability
+			root-only access				operational friction
+			daemon misconfig				Docker crash
+
+	7. OUTPUT (DELIVERABLE)
+
+		Deterministic Container Runtime:
+
+			→ Docker Engine installed
+			→ Runtime validated
+			→ Daemon hardened
+			→ Kubernetes-compatible configuration
+
+	8. TRACEABILITY
+			Phase 0 → OS baseline (Ubuntu tuned)
+			Phase 1 → Container runtime (Docker)
+			Phase 2 → Kubernetes (depends on this)
+
+	9. PHASE LOCK CRITERIA
+
+		✔ Official installation
+		✔ Service active
+		✔ hello-world passed
+		✔ overlay2 configured
+		✔ systemd cgroup configured
+		✔ validation successful
+
+	10. COMMAND REFERENCE TABLE (PHASE 1)
+		Step			Command																Purpose				Expected Output
+		Cleanup			sudo apt remove -y docker docker-engine docker.io containerd runc	remove old Docker	clean system
+		Update			sudo apt update														refresh packages	no errors
+		Dependencies	sudo apt install -y ca-certificates curl gnupg lsb-release			required libs		installed
+		GPG Key			`curl -fsSL ...														gpg --dearmor`		secure repo
+		Repo Add		`echo "deb ..."														tee`				add Docker repo
+		Install Docker	sudo apt install -y docker-ce ...									install engine		installed
+		Enable Service	sudo systemctl enable docker										auto-start			enabled
+		Start Service	sudo systemctl start docker											start daemon		running
+		Check Service	systemctl status docker												verify status		active
+		User Access		sudo usermod -aG docker $USER										non-root access		applied
+		Apply Group		newgrp docker														activate group		no error
+		Test Run		docker run hello-world												runtime test		success
+		Version			docker --version													verify install		version shown
+		Info Check		docker info															inspect runtime		details shown
+		Daemon Config	sudo nano /etc/docker/daemon.json									configure runtime	file updated
+		Restart			sudo systemctl restart docker										apply config		restarted
+		Final Check		docker info | grep -E "Storage Driver|Cgroup Driver"
+
+	Phase C1: CONTAINER LAYER (DOCKER + RUNTIME ALIGNMENT)
+	C1 — STEP 1 → Docker baseline validation (actual system state)
+		docker --version
+			Docker version 29.4.0, build 9d7ad9f
+
+	C1 — STEP 2 → Docker service validation
+		systemctl status docker
+			Active: active (running) since Wed 2026-04-22 14:22:12 UTC; 14min ago
+
+	C1 — STEP 3 → Docker runtime inspection (docker info)
+		docker info
+			Extracted:
+				Storage Driver → overlay2 	✅
+				Cgroup Driver → systemd 	✅
+				Logging Driver → json-file 	✅
+
+			Additional:
+				Cgroup Version → v2 	✅ (aligned with modern K8s)
+				containerd connected 	✅
+
+	C1 — STEP 4 → Docker daemon configuration (critical correction)
+		cat /etc/docker/daemon.json
+
+			{
+			  "log-driver": "json-file",
+			  "log-opts": {
+				"max-size": "100m",
+				"max-file": "3"
+			  },
+			  "exec-opts": ["native.cgroupdriver=systemd"],
+			  "storage-driver": "overlay2"
+			}
+
+	C1 — STEP 5: DOCKER DAEMON CONSISTENCY CHECK
+		docker info | grep -E "Storage Driver|Cgroup Driver|Logging Driver"
+
+			Storage Driver: overlay2
+			Cgroup Driver: systemd
+			Logging Driver: json-file
+
+	C1 — STEP 6: CONTAINER LIFECYCLE VALIDATION
+		docker run hello-world
+
+			Hello from Docker!
+
+	C1 — STEP 7: NON-ROOT DOCKER ACCESS
+		docker ps
+
+			CONTAINER ID   IMAGE   COMMAND   CREATED   STATUS   PORTS   NAMES
+
+	C1 — STEP 8: IMAGE BUILD VALIDATION
+		Step 8.1 — Create test directory
+			mkdir -p ~/docker-test && cd ~/docker-test
+
+		Step 8.2 — Create Dockerfile
+			nano Dockerfile
+
+		Paste:
+			FROM alpine:3.20
+			CMD ["echo", "C1 BUILD SUCCESS"]
+
+			Save and exit.
+
+		Step 8.3 — Build image
+			docker build -t c1-test:latest .
+
+		Step 8.4 — Run container
+			docker run c1-test:latest
+
+			EXPECTED OUTPUT:
+			C1 BUILD SUCCESS
+
+	C1 — STEP 9: IMAGE EXPORT (DOCKER SAVE)
+		docker save c1-test:latest -o ~/docker-test/c1-test.tar
+
+		VERIFY FILE:
+			ls -lh ~/docker-test/c1-test.tar
+
+			OUTPUT:	~/docker-test/c1-test.tar
+					-rw------- 1 coreeye coreeye 7.8M Apr 22 14:53 /home/coreeye/docker-test/c1-test.tar
+
+	C1 — STEP 10: IMPORT IMAGE INTO CONTAINERD
+		sudo ctr -n k8s.io images import ~/docker-test/c1-test.tar
+
+			OUTPUT: successfully imported
+
+	C1 — STEP 11: VERIFY IMAGE INSIDE CONTAINERD
+		sudo ctr -n k8s.io images list | grep c1-test
+
+			OUTPUT: successfully imported same image
+
+	WHAT YOU HAVE ACHIEVED (IMPORTANT)
+	You now have a fully deterministic container layer:
+
+	✔ Runtime Layer
+		Docker installed (official)
+		Daemon configured (overlay2 + systemd)
+		Logging controlled
+
+	✔ Execution Layer
+		Container lifecycle validated
+		Non-root execution enabled
+
+	✔ Build Layer
+		Dockerfile → image pipeline validated
+
+	✔ Kubernetes Bridge
+		Docker → containerd flow validated
+		Image visible to Kubernetes
+
+	🔷 C1 — CONTAINER LAYER (Docker Runtime)
+		🧠 MACRO ROLE
+			Container execution engine
+			→ deterministic runtime environment for all services
+
+		✔ WHAT YOU DID
+			Installed and validated Docker Engine
+			Verified:
+				daemon status
+				runtime config
+				storage driver
+				cgroup alignment
+			Built custom image (c1-test)
+			Executed container successfully
+			Exported image → imported into containerd (K8s runtime)
+
+		⚙️ FINAL SETTINGS
+			Storage Driver      → overlay2
+			Cgroup Driver       → systemd
+			Logging Driver      → json-file (100MB x 3 rotation)
+			Runtime             → runc (containerd)
+
+		🧠 VALUE
+			Deterministic container execution
+			Compatible with Kubernetes
+			No runtime mismatch (critical for K8s stability)

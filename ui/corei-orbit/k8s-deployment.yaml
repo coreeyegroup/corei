@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: corei-orbit
+  namespace: corei
+  labels:
+    app: corei-orbit
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: corei-orbit
+  template:
+    metadata:
+      labels:
+        app: corei-orbit
+    spec:
+      serviceAccountName: dashboard-admin # Assuming you created this earlier for the dashboard
+      containers:
+      - name: corei-orbit
+        image: corei-orbit:latest # You will build and push this image or use localhost
+        ports:
+        - containerPort: 3000
+        env:
+        - name: POSTGRES_HOST
+          value: "timescaledb.database.svc.cluster.local"
+        - name: REDIS_HOST
+          value: "redis.database.svc.cluster.local"
+        - name: KAFKA_BROKERS
+          value: "kafka.kafka.svc.cluster.local:9092"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: corei-orbit
+  namespace: corei
+spec:
+  selector:
+    app: corei-orbit
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+  type: ClusterIP

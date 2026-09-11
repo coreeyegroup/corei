@@ -1,0 +1,403 @@
+RED_TEAM_GLOBAL
+
+MODE:
+	ADVERSARIAL_VALIDATION_STRICT
+
+SYSTEM_SCOPE:
+	Target Phase (A / B / C / D)
+
+PRIMARY OBJECTIVE:
+	Identify ANY violation of:
+	determinism
+	completeness
+	traceability
+	constraint integrity
+	phase boundary enforcement
+
+GLOBAL NON-NEGOTIABLE RULES
+
+	NO modification of:
+		architecture
+		flow
+		entities
+		schemas
+		contracts
+		pipelines
+
+	NO reinterpretation of logic
+
+	NO adding missing rules (only expose them)
+
+	NO mutation of system state during attack execution
+
+	ALL attacks MUST operate in isolation (read-only interaction)
+
+	FAIL-FAST RULE (MANDATORY):
+
+		IF CRITICAL violation detected:
+
+			attack execution MAY stop early
+
+		BUT:
+
+			coverage requirement MUST still be satisfied
+
+		Execution Rule:
+
+            fail-fast MAY stop current scenario execution
+
+        BUT:
+
+            overall test suite MUST ensure:
+
+                full attack layer coverage
+                across all scenarios
+
+		Completion Constraint:
+
+            even if early stop occurs,
+
+            system MUST ensure:
+
+                all attack layers are executed
+                OR
+                coverage requirement is satisfied via prior executions
+
+--------------------------------------------
+
+CANONICAL INPUT DEFINITION (MANDATORY)
+
+	All validation MUST operate on a canonical input set:
+
+		canonical_input_set = {
+			input_data_snapshot
+			configuration_snapshot
+			version_identifiers
+		}
+
+	Constraints:
+		snapshot MUST be immutable
+		snapshot MUST be fully defined (no implicit fields)
+		snapshot MUST be hash-identifiable
+
+		partial inputs allowed ONLY under:
+			INPUT INTEGRITY ATTACK
+
+	Determinism Rule:
+		identical canonical_input_set MUST produce identical output
+
+--------------------------------------------
+
+INPUT DOMAIN VALIDATION (MANDATORY):
+
+    Red Team MUST test:
+
+        invalid domain values
+        undefined enum values
+        logically impossible input combinations
+
+    Violation if:
+        system accepts invalid domain inputs
+        OR produces undefined behavior
+
+--------------------------------------------
+ATTACK REPRODUCIBILITY REQUIREMENT:
+
+	every attack MUST include:
+
+		canonical_input_set reference
+		exact execution steps
+
+	attack MUST be replayable deterministically
+
+--------------------------------------------
+
+ATTACK LAYERS
+
+ATTACK PRECEDENCE MODEL (MANDATORY):
+
+    Attack layers MUST execute in strict numeric order:
+
+        ATTACK LAYER 1 → ATTACK LAYER 13
+
+    each layer MUST evaluate system based on:
+
+            current system state
+            OR accumulated attack context
+
+        without skipping prior layer effects
+
+	Constraint:
+
+        execution MUST follow defined layer numbering
+
+        no reordering allowed
+
+        each layer MUST operate on output state of previous layer
+
+ATTACK COMPOSITION RULE (MANDATORY):
+
+    Red Team MUST generate combined attack scenarios:
+
+        multi-layer attacks:
+            e.g., stale data + boundary values + conflict signals
+
+    Constraint:
+
+        system MUST be tested under:
+
+            single-layer attacks
+            multi-layer combined attacks
+
+    Violation if:
+        system behaves correctly in isolation
+        but fails under combined attack conditions
+
+ATTACK LAYER 1 — STRUCTURAL ATTACK
+
+	Missing sections (Universal Phase Structure)
+	Incomplete definitions
+	Cross-phase leakage
+
+ATTACK LAYER 2 — DETERMINISM ATTACK
+
+	Same input → different outputs
+	ordering sensitivity
+	concurrency ambiguity (Phase C/D)
+
+ATTACK LAYER 3 — INPUT INTEGRITY ATTACK
+
+	malformed inputs
+	partial inputs
+	invalid but schema-passing inputs
+
+ATTACK LAYER 4 — TIME / ORDER ATTACK
+
+	out-of-order events
+	stale data usage
+	lifecycle violations
+
+ATTACK LAYER 5 — NUMERIC / LIMIT ATTACK
+
+	boundary values
+	overflow / underflow
+	division-by-zero scenarios
+
+    EXHAUSTIVE BOUNDARY COVERAGE:
+
+        test ALL boundary classes:
+
+            minimum
+            maximum
+            just-below minimum
+            just-above maximum
+
+        test combinations of boundaries across variables
+
+		Violation if:
+			any boundary condition produces undefined behavior
+
+ATTACK LAYER 6 — RULE COLLISION ATTACK
+
+	conflicting rules under edge cases
+	precedence violations
+	undefined behavior zones
+
+	PRECEDENCE VALIDATION (MANDATORY):
+
+		For phases with ordered rule execution:
+
+			verify strict rule execution sequence
+
+			ensure no lower-precedence rule overrides higher-precedence rule
+
+		Violation if:
+			execution order deviates from defined precedence
+
+ATTACK LAYER 7 — CAPACITY / SCALE ATTACK
+
+	max load conditions
+	burst scenarios
+	saturation behavior
+
+    DENSITY ESCALATION MODEL:
+
+        gradually increase:
+
+            signal density
+            event rate
+            input complexity
+
+        observe transition behavior:
+
+            stable → unstable
+
+		Violation if:
+			system exhibits:
+
+				abrupt failure
+				non-deterministic transition
+
+ATTACK LAYER 8 — STATE CORRUPTION ATTACK
+
+	invalid state transitions
+	unreconstructable state
+	hidden state emergence
+
+	STATE RECONSTRUCTION ATTACK:
+
+        attempt to reconstruct system state from:
+
+            input history
+            configuration
+            outputs
+
+		Violation if:
+			state cannot be deterministically reconstructed
+
+ATTACK LAYER 9 — TRACEABILITY BREAK ATTACK
+
+	broken lineage mapping
+	missing references
+	inconsistent hashes / identifiers
+
+ATTACK LAYER 10 — PHASE BOUNDARY ATTACK
+
+	logic leaking into infra (A → C violation)
+	infra assumptions inside logic
+	execution leaking into decision
+
+ATTACK LAYER 11 — REPLAY CONSISTENCY ATTACK
+
+	execute identical scenario multiple times
+
+	compare:
+		output payload
+		ordering
+		hashes / identifiers
+
+		Constraint:
+			bit-level equality required
+
+		Violation if:
+			any mismatch across runs
+
+	CANONICAL OUTPUT COMPARISON:
+
+        outputs MUST be compared using:
+
+            full payload equality
+            hash equality
+            field-level equality
+
+        partial comparison is NOT allowed
+
+		Violation if:
+			any field differs
+
+ATTACK LAYER 12 — INVARIANT VIOLATION ATTACK
+
+	Validate system invariants under all scenarios:
+
+		bounds:
+			values must remain within defined limits
+
+		normalization:
+			aggregation and scaling constraints must hold
+
+		monotonicity:
+			signal_strength, confidence must remain monotonic
+
+		identity:
+			hash and identifier consistency must hold
+
+	Violation if:
+		any invariant is broken
+
+ATTACK LAYER 13 — AMBIGUITY DETECTION (MANDATORY)
+
+	For each rule / definition:
+
+		evaluate multiple valid interpretations
+
+		simulate outcomes under each interpretation
+
+	Violation if:
+		different interpretations produce different outputs
+
+	Classification:
+		CRITICAL (design ambiguity)
+
+--------------------------------------------
+
+OUTPUT FORMAT
+
+	FOR EACH FAILURE:
+
+		phase
+		attack_layer
+		attack_type
+		violation_point
+		impacted_rule (section reference)
+		reproducibility_steps
+
+		severity:
+			CRITICAL
+			HIGH
+			MEDIUM
+			LOW
+
+--------------------------------------------
+
+SEVERITY MODEL (STANDARDIZED)
+
+	CRITICAL:
+		breaks determinism, replay, or system safety
+
+	HIGH:
+		produces incorrect behavior under valid conditions
+
+	MEDIUM:
+		edge instability without systemic failure
+
+	LOW:
+		non-critical inconsistency
+
+--------------------------------------------
+
+ATTACK COVERAGE REQUIREMENT (MANDATORY):
+
+    Red Team MUST ensure:
+
+        every rule
+        every constraint
+        every state transition
+
+    is exercised by at least one attack scenario
+
+    Violation if:
+        any rule is not covered by attack scenarios
+
+--------------------------------------------
+SUCCESS CONDITION (STRICT):
+
+    ZERO:
+
+        ambiguity
+        non-determinism
+        replay mismatch
+        invariant violation
+        rule collision
+        precedence violation
+        traceability gaps
+        boundary violations
+        invalid input acceptance
+        state reconstruction failure
+
+    AND:
+
+        all invariants validated
+        all replay tests passed
+        attack coverage requirement satisfied
+
+--------------------------------------------

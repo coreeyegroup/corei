@@ -1,0 +1,27 @@
+{
+  "type": "record",
+  "name": "BaseEvent",
+  "namespace": "corei.events.common",
+  "fields": [
+    {
+      "name": "event_id",
+      "type": "string"
+    },
+    {
+      "name": "event_time",
+      "type": "long"
+    },
+    {
+      "name": "trace_id",
+      "type": "string"
+    },
+    {
+      "name": "execution_id",
+      "type": "string"
+    },
+    {
+      "name": "schema_version",
+      "type": "string"
+    }
+  ]
+}

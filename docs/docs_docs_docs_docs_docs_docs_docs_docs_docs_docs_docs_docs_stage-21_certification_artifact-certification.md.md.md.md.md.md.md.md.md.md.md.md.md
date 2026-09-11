@@ -1,0 +1,25 @@
+# ARTIFACT CERTIFICATION
+
+CERTIFIED ARTIFACTS
+
+secured-statefulset.yaml
+
+generated-manifest-validation.yaml
+
+deployment package
+
+---
+
+ARTIFACT STATUS
+
+COMPLETE
+
+VALIDATED
+
+IMMUTABLE PACKAGE CREATED
+
+---
+
+DEPLOYMENT STATUS
+
+NOT DEPLOYED

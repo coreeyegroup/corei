@@ -1,0 +1,731 @@
+PHASE C — STEP 2: PHYSICAL INFRASTRUCTURE LAYER
+
+(Implementation Layer — Deterministic, Replay-Safe, Event-State Realization)
+
+1. PHASE IDENTITY LAYER
+	1.1 Phase Name
+
+		Phase C — Step 2: Physical Infrastructure Layer
+
+	1.2 Phase Role
+
+		Defines the physical realization layer of the Step 1 architecture:
+
+			converts logical infra model → deployable system primitives
+			defines event streaming, storage, compute, orchestration, recovery
+			ensures bit-level deterministic execution
+
+	1.3 Objective
+
+		Construct a deterministic, replay-safe, distributed infrastructure implementation model such that:
+
+		canonical_input_set_C
+		→ physical infra execution
+		→ identical execution_ready_system_state
+
+	1.4 Why This Exists
+
+		Prevents:
+
+			F1 — non-deterministic distributed execution
+			F2 — inconsistent event ordering across nodes
+			F3 — state divergence under scale
+			F4 — replay failure due to infra inconsistency
+			F5 — hidden infra state (cache, async drift)
+
+2. PHASE SCOPE CONTROL
+	2.1 INCLUDED (STRICT)
+		event streaming system (log-based infra)
+		partitioning model
+		ordering guarantees
+		storage systems:
+		event store
+		snapshot store
+		compute topology
+		service deployment model
+		orchestration runtime
+		scheduling system
+		failure handling runtime
+		checkpointing system
+		replay engine
+
+	2.2 EXCLUDED (STRICT)
+		strategy / signal / decision logic (Phase A)
+		constraint definitions (Phase B)
+		execution enforcement (Phase D)
+		broker connectivity
+		trading APIs
+
+	2.3 Boundary Rule
+
+		Step 2 MUST:
+
+			implement infra primitives ONLY
+
+		Step 2 MUST NOT:
+
+			reinterpret logic
+			enforce constraints
+			mutate upstream outputs
+
+3. ARCHITECTURAL INTENT LAYER
+	3.1 Core Principles
+
+		P1 — Deterministic execution
+		P2 — Log-based system (event-first)
+		P3 — Stateless compute nodes
+		P4 — Replay-first design
+		P5 — No hidden state
+		P6 — Partition-consistent ordering
+		P7 — Infra-level idempotency
+
+	3.2 Architectural Model
+
+			Physical Infra Function:
+
+				Infra_Output = F(
+					canonical_input_set_C,
+					constraint_specification,
+					configuration_snapshot
+				)
+
+			Aligned with Phase C macro
+
+	3.3 System Positioning
+			Phase A → logical outputs
+			Phase B → constraints
+			Phase C Step 1 → architecture
+			Phase C Step 2 → physical infra (THIS)
+			Phase D → execution
+
+	3.4 EXECUTION INFRASTRUCTURE LAYER (MANDATORY)
+
+			Phase C MUST define a non-authoritative infrastructure layer
+			to support execution transport:
+
+			Execution Infra Layer = {
+				Event Bus
+				OMS (Order Management Service)
+				EMS (Execution Management Service)
+				Broker Adapter Runtime Interface
+			}
+
+			Position in system:
+
+			Phase D Step 5
+				↓
+			Execution Infra Layer (THIS)
+				↓
+			Phase D Step 7 (Broker Adapter)
+
+			Constraints:
+
+			- Infra layer MUST be transport-only
+			- Infra layer MUST NOT modify execution payload
+			- Infra layer MUST NOT introduce state authority
+			- Infra layer MUST be fully replay-compatible
+
+			Violation → SYSTEM NON-DETERMINISTIC
+
+		OMS/EMS HARD BOUNDARY (MANDATORY)
+
+			OMS/EMS MUST:
+
+			- NOT modify payload
+			- NOT reorder events
+			- NOT generate IDs
+			- NOT introduce timing variation
+
+			Role:
+
+			transport-only deterministic relay
+
+			All transformations MUST occur ONLY in Phase D
+
+4. DOMAIN MODEL DEFINITION
+	4.1 Entities
+
+		E1 — EventLog
+		E2 — Partition
+		E3 — EventStore
+		E4 — SnapshotStore
+		E5 — ComputeNode
+		E6 — ServiceInstance
+		E7 — OrchestratorRuntime
+		E8 — ExecutionScheduler
+		E9 — Checkpoint
+		E10 — ReplayEngine
+
+		E11 — ServiceRegistry
+
+				service_registry = {
+					service_id
+					endpoint
+					version
+					health_status
+				}
+
+	4.2 Attributes
+
+		Event Identity Rule (MANDATORY)
+
+			event_id = HASH_v1(
+				canonical_event_payload
+			)
+
+			Constraints:
+
+			- MUST be globally unique
+			- MUST be deterministic
+			- identical event → identical event_id
+
+		EventLog
+
+			partition_id
+			ordered_event_sequence
+			offset_index
+
+		Partition
+
+			partition_key
+			partition_range
+			ordering_domain
+
+		EventStore
+
+			append_only_log
+			segment_index
+			hash_chain
+
+		SnapshotStore
+
+			snapshot_id
+			snapshot_time
+			state_hash
+
+		ComputeNode
+
+			node_id
+			stateless_flag = TRUE
+
+		Checkpoint
+
+			checkpoint_id
+			event_offset
+			state_hash_reference
+
+		Hash Chain Definition
+
+			event_hash = HASH_v1(event_payload)
+
+			state_hash = HASH_v1(
+				previous_state_hash +
+				event_hash
+			)
+
+			Constraint:
+
+			- full lineage MUST be reconstructable
+
+		event_hash = event_id
+
+			OR
+
+			event_hash = HASH_v1(event_payload)
+			event_id = event_hash
+
+	4.3 Relationships
+		EventLog → partitioned into → Partition
+		EventStore → persists → EventLog
+		SnapshotStore → derived from → EventLog
+		ComputeNode → processes → EventLog
+		Orchestrator → schedules → ComputeNode
+		ReplayEngine → replays → EventStore
+
+	4.4 Ownership
+
+		All entities → Phase C
+
+	4.5 Section Ownership Enforcement
+		Entities → Section 4
+		Logic → Section 5
+		State → Section 9
+
+		(Strict per template )
+
+5. LOGIC / RULE ENGINE
+
+	Numeric Model (MANDATORY)
+
+		All numeric values MUST use fixed-point:
+
+		value = integer / 10^6
+
+		Constraints:
+
+		- floating point forbidden
+		- overflow → HARD FAIL
+		- underflow → zero
+
+	5.1 Rules
+
+		R1 — Append-only event rule
+		R2 — Deterministic partition routing
+		R3 — Strict ordering per partition
+		R4 — Idempotent processing
+		R5 — Stateless execution
+		R6 — Snapshot derivation rule
+		R7 — Replay determinism rule
+
+		Partition Routing Function (MANDATORY)
+
+			partition_id = HASH_v1(
+				canonical_partition_key
+			) mod N_partitions
+
+			Constraints:
+
+			- canonical_partition_key MUST be derived ONLY from:
+				instrument
+				entity_id
+
+			- HASH_v1 = SHA-256 (fixed)
+
+			- identical input → identical partition_id
+
+			Violation:
+			→ system invalid
+
+		Global Ordering Rule
+
+			Events MUST be ordered by:
+
+			1. event_time ASC
+			2. partition_id ASC
+			3. event_id ASC
+
+			Tie-break guarantee:
+
+			- event_id MUST be deterministic hash
+			- ensures total ordering
+
+		R-PARTITION-LOCK:
+
+			FOR execution lifecycle:
+
+				partition_key = order_id
+
+				assert ALL events in lifecycle:
+					same partition_id
+
+	5.2 Conditions
+			canonical_input_set_C complete
+			partition key valid
+			event schema valid
+
+
+			Event Validation MUST include:
+
+			- schema validation
+			- null check
+			- domain validation
+			- hash integrity check
+
+			If any fails → REJECT
+
+	5.3 Decision Logic
+
+			IF event valid
+				→ append to partition
+				→ process in order
+				→ update state
+
+			ELSE → reject
+
+	5.5 RULE EXECUTION ORDER (STRICT)
+			Input Validation
+			Partition Assignment
+			Event Append
+			Event Ordering
+			Processing Execution
+			State Update
+			Snapshot Generation
+			Checkpoint Update
+
+			No deviation allowed.
+
+		DEPENDENCY ORCHESTRATOR (MANDATORY)
+
+			For any event_B with dependency_set:
+
+				ensure ALL dependency events are:
+
+					processed
+					committed
+
+			BEFORE event_B execution
+
+			Mechanism:
+
+			- dependency barrier
+			- partition synchronization
+
+			Violation → HARD FAIL
+
+6. FLOW ARCHITECTURE
+	6.0 Canonical Contract
+		canonical_input_set_C = {
+			phase_a_output_snapshot
+			constraint_specification
+			configuration_snapshot
+			version_identifiers
+		}
+
+		(Aligned with Phase C macro )
+
+	6.1 Input
+		validated Phase A outputs
+		constraint_specification
+
+	6.2 Processing Flow
+		Input
+		→ Event Creation
+		→ Partition Routing
+		→ Log Append
+		→ Ordered Processing
+		→ State Update
+		→ Snapshot
+		→ Checkpoint
+
+	6.3 Output
+		execution_ready_system_state = {
+			event_stream
+			state_snapshots
+			execution_instruction_stream
+			orchestration_metadata
+		}
+
+	6.4 Flow Diagram
+
+		Input → Log → Process → State → Output
+
+	6.5 Flow Canonicalization
+		no external data
+		no runtime mutation
+		no hidden fields
+
+	6.6 DEPLOYMENT MODEL (MANDATORY)
+
+		Deployment Environment:
+
+			- containerized services (Docker)
+			- orchestrated via Kubernetes
+
+		Service Properties:
+
+			- stateless (except Portfolio Service)
+			- horizontally scalable
+			- deterministic execution
+
+		Event Bus:
+
+			- distributed log system (Kafka-compatible)
+
+		Constraints:
+
+			- deployment MUST NOT introduce non-determinism
+			- scaling MUST preserve ordering guarantees
+
+7. PIPELINE STRUCTURE
+	Input Validation
+	Event Generation
+	Partition Routing
+	Event Append
+	Ordered Processing
+	State Update
+	Snapshot Creation
+	Checkpoint Commit
+	Output Emission
+
+	Strict sequential execution.
+
+8. CONTROL & CONSTRAINTS
+	8.1 Hard Rules
+		no out-of-order execution
+		no duplicate processing
+		no state mutation outside events
+		no randomness
+
+	8.2 Soft Rules
+		optimize partition balance
+		minimize snapshot frequency
+
+	8.3 Guardrails
+		reject invalid events
+		reject unordered inputs
+
+	8.4 Boundary Definitions
+
+		Partition size:
+
+			min = 1
+			max = system_limit
+			overflow → REJECT
+
+		Checkpoint interval:
+
+			min = 1 event
+			max = configured_window
+
+	Invariants
+
+			I1: Event ordering deterministic
+			I2: State = f(EventLog)
+			I3: Replay identical
+			I4: Partition routing deterministic
+			I5: Idempotent processing
+
+			I6: Cross-partition ordering consistency
+
+				If event_B depends on event_A:
+
+					event_A MUST be processed before event_B
+
+				Violation → system invalid
+
+			I-GLOBAL-1: Order lifecycle MUST NOT span partitions
+
+9. STATE & DATA MODEL
+	9.1 State Definition
+
+		State = derived snapshot from event log
+
+		Snapshot Validation Rule
+
+			snapshot MUST satisfy:
+
+			snapshot_hash == HASH_v1(
+				EventLog[0 → t]
+			)
+
+			If mismatch:
+			→ snapshot INVALID
+			→ trigger replay rebuild
+
+		Snapshot Hash Standard
+
+			snapshot_hash = HASH_v1(
+				canonical_serialization(snapshot_payload)
+			)
+
+			Serialization MUST:
+
+			- use fixed field order
+			- no optional omission
+			- deterministic encoding (UTF-8)
+
+	9.2 State Transition
+		State(t+1) = f(State(t), Event)
+
+	9.3 Source of Truth
+		Primary → EventLog
+		Secondary → Snapshot
+
+	9.4 State Reconstruction
+		State(t) = f(EventLog[0 → t])
+
+		Failure → system invalid
+
+	Replay Engine
+
+		Replay MUST:
+
+		- read EventStore from offset 0
+		- apply events sequentially
+		- rebuild state deterministically
+
+		Output MUST match:
+
+		- snapshot_hash
+		- output payload
+
+10. FAILURE MODEL
+	10.1 Scenarios
+			partition ordering failure
+			duplicate event
+			checkpoint mismatch
+			snapshot corruption
+			node crash
+
+	10.2 Impact
+			state divergence
+			replay inconsistency
+
+	10.3 Mitigation
+			checkpoint restore
+			replay from event log
+
+	10.4 Detection
+			hash mismatch
+			offset inconsistency
+
+		Checkpoint Model (MANDATORY)
+
+			checkpoint = {
+				partition_offsets: {
+					partition_id → offset
+				}
+				state_hash
+			}
+
+			Constraints:
+
+			- ALL partitions MUST be included
+			- offsets MUST be consistent snapshot boundary
+
+		END-TO-END RECOVERY CONTRACT
+
+			FOR each pipeline stage:
+
+			state = {
+				last_processed_event_id
+				state_hash
+			}
+
+			Recovery:
+
+			1. Load checkpoint
+			2. Replay from last_processed_event_id
+			3. Recompute state
+
+			Constraint:
+
+			Recovered state MUST match:
+
+				HASH_v1(original_state)
+
+11. ASSUMPTION REGISTER
+	Assumption							Reason					Validate In		Status
+	Event log immutable					required for replay		Step 2			OPEN
+	Partition routing deterministic		ensures ordering		Step 2			OPEN
+	Snapshot correctness				ensures recovery		Step 3			OPEN
+
+12. VALIDATION FRAMEWORK
+	12.1 Checklist
+		event ordering enforced
+		replay identical
+		state reconstructable
+
+	12.2 Method
+		deterministic replay tests
+		partition consistency tests
+
+	12.3 Acceptance
+
+		PASS / FAIL
+
+	12.4 Coverage
+
+		All rules mapped to Red/Blue validation
+
+	12.5 Ambiguity Check
+
+		Multiple execution paths → identical output
+
+13. OUTPUT (DELIVERABLE)
+	physical_infrastructure_spec = {
+		event_streaming_model
+		partitioning_model
+		storage_architecture
+		compute_topology
+		orchestration_runtime
+		recovery_system
+	}
+
+14. TRACEABILITY MAPPING
+		Event → derived from Phase A output
+		State → derived from Event
+		Output → derived from State
+
+	Full lineage required.
+
+	Traceability Mapping (STRUCTURED)
+
+		trace = {
+			event_id
+			state_hash
+			output_id
+		}
+
+		Constraints:
+
+		- MUST form full lineage chain
+		- MUST be hash-verifiable
+
+15. CROSS-PHASE CONSISTENCY
+
+	OWNED:
+
+		infra implementation
+
+	REFERENCED:
+
+		Phase A outputs
+		Phase B constraints
+
+16. SCALABILITY MODEL
+	horizontal partition scaling
+	stateless compute scaling
+	distributed log expansion
+
+	Partition Scaling Rule
+
+		When scaling:
+
+		- partition split MUST preserve ordering
+		- rehashing MUST be deterministic
+		- historical mapping MUST remain immutable
+
+17. GOVERNANCE INTEGRATION
+	infra versioning mandatory
+	configuration immutable
+	changes require approval
+
+18. AUDITABILITY & OBSERVABILITY
+	full event trace
+	replay validation
+	hash verification
+	checkpoint lineage
+
+19. RISK CONSIDERATIONS
+
+	Risks:
+
+		partition imbalance
+		replay inconsistency
+		infra drift
+
+	Controls:
+
+		deterministic routing
+		strict ordering
+		hash validation
+
+20. FAILURE CONDITION (PHASE LEVEL)
+
+	Phase fails if:
+
+	ordering non-deterministic
+	replay mismatch
+	state not reconstructable
+	hidden state exists
+
+21. PHASE LOCK CRITERIA
+
+	Phase locked only if:
+
+		all 21 sections complete
+		deterministic infra guaranteed
+		replay validated
+		no ambiguity
+		governance approved

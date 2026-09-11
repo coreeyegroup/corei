@@ -1,0 +1,367 @@
+Below is a FULL SYSTEM CORRECTION LIST (Phase A → D) structured as:
+
+	ID (traceable)
+	Location (Phase / Step)
+	Type (Gap / Ambiguity / Violation)
+	What is missing or broken
+	Why it matters (system impact)
+	Fix priority (P0/P1/P2)
+
+🔴 GLOBAL PRIORITY LEGEND
+	P0 = BLOCKER (must fix before anything else)
+	P1 = CRITICAL (required for correctness)
+	P2 = HARDENING (stability / scale / audit)
+
+🔴 PHASE A — CORRECTIONS
+
+	🧠 A-CORE (LOGIC COMPLETENESS)
+	🔴 A-01 — Missing Decision Layer (Signal → TradeIntent)
+		Location: Phase A (missing Step 3)
+		Type: GAP (CRITICAL)
+		Issue:
+			No deterministic transformation from Signal → TradeIntent
+		Impact:
+			Entire execution pipeline undefined
+		Fix:
+			Create Phase A Step 3: Decision Engine
+		Priority: P0
+
+	🔴 A-02 — TradeIntent Schema Not Defined
+		Location: Phase A output contract
+		Type: GAP
+		Issue:
+			TradeIntent lacks:
+				canonical schema
+				encoding model
+				hashing rule
+		Impact:
+		Breaks:
+			Phase D determinism
+			traceability chain
+
+		Fix:
+		Define:
+
+			TradeIntent = {full schema + hash + encoding}
+		Priority: P0
+
+	🔴 A-03 — Signal Aggregation Rules Missing
+		Type: GAP
+		Issue:
+		No rules for:
+			multiple signals (same instrument)
+			cross-strategy conflict
+		Impact:
+			Non-deterministic decision behavior
+		Fix:
+			Define:
+				aggregation function
+				conflict resolution model
+		Priority: P0
+
+	🔴 A-04 — Signal → Size Mapping Undefined
+		Type: GAP
+
+		Issue:
+			No deterministic mapping:
+
+			signal_strength → trade size
+		Impact:
+			Execution inconsistency
+		Fix:
+			Define mapping function (fixed-point)
+		Priority: P0
+
+	🟡 A-05 — Capacity Enforcement Ambiguity
+		Type: AMBIGUITY
+		Issue:
+			“reduce or stop” not deterministic
+		Fix:
+			Define:
+			exact thresholds
+			precedence rule
+		Priority: P1
+
+	🟡 A-06 — Strategy Priority vs Decision Priority Conflict
+		Type: AMBIGUITY
+		Issue:
+			Strategy priority defined, but:
+			not clearly used in decision layer
+		Fix:
+			unify priority model
+		Priority: P1
+
+
+🟡 PHASE B — CORRECTIONS
+	🧱 CONSTRAINT SYSTEM
+	🔴 B-01 — Constraint → Execution Binding Missing
+		Type: GAP
+
+		Issue:
+		No explicit mapping:
+
+			constraint → target variable (e.g., size, exposure)
+		Impact:
+		Risk Engine cannot enforce deterministically
+
+		Fix:
+		Add:
+
+			constraint_binding_map
+		Priority: P0
+
+	🔴 B-02 — Constraint Application Layer Undefined
+		Type: GAP
+		Issue:
+		Constraints defined, but:
+			where applied? (pre/post execution?)
+
+		Fix:
+		Define:
+
+			enforcement_layer ∈ {Decision, Risk, Execution}
+		Priority: P0
+
+	🟡 B-03 — Multi-Constraint Interaction Not Fully Defined
+		Type: GAP
+		Issue:
+		Complex interactions:
+			capital vs exposure vs instrument limits
+		Fix:
+			Define:
+				composition rules (AND/OR precedence)
+		Priority: P1
+
+	🟡 B-04 — Constraint Evaluation Output Format Missing
+		Type: GAP
+
+		Issue:
+			No standard output:
+
+				constraint_result / flags
+		Fix:
+			Define constraint evaluation object
+		Priority: P1
+
+🟡 PHASE C — CORRECTIONS
+	⚙️ INFRA (LOGICAL ARCHITECTURE)
+	🔴 C-01 — execution_instruction_stream Undefined
+		Type: GAP
+		Issue:
+		Phase D depends on it, but:
+			no schema
+			no generation logic
+
+		Fix:
+			Define:
+
+				execution_instruction_stream schema + derivation
+		Priority: P0
+
+	🔴 C-02 — CEIL Merge Logic Missing
+		Type: GAP
+
+		Issue:
+		No deterministic merge:
+
+				CORE intents + EXTERNAL intents
+		Fix:
+			Define:
+			merge ordering
+			priority rules
+		Priority: P0
+
+	🔴 C-03 — TradeIntent → Event Mapping Not Explicit
+		Type: GAP
+		Issue:
+			How TradeIntent becomes event?
+
+		Fix:
+		Define:
+
+			trade_intent_event schema
+		Priority: P0
+
+	🟡 C-04 — Execution Channel Definition Weak
+		Type: GAP
+		Issue:
+			ExecutionChannel entity exists but:
+			no contract defined
+		Fix:
+			define channel semantics
+		Priority: P1
+
+	🟡 C-05 — Backpressure / Throughput Handling Missing
+		Type: GAP
+		Issue:
+			No handling of:
+			burst signals
+		queue overload
+		Fix:
+			define deterministic throttling model
+		Priority: P1
+
+🔴 PHASE D — CORRECTIONS
+	🚨 EXECUTION LAYER (CRITICAL)
+
+	🔴 D-01 — Risk Engine Missing
+		Type: GAP (CRITICAL)
+		Issue:
+		No enforcement of Phase B constraints
+
+		Fix:
+		Add:
+
+		Phase D Step 3: Risk Engine
+		Priority: P0
+
+	🔴 D-02 — Policy Engine Missing
+		Type: GAP
+		Issue:
+		No final approval layer
+
+		Fix:
+		Add:
+
+		Phase D Step 4: Policy Engine
+		Priority: P0
+
+	🔴 D-03 — Execution Engine Missing
+		Type: GAP
+		Issue:
+		No:
+		order generation
+		routing
+
+		Fix:
+		Add:
+
+		Phase D Step 5: Execution Engine
+		Priority: P0
+
+	🔴 D-04 — Feedback Loop Missing
+		Type: GAP
+		Issue:
+		No:
+		fills
+		reconciliation
+
+		Fix:
+		Add:
+
+		Phase D Step 6: Feedback System
+		Priority: P0
+
+	🔴 D-05 — ExecutionIntent Missing event_time (implicit)
+		Type: VIOLATION
+		Issue:
+		Step 2 requires event_time, Step 1 does not define clearly
+
+		Fix:
+		enforce:
+
+		ExecutionIntent.event_time mandatory
+		Priority: P0
+
+	🟡 D-06 — Partial Failure Handling Strategy Weak
+		Type: GAP
+		Issue:
+		Isolation defined, but:
+		no retry model
+		Fix:
+		define retry / dead-letter model
+		Priority: P1
+
+	🟡 D-07 — Priority Model Coupling Ambiguity
+		Type: AMBIGUITY
+		Issue:
+		priority used in:
+		Step 1 mapping
+		Step 2 conflict resolution
+		Fix:
+		unify priority semantics
+		Priority: P1
+
+
+🔴 CROSS-PHASE CORRECTIONS
+
+	🔴 X-01 — Signal → Execution Trace Gap
+		Type: GAP
+
+		Issue:
+		Missing full chain:
+
+		signal_id → trade_intent_id → execution_intent_id
+		Priority: P0
+
+	🔴 X-02 — Canonical Identity Chain Not Fully Linked
+		Type: GAP
+		Issue:
+		Hash chain breaks across phases
+
+		Fix:
+		enforce:
+
+		full lineage hashing
+		Priority: P0
+
+	🔴 X-03 — Time Model Not Fully Unified
+		Type: GAP
+		Issue:
+		event_time defined, but:
+		not consistently enforced across all entities
+		Priority: P0
+
+	🟡 X-04 — CEIL vs CORE Conflict Handling Not Fully Defined
+		Type: GAP
+		Issue:
+		priority defined, but:
+		not across full lifecycle
+		Priority: P1
+
+📊 FINAL CORRECTION SUMMARY
+	🔴 P0 (BLOCKERS)
+
+	You MUST fix first:
+
+		A-01 Decision Layer
+		A-02 TradeIntent schema
+		A-03 Signal aggregation
+		A-04 Signal → size mapping
+
+		B-01 Constraint binding
+		B-02 Enforcement layer
+
+		C-01 execution_instruction_stream
+		C-02 CEIL merge
+		C-03 TradeIntent event mapping
+
+		D-01 Risk Engine
+		D-02 Policy Engine
+		D-03 Execution Engine
+		D-04 Feedback loop
+		D-05 event_time fix
+
+		X-01 Traceability chain
+		X-02 Hash chain
+		X-03 Time model
+
+🟡 P1 (CRITICAL HARDENING)
+		A-05, A-06
+		B-03, B-04
+		C-04, C-05
+		D-06, D-07
+		X-04
+
+🧭 NEXT STEP (CONTROLLED EXECUTION)
+
+	We proceed one-by-one (no skipping).
+
+	Recommended order:
+	1 → A-01 (Decision Engine)  ← START HERE
+	2 → A-02 (TradeIntent Spec)
+	3 → A-03 + A-04 (Aggregation + Size)
+	4 → B-01 + B-02
+	5 → C-01 + C-03
+	6 → D-01 (Risk Engine)
+	...

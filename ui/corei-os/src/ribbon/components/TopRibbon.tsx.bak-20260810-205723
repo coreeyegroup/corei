@@ -1,0 +1,658 @@
+/******************************************************************************
+ *
+ * COREI OPERATING SYSTEM
+ *
+ * TOP RIBBON
+ * Institutional Operational / Developer Command Surface
+ *
+ * Presentation and composition only.
+ *
+ * Existing authoritative capabilities consumed:
+ * - ShellHeaderContextContract
+ * - identityService organization switching
+ * - workspaceRuntime workspace switching
+ *
+ ******************************************************************************/
+
+import {
+    useEffect,
+    useRef,
+    useState,
+    type ReactElement
+} from "react";
+
+import "../styles/top-ribbon.css";
+
+import { RibbonSearch } from "./RibbonSearch";
+
+import {
+    getShellHeaderContext
+} from "../models/shell-header-context";
+
+import {
+    identityService
+} from "../../identity-platform";
+
+import {
+    workspaceRuntime
+} from "../../workbench/workspace/runtime/workspace-runtime";
+
+
+type RibbonTab =
+    | "operations"
+    | "infrastructure";
+
+
+type StatusTone =
+    | "operational"
+    | "attention"
+    | "critical"
+    | "neutral";
+
+
+interface StatusProps {
+    readonly label: string;
+    readonly value: string;
+    readonly tone?: StatusTone;
+}
+
+
+interface SelectorOption {
+    readonly id: string;
+    readonly name: string;
+}
+
+
+function Status({
+    label,
+    value,
+    tone = "neutral"
+}: StatusProps): ReactElement {
+
+    return (
+        <div
+            className="corei-ribbon-status"
+            data-status-tone={tone}
+        >
+            <span className="corei-ribbon-status-label">
+                {label}
+            </span>
+
+            <span className="corei-ribbon-status-value">
+                {tone !== "neutral" && (
+                    <i aria-hidden="true" />
+                )}
+
+                {value}
+            </span>
+        </div>
+    );
+}
+
+
+function Clock(): ReactElement {
+
+    const [now, setNow] =
+        useState(() => new Date());
+
+    useEffect(() => {
+
+        const timer =
+            window.setInterval(
+                () => setNow(new Date()),
+                1000
+            );
+
+        return () =>
+            window.clearInterval(timer);
+
+    }, []);
+
+    return (
+        <div
+            className="corei-ribbon-clock"
+            data-ribbon-block="clock"
+        >
+            <span className="corei-ribbon-clock-time">
+                {now.toLocaleTimeString(undefined, {
+                    hour12: false,
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit"
+                })}
+            </span>
+
+            <span className="corei-ribbon-clock-zone">
+                IST
+            </span>
+        </div>
+    );
+}
+
+
+interface SelectorProps {
+    readonly label: string;
+    readonly value: string;
+    readonly options: readonly SelectorOption[];
+    readonly onChange: (value: string) => void;
+}
+
+
+function RibbonSelector({
+    label,
+    value,
+    options,
+    onChange
+}: SelectorProps): ReactElement {
+
+    const [open, setOpen] =
+        useState(false);
+
+    const rootRef =
+        useRef<HTMLDivElement>(null);
+
+    const selected =
+        options.find(
+            (option) => option.id === value
+        );
+
+    useEffect(() => {
+
+        const handlePointerDown =
+            (event: PointerEvent) => {
+
+                if (
+                    rootRef.current &&
+                    !rootRef.current.contains(
+                        event.target as Node
+                    )
+                ) {
+                    setOpen(false);
+                }
+            };
+
+        document.addEventListener(
+            "pointerdown",
+            handlePointerDown
+        );
+
+        return () =>
+            document.removeEventListener(
+                "pointerdown",
+                handlePointerDown
+            );
+
+    }, []);
+
+    const handleSelect =
+        (nextValue: string) => {
+
+            setOpen(false);
+
+            if (nextValue !== value) {
+                onChange(nextValue);
+            }
+        };
+
+    return (
+        <div
+            ref={rootRef}
+            className="corei-ribbon-selector"
+            data-ribbon-block={
+                label.toLowerCase()
+            }
+        >
+            <button
+                type="button"
+                className="corei-ribbon-selector-trigger"
+                aria-label={`Select ${label}`}
+                aria-haspopup="listbox"
+                aria-expanded={open}
+                onClick={() =>
+                    setOpen((current) => !current)
+                }
+            >
+                <span className="corei-ribbon-selector-label">
+                    {label}
+                </span>
+
+                <span className="corei-ribbon-selector-value">
+                    {selected?.name ?? value}
+                </span>
+
+                <span
+                    className="corei-ribbon-selector-chevron"
+                    aria-hidden="true"
+                >
+                    ▾
+                </span>
+            </button>
+
+            {open && (
+                <div
+                    className="corei-ribbon-selector-menu"
+                    role="listbox"
+                    aria-label={`${label} options`}
+                >
+                    {options.map((option) => (
+                        <button
+                            key={option.id}
+                            type="button"
+                            role="option"
+                            aria-selected={
+                                option.id === value
+                            }
+                            className={
+                                option.id === value
+                                    ? "selected"
+                                    : ""
+                            }
+                            onClick={() =>
+                                handleSelect(option.id)
+                            }
+                        >
+                            <span>
+                                {option.name}
+                            </span>
+
+                            {option.id === value && (
+                                <span
+                                    aria-hidden="true"
+                                    className="corei-ribbon-selector-check"
+                                >
+                                    ●
+                                </span>
+                            )}
+                        </button>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+}
+
+
+export function TopRibbon(): ReactElement {
+
+    const context =
+        getShellHeaderContext();
+
+    const [activeTab, setActiveTab] =
+        useState<RibbonTab>("operations");
+
+    const [organizationId, setOrganizationId] =
+        useState("org-1");
+
+    const organizationOptions:
+        readonly SelectorOption[] = [
+            {
+                id: "org-1",
+                name: "COREI Institutional"
+            },
+            {
+                id: "org-2",
+                name: "Research Division"
+            }
+        ];
+
+    const [workspaceId, setWorkspaceId] =
+        useState(
+            context.workspace.workspaceId
+        );
+
+    const [workspaceOptions] =
+        useState<readonly SelectorOption[]>(() =>
+            workspaceRuntime
+                .list()
+                .map((workspace) => ({
+                    id: workspace.id,
+                    name: workspace.name
+                }))
+        );
+
+    const runtimeReady =
+        context.runtime.state === "ready";
+
+    const runtimeHealthy =
+        context.runtime.health === "healthy";
+
+    const notificationTone =
+        context.notifications.critical > 0
+            ? "critical"
+            : context.notifications.unread > 0
+                ? "attention"
+                : "operational";
+
+
+    const handleOrganizationChange =
+        async (value: string) => {
+
+            if (value === organizationId) {
+                return;
+            }
+
+            await identityService.switchOrganization(
+                value
+            );
+
+            setOrganizationId(value);
+        };
+
+
+    const handleWorkspaceChange =
+        (value: string) => {
+
+            if (value === workspaceId) {
+                return;
+            }
+
+            workspaceRuntime.open(value);
+
+            setWorkspaceId(value);
+        };
+
+
+    return (
+        <header
+            className="corei-top-ribbon"
+            data-ribbon-surface="institutional-operational"
+        >
+
+            {/* ============================================================
+             * PRIMARY GLOBAL CONTEXT
+             * ============================================================ */}
+
+            <div className="corei-ribbon-primary-row">
+
+                <section
+                    className="corei-ribbon-identity"
+                    data-ribbon-block="institution"
+                >
+                    <span className="corei-ribbon-product">
+                        COREI OS
+                    </span>
+
+                    <span className="corei-ribbon-identity-divider">
+                        /
+                    </span>
+
+                    <span className="corei-ribbon-identity-type">
+                        INSTITUTIONAL
+                    </span>
+                </section>
+
+
+                <RibbonSelector
+                    label="ORG"
+                    value={organizationId}
+                    options={organizationOptions}
+                    onChange={handleOrganizationChange}
+                />
+
+
+                <Status
+                    label="ENV"
+                    value={
+                        context.environment.environment
+                            .toUpperCase()
+                    }
+                    tone={
+                        context.environment.environment
+                            .toLowerCase() === "development"
+                            ? "attention"
+                            : "operational"
+                    }
+                />
+
+
+                <Status
+                    label="OPERATOR"
+                    value={
+                        context.session.operatorLabel
+                    }
+                />
+
+
+                <RibbonSelector
+                    label="WORKSPACE"
+                    value={workspaceId}
+                    options={workspaceOptions}
+                    onChange={handleWorkspaceChange}
+                />
+
+
+                <Status
+                    label="RUNTIME"
+                    value={
+                        runtimeReady
+                            ? "READY"
+                            : "STARTING"
+                    }
+                    tone={
+                        runtimeHealthy
+                            ? "operational"
+                            : "critical"
+                    }
+                />
+
+
+                <Status
+                    label="REGION"
+                    value={
+                        context.environment.region
+                            .toUpperCase()
+                    }
+                />
+
+
+                <Status
+                    label="ALERTS"
+                    value={
+                        String(
+                            context.notifications.total
+                        )
+                    }
+                    tone={notificationTone}
+                />
+
+
+                <div className="corei-ribbon-primary-spacer" />
+
+
+                <RibbonSearch />
+
+                <button
+                    type="button"
+                    className="corei-ribbon-command"
+                    aria-label="Open command palette"
+                    title="Open Command Palette (Ctrl+Shift+P)"
+                    onClick={() => {
+                        window.dispatchEvent(
+                            new KeyboardEvent(
+                                "keydown",
+                                {
+                                    key: "P",
+                                    code: "KeyP",
+                                    bubbles: true,
+                                    cancelable: true,
+                                    ctrlKey: !navigator.platform
+                                        .toLowerCase()
+                                        .includes("mac"),
+                                    metaKey: navigator.platform
+                                        .toLowerCase()
+                                        .includes("mac"),
+                                    shiftKey: true
+                                }
+                            )
+                        );
+                    }}
+                >
+                    <span className="corei-ribbon-command-icon">
+                        ⌘
+                    </span>
+
+                    <span className="corei-ribbon-command-label">
+                        COMMAND
+                    </span>
+
+                    <kbd>
+                        ⌘⇧P
+                    </kbd>
+                </button>
+
+
+                <Clock />
+
+            </div>
+
+
+            {/* ============================================================
+             * SECONDARY OPERATIONAL CONTEXT
+             * ============================================================ */}
+
+            <div className="corei-ribbon-secondary-row">
+
+                <nav
+                    className="corei-ribbon-tabs"
+                    aria-label="Top ribbon information"
+                    role="tablist"
+                >
+                    <button
+                        type="button"
+                        role="tab"
+                        aria-selected={
+                            activeTab === "operations"
+                        }
+                        className={
+                            activeTab === "operations"
+                                ? "active"
+                                : ""
+                        }
+                        onClick={() =>
+                            setActiveTab("operations")
+                        }
+                    >
+                        OPERATIONS
+                    </button>
+
+                    <button
+                        type="button"
+                        role="tab"
+                        aria-selected={
+                            activeTab === "infrastructure"
+                        }
+                        className={
+                            activeTab === "infrastructure"
+                                ? "active"
+                                : ""
+                        }
+                        onClick={() =>
+                            setActiveTab("infrastructure")
+                        }
+                    >
+                        INFRASTRUCTURE
+                    </button>
+                </nav>
+
+
+                <div className="corei-ribbon-secondary-content">
+
+                    {activeTab === "operations" ? (
+
+                        <>
+                            <Status
+                                label="MARKET"
+                                value="NOT EXPOSED"
+                            />
+
+                            <Status
+                                label="TRADING"
+                                value="NOT EXPOSED"
+                            />
+
+                            <Status
+                                label="BROKER"
+                                value="NOT EXPOSED"
+                            />
+
+                            <Status
+                                label="DATA"
+                                value="NOT EXPOSED"
+                            />
+
+                            <Status
+                                label="REGION"
+                                value={
+                                    context.environment.region
+                                        .toUpperCase()
+                                }
+                            />
+                        </>
+
+                    ) : (
+
+                        <>
+                            <Status
+                                label="PLATFORM"
+                                value={
+                                    runtimeReady
+                                        ? "READY"
+                                        : "STARTING"
+                                }
+                                tone={
+                                    runtimeReady
+                                        ? "operational"
+                                        : "attention"
+                                }
+                            />
+
+                            <Status
+                                label="RUNTIME"
+                                value={
+                                    runtimeHealthy
+                                        ? "HEALTHY"
+                                        : "DEGRADED"
+                                }
+                                tone={
+                                    runtimeHealthy
+                                        ? "operational"
+                                        : "critical"
+                                }
+                            />
+
+                            <Status
+                                label="DATA FEED"
+                                value="NOT EXPOSED"
+                            />
+
+                            <Status
+                                label="ORDER ROUTING"
+                                value="NOT EXPOSED"
+                            />
+
+                            <Status
+                                label="CACHE / REDIS"
+                                value="NOT EXPOSED"
+                            />
+
+                            <Status
+                                label="DATABASE"
+                                value="NOT EXPOSED"
+                            />
+
+                            <Status
+                                label="SERVICES"
+                                value="NOT EXPOSED"
+                            />
+                        </>
+                    )}
+
+                </div>
+
+            </div>
+
+        </header>
+    );
+}
+
+export default TopRibbon;

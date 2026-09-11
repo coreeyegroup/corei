@@ -1,0 +1,659 @@
+/* ─── Main container ────────────────────────────────────────────────── */
+.file-explorer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--bg-primary);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 13px;
+}
+
+.file-explorer-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+/* ─── File Tree Panel ────────────────────────────────────────────────── */
+.file-tree-panel {
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border-color);
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.2s ease;
+}
+.file-tree-panel.collapsed {
+  min-width: 40px;
+  width: 40px;
+}
+
+/* ─── Header ────────────────────────────────────────────────────────── */
+.file-tree-header {
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  height: 28px;
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+.file-tree-header-title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+}
+.file-tree-toggle {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 11px;
+  padding: 0 4px;
+  border-radius: 2px;
+  transition: background 0.15s, color 0.15s;
+  margin-left: auto;
+}
+.file-tree-toggle:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+/* ─── Search Box ────────────────────────────────────────────────────── */
+.file-tree-search {
+  padding: 0px;
+  border-bottom: 1px solid var(--border-color);
+}
+.file-search-input {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 2px 6px;
+  border-radius: 2px;
+  font-size: 12px;
+  height: 22px;
+  outline: none;
+  font-family: inherit;
+}
+.file-search-input:focus {
+  border-color: var(--accent-teal);
+}
+.file-search-input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.5;
+}
+
+/* ─── Open Editors ──────────────────────────────────────────────────── */
+.open-editors {
+  border-bottom: 1px solid var(--border-color);
+  padding: 2px 0;
+  flex-shrink: 0;
+}
+.open-editors-header {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  padding: 2px 8px 2px 14px;
+  font-weight: 600;
+}
+.open-editor-item {
+  display: flex;
+  align-items: center;
+  padding: 1px 8px 1px 14px;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--text-muted);
+  cursor: default;
+  transition: background 0.1s;
+  border-left: 2px solid transparent;
+  height: 22px;
+}
+.open-editor-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+.open-editor-item.active {
+  background: rgba(255, 255, 255, 0.06);
+  border-left-color: var(--accent-teal);
+  color: var(--text-primary);
+}
+.open-editor-name {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.open-editor-dirty {
+  color: var(--danger-red);
+  font-size: 9px;
+  margin-left: 4px;
+}
+.open-editor-close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 13px;
+  padding: 0 2px;
+  cursor: pointer;
+  border-radius: 2px;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.open-editor-item:hover .open-editor-close {
+  opacity: 1;
+}
+.open-editor-close:hover {
+  background: var(--danger-red);
+  color: #fff;
+}
+
+/* ─── File Tree ────────────────────────────────────────────────────── */
+.file-tree {
+  flex: 1;
+  overflow: auto;
+  padding: 4px 0;
+}
+
+.file-tree-item {
+  display: flex;
+  align-items: center;
+  padding: 1px 0;
+  color: var(--text-muted);
+  border-radius: 2px;
+  cursor: default;
+  transition: background 0.1s;
+  min-height: 18px;
+  position: relative;
+  line-height: 1.5;
+}
+.file-tree-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+.file-tree-item.active {
+  background: rgba(0, 229, 160, 0.08);
+  border-left: 1px solid var(--accent-teal);
+}
+.file-tree-item.active .file-name {
+  color: var(--text-primary);
+}
+
+/* ─── Indentation lines ───────────────────────────────────────────── */
+.tree-indent-line {
+  display: inline-block;
+  width: 12px;
+  height: 100%;
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+  flex-shrink: 0;
+  min-height: 20px;
+}
+
+/* ─── Arrows (chevrons) ───────────────────────────────────────────── */
+.file-tree-arrow {
+  color: rgba(255, 255, 255, 0.4);
+  flex-shrink: 0;
+  width: auto;
+  margin-right: 0;
+  transition: color 0.15s;
+}
+.file-tree-arrow-placeholder {
+  display: inline-block;
+  width: 12px;
+  flex-shrink: 0;
+  margin-right: 1px;
+}
+.file-tree-item:hover .file-tree-arrow {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ─── File icon ───────────────────────────────────────────────────── */
+.file-icon {
+  flex-shrink: 0;
+  margin-right: 2px;
+  width: 14px;
+  height: 14px;
+}
+.file-tree-item:hover .file-icon {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ─── File name ───────────────────────────────────────────────────── */
+.file-name {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text-muted);
+  transition: color 0.1s;
+  font-size: 13px;
+  padding-left: 0px;
+}
+.file-tree-item:hover .file-name {
+  color: var(--text-primary);
+}
+
+/* ─── Loading spinner ──────────────────────────────────────────────── */
+.file-loading {
+  display: inline-block;
+  animation: spin 1s linear infinite;
+  font-size: 10px;
+  margin-left: 2px;
+  color: var(--text-muted);
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ─── Resize Handle ────────────────────────────────────────────────── */
+.file-tree-resize-handle {
+  width: 3px;
+  background: var(--border-color);
+  cursor: col-resize;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.file-tree-resize-handle:hover,
+.file-tree-resize-handle:active {
+  background: var(--accent-teal);
+}
+
+/* ─── Editor Panel ──────────────────────────────────────────────────── */
+.file-editor-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-primary);
+  overflow: hidden;
+}
+.file-editor-placeholder {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+/* ─── File Editor Container ─────────────────────────────────────────── */
+.file-editor-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* ─── File Editor Header ───────────────────────────────────────────── */
+.file-editor-header {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 0 8px 0 10px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  height: 22px;
+  flex-shrink: 0;
+}
+.file-editor-tab {
+  font-size: 11px;
+  color: var(--text-primary);
+  font-weight: 400;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+.file-editor-status {
+  font-size: 10px;
+  margin-left: 2px;
+}
+.file-editor-status.dirty {
+  color: var(--danger-red);
+}
+.file-editor-status.saving {
+  color: var(--amber);
+  animation: spin 1s linear infinite;
+}
+.file-editor-status.saved {
+  color: var(--accent-teal);
+}
+
+/* ─── Editor header buttons ────────────────────────────────────────── */
+.file-editor-find-btn,
+.file-editor-preview-btn,
+.file-editor-close,
+.file-editor-save {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  padding: 0 4px;
+  border-radius: 2px;
+  font-size: 10px;
+  height: 18px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+}
+.file-editor-find-btn:hover,
+.file-editor-preview-btn:hover,
+.file-editor-save:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+.file-editor-close:hover {
+  background: var(--danger-red);
+  color: #fff;
+}
+.file-editor-preview-btn.active {
+  border-color: var(--accent-teal);
+  color: var(--accent-teal);
+  background: rgba(0, 229, 160, 0.08);
+}
+
+/* ─── Preview zoom controls ─────────────────────────────────────────── */
+.preview-zoom-controls {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: 4px;
+}
+.preview-zoom-controls button {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  padding: 0 4px;
+  border-radius: 2px;
+  font-size: 10px;
+  cursor: pointer;
+  height: 18px;
+  transition: background 0.15s, color 0.15s;
+}
+.preview-zoom-controls button:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+.preview-zoom-controls span {
+  font-size: 9px;
+  color: var(--text-muted);
+  min-width: 2.5ch;
+  text-align: center;
+}
+
+/* ─── Zoom controls disabled state ────────────────────────────────── */
+.preview-zoom-controls button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.preview-zoom-controls button:disabled:hover {
+  background: transparent;
+  color: var(--text-muted);
+}
+
+/* ─── Editor + Preview body ─────────────────────────────────────────── */
+.file-editor-body {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  height: 100%;
+}
+.file-editor-body.split {
+  flex-direction: row;
+}
+.file-editor-body.split .file-editor-wrapper {
+  flex: 1;
+  min-width: 0;
+}
+.file-editor-body.split .file-editor-preview-wrapper {
+  flex-shrink: 0;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  border-left: 1px solid var(--border-color);
+}
+.file-editor-wrapper {
+  flex: 1;
+  overflow: hidden;
+  height: 100%;
+}
+
+.file-editor-preview-resize-handle {
+  width: 3px;
+  background: var(--border-color);
+  cursor: col-resize;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.file-editor-preview-resize-handle:hover,
+.file-editor-preview-resize-handle:active {
+  background: var(--accent-teal);
+}
+
+.file-editor-preview {
+  flex: 1;
+  overflow: auto;
+  background: #fff;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.preview-content {
+  transform-origin: top left;
+  width: 100%;
+  height: 100%;
+}
+.preview-content iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* ─── Error message ──────────────────────────────────────────────────── */
+.file-error {
+  background: rgba(255, 77, 77, 0.1);
+  border-bottom: 1px solid var(--danger-red);
+  color: var(--danger-red);
+  padding: 2px 12px;
+  font-size: 12px;
+}
+
+/* ─── File Tab Bar ────────────────────────────────────────────────── */
+.file-tab-bar {
+  display: flex;
+  align-items: center;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0 4px;
+  height: 20px;
+  flex-shrink: 0;
+  overflow-x: auto;
+  gap: 1px;
+}
+.file-tab-bar::-webkit-scrollbar {
+  height: 2px;
+}
+.file-tab-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 8px;
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid transparent;
+  border-bottom: 2px solid transparent;
+  border-radius: 3px 3px 0 0;
+  cursor: default;
+  white-space: nowrap;
+  height: 20px;
+  flex-shrink: 0;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.file-tab-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-primary);
+}
+.file-tab-item.active {
+  background: rgba(0, 229, 160, 0.08);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+  border-bottom-color: var(--accent-teal);
+}
+.file-tab-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.file-tab-dirty {
+  color: var(--danger-red);
+  font-size: 0.5rem;
+  margin-left: 2px;
+}
+.file-tab-close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  padding: 0 2px;
+  cursor: pointer;
+  border-radius: 2px;
+}
+.file-tab-close:hover {
+  background: var(--danger-red);
+  color: #fff;
+}
+
+/* ─── Inline Search Bar ────────────────────────────────────────────── */
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: 2px;
+  padding: 0 4px;
+  height: 18px;
+}
+.search-bar .search-input {
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 11px;
+  width: 120px;
+  outline: none;
+  height: 18px;
+  font-family: inherit;
+}
+.search-bar .search-input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+.search-bar .search-count {
+  font-size: 10px;
+  color: var(--text-muted);
+  min-width: 30px;
+  text-align: center;
+}
+.search-bar .search-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 12px;
+  padding: 0 2px;
+  cursor: pointer;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.search-bar .search-btn:hover {
+  color: var(--text-primary);
+}
+.search-bar .search-close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 14px;
+  padding: 0 4px;
+  cursor: pointer;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.search-bar .search-close:hover {
+  color: var(--text-primary);
+}
+
+/* ─── Custom search match highlight ───────────────────────────────── */
+.search-match {
+  background: rgba(255, 255, 0, 0.3) !important;
+  border-radius: 2px;
+}
+
+/* ─── Persistent Search Bar ────────────────────────────────────────── */
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: 2px;
+  padding: 0 4px;
+  height: 20px;
+}
+.search-bar .search-input {
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 11px;
+  width: 120px;
+  outline: none;
+  height: 18px;
+  font-family: inherit;
+}
+.search-bar .search-input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+.search-bar .search-count {
+  font-size: 10px;
+  color: var(--text-muted);
+  min-width: 30px;
+  text-align: center;
+}
+.search-bar .search-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 12px;
+  padding: 0 2px;
+  cursor: pointer;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.search-bar .search-btn:hover {
+  color: var(--text-primary);
+}
+
+/* ─── Custom search match styles ───────────────────────────────────── */
+.search-match {
+  background: rgba(255, 255, 0, 0.2) !important;
+  border-radius: 2px;
+}
+.search-match-current {
+  background: rgba(255, 200, 0, 0.5) !important;
+  border: 1px solid #ffaa00 !important;
+  border-radius: 2px;
+  outline: 2px solid #ffaa00;
+  outline-offset: 1px;
+}

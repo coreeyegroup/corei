@@ -1,0 +1,83 @@
+.corei-dock-surface {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--corei-surface, transparent);
+}
+
+.corei-dock-region {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.corei-dock-region--left,
+.corei-dock-region--right {
+  width: 280px;
+  flex: 0 0 auto;
+}
+
+.corei-dock-region--top,
+.corei-dock-region--bottom {
+  height: 220px;
+  flex: 0 0 auto;
+}
+
+.corei-dock-region--center {
+  flex: 1;
+}
+
+.corei-dock-splitter {
+  flex: 0 0 auto;
+  background: var(--corei-border-color, rgba(255,255,255,0.08));
+}
+
+.corei-dock-splitter--vertical {
+  width: 1px;
+  cursor: col-resize;
+}
+
+.corei-dock-splitter--horizontal {
+  height: 1px;
+  cursor: row-resize;
+}
+
+.corei-dock-placeholder {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 24px;
+  text-align: center;
+}
+
+.corei-dock-placeholder__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+}
+
+.corei-dock-placeholder__body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.corei-dock-placeholder__title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.corei-dock-placeholder__description {
+  font-size: 12px;
+  opacity: 0.7;
+}

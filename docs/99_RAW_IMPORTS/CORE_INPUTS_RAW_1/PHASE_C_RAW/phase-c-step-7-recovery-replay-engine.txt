@@ -1,0 +1,542 @@
+PHASE C — STEP 7: RECOVERY & REPLAY ENGINE
+
+Reference ID: CORE-TRADING-SYSTEM-PHASE-C-STEP7-RECOVERY-REPLAY-V1-2026-04-09
+
+1. PHASE IDENTITY LAYER
+	1.1 Phase Name
+
+		Phase C — Step 7: Recovery & Replay Engine
+
+	1.2 Phase Role
+
+		Defines the deterministic recovery, checkpointing, and replay system that:
+
+			guarantees state reconstruction after failure
+			enforces bit-level replay equivalence
+			provides timeline reconstruction + audit trace
+			ensures zero divergence between live and replay execution
+
+	1.3 Phase Objective
+
+		Construct a fully deterministic recovery + replay system such that:
+
+			State(t) = f(EventLog[0 → t])
+			Replay(EventLog) → identical State + Snapshot + Output
+			Recovery(system_state, event_log) → exact pre-failure state
+
+	1.4 Why This Phase Exists
+
+		Without Step 7:
+
+			replay divergence → audit failure
+			snapshot corruption → undetected inconsistency
+			partial failures → undefined recovery
+			execution cannot be resumed deterministically
+
+		Aligned with Phase C Macro invariant:
+
+			Replay produces identical output
+
+2. PHASE SCOPE CONTROL
+	2.1 INCLUDED (STRICT)
+		checkpoint model (snapshot + execution checkpoint)
+		recovery engine definition
+		replay engine definition
+		failure reconstruction system
+		consistency validation model
+		snapshot ↔ event log integrity enforcement
+
+	2.2 EXCLUDED (STRICT)
+		event schema (Step 3)
+		state computation logic (Step 4)
+		execution logic (Step 6)
+		orchestration (Step 5)
+		constraint enforcement (Phase D)
+
+	2.3 Boundary Rule (CRITICAL)
+
+		Step 7 MUST:
+
+			consume:
+			Event Model (Step 3)
+			State Model (Step 4)
+			Execution Engine (Step 6)
+
+		Step 7 MUST NOT:
+
+			modify event ordering
+			redefine state transitions
+			alter execution sequencing
+
+		Violation → NON-DETERMINISTIC SYSTEM
+
+3. ARCHITECTURAL INTENT LAYER
+	3.1 Core Principles (MANDATORY)
+
+		P1 — Replay Equivalence Guarantee
+
+			Replay(EventLog) MUST produce:
+
+				identical state_hash
+				identical snapshot
+				identical output
+
+		P2 — Checkpoint Determinism
+
+			Checkpoint creation MUST be:
+
+				interval-defined
+				input-derived
+				hash-linked
+
+		P3 — No Hidden Recovery Logic
+
+			Recovery MUST use ONLY:
+
+				EventLog
+				SnapshotStore
+				Checkpoints
+
+		P4 — Failure Determinism
+
+			Same failure scenario → identical recovery path
+
+		P5 — Hash-Chain Continuity
+
+			Checkpoint MUST preserve:
+
+				event_hash_chain → state_hash_chain → snapshot_hash
+
+		P6 — Execution Replay Binding
+
+			Replay MUST follow:
+
+				Step 6 execution order EXACTLY
+				no deviation allowed
+
+	3.2 Architectural Model
+			Recovery_Replay_System = F(
+				EventLog,
+				SnapshotStore,
+				CheckpointStore,
+				configuration_snapshot
+			)
+
+		Functional Components
+			Checkpoint Layer
+			Recovery Engine
+			Replay Engine
+			Failure Reconstruction Engine
+			Consistency Validator
+
+	3.3 System Positioning
+
+		Event Model (Step 3)
+				↓
+		State Model (Step 4)
+				↓
+		Execution Engine (Step 6)
+				↓
+		RECOVERY & REPLAY (THIS)
+				↓
+		Phase D
+
+4. DOMAIN MODEL DEFINITION
+	4.1 Core Entities
+
+		E1 — StateSnapshot (EXTENDED)
+			state_snapshot = {
+				snapshot_id
+				snapshot_time
+				partition_states
+				global_state_hash
+				lineage_hash
+				checkpoint_reference
+			}
+
+		E2 — ExecutionCheckpoint
+			execution_checkpoint = {
+				checkpoint_id
+				checkpoint_time
+				event_offset_map
+				state_hash_reference
+				snapshot_id
+				execution_position
+				checkpoint_hash
+			}
+
+			lineage_hash = HASH_v1(
+				previous_checkpoint_lineage_hash +
+				state_lineage_hash +
+				checkpoint_hash
+			)
+
+		E3 — CheckpointInterval
+			checkpoint_interval = {
+				interval_type ∈ {EVENT_COUNT, TIME_WINDOW}
+				interval_value (fixed-point)
+			}
+
+		E4 — RecoveryState
+			recovery_state = {
+				target_checkpoint_id
+				recovered_event_offset
+				recovered_state_hash
+				recovery_status ∈ {IN_PROGRESS, COMPLETED, FAILED}
+			}
+
+		E5 — ReplaySession
+			replay_session = {
+				replay_id
+				start_offset
+				end_offset
+				replay_state_hash
+				replay_status ∈ {RUNNING, COMPLETED, FAILED}
+			}
+
+		E6 — FailureTrace
+			failure_trace = {
+				failure_id
+				failure_time
+				affected_partition
+				last_valid_event_id
+				last_valid_state_hash
+				divergence_point
+			}
+
+		execution_position = {
+				partition_id
+				event_id
+				service_id
+				task_id
+			}
+
+		4.2 Relationships
+			Checkpoint → references → Snapshot
+			Snapshot → derived from → EventLog
+			Replay → reconstructs → State
+			Recovery → restores → Checkpoint
+
+	4.3 Ownership
+
+		All entities owned by Phase C
+
+5. LOGIC / RULE ENGINE
+	5.1 Rules
+		R1 — Checkpoint Creation Rule
+
+			Checkpoint created when:
+
+				event_count % interval == 0
+				OR
+				event_time crosses time_window
+
+			TIME WINDOW DEFINITION (MANDATORY):
+
+				time_window = fixed-size event_time bucket
+
+				window_id = floor(event_time / window_size)
+
+				Checkpoint MUST trigger ONLY when:
+				window_id changes
+
+				Rolling time windows are FORBIDDEN
+				System clock usage is FORBIDDEN
+
+		R2 — Checkpoint Hash Rule
+			checkpoint_hash = HASH_v1(
+				checkpoint_id +
+				event_offset_map +
+				state_hash_reference +
+				snapshot_id
+			)
+
+		R3 — Recovery Rule
+			recover(system_state, event_log):
+
+				1. locate latest valid checkpoint
+				2. restore snapshot
+				3. resume event processing from checkpoint offset
+				4. recompute state forward
+
+		R4 — Replay Rule
+			replay(event_log, start_offset, end_offset):
+
+			FOR event IN EventLog[start_offset → end_offset]:
+				apply deterministic transition
+
+			RETURN state
+
+			(MUST match Step 4 transition rules exactly )
+
+			CONSTRAINT:
+				start_offset = checkpoint.event_offset
+				end_offset = target recovery point
+
+			Replay MUST use ordering defined in:
+
+				Step 3 — Event Ordering Model
+				Step 6 — Execution Ordering
+
+				No independent ordering allowed
+
+			REPLAY MODE DEFINITION (MANDATORY):
+
+				Replay operates in two explicit modes:
+
+				1. RECOVERY MODE
+				   Purpose:
+					   reconstruct state from checkpoint_offset → target_offset
+
+				2. VALIDATION MODE
+				   Purpose:
+					   recompute full state from EventLog[0 → t] for equivalence check
+
+				Constraint:
+
+				- modes MUST be explicitly specified
+				- implicit mode selection is FORBIDDEN
+
+		R5 — Replay Determinism Rule
+
+			Replay MUST match:
+
+				state_hash
+				snapshot_hash
+				output_stream
+
+			Violation → HARD FAIL
+
+		R6 — Failure Reconstruction Rule
+			failure_point = first mismatch(
+				live_state_hash,
+				replay_state_hash
+			)
+
+		R7 — Consistency Validation Rule
+			snapshot_hash == HASH(EventLog[0 → t])
+
+			(Aligned with Step 2 + Step 4 invariants)
+
+	5.5 RULE EXECUTION ORDER (STRICT)
+			Checkpoint Validation
+			Snapshot Validation
+			Recovery Execution
+			Replay Execution
+			Consistency Validation
+			Failure Reconstruction
+
+6. FLOW ARCHITECTURE
+	6.0 Canonical Input
+		canonical_input_set_C = {
+			event_log
+			snapshot_store
+			checkpoint_store
+			configuration_snapshot
+			version_identifiers
+		}
+
+		snapshot_store MUST satisfy:
+
+			- snapshot_hash validation
+			- lineage_hash continuity
+
+			checkpoint_store MUST satisfy:
+
+			- checkpoint_hash validation
+			- offset continuity
+
+			Violation → HARD FAIL
+
+	6.1 Processing Flow
+		Failure Detected
+			→ Locate Checkpoint
+			→ Restore Snapshot
+			→ Replay(event_log, start_offset, end_offset)
+			→ Validate State
+			→ Resume Execution
+
+			Replay MUST strictly invoke R4 (Replay Rule)
+
+			No implicit replay execution allowed
+
+	6.2 Output
+		recovery_output = {
+			recovered_state
+			recovered_snapshot
+			replay_validation_status
+			failure_trace
+		}
+
+	6.5 Flow Canonicalization Rule
+		recovery MUST depend ONLY on canonical_input_set_C
+		no runtime inference allowed
+
+7. PIPELINE STRUCTURE
+
+	Stage 1 — Failure Detection
+	Stage 2 — Checkpoint Selection
+	Stage 3 — Snapshot Restore
+	Stage 4 — Replay Execution (Mode: RECOVERY)
+	Stage 5 — Replay Validation (Mode: VALIDATION)
+	Stage 6 — Failure Trace Generation
+	Stage 7 — Resume Execution
+
+8. CONTROL & CONSTRAINTS
+
+	8.1 Hard Rules
+		replay MUST be bit-identical
+		checkpoint MUST be hash-linked
+		no partial state allowed
+		no external dependency
+
+	8.2 Guardrails
+		reject corrupted snapshot
+		reject invalid checkpoint
+		reject replay mismatch
+
+	8.3 Invariants
+		I1: State = f(EventLog)
+		I2: Replay = Live
+		I3: Snapshot = State
+		I4: Checkpoint consistency maintained
+
+		I5 — Checkpoint Equivalence
+
+			checkpoint_state_hash ==
+			replay(EventLog[0 → checkpoint_offset]).state_hash
+
+9. STATE & DATA MODEL
+	9.1 State Definition
+
+		Recovered state MUST equal:
+
+			State(t) = f(EventLog[0 → t])
+
+	9.2 Transition
+
+		Recovery uses same transition as Step 4
+
+	9.3 Source of Truth
+
+		Primary → EventLog
+		Secondary → Snapshot
+
+10. FAILURE MODEL
+	10.1 Scenarios
+		node crash
+		snapshot corruption
+		checkpoint mismatch
+		replay divergence
+
+	10.2 Impact
+		state inconsistency
+		execution halt
+
+	10.3 Mitigation
+
+		Checkpoint → Replay → Validate
+
+	10.4 Detection
+		hash mismatch
+		replay divergence
+
+11. ASSUMPTION REGISTER
+	EventLog is complete (validated in Step 3)
+	State transitions deterministic (Step 4)
+	Execution order fixed (Step 6)
+
+12. VALIDATION FRAMEWORK
+	Red Team: replay attacks, corruption injection
+	Blue Team: hash + state validation
+
+	Acceptance: PASS / FAIL
+
+13. OUTPUT (DELIVERABLE)
+	recovery_replay_spec = {
+		checkpoint_model
+		recovery_engine
+		replay_engine
+		failure_reconstruction_model
+		consistency_validation_model
+	}
+
+14. TRACEABILITY MAPPING
+
+	Event → State → Snapshot → Checkpoint → Replay
+
+15. CROSS-PHASE CONSISTENCY
+
+	References:
+
+	Step 3 Event Model
+	Step 4 State Model
+	Step 6 Execution Engine
+
+	No modification allowed
+
+16. SCALABILITY MODEL
+	partition-level recovery
+	parallel replay with deterministic merge
+	checkpoint sharding
+
+	DETERMINISTIC MERGE RULE:
+
+		merged_event_order sorted by:
+
+		1. event_time ASC
+		2. partition_id ASC
+		3. dependency_depth ASC
+		4. event_id ASC
+
+		No other merge strategy allowed
+
+17. GOVERNANCE INTEGRATION
+	checkpoint versioning mandatory
+	replay audit logs required
+
+18. AUDITABILITY & OBSERVABILITY
+	full replay logs
+	failure trace logs
+	checkpoint lineage
+
+	Execution Infra Observability
+
+		Track:
+
+		- OMS latency
+		- EMS routing decisions
+		- Broker response latency
+		- Fill delay vs expected
+
+		Constraints:
+
+		- Observability MUST NOT affect execution logic
+		- Metrics are read-only
+
+		Purpose:
+
+		- production monitoring
+		- NOT decision-making
+
+19. RISK CONSIDERATIONS
+	replay divergence = system failure
+	checkpoint corruption = recoverability risk
+
+20. FAILURE CONDITION (PHASE LEVEL)
+
+	Phase fails if:
+
+	replay ≠ live state
+	checkpoint invalid
+	recovery ambiguous
+
+21. PHASE LOCK CRITERIA
+
+	Phase locked ONLY if:
+
+	deterministic recovery guaranteed
+	replay produces identical state
+	checkpoint system fully defined
+	failure recovery has zero ambiguity
+	all 21 sections complete

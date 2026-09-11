@@ -1,0 +1,47 @@
+==================================================
+STAGE-16 INVENTORY
+==================================================
+
+[EXECUTION NAMESPACE]
+
+[TRADING-INFRA NAMESPACE]
+
+[COMPONENTS]
+argocd
+broker-adapter
+cert-manager
+containerd
+copy-trade-engine
+docker
+ems
+execution
+falco
+fill-handler
+helm
+ingress
+istio
+kafka
+keycloak
+kong
+kubectl
+longhorn
+metallb
+network-policy
+oms
+pgbouncer
+postgres
+rbac
+reconciliation
+redis
+registry
+schema-registry
+smart-order-router
+_standards
+terraform
+timescaledb
+vault
+wireguard
+
+[VALUES FILES]
+kubernetes/execution/values/values-dev.yaml
+kubernetes/trading-infra/values/values-dev.yaml

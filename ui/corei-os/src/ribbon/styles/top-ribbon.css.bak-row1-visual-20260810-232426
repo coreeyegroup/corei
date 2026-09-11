@@ -1,0 +1,888 @@
+/******************************************************************************
+ *
+ * COREI OPERATING SYSTEM
+ *
+ * TOP RIBBON – ROW 1
+ * Institutional Developer / Operator Control Surface
+ *
+ * Redesigned for clarity, comfort, and professional aesthetics.
+ *
+ ******************************************************************************/
+
+/* ── Ribbon container ── */
+.corei-top-ribbon {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    height: 34px;
+    min-height: 34px;
+    max-height: 34px;
+
+    display: flex;
+    flex-direction: column;
+
+    box-sizing: border-box;
+
+    overflow: visible;
+
+    background: var(--corei-color-surface-1);
+    color: var(--corei-color-text-primary);
+
+    border-bottom: 1px solid var(--corei-color-border);
+
+    font-family: var(--corei-font-family);
+
+    white-space: nowrap;
+}
+
+/* ── Primary row ── */
+.corei-ribbon-primary-row {
+    width: 100%;
+    min-width: 0;
+    height: 34px;
+    min-height: 34px;
+    max-height: 34px;
+
+    display: flex;
+    align-items: center;
+
+    box-sizing: border-box;
+
+    overflow: visible;
+
+    padding: 0 6px;
+
+    gap: 8px;
+}
+
+/* ── Typography ── */
+.corei-top-ribbon,
+.corei-top-ribbon button,
+.corei-top-ribbon input {
+    font-family: var(--corei-font-family);
+}
+
+/* ── Identity section ── */
+.corei-ribbon-identity {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 0 0 auto;
+    height: 34px;
+    padding: 0 4px;
+}
+
+.corei-ribbon-product {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--corei-color-text-primary);
+    letter-spacing: .015em;
+}
+
+.corei-ribbon-institution-name {
+    font-size: 10px;
+    font-weight: 400;
+    color: var(--corei-color-text-secondary);
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ── Separator between sections ── */
+.corei-ribbon-separator {
+    width: 1px;
+    height: 20px;
+    background: var(--corei-color-border);
+    flex: 0 0 1px;
+}
+
+/* ── Selectors (ORG, WORKSPACE) ── */
+.corei-ribbon-selector {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 34px;
+    flex: 0 1 auto;
+    min-width: 0;
+    padding: 0 4px;
+}
+
+.corei-ribbon-selector[data-ribbon-block="org"] {
+    width: 155px;
+    min-width: 120px;
+}
+
+.corei-ribbon-selector[data-ribbon-block="workspace"] {
+    width: 140px;
+    min-width: 110px;
+}
+
+.corei-ribbon-selector-trigger {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    width: 100%;
+    height: 34px;
+    padding: 0 6px;
+    border: none;
+    background: transparent;
+    color: var(--corei-color-text-primary);
+    font: inherit;
+    cursor: pointer;
+    border-radius: 2px;
+}
+
+.corei-ribbon-selector-trigger:hover {
+    background: var(--corei-color-surface-2);
+}
+
+.corei-ribbon-selector-label {
+    font-size: 9px;
+    font-weight: 500;
+    color: var(--corei-color-text-secondary);
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+.corei-ribbon-selector-value {
+    font-size: 11px;
+    font-weight: 450;
+    color: var(--corei-color-text-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+}
+
+.corei-ribbon-selector-chevron {
+    font-size: 8px;
+    color: var(--corei-color-text-secondary);
+    flex: 0 0 auto;
+}
+
+/* ── Dropdown menu ── */
+.corei-ribbon-selector-menu {
+    position: absolute;
+    top: calc(100% + 2px);
+    left: 0;
+    z-index: 10000;
+    min-width: 100%;
+    max-width: 300px;
+    padding: 4px;
+    background: var(--corei-color-surface-2);
+    border: 1px solid var(--corei-color-border);
+    border-radius: 4px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .35);
+}
+
+.corei-ribbon-selector-menu button {
+    width: 100%;
+    min-height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 8px;
+    border: none;
+    border-radius: 2px;
+    background: transparent;
+    color: var(--corei-color-text-primary);
+    font: inherit;
+    font-size: 11px;
+    font-weight: 450;
+    cursor: pointer;
+}
+
+.corei-ribbon-selector-menu button:hover,
+.corei-ribbon-selector-menu button[aria-selected="true"] {
+    background: var(--corei-color-surface-3);
+}
+
+.corei-ribbon-selector-menu button[aria-selected="true"] {
+    color: #ddb25c;
+}
+
+/* ── Status indicators (ENV, OPERATOR, RUNTIME, ALERTS) ── */
+.corei-ribbon-status-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 0 1 auto;
+    height: 34px;
+    padding: 0 4px;
+}
+
+.corei-ribbon-status {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0 2px;
+    height: 34px;
+}
+
+.corei-ribbon-status-label {
+    font-size: 9px;
+    font-weight: 500;
+    color: var(--corei-color-text-secondary);
+    letter-spacing: .055em;
+}
+
+.corei-ribbon-status-value {
+    font-size: 11px;
+    font-weight: 450;
+    color: var(--corei-color-text-primary);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.corei-ribbon-status-value i {
+    width: 5px;
+    height: 5px;
+    display: inline-block;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+/* ── Status tones ── */
+.corei-ribbon-status[data-status-tone="operational"] .corei-ribbon-status-value {
+    color: #82c96b;
+}
+.corei-ribbon-status[data-status-tone="operational"] .corei-ribbon-status-value i {
+    background: #82c96b;
+}
+
+.corei-ribbon-status[data-status-tone="attention"] .corei-ribbon-status-value {
+    color: #d5ad58;
+}
+.corei-ribbon-status[data-status-tone="attention"] .corei-ribbon-status-value i {
+    background: #d5ad58;
+}
+
+.corei-ribbon-status[data-status-tone="critical"] .corei-ribbon-status-value {
+    color: #d75b5b;
+}
+.corei-ribbon-status[data-status-tone="critical"] .corei-ribbon-status-value i {
+    background: #d75b5b;
+}
+
+.corei-ribbon-status[data-status-tone="neutral"] .corei-ribbon-status-value {
+    color: var(--corei-color-text-secondary);
+}
+.corei-ribbon-status[data-status-tone="neutral"] .corei-ribbon-status-value i {
+    display: none;
+}
+
+/* ── Flexible spacer ── */
+.corei-ribbon-primary-spacer {
+    flex: 1 1 auto;
+    min-width: 8px;
+}
+
+/* ── SEARCH / FIND ── */
+.corei-ribbon-search {
+    flex: 0 1 190px;
+    min-width: 140px;
+    max-width: 220px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    padding: 0 4px;
+    border: 1px solid var(--corei-color-border);
+    border-radius: 3px;
+    background: var(--corei-color-surface-0);
+}
+
+.corei-ribbon-search-icon {
+    color: var(--corei-color-text-secondary);
+    font-size: 13px;
+    margin-right: 4px;
+}
+
+.corei-ribbon-search-input {
+    flex: 1 1 auto;
+    min-width: 0;
+    width: 100%;
+    height: 22px;
+    padding: 0 2px;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: var(--corei-color-text-primary);
+    font: inherit;
+    font-size: 11px;
+    font-weight: 400;
+}
+
+.corei-ribbon-search-input::placeholder {
+    color: var(--corei-color-text-secondary);
+    opacity: .85;
+}
+
+.corei-ribbon-search-key {
+    color: var(--corei-color-text-secondary);
+    font-size: 9px;
+    font-weight: 400;
+    padding-left: 6px;
+}
+
+/* ── COMMAND, HELP, SETTINGS ── */
+.corei-ribbon-actions {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex: 0 0 auto;
+}
+
+.corei-ribbon-command,
+.corei-ribbon-help,
+.corei-ribbon-settings {
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 0 8px;
+    border: none;
+    background: transparent;
+    color: var(--corei-color-text-secondary);
+    font: inherit;
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 2px;
+}
+
+.corei-ribbon-command:hover,
+.corei-ribbon-help:hover,
+.corei-ribbon-settings:hover {
+    background: var(--corei-color-surface-2);
+    color: var(--corei-color-text-primary);
+}
+
+.corei-ribbon-command kbd {
+    color: var(--corei-color-text-secondary);
+    font-size: 9px;
+    font-weight: 400;
+}
+
+.corei-ribbon-help span,
+.corei-ribbon-settings span {
+    font-size: 13px;
+    line-height: 1;
+}
+
+/* ── CLOCK ── */
+.corei-ribbon-clock {
+    flex: 0 0 85px;
+    min-width: 75px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+    padding: 0 4px;
+    font-size: 11px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    color: var(--corei-color-text-primary);
+}
+
+.corei-ribbon-clock-zone {
+    font-size: 9px;
+    font-weight: 450;
+    color: var(--corei-color-text-secondary);
+}
+
+/* ── Responsive ── */
+@media (max-width: 1100px) {
+    .corei-ribbon-selector[data-ribbon-block="org"] {
+        width: 120px;
+        min-width: 90px;
+    }
+
+    .corei-ribbon-selector[data-ribbon-block="workspace"] {
+        width: 110px;
+        min-width: 80px;
+    }
+
+    .corei-ribbon-search {
+        min-width: 100px;
+        max-width: 160px;
+    }
+
+    .corei-ribbon-clock {
+        flex: 0 0 75px;
+        min-width: 65px;
+    }
+}
+
+@media (max-width: 760px) {
+    .corei-ribbon-institution-name {
+        display: none;
+    }
+
+    .corei-ribbon-selector[data-ribbon-block="org"] {
+        width: 90px;
+        min-width: 70px;
+    }
+
+    .corei-ribbon-selector[data-ribbon-block="workspace"] {
+        width: 80px;
+        min-width: 60px;
+    }
+
+    .corei-ribbon-status-group {
+        gap: 6px;
+    }
+
+    .corei-ribbon-search {
+        min-width: 70px;
+        max-width: 120px;
+    }
+
+    .corei-ribbon-command {
+        font-size: 9px;
+        padding: 0 4px;
+    }
+
+    .corei-ribbon-clock {
+        flex: 0 0 65px;
+        min-width: 55px;
+    }
+
+    .corei-ribbon-clock-zone {
+        display: none;
+    }
+
+    .corei-ribbon-command kbd {
+        display: none;
+    }
+}
+/* ==========================================================================
+   COREI TOP RIBBON — ROW 01 INSTITUTIONAL POLISH
+   Execution unit: Top Ribbon / Primary Row only
+   ========================================================================== */
+
+/*
+ * ROW CONTAINER
+ *
+ * The primary row must consume the shell width.
+ * It must never establish an independent fixed desktop width.
+ */
+.corei-top-ribbon {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.corei-ribbon-primary-row {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    height: 38px;
+    min-height: 38px;
+    max-height: 38px;
+
+    display: flex;
+    align-items: stretch;
+
+    box-sizing: border-box;
+    overflow: hidden;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.075);
+}
+
+/*
+ * ALL PRIMARY ROW BLOCKS
+ */
+.corei-ribbon-primary-row > * {
+    box-sizing: border-box;
+    min-width: 0;
+}
+
+/*
+ * IDENTITY
+ *
+ * Stable, non-dropdown identity zone.
+ */
+.corei-ribbon-identity {
+    flex: 0 0 178px;
+    width: 178px;
+    min-width: 178px;
+    max-width: 178px;
+
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 14px;
+
+    border-right: 1px solid rgba(255, 255, 255, 0.09);
+    box-sizing: border-box;
+
+    white-space: nowrap;
+}
+
+/*
+ * SELECTOR BLOCKS
+ *
+ * Organization / Workspace / Environment / Operator.
+ *
+ * Every selector gets the same visual grammar:
+ *
+ * LABEL
+ * VALUE                         CHEVRON
+ */
+.corei-ribbon-selector {
+    position: relative;
+
+    flex: 0 1 auto;
+
+    height: 38px;
+    min-height: 38px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0;
+
+    border-right: 1px solid rgba(255, 255, 255, 0.075);
+
+    box-sizing: border-box;
+
+    background: transparent;
+}
+
+.corei-ribbon-selector[data-ribbon-block="org"] {
+    flex-basis: 198px;
+    min-width: 198px;
+}
+
+.corei-ribbon-selector[data-ribbon-block="workspace"] {
+    flex-basis: 170px;
+    min-width: 170px;
+}
+
+.corei-ribbon-selector[data-ribbon-block="environment"] {
+    flex-basis: 156px;
+    min-width: 156px;
+}
+
+.corei-ribbon-selector[data-ribbon-block="operator"] {
+    flex-basis: 168px;
+    min-width: 168px;
+}
+
+/*
+ * SELECTOR TRIGGER
+ */
+.corei-ribbon-selector-trigger {
+    position: relative;
+
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 11px;
+
+    border: 0;
+    border-radius: 0;
+
+    background: transparent;
+    color: inherit;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    box-sizing: border-box;
+}
+
+/*
+ * SELECTOR HOVER / OPEN
+ */
+.corei-ribbon-selector-trigger:hover {
+    background: rgba(255, 255, 255, 0.035);
+}
+
+.corei-ribbon-selector-trigger[aria-expanded="true"] {
+    background: rgba(255, 255, 255, 0.055);
+}
+
+/*
+ * LABEL
+ */
+.corei-ribbon-selector-label {
+    flex: 0 0 auto;
+
+    margin-right: 8px;
+
+    font-size: 9px;
+    line-height: 1;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+
+    color: rgba(255, 255, 255, 0.48);
+
+    white-space: nowrap;
+}
+
+/*
+ * VALUE
+ */
+.corei-ribbon-selector-value {
+    flex: 1 1 auto;
+
+    min-width: 0;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    font-size: 12px;
+    line-height: 1;
+    font-weight: 500;
+
+    color: rgba(255, 255, 255, 0.92);
+}
+
+/*
+ * DROPDOWN CHEVRON
+ *
+ * Existing trigger remains the owner.
+ * This only makes the affordance visible and consistently aligned.
+ */
+.corei-ribbon-selector-trigger::after {
+    content: "";
+
+    flex: 0 0 auto;
+
+    width: 6px;
+    height: 6px;
+
+    margin-left: 9px;
+    margin-right: 1px;
+
+    border-right: 1px solid rgba(255, 255, 255, 0.62);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.62);
+
+    transform: rotate(45deg) translateY(-2px);
+
+    transition:
+        transform 120ms ease,
+        border-color 120ms ease;
+}
+
+.corei-ribbon-selector-trigger:hover::after {
+    border-color: rgba(255, 255, 255, 0.9);
+}
+
+.corei-ribbon-selector-trigger[aria-expanded="true"]::after {
+    transform: rotate(225deg) translateY(-1px);
+}
+
+/*
+ * STATUS BLOCKS
+ *
+ * Runtime and alerts are information/control blocks rather than dropdowns.
+ */
+.corei-ribbon-primary-row .corei-ribbon-runtime,
+.corei-ribbon-primary-row .corei-ribbon-alerts {
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+
+    box-sizing: border-box;
+
+    border-right: 1px solid rgba(255, 255, 255, 0.075);
+}
+
+/*
+ * RUNTIME
+ */
+.corei-ribbon-primary-row .corei-ribbon-runtime {
+    flex: 0 0 118px;
+    width: 118px;
+    min-width: 118px;
+
+    padding: 0 12px;
+}
+
+/*
+ * ALERTS
+ */
+.corei-ribbon-primary-row .corei-ribbon-alerts {
+    flex: 0 0 86px;
+    width: 86px;
+    min-width: 86px;
+
+    padding: 0 12px;
+}
+
+/*
+ * SEARCH / COMMAND / HELP / SETTINGS / CLOCK
+ *
+ * Right-side command zone.
+ */
+.corei-ribbon-search,
+.corei-ribbon-command,
+.corei-ribbon-clock {
+    height: 38px;
+    box-sizing: border-box;
+}
+
+/*
+ * SEARCH
+ */
+.corei-ribbon-search {
+    flex: 1 1 180px;
+    min-width: 150px;
+
+    margin-left: auto;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 8px;
+}
+
+/*
+ * COMMAND
+ */
+.corei-ribbon-command {
+    flex: 0 0 116px;
+    width: 116px;
+    min-width: 116px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 10px;
+
+    border-left: 1px solid rgba(255, 255, 255, 0.075);
+}
+
+/*
+ * CLOCK
+ */
+.corei-ribbon-clock {
+    flex: 0 0 94px;
+    width: 94px;
+    min-width: 94px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 10px;
+
+    border-left: 1px solid rgba(255, 255, 255, 0.075);
+
+    font-variant-numeric: tabular-nums;
+}
+
+/*
+ * RIGHT-SIDE ICON / ACTION BUTTONS
+ *
+ * Do not let individual buttons establish large widths.
+ */
+.corei-ribbon-primary-row button {
+    box-sizing: border-box;
+}
+
+/*
+ * PRIMARY TYPOGRAPHY
+ *
+ * Keep the ribbon compact but readable on a long-duration workstation.
+ */
+.corei-ribbon-primary-row {
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    font-variant-numeric: tabular-nums;
+}
+
+/*
+ * PRESERVE INFORMATION DENSITY WITHOUT CROWDING
+ */
+.corei-ribbon-primary-row [class*="value"],
+.corei-ribbon-primary-row [class*="status"] {
+    min-width: 0;
+}
+
+/*
+ * RESPONSIVE DEGRADATION
+ *
+ * Do not introduce a fixed minimum viewport.
+ * Blocks compress progressively.
+ */
+@media (max-width: 1250px) {
+    .corei-ribbon-identity {
+        flex-basis: 160px;
+        min-width: 160px;
+    }
+
+    .corei-ribbon-selector[data-ribbon-block="org"] {
+        flex-basis: 178px;
+        min-width: 178px;
+    }
+
+    .corei-ribbon-selector[data-ribbon-block="workspace"] {
+        flex-basis: 150px;
+        min-width: 150px;
+    }
+
+    .corei-ribbon-selector[data-ribbon-block="environment"] {
+        flex-basis: 140px;
+        min-width: 140px;
+    }
+
+    .corei-ribbon-selector[data-ribbon-block="operator"] {
+        flex-basis: 150px;
+        min-width: 150px;
+    }
+
+    .corei-ribbon-search {
+        min-width: 120px;
+    }
+}
+
+@media (max-width: 1050px) {
+    .corei-ribbon-selector[data-ribbon-block="environment"] {
+        flex-basis: 128px;
+        min-width: 128px;
+    }
+
+    .corei-ribbon-selector[data-ribbon-block="operator"] {
+        flex-basis: 138px;
+        min-width: 138px;
+    }
+
+    .corei-ribbon-search {
+        min-width: 100px;
+    }
+}
+
+/*
+ * IMPORTANT:
+ * Row 01 owns no independent desktop canvas.
+ */
+.corei-ribbon-primary-row,
+.corei-ribbon-primary-row > * {
+    max-width: 100%;
+}

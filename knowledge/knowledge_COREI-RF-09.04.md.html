@@ -1,0 +1,2106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COREI RF 09.04</title>
+  <style>
+  body {
+    background: #0A0D12;
+    color: #E3E7EC;
+    font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px 40px;
+  }
+  h1 {
+    font-size: 26px;
+    font-weight: 600;
+    color: #C6A46A;
+    margin: 24px 0 12px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 8px;
+  }
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #D4B88A;
+    margin: 20px 0 10px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 6px;
+  }
+  h3 {
+    font-size: 17px;
+    font-weight: 500;
+    color: #E3E7EC;
+    margin: 16px 0 8px 0;
+  }
+  h4 {
+    font-size: 15px;
+    font-weight: 500;
+    color: #C5CED9;
+    margin: 12px 0 6px 0;
+  }
+  p { margin-bottom: 8px; color: #C5CED9; }
+  ul, ol { padding-left: 24px; margin-bottom: 8px; color: #C5CED9; }
+  li { margin-bottom: 2px; }
+  code {
+    font-family: 'JetBrains Mono', 'Cascadia Code', monospace;
+    font-size: 13px;
+    background: rgba(255,255,255,0.05);
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid #28303C;
+    color: #C5CED9;
+  }
+  pre {
+    background: #18202A;
+    border: 1px solid #28303C;
+    border-radius: 6px;
+    padding: 16px 20px;
+    overflow: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 12px 0 16px 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #C5CED9;
+  }
+  pre code { background: transparent; border: none; padding: 0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 16px 0;
+    font-size: 13px;
+    color: #C5CED9;
+  }
+  th {
+    background: #18202A;
+    color: #C5CED9;
+    font-weight: 600;
+    text-align: left;
+    padding: 6px 12px;
+    border: 1px solid #28303C;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  td {
+    padding: 4px 12px;
+    border: 1px solid #28303C;
+    background: #0E1219;
+  }
+  tr:nth-child(even) td { background: #121821; }
+  blockquote {
+    border-left: 3px solid #C6A46A;
+    padding-left: 16px;
+    margin: 8px 0 12px 0;
+    color: #6E7883;
+    font-style: italic;
+  }
+  hr { border: none; border-top: 1px solid #28303C; margin: 24px 0; }
+  a { color: #8BB4F0; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  strong { color: #E3E7EC; font-weight: 600; }
+  img { max-width: 100%; border-radius: 4px; border: 1px solid #28303C; }
+  .doc-footer {
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid #28303C;
+    font-size: 12px;
+    color: #6E7883;
+    font-family: monospace;
+  }
+</style>
+</head>
+<body>
+  <div class="doc-header" style="background:#121821;border:1px solid #28303C;border-radius:8px;padding:1.2rem 1.8rem;margin-bottom:1.8rem;">
+    <div style="color:#C6A46A;font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:0.05em;">COREI · Knowledge System</div>
+    <div style="color:#6E7883;font-family:monospace;font-size:14px;margin-top:0.1rem;"></div>
+    <h1 style="font-size:28px;font-weight:600;color:#E3E7EC;margin:0.1rem 0;border-bottom:none;padding-bottom:0;">COREI RF 09.04</h1>
+    <div style="font-size:16px;color:#C5CED9;">00 · Constitutional</div>
+    <div style="display:flex;flex-wrap:wrap;gap:0.6rem 1.8rem;margin-top:0.6rem;font-size:13px;">
+      <span style="display:flex;align-items:baseline;gap:0.3rem;"><span style="color:#6E7883;text-transform:uppercase;font-size:10px;letter-spacing:0.04em;font-weight:600;">Status</span><span style="color:#E3E7EC;font-weight:500;">Approved</span></span>
+      <span style="display:flex;align-items:baseline;gap:0.3rem;"><span style="color:#6E7883;text-transform:uppercase;font-size:10px;letter-spacing:0.04em;font-weight:600;">Version</span><span style="color:#E3E7EC;font-weight:500;">1.0</span></span>
+      <span style="display:flex;align-items:baseline;gap:0.3rem;"><span style="color:#6E7883;text-transform:uppercase;font-size:10px;letter-spacing:0.04em;font-weight:600;">Classification</span><span style="color:#E3E7EC;font-weight:500;">Constitutional</span></span>
+      <span style="display:flex;align-items:baseline;gap:0.3rem;"><span style="color:#6E7883;text-transform:uppercase;font-size:10px;letter-spacing:0.04em;font-weight:600;">Owner</span><span style="color:#E3E7EC;font-weight:500;">COREI</span></span>
+      <span style="display:flex;align-items:baseline;gap:0.3rem;"><span style="color:#6E7883;text-transform:uppercase;font-size:10px;letter-spacing:0.04em;font-weight:600;">Repository</span><span style="color:#E3E7EC;font-weight:500;font-family:monospace;">knowledge/00-00/</span></span>
+    </div>
+
+  </div>
+
+
+
+  <h1>COREI INSTITUTIONAL PLATFORM, SERVICE, MODULE, ENGINE, DOMAIN AND</h1>
+<h1>APPLICATION REGISTRY</h1>
+<h1>DOCUMENT ID</h1>
+<h1>COREI-RF-09.04</h1>
+<h1>DOCUMENT NAME</h1>
+<h1>INSTITUTIONAL PLATFORM, SERVICE, MODULE, ENGINE, DOMAIN AND APPLICATION</h1>
+<h1>REGISTRY</h1>
+<h1>REPOSITORY FILE</h1>
+<h1>knowledge/09-reference/COREI-RF-09.04-INSTITUTIONAL-PLATFORM-SERVICE-MODULE-ENGINE-DOMAIN-AND-APPLICATION-REGISTRY.md</h1>
+<h1>VERSION</h1>
+<h1>1.0</h1>
+<h1>STATUS</h1>
+<h1>APPROVED</h1>
+<h1>CLASSIFICATION</h1>
+<h1>CONSTITUTIONAL</h1>
+<h1>1. PURPOSE</h1>
+<p>The COREI Institutional Platform, Service, Module,<br>
+Engine, Domain and Application Registry defines the<br>
+authoritative institutional reference model for<br>
+identifying,<br>
+classifying,<br>
+owning,<br>
+locating,<br>
+relating,<br>
+integrating,<br>
+validating,<br>
+operating,<br>
+evolving,<br>
+and retiring</p>
+<p>Platforms,</p>
+<p>Services,</p>
+<p>Modules,</p>
+<p>Engines,</p>
+<p>Domains,</p>
+<p>and Applications</p>
+<p>across the COREI institutional system.</p>
+<p>Its purpose is to prevent</p>
+<p>platform duplication,</p>
+<p>service duplication,</p>
+<p>module ambiguity,</p>
+<p>engine ambiguity,</p>
+<p>domain ownership confusion,</p>
+<p>application boundary erosion,</p>
+<p>dependency disorder,</p>
+<p>capability rebuilding,</p>
+<p>implementation drift,</p>
+<p>and uncontrolled architectural proliferation.</p>
+<p>Every material software or platform object SHALL<br>
+have a clear institutional identity and ownership<br>
+boundary.</p>
+<p>The registry SHALL make it possible to determine</p>
+<p>what the object is,</p>
+<p>what responsibility it owns,</p>
+<p>where it belongs,</p>
+<p>what it depends upon,</p>
+<p>what depends upon it,</p>
+<p>what contracts it exposes,</p>
+<p>whether it is foundational or consuming,</p>
+<p>whether it is implemented,</p>
+<p>whether it is operational,</p>
+<p>and whether it remains approved for institutional<br>
+use.</p>
+<h1>2. SCOPE</h1>
+<p>This registry governs</p>
+<p>institutional Platforms,</p>
+<p>Platform Kernel components,</p>
+<p>provider platforms,</p>
+<p>capability platforms,</p>
+<p>cognitive platforms,</p>
+<p>workspace platforms,</p>
+<p>experience platforms,</p>
+<p>application platforms,</p>
+<p>service platforms,</p>
+<p>module platforms,</p>
+<p>engine platforms,</p>
+<p>domain platforms,</p>
+<p>event platforms,</p>
+<p>state platforms,</p>
+<p>runtime platforms,</p>
+<p>data platforms,</p>
+<p>security platforms,</p>
+<p>observability platforms,</p>
+<p>automation platforms,</p>
+<p>trading platforms,</p>
+<p>Services,</p>
+<p>Modules,</p>
+<p>Engines,</p>
+<p>Domains,</p>
+<p>Applications,</p>
+<p>shared foundations,</p>
+<p>runtime integrations,</p>
+<p>adapters,</p>
+<p>connectors,</p>
+<p>gateways,</p>
+<p>orchestrators,</p>
+<p>registries,</p>
+<p>managers,</p>
+<p>controllers,</p>
+<p>processors,</p>
+<p>workers,</p>
+<p>and future governed software architecture objects.</p>
+<h1>3. CORE PRINCIPLE</h1>
+<p>One institutional responsibility SHALL have one<br>
+clear owning boundary.</p>
+<p>Platforms SHALL provide reusable institutional<br>
+foundations.</p>
+<p>Services SHALL own bounded operational<br>
+responsibilities.</p>
+<p>Modules SHALL encapsulate cohesive implementation<br>
+responsibilities.</p>
+<p>Engines SHALL perform defined processing or decision<br>
+responsibilities.</p>
+<p>Domains SHALL preserve institutional ownership and<br>
+business or system meaning.</p>
+<p>Applications SHALL compose approved capabilities<br>
+into user-facing or system-facing outcomes.</p>
+<p>These object types SHALL not be treated as<br>
+interchangeable labels.</p>
+<h1>4. ARCHITECTURAL OBJECT HIERARCHY</h1>
+<p>The institutional architecture MAY contain the<br>
+following relationship:</p>
+<p>Institution</p>
+<p>↓</p>
+<p>Platform</p>
+<p>↓</p>
+<p>Domain</p>
+<p>↓</p>
+<p>Application</p>
+<p>↓</p>
+<p>Service</p>
+<p>↓</p>
+<p>Engine</p>
+<p>↓</p>
+<p>Module</p>
+<p>↓</p>
+<p>Artifact.</p>
+<p>This is not a mandatory deployment hierarchy.</p>
+<p>Actual ownership and dependency relationships SHALL<br>
+be defined by approved architecture.</p>
+<h1>5. PLATFORM DEFINITION</h1>
+<p>A Platform is a reusable institutional foundation<br>
+that provides governed capabilities,<br>
+contracts,<br>
+runtime behaviour,<br>
+or infrastructure</p>
+<p>to multiple consumers.</p>
+<p>A Platform SHALL not exist merely because a folder<br>
+is named <code>platform</code>.</p>
+<h1>6. SERVICE DEFINITION</h1>
+<p>A Service is an independently owned operational or<br>
+technical responsibility with explicit contracts<br>
+and lifecycle.</p>
+<p>A Service MAY be independently deployed.</p>
+<p>Independent deployment is not mandatory unless the<br>
+approved architecture requires it.</p>
+<h1>7. MODULE DEFINITION</h1>
+<p>A Module is a cohesive implementation boundary that<br>
+encapsulates related logic,<br>
+contracts,<br>
+state,<br>
+or behaviour.</p>
+<p>A Module SHOULD expose a controlled public surface.</p>
+<h1>8. ENGINE DEFINITION</h1>
+<p>An Engine is a governed processing boundary that<br>
+performs a defined computational,<br>
+analytical,<br>
+decision,<br>
+or orchestration responsibility.</p>
+<p>An Engine SHALL have explicit inputs,<br>
+outputs,<br>
+and ownership.</p>
+<h1>9. DOMAIN DEFINITION</h1>
+<p>A Domain is a stable institutional responsibility<br>
+boundary representing coherent business,<br>
+operational,<br>
+technical,<br>
+or intelligence ownership.</p>
+<p>A Domain SHALL preserve meaning across implementation<br>
+changes.</p>
+<h1>10. APPLICATION DEFINITION</h1>
+<p>An Application is a governed composition of<br>
+capabilities,<br>
+services,<br>
+modules,<br>
+engines,<br>
+domains,<br>
+and interfaces</p>
+<p>that delivers a defined institutional outcome.</p>
+<p>An Application SHALL not own foundational<br>
+responsibilities already assigned to shared<br>
+Platforms unless explicitly approved.</p>
+<h1>11. PLATFORM IDENTITY</h1>
+<p>Every material Platform SHALL have a canonical<br>
+Platform identity.</p>
+<p>Platform identity SHALL remain stable across</p>
+<p>repository relocation,</p>
+<p>implementation refactoring,</p>
+<p>deployment changes,</p>
+<p>and infrastructure migration</p>
+<p>unless the institutional object itself changes.</p>
+<h1>12. PLATFORM NAME</h1>
+<p>Every Platform SHALL have a controlled human-readable<br>
+name.</p>
+<p>The name SHALL not replace canonical identity.</p>
+<h1>13. PLATFORM PURPOSE</h1>
+<p>Every Platform SHALL define the institutional<br>
+problem it solves and the reusable capability it<br>
+provides.</p>
+<h1>14. PLATFORM SCOPE</h1>
+<p>Every Platform SHALL define</p>
+<p>owned responsibilities</p>
+<p>and</p>
+<p>non-owned responsibilities.</p>
+<h1>15. PLATFORM OWNER</h1>
+<p>Every Platform SHALL have an accountable owner.</p>
+<h1>16. PLATFORM CONTRACT</h1>
+<p>A Platform MAY expose</p>
+<p>APIs,</p>
+<p>events,</p>
+<p>interfaces,</p>
+<p>registries,</p>
+<p>providers,</p>
+<p>capabilities,</p>
+<p>runtime contracts,</p>
+<p>state contracts,</p>
+<p>or extension points.</p>
+<p>Platform contracts SHALL remain controlled.</p>
+<h1>17. PLATFORM CONSUMER</h1>
+<p>A Platform Consumer is an approved object that uses<br>
+a Platform contract.</p>
+<p>Consumers SHALL integrate through approved public<br>
+surfaces where such surfaces exist.</p>
+<h1>18. PLATFORM PROVIDER</h1>
+<p>A Platform Provider is a component that supplies a<br>
+capability through the Platform’s approved provider<br>
+contract.</p>
+<h1>19. PLATFORM FOUNDATION</h1>
+<p>A Platform Foundation contains reusable<br>
+institutional infrastructure or runtime behaviour<br>
+intended to support later capabilities.</p>
+<p>Foundational implementation SHALL not be duplicated<br>
+inside consuming applications.</p>
+<h1>20. PLATFORM KERNEL</h1>
+<p>The Platform Kernel is the foundational institutional<br>
+runtime and capability substrate upon which later<br>
+platform enablement is built.</p>
+<p>Where the Platform Kernel is approved and complete,<br>
+later implementation SHALL</p>
+<p>consume,</p>
+<p>integrate,</p>
+<p>configure,</p>
+<p>extend through approved contracts,</p>
+<p>and operationalize</p>
+<p>the Kernel.</p>
+<p>Later implementation SHALL not silently rebuild the<br>
+Kernel.</p>
+<h1>21. PLATFORM CONSTRUCTION</h1>
+<p>Platform Construction is the lifecycle period in<br>
+which foundational Platforms and their contracts are<br>
+created.</p>
+<h1>22. PLATFORM ENABLEMENT</h1>
+<p>Platform Enablement is the lifecycle period in which<br>
+completed foundational Platforms are</p>
+<p>consumed,</p>
+<p>connected,</p>
+<p>configured,</p>
+<p>operationalized,</p>
+<p>and exposed</p>
+<p>for institutional use.</p>
+<p>Platform Enablement SHALL not become disguised<br>
+foundation reconstruction.</p>
+<h1>23. PLATFORM STATUS</h1>
+<p>Platform status MAY include</p>
+<p>PLANNED</p>
+<p>DESIGNING</p>
+<p>SCAFFOLDED</p>
+<p>IMPLEMENTING</p>
+<p>INTEGRATING</p>
+<p>VALIDATING</p>
+<p>OPERATIONAL</p>
+<p>COMPLETE</p>
+<p>DEPRECATED</p>
+<p>SUPERSEDED</p>
+<p>RETIRED.</p>
+<h1>24. PLATFORM COMPLETION</h1>
+<p>A Platform SHALL not be considered complete until<br>
+its required</p>
+<p>contracts,</p>
+<p>runtime,</p>
+<p>public surfaces,</p>
+<p>integration,</p>
+<p>validation,</p>
+<p>ownership,</p>
+<p>and documentation</p>
+<p>are established.</p>
+<h1>25. PLATFORM OPERATIONAL STATE</h1>
+<p>A Platform MAY be implementation-complete but not<br>
+operationally enabled.</p>
+<p>Implementation completion and operational activation<br>
+SHALL remain distinguishable.</p>
+<h1>26. SERVICE IDENTITY</h1>
+<p>Every material Service SHALL have a stable canonical<br>
+identity.</p>
+<h1>27. SERVICE RESPONSIBILITY</h1>
+<p>Every Service SHALL own a bounded responsibility.</p>
+<p>A Service SHALL not become a container for unrelated<br>
+logic.</p>
+<h1>28. SERVICE OWNER</h1>
+<p>Every Service SHALL have an accountable owner.</p>
+<h1>29. SERVICE CONTRACT</h1>
+<p>A Service SHALL expose explicit contracts where<br>
+other objects depend upon it.</p>
+<p>Contracts MAY include</p>
+<p>APIs,</p>
+<p>events,</p>
+<p>commands,</p>
+<p>queries,</p>
+<p>schemas,</p>
+<p>state interfaces,</p>
+<p>or operational endpoints.</p>
+<h1>30. SERVICE DEPENDENCY</h1>
+<p>Service dependencies SHALL be explicit.</p>
+<p>Services SHALL not depend upon internal<br>
+implementation details of another Service where a<br>
+public contract exists.</p>
+<h1>31. SERVICE STATE</h1>
+<p>Service-owned state SHALL have explicit ownership.</p>
+<p>Multiple Services SHALL not silently claim<br>
+authoritative ownership of the same state.</p>
+<h1>32. SERVICE DEPLOYMENT</h1>
+<p>Deployment topology SHALL not redefine Service<br>
+identity.</p>
+<p>One Service MAY have multiple runtime instances.</p>
+<h1>33. SERVICE INSTANCE</h1>
+<p>A Service Instance is a runtime realization of a<br>
+Service.</p>
+<p>Service instance identity SHALL remain distinct from<br>
+Service identity.</p>
+<h1>34. SERVICE STATUS</h1>
+<p>Service status MAY include</p>
+<p>PLANNED</p>
+<p>IMPLEMENTING</p>
+<p>INTEGRATING</p>
+<p>VALIDATING</p>
+<p>DEPLOYABLE</p>
+<p>DEPLOYED</p>
+<p>OPERATIONAL</p>
+<p>DEGRADED</p>
+<p>DEPRECATED</p>
+<p>RETIRED.</p>
+<h1>35. MODULE IDENTITY</h1>
+<p>Every material Module SHALL have a stable identity<br>
+within its owning namespace.</p>
+<h1>36. MODULE RESPONSIBILITY</h1>
+<p>A Module SHALL encapsulate a cohesive responsibility.</p>
+<h1>37. MODULE OWNER</h1>
+<p>A Module SHALL have an owning Platform,<br>
+Service,<br>
+Engine,<br>
+Application,<br>
+or Domain</p>
+<p>where applicable.</p>
+<h1>38. MODULE PUBLIC API</h1>
+<p>A Module SHOULD expose a controlled public API.</p>
+<p>Consumers SHOULD not import private internals across<br>
+ownership boundaries.</p>
+<h1>39. MODULE DEPENDENCY</h1>
+<p>Module dependencies SHALL follow approved dependency<br>
+direction.</p>
+<h1>40. MODULE CIRCULAR DEPENDENCY</h1>
+<p>Circular Module dependencies SHALL be prevented.</p>
+<p>Where unavoidable,<br>
+they require explicit architectural approval and<br>
+documented rationale.</p>
+<h1>41. MODULE STATUS</h1>
+<p>Module status MAY include</p>
+<p>PLANNED</p>
+<p>SCAFFOLDED</p>
+<p>IMPLEMENTING</p>
+<p>VALIDATING</p>
+<p>ACTIVE</p>
+<p>DEPRECATED</p>
+<p>SUPERSEDED</p>
+<p>RETIRED.</p>
+<h1>42. ENGINE IDENTITY</h1>
+<p>Every material Engine SHALL have a canonical<br>
+identity.</p>
+<h1>43. ENGINE RESPONSIBILITY</h1>
+<p>Every Engine SHALL perform a defined processing,<br>
+analysis,<br>
+decision,<br>
+or orchestration responsibility.</p>
+<h1>44. ENGINE INPUT</h1>
+<p>Engine inputs SHALL be explicit and validated where<br>
+required.</p>
+<h1>45. ENGINE OUTPUT</h1>
+<p>Engine outputs SHALL be explicit,<br>
+typed,<br>
+and attributable to the Engine where required.</p>
+<h1>46. ENGINE STATE</h1>
+<p>Stateful Engines SHALL define state ownership and<br>
+lifecycle.</p>
+<p>Stateless Engines SHALL not silently accumulate<br>
+authoritative state.</p>
+<h1>47. ENGINE DETERMINISM</h1>
+<p>Where an Engine performs financially,<br>
+operationally,<br>
+or governance-critical processing,<br>
+its deterministic requirements SHALL be explicit.</p>
+<p>Probabilistic behaviour SHALL not be hidden inside a<br>
+deterministic contract.</p>
+<h1>48. ENGINE DEPENDENCY</h1>
+<p>Engine dependencies SHALL be explicit.</p>
+<p>An Engine SHALL consume approved contracts rather<br>
+than private implementation internals.</p>
+<h1>49. ENGINE STATUS</h1>
+<p>Engine status MAY include</p>
+<p>PLANNED</p>
+<p>IMPLEMENTING</p>
+<p>INTEGRATING</p>
+<p>VALIDATING</p>
+<p>ACTIVE</p>
+<p>DEGRADED</p>
+<p>DEPRECATED</p>
+<p>RETIRED.</p>
+<h1>50. DOMAIN IDENTITY</h1>
+<p>Every institutional Domain SHALL have a stable<br>
+canonical identity.</p>
+<h1>51. DOMAIN PURPOSE</h1>
+<p>Every Domain SHALL define the institutional<br>
+responsibility and meaning it owns.</p>
+<h1>52. DOMAIN OWNER</h1>
+<p>Every Domain SHALL have accountable ownership.</p>
+<h1>53. DOMAIN BOUNDARY</h1>
+<p>A Domain SHALL define</p>
+<p>what it owns,</p>
+<p>what it consumes,</p>
+<p>what it publishes,</p>
+<p>and what remains outside its boundary.</p>
+<h1>54. DOMAIN CONTRACT</h1>
+<p>Cross-domain interaction SHALL occur through<br>
+approved contracts.</p>
+<p>Domains SHALL not silently reach into another<br>
+Domain’s private implementation.</p>
+<h1>55. DOMAIN STATE</h1>
+<p>Authoritative Domain state SHALL have one clear<br>
+ownership model.</p>
+<h1>56. DOMAIN EVENT</h1>
+<p>A Domain MAY publish events representing material<br>
+state changes or institutional facts.</p>
+<p>Event ownership SHALL remain explicit.</p>
+<h1>57. DOMAIN DEPENDENCY</h1>
+<p>Domain dependency direction SHALL follow approved<br>
+architecture.</p>
+<p>Circular institutional ownership SHALL be avoided.</p>
+<h1>58. DOMAIN STATUS</h1>
+<p>Domain status MAY include</p>
+<p>DEFINED</p>
+<p>IMPLEMENTING</p>
+<p>INTEGRATING</p>
+<p>ACTIVE</p>
+<p>DEPRECATED</p>
+<p>SUPERSEDED</p>
+<p>RETIRED.</p>
+<h1>59. APPLICATION IDENTITY</h1>
+<p>Every material Application SHALL have a canonical<br>
+identity.</p>
+<h1>60. APPLICATION PURPOSE</h1>
+<p>Every Application SHALL define the institutional<br>
+outcome it provides.</p>
+<h1>61. APPLICATION OWNER</h1>
+<p>Every Application SHALL have an accountable owner.</p>
+<h1>62. APPLICATION COMPOSITION</h1>
+<p>An Application MAY compose</p>
+<p>Platforms,</p>
+<p>Services,</p>
+<p>Modules,</p>
+<p>Engines,</p>
+<p>Domains,</p>
+<p>workspaces,</p>
+<p>interfaces,</p>
+<p>and external integrations.</p>
+<p>Composition SHALL respect ownership boundaries.</p>
+<h1>63. APPLICATION CONTRACT</h1>
+<p>Applications MAY expose</p>
+<p>user interfaces,</p>
+<p>APIs,</p>
+<p>events,</p>
+<p>commands,</p>
+<p>automation interfaces,</p>
+<p>or operational surfaces.</p>
+<p>These contracts SHALL be governed.</p>
+<h1>64. APPLICATION STATE</h1>
+<p>Applications SHALL not duplicate authoritative state<br>
+already owned by another approved boundary unless a<br>
+defined replica,<br>
+cache,<br>
+projection,<br>
+or derived-state model exists.</p>
+<h1>65. APPLICATION STATUS</h1>
+<p>Application status MAY include</p>
+<p>PLANNED</p>
+<p>IMPLEMENTING</p>
+<p>INTEGRATING</p>
+<p>VALIDATING</p>
+<p>DEPLOYABLE</p>
+<p>DEPLOYED</p>
+<p>OPERATIONAL</p>
+<p>DEGRADED</p>
+<p>DEPRECATED</p>
+<p>RETIRED.</p>
+<h1>66. SHARED FOUNDATION</h1>
+<p>A Shared Foundation is a reusable institutional<br>
+capability intended for multiple consumers.</p>
+<p>Shared Foundations SHALL have explicit ownership and<br>
+public contracts.</p>
+<h1>67. SHARED FOUNDATION CONSUMPTION</h1>
+<p>Consumers SHALL use approved Shared Foundations<br>
+rather than creating local substitutes without<br>
+authority.</p>
+<h1>68. PROVIDER PLATFORM</h1>
+<p>A Provider Platform governs provider registration,<br>
+selection,<br>
+resolution,<br>
+lifecycle,<br>
+and consumption</p>
+<p>where approved by architecture.</p>
+<h1>69. CAPABILITY PLATFORM</h1>
+<p>A Capability Platform governs reusable institutional<br>
+capabilities and their</p>
+<p>contracts,</p>
+<p>lifecycle,</p>
+<p>registration,</p>
+<p>resolution,</p>
+<p>dependency,</p>
+<p>and runtime behaviour.</p>
+<h1>70. COGNITIVE PLATFORM</h1>
+<p>A Cognitive Platform governs approved cognitive or<br>
+intelligence capabilities and their interaction with<br>
+the wider institutional system.</p>
+<h1>71. WORKSPACE PLATFORM</h1>
+<p>A Workspace Platform governs workspace definition,<br>
+composition,<br>
+lifecycle,<br>
+runtime,<br>
+and operating context.</p>
+<h1>72. EXPERIENCE PLATFORM</h1>
+<p>An Experience Platform governs shared user<br>
+experience,<br>
+interaction,<br>
+presentation,<br>
+and experience-level capabilities.</p>
+<h1>73. APPLICATION PLATFORM</h1>
+<p>An Application Platform governs application<br>
+registration,<br>
+composition,<br>
+lifecycle,<br>
+and runtime integration.</p>
+<h1>74. SERVICE PLATFORM</h1>
+<p>A Service Platform governs service registration,<br>
+resolution,<br>
+lifecycle,<br>
+dependency,<br>
+and runtime integration.</p>
+<h1>75. MODULE PLATFORM</h1>
+<p>A Module Platform governs module registration,<br>
+resolution,<br>
+dependency,<br>
+public API,<br>
+and lifecycle.</p>
+<h1>76. ENGINE PLATFORM</h1>
+<p>An Engine Platform governs Engine registration,<br>
+execution,<br>
+dependency,<br>
+lifecycle,<br>
+and runtime integration.</p>
+<h1>77. DOMAIN PLATFORM</h1>
+<p>A Domain Platform governs Domain registration,<br>
+ownership,<br>
+dependency,<br>
+contracts,<br>
+and runtime participation.</p>
+<h1>78. PLATFORM RUNTIME INTEGRATION</h1>
+<p>Platform Runtime Integration connects foundational<br>
+Platforms into a coherent runtime without collapsing<br>
+their ownership boundaries.</p>
+<h1>79. EVENT PLATFORM</h1>
+<p>An Event Platform governs</p>
+<p>event identity,</p>
+<p>publication,</p>
+<p>subscription,</p>
+<p>routing,</p>
+<p>validation,</p>
+<p>ordering,</p>
+<p>and lifecycle</p>
+<p>where defined by approved architecture.</p>
+<h1>80. STATE PLATFORM</h1>
+<p>A State Platform governs</p>
+<p>state identity,</p>
+<p>ownership,</p>
+<p>transition,</p>
+<p>projection,</p>
+<p>persistence,</p>
+<p>and lifecycle</p>
+<p>where defined by approved architecture.</p>
+<h1>81. DATA PLATFORM</h1>
+<p>A Data Platform governs shared institutional data<br>
+capabilities,<br>
+contracts,<br>
+pipelines,<br>
+quality,<br>
+and access</p>
+<p>where approved.</p>
+<h1>82. SECURITY PLATFORM</h1>
+<p>A Security Platform governs shared security<br>
+capabilities and controls.</p>
+<h1>83. OBSERVABILITY PLATFORM</h1>
+<p>An Observability Platform governs shared</p>
+<p>metrics,</p>
+<p>logs,</p>
+<p>traces,</p>
+<p>health,</p>
+<p>alerts,</p>
+<p>and operational visibility.</p>
+<h1>84. AUTOMATION PLATFORM</h1>
+<p>An Automation Platform governs deterministic<br>
+workflow execution,<br>
+orchestration,<br>
+integration,<br>
+and automation lifecycle.</p>
+<h1>85. TRADING PLATFORM</h1>
+<p>A Trading Platform governs institutional trading<br>
+capabilities across the approved trading lifecycle.</p>
+<h1>86. TRADING DOMAIN CHAIN</h1>
+<p>The approved institutional trading domain chain MAY<br>
+include</p>
+<p>MARKET INTELLIGENCE</p>
+<p>↓</p>
+<p>SIGNAL INTELLIGENCE</p>
+<p>↓</p>
+<p>DECISION INTELLIGENCE</p>
+<p>↓</p>
+<p>RISK INTELLIGENCE</p>
+<p>↓</p>
+<p>PORTFOLIO INTELLIGENCE</p>
+<p>↓</p>
+<p>EXECUTION INTELLIGENCE</p>
+<p>↓</p>
+<p>POSITION INTELLIGENCE</p>
+<p>↓</p>
+<p>PERFORMANCE INTELLIGENCE</p>
+<p>↓</p>
+<p>SYSTEM INTELLIGENCE.</p>
+<p>Domain implementation SHALL preserve approved<br>
+ownership and dependency direction.</p>
+<h1>87. MARKET INTELLIGENCE DOMAIN</h1>
+<p>The Market Intelligence Domain owns approved<br>
+responsibilities for transforming raw market inputs<br>
+into governed market intelligence states.</p>
+<p>It SHALL not own downstream trading decisions unless<br>
+explicitly approved.</p>
+<h1>88. SIGNAL INTELLIGENCE DOMAIN</h1>
+<p>The Signal Intelligence Domain owns approved signal<br>
+generation,<br>
+evaluation,<br>
+or aggregation responsibilities.</p>
+<p>Signal generation SHALL remain distinct from final<br>
+execution authority.</p>
+<h1>89. DECISION INTELLIGENCE DOMAIN</h1>
+<p>The Decision Intelligence Domain owns approved<br>
+decision formation responsibilities.</p>
+<h1>90. RISK INTELLIGENCE DOMAIN</h1>
+<p>The Risk Intelligence Domain owns approved risk<br>
+evaluation,<br>
+limits,<br>
+controls,<br>
+and decision constraints.</p>
+<h1>91. PORTFOLIO INTELLIGENCE DOMAIN</h1>
+<p>The Portfolio Intelligence Domain owns approved<br>
+portfolio,<br>
+capital,<br>
+allocation,<br>
+and exposure responsibilities.</p>
+<h1>92. EXECUTION INTELLIGENCE DOMAIN</h1>
+<p>The Execution Intelligence Domain owns approved<br>
+order execution,<br>
+routing,<br>
+and execution-control responsibilities.</p>
+<h1>93. POSITION INTELLIGENCE DOMAIN</h1>
+<p>The Position Intelligence Domain owns approved<br>
+position state,<br>
+position lifecycle,<br>
+and position reconciliation responsibilities.</p>
+<h1>94. PERFORMANCE INTELLIGENCE DOMAIN</h1>
+<p>The Performance Intelligence Domain owns approved<br>
+performance measurement,<br>
+attribution,<br>
+and analysis responsibilities.</p>
+<h1>95. SYSTEM INTELLIGENCE DOMAIN</h1>
+<p>The System Intelligence Domain owns approved<br>
+platform health,<br>
+runtime intelligence,<br>
+operational awareness,<br>
+and system-level analysis responsibilities.</p>
+<h1>96. DOMAIN CHAIN INTEGRITY</h1>
+<p>A downstream Domain SHALL consume upstream outputs<br>
+through approved contracts.</p>
+<p>A downstream Domain SHALL not silently rewrite<br>
+upstream authoritative state.</p>
+<h1>97. DOMAIN SEPARATION</h1>
+<p>Market analysis,<br>
+signal generation,<br>
+decision formation,<br>
+risk authorization,<br>
+portfolio allocation,<br>
+execution,<br>
+position management,<br>
+and performance measurement</p>
+<p>SHALL remain distinguishable responsibilities.</p>
+<h1>98. PLATFORM REGISTRY</h1>
+<p>The Platform Registry SHALL maintain where<br>
+applicable</p>
+<p>Platform ID,</p>
+<p>name,</p>
+<p>type,</p>
+<p>purpose,</p>
+<p>scope,</p>
+<p>owner,</p>
+<p>status,</p>
+<p>repository location,</p>
+<p>public contracts,</p>
+<p>providers,</p>
+<p>consumers,</p>
+<p>dependencies,</p>
+<p>runtime state,</p>
+<p>version,</p>
+<p>and lifecycle state.</p>
+<h1>99. SERVICE REGISTRY</h1>
+<p>The Service Registry SHALL maintain where applicable</p>
+<p>Service ID,</p>
+<p>name,</p>
+<p>purpose,</p>
+<p>owner,</p>
+<p>status,</p>
+<p>repository location,</p>
+<p>contracts,</p>
+<p>dependencies,</p>
+<p>state ownership,</p>
+<p>deployment model,</p>
+<p>runtime instances,</p>
+<p>version,</p>
+<p>and lifecycle state.</p>
+<h1>100. MODULE REGISTRY</h1>
+<p>The Module Registry SHALL maintain where applicable</p>
+<p>Module ID,</p>
+<p>name,</p>
+<p>owner,</p>
+<p>parent object,</p>
+<p>repository location,</p>
+<p>public API,</p>
+<p>dependencies,</p>
+<p>status,</p>
+<p>version,</p>
+<p>and lifecycle state.</p>
+<h1>101. ENGINE REGISTRY</h1>
+<p>The Engine Registry SHALL maintain where applicable</p>
+<p>Engine ID,</p>
+<p>name,</p>
+<p>purpose,</p>
+<p>owner,</p>
+<p>inputs,</p>
+<p>outputs,</p>
+<p>state model,</p>
+<p>dependencies,</p>
+<p>determinism requirements,</p>
+<p>repository location,</p>
+<p>status,</p>
+<p>version,</p>
+<p>and lifecycle state.</p>
+<h1>102. DOMAIN REGISTRY</h1>
+<p>The Domain Registry SHALL maintain where applicable</p>
+<p>Domain ID,</p>
+<p>name,</p>
+<p>purpose,</p>
+<p>owner,</p>
+<p>boundary,</p>
+<p>contracts,</p>
+<p>state ownership,</p>
+<p>published events,</p>
+<p>consumed events,</p>
+<p>dependencies,</p>
+<p>applications,</p>
+<p>services,</p>
+<p>engines,</p>
+<p>status,</p>
+<p>and lifecycle state.</p>
+<h1>103. APPLICATION REGISTRY</h1>
+<p>The Application Registry SHALL maintain where<br>
+applicable</p>
+<p>Application ID,</p>
+<p>name,</p>
+<p>purpose,</p>
+<p>owner,</p>
+<p>composition,</p>
+<p>contracts,</p>
+<p>dependencies,</p>
+<p>state model,</p>
+<p>repository location,</p>
+<p>deployment model,</p>
+<p>status,</p>
+<p>version,</p>
+<p>and lifecycle state.</p>
+<h1>104. OBJECT RELATIONSHIP REGISTRY</h1>
+<p>Relationships between Platforms,<br>
+Services,<br>
+Modules,<br>
+Engines,<br>
+Domains,<br>
+and Applications</p>
+<p>SHALL be explicit where material.</p>
+<p>Relationship types MAY include</p>
+<p>OWNS</p>
+<p>CONTAINS</p>
+<p>CONSUMES</p>
+<p>PROVIDES</p>
+<p>IMPLEMENTS</p>
+<p>EXTENDS</p>
+<p>DEPENDS_ON</p>
+<p>PUBLISHES_TO</p>
+<p>SUBSCRIBES_TO</p>
+<p>READS_FROM</p>
+<p>WRITES_TO</p>
+<p>ORCHESTRATES</p>
+<p>VALIDATES</p>
+<p>OBSERVES</p>
+<p>SECURES</p>
+<p>DEPLOYS</p>
+<p>and other approved relationship types.</p>
+<h1>105. OWNS RELATIONSHIP</h1>
+<p>OWNS means the source object has authoritative<br>
+responsibility for the target object or state.</p>
+<h1>106. CONTAINS RELATIONSHIP</h1>
+<p>CONTAINS means the target is structurally part of<br>
+the source boundary.</p>
+<h1>107. CONSUMES RELATIONSHIP</h1>
+<p>CONSUMES means the source uses an approved contract<br>
+provided by the target.</p>
+<h1>108. PROVIDES RELATIONSHIP</h1>
+<p>PROVIDES means the source exposes an approved<br>
+capability or contract to consumers.</p>
+<h1>109. IMPLEMENTS RELATIONSHIP</h1>
+<p>IMPLEMENTS means the source realizes an approved<br>
+contract,<br>
+specification,<br>
+or capability.</p>
+<h1>110. EXTENDS RELATIONSHIP</h1>
+<p>EXTENDS means the source adds approved behaviour<br>
+through a defined extension mechanism.</p>
+<h1>111. DEPENDS_ON RELATIONSHIP</h1>
+<p>DEPENDS_ON means the source requires the target for<br>
+correct operation.</p>
+<h1>112. PUBLISHES_TO RELATIONSHIP</h1>
+<p>PUBLISHES_TO means the source emits governed data or<br>
+events through the target contract.</p>
+<h1>113. SUBSCRIBES_TO RELATIONSHIP</h1>
+<p>SUBSCRIBES_TO means the source consumes governed<br>
+events from the target contract.</p>
+<h1>114. READS_FROM RELATIONSHIP</h1>
+<p>READS_FROM means the source reads approved state or<br>
+data from the target.</p>
+<h1>115. WRITES_TO RELATIONSHIP</h1>
+<p>WRITES_TO means the source is authorized to write to<br>
+the target state or data boundary.</p>
+<h1>116. ORCHESTRATES RELATIONSHIP</h1>
+<p>ORCHESTRATES means the source coordinates multiple<br>
+objects without necessarily owning their internal<br>
+responsibilities.</p>
+<h1>117. VALIDATES RELATIONSHIP</h1>
+<p>VALIDATES means the source evaluates the target<br>
+against defined requirements.</p>
+<h1>118. OBSERVES RELATIONSHIP</h1>
+<p>OBSERVES means the source collects approved<br>
+operational information without owning the observed<br>
+object’s business state.</p>
+<h1>119. SECURES RELATIONSHIP</h1>
+<p>SECURES means the source provides approved security<br>
+controls for the target.</p>
+<h1>120. DEPLOYS RELATIONSHIP</h1>
+<p>DEPLOYS means the source controls or performs<br>
+deployment of the target.</p>
+<h1>121. DEPENDENCY DIRECTION</h1>
+<p>Dependency direction SHALL follow approved<br>
+architecture.</p>
+<p>Lower-level reusable foundations SHOULD NOT depend<br>
+upon higher-level consuming applications unless<br>
+explicitly required by architecture.</p>
+<h1>122. DEPENDENCY INVERSION</h1>
+<p>Where dependency inversion is required,<br>
+implementation SHALL depend upon approved contracts<br>
+rather than concrete private internals.</p>
+<h1>123. CIRCULAR DEPENDENCY</h1>
+<p>Circular dependencies across Platforms,<br>
+Services,<br>
+Modules,<br>
+Engines,<br>
+Domains,<br>
+or Applications</p>
+<p>SHALL be detected and eliminated where possible.</p>
+<p>Unavoidable cycles require explicit architectural<br>
+approval.</p>
+<h1>124. PRIVATE IMPLEMENTATION</h1>
+<p>Private implementation details SHALL remain inside<br>
+their owning boundary.</p>
+<h1>125. PUBLIC CONTRACT</h1>
+<p>A Public Contract is an approved interface through<br>
+which external consumers interact with an object.</p>
+<p>Public contracts SHALL be stable,<br>
+versioned where required,<br>
+and intentionally exposed.</p>
+<h1>126. INTERNAL CONTRACT</h1>
+<p>An Internal Contract is intended for controlled use<br>
+within an ownership boundary.</p>
+<p>Internal contracts SHALL not silently become<br>
+institution-wide public APIs.</p>
+<h1>127. CONTRACT VERSIONING</h1>
+<p>Material incompatible contract changes SHALL be<br>
+versioned or migrated through controlled processes.</p>
+<h1>128. CONTRACT COMPATIBILITY</h1>
+<p>Compatibility expectations SHALL be explicit.</p>
+<p>Consumers SHALL not rely on accidental<br>
+implementation behaviour.</p>
+<h1>129. STATE OWNERSHIP</h1>
+<p>Every authoritative state object SHALL have one<br>
+clear ownership boundary.</p>
+<p>Replicas,<br>
+projections,<br>
+caches,<br>
+and derived states</p>
+<p>SHALL remain distinguishable from authoritative<br>
+state.</p>
+<h1>130. EVENT OWNERSHIP</h1>
+<p>Every governed event SHALL have a clear producer or<br>
+ownership model.</p>
+<p>Consumers SHALL not redefine the meaning of<br>
+upstream events.</p>
+<h1>131. RUNTIME OWNERSHIP</h1>
+<p>Runtime responsibilities such as</p>
+<p>startup,</p>
+<p>shutdown,</p>
+<p>health,</p>
+<p>recovery,</p>
+<p>and lifecycle</p>
+<p>SHALL have explicit ownership.</p>
+<h1>132. CONFIGURATION OWNERSHIP</h1>
+<p>Configuration SHALL be owned by the object whose<br>
+behaviour it controls unless an approved centralized<br>
+configuration model applies.</p>
+<h1>133. SECRET OWNERSHIP</h1>
+<p>Secret references and access authority SHALL follow<br>
+the owning object’s security boundary.</p>
+<h1>134. OBSERVABILITY OWNERSHIP</h1>
+<p>Every material operational object SHOULD expose<br>
+sufficient observability for its owner to determine<br>
+health and behaviour.</p>
+<h1>135. PLATFORM DISCOVERY</h1>
+<p>Authorized consumers SHOULD be able to discover<br>
+available Platforms and their public contracts.</p>
+<h1>136. SERVICE DISCOVERY</h1>
+<p>Services MAY use runtime or registry-based discovery<br>
+where approved.</p>
+<p>Discovery SHALL not remove identity or ownership<br>
+requirements.</p>
+<h1>137. MODULE DISCOVERY</h1>
+<p>Modules SHOULD be discoverable through controlled<br>
+repository structure and public exports.</p>
+<h1>138. ENGINE DISCOVERY</h1>
+<p>Engines SHOULD be discoverable through the approved<br>
+Engine registry or architecture model.</p>
+<h1>139. DOMAIN DISCOVERY</h1>
+<p>Domains SHALL be discoverable through the<br>
+institutional Domain registry and architecture.</p>
+<h1>140. APPLICATION DISCOVERY</h1>
+<p>Applications SHALL be discoverable through the<br>
+approved Application registry and operational<br>
+catalog.</p>
+<h1>141. IMPLEMENTATION STATE</h1>
+<p>An object MAY exist in architecture before it exists<br>
+in implementation.</p>
+<p>Architecture existence SHALL not prove repository<br>
+implementation.</p>
+<h1>142. REPOSITORY STATE</h1>
+<p>Repository existence SHALL prove that implementation<br>
+artifacts exist.</p>
+<p>It SHALL not automatically prove runtime operation.</p>
+<h1>143. RUNTIME STATE</h1>
+<p>Runtime operation SHALL be verified through<br>
+appropriate operational evidence.</p>
+<h1>144. REGISTERED STATE</h1>
+<p>Registration means the object is known to the<br>
+institutional registry.</p>
+<p>Registration SHALL not automatically mean the object<br>
+is implemented or operational.</p>
+<h1>145. IMPLEMENTED STATE</h1>
+<p>Implemented means required repository artifacts<br>
+exist and required implementation validation has<br>
+passed.</p>
+<h1>146. INTEGRATED STATE</h1>
+<p>Integrated means the object is connected to required<br>
+dependencies and consumers through approved<br>
+contracts.</p>
+<h1>147. OPERATIONAL STATE</h1>
+<p>Operational means the object is active in the<br>
+intended runtime environment and required health<br>
+conditions are satisfied.</p>
+<h1>148. CERTIFIED STATE</h1>
+<p>Certified means the exact baseline has passed the<br>
+required formal certification process.</p>
+<h1>149. OBJECT VERSION</h1>
+<p>Platforms,<br>
+Services,<br>
+Modules,<br>
+Engines,<br>
+Domains,<br>
+and Applications</p>
+<p>MAY have versions where lifecycle,<br>
+compatibility,<br>
+deployment,<br>
+or audit</p>
+<p>requires them.</p>
+<h1>150. OBJECT BASELINE</h1>
+<p>A baseline MAY include</p>
+<p>repository commit,</p>
+<p>release,</p>
+<p>configuration,</p>
+<p>schema version,</p>
+<p>environment,</p>
+<p>and dependency versions</p>
+<p>where required.</p>
+<h1>151. OBJECT LIFECYCLE</h1>
+<p>Every material architectural object SHALL have a<br>
+controlled lifecycle.</p>
+<h1>152. OBJECT CREATION</h1>
+<p>A new object SHALL be created only when a distinct<br>
+institutional responsibility or approved boundary<br>
+exists.</p>
+<h1>153. OBJECT MODIFICATION</h1>
+<p>Material modifications SHALL preserve contracts,<br>
+ownership,<br>
+and compatibility</p>
+<p>or use controlled migration.</p>
+<h1>154. OBJECT DEPRECATION</h1>
+<p>Deprecated objects SHALL remain discoverable while<br>
+consumers migrate.</p>
+<h1>155. OBJECT SUPERSESSION</h1>
+<p>Superseded objects SHALL identify their replacement<br>
+where applicable.</p>
+<h1>156. OBJECT RETIREMENT</h1>
+<p>Retired objects SHALL no longer be used for new<br>
+institutional work.</p>
+<p>Historical traceability SHALL remain where required.</p>
+<h1>157. OBJECT SPLIT</h1>
+<p>When one responsibility becomes multiple distinct<br>
+responsibilities,<br>
+new object identities SHALL be created.</p>
+<p>Lineage SHALL be preserved.</p>
+<h1>158. OBJECT MERGE</h1>
+<p>When multiple objects are merged,<br>
+predecessor identities SHALL remain traceable.</p>
+<h1>159. PLATFORM DUPLICATION</h1>
+<p>A new Platform SHALL not duplicate an existing<br>
+approved Platform merely to provide local<br>
+convenience.</p>
+<h1>160. SERVICE DUPLICATION</h1>
+<p>A new Service SHALL not duplicate an existing<br>
+Service responsibility without explicit<br>
+architecture approval.</p>
+<h1>161. MODULE DUPLICATION</h1>
+<p>Shared logic SHOULD be consumed from its approved<br>
+owner rather than copied across Modules.</p>
+<h1>162. ENGINE DUPLICATION</h1>
+<p>An Engine SHALL not be recreated inside each<br>
+consumer when an approved reusable Engine already<br>
+exists.</p>
+<h1>163. DOMAIN DUPLICATION</h1>
+<p>A Domain responsibility SHALL not be independently<br>
+reimplemented in multiple Domains without an<br>
+approved ownership model.</p>
+<h1>164. APPLICATION DUPLICATION</h1>
+<p>Applications MAY provide different experiences.</p>
+<p>They SHALL not duplicate foundational ownership<br>
+merely because they have different interfaces.</p>
+<h1>165. PLATFORM LEAKAGE</h1>
+<p>Platform Leakage occurs when consumers depend upon<br>
+private Platform internals.</p>
+<p>Platform Leakage SHALL be eliminated through<br>
+approved public contracts.</p>
+<h1>166. DOMAIN LEAKAGE</h1>
+<p>Domain Leakage occurs when one Domain directly<br>
+depends upon another Domain’s private state or<br>
+implementation.</p>
+<p>Cross-domain interaction SHALL use approved<br>
+contracts.</p>
+<h1>167. SERVICE LEAKAGE</h1>
+<p>Service Leakage occurs when external consumers<br>
+depend upon private Service implementation details.</p>
+<h1>168. MODULE LEAKAGE</h1>
+<p>Module Leakage occurs when private internals become<br>
+uncontrolled cross-boundary dependencies.</p>
+<h1>169. APPLICATION LEAKAGE</h1>
+<p>Application-specific logic SHALL not leak into<br>
+shared foundations unless intentionally generalized<br>
+and approved.</p>
+<h1>170. ARCHITECTURE DRIFT</h1>
+<p>Architecture Drift occurs when implemented object<br>
+boundaries no longer match approved architecture.</p>
+<p>Drift SHALL be detected and reconciled.</p>
+<h1>171. REGISTRY DRIFT</h1>
+<p>Registry Drift occurs when the registry no longer<br>
+matches authoritative architecture,<br>
+repository,<br>
+or runtime state.</p>
+<h1>172. IMPLEMENTATION DRIFT</h1>
+<p>Implementation Drift occurs when repository<br>
+implementation diverges from approved object<br>
+responsibilities or contracts.</p>
+<h1>173. RUNTIME DRIFT</h1>
+<p>Runtime Drift occurs when deployed object topology<br>
+or behaviour diverges from the approved operational<br>
+baseline.</p>
+<h1>174. AI ARCHITECTURAL OBJECT RESPONSIBILITY</h1>
+<p>Artificial intelligence systems MAY assist with</p>
+<p>discovery,</p>
+<p>registration,</p>
+<p>implementation,</p>
+<p>integration,</p>
+<p>dependency analysis,</p>
+<p>validation,</p>
+<p>and documentation</p>
+<p>of Platforms,<br>
+Services,<br>
+Modules,<br>
+Engines,<br>
+Domains,<br>
+and Applications.</p>
+<p>AI SHALL preserve approved architecture boundaries.</p>
+<h1>175. AI SHALL CONSUME EXISTING FOUNDATIONS</h1>
+<p>Where an approved foundational Platform exists,<br>
+AI SHALL use it rather than rebuild equivalent<br>
+infrastructure.</p>
+<h1>176. AI SHALL INSPECT BEFORE CREATING</h1>
+<p>Before creating a new Platform,<br>
+Service,<br>
+Module,<br>
+Engine,<br>
+Domain,<br>
+or Application,</p>
+<p>AI SHALL inspect the relevant authoritative<br>
+architecture and repository state where available.</p>
+<h1>177. AI SHALL NOT CREATE DUPLICATE OWNERSHIP</h1>
+<p>AI SHALL not assign the same authoritative<br>
+responsibility to multiple objects without an<br>
+approved ownership model.</p>
+<h1>178. AI SHALL NOT CROSS PRIVATE BOUNDARIES</h1>
+<p>AI SHALL use approved public contracts instead of<br>
+private implementation internals.</p>
+<h1>179. AI SHALL PRESERVE DEPENDENCY DIRECTION</h1>
+<p>AI SHALL not introduce dependency inversion or<br>
+cycles that violate approved architecture.</p>
+<h1>180. AI SHALL DISTINGUISH OBJECT TYPES</h1>
+<p>AI SHALL not treat</p>
+<p>Platform,</p>
+<p>Service,</p>
+<p>Module,</p>
+<p>Engine,</p>
+<p>Domain,</p>
+<p>and Application</p>
+<p>as interchangeable terms.</p>
+<h1>181. AI SHALL DISTINGUISH IMPLEMENTED FROM</h1>
+<h1>OPERATIONAL</h1>
+<p>AI SHALL not claim runtime operation merely because<br>
+repository implementation exists.</p>
+<h1>182. AI SHALL DISTINGUISH DOCUMENTED FROM</h1>
+<h1>IMPLEMENTED</h1>
+<p>AI SHALL not claim implementation merely because a<br>
+design document exists.</p>
+<h1>183. AI SHALL VALIDATE PUBLIC API</h1>
+<p>Where a Module,<br>
+Service,<br>
+or Platform</p>
+<p>exposes a public API,<br>
+AI SHALL preserve and validate that surface.</p>
+<h1>184. AI SHALL CHECK CIRCULAR DEPENDENCIES</h1>
+<p>Where applicable,<br>
+AI SHALL validate that implementation does not<br>
+introduce prohibited circular dependencies.</p>
+<h1>185. AI SHALL PRESERVE COMPLETED PLATFORM KERNEL</h1>
+<p>Where the Platform Kernel is complete,<br>
+AI SHALL treat it as a consumed institutional<br>
+foundation.</p>
+<p>AI SHALL not silently restart Platform Kernel<br>
+construction.</p>
+<h1>186. NO PLATFORM WITHOUT PURPOSE</h1>
+<p>A Platform SHALL not be created without a defined<br>
+reusable institutional purpose.</p>
+<h1>187. NO SERVICE WITHOUT RESPONSIBILITY</h1>
+<p>A Service SHALL not be created without a bounded<br>
+responsibility.</p>
+<h1>188. NO MODULE WITHOUT OWNERSHIP</h1>
+<p>A Module SHALL not exist without an owning boundary.</p>
+<h1>189. NO ENGINE WITHOUT INPUT AND OUTPUT</h1>
+<p>An Engine SHALL define what it consumes and what it<br>
+produces.</p>
+<h1>190. NO DOMAIN WITHOUT OWNERSHIP</h1>
+<p>A Domain SHALL not exist without an accountable<br>
+institutional responsibility.</p>
+<h1>191. NO APPLICATION WITHOUT OUTCOME</h1>
+<p>An Application SHALL define the institutional<br>
+outcome it provides.</p>
+<h1>192. NO DUPLICATE FOUNDATION</h1>
+<p>A consuming object SHALL not rebuild approved shared<br>
+foundations.</p>
+<h1>193. NO PRIVATE INTERNAL DEPENDENCY</h1>
+<p>Cross-boundary consumers SHALL not depend upon<br>
+private internals where an approved public contract<br>
+exists.</p>
+<h1>194. NO UNCONTROLLED CIRCULAR DEPENDENCY</h1>
+<p>Circular dependencies SHALL not be introduced<br>
+without explicit architecture authority.</p>
+<h1>195. NO MULTIPLE AUTHORITATIVE STATE OWNERS</h1>
+<p>One authoritative state SHALL not have multiple<br>
+uncoordinated owners.</p>
+<h1>196. NO APPLICATION-LEVEL FOUNDATION REBUILD</h1>
+<p>Applications SHALL consume approved Platforms and<br>
+Shared Foundations rather than recreating them<br>
+locally.</p>
+<h1>197. NO DOCUMENT-ONLY PLATFORM CLAIM</h1>
+<p>A documented Platform SHALL not be reported as<br>
+implemented without repository evidence.</p>
+<h1>198. NO REPOSITORY-ONLY OPERATIONAL CLAIM</h1>
+<p>Repository implementation SHALL not be reported as<br>
+operational without runtime evidence where runtime<br>
+operation is required.</p>
+<h1>199. NO CHAT-ONLY REGISTRY</h1>
+<p>The institutional object registry SHALL not exist<br>
+only in conversation history.</p>
+<h1>200. NO HUMAN-MEMORY-ONLY ARCHITECTURE</h1>
+<p>Critical object boundaries,<br>
+ownership,<br>
+and dependencies</p>
+<p>SHALL be persisted.</p>
+<h1>201. PLATFORM LIFECYCLE</h1>
+<p>The authoritative COREI Platform Lifecycle is</p>
+<p>Platform Need Identified</p>
+<p>↓</p>
+<p>Existing Platform Search Performed</p>
+<p>↓</p>
+<p>Reusable Responsibility Defined</p>
+<p>↓</p>
+<p>Architecture Boundary Verified</p>
+<p>↓</p>
+<p>Platform Identity Assigned</p>
+<p>↓</p>
+<p>Owner Assigned</p>
+<p>↓</p>
+<p>Purpose Defined</p>
+<p>↓</p>
+<p>Scope Defined</p>
+<p>↓</p>
+<p>Contracts Defined</p>
+<p>↓</p>
+<p>Providers Defined Where Applicable</p>
+<p>↓</p>
+<p>Consumers Identified</p>
+<p>↓</p>
+<p>Dependencies Defined</p>
+<p>↓</p>
+<p>Platform Implemented</p>
+<p>↓</p>
+<p>Platform Integrated</p>
+<p>↓</p>
+<p>Platform Validated</p>
+<p>↓</p>
+<p>Platform Operationalized Where Required</p>
+<p>↓</p>
+<p>Platform Maintained</p>
+<p>↓</p>
+<p>Platform Deprecated,<br>
+Superseded,<br>
+or Retired.</p>
+<h1>202. SERVICE LIFECYCLE</h1>
+<p>The authoritative COREI Service Lifecycle is</p>
+<p>Service Need Identified</p>
+<p>↓</p>
+<p>Existing Service Search Performed</p>
+<p>↓</p>
+<p>Responsibility Defined</p>
+<p>↓</p>
+<p>Architecture Boundary Verified</p>
+<p>↓</p>
+<p>Service Identity Assigned</p>
+<p>↓</p>
+<p>Owner Assigned</p>
+<p>↓</p>
+<p>Contracts Defined</p>
+<p>↓</p>
+<p>State Ownership Defined</p>
+<p>↓</p>
+<p>Dependencies Defined</p>
+<p>↓</p>
+<p>Service Implemented</p>
+<p>↓</p>
+<p>Service Integrated</p>
+<p>↓</p>
+<p>Service Validated</p>
+<p>↓</p>
+<p>Service Deployed Where Required</p>
+<p>↓</p>
+<p>Service Operationalized</p>
+<p>↓</p>
+<p>Service Maintained</p>
+<p>↓</p>
+<p>Service Deprecated or Retired.</p>
+<h1>203. MODULE LIFECYCLE</h1>
+<p>The authoritative COREI Module Lifecycle is</p>
+<p>Module Need Identified</p>
+<p>↓</p>
+<p>Existing Module Search Performed</p>
+<p>↓</p>
+<p>Responsibility Defined</p>
+<p>↓</p>
+<p>Owning Boundary Identified</p>
+<p>↓</p>
+<p>Module Identity Assigned</p>
+<p>↓</p>
+<p>Public API Defined</p>
+<p>↓</p>
+<p>Dependencies Defined</p>
+<p>↓</p>
+<p>Module Implemented</p>
+<p>↓</p>
+<p>Module Validated</p>
+<p>↓</p>
+<p>Module Integrated</p>
+<p>↓</p>
+<p>Module Maintained</p>
+<p>↓</p>
+<p>Module Deprecated,<br>
+Superseded,<br>
+or Retired.</p>
+<h1>204. ENGINE LIFECYCLE</h1>
+<p>The authoritative COREI Engine Lifecycle is</p>
+<p>Engine Need Identified</p>
+<p>↓</p>
+<p>Existing Engine Search Performed</p>
+<p>↓</p>
+<p>Processing Responsibility Defined</p>
+<p>↓</p>
+<p>Engine Identity Assigned</p>
+<p>↓</p>
+<p>Owner Assigned</p>
+<p>↓</p>
+<p>Inputs Defined</p>
+<p>↓</p>
+<p>Outputs Defined</p>
+<p>↓</p>
+<p>State Model Defined</p>
+<p>↓</p>
+<p>Determinism Requirements Defined</p>
+<p>↓</p>
+<p>Dependencies Defined</p>
+<p>↓</p>
+<p>Engine Implemented</p>
+<p>↓</p>
+<p>Engine Integrated</p>
+<p>↓</p>
+<p>Engine Validated</p>
+<p>↓</p>
+<p>Engine Activated</p>
+<p>↓</p>
+<p>Engine Observed</p>
+<p>↓</p>
+<p>Engine Maintained</p>
+<p>↓</p>
+<p>Engine Deprecated or Retired.</p>
+<h1>205. DOMAIN LIFECYCLE</h1>
+<p>The authoritative COREI Domain Lifecycle is</p>
+<p>Institutional Responsibility Identified</p>
+<p>↓</p>
+<p>Existing Domain Search Performed</p>
+<p>↓</p>
+<p>Domain Boundary Defined</p>
+<p>↓</p>
+<p>Domain Identity Assigned</p>
+<p>↓</p>
+<p>Owner Assigned</p>
+<p>↓</p>
+<p>Owned State Defined</p>
+<p>↓</p>
+<p>Contracts Defined</p>
+<p>↓</p>
+<p>Dependencies Defined</p>
+<p>↓</p>
+<p>Services,<br>
+Engines,<br>
+and Applications Associated</p>
+<p>↓</p>
+<p>Domain Implemented</p>
+<p>↓</p>
+<p>Domain Integrated</p>
+<p>↓</p>
+<p>Domain Validated</p>
+<p>↓</p>
+<p>Domain Activated</p>
+<p>↓</p>
+<p>Domain Maintained</p>
+<p>↓</p>
+<p>Domain Superseded or Retired.</p>
+<h1>206. APPLICATION LIFECYCLE</h1>
+<p>The authoritative COREI Application Lifecycle is</p>
+<p>Institutional Outcome Identified</p>
+<p>↓</p>
+<p>Existing Application Search Performed</p>
+<p>↓</p>
+<p>Application Boundary Defined</p>
+<p>↓</p>
+<p>Application Identity Assigned</p>
+<p>↓</p>
+<p>Owner Assigned</p>
+<p>↓</p>
+<p>Required Platforms Identified</p>
+<p>↓</p>
+<p>Required Domains Identified</p>
+<p>↓</p>
+<p>Required Services Identified</p>
+<p>↓</p>
+<p>Required Engines Identified</p>
+<p>↓</p>
+<p>Required Modules Identified</p>
+<p>↓</p>
+<p>Contracts Defined</p>
+<p>↓</p>
+<p>Application Implemented</p>
+<p>↓</p>
+<p>Application Integrated</p>
+<p>↓</p>
+<p>Application Validated</p>
+<p>↓</p>
+<p>Application Deployed</p>
+<p>↓</p>
+<p>Application Operationalized</p>
+<p>↓</p>
+<p>Application Maintained</p>
+<p>↓</p>
+<p>Application Deprecated or Retired.</p>
+<h1>207. PLATFORM ENABLEMENT LIFECYCLE</h1>
+<p>The authoritative COREI Platform Enablement<br>
+Lifecycle is</p>
+<p>Completed Platform Resolved</p>
+<p>↓</p>
+<p>Public Contracts Verified</p>
+<p>↓</p>
+<p>Consumer Requirement Identified</p>
+<p>↓</p>
+<p>Required Providers Resolved</p>
+<p>↓</p>
+<p>Required Capabilities Resolved</p>
+<p>↓</p>
+<p>Configuration Defined</p>
+<p>↓</p>
+<p>Integration Implemented</p>
+<p>↓</p>
+<p>Runtime Connection Established</p>
+<p>↓</p>
+<p>State Connection Established Where Required</p>
+<p>↓</p>
+<p>Event Connection Established Where Required</p>
+<p>↓</p>
+<p>Consumer Validation Performed</p>
+<p>↓</p>
+<p>Cross-Platform Validation Performed</p>
+<p>↓</p>
+<p>Operational Readiness Verified</p>
+<p>↓</p>
+<p>Platform Capability Enabled</p>
+<p>↓</p>
+<p>Evidence Preserved.</p>
+<h1>208. OBJECT RESTORATION LIFECYCLE</h1>
+<p>The authoritative COREI Architectural Object<br>
+Restoration Lifecycle is</p>
+<p>Object Need Identified</p>
+<p>↓</p>
+<p>Canonical Registry Located</p>
+<p>↓</p>
+<p>Object Identity Resolved</p>
+<p>↓</p>
+<p>Object Type Resolved</p>
+<p>↓</p>
+<p>Owner Resolved</p>
+<p>↓</p>
+<p>Architecture Boundary Resolved</p>
+<p>↓</p>
+<p>Repository Location Resolved</p>
+<p>↓</p>
+<p>Public Contracts Resolved</p>
+<p>↓</p>
+<p>Dependencies Resolved</p>
+<p>↓</p>
+<p>Implementation State Verified</p>
+<p>↓</p>
+<p>Runtime State Verified Where Required</p>
+<p>↓</p>
+<p>Current Lifecycle State Established</p>
+<p>↓</p>
+<p>Safe Consumption or Modification Resumes.</p>
+<h1>209. RELATIONSHIP TO REFERENCE SYSTEM</h1>
+<p>COREI-RF-09.00 defines the overall Reference System.</p>
+<p>This document defines the registry for major<br>
+institutional software and platform architecture<br>
+objects.</p>
+<h1>210. RELATIONSHIP TO IDENTIFIER REGISTRY</h1>
+<p>COREI-RF-09.01 defines the canonical identity,<br>
+namespace,<br>
+and code model used by registered architecture<br>
+objects.</p>
+<h1>211. RELATIONSHIP TO DOCUMENT REGISTRY</h1>
+<p>COREI-RF-09.02 defines the knowledge assets that<br>
+describe,<br>
+govern,<br>
+specify,<br>
+and validate</p>
+<p>registered architecture objects.</p>
+<h1>212. RELATIONSHIP TO EXECUTION REGISTRY</h1>
+<p>COREI-RF-09.03 defines the Stage,<br>
+Phase,<br>
+Step,<br>
+Subsystem,<br>
+and Artifact</p>
+<p>execution context through which registered<br>
+architecture objects are implemented.</p>
+<h1>213. RELATIONSHIP TO GOVERNANCE</h1>
+<p>Governance defines who may</p>
+<p>create,</p>
+<p>own,</p>
+<p>change,</p>
+<p>approve,</p>
+<p>deprecate,</p>
+<p>supersede,</p>
+<p>or retire</p>
+<p>registered architecture objects.</p>
+<h1>214. RELATIONSHIP TO ARCHITECTURE</h1>
+<p>Architecture defines approved</p>
+<p>boundaries,</p>
+<p>ownership,</p>
+<p>dependency direction,</p>
+<p>contracts,</p>
+<p>and composition.</p>
+<h1>215. RELATIONSHIP TO ENGINEERING</h1>
+<p>Engineering defines how registered architecture<br>
+objects are implemented,<br>
+integrated,<br>
+tested,<br>
+and maintained.</p>
+<h1>216. RELATIONSHIP TO STANDARDS</h1>
+<p>Standards define mandatory requirements that<br>
+Platforms,<br>
+Services,<br>
+Modules,<br>
+Engines,<br>
+Domains,<br>
+and Applications</p>
+<p>SHALL satisfy.</p>
+<h1>217. RELATIONSHIP TO SPECIFICATIONS</h1>
+<p>Specifications define exact contracts and<br>
+implementation requirements for registered objects.</p>
+<h1>218. RELATIONSHIP TO OPERATIONS</h1>
+<p>Operations determines whether deployed and<br>
+operational objects remain healthy,<br>
+observable,<br>
+recoverable,<br>
+and controlled.</p>
+<h1>219. RELATIONSHIP TO IMPLEMENTATION</h1>
+<p>Implementation realizes registered architecture<br>
+objects in repositories and runtime environments.</p>
+<h1>220. RELATIONSHIP TO HISTORY</h1>
+<p>History preserves previous object boundaries,<br>
+versions,<br>
+migrations,<br>
+supersessions,<br>
+and retirements.</p>
+<h1>221. RELATIONSHIP TO RESEARCH</h1>
+<p>Research MAY propose new Platforms,<br>
+Services,<br>
+Modules,<br>
+Engines,<br>
+Domains,<br>
+or Applications.</p>
+<p>Research SHALL not silently create institutional<br>
+architecture.</p>
+<h1>222. MINIMUM PLATFORM REGISTRATION GATE</h1>
+<p>Before a Platform is registered,<br>
+the following SHALL be established where<br>
+applicable.</p>
+<p>Platform Identity Defined</p>
+<p>Platform Name Defined</p>
+<p>Reusable Purpose Defined</p>
+<p>Scope Defined</p>
+<p>Owner Defined</p>
+<p>Architecture Boundary Verified</p>
+<p>Public Contracts Defined</p>
+<p>Providers Defined Where Applicable</p>
+<p>Consumers Identified</p>
+<p>Dependencies Defined</p>
+<p>Lifecycle State Defined</p>
+<p>No Existing Platform Owns the Same Responsibility</p>
+<p>No Critical Architecture Conflict Remains</p>
+<h1>223. MINIMUM SERVICE REGISTRATION GATE</h1>
+<p>Before a Service is registered,<br>
+the following SHALL be established where<br>
+applicable.</p>
+<p>Service Identity Defined</p>
+<p>Service Name Defined</p>
+<p>Bounded Responsibility Defined</p>
+<p>Owner Defined</p>
+<p>Architecture Boundary Verified</p>
+<p>Contracts Defined</p>
+<p>State Ownership Defined</p>
+<p>Dependencies Defined</p>
+<p>Deployment Model Defined Where Required</p>
+<p>Lifecycle State Defined</p>
+<p>No Existing Service Owns the Same Responsibility</p>
+<p>No Critical Ownership Conflict Remains</p>
+<h1>224. MINIMUM MODULE REGISTRATION GATE</h1>
+<p>Before a Module is registered,<br>
+the following SHALL be established where<br>
+applicable.</p>
+<p>Module Identity Defined</p>
+<p>Module Name Defined</p>
+<p>Owning Boundary Defined</p>
+<p>Responsibility Defined</p>
+<p>Public API Defined Where Required</p>
+<p>Dependencies Defined</p>
+<p>Repository Location Defined</p>
+<p>Lifecycle State Defined</p>
+<p>No Duplicate Module Responsibility Exists</p>
+<p>No Critical Dependency Conflict Remains</p>
+<h1>225. MINIMUM ENGINE REGISTRATION GATE</h1>
+<p>Before an Engine is registered,<br>
+the following SHALL be established where<br>
+applicable.</p>
+<p>Engine Identity Defined</p>
+<p>Engine Name Defined</p>
+<p>Processing Responsibility Defined</p>
+<p>Owner Defined</p>
+<p>Inputs Defined</p>
+<p>Outputs Defined</p>
+<p>State Model Defined</p>
+<p>Determinism Requirements Defined</p>
+<p>Dependencies Defined</p>
+<p>Lifecycle State Defined</p>
+<p>No Existing Engine Owns the Same Responsibility</p>
+<p>No Critical Processing Ambiguity Remains</p>
+<h1>226. MINIMUM DOMAIN REGISTRATION GATE</h1>
+<p>Before a Domain is registered,<br>
+the following SHALL be established where<br>
+applicable.</p>
+<p>Domain Identity Defined</p>
+<p>Domain Name Defined</p>
+<p>Institutional Responsibility Defined</p>
+<p>Owner Defined</p>
+<p>Boundary Defined</p>
+<p>Owned State Defined</p>
+<p>Published Contracts Defined</p>
+<p>Consumed Contracts Defined</p>
+<p>Dependencies Defined</p>
+<p>Lifecycle State Defined</p>
+<p>No Existing Domain Owns the Same Responsibility</p>
+<p>No Critical Domain Overlap Remains</p>
+<h1>227. MINIMUM APPLICATION REGISTRATION GATE</h1>
+<p>Before an Application is registered,<br>
+the following SHALL be established where<br>
+applicable.</p>
+<p>Application Identity Defined</p>
+<p>Application Name Defined</p>
+<p>Institutional Outcome Defined</p>
+<p>Owner Defined</p>
+<p>Application Boundary Defined</p>
+<p>Required Platforms Identified</p>
+<p>Required Domains Identified</p>
+<p>Required Services Identified</p>
+<p>Required Engines Identified</p>
+<p>Required Modules Identified</p>
+<p>Contracts Defined</p>
+<p>State Model Defined</p>
+<p>Deployment Model Defined Where Required</p>
+<p>Lifecycle State Defined</p>
+<p>No Uncontrolled Foundation Duplication Exists</p>
+<h1>228. MINIMUM PLATFORM CONSUMPTION GATE</h1>
+<p>Before a consumer integrates with an existing<br>
+Platform,<br>
+the following SHALL be established where<br>
+applicable.</p>
+<p>Platform Identity Resolved</p>
+<p>Platform Status Verified</p>
+<p>Public Contract Resolved</p>
+<p>Required Provider Resolved</p>
+<p>Required Capability Resolved</p>
+<p>Consumer Identity Resolved</p>
+<p>Dependency Direction Valid</p>
+<p>Configuration Defined</p>
+<p>Compatibility Verified</p>
+<p>No Private Internal Dependency Introduced</p>
+<p>No Duplicate Foundation Created</p>
+<h1>229. MINIMUM ARCHITECTURAL OBJECT COMPLETION GATE</h1>
+<p>Before a Platform,<br>
+Service,<br>
+Module,<br>
+Engine,<br>
+Domain,<br>
+or Application</p>
+<p>is declared complete,<br>
+the following SHALL be established where<br>
+applicable.</p>
+<p>Canonical Identity Resolved</p>
+<p>Owner Resolved</p>
+<p>Architecture Boundary Verified</p>
+<p>Required Artifacts Present</p>
+<p>Public Contracts Present</p>
+<p>Dependencies Valid</p>
+<p>Circular Dependency Checks Passed Where Required</p>
+<p>Build Validation Passed</p>
+<p>Repository Validation Passed</p>
+<p>Integration Validation Passed</p>
+<p>Runtime Validation Passed Where Required</p>
+<p>Observability Present Where Required</p>
+<p>Documentation Aligned</p>
+<p>No Critical Architecture Drift Remains</p>
+<p>Completion Evidence Preserved</p>
+<h1>230. PLATFORM, SERVICE, MODULE, ENGINE, DOMAIN AND</h1>
+<h1>APPLICATION QUESTIONS</h1>
+<p>Every material architecture object shall answer the<br>
+following institutional questions where applicable.</p>
+<p>What type of object is this?</p>
+<p>What is its canonical identity?</p>
+<p>What is its purpose?</p>
+<p>What responsibility does it own?</p>
+<p>What does it explicitly not own?</p>
+<p>Who owns it?</p>
+<p>Where is it implemented?</p>
+<p>What public contracts does it expose?</p>
+<p>What private implementation does it contain?</p>
+<p>What state does it own?</p>
+<p>What events does it publish?</p>
+<p>What events does it consume?</p>
+<p>What does it depend upon?</p>
+<p>What depends upon it?</p>
+<p>Is it foundational?</p>
+<p>Is it a consumer?</p>
+<p>Is it registered?</p>
+<p>Is it implemented?</p>
+<p>Is it integrated?</p>
+<p>Is it operational?</p>
+<p>Is it certified?</p>
+<p>What version or baseline is active?</p>
+<p>Does an existing approved object already provide<br>
+this capability?</p>
+<p>Is a consumer using the public contract or private<br>
+internals?</p>
+<p>Does the dependency direction follow architecture?</p>
+<p>Does a circular dependency exist?</p>
+<p>Is authoritative state ownership clear?</p>
+<p>Can another engineer locate and safely modify it?</p>
+<p>Can another authorized AI system locate and safely<br>
+modify it?</p>
+<p>If any mandatory answer is unknown,</p>
+<p>architectural object readiness remains incomplete.</p>
+<h1>231. INSTITUTIONAL PLATFORM, SERVICE, MODULE,</h1>
+<h1>ENGINE, DOMAIN AND APPLICATION REGISTRY DECLARATION</h1>
+<p>COREI shall maintain a governed institutional<br>
+registry of</p>
+<p>Platforms,</p>
+<p>Services,</p>
+<p>Modules,</p>
+<p>Engines,</p>
+<p>Domains,</p>
+<p>and Applications.</p>
+<p>Every material architectural object SHALL have</p>
+<p>identity,</p>
+<p>purpose,</p>
+<p>ownership,</p>
+<p>boundary,</p>
+<p>contracts,</p>
+<p>dependencies,</p>
+<p>lifecycle,</p>
+<p>and status</p>
+<p>appropriate to its institutional significance.</p>
+<p>Foundational Platforms SHALL be reused.</p>
+<p>Completed Platform Kernel capabilities SHALL be<br>
+consumed.</p>
+<p>Services SHALL own bounded responsibilities.</p>
+<p>Modules SHALL preserve cohesive implementation<br>
+boundaries.</p>
+<p>Engines SHALL expose defined inputs and outputs.</p>
+<p>Domains SHALL preserve institutional ownership and<br>
+meaning.</p>
+<p>Applications SHALL compose approved capabilities<br>
+without rebuilding shared foundations.</p>
+<p>Authoritative state ownership SHALL remain clear.</p>
+<p>Dependency direction SHALL remain controlled.</p>
+<p>Circular dependencies SHALL be prevented.</p>
+<p>Private implementation SHALL remain private.</p>
+<p>Public contracts SHALL remain intentional.</p>
+<p>Documentation SHALL not be mistaken for<br>
+implementation.</p>
+<p>Implementation SHALL not be mistaken for runtime<br>
+operation.</p>
+<p>The objective is not merely software inventory.</p>
+<p>The objective is deterministic institutional<br>
+architecture ownership and reuse.</p>
+<h1>232. CONSTITUTIONAL COMMITMENT</h1>
+<p>COREI institutional architecture objects</p>
+<p>shall remain</p>
+<p>identified,</p>
+<p>registered,</p>
+<p>purpose-driven,</p>
+<p>ownership-controlled,</p>
+<p>boundary-preserving,</p>
+<p>contract-based,</p>
+<p>dependency-aware,</p>
+<p>state-aware,</p>
+<p>event-aware,</p>
+<p>runtime-aware,</p>
+<p>version-aware,</p>
+<p>lifecycle-governed,</p>
+<p>repository-grounded,</p>
+<p>validation-driven,</p>
+<p>observable,</p>
+<p>reusable,</p>
+<p>non-duplicative,</p>
+<p>AI-resolvable,</p>
+<p>trading-safe,</p>
+<p>continuity-preserving,</p>
+<p>and institutionally deterministic.</p>
+<p>Architecture shall remain traceable across</p>
+<p>Platforms,</p>
+<p>Platform Kernel foundations,</p>
+<p>provider systems,</p>
+<p>capability systems,</p>
+<p>cognitive systems,</p>
+<p>workspace systems,</p>
+<p>experience systems,</p>
+<p>application systems,</p>
+<p>service systems,</p>
+<p>module systems,</p>
+<p>engine systems,</p>
+<p>domain systems,</p>
+<p>event systems,</p>
+<p>state systems,</p>
+<p>runtime systems,</p>
+<p>data systems,</p>
+<p>security systems,</p>
+<p>observability systems,</p>
+<p>automation systems,</p>
+<p>trading systems,</p>
+<p>Applications,</p>
+<p>Services,</p>
+<p>Modules,</p>
+<p>Engines,</p>
+<p>Domains,</p>
+<p>repositories,</p>
+<p>deployments,</p>
+<p>environments,</p>
+<p>teams,</p>
+<p>operations,</p>
+<p>and generations of technology.</p>
+<h1>233. AUTHORITY</h1>
+<p>This document defines the authoritative<br>
+Institutional Platform,<br>
+Service,<br>
+Module,<br>
+Engine,<br>
+Domain and Application Registry of COREI.</p>
+<p>Every material</p>
+<p>Platform,</p>
+<p>Platform Kernel component,</p>
+<p>Provider Platform,</p>
+<p>Capability Platform,</p>
+<p>Cognitive Platform,</p>
+<p>Workspace Platform,</p>
+<p>Experience Platform,</p>
+<p>Application Platform,</p>
+<p>Service Platform,</p>
+<p>Module Platform,</p>
+<p>Engine Platform,</p>
+<p>Domain Platform,</p>
+<p>Platform Runtime Integration,</p>
+<p>Event Platform,</p>
+<p>State Platform,</p>
+<p>Data Platform,</p>
+<p>Security Platform,</p>
+<p>Observability Platform,</p>
+<p>Automation Platform,</p>
+<p>Trading Platform,</p>
+<p>Service,</p>
+<p>Module,</p>
+<p>Engine,</p>
+<p>Domain,</p>
+<p>Application,</p>
+<p>Shared Foundation,</p>
+<p>adapter,</p>
+<p>connector,</p>
+<p>gateway,</p>
+<p>orchestrator,</p>
+<p>registry,</p>
+<p>manager,</p>
+<p>controller,</p>
+<p>processor,</p>
+<p>worker,</p>
+<p>and future institutional software architecture<br>
+object</p>
+<p>shall comply with this document.</p>
+<p>Platform-specific,<br>
+Service-specific,<br>
+Module-specific,<br>
+Engine-specific,<br>
+Domain-specific,<br>
+Application-specific,<br>
+and architecture-specific documents</p>
+<p>MAY extend this registry.</p>
+<p>No extension may weaken constitutional,<br>
+governance,<br>
+architectural,<br>
+engineering,<br>
+standards,<br>
+specification,<br>
+operations,<br>
+implementation,<br>
+reference,<br>
+identity,<br>
+ownership,<br>
+boundary,<br>
+contract,<br>
+dependency,<br>
+state,<br>
+event,<br>
+runtime,<br>
+validation,<br>
+reuse,<br>
+non-duplication,<br>
+continuity,<br>
+trading safety,<br>
+or institutional determinism requirements.</p>
+<p>Changes to this document require constitutional<br>
+review.</p>
+<h1>END OF DOCUMENT</h1>
+<h1>DOCUMENT ID</h1>
+<h1>COREI-RF-09.04</h1>
+<h1>DOCUMENT NAME</h1>
+<h1>INSTITUTIONAL PLATFORM, SERVICE, MODULE, ENGINE, DOMAIN AND APPLICATION</h1>
+<h1>REGISTRY</h1>
+<h1>REPOSITORY FILE</h1>
+<h1>knowledge/09-reference/COREI-RF-09.04-INSTITUTIONAL-PLATFORM-SERVICE-MODULE-ENGINE-DOMAIN-AND-APPLICATION-REGISTRY.md</h1>
+
+
+  <div class="doc-footer">
+    <span>DOCUMENT ID: </span>
+    <span>DOCUMENT NAME: COREI RF 09.04</span>
+    <span>VERSION: 1.0</span>
+  </div>
+</body>
+</html>

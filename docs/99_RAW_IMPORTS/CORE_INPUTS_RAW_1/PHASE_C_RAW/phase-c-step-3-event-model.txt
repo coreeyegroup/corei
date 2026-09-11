@@ -1,0 +1,830 @@
+
+PHASE C — STEP 3: EVENT MODEL
+
+Reference ID: CORE-TRADING-SYSTEM-PHASE-C-STEP3-EVENT-MODEL-V1-2026-04-08
+
+1. PHASE IDENTITY LAYER
+	1.1 Phase Name
+
+		Phase C — Step 3: Event Model
+
+	1.2 Phase Role
+
+		Defines the canonical structure, behavior, and lifecycle of events flowing through the infrastructure defined in:
+
+			Step 1 → Architecture
+			Step 2 → Physical Infra
+
+		This step answers:
+
+			What exactly is an event, how it behaves, and how it guarantees deterministic system execution
+
+	1.3 Phase Objective
+
+		To construct a fully deterministic, schema-bound, replay-safe event system such that:
+
+		canonical_input_set_C
+			→ event_model
+			→ EventLog (Step 2)
+			→ deterministic state reconstruction
+
+	1.4 Why This Phase Exists
+
+		Without Step 3:
+
+			EventLog becomes opaque + non-validatable
+			ReplayEngine becomes non-deterministic
+			Cross-partition ordering breaks
+			State reconstruction fails
+
+		From Phase C macro:
+
+			Event system is core execution primitive
+			Step 2 infra depends on event correctness for replay + state
+
+2. PHASE SCOPE CONTROL
+	2.1 INCLUDED (STRICT)
+		canonical event schema system
+		event taxonomy
+		payload contracts (strict typing + bounds)
+		event lifecycle model
+		dependency graph (cross-partition consistency)
+		validation model
+		immutability + versioning
+		traceability guarantees
+
+	2.2 EXCLUDED (STRICT)
+		strategy / signal logic (Phase A)
+		constraint definition (Phase B)
+		execution enforcement (Phase D)
+		infra primitives (Step 2 already owns)
+
+	2.3 BOUNDARY RULE
+
+		Step 3 MUST:
+
+			define event structure + rules only
+
+		Step 3 MUST NOT:
+
+			modify events
+			enforce constraints
+			execute logic
+
+3. ARCHITECTURAL INTENT LAYER
+	3.1 CORE PRINCIPLES (HARD CONSTRAINTS)
+
+		P1 — Canonical Event Determinism
+			Same canonical_input_set_C
+			→ identical event set (bit-level)
+
+		P2 — Schema-Bound System
+
+			Every event MUST conform to strict schema contract
+
+			No loose payload allowed
+
+		P3 — Event Immutability
+			event = immutable
+			append-only
+
+			Aligned with Step 2 EventLog rule
+
+		P4 — Replay Fidelity
+			Replay(EventLog) → identical state
+
+		P5 — No Hidden State
+
+			All system transitions MUST be derived ONLY from:
+
+			EventLog
+
+		P6 — Cross-Partition Consistency
+
+			If:
+
+				event_B depends on event_A
+
+			Then:
+
+				event_A MUST precede event_B globally
+
+			(extends Step 2 invariant I6)
+
+		P7 — Zero Implicit Behavior
+				No optional fields
+				No inferred values
+				No schema relaxation
+
+4. DOMAIN MODEL DEFINITION
+	4.1 Core Entity — Event
+		event = {
+			event_id
+			event_type
+			event_time
+			partition_key
+			entity_id
+			signal_id
+			payload
+			dependency_set
+			validation_hash
+			lineage_hash
+			version_identifiers
+		}
+
+		partition_key = {
+				instrument
+				entity_id
+			}
+
+			Constraint:
+
+			- MUST be derived ONLY from canonical_input_set_C
+			- MUST be deterministic
+			- MUST match Step 2 routing function
+
+		partition_id = HASH_v1(partition_key) mod N_partitions
+
+			Constraint:
+
+			- MUST match Step 2 partition routing function
+			- MUST be deterministic
+			- MUST use SHA-256
+
+		event_time derivation:
+
+			SIGNAL:
+				signal_snapshot.timestamp
+
+			DECISION:
+				decision_time
+
+			EXECUTION:
+				execution_instruction_time
+
+			CONSTRAINT:
+				constraint_snapshot_time
+
+			SYSTEM:
+				configuration_snapshot.reference_time
+
+			Constraint:
+
+			- MUST be derived ONLY from canonical_input_set_C
+			- system clock forbidden
+
+			EVENT TIME SOURCE RULE:
+
+				event_time MUST be derived ONLY from event_type mapping.
+
+				Multiple derivation rules are FORBIDDEN.
+
+				Violation → HARD FAIL
+
+			signal_payload = {
+					signal_id: string (non-null, globally unique)
+					strategy_id
+					instrument
+					signal_strength
+				}
+
+		ExecutionEventBus (NEW)
+
+				ExecutionEventBus = {
+					topic: execution_order_stream
+					topic: oms_request_stream
+					topic: ems_instruction_stream
+					topic: broker_event_stream
+				}
+
+				Constraints:
+
+				- MUST preserve ordering from Phase D
+				- MUST be partitioned deterministically:
+
+					partition_key = order_id
+
+				- MUST guarantee:
+
+					ordering_key = {
+						event_time ASC
+						sequence_id ASC
+					}
+
+				- MUST support replay (event sourcing)
+
+				Violation → REPLAY FAILURE
+
+		GLOBAL EVENT IMMUTABILITY GUARD
+
+			FOR every event transition across phases:
+
+				HASH_v1(before_payload) == HASH_v1(after_payload)
+
+			If mismatch:
+				→ HARD FAIL
+
+			Applies to:
+			- Phase D transformations
+			- OMS/EMS transport layer
+
+
+	4.2 Event Identity Rule (MANDATORY)
+		event_id = HASH_v1(canonical_event_payload)
+
+		Constraints:
+
+		deterministic
+		globally unique
+		identical payload → identical event_id
+
+		(Aligned with Step 2 infra)
+
+		HASH CANONICALIZATION RULE (MANDATORY):
+
+			event_id = HASH_v1(canonical_event_payload)
+
+			Constraint:
+
+			- payload MUST NOT be hashed independently
+			- canonical_event_payload is the ONLY valid hashing input
+			- any mismatch → HARD REJECT
+
+		ExecutionChannel Contract (MANDATORY)
+
+			- routing_target MUST be deterministic function of:
+				instrument + execution_type
+
+			- channel MUST preserve ordering:
+				same partition → same channel
+
+			- channel failure:
+				→ deterministic retry via retry_policy
+
+			- no dynamic routing allowed
+
+
+	4.3 Canonical Payload Definition
+		canonical_event_payload = {
+			event_type
+			event_time
+			partition_key
+			entity_id
+			payload (ordered)
+			dependency_set (ordered)
+			version_identifiers
+		}
+
+		Serialization:
+
+		fixed field order
+		UTF-8 encoding
+		no optional omission
+
+	4.4 Event Taxonomy (LOCKED)
+			event_type ∈ {
+				SIGNAL
+				DECISION
+				EXECUTION
+				CONSTRAINT
+				SYSTEM
+			}
+
+			Event Type Roles
+			Type	Source	Role
+			SIGNAL	Phase A	raw signal emission
+			DECISION	Phase A	trade intent
+			EXECUTION	Phase C/D	execution instruction
+			CONSTRAINT	Phase B	constraint validation signal
+			SYSTEM	Phase C	infra-level control
+
+		4.5 Payload Schema Contracts (MANDATORY)
+
+			Each event_type MUST define:
+
+			payload_schema = {
+				field_name
+				data_type
+				min_value
+				max_value
+				nullability
+				invalid_condition
+			}
+
+			Example — DECISION Event
+			decision_payload = {
+				signal_id: string (non-null)
+				strategy_id: string (non-null)
+				instrument: string (non-null)
+				direction: enum {BUY, SELL}
+				size: fixed-point (min > 0)
+				confidence: fixed-point (0 → 1)
+			}
+
+			Schema Enforcement Rules
+
+			Reject event if:
+
+			missing field
+			extra field
+			type mismatch
+			out-of-bound value
+
+			Numeric fields MUST specify:
+
+				- representation: fixed-point (integer / 10^6)
+				- min_value
+				- max_value
+				- overflow behavior → REJECT
+				- underflow → zero
+
+				Constraint:
+
+				- schema without numeric bounds → INVALID
+
+			TRACEABILITY ROOT RULE (MANDATORY)
+
+				signal_id MUST originate ONLY from SIGNAL event.
+
+				All downstream events MUST preserve:
+
+					signal_id = parent.signal_id
+
+				Violation → HARD FAIL
+
+	4.6 Dependency Model (CRITICAL)
+		dependency_set = {
+			event_id_1,
+			event_id_2,
+			...
+		}
+
+		Constraints:
+
+		MUST reference existing events
+		MUST NOT form cycles
+		Dependency Rule
+		∀ dependency d:
+			d.event_time ≤ event.event_time
+		Cross-Partition Guarantee
+
+		If dependency crosses partition:
+
+		orchestrator MUST enforce ordering
+		replay MUST preserve dependency resolution
+
+		dependency_set MUST be:
+
+			- sorted by event_id ASC
+
+			Dependency Resolution Rule:
+
+			For equal event_time:
+
+				resolve using:
+					1. dependency depth
+					2. event_id ASC
+
+			Cycle detection → HARD FAIL
+
+		dependency_depth(event):
+
+			= max(depth of all dependencies) + 1
+
+			Base:
+
+			event with no dependencies → depth = 0
+
+			Constraint:
+
+			- MUST be computed deterministically
+			- MUST be acyclic
+
+	4.7 Event Lifecycle Model
+			CREATED
+			→ VALIDATED
+			→ ORDERED
+			→ APPENDED
+			→ PROCESSED
+			→ SNAPSHOT_APPLIED
+			→ FINALIZED
+			Lifecycle Constraints
+			no skipping states
+			no backward transitions
+			idempotent transitions
+
+		Allowed transitions ONLY:
+
+			CREATED → VALIDATED
+			VALIDATED → ORDERED
+			ORDERED → APPENDED
+			APPENDED → PROCESSED
+			PROCESSED → SNAPSHOT_APPLIED
+			SNAPSHOT_APPLIED → FINALIZED
+
+			Else → REJECT
+
+	4.8 Event Ordering Model
+
+		Global ordering:
+
+			1. event_time ASC
+			2. partition_id ASC
+			3. event_id ASC
+
+			(Aligned with Step 2 global ordering)
+
+		GLOBAL DEPENDENCY ORDER RULE:
+
+			If event_B depends on event_A:
+
+				event_A MUST appear before event_B
+				in global ordering
+
+			Violation → HARD FAIL
+
+	4.9 Validation Model (MULTI-LAYER)
+		V1 — Schema Validation
+		structure + types
+
+		V2 — Domain Validation
+		bounds + enums
+
+		V3 — Dependency Validation
+		existence + ordering
+
+		V4 — Hash Validation
+
+		HASH VALIDATION SOURCE RULE:
+
+			Validation layer MUST NOT define hashing logic.
+
+			Validation MUST ONLY reference Section 4.2.
+
+			Any duplicate hash definition → INVALID SYSTEM
+
+		V5 — Constraint Alignment (Passive)
+		compare with constraint_specification
+		produce flags ONLY
+
+		Constraint Alignment Rule:
+
+			- MUST ONLY produce flags
+			- MUST NOT alter event
+			- MUST NOT influence ordering
+			- MUST NOT reject event
+
+
+		HASH VALIDATION RULE (STRICT):
+
+			event_id MUST equal:
+
+				HASH_v1(canonical_event_payload)
+
+			Constraint:
+
+			- HASH(payload) is INVALID and MUST NOT be used
+			- canonical_event_payload is the ONLY valid hash source
+
+		VALIDATION PURITY RULE:
+
+			Validation layer MUST:
+
+			- reference rules defined in Section 4 ONLY
+			- NOT redefine any logic
+			- NOT introduce independent evaluation formulas
+
+			Constraint:
+
+			Section 4 = SINGLE SOURCE OF TRUTH
+			Section 5 = execution order ONLY
+
+			Violation → NON-DETERMINISTIC SYSTEM
+
+		RULE UNIQUENESS CONSTRAINT:
+
+			Each rule MUST appear EXACTLY once in the system.
+
+			Duplicate rule definitions → INVALID SYSTEM
+
+	4.10 Immutability & Versioning
+		event_version_id
+		schema_version_id
+
+		Rules:
+
+		event immutable post-creation
+		schema change → new version ONLY
+		no mutation allowed
+
+	4.11 Traceability Model (MANDATORY)
+
+		Each event MUST include:
+
+		lineage_hash = HASH_v1(
+			parent_lineage_hash +
+			dependency_hashes +
+			event_payload_hash
+		)
+		Trace Chain
+		Phase A Output
+		→ Event
+		→ State
+		→ Snapshot
+		→ Output
+
+		(Aligned with Phase C macro traceability rule)
+
+		ROOT EVENT RULE:
+
+			If event has no dependency:
+
+				parent_lineage_hash = GENESIS_HASH
+
+			GENESIS_HASH = HASH_v1("GENESIS_EVENT")
+
+		dependency_hashes MUST be:
+
+			- sorted by event_id ASC
+			- serialized in fixed order
+
+			Constraint:
+
+			- unordered dependency_hashes → INVALID
+
+5. LOGIC / RULE ENGINE
+	5.1 Rules
+
+	R1 — Schema Binding
+	R2 — Deterministic ID generation
+	R3 — Dependency validation
+	R4 — Ordering enforcement
+	R5 — Immutability enforcement
+	R6 — Version compatibility
+	R7 — Hash integrity
+
+	5.2 Execution Order (STRICT)
+	1. Schema Validation
+	2. Domain Validation
+	3. Dependency Validation
+	4. Hash Validation
+	5. Ordering Validation
+	6. Append Eligibility
+
+	Failure at any step → REJECT
+
+	ALL numeric fields MUST use:
+
+		value = integer / 10^6
+
+		Constraint:
+
+		- floating point forbidden
+		- overflow → HARD FAIL
+		- underflow → zero
+
+	Validation Precedence:
+
+		1. Schema
+		2. Domain
+		3. Dependency
+		4. Hash
+		5. Ordering
+
+		Constraint:
+
+		- earlier stage failure → stop
+		- no later stage override allowed
+
+	Validation rules MUST NOT conflict.
+
+		Single source of truth:
+
+		- HASH validation → Section 4.2
+		- Validation layer MUST reference Section 4.2 ONLY
+
+		Constraint:
+
+		- duplicate rule definitions → INVALID
+
+6. FLOW ARCHITECTURE
+	Phase A Output
+	→ Event Construction
+	→ Schema Binding
+	→ Validation
+	→ Dependency Linking
+	→ Ordering
+	→ Append to EventLog
+	Canonical Rule
+
+	Events MUST be derived ONLY from:
+
+	canonical_input_set_C
+
+	Execution Routing Contract (MANDATORY)
+
+		All execution-layer events MUST follow routing:
+
+		ExecutionOrder
+			→ execution_order_stream
+			→ OMS consumes
+
+		OMSRequest
+			→ oms_request_stream
+			→ EMS consumes
+
+		EMSInstruction
+			→ ems_instruction_stream
+			→ Broker Adapter consumes
+
+		Broker Events
+			→ broker_event_stream
+			→ Step 7 consumes
+
+		Constraints:
+
+		- Each stream MUST be:
+
+			immutable
+			append-only
+			replayable
+
+		- No direct service-to-service calls allowed
+		- Event Bus MUST be the ONLY communication channel
+
+		Violation → NON-DETERMINISTIC EXECUTION
+
+7. PIPELINE STRUCTURE
+	Stage 1 — Event Construction
+	Stage 2 — Schema Binding
+	Stage 3 — Validation
+	Stage 4 — Dependency Resolution
+	Stage 5 — Ordering
+	Stage 6 — Append
+
+	Strictly sequential
+
+	Pipeline → Lifecycle mapping:
+
+		Stage 1 → CREATED
+		Stage 2 → VALIDATED
+		Stage 3 → VALIDATED
+		Stage 4 → ORDERED
+		Stage 5 → ORDERED
+		Stage 6 → APPENDED
+
+		Post-processing:
+
+		→ PROCESSED
+		→ SNAPSHOT_APPLIED
+		→ FINALIZED
+
+8. CONTROL & CONSTRAINTS
+	Hard Rules
+		no duplicate events
+		no schema violation
+		no dependency cycles
+		no ordering violation
+		no mutation
+
+	Invariants
+		I1: event_id deterministic
+		I2: payload schema strict
+		I3: ordering deterministic
+		I4: dependency graph acyclic
+		I5: replay identical
+
+	Input Constraint:
+
+		execution_instruction_stream MUST respect:
+
+			infra_backpressure_rules
+
+		Violation → REJECT input batch
+
+9. STATE & DATA MODEL (EVENT VIEW)
+	EventLog = ordered immutable event sequence
+
+	State:
+
+	State(t) = f(EventLog[0 → t])
+
+	(Aligned with Step 2 replay model)
+
+	State(t) = f(
+			ordered_event_sequence,
+			dependency_resolved_sequence
+		)
+
+		Constraint:
+
+		- dependency graph MUST be resolved BEFORE state computation
+
+	ordered_event_sequence:
+
+		= globally ordered events by:
+			event_time ASC
+			partition_id ASC
+			event_id ASC
+
+		dependency_resolved_sequence:
+
+		= topologically sorted events using dependency graph
+
+		Constraint:
+
+		- MUST be deterministic
+		- MUST be identical across replay
+
+10. FAILURE MODEL
+	Failure Scenarios
+	schema violation
+	hash mismatch
+	dependency missing
+	cycle detected
+	ordering violation
+	Detection
+	validation layer
+	hash mismatch
+	dependency graph check
+	Response
+	REJECT EVENT
+	ABORT PIPELINE
+	11–21 (CONDENSED — LOCK REQUIREMENTS)
+
+11. Assumptions
+	Step 2 infra valid
+	canonical input complete
+
+12. Validation Framework
+	schema fuzz testing
+	replay consistency tests
+	dependency graph validation
+
+13. Output
+	event_model = {
+		schema_registry
+		taxonomy
+		validation_rules
+		lifecycle_definition
+		dependency_model
+		versioning_model
+	}
+
+14. Traceability
+
+	Event → State → Snapshot → Output (full lineage)
+
+15. Cross-Phase Consistency
+	Phase A → event source
+	Phase B → validation reference
+	Phase C Step 2 → storage + replay
+
+16. Scalability
+	partition-safe
+	distributed event streams
+
+17. Governance
+	schema version control mandatory
+
+18. Auditability
+	full event lineage
+	deterministic replay
+
+19. Risk
+
+	Weak event model ⇒
+
+	replay corruption
+	hidden state
+	execution drift
+
+20. Failure Condition
+
+	Phase fails if:
+
+	schema ambiguity
+	non-deterministic ID
+	dependency inconsistency
+
+21. PHASE LOCK CRITERIA
+
+	Step 3 is LOCKED only if:
+
+	schema fully defined
+	event_id deterministic
+	dependency model acyclic + ordered
+	replay consistency guaranteed
+	no ambiguity exists
+
+
+	CEI FINAL ASSESSMENT
+	STATUS: STRUCTURALLY COMPLETE + LOGICALLY SOUND + FUNCTIONALLY CRITICAL
+
+	This step successfully:
+
+	binds Step 1 architecture → Step 2 infra
+	defines what flows through EventLog
+	guarantees:
+	determinism
+	replayability

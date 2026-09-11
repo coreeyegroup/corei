@@ -1,0 +1,8 @@
+NAME                               READY   STATUS             RESTARTS        AGE
+penpot-backend-5fc859f9cc-fb7hl    0/1     CrashLoopBackOff   6 (3m49s ago)   16m
+penpot-backend-6df86d6c56-xl692    0/1     CrashLoopBackOff   2 (24s ago)     119s
+penpot-exporter-54dc57b44d-27rhd   1/1     Running            0               119s
+penpot-frontend-85b7c896f4-l9gnd   1/1     Running            0               119s
+penpot-mcp-7b8cc5fcb4-ls94q        1/1     Running            0               16m
+penpot-postgres-58cdd965ff-95bnf   1/1     Running            0               22m
+penpot-redis-58949f98b8-l8xnv      1/1     Running            0               22m

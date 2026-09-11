@@ -1,0 +1,663 @@
+PHASE D — STEP 3: RISK ENGINE (EXECUTION ENFORCEMENT LAYER)
+
+1. PHASE IDENTITY LAYER
+	1.1 Phase Name
+
+		Phase D — Step 3: Risk Engine (Execution Enforcement Layer)
+
+	1.2 Phase Role
+
+		Deterministic enforcement layer that:
+
+			consumes DecisionValidatedIntent
+			enforces Phase B constraints
+			applies multi-level risk controls
+			produces RiskApprovedIntent
+
+		This is the first enforcement gate in execution chain, aligned with macro ordering:
+		TradeIntent → Risk → Policy → Execution
+
+	1.3 Phase Objective
+
+		Transform:
+
+			DecisionValidatedIntent → RiskApprovedIntent
+
+		Such that:
+
+			all intents are risk-compliant
+			capital allocation is bounded
+			exposure is controlled
+			system is protected from catastrophic failure
+			output is deterministic and replay-safe
+
+	1.4 Why This Phase Exists
+
+		Without Risk Engine:
+
+			unlimited scaling of high-confidence signals
+			exposure accumulation across strategies
+			CEIL capital contamination
+			violation of Phase B constraint envelope
+			non-reproducible execution decisions
+
+		→ system-level failure
+
+2. PHASE SCOPE CONTROL
+	2.1 INCLUDED (STRICT)
+		risk validation (position, exposure, capital, drawdown)
+		capital allocation enforcement
+		CORE vs EXTERNAL isolation
+		size bounding / reduction logic
+		deterministic risk decision output
+		multi-level risk evaluation:
+			trade-level
+			strategy-level
+			portfolio-level
+			firm-level
+
+	2.2 EXCLUDED (STRICT)
+		policy decisions
+		order generation
+		execution routing
+		broker interaction
+		portfolio computation logic (only reference)
+		constraint definition (Phase B ownership)
+		infra/state mutation (Phase C ownership)
+
+	2.3 Boundary Rule
+
+		Risk Engine MUST:
+
+			enforce constraints
+			validate exposure
+			control capital
+
+		Risk Engine MUST NOT:
+
+			change intent meaning (instrument/direction)
+			introduce new intents
+			depend on runtime/external systems
+
+3. ARCHITECTURAL INTENT LAYER
+	3.1 Core Principles (MANDATORY)
+
+		P1 — Determinism
+
+			identical input → identical risk output
+
+		P2 — Enforcement Only
+
+			no interpretation, only enforcement
+
+		P3 — Canonical Dependency Only
+
+			only uses canonical_input_set_D3
+
+		P4 — No Hidden State
+
+			all decisions derived from input snapshot
+
+		P5 — Capital Isolation
+
+			CORE ≠ EXTERNAL (strict separation)
+
+		P6 — Precedence Enforcement
+
+			Risk rejection → STOP pipeline
+
+	3.2 Architectural Model
+		RiskApprovedIntentStream = F(
+			decision_validated_intent_stream,
+			constraint_specification,
+			portfolio_state_snapshot,
+			configuration_snapshot,
+			version_identifiers
+		)
+
+	3.3 System Positioning
+		Step 1 → ExecutionIntent
+		Step 2 → DecisionValidatedIntent
+		Step 3 → RiskApprovedIntent   ← (THIS)
+		Step 4 → PolicyDecision
+		Step 5 → ExecutionOrder
+
+4. DOMAIN MODEL DEFINITION
+
+	4.1 Core Entities
+		DecisionValidatedIntent (input)
+		RiskApprovedIntent (output)
+		RiskDecision
+		RiskLimits
+		ExposureState
+		CapitalState
+
+	4.2 RiskApprovedIntent Schema
+		RiskApprovedIntent = {
+			signal_id
+			risk_approved_intent_id
+			decision_validated_intent_id
+			instrument
+			direction
+			approved_size
+			origin_type
+			risk_status
+			risk_flags[]
+			constraint_references[]
+			lineage_hash_reference
+		}
+
+	4.3 RiskDecision
+		RiskDecision = {
+			status ∈ {APPROVED, REDUCED, REJECTED}
+			approved_size
+			risk_flags[]
+			constraint_references[]
+		}
+
+	4.4 RiskLimits
+
+		Derived from constraint_specification:
+
+		RiskLimits = {
+			max_position_size
+			max_strategy_exposure
+			max_portfolio_exposure
+			max_firm_exposure
+			capital_limit
+			drawdown_limit
+		}
+
+	4.5 ExposureState (READ-ONLY)
+		ExposureState = {
+			instrument_exposure
+			strategy_exposure
+			portfolio_exposure
+			firm_exposure
+		}
+
+	4.6 Ownership
+		Risk entities → Phase D only
+		Constraints → Phase B
+		State → Phase C
+
+		ADD:
+
+		CapitalState = {
+			core_capital_remaining
+			external_capital_remaining
+		}
+
+5. LOGIC / RULE ENGINE
+	5.1 Rule Classes
+		R1 — Input Validation
+		R2 — Constraint Binding
+		R3 — Exposure Evaluation
+		R4 — Capital Evaluation
+		R5 — Size Adjustment
+		R6 — Risk Decision Assignment
+		R7 — Output Construction
+
+	5.2 Risk Validation Rules (MANDATORY)
+
+		Check against:
+
+			Position limits
+			Strategy exposure
+			Portfolio exposure
+			Firm exposure
+			Capital availability
+			Drawdown limits
+
+		Exposure Update Rule (MANDATORY):
+
+			For sequential processing:
+
+			exposure_state_current = initial snapshot
+
+			FOR each approved intent:
+
+				exposure_state_current += approved_size
+
+			Subsequent intents MUST use updated exposure_state_current
+
+
+		Directional Exposure Update (MANDATORY):
+
+			IF direction == BUY:
+
+				exposure_state_current += approved_size
+
+			ELSE IF direction == SELL:
+
+				exposure_state_current -= approved_size
+
+			Constraint:
+
+			exposure_state_current MUST NOT go below 0
+
+			IF exposure_state_current < 0:
+				→ HARD FAIL (invalid state)
+
+	5.3 Capital Allocation Function
+		approved_size = MIN(
+			requested_size,
+			position_limit_remaining,
+			capital_remaining,
+			exposure_remaining
+		)
+
+		Constraints:
+
+			fixed-point arithmetic only
+			overflow → REJECT
+			underflow → 0
+
+
+			capital_remaining
+
+			WITH:
+
+			IF origin_type == CORE:
+				capital_remaining = core_capital_remaining
+			ELSE:
+				capital_remaining = external_capital_remaining
+
+		IF capital_remaining < threshold:
+
+			STOP all further approvals
+			emit SYSTEM_RISK_EVENT
+
+		Pre-Validation Rule (MANDATORY):
+
+			IF any of the following:
+
+				capital_remaining < 0
+				exposure_remaining < 0
+				position_limit_remaining < 0
+
+			THEN:
+
+				status = REJECTED
+				approved_size = 0
+
+				risk_flag = INVALID_STATE
+
+	5.4 Decision Logic
+		IF any hard constraint violated:
+			status = REJECTED
+			approved_size = 0
+
+		ELSE IF partial constraint violation:
+			status = REDUCED
+			approved_size = bounded value
+
+		ELSE:
+			status = APPROVED
+			approved_size = requested_size
+
+
+		Constraint Classification (MANDATORY):
+
+			constraints classified as:
+
+			HARD_CONSTRAINTS = {
+				drawdown_limit,
+				firm_exposure_limit,
+				invalid_state
+			}
+
+			SOFT_CONSTRAINTS = {
+				position_limit,
+				strategy_exposure,
+				capital_limit
+			}
+
+			Precedence Rule:
+
+			IF any HARD_CONSTRAINT violated:
+				status = REJECTED
+				approved_size = 0
+
+			ELSE:
+				approved_size = MIN(...)
+
+				IF approved_size < requested_size:
+					status = REDUCED
+				ELSE:
+					status = APPROVED
+
+	5.5 Rule Execution Order (STRICT)
+		Input Validation
+		Constraint Binding
+		Exposure Evaluation
+		Capital Evaluation
+		Size Computation
+		Risk Decision Assignment
+		Output Construction
+
+		Constraint: no lower rule overrides higher rule
+
+6. FLOW ARCHITECTURE
+	6.0 Canonical Input Set (MANDATORY)
+		canonical_input_set_D3 = {
+			decision_validated_intent_stream,
+			constraint_specification,
+			portfolio_state_snapshot,
+			configuration_snapshot,
+			version_identifiers
+		}
+
+		Constraints:
+
+			immutable
+			complete
+			hash-identifiable
+
+	6.1 Input
+		DecisionValidatedIntent (from Step 2)
+		constraint_specification (Phase B)
+		portfolio_state_snapshot (Phase C)
+
+	6.2 Processing Flow
+		DecisionValidatedIntent
+			→ Risk Validation
+			→ Exposure Check
+			→ Capital Check
+			→ Size Adjustment
+			→ RiskDecision
+			→ RiskApprovedIntent
+
+		GLOBAL CAPITAL LOCK:
+
+			FOR shared capital pool:
+
+				process intents STRICTLY SEQUENTIAL
+
+				parallelism FORBIDDEN
+
+
+		Deterministic Capital Sequencing (MANDATORY):
+
+			All intents MUST be processed in strict order:
+
+			ordering_key = {
+				event_time ASC
+				origin_type (CORE=1, EXTERNAL=2)
+				sequence_id ASC
+			}
+
+			Processing MUST be sequential:
+
+			FOR intent IN ordered_intents:
+
+				evaluate capital_remaining_current
+
+				approved_size = f(...)
+
+
+			Capital State Update Rule (MANDATORY):
+
+				FOR intent IN ordered_intents:
+
+					IF origin_type == CORE:
+
+						approved_size = f(
+							requested_size,
+							position_limit_remaining,
+							core_capital_remaining,
+							exposure_remaining
+						)
+
+						core_capital_remaining -= approved_size
+
+					ELSE:
+
+						approved_size = f(
+							requested_size,
+							position_limit_remaining,
+							external_capital_remaining,
+							exposure_remaining
+						)
+
+						external_capital_remaining -= approved_size
+
+	6.3 Output
+		risk_approved_intent_stream = {
+			intents: [
+				{
+		            risk_approved_intent_id
+					decision_validated_intent_id
+					risk_status
+					approved_size
+					risk_flags
+					constraint_references
+				}
+			]
+		}
+
+		Risk Approved Intent Identity Rule (MANDATORY)
+
+			risk_approved_intent_id MUST be computed as:
+
+				HASH_v1(
+					decision_validated_intent_id +
+					risk_status +
+					approved_size +
+					ordered(risk_flags) +
+					ordered(constraint_references)
+				)
+
+			Constraint:
+
+				identical input → identical risk_approved_intent_id
+
+	6.4 Flow Canonicalization Rule
+		no external data
+		no runtime dependency
+		pure function of canonical_input_set_D3
+
+7. PIPELINE STRUCTURE
+
+	P1: Input Validation
+	P2: Constraint Binding
+	P3: Exposure Evaluation
+	P4: Capital Evaluation
+	P5: Size Adjustment
+	P6: Risk Decision
+	P7: Output Emission
+
+8. CONTROL & CONSTRAINTS
+	Hard Rules
+		risk approval mandatory before policy
+		no cross-capital usage
+		deterministic output
+		no hidden state
+
+	Guardrails
+		reject invalid intent
+		reject constraint violation
+		reject capital breach
+
+	Invariants
+		same input → same risk output
+		no exposure breach
+		capital always bounded
+
+		I-GLOBAL-3: Capital MUST be consumed in deterministic sequence
+
+	Numeric Boundaries:
+
+		approved_size:
+
+		min = 0
+		max = min(capital_limit, position_limit)
+
+		Edge Behavior:
+
+		approved_size = 0 → status MUST be REJECTED
+		approved_size < requested_size → REDUCED
+		overflow → HARD FAIL
+
+	Capital Isolation Invariant:
+
+		core_capital_remaining MUST NEVER be affected by EXTERNAL intents
+
+		external_capital_remaining MUST NEVER be affected by CORE intents
+
+	Capital State Ownership Rule:
+
+		There MUST NOT exist any global capital variable.
+
+		All capital computations MUST use ONLY:
+
+			core_capital_remaining
+			external_capital_remaining
+
+		Violation → HARD FAIL
+
+9. STATE & DATA MODEL
+	9.1 State Definition
+
+		READ-ONLY:
+
+		portfolio_state_snapshot
+		exposure_state
+
+	9.2 State Rule
+		Risk Engine MUST NOT mutate state
+		Only references Phase C state
+
+	9.3 Source of Truth
+
+		canonical_input_set_D3
+
+10. FAILURE MODEL
+
+	10.1 Scenarios
+		exposure overflow
+		capital breach
+		missing constraint
+		invalid state snapshot
+
+	10.2 Impact
+		catastrophic loss risk
+		invalid execution
+
+	10.3 Mitigation
+		reject intent
+		emit risk flags
+		halt downstream execution
+
+	10.4 Detection
+		constraint violation checks
+		boundary overflow detection
+
+11. ASSUMPTION REGISTER
+	Assumption						Reason					Validation				Status
+	Phase B constraints valid		enforcement dependency	Phase lock				VALIDATED
+	Phase C state accurate			exposure correctness	snapshot validation		CONTROLLED
+	DecisionValidatedIntent valid	upstream guarantee		Step 2 lock				VALIDATED
+
+12. VALIDATION FRAMEWORK
+	12.1 Red Team (3 Rounds)
+
+		Round 1 — Constraint Bypass Attack
+
+			inject oversized intent
+			→ expected: REJECT
+
+		Round 2 — Capital Exhaustion Attack
+
+			multiple intents consuming full capital
+			→ expected: REDUCED/REJECT
+
+		Round 3 — CEIL Contamination
+
+			EXTERNAL using CORE capital
+			→ expected: REJECT
+
+	12.2 Blue Team Validation
+		verify deterministic output
+		verify constraint mapping
+		verify isolation rules
+
+	12.3 Coverage Rule
+
+		Every rule mapped to:
+
+			Red attack scenario
+			Blue validation
+
+13. OUTPUT (DELIVERABLE SPEC)
+	risk_approved_intent_stream = {
+		intents: RiskApprovedIntent[]
+	}
+
+	All fields mandatory. No optional fields.
+
+14. TRACEABILITY MAPPING
+	decision_validated_intent_id
+		→ risk_approved_intent_id
+		→ constraint_references
+
+15. CROSS-PHASE CONSISTENCY
+	Uses:
+		Phase B constraints
+		Phase C state
+	Does NOT modify upstream outputs
+
+16. SCALABILITY MODEL
+
+		REPLACE:
+
+		parallel evaluation per intent
+
+		WITH:
+
+		partition-level parallelism allowed ONLY IF:
+
+		- partitions have disjoint capital pools
+		- no shared capital dependency
+
+		Otherwise:
+
+		- MUST execute sequentially
+
+17. GOVERNANCE INTEGRATION
+	constraint version binding
+	audit logs mandatory
+	change approval required
+
+18. AUDITABILITY & OBSERVABILITY
+	full risk decision trace
+	deterministic replay
+	constraint-level logging
+
+19. RISK CONSIDERATIONS
+		incorrect exposure reference → system risk
+		constraint mismatch → invalid enforcement
+
+	Mitigation:
+
+		strict canonical dependency
+		validation framework
+
+20. FAILURE CONDITION (PHASE LEVEL)
+
+	Phase fails if:
+
+		determinism breaks
+		constraints not enforced
+		exposure exceeds limits
+		ambiguity exists
+
+21. PHASE LOCK CRITERIA
+
+	Phase LOCKED only if:
+
+		all 21 sections complete
+		deterministic behavior proven
+		Red Team passed
+		Blue Team validated
+		zero ambiguity

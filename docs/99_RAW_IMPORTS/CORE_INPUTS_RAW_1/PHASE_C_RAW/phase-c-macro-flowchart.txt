@@ -1,0 +1,171 @@
+PHASE C — MACRO PROCESS FLOW (HUMAN VIEW)
+
+1. INPUT ENTRY (FROM PHASE A + B)
+
+	Phase A Outputs (Strategy → Signal → Decision → Portfolio)
+			+
+	Phase B Outputs (Constraint Specification)
+			+
+	Configuration Snapshot
+
+	These together form: canonical_input_set_C
+
+2. INPUT VALIDATION & CANONICALIZATION
+	Check:
+		- completeness
+		- validity
+		- hash integrity
+
+	❌ If invalid → reject
+	✅ If valid → proceed
+
+3. EVENT CONVERSION (EVENTIZATION)
+	Logical Outputs → Structured Events
+
+	Examples:
+
+		Signal → SignalEvent
+		Decision → DecisionEvent
+		Portfolio → PortfolioEvent
+
+	Everything becomes event-driven
+
+4. EVENT VALIDATION & ORDERING
+	Validate:
+		- schema correctness
+		- domain correctness
+
+	Order:
+		- strictly by event_time
+
+	No system clock used
+	No out-of-order allowed
+
+5. CONSTRAINT VALIDATION (FROM PHASE B)
+	Check events against constraints
+
+	IMPORTANT:
+
+		Phase C only VALIDATES
+		Does NOT enforce or modify
+
+	Enforcement happens in Phase D
+
+6. ORCHESTRATION (CONTROL + DISTRIBUTION)
+	Central Control Plane:
+		decides execution order
+
+	Distributed Workers:
+		process events
+
+	Hybrid model:
+
+		deterministic control
+		scalable execution
+
+7. STATE UPDATE (CORE ENGINE)
+	Event → Applied to State → New State
+	State(t+1) = f(State(t), Event)
+
+	Produces:
+
+		updated portfolio state
+		updated execution state
+
+8. SNAPSHOT GENERATION
+	Create deterministic snapshot of system state
+		snapshot = current system view
+		event log = full history
+
+	Dual system:
+
+		Event Log (truth)
+			+
+		Snapshot (execution surface)
+
+9. OUTPUT FORMATION
+	Generate:
+
+	execution_ready_system_state = {
+
+		event_stream
+		state_snapshots
+		execution_instruction_stream
+		orchestration_metadata
+	}
+
+10. TRACEABILITY & HASHING
+	Maintain lineage:
+
+	Phase A → Event → State → Output
+
+	IDs propagated
+	hashes chained
+
+	Full audit trail
+
+11. STORAGE (DUAL SOURCE OF TRUTH)
+	Store:
+
+	1. Event Log (immutable)
+	2. State Snapshots (derived)
+
+12. FAILURE & RECOVERY SYSTEM
+
+	If failure:
+
+	Load last checkpoint
+			↓
+	Replay event log
+			↓
+	Rebuild state
+
+	Guarantees deterministic recovery
+
+13. FINAL OUTPUT → PHASE D
+
+	Execution-ready system state
+			↓
+	Sent to Phase D (Execution Layer)
+
+
+FULL FLOW (COMPACT VIEW)
+
+	[Phase A + Phase B + Config]
+				↓
+	[Canonical Input Validation]
+				↓
+	[Event Conversion]
+				↓
+	[Event Validation + Ordering]
+				↓
+	[Constraint Validation]
+				↓
+	[Orchestration (Control + Workers)]
+				↓
+	[State Update]
+				↓
+	[Snapshot Generation]
+				↓
+	[Output Formation]
+				↓
+	[Traceability + Hashing]
+				↓
+	[Storage (Event Log + Snapshot)]
+				↓
+	[Recovery System Ready]
+				↓
+	→ OUTPUT TO PHASE D
+
+SIMPLE ANALOGY (FOR CLARITY)
+
+	Think of Phase C like a high-precision factory line:
+
+		Raw materials → (Phase A + B inputs)
+		Quality check → (validation)
+		Convert into parts → (events)
+		Assemble in order → (orchestration)
+		Update machine state → (state engine)
+		Take snapshot → (snapshot system)
+		Record everything → (event log)
+		Deliver product → (Phase D input)

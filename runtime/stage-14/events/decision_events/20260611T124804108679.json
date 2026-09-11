@@ -1,0 +1,11 @@
+{
+  "trade_intent_id": "2abc2cc5e52b9e55ba1e75f407648b19de55383912ed849d96f17c242c096f18",
+  "instrument_id": "BANKNIFTY",
+  "decision_action": "LONG",
+  "strategy_set": [
+    "stock_momentum_strategy"
+  ],
+  "aggregated_strength_bps": 8200,
+  "priority_score_bps": 9000,
+  "event_time": "2026-06-11T12:48:04.108584+00:00"
+}

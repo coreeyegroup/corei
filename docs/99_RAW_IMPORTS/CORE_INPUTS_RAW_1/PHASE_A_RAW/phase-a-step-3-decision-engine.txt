@@ -1,0 +1,1407 @@
+Phase A — Step 3: Decision Engine (Signal → TradeIntent)
+
+	All incoming signals MUST be ordered before any processing:
+
+		ordered_signals = sort(signals, by:
+			1. event_time ASC
+			2. signal_id ASC
+		)
+
+		signals = UNIQUE_BY(signal_id)
+
+			IF duplicate detected:
+				KEEP first occurrence only
+
+		IF signals is empty:
+			RETURN NoTradeIntent
+
+	CORE CONTENT (MANDATORY)
+	1. OBJECTIVE
+		Transform Signal → TradeIntent deterministically
+
+	4. DOMAIN MODEL (NEW ENTITY)
+
+		ADD:
+
+		TradeIntent = {
+			trade_intent_id
+			signal_ids[]
+			strategy_ids[]
+			instrument
+			direction ∈ {BUY, SELL}
+			size
+			aggregation_score
+			priority_level
+			event_time
+			origin_type
+			account_id
+			origin_type ∈ {CORE, EXTERNAL}
+
+			trace_id
+			hash_version
+		}
+
+		signal_ids MUST be:
+			sorted ASC
+			unique
+
+		trace_id = HASH_v1(signal_ids)
+
+		hash_version = "v1"
+
+	5. LOGIC ENGINE (CRITICAL)
+	ADD RULES:
+		R1 — Signal Validity Filter
+			Only ACTIVE signals allowed
+			Expired signals → reject
+
+		R2 — Aggregation Rule (A-03 FIX)
+			Aggregation Model:
+
+				aggregation_score = Σ (strategy_weight_i * signal_strength_i)
+
+				Where:
+
+				- strategy_weight_i = predefined constant (config only)
+				- signal_strength_i = fixed-point int64 in range [-1, +1]
+
+				Rules:
+
+				1. No dynamic weighting
+				2. No override by priority
+				3. No conditional branching
+				4. Same input → same output ALWAYS
+
+
+		R3 — Direction Resolution
+			IF aggregation_score > 0:
+				direction = BUY
+
+			ELSE IF aggregation_score < 0:
+				direction = SELL
+
+			ELSE:
+				RETURN NULL (no TradeIntent)
+
+		R4 — Signal → Size Mapping (A-04 FIX)
+			size = floor(
+				abs(aggregation_score) * capital_scaling_factor
+			)
+
+			Constraints:
+
+			size > 0 → valid
+			size = 0 → reject
+
+
+
+		R5 — Strategy Conflict Resolution
+			If opposing signals:
+
+			use aggregation_score (no voting ambiguity)
+
+		R6 — TradeIntent Creation
+			TradeIntent created ONLY IF:
+
+			aggregation_score ≠ 0
+			AND size > 0
+
+		R7 — Identity Rule (A-02 PARTIAL)
+			trade_intent_id = HASH_v1(
+					canonical_trade_intent_payload
+				)
+
+				WHERE:
+
+				canonical_trade_intent_payload =
+					"[" + join(signal_ids, "|") + "]" + "|" +
+					instrument + "|" +
+					direction + "|" +
+					size + "|" +
+					event_time
+
+			ALL hash inputs MUST follow:
+
+				- integers → base-10 string
+				- no leading zeros
+				- fields separated by "|"
+				- lists enclosed in []
+				- no whitespace
+
+		Priority MUST NOT be used in:
+
+		- aggregation
+		- direction
+		- size
+
+		Priority is ONLY forwarded to Phase D
+
+		event_time MUST be:
+
+			- UTC
+			- epoch_ns (int64)
+			- monotonic per signal source
+
+		TradeIntent.event_time = MAX(signal.event_time)
+
+		R8 — Capacity Clamp (Decision Layer)
+
+			IF size > capacity_limit:
+				size = capacity_limit
+
+			IF capacity_limit == 0:
+				RETURN NoTradeIntent
+
+	5.5 RULE ORDER (MANDATORY)
+		1. Signal validation
+		2. Grouping (instrument)
+		3. Aggregation
+		4. Direction resolution
+		5. Size calculation
+		6. TradeIntent creation
+		7. ID generation
+
+	DecisionEngine:
+
+		INPUT:
+			List<Signal>
+
+		PROCESS:
+			1. Normalize signals (already Step 1 output)
+			2. Apply deterministic ordering:
+				sort by (event_time ASC, signal_id ASC)
+
+			3. Aggregate:
+				aggregation_score = Σ(weight * signal_strength)
+
+			4. Resolve direction:
+				if score > 0 → BUY
+				if score < 0 → SELL
+				if score == 0 → NO INTENT
+
+			5. Map size (delegated to SizeMapper)
+
+		OUTPUT:
+			TradeIntent (or NULL)
+
+		TradeIntent DEFINITION:
+
+		TradeIntent_v1:
+
+			STRICT FIELD ORDER:
+
+			1. trade_intent_id: bytes32
+			2. instrument: string
+			3. direction: enum {BUY, SELL}
+			4. size: int64
+			5. aggregation_score: int64
+			6. signal_ids: List<bytes32> (SORTED ASC)
+			7. event_time: int64 (epoch ns)
+			8. encoding_version: int = 1
+
+			TradeIntent Encoding:
+
+				CBE (Canonical Binary Encoding)
+
+				Rules:
+
+				- fixed field order
+				- fixed byte size per field
+				- no JSON
+				- no optional fields
+
+			TradeIntent Hashing:
+
+					trade_intent_id = HASH_v1(
+						CBE_encode([
+							instrument,
+							direction,
+							size,
+							aggregation_score,
+							signal_ids_sorted,
+							event_time
+						])
+					)
+
+
+		SizeMapper:
+
+			INPUT:
+				aggregation_score (int64 fixed-point)
+
+			PROCESS:
+
+			1. absolute_score = abs(aggregation_score)
+
+			2. size_raw = absolute_score * capital_scaling_factor
+
+				WHERE:
+				- capital_scaling_factor = fixed int64
+				- multiplication = integer-only (NO FLOAT)
+
+			3. size = FLOOR(size_raw)
+
+			RULES:
+
+			- NO rounding up
+			- NO floating point
+			- NO adaptive scaling
+
+			VALIDATION:
+
+			IF size == 0:
+				REJECT TradeIntent
+
+		Deduplication Rule:
+
+			signals = UNIQUE_BY(signal_id)
+
+			IF duplicate detected:
+				KEEP first occurrence only
+
+		SORT ORDER:
+
+
+		ordered_signals = sort(signals, by:
+				1. event_time ASC
+				2. strategy_priority DESC
+				3. signal_id ASC
+			)
+
+
+
+
+PHASE A — STEP 3: DECISION ENGINE SYSTEM
+	(Fully Deterministic — Conflict-Resolved, Aggregation-Safe, Institution-Grade Decision Layer)
+
+	Reference Base:
+
+
+	1. PHASE IDENTITY LAYER
+		1.1 Phase Name
+			Phase A — Step 3: Decision Engine System
+
+		1.2 Phase Role
+			Transforms standardized signals into deterministic trade decisions (trade intent).
+
+		1.3 Objective
+			Define a fully deterministic, auditable, and conflict-resolved decision model that converts signals → trade intents.
+
+		1.4 Why This Exists
+			Without this layer:
+				Signals remain isolated
+				Decision outcomes become inconsistent
+				Strategy conflicts create ambiguity
+
+			Step 2 defines what is produced
+			Step 3 defines how decisions are made
+
+
+	2. PHASE SCOPE CONTROL
+		2.1 INCLUDED
+			Signal aggregation logic
+			Conflict resolution model
+			Decision scoring system
+			Trade intent definition
+			Decision lifecycle
+
+		2.2 EXCLUDED (STRICT)
+			Trade execution
+			Risk enforcement
+			Capital allocation enforcement
+			Infrastructure (Kafka, DB, APIs)
+			Latency / delivery guarantees
+
+		Strict Boundary Rules
+			Decision layer MUST NOT:
+				send orders
+				interact with broker
+				apply real risk constraints
+
+
+	3. ARCHITECTURAL INTENT
+		3.1 Principles
+			Deterministic decision making
+			Order-independent aggregation
+			Full auditability
+			Conflict-safe logic
+			Replayable outcomes
+
+		3.2 Model Type
+			Logical + Mathematical Decision Specification
+
+		3.3 Position in System
+			Strategy → Signal → Decision Engine → Trade Intent
+
+
+	4. DOMAIN MODEL
+		4.1 Core Entities
+			Decision Context
+				Group of signals for same instrument and decision window
+
+			Decision Unit
+				Processed aggregation result per instrument
+
+			Trade Intent
+				Final deterministic output of decision engine
+
+		4.2 Attributes
+
+			Decision Context
+				instrument
+				event_time
+				signal_set
+				context_id
+
+			Decision Unit
+				aggregated_direction
+				confidence_score
+				participating_signals
+				conflict_flag
+				conflict_intensity
+				conflict_score
+
+			Trade Intent
+				intent_id
+				instrument
+				direction
+				confidence
+				decision_time
+				supporting_signals
+				decision_trace_hash
+
+		4.3 Relationships
+			Signals → grouped into → Decision Context
+			Decision Context → processed into → Decision Unit
+			Decision Unit → produces → Trade Intent
+
+		4.4 Ownership
+			Decision logic → Phase A
+			Trade intent schema → Phase A
+			Execution → Phase D
+
+
+	5. LOGIC / RULE ENGINE
+
+		5.1 Input Definition (DETERMINISTIC GROUPING)
+
+			Canonical Input Set (MANDATORY)
+
+				canonical_input_set = {
+					input_signal_snapshot
+					configuration_snapshot
+					previous_trade_intent
+					version_identifiers
+				}
+
+				Constraint:
+
+					ALL decision outputs MUST be derived ONLY from canonical_input_set
+
+					No implicit inputs allowed
+
+			Canonical Enforcement Rule (STRICT)
+
+				All computations MUST use ONLY:
+
+					canonical_input_set.input_signal_snapshot
+
+				Replace ALL references of:
+					"active signals"
+					"collected signals"
+					"input signals"
+
+				WITH:
+					canonical_input_set.input_signal_snapshot
+
+				decision_time MUST be derived ONLY from:
+					canonical_input_set.input_signal_snapshot
+
+				Constraint:
+
+					Any dependency outside canonical_input_set → INVALID SYSTEM
+
+			Previous Decision State Input
+
+				previous_trade_intent MUST include:
+
+					direction
+					NS
+					decision_time
+
+				Constraint:
+
+					inertia evaluation MUST use only this explicit input
+
+			Input Domain Validation (MANDATORY)
+
+				Each signal MUST satisfy:
+
+					direction ∈ {-1, 0, +1}
+					signal_strength_global ∈ [0,1]
+					event_time valid
+
+				Invalid signals MUST be rejected BEFORE processing
+
+			Step 1:
+				Collect ALL signals from:
+
+					canonical_input_set.input_signal_snapshot
+
+				WHERE:
+					signal.instrument == instrument
+
+			Step 2:
+				decision_time = max(event_time from:
+
+					canonical_input_set.input_signal_snapshot)
+
+			Step 3:
+				Final Decision Context includes signals WHERE:
+
+					signal.event_time ≤ decision_time
+
+					AND signal ∈ canonical_input_set.input_signal_snapshot
+
+			Empty Set Rule
+
+				IF no active signals exist:
+
+					Decision MUST be:
+						direction = NEUTRAL
+						confidence = 0
+
+					Trade Intent MUST still be generated
+
+			Freshness Enforcement
+
+				signals MUST satisfy:
+					decision_time - signal.event_time ≤ staleness_limit
+
+				If violated:
+					signal MUST be excluded
+
+				staleness_limit must be globally defined
+
+			Strategy Emission Cap
+
+				max_signals_per_strategy_per_window enforced
+
+				If exceeded:
+					excess signals MUST be ignored
+
+			Global Signal Cap
+
+				Filtered Signal Set Definition
+
+					filtered_signal_set is defined as:
+
+						signals from canonical_input_set.input_signal_snapshot
+						AFTER applying:
+
+							instrument filtering
+							staleness enforcement
+							strategy emission cap
+							input domain validation
+
+					Constraint:
+
+						filtered_signal_set MUST be deterministic and reproducible
+
+				Deterministic Top-K Selection (STRICT)
+
+					Input Set Definition:
+
+						Top-K selection MUST be applied ONLY on:
+
+							filtered_signal_set
+
+						Where filtered_signal_set is the result AFTER:
+
+							instrument filtering
+							staleness enforcement
+							strategy emission cap
+							input domain validation
+
+						AND MUST be derived ONLY from:
+
+							canonical_input_set.input_signal_snapshot
+
+					Ordering Rule (TOTAL ORDER — NO TIES)
+
+						Signals MUST be sorted using the following keys:
+
+							1. signal_strength_global (descending)
+							2. event_time (ascending)
+							3. signal_id (lexicographic)
+
+						Constraint:
+
+							signal_id MUST be globally unique
+
+							This guarantees strict total ordering
+							(no two signals can have identical ordering keys)
+
+					Selection Rule
+
+						Top-K signals MUST be selected from the ordered list:
+
+							selected_signals = first K elements
+
+					Determinism Constraint
+
+						The combination of:
+
+							canonical_input_set
+							filtered_signal_set definition
+							ordering rule
+
+						MUST produce identical Top-K selection across all executions
+
+					Invalid Condition
+
+						If ordering produces ambiguity:
+
+							system MUST fail validation
+
+			External Input Exclusion (MANDATORY)
+
+				Decision Engine MUST consume ONLY:
+
+					canonical_input_set.input_signal_snapshot
+
+				External trade intents MUST NOT:
+
+					enter canonical_input_set
+					participate in aggregation
+					influence decision outcomes
+
+				Any external dependency → system invalid
+
+		5.2 Aggregation Model
+			MUST be:
+				order-independent
+				deterministic
+				replayable
+
+			Canonical Ordering Rule (UNIFIED — STRICT)
+
+				All signals entering aggregation MUST follow the SAME ordering used in Top-K selection.
+
+				Signals MUST be sorted using:
+
+					1. signal_strength_global (descending)
+					2. event_time (ascending)
+					3. signal_id (lexicographic)
+
+				Constraint:
+
+					This ordering MUST be preserved across:
+
+						Top-K selection
+						aggregation
+						normalization
+						conflict evaluation
+
+					Re-ordering at any stage is NOT allowed
+
+		5.3 Direction Aggregation
+
+			Let:
+				D_i ∈ {-1, 0, +1}
+				W_i = signal_strength_global
+
+			Weight Cap Rule
+
+				W_i ≤ W_max
+
+			Weight Floor Rule
+
+				W_i ≥ W_min
+
+			Adaptive Density Normalization
+
+				N = number of signals
+				D = min(N, N_cap)
+				W_i = W_i / D
+
+			Temporal Weighting
+
+				Δt_i = decision_time - signal.event_time
+				T_i = max(0, 1 - (Δt_i / staleness_limit))
+
+			Temporal Smoothing
+
+				T_i = floor(T_i / τ_step) * τ_step
+
+				W_i = W_i * T_i
+
+			Weighted Direction Score:
+				WDS = Σ (D_i * W_i)
+
+		5.4 Normalization
+
+			Let:
+				S_raw = Σ |W_i|
+
+			Denominator Safety Rule
+
+				IF S_raw == 0:
+					NS = 0
+					Decision = NEUTRAL
+					confidence = 0
+					conflict_flag = FALSE
+
+				IF S_raw < ε_min:
+					NS = 0
+					Decision = NEUTRAL
+					confidence = 0
+
+			Responsive Normalization
+
+				IF S_raw ≥ S_min:
+					S = S_raw
+				ELSE:
+					S = α*S_raw + (1-α)*S_min
+
+			Normalized Score:
+				NS = WDS / S
+
+			Constraints:
+				ε_min, S_min, α must be globally defined
+
+		5.5 Decision Threshold Model
+
+			Hysteresis Rule
+
+				θ_entry > θ_exit
+
+				Enter LONG if NS > θ_entry
+				Stay LONG if NS > θ_exit
+
+				Enter SHORT if NS < -θ_entry
+				Stay SHORT if NS < -θ_exit
+
+			Conflict Suppression Rule
+
+				IF conflict_intensity ≥ γ_threshold
+				AND total_magnitude ≥ M_threshold:
+
+					Decision MUST be NEUTRAL
+
+			Conflict Deadlock Override
+
+				IF conflict_intensity ≥ γ_threshold
+				AND total_magnitude ≥ M_threshold
+				AND |NS| ≥ conflict_override_threshold:
+
+					Allow directional decision
+
+			Constrained Activation Rule
+
+				IF max(|W_i|) ≥ activation_threshold
+				AND NS within dead zone
+				AND conflict_intensity < γ_threshold:
+
+					Decision MAY follow dominant direction
+
+				Else:
+					Activation MUST NOT trigger
+
+			Final Decision Resolution Rule (STRICT)
+
+				IF conflict suppression condition satisfied:
+
+					Decision MUST be NEUTRAL
+					Activation MUST NOT trigger
+
+				ELSE IF conflict override condition satisfied:
+
+					Decision follows override logic
+					Activation MUST NOT trigger
+
+				ELSE:
+
+					Activation rule MAY apply (subject to constraints)
+
+				Constraint:
+
+					Activation rule is lowest precedence
+
+			Dead Zone Definition (EXPLICIT)
+
+				-θ_entry ≤ NS ≤ θ_entry
+
+				Boundary Rules:
+
+					NS = +θ_entry → treated as ENTRY
+					NS = -θ_entry → treated as ENTRY
+
+		5.6 Confidence Model
+
+			confidence = |NS|
+
+			Constraints:
+				confidence ∈ [0,1]
+				monotonic
+
+		5.7 Conflict Detection
+
+			Let:
+				P = Σ positive weights
+				N = Σ absolute negative weights
+
+			total_magnitude = P + N
+
+			Conflict exists if:
+				P > 0 AND N > 0
+
+			conflict_flag MUST be recorded
+
+				IF max(P, N) == 0:
+					conflict_intensity = 0
+				ELSE:
+					conflict_intensity = min(P, N) / max(P, N)
+
+			conflict_score = conflict_intensity * total_magnitude
+
+		5.8 Priority Adjustment (Optional)
+
+			W_i = W_i * priority_weight
+
+			Constraints:
+				priority_weight ∈ [p_min, p_max]
+
+			Priority Cluster Constraint
+
+				P_cluster ≤ P_cluster_max
+
+		5.9 Time Model
+
+			decision_time = max(event_time of all signals)
+
+			Manual override forbidden
+
+		5.10 Determinism Constraints
+
+			Same input signals → identical trade intent
+
+			Numeric Model Enforcement
+
+				ALL computations MUST use fixed-point:
+					value = integer / 10^6
+
+				Floating-point arithmetic forbidden
+
+		5.11 Decision Rule Precedence (STRICT ORDER — NO DEVIATION)
+
+			All decision logic MUST be applied in the following sequence:
+
+				1. Input Validation Layer
+				2. Signal Filtering (caps, staleness, limits)
+				3. Weight Construction (W_i computation)
+				4. Aggregation (WDS, S, NS)
+				5. Conflict Evaluation
+				6. Threshold Evaluation (Hysteresis)
+				7. Inertia Evaluation
+				8. Conflict Override Evaluation
+				9. Activation Rule (FINAL FALLBACK ONLY)
+
+			Constraint:
+				No rule may override a higher-precedence layer
+
+			Purpose:
+				Eliminate rule conflict ambiguity
+
+			Execution Constraint
+
+				Implementation MUST strictly follow precedence order
+
+				Any deviation → system invalid
+
+			Activation rule MUST operate only within defined constraints and MUST NOT override conflict suppression or normalization layers
+
+		Aggregation Constraints
+			- MUST be deterministic
+			- MUST use fixed-point arithmetic
+			- MUST define ordering of signals before aggregation
+
+		Ordering Rule
+			sort signals by:
+
+			1. event_time ASC
+			2. signal_id ASC
+
+		Strategy Weight Definition
+			strategy_weight ∈ [0,1]
+
+			Defined in strategy configuration
+
+		Aggregation Formula (FINAL)
+			aggregation_score =
+				Σ (direction_i * signal_strength_i * strategy_weight_i)
+
+		Size Mapping Function
+			size = floor(
+				abs(aggregation_score) * capital_scaling_factor
+			)
+
+			size = MIN(size, max_position_size)
+
+		Constraints
+			capital_scaling_factor:
+				defined in configuration_snapshot
+
+			size ∈ [1, MAX_INT]
+
+			MAX_INT = 10^12
+
+		Invalid Conditions
+			aggregation_score = 0 → NO TradeIntent
+			size = 0 → reject
+			size = MIN(size, MAX_INT)
+
+		AGGREGATION ORDERING RULE (MANDATORY)
+
+			All signals contributing to a single TradeIntent MUST be aggregated using deterministic ordering.
+
+			aggregation_order_key = {
+				instrument ASC
+				strategy_priority DESC
+				signal_strength DESC
+				signal_time ASC
+				signal_id ASC
+			}
+
+			Rules:
+
+			1. All signals MUST be sorted using aggregation_order_key BEFORE aggregation.
+			2. Aggregation MUST be applied sequentially on sorted signals.
+			3. No parallel aggregation allowed.
+
+			Tie-break guarantee:
+
+			- signal_id MUST be final tie-breaker (lexicographic)
+
+			Constraint:
+
+			- identical input signal set → identical TradeIntent output
+
+			Violation → NON-DETERMINISTIC DECISION
+
+		SIZE MAPPING STANDARDIZATION (MANDATORY)
+
+			All size computations MUST use fixed-point arithmetic:
+
+			size = integer / 10^6
+
+			Mapping function:
+
+			trade_size = floor(
+				signal_strength * strategy_capital_allocation * scaling_factor
+			)
+
+			Constraints:
+
+			- floating point FORBIDDEN
+			- overflow → HARD REJECT
+			- underflow → 0
+
+			Global Scaling Rule:
+
+			- scaling_factor MUST be defined in configuration_snapshot
+			- identical configuration → identical size mapping
+
+			Boundary:
+
+			trade_size ∈ (0, MAX_INT]
+
+			MAX_INT = 10^12
+
+			Violation → INVALID TRADE INTENT
+
+
+	6. FLOW ARCHITECTURE
+		6.1 Input
+			Active signals (from Step 2)
+
+		6.2 Processing
+			Signal Set → Context Formation → Aggregation → Decision
+
+		6.3 Output
+			Trade Intent object
+
+		6.4 Flow Model
+			Canonical Flow
+
+				Signals → Decision Context → Decision Unit → Trade Intent
+
+			Explicit Flow Mapping (DECOMPOSED VIEW)
+
+				Input:
+					Active signals (validated set)
+
+				Transform:
+					Context formation → aggregation → normalization → decision logic
+
+				Output:
+					Trade Intent object
+
+			Constraint:
+				Canonical flow defines structural pipeline
+				Explicit mapping defines transformation semantics
+
+				Both MUST be consistent with 6.1, 6.2, 6.3
+
+	7. PIPELINE STRUCTURE
+		Decision Lifecycle
+			Collect → Validate → Aggregate → Decide → Emit → Archive
+
+		State Transitions
+			Pending → Active → Finalized
+
+		Decision Stability Rules
+
+			Canonical Stability Rule
+
+				Let:
+
+					Δt_decision =
+						decision_time
+						- previous_trade_intent.decision_time
+
+				Decision MUST NOT be emitted unless:
+
+					Δt_decision ≥ MDI
+					OR
+					|ΔNS| ≥ decision_delta_threshold
+
+				Constraint:
+
+					All timing MUST be derived from canonical_input_set
+
+		State Transition Definition (EXPLICIT)
+
+			Pending → Active
+				when signals enter valid decision context
+
+			Active → Recomputed
+				when new signals arrive or existing signals expire
+
+			Active → Finalized
+				when decision emitted and stable
+
+			Recomputed → Finalized
+				when stability conditions satisfied
+
+		Constraints:
+			State transitions MUST be deterministic
+			No implicit transitions allowed
+
+	8. CONTROL & CONSTRAINTS
+		8.1 Hard Rules
+			Deterministic aggregation
+			Valid signal set required
+			Fixed threshold enforcement
+
+		8.2 Soft Rules
+
+			Prefer stability over sensitivity in borderline conditions
+
+			Prefer conflict-aware neutrality when directional clarity is weak
+
+			Prefer signal diversity over concentrated dominance
+
+			Prefer smoother transitions over abrupt directional changes
+
+			Prefer temporal relevance (recent signals) over stale signals within valid range
+
+			Constraints:
+				Soft rules MUST NOT override hard rules
+				Soft rules act only as tie-breakers or secondary preference logic
+
+
+		8.3 Guardrails
+			No cross-instrument aggregation
+			No uncontrolled signal dominance
+
+			Correlation Guard
+
+				If strategy class concentration exceeds threshold:
+					weights must be reduced
+
+			Behavioral Correlation Proxy
+
+				If directional + temporal clustering detected:
+					weights must be reduced
+
+		Full Parameter Constraint Graph
+
+			S_min > ε_min
+			W_max > W_min > 0
+			θ_entry > θ_exit > 0
+
+			inertia_threshold ≤ θ_entry
+			conflict_override_threshold ≤ θ_entry
+			activation_threshold ≤ W_max
+
+			Constraint:
+				If violated → configuration invalid
+
+			Account Binding Rule (MANDATORY)
+
+				- Every TradeIntent MUST belong to exactly one account_id
+				- account_id MUST be present in canonical_input_set
+				- Missing account_id → HARD REJECT
+
+				Origin Classification Rule (MANDATORY)
+
+				- origin_type MUST be assigned at TradeIntent creation
+				- CORE → generated by Decision Engine
+				- EXTERNAL → generated by CEIL
+				- origin_type MUST NOT change downstream
+
+	9. STATE & DATA MODEL
+		9.1 State Types
+			Active Decision Context
+			Finalized Decision
+
+		9.2 State Transitions
+			New signals → recompute decision deterministically
+
+		Decision Inertia Rule
+
+			If direction changes:
+
+				|NS| ≥ inertia_threshold * β
+
+			where:
+				β = max(β_min, 1 - conflict_intensity)
+
+		9.3 Source of Truth
+			Trade Intent object
+
+			Ownership Clarification
+
+				Trade Intent object is the authoritative decision output
+
+				Persistence Responsibility:
+					Owned by downstream system (execution layer)
+
+				Decision Engine MUST NOT mutate historical trade intents
+
+			Constraint:
+				State must remain immutable once finalized
+
+	10. FAILURE MODEL
+		10.1 Failure Scenarios
+			Ambiguous aggregation
+			Threshold inconsistency
+			Conflicts not handled
+			Numeric instability
+			Invalid input set
+			Adversarial signal flooding
+			Over-constraint suppression
+
+		10.2 Impact
+			Incorrect trade intent
+			Portfolio inconsistency
+
+		10.3 Mitigation
+			Strict aggregation rules
+			Deterministic thresholds
+			Input validation enforcement
+			Balanced constraint design
+
+
+	11. ASSUMPTION REGISTER
+		Assumption					Reason					Validate In		Status
+		Signal calibration valid		required for aggregation fairness	Phase B		open
+		Signal timing aligned		required for grouping				Phase B		open
+		Threshold sufficiency		required for decision clarity		Phase B		open
+
+
+	12. VALIDATION FRAMEWORK
+		12.1 Checklist
+				Aggregation defined
+				Conflict logic defined
+				Determinism enforced
+				Numeric safety enforced
+				Responsiveness verified
+
+		12.2 Validation Method
+
+				Deterministic Replay Testing
+
+					Replay identical signal sets
+					Verify identical trade intent output
+
+				Edge Case Simulation
+
+					Test:
+						empty signal set
+						high conflict scenarios
+						max signal density
+						staleness boundary conditions
+
+				Stress Testing
+
+					Simulate:
+						high-frequency updates
+						multi-strategy signal floods
+						conflict-heavy environments
+
+				Parameter Sensitivity Testing
+
+					Vary:
+						θ_entry, θ_exit
+						W_max, W_min
+						S_min, ε_min
+
+					Verify:
+						no dead zones
+						no instability
+
+				Invariant Validation
+
+					Ensure:
+						no division by zero
+						bounded outputs
+						confidence ∈ [0,1]
+
+				Replay Consistency Check
+
+					Hash comparison across runs must match
+
+		12.3 Acceptance Criteria
+				Zero ambiguity
+				Replay consistency
+				Deterministic output
+
+		Replay Validation
+			Identical signals → identical trade intents
+
+		Phase Gate Compliance
+
+			This phase MUST NOT be approved unless:
+
+				all checklist items satisfied
+				all validation tests passed
+				replay consistency verified
+
+			Constraint:
+
+				partial validation is NOT acceptable
+
+
+	13. OUTPUT (DELIVERABLE)
+		Decision Model Specification
+
+		Includes:
+			aggregation logic
+			conflict rules
+			trade intent schema
+
+		Output Schema Definition
+
+			Trade Intent Structure (MANDATORY)
+
+				intent_id: string
+				instrument: string
+				direction: {LONG, SHORT, NEUTRAL}
+				confidence: fixed-point [0,1]
+				decision_time: timestamp (Δt_fixed aligned)
+				supporting_signals: list<signal_id>
+				conflict_flag: boolean
+				conflict_intensity: fixed-point [0,1]
+				conflict_score: fixed-point
+				decision_trace_hash: string
+				config_version_id: string
+
+		Output Format
+
+			Must be serializable as:
+				JSON (primary)
+				Binary format (optional for execution layer)
+
+		Output Contract
+
+			Schema MUST be:
+				backward compatible
+				versioned
+				strictly validated before emission
+
+			Null values NOT allowed in mandatory fields
+
+		Trade Intent Ownership Constraint
+
+			Trade Intent produced in this phase represents:
+
+				CORE trade intent only
+
+			External trade intents are NOT produced here
+			and MUST be handled exclusively via CEIL outside Phase A
+
+		signal_id (MANDATORY)
+
+			TradeIntent = {
+				signal_id
+				trade_intent_id
+				...
+			}
+
+
+	14. TRACEABILITY
+		Step 2 → Signal Model
+		Step 3 → Decision Engine
+		Step 4 → Execution Behavior
+
+		Trace Continuity Constraint
+
+		Each Trade Intent MUST maintain mapping to:
+
+			input signal_ids (from Step 2)
+			Decision Context identifier
+
+		Constraint:
+
+			no transformation may break input-to-output trace linkage
+
+		Purpose:
+
+			ensure full lineage from signal → decision → execution
+
+
+	15. CROSS-PHASE CONSISTENCY
+		OWNED HERE
+			decision logic
+			aggregation rules
+
+		REFERENCED
+			signal schema (Step 2)
+			risk layer (future phase)
+
+
+
+
+	16. SCALABILITY MODEL
+		Supports:
+			1000+ strategies
+			multi-asset decisioning
+			high-frequency updates
+
+		Scaling Model
+			per-instrument isolation
+
+
+	17. GOVERNANCE
+		Decision logic must be versioned
+
+		Changes require:
+			approval
+			impact analysis
+			version increment
+
+
+	18. AUDITABILITY
+		Must support:
+			full decision replay
+			signal-to-decision traceability
+
+		Log Requirements:
+			input signals
+			aggregation steps
+			final decision
+
+		Decision Trace Hash Definition
+
+			decision_trace_hash MUST include:
+
+				signal_ids
+				W_i values
+				NS
+				decision_time
+				conflict_intensity
+				W_max
+				W_min
+				ε_min
+				S_min
+				γ_threshold
+				M_threshold
+				staleness_limit
+				MDI
+				θ_entry
+				θ_exit
+				config_version_id
+
+				Hash Versioning
+
+					HASH_v1 MUST be used for current implementation
+
+					Future changes MUST introduce:
+						HASH_v2, HASH_v3, ...
+
+				Constraint:
+					Hash version must be included in decision_trace_hash metadata
+
+		Observability Requirements
+
+			Metrics
+
+				decision_rate_per_instrument
+				conflict_frequency
+				neutral_decision_ratio
+				average_confidence
+				signal_density_distribution
+
+			Alerts
+
+				trigger if:
+					decision inactivity exceeds threshold
+					conflict_rate spikes
+					NS remains near zero for extended duration
+
+			Monitoring Signals
+
+				NS distribution over time
+				WDS trends
+				signal arrival rate
+				decision transitions
+
+			Logging Requirements
+
+				each decision MUST log:
+					input signal set
+					intermediate aggregation values
+					final NS and decision
+
+		Constraints:
+			Observability MUST NOT affect decision logic
+
+	19. RISK CONSIDERATION
+		Risks:
+			signal overweight bias
+			strategy conflict
+			adversarial signal injection
+			system rigidity
+
+		Controls:
+			normalization
+			threshold enforcement
+			rate limiting
+			adaptive balancing
+
+
+	20. FAILURE CONDITION
+		Phase fails if:
+			decision logic is ambiguous
+			non-determinism exists
+			replay mismatch occurs
+
+
+	21. PHASE LOCK CRITERIA
+		All sections complete
+		Determinism enforced
+		Replay validated
+		No ambiguity
+		Governance approved

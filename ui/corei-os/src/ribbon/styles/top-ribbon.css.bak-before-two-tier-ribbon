@@ -1,0 +1,466 @@
+/******************************************************************************
+ *
+ * COREI OPERATING SYSTEM
+ *
+ * INSTITUTIONAL TOP RIBBON
+ *
+ * Two-tier operational awareness surface.
+ *
+ ******************************************************************************/
+
+.corei-top-ribbon {
+    width: 100%;
+    height: var(--corei-shell-top-height);
+
+    min-width: 0;
+    min-height: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+
+    box-sizing: border-box;
+
+    background:
+        var(--corei-color-surface-primary, #111318);
+
+    color:
+        var(--corei-color-text-primary, #e6e8eb);
+
+    border-bottom:
+        1px solid
+        var(--corei-color-border-subtle, #2b3038);
+
+    font-family:
+        var(--corei-font-family, Inter, system-ui, sans-serif);
+}
+
+
+/* ============================================================================
+ * PRIMARY ROW
+ * ========================================================================== */
+
+.corei-ribbon-primary-row {
+    width: 100%;
+    height: 42px;
+
+    min-width: 720px;
+
+    display: flex;
+    align-items: stretch;
+
+    overflow: hidden;
+
+    box-sizing: border-box;
+
+    border-bottom:
+        1px solid
+        #292e35;
+}
+
+
+.corei-ribbon-primary-row > section,
+.corei-ribbon-primary-row > button {
+    flex: 0 0 auto;
+
+    min-width: 0;
+
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+
+    border-right:
+        1px solid
+        #292e35;
+}
+
+
+/* ============================================================================
+ * INSTITUTION
+ * ========================================================================== */
+
+.corei-ribbon-identity {
+    width: 220px;
+
+    padding:
+        0 14px;
+
+    gap: 7px;
+}
+
+
+.corei-ribbon-brand {
+    font-size: 15px;
+    font-weight: 750;
+    letter-spacing: 0.08em;
+}
+
+
+.corei-ribbon-product {
+    font-size: 11px;
+    font-weight: 650;
+    letter-spacing: 0.12em;
+    opacity: 0.72;
+}
+
+
+.corei-ribbon-organization {
+    margin-left: 4px;
+
+    font-size: 12px;
+    font-weight: 550;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* ============================================================================
+ * STANDARD INFORMATION BLOCKS
+ * ========================================================================== */
+
+.corei-ribbon-environment {
+    width: 145px;
+    padding: 0 12px;
+    gap: 8px;
+}
+
+
+.corei-ribbon-session {
+    width: 165px;
+    padding: 0 12px;
+    gap: 8px;
+}
+
+
+.corei-ribbon-workspace {
+    width: 245px;
+    padding: 0 12px;
+    gap: 8px;
+}
+
+
+.corei-ribbon-runtime {
+    width: 150px;
+    padding: 0 12px;
+    gap: 8px;
+}
+
+
+.corei-ribbon-alerts {
+    width: 90px;
+    padding: 0 12px;
+    gap: 7px;
+}
+
+
+.corei-ribbon-label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+
+    opacity: 0.55;
+}
+
+
+.corei-ribbon-value {
+    font-size: 12px;
+    font-weight: 650;
+
+    white-space: nowrap;
+}
+
+
+.corei-ribbon-secondary,
+.corei-ribbon-region {
+    font-size: 10px;
+
+    white-space: nowrap;
+
+    opacity: 0.55;
+}
+
+
+.corei-ribbon-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+
+
+.corei-ribbon-status i,
+.corei-ribbon-alerts::before {
+    width: 7px;
+    height: 7px;
+
+    flex: 0 0 auto;
+
+    display: inline-block;
+
+    border-radius: 50%;
+
+    background: currentColor;
+
+    content: "";
+}
+
+
+.corei-ribbon-runtime.operational,
+.corei-ribbon-workspace.operational,
+.corei-ribbon-alerts.operational {
+    color: #a8d66d;
+}
+
+
+.corei-ribbon-runtime.critical,
+.corei-ribbon-alerts.critical {
+    color: #e06c75;
+}
+
+
+.corei-ribbon-workspace.attention,
+.corei-ribbon-alerts.attention {
+    color: #d8aa5a;
+}
+
+
+/* ============================================================================
+ * COMMAND
+ * ========================================================================== */
+
+.corei-ribbon-command {
+    width: 120px;
+
+    padding: 0 11px;
+
+    gap: 7px;
+
+    background: transparent;
+
+    color:
+        var(--corei-color-text-primary, #e6e8eb);
+
+    border-top: 0;
+    border-bottom: 0;
+
+    font: inherit;
+
+    cursor: pointer;
+}
+
+
+.corei-ribbon-command:hover {
+    background: #191d23;
+}
+
+
+.corei-ribbon-command strong {
+    font-size: 11px;
+    font-weight: 650;
+}
+
+
+.corei-ribbon-command kbd {
+    font-size: 9px;
+    opacity: 0.55;
+}
+
+
+/* ============================================================================
+ * CLOCK
+ * ========================================================================== */
+
+.corei-ribbon-clock {
+    margin-left: auto;
+
+    width: 125px;
+
+    padding: 0 13px;
+
+    gap: 7px;
+
+    justify-content: center;
+}
+
+
+.corei-ribbon-clock-time {
+    font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        Monaco,
+        Consolas,
+        monospace;
+
+    font-size: 12px;
+    font-weight: 650;
+
+    letter-spacing: 0.03em;
+}
+
+
+.corei-ribbon-clock-zone {
+    font-size: 10px;
+    font-weight: 700;
+
+    opacity: 0.55;
+}
+
+
+/* ============================================================================
+ * SECONDARY ROW
+ * ========================================================================== */
+
+.corei-ribbon-secondary-row {
+    width: 100%;
+    height: 40px;
+
+    min-width: 720px;
+
+    display: flex;
+    align-items: stretch;
+
+    overflow: hidden;
+
+    box-sizing: border-box;
+
+    background: #0d1014;
+}
+
+
+/* ============================================================================
+ * TABS
+ * ========================================================================== */
+
+.corei-ribbon-tabs {
+    width: 230px;
+
+    flex: 0 0 230px;
+
+    display: flex;
+    align-items: stretch;
+
+    border-right:
+        1px solid
+        #292e35;
+}
+
+
+.corei-ribbon-tabs button {
+    min-width: 112px;
+
+    padding:
+        0 16px;
+
+    border: 0;
+
+    border-bottom:
+        2px solid
+        transparent;
+
+    background: transparent;
+
+    color: #7f8791;
+
+    font: inherit;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    letter-spacing: 0.08em;
+
+    cursor: pointer;
+}
+
+
+.corei-ribbon-tabs button:hover {
+    color: #d8dce1;
+    background: #15191e;
+}
+
+
+.corei-ribbon-tabs button.active {
+    color: #d7b66a;
+
+    border-bottom-color:
+        #d7b66a;
+
+    background: #15191e;
+}
+
+
+/* ============================================================================
+ * OPERATIONAL STRIP
+ * ========================================================================== */
+
+.corei-ribbon-operational-strip {
+    min-width: 0;
+
+    flex: 1;
+
+    display: flex;
+    align-items: center;
+
+    overflow: hidden;
+}
+
+
+.corei-ribbon-operational-strip span {
+    min-width: 0;
+
+    height: 100%;
+
+    padding:
+        0 15px;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    border-right:
+        1px solid
+        #252a31;
+
+    white-space: nowrap;
+
+    color: #7f8791;
+
+    font-size: 9px;
+    font-weight: 700;
+
+    letter-spacing: 0.07em;
+}
+
+
+.corei-ribbon-operational-strip strong {
+    color: #cbd0d6;
+
+    font-size: 11px;
+    font-weight: 650;
+
+    letter-spacing: 0;
+}
+
+
+.corei-ribbon-operational-strip span:first-child strong {
+    color: #a8d66d;
+}
+
+
+/* ============================================================================
+ * RESPONSIVE SAFETY
+ *
+ * COREI desktop workspace intentionally preserves its institutional minimum
+ * width. The ribbon does not collapse into mobile UI.
+ * ========================================================================== */
+
+.corei-top-ribbon * {
+    box-sizing: border-box;
+}

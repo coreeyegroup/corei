@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <title>docs stages stage 03 platform governance foundation.md</title>
+  <style>
+  body {
+    background: #0A0D12;
+    color: #E3E7EC;
+    font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px 40px;
+  }
+
+  h1 {
+    font-size: 26px;
+    font-weight: 600;
+    color: #C6A46A;
+    margin: 24px 0 12px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 8px;
+  }
+
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #D4B88A;
+    margin: 20px 0 10px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 6px;
+  }
+
+  h3 {
+    font-size: 17px;
+    font-weight: 500;
+    color: #E3E7EC;
+    margin: 16px 0 8px 0;
+  }
+
+  h4 {
+    font-size: 15px;
+    font-weight: 500;
+    color: #C5CED9;
+    margin: 12px 0 6px 0;
+  }
+
+  p {
+    margin-bottom: 8px;
+    color: #C5CED9;
+  }
+
+  ul,
+  ol {
+    padding-left: 24px;
+    margin-bottom: 8px;
+    color: #C5CED9;
+  }
+
+  li {
+    margin-bottom: 2px;
+  }
+
+  code {
+    font-family: 'JetBrains Mono', 'Cascadia Code', monospace;
+    font-size: 13px;
+    background: rgba(255,255,255,0.05);
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid #28303C;
+    color: #C5CED9;
+  }
+
+  pre {
+    background: #18202A;
+    border: 1px solid #28303C;
+    border-radius: 6px;
+    padding: 16px 20px;
+    overflow: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 12px 0 16px 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #C5CED9;
+  }
+
+  pre code {
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 16px 0;
+    font-size: 13px;
+    color: #C5CED9;
+  }
+
+  th {
+    background: #18202A;
+    color: #C5CED9;
+    font-weight: 600;
+    text-align: left;
+    padding: 6px 12px;
+    border: 1px solid #28303C;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  td {
+    padding: 4px 12px;
+    border: 1px solid #28303C;
+    background: #0E1219;
+  }
+
+  tr:nth-child(even) td {
+    background: #121821;
+  }
+
+  blockquote {
+    border-left: 3px solid #C6A46A;
+    padding-left: 16px;
+    margin: 8px 0 12px 0;
+    color: #6E7883;
+    font-style: italic;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #28303C;
+    margin: 24px 0;
+  }
+
+  a {
+    color: #8BB4F0;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  strong {
+    color: #E3E7EC;
+    font-weight: 600;
+  }
+
+  img {
+    max-width: 100%;
+    border-radius: 4px;
+    border: 1px solid #28303C;
+  }
+
+  .doc-footer {
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid #28303C;
+    font-size: 12px;
+    color: #6E7883;
+    font-family: monospace;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+</style>
+</head>
+
+<body>
+
+  <div
+    class="doc-header"
+    style="
+      background:#121821;
+      border:1px solid #28303C;
+      border-radius:8px;
+      padding:1.2rem 1.8rem;
+      margin-bottom:1.8rem;
+    "
+  >
+
+    <div
+      style="
+        color:#C6A46A;
+        font-weight:600;
+        font-size:13px;
+        text-transform:uppercase;
+        letter-spacing:0.05em;
+      "
+    >
+      COREI · Stage Documentation
+    </div>
+
+
+
+    <h1
+      style="
+        font-size:28px;
+        font-weight:600;
+        color:#E3E7EC;
+        margin:0.1rem 0;
+        border-bottom:none;
+        padding-bottom:0;
+      "
+    >
+      docs stages stage 03 platform governance foundation.md
+    </h1>
+
+    <div
+      style="
+        font-size:16px;
+        color:#C5CED9;
+      "
+    >
+      Stage Documentation
+      ·
+      Operational
+    </div>
+
+    <div
+      style="
+        display:flex;
+        flex-wrap:wrap;
+        gap:0.6rem 1.8rem;
+        margin-top:0.6rem;
+        font-size:13px;
+      "
+    >
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Status
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          Approved
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Version
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          1.0
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Classification
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          Operational
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Owner
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          COREI
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Repository
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+            font-family:monospace;
+          "
+        >
+          docs/docs_stages_stage-03-platform-governance-foundation.md.md
+        </span>
+      </span>
+
+    </div>
+
+
+
+  </div>
+
+
+
+  <h1>COREI — STAGE 3 AUTHORITATIVE RECORD</h1>
+<h1>STAGE 3 — PLATFORM GOVERNANCE FOUNDATION</h1>
+<hr>
+<h1>STATUS</h1>
+<p>Stage 3 Governance Foundation is ACTIVE.</p>
+<p>This document represents the authoritative institutional governance record for Stage 3 of the Corei platform lifecycle.</p>
+<hr>
+<h1>PURPOSE OF STAGE 3</h1>
+<p>Stage 3 establishes deterministic architectural law for the Corei institutional trading platform.</p>
+<p>This stage transforms the platform from:</p>
+<ul>
+<li>governed repository infrastructure</li>
+<li>structured engineering substrate</li>
+<li>deterministic filesystem topology</li>
+</ul>
+<p>into:</p>
+<ul>
+<li>governed runtime architecture</li>
+<li>governed financial arithmetic</li>
+<li>governed event architecture</li>
+<li>governed schema evolution</li>
+<li>governed replay infrastructure</li>
+<li>governed service boundaries</li>
+</ul>
+<p>Stage 3 defines the constitutional laws that all future runtime systems must obey.</p>
+<hr>
+<h1>STAGE 3 CORE OBJECTIVES</h1>
+<p>Stage 3 was responsible for establishing:</p>
+<h2>1. Event Governance</h2>
+<p>Deterministic event architecture law.</p>
+<hr>
+<h2>2. Schema Governance</h2>
+<p>Institutional schema evolution and compatibility law.</p>
+<hr>
+<h2>3. Fixed-Point Governance</h2>
+<p>Financial arithmetic safety and precision law.</p>
+<hr>
+<h2>4. Timestamp Governance</h2>
+<p>Deterministic platform time authority.</p>
+<hr>
+<h2>5. Lineage Governance</h2>
+<p>Immutable replay and lineage traceability law.</p>
+<hr>
+<h2>6. Topic Governance</h2>
+<p>Kafka topic naming and operational governance law.</p>
+<hr>
+<h2>7. Service Boundary Governance</h2>
+<p>Bounded-context runtime ownership law.</p>
+<hr>
+<h2>8. Environment Governance</h2>
+<p>Deterministic environment separation law.</p>
+<hr>
+<h2>9. Configuration Governance</h2>
+<p>Deterministic runtime configuration law.</p>
+<hr>
+<h2>10. Governance Enforcement</h2>
+<p>Machine-enforced governance validation.</p>
+<hr>
+<h1>AUTHORITATIVE GOVERNANCE TOPOLOGY</h1>
+<p>The following governance structure became authoritative:</p>
+<pre><code class="language-text">docs/governance/
+├── build-state-governance.md
+├── configuration-governance.md
+├── environment-governance.md
+├── event-governance.md
+├── filesystem-governance.md
+├── fixed-point-governance.md
+├── installer-governance.md
+├── lineage-governance.md
+├── repository-boundaries.md
+├── repository-topology.md
+├── schema-governance.md
+├── scripting-governance.md
+├── service-boundary-governance.md
+├── service-ownership-governance.md
+├── timestamp-governance.md
+├── topic-governance.md
+└── validation-governance.md
+</code></pre>
+<hr>
+<h1>EVENT GOVERNANCE</h1>
+<p>Stage 3 established deterministic event governance.</p>
+<hr>
+<h1>REQUIRED EVENT FIELDS</h1>
+<p>Every event must contain:</p>
+<ul>
+<li>event_id</li>
+<li>event_type</li>
+<li>event_version</li>
+<li>event_time</li>
+<li>ingestion_time</li>
+<li>trace_id</li>
+<li>lineage_id</li>
+<li>producer</li>
+<li>schema_version</li>
+</ul>
+<hr>
+<h1>EVENT GOVERNANCE RULES</h1>
+<p>All events must remain:</p>
+<ul>
+<li>immutable</li>
+<li>replay-safe</li>
+<li>lineage-aware</li>
+<li>versioned</li>
+<li>deterministic</li>
+</ul>
+<hr>
+<h1>TIMESTAMP LAW</h1>
+<p>All timestamps must use:</p>
+<ul>
+<li>int64 epoch nanoseconds UTC</li>
+</ul>
+<p>String timestamps are prohibited.</p>
+<hr>
+<h1>SCHEMA GOVERNANCE</h1>
+<p>Stage 3 established institutional schema law.</p>
+<hr>
+<h1>AUTHORITATIVE SCHEMA RULES</h1>
+<p>Schemas must remain:</p>
+<ul>
+<li>versioned</li>
+<li>backward-compatible</li>
+<li>replay-safe</li>
+<li>deterministic</li>
+</ul>
+<hr>
+<h1>AVRO GOVERNANCE</h1>
+<p>The platform established:</p>
+<ul>
+<li>Avro as authoritative serialization standard</li>
+</ul>
+<hr>
+<h1>FORBIDDEN TYPES</h1>
+<p>The following are prohibited:</p>
+<ul>
+<li>float</li>
+<li>double</li>
+<li>decimal</li>
+</ul>
+<hr>
+<h1>FIXED-POINT GOVERNANCE</h1>
+<p>Stage 3 established deterministic financial arithmetic law.</p>
+<hr>
+<h1>AUTHORITATIVE LAW</h1>
+<p>Financial arithmetic must use:</p>
+<ul>
+<li>int64 fixed-point arithmetic</li>
+</ul>
+<p>Mandatory.</p>
+<hr>
+<h1>PROHIBITED TYPES</h1>
+<p>The following are prohibited platform-wide:</p>
+<ul>
+<li>float</li>
+<li>double</li>
+<li>decimal</li>
+</ul>
+<hr>
+<h1>REASON</h1>
+<p>Floating-point arithmetic creates:</p>
+<ul>
+<li>non-deterministic replay</li>
+<li>financial precision drift</li>
+<li>execution inconsistencies</li>
+<li>audit instability</li>
+</ul>
+<p>Institutional financial systems cannot tolerate this.</p>
+<hr>
+<h1>TIMESTAMP GOVERNANCE</h1>
+<p>Stage 3 established authoritative platform time governance.</p>
+<hr>
+<h1>REQUIRED TIME STANDARD</h1>
+<p>All platform timestamps must use:</p>
+<ul>
+<li>UTC nanosecond precision</li>
+<li>int64 epoch nanoseconds</li>
+</ul>
+<hr>
+<h1>TIMESTAMP PRIORITY</h1>
+<p>Authoritative priority:</p>
+<p>exchange_time<br>
+→ ingestion_time<br>
+→ system_time</p>
+<p>System time must never drive trading decisions.</p>
+<hr>
+<h1>LINEAGE GOVERNANCE</h1>
+<p>Stage 3 established immutable lineage governance.</p>
+<hr>
+<h1>AUTHORITATIVE LAW</h1>
+<p>All critical runtime events require:</p>
+<ul>
+<li>immutable lineage propagation</li>
+<li>deterministic replay traceability</li>
+<li>canonical lineage hashing</li>
+</ul>
+<hr>
+<h1>HASHING LAW</h1>
+<p>Lineage chains must use:</p>
+<ul>
+<li>SHA-256</li>
+</ul>
+<p>for deterministic lineage verification.</p>
+<hr>
+<h1>TOPIC GOVERNANCE</h1>
+<p>Stage 3 established Kafka topic governance law.</p>
+<hr>
+<h1>AUTHORITATIVE TOPIC FORMAT</h1>
+<pre><code class="language-text">&lt;domain&gt;_&lt;entity&gt;_&lt;type&gt;_&lt;version&gt;
+</code></pre>
+<p>Example:</p>
+<pre><code class="language-text">execution_order_stream_v1
+</code></pre>
+<hr>
+<h1>TOPIC GOVERNANCE RULES</h1>
+<p>Topics must define:</p>
+<ul>
+<li>retention policy</li>
+<li>DLQ policy</li>
+<li>replay compatibility</li>
+<li>ordering requirements</li>
+<li>ownership boundaries</li>
+</ul>
+<hr>
+<h1>SERVICE BOUNDARY GOVERNANCE</h1>
+<p>Stage 3 established bounded-context runtime law.</p>
+<hr>
+<h1>AUTHORITATIVE SERVICE LAW</h1>
+<p>Every service owns:</p>
+<ul>
+<li>one bounded operational responsibility</li>
+</ul>
+<p>Mandatory.</p>
+<hr>
+<h1>PROHIBITED PATTERNS</h1>
+<p>The following are prohibited:</p>
+<ul>
+<li>direct cross-service DB access</li>
+<li>hidden orchestration</li>
+<li>shared mutable ownership</li>
+<li>undocumented runtime coupling</li>
+</ul>
+<hr>
+<h1>CROSS-SERVICE COMMUNICATION</h1>
+<p>Cross-service runtime communication must occur through:</p>
+<ul>
+<li>Kafka event infrastructure</li>
+</ul>
+<p>Authoritative.</p>
+<hr>
+<h1>ENVIRONMENT GOVERNANCE</h1>
+<p>Stage 3 established deterministic environment governance.</p>
+<hr>
+<h1>AUTHORITATIVE ENVIRONMENTS</h1>
+<pre><code class="language-text">dev
+→ staging
+→ production
+</code></pre>
+<p>Mandatory promotion order.</p>
+<hr>
+<h1>ENVIRONMENT GOVERNANCE RULES</h1>
+<p>Environments must remain:</p>
+<ul>
+<li>isolated</li>
+<li>independently configured</li>
+<li>independently validated</li>
+<li>operationally bounded</li>
+</ul>
+<hr>
+<h1>CONFIGURATION GOVERNANCE</h1>
+<p>Stage 3 established deterministic runtime configuration law.</p>
+<hr>
+<h1>AUTHORITATIVE CONFIGURATION HIERARCHY</h1>
+<pre><code class="language-text">platform
+→ environment
+→ service
+→ runtime override
+</code></pre>
+<hr>
+<h1>CONFIGURATION RULES</h1>
+<p>Configuration must remain:</p>
+<ul>
+<li>externalized</li>
+<li>immutable</li>
+<li>versioned</li>
+<li>auditable</li>
+</ul>
+<hr>
+<h1>GOVERNANCE VALIDATION FOUNDATION</h1>
+<p>Stage 3 established machine-enforced governance validation.</p>
+<hr>
+<h1>AUTHORITATIVE VALIDATION STRUCTURE</h1>
+<pre><code class="language-text">infrastructure/validation/governance/
+├── check-no-float.sh
+├── validate-governance.sh
+└── validate-stage-03.sh
+</code></pre>
+<hr>
+<h1>VALIDATION PURPOSE</h1>
+<p>Validation became:</p>
+<ul>
+<li>platform law enforcement</li>
+</ul>
+<p>Validation is not optional.</p>
+<hr>
+<h1>FLOAT GOVERNANCE VALIDATION</h1>
+<p>Stage 3 established platform-wide float prohibition validation.</p>
+<p>The platform now automatically validates:</p>
+<ul>
+<li>float violations</li>
+<li>double violations</li>
+</ul>
+<p>inside runtime service domains.</p>
+<hr>
+<h1>SCHEMA FOUNDATION</h1>
+<p>Stage 3 established institutional schema topology.</p>
+<hr>
+<h1>AUTHORITATIVE STRUCTURE</h1>
+<pre><code class="language-text">schemas/
+├── avro/
+│   ├── audit/
+│   ├── common/
+│   ├── execution/
+│   ├── governance/
+│   ├── market-data/
+│   ├── portfolio/
+│   └── strategy/
+├── compatibility/
+├── registry/
+└── README.md
+</code></pre>
+<hr>
+<h1>BASE EVENT FOUNDATION</h1>
+<p>Stage 3 established canonical base event governance through:</p>
+<pre><code class="language-text">schemas/avro/common/base-event.avsc
+</code></pre>
+<p>This became the authoritative event envelope foundation.</p>
+<hr>
+<h1>EVENT CONTRACT FOUNDATION</h1>
+<p>Stage 3 established event contract governance.</p>
+<hr>
+<h1>AUTHORITATIVE CONTRACT STRUCTURE</h1>
+<pre><code class="language-text">contracts/events/
+└── event-envelope.yaml
+</code></pre>
+<hr>
+<h1>CONTRACT GOVERNANCE PURPOSE</h1>
+<p>Contracts define:</p>
+<ul>
+<li>required event fields</li>
+<li>replay requirements</li>
+<li>timestamp rules</li>
+<li>lineage requirements</li>
+<li>serialization expectations</li>
+</ul>
+<hr>
+<h1>SYSTEM REGISTRY FOUNDATION</h1>
+<p>Stage 3 established deterministic ownership registry foundation.</p>
+<hr>
+<h1>AUTHORITATIVE STRUCTURE</h1>
+<pre><code class="language-text">system/system-registry/
+└── README.md
+</code></pre>
+<hr>
+<h1>SYSTEM REGISTRY PURPOSE</h1>
+<p>The system registry defines:</p>
+<ul>
+<li>service ownership</li>
+<li>bounded contexts</li>
+<li>runtime authority</li>
+<li>dependency authority</li>
+</ul>
+<hr>
+<h1>IMPORTANT GOVERNANCE PRINCIPLE</h1>
+<p>Stage 3 intentionally established:</p>
+<ul>
+<li>architectural law before runtime implementation</li>
+</ul>
+<p>This sequencing is mandatory.</p>
+<hr>
+<h1>WHAT STAGE 3 EXPLICITLY DID NOT IMPLEMENT</h1>
+<p>Stage 3 intentionally did NOT implement:</p>
+<ul>
+<li>Kafka runtime infrastructure</li>
+<li>PostgreSQL runtime infrastructure</li>
+<li>Redis runtime infrastructure</li>
+<li>Kubernetes runtime orchestration</li>
+<li>broker connectivity</li>
+<li>trading execution</li>
+<li>replay engine runtime</li>
+<li>orchestration runtime</li>
+<li>observability runtime</li>
+<li>deployment runtime</li>
+</ul>
+<p>These belong to future stages.</p>
+<p>This separation is intentional and mandatory.</p>
+<hr>
+<h1>CRITICAL ENGINEERING PRINCIPLE</h1>
+<p>Institutional systems fail when:</p>
+<ul>
+<li>runtime complexity exceeds governance maturity</li>
+</ul>
+<p>Stage 3 exists specifically to prevent this.</p>
+<hr>
+<h1>STAGE 3 AUTHORITATIVE RESULT</h1>
+<p>Stage 3 transformed Corei from:</p>
+<ul>
+<li>structured engineering platform</li>
+</ul>
+<p>into:</p>
+<ul>
+<li>governed deterministic trading platform architecture</li>
+</ul>
+<p>This is one of the most important architectural stabilization stages of the platform lifecycle.</p>
+<hr>
+<h1>AUTHORITATIVE PLATFORM STATUS</h1>
+<p>After Stage 3 governance foundation:</p>
+<p>The platform now possesses:</p>
+<ul>
+<li>deterministic architectural law</li>
+<li>deterministic event law</li>
+<li>deterministic schema law</li>
+<li>deterministic arithmetic law</li>
+<li>deterministic replay law</li>
+<li>deterministic ownership law</li>
+<li>deterministic validation law</li>
+</ul>
+<p>This became the constitutional governance layer for all future runtime systems.</p>
+<hr>
+<h1>FINAL STAGE 3 STATUS</h1>
+<p>STAGE 3 — GOVERNANCE FOUNDATION INITIALIZED</p>
+<p>Governance foundation is now:</p>
+<ul>
+<li>institutionally governed</li>
+<li>validation-enforced</li>
+<li>replay-aware</li>
+<li>financially deterministic</li>
+<li>operationally bounded</li>
+</ul>
+<hr>
+<h1>AUTHORITATIVE NEXT STAGE</h1>
+<p>After Stage 3 governance foundation:</p>
+<p>future stages may begin:</p>
+<ul>
+<li>runtime infrastructure</li>
+<li>event streaming infrastructure</li>
+<li>orchestration runtime</li>
+<li>replay runtime</li>
+<li>observability runtime</li>
+<li>deployment runtime</li>
+</ul>
+<p>ONLY under the governance laws established by Stage 3.</p>
+
+
+  <div class="doc-footer">
+
+    <span>DOCUMENT KEY: docs:docs_stages_stage-03-platform-governance-foundation.md.md</span>
+
+    <span>
+      DOCUMENT NAME: docs stages stage 03 platform governance foundation.md
+    </span>
+
+    <span>
+      VERSION: 1.0
+    </span>
+
+  </div>
+
+</body>
+</html>

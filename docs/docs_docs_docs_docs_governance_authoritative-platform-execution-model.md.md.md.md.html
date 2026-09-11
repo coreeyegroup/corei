@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <title>docs docs docs governance authoritative platform execution model.md.md.md</title>
+  <style>
+  body {
+    background: #0A0D12;
+    color: #E3E7EC;
+    font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px 40px;
+  }
+
+  h1 {
+    font-size: 26px;
+    font-weight: 600;
+    color: #C6A46A;
+    margin: 24px 0 12px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 8px;
+  }
+
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #D4B88A;
+    margin: 20px 0 10px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 6px;
+  }
+
+  h3 {
+    font-size: 17px;
+    font-weight: 500;
+    color: #E3E7EC;
+    margin: 16px 0 8px 0;
+  }
+
+  h4 {
+    font-size: 15px;
+    font-weight: 500;
+    color: #C5CED9;
+    margin: 12px 0 6px 0;
+  }
+
+  p {
+    margin-bottom: 8px;
+    color: #C5CED9;
+  }
+
+  ul,
+  ol {
+    padding-left: 24px;
+    margin-bottom: 8px;
+    color: #C5CED9;
+  }
+
+  li {
+    margin-bottom: 2px;
+  }
+
+  code {
+    font-family: 'JetBrains Mono', 'Cascadia Code', monospace;
+    font-size: 13px;
+    background: rgba(255,255,255,0.05);
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid #28303C;
+    color: #C5CED9;
+  }
+
+  pre {
+    background: #18202A;
+    border: 1px solid #28303C;
+    border-radius: 6px;
+    padding: 16px 20px;
+    overflow: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 12px 0 16px 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #C5CED9;
+  }
+
+  pre code {
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 16px 0;
+    font-size: 13px;
+    color: #C5CED9;
+  }
+
+  th {
+    background: #18202A;
+    color: #C5CED9;
+    font-weight: 600;
+    text-align: left;
+    padding: 6px 12px;
+    border: 1px solid #28303C;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  td {
+    padding: 4px 12px;
+    border: 1px solid #28303C;
+    background: #0E1219;
+  }
+
+  tr:nth-child(even) td {
+    background: #121821;
+  }
+
+  blockquote {
+    border-left: 3px solid #C6A46A;
+    padding-left: 16px;
+    margin: 8px 0 12px 0;
+    color: #6E7883;
+    font-style: italic;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #28303C;
+    margin: 24px 0;
+  }
+
+  a {
+    color: #8BB4F0;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  strong {
+    color: #E3E7EC;
+    font-weight: 600;
+  }
+
+  img {
+    max-width: 100%;
+    border-radius: 4px;
+    border: 1px solid #28303C;
+  }
+
+  .doc-footer {
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid #28303C;
+    font-size: 12px;
+    color: #6E7883;
+    font-family: monospace;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+</style>
+</head>
+
+<body>
+
+  <div
+    class="doc-header"
+    style="
+      background:#121821;
+      border:1px solid #28303C;
+      border-radius:8px;
+      padding:1.2rem 1.8rem;
+      margin-bottom:1.8rem;
+    "
+  >
+
+    <div
+      style="
+        color:#C6A46A;
+        font-weight:600;
+        font-size:13px;
+        text-transform:uppercase;
+        letter-spacing:0.05em;
+      "
+    >
+      COREI · Stage Documentation
+    </div>
+
+
+
+    <h1
+      style="
+        font-size:28px;
+        font-weight:600;
+        color:#E3E7EC;
+        margin:0.1rem 0;
+        border-bottom:none;
+        padding-bottom:0;
+      "
+    >
+      docs docs docs governance authoritative platform execution model.md.md.md
+    </h1>
+
+    <div
+      style="
+        font-size:16px;
+        color:#C5CED9;
+      "
+    >
+      Stage Documentation
+      ·
+      Operational
+    </div>
+
+    <div
+      style="
+        display:flex;
+        flex-wrap:wrap;
+        gap:0.6rem 1.8rem;
+        margin-top:0.6rem;
+        font-size:13px;
+      "
+    >
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Status
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          Approved
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Version
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          1.0
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Classification
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          Operational
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Owner
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          COREI
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Repository
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+            font-family:monospace;
+          "
+        >
+          docs/docs_docs_docs_governance_authoritative-platform-execution-model.md.md.md.md
+        </span>
+      </span>
+
+    </div>
+
+
+
+  </div>
+
+
+
+  <h1>CONTINUITY RESTORATION BLOCK</h1>
+<h1>AUTHORITATIVE PLATFORM STATE</h1>
+<h1>CORE SYSTEM</h1>
+<h1>AUTHORITATIVE PURPOSE</h1>
+<p>This document is the authoritative continuity restoration block for CORE SYSTEM.</p>
+<p>Its purpose is to:</p>
+<ul>
+<li>restore institutional continuity across chats/sessions</li>
+<li>preserve deterministic platform evolution</li>
+<li>prevent architecture drift</li>
+<li>preserve operational maturity awareness</li>
+<li>preserve governance sequencing discipline</li>
+<li>maintain recovery authority</li>
+<li>maintain institutional engineering rigor</li>
+<li>preserve authoritative platform state</li>
+</ul>
+<p>This document is NOT:</p>
+<ul>
+<li>a temporary prompt</li>
+<li>a deployment checklist</li>
+<li>runtime notes</li>
+<li>operator memory</li>
+</ul>
+<p>This document IS:</p>
+<pre><code>authoritative platform continuity authority
+</code></pre>
+<hr>
+<h1>AUTHORITATIVE PLATFORM MODEL</h1>
+<p>We are continuing the deterministic institutional trading platform buildout for CORE SYSTEM.</p>
+<p>The platform is being engineered as:</p>
+<pre><code>institutional-grade algorithmic trading infrastructure substrate
+</code></pre>
+<p>using deterministic governance methodology aligned with:</p>
+<ul>
+<li>hedge-fund infrastructure engineering</li>
+<li>platform engineering discipline</li>
+<li>replay-safe distributed systems architecture</li>
+<li>governance-first infrastructure lifecycle management</li>
+<li>deterministic recovery engineering</li>
+<li>script-authoritative infrastructure operations</li>
+</ul>
+<p>Continue EXACTLY the same:</p>
+<ul>
+<li>tone</li>
+<li>rigor</li>
+<li>sequencing discipline</li>
+<li>architecture awareness</li>
+<li>operational realism</li>
+<li>deterministic methodology</li>
+</ul>
+<p>used throughout:</p>
+<ul>
+<li>Stage-01</li>
+<li>Stage-02</li>
+<li>Stage-03</li>
+<li>Stage-03A</li>
+<li>Stage-04</li>
+<li>Stage-05</li>
+<li>Stage-06</li>
+<li>Stage-07</li>
+</ul>
+<p>NO drift permitted.</p>
+<p>NO simplification permitted.</p>
+<p>NO generic DevOps/tutorial behavior permitted.</p>
+<p>NO ad-hoc infrastructure behavior permitted.</p>
+<p>NO undocumented runtime mutation permitted.</p>
+<hr>
+<h1>AUTHORITATIVE CURRENT PLATFORM STATE</h1>
+<p>Completed stages:</p>
+<pre><code>Stage-01 Machine Foundation
+Stage-02 Repository Foundation
+Stage-03 Platform Governance Foundation
+Stage-03A Configuration Foundation
+Stage-04 Infrastructure Foundation
+Stage-05 Kubernetes Platform Foundation
+Stage-06 Security Foundation
+Stage-07 Event Backbone Foundation
+</code></pre>
+<p>All stages are:</p>
+<ul>
+<li>validated</li>
+<li>governance-audited</li>
+<li>git-frozen</li>
+<li>snapshot-authoritative</li>
+<li>recoverable</li>
+</ul>
+<hr>
+<h1>AUTHORITATIVE GIT STATE</h1>
+<p>Branch:</p>
+<pre><code>main
+</code></pre>
+<p>Latest authoritative commit:</p>
+<pre><code>74e4834
+stage-07-event-backbone-foundation-complete
+</code></pre>
+<p>Git state:</p>
+<pre><code>clean
+synchronized with origin/main
+</code></pre>
+<p>Stage-07 successfully:</p>
+<ul>
+<li>committed</li>
+<li>pushed</li>
+<li>frozen</li>
+<li>validated</li>
+<li>governance-audited</li>
+</ul>
+<p>Git is now:</p>
+<pre><code>authoritative infrastructure source-of-truth
+</code></pre>
+<p>NOT:</p>
+<ul>
+<li>runtime cluster state</li>
+<li>shell history</li>
+<li>operator memory</li>
+</ul>
+<hr>
+<h1>CURRENT SNAPSHOT AUTHORITY</h1>
+<p>Latest authoritative infrastructure snapshot:</p>
+<pre><code>stage-07-event-backbone-foundation-complete
+</code></pre>
+<p>Snapshot authority established ONLY AFTER:</p>
+<ul>
+<li>validation convergence</li>
+<li>governance audit</li>
+<li>git synchronization</li>
+<li>contamination validation</li>
+<li>recovery reconciliation</li>
+</ul>
+<p>This snapshot is now:</p>
+<pre><code>authoritative deterministic rollback checkpoint
+</code></pre>
+<hr>
+<h1>CURRENT FROZEN STAGE BASELINE</h1>
+<p>Frozen authoritative baseline:</p>
+<pre><code>post Stage-07 governed event backbone platform
+</code></pre>
+<p>All future stages MUST evolve FROM this baseline.</p>
+<p>No mutation of frozen stages without:</p>
+<ul>
+<li>governance reconciliation</li>
+<li>runtime justification</li>
+<li>lifecycle normalization</li>
+<li>audit validation</li>
+<li>git reconciliation</li>
+</ul>
+<p>Frozen stages are:</p>
+<ul>
+<li>recovery checkpoints</li>
+<li>governance baselines</li>
+<li>deterministic evolution anchors</li>
+</ul>
+<p>NOT:</p>
+<ul>
+<li>mutable deployment sandboxes</li>
+</ul>
+<hr>
+<h1>CURRENT SOURCE-OF-TRUTH MODEL</h1>
+<p>The authoritative platform source-of-truth is:</p>
+<pre><code>Git + lifecycle scripts + manifests + governance documents
+</code></pre>
+<p>NEVER:</p>
+<ul>
+<li>shell history</li>
+<li>kubectl history</li>
+<li>remembered commands</li>
+<li>undocumented runtime fixes</li>
+<li>tribal operational knowledge</li>
+</ul>
+<p>Every runtime correction MUST eventually become:</p>
+<ul>
+<li>deterministic lifecycle scripts</li>
+<li>governed manifests</li>
+<li>reproducible infrastructure authority</li>
+<li>recoverable source code</li>
+</ul>
+<p>Runtime infrastructure is NEVER authoritative.</p>
+<p>Git authority is ALWAYS authoritative.</p>
+<p>This became one of the MOST IMPORTANT institutional governance lessons learned during:</p>
+<ul>
+<li>Stage-06</li>
+<li>Stage-07</li>
+</ul>
+<hr>
+<h1>CURRENT AUTHORITATIVE GOVERNANCE DOCUMENTS</h1>
+<p>Current institutional governance stack:</p>
+<h2>Lifecycle Governance</h2>
+<pre><code>docs/governance/institutional-stage-execution-lifecycle.md
+</code></pre>
+<p>Purpose:</p>
+<ul>
+<li>HOW stages execute</li>
+</ul>
+<hr>
+<h2>Execution Philosophy</h2>
+<pre><code>docs/governance/authoritative-platform-execution-model.md
+</code></pre>
+<p>Purpose:</p>
+<ul>
+<li>WHY the platform is engineered this way</li>
+</ul>
+<hr>
+<h2>Stage Governance Map</h2>
+<pre><code>docs/governance/authoritative-stage-index.md
+</code></pre>
+<p>Purpose:</p>
+<ul>
+<li>global platform governance authority</li>
+</ul>
+<hr>
+<h2>Runtime Continuity Authority</h2>
+<pre><code>docs/continuity/platform-continuity-restoration-block.md
+</code></pre>
+<p>Purpose:</p>
+<ul>
+<li>current authoritative platform continuity state</li>
+</ul>
+<hr>
+<p>These documents collectively establish:</p>
+<ul>
+<li>continuity authority</li>
+<li>lifecycle authority</li>
+<li>governance authority</li>
+<li>recovery authority</li>
+<li>deterministic infrastructure discipline</li>
+<li>anti-drift governance</li>
+</ul>
+<hr>
+<h1>AUTHORITATIVE PLATFORM MATURITY</h1>
+<p>The platform now contains:</p>
+<h2>Kubernetes Platform Substrate</h2>
+<ul>
+<li>Kubernetes</li>
+<li>Longhorn</li>
+<li>ingress governance substrate</li>
+<li>deterministic infrastructure lifecycle governance</li>
+</ul>
+<hr>
+<h2>Security Substrate</h2>
+<ul>
+<li>Vault</li>
+<li>Keycloak</li>
+<li>Istio</li>
+<li>Kong</li>
+<li>cert-manager</li>
+<li>Falco</li>
+</ul>
+<p>Security governance topology operational.</p>
+<hr>
+<h2>Event Backbone</h2>
+<ul>
+<li>Kafka KRaft</li>
+<li>Apicurio Registry</li>
+<li>governed event topology</li>
+<li>replay-safe architecture</li>
+<li>schema governance</li>
+<li>event validation chain</li>
+<li>transport integrity validation</li>
+</ul>
+<p>Kafka is now:</p>
+<pre><code>authoritative event source-of-truth
+</code></pre>
+<p>All downstream state reconstruction derives from governed events.</p>
+<hr>
+<h1>IMPORTANT STAGE-06 CONCLUSION</h1>
+<p>Stage-06 intentionally finalized as:</p>
+<pre><code>institutional security substrate foundation
+</code></pre>
+<p>NOT:</p>
+<pre><code>fully hardened production zero-trust environment
+</code></pre>
+<p>Deferred intentionally:</p>
+<ul>
+<li>strict mTLS</li>
+<li>advanced RBAC</li>
+<li>Vault PKI</li>
+<li>dynamic secrets</li>
+<li>MFA</li>
+<li>aggressive API governance</li>
+<li>advanced OIDC</li>
+<li>production-rate enforcement</li>
+</ul>
+<p>Reason:</p>
+<ul>
+<li>no production workloads yet</li>
+<li>no external APIs yet</li>
+<li>no production traffic yet</li>
+<li>no trading services yet</li>
+<li>premature hardening intentionally avoided</li>
+</ul>
+<p>This was determined to be:</p>
+<pre><code>correct institutional staging discipline
+</code></pre>
+<p>NOT incomplete infrastructure.</p>
+<p>Deferred hardening governance document exists at:</p>
+<pre><code>infrastructure/phases/stage-06-security/DEFERRED-HARDENING.md
+</code></pre>
+<hr>
+<h1>AUTHORITATIVE STAGE-07 STATE</h1>
+<h2>PURPOSE</h2>
+<p>Stage-07 established:</p>
+<pre><code>deterministic governed event backbone
+</code></pre>
+<p>Kafka is now the authoritative event source-of-truth.</p>
+<p>All downstream state reconstruction derives from governed events.</p>
+<hr>
+<h1>STAGE-07 RUNTIME</h1>
+<h2>Kafka</h2>
+<ul>
+<li>Apache Kafka 3.7</li>
+<li>KRaft mode</li>
+<li>No ZooKeeper</li>
+<li>Longhorn-backed persistence</li>
+<li>Dev topology:<br>
+1 controller + 1 broker</li>
+</ul>
+<p>Persistent log directory:</p>
+<pre><code>/var/lib/kafka/data/kraft-combined-logs
+</code></pre>
+<p>NOT:</p>
+<pre><code>/tmp
+</code></pre>
+<hr>
+<h1>SCHEMA GOVERNANCE</h1>
+<p>Runtime implementation:</p>
+<pre><code>Apicurio Registry 2.x
+</code></pre>
+<p>Used as:</p>
+<pre><code>Confluent-compatible schema governance layer
+</code></pre>
+<p>BACKWARD compatibility enforcement operational.</p>
+<hr>
+<h1>GOVERNED SCHEMAS</h1>
+<p>7 authoritative schemas operational:</p>
+<pre><code>signal_v1
+trade_intent_v1
+execution_intent_v1
+execution_order_v1
+fill_v1
+kill_switch_v1
+audit_event_v1
+</code></pre>
+<p>Compatibility mode:</p>
+<pre><code>BACKWARD
+</code></pre>
+<p>fully enforced and validated.</p>
+<hr>
+<h1>GOVERNED EVENT TOPOLOGY</h1>
+<p>23 governed Kafka topics operational:</p>
+<pre><code>market_ticks_stream
+market_ohlcv_stream
+market_depth_stream
+signal_stream
+strategy_state_stream
+trade_intent_stream
+execution_intent_stream
+execution_order_stream
+fill_stream
+order_state_stream
+portfolio_state_stream
+position_state_stream
+pnl_stream
+risk_event_stream
+margin_event_stream
+kill_switch_stream
+config_event_stream
+orchestration_event_stream
+audit_stream
+alert_stream
+metrics_stream
+retry_stream
+dead_letter_stream
+</code></pre>
+<hr>
+<h1>EVENT GOVERNANCE GUARANTEES</h1>
+<h2>Replay Governance</h2>
+<p>audit_stream retention:</p>
+<pre><code>retention.ms = -1
+</code></pre>
+<p>Immutable replay-safe audit history.</p>
+<hr>
+<h2>Kill Switch Governance</h2>
+<p>kill_switch_stream:</p>
+<pre><code>partitions = 1
+</code></pre>
+<p>Strict global ordering guaranteed.</p>
+<hr>
+<h2>Partition Governance</h2>
+<p>Trading-event producers MUST use:</p>
+<pre><code>partition_key = account_id + order_id
+</code></pre>
+<p>Applies to:</p>
+<ul>
+<li>trade_intent_stream</li>
+<li>execution_intent_stream</li>
+<li>execution_order_stream</li>
+<li>fill_stream</li>
+<li>order_state_stream</li>
+</ul>
+<p>Purpose:</p>
+<ul>
+<li>deterministic ordering</li>
+<li>replay consistency</li>
+<li>execution sequencing guarantees</li>
+<li>portfolio reconstruction safety</li>
+</ul>
+<hr>
+<h2>Consumer Group Governance</h2>
+<p>Convention:</p>
+<pre><code>&lt;service&gt;-&lt;purpose&gt;-cg
+</code></pre>
+<hr>
+<h1>STAGE-07 VALIDATION CHAIN</h1>
+<p>Operational validation scripts:</p>
+<pre><code>validate-topics.sh
+validate-schemas.sh
+validate-replay.sh
+validate-acls.sh
+validate-event-backbone.sh
+</code></pre>
+<p>Validation confirms:</p>
+<ul>
+<li>topology integrity</li>
+<li>schema governance</li>
+<li>replay guarantees</li>
+<li>event integrity</li>
+<li>producer → consumer correctness</li>
+<li>transport integrity</li>
+<li>persistence integrity</li>
+</ul>
+<p>Validation topic cleanup operational.</p>
+<hr>
+<h1>AUTHORITATIVE STAGE-07 BLUEPRINT</h1>
+<p>Authoritative blueprint:</p>
+<pre><code>~/corei/docs/blueprints/stage-07-event-backbone-foundation.md
+</code></pre>
+<p>This is now the authoritative Stage-07 governance document.</p>
+<hr>
+<h1>CRITICAL EXECUTION GOVERNANCE</h1>
+<p>The platform execution model is:</p>
+<pre><code>SCRIPT-DRIVEN INFRASTRUCTURE GOVERNANCE
+</code></pre>
+<p>Manual kubectl/runtime commands allowed ONLY for:</p>
+<ul>
+<li>debugging</li>
+<li>incident recovery</li>
+<li>root-cause analysis</li>
+<li>validation</li>
+<li>emergency reconciliation</li>
+</ul>
+<p>They are NOT the authoritative operational model.</p>
+<p>The authoritative operational model is:</p>
+<pre><code>deterministic lifecycle scripts
+</code></pre>
+<p>Every major operation must become governed by:</p>
+<ul>
+<li>setup scripts</li>
+<li>validation scripts</li>
+<li>audit scripts</li>
+<li>rollback scripts</li>
+<li>contamination checks</li>
+<li>recovery workflows</li>
+<li>snapshot workflows</li>
+</ul>
+<p>Correct institutional lifecycle structure:</p>
+<pre><code>infrastructure/phases/stage-XX-&lt;name&gt;/
+
+    setup.sh
+    validate.sh
+    backup.sh
+    rollback.sh
+    inventory.sh
+    state.sh
+    snapshot.sh
+</code></pre>
+<p>with delegated component scripts:</p>
+<pre><code>infrastructure/components/&lt;component&gt;/
+
+    install.sh
+    configure.sh
+    validate.sh
+</code></pre>
+<p>Infrastructure is treated as:</p>
+<pre><code>governed deterministic lifecycle evolution
+</code></pre>
+<p>NOT:</p>
+<pre><code>operator-dependent infrastructure
+</code></pre>
+<hr>
+<h1>AUTHORITATIVE EXECUTION METHODOLOGY</h1>
+<p>Stages 1–7 established the required institutional lifecycle discipline.</p>
+<p>Every future stage MUST continue:</p>
+<pre><code>1. zoom-out reconciliation
+2. authoritative scope definition
+3. topology establishment
+4. governance structure creation
+5. install lifecycle
+6. configure lifecycle
+7. validation lifecycle
+8. audit lifecycle
+9. contamination validation
+10. Git reconciliation
+11. backup + recovery checkpoint
+12. snapshot authority
+13. stage lock
+14. transition reconciliation
+</code></pre>
+<p>NO shortcuts permitted.</p>
+<p>NO governance drift permitted.</p>
+<p>NO premature enforcement permitted.</p>
+<p>NO undocumented runtime mutation permitted.</p>
+<hr>
+<h1>AUTHORITATIVE RECOVERY GOVERNANCE</h1>
+<p>The platform MUST ALWAYS be recoverable from:</p>
+<ul>
+<li>Git</li>
+<li>lifecycle scripts</li>
+<li>manifests</li>
+<li>governance documents</li>
+<li>infrastructure snapshots</li>
+</ul>
+<p>ONLY.</p>
+<p>WITHOUT:</p>
+<ul>
+<li>shell-history dependence</li>
+<li>tribal knowledge</li>
+<li>remembered fixes</li>
+<li>undocumented procedures</li>
+</ul>
+<p>Recovery determinism is mandatory institutional governance.</p>
+<hr>
+<h1>AUTHORITATIVE STAGE-08 STORAGE FOUNDATION</h1>
+<p>Stage-08 established:</p>
+<pre><code>authoritative governed persistence substrate
+</code></pre>
+<p>for deterministic platform state reconstruction.</p>
+<p>This stage operationalized:</p>
+<ul>
+<li>PostgreSQL authoritative relational persistence</li>
+<li>PgBouncer connection governance</li>
+<li>TimescaleDB analytical persistence</li>
+<li>Redis governed cache substrate</li>
+<li>Kafka → persistence ingestion lifecycle</li>
+<li>replay-safe persistence governance</li>
+<li>immutable audit persistence governance</li>
+<li>governed backup lifecycle</li>
+<li>deterministic recovery foundations</li>
+</ul>
+<p>Kafka REMAINS:</p>
+<pre><code>authoritative event source-of-truth
+</code></pre>
+<p>No service writes authoritative state directly.</p>
+<p>All durable state derives from governed Kafka events.</p>
+<hr>
+<h1>AUTHORITATIVE STORAGE GOVERNANCE MODEL</h1>
+<h2>AUTHORITY MODEL</h2>
+<p>Kafka:</p>
+<pre><code>authoritative event log
+</code></pre>
+<p>PostgreSQL:</p>
+<pre><code>relational materialized state derived from Kafka
+</code></pre>
+<p>TimescaleDB:</p>
+<pre><code>authoritative time-series persistence layer
+</code></pre>
+<p>Redis:</p>
+<pre><code>cache only
+</code></pre>
+<p>Redis is NEVER authoritative.</p>
+<p>PostgreSQL is NEVER direct-write authoritative.</p>
+<p>Kafka remains the ONLY authoritative event lineage.</p>
+<hr>
+<h1>POSTGRESQL GOVERNANCE</h1>
+<h2>Runtime Topology</h2>
+<p>Runtime:</p>
+<ul>
+<li>PostgreSQL 15</li>
+<li>StatefulSet deployment</li>
+<li>Namespace: storage</li>
+<li>Longhorn-backed persistence</li>
+<li>20Gi persistent storage</li>
+<li>PgBouncer operational</li>
+</ul>
+<p>Database:</p>
+<pre><code>coredb
+</code></pre>
+<hr>
+<h2>Migration Governance</h2>
+<p>Authoritative migrations:</p>
+<ul>
+<li>001_accounts</li>
+<li>002_account_groups</li>
+<li>003_orders</li>
+<li>004_positions</li>
+<li>005_portfolio_snapshots</li>
+<li>006_strategy_versions</li>
+<li>007_config_snapshots</li>
+<li>008_reconciliation_log</li>
+<li>009_audit_log</li>
+<li>010_operation_modes</li>
+</ul>
+<p>All migrations validated operationally.</p>
+<hr>
+<h2>Financial Precision Governance</h2>
+<p>Governance rules:</p>
+<ul>
+<li>all financial values stored as BIGINT</li>
+<li>FLOAT financial columns prohibited</li>
+<li>timestamps stored as BIGINT epoch nanoseconds</li>
+<li>replay-safe persistence enforced</li>
+</ul>
+<p>Validated operationally through automated schema validation.</p>
+<hr>
+<h2>Immutable Audit Governance</h2>
+<p>Immutable audit governance operational through:</p>
+<ul>
+<li>UPDATE rejection triggers</li>
+<li>DELETE rejection triggers</li>
+</ul>
+<p>Validated operationally.</p>
+<p>The audit_log table now operates as:</p>
+<pre><code>insert-only authoritative audit lineage
+</code></pre>
+<hr>
+<h1>PGBOUNCER GOVERNANCE</h1>
+<p>PgBouncer operational as:</p>
+<pre><code>governed PostgreSQL connection pool layer
+</code></pre>
+<p>Responsibilities:</p>
+<ul>
+<li>transactional pooling</li>
+<li>connection multiplexing</li>
+<li>controlled concurrency</li>
+<li>governed client access scaling</li>
+</ul>
+<p>Namespace:</p>
+<pre><code>storage
+</code></pre>
+<hr>
+<h1>TIMESCALEDB GOVERNANCE</h1>
+<h2>Runtime Topology</h2>
+<p>Runtime:</p>
+<ul>
+<li>TimescaleDB 2.14-pg15</li>
+<li>PostgreSQL 15 compatible</li>
+<li>StatefulSet deployment</li>
+<li>Namespace: storage</li>
+<li>Longhorn-backed persistence</li>
+</ul>
+<p>Database:</p>
+<pre><code>marketdb
+</code></pre>
+<p>Timescale extension validated operational.</p>
+<hr>
+<h2>Hypertable Governance</h2>
+<p>Authoritative hypertables:</p>
+<ul>
+<li>ticks</li>
+<li>ohlcv_1m</li>
+<li>ohlcv_5m</li>
+<li>ohlcv_1h</li>
+<li>signals</li>
+<li>fills</li>
+<li>features</li>
+</ul>
+<hr>
+<h2>Retention Governance</h2>
+<p>Retention policies validated for:</p>
+<ul>
+<li>ticks</li>
+<li>features</li>
+</ul>
+<p>OHLCV governance intentionally retained permanently.</p>
+<p>Compression governance validated.</p>
+<hr>
+<h2>Financial Precision Governance</h2>
+<p>Governance rules:</p>
+<ul>
+<li>all prices stored as BIGINT</li>
+<li>FLOAT market persistence prohibited</li>
+<li>replay-safe analytical storage enforced</li>
+</ul>
+<hr>
+<h1>REDIS GOVERNANCE</h1>
+<h2>Runtime Topology</h2>
+<p>Runtime:</p>
+<ul>
+<li>Redis 7.2</li>
+<li>StatefulSet deployment</li>
+<li>Longhorn-backed persistence</li>
+<li>AOF enabled</li>
+<li>authentication enabled</li>
+</ul>
+<p>Redis governance role:</p>
+<pre><code>cache-only derived substrate
+</code></pre>
+<p>Redis is NEVER authoritative.</p>
+<hr>
+<h2>Authentication Governance</h2>
+<p>Validated operationally:</p>
+<ul>
+<li>NOAUTH enforcement</li>
+<li>password authentication</li>
+<li>governed access control</li>
+</ul>
+<p>Development bootstrap credentials explicitly marked:</p>
+<pre><code>governance.core/dev-only=true
+</code></pre>
+<hr>
+<h1>PERSISTENCE INGESTION GOVERNANCE</h1>
+<h2>Persistence Writer</h2>
+<p>Governed persistence service operational:</p>
+<pre><code>persistence-writer
+</code></pre>
+<p>Responsibilities:</p>
+<ul>
+<li>consume Kafka audit events</li>
+<li>persist governed audit state</li>
+<li>enforce replay-safe ingestion lifecycle</li>
+<li>validate Kafka → PostgreSQL persistence path</li>
+</ul>
+<p>Consumer group governance:</p>
+<pre><code>persistence-writer-audit-cg
+</code></pre>
+<p>Operational validation completed successfully.</p>
+<p>Kafka → PostgreSQL persistence lifecycle validated end-to-end.</p>
+<p>Critical architecture rule reinforced:</p>
+<pre><code>Kafka authoritative
+persistence derived
+replay reconstruction mandatory
+</code></pre>
+<p>Services MUST NOT directly own authoritative state.</p>
+<hr>
+<h1>LONGHORN GOVERNANCE STATE</h1>
+<p>Longhorn operational.</p>
+<p>PVCs validated:</p>
+<ul>
+<li>postgres-storage-postgres-0</li>
+<li>redis-storage-redis-0</li>
+<li>timescaledb-storage-timescaledb-0</li>
+</ul>
+<p>Current runtime robustness:</p>
+<pre><code>degraded
+</code></pre>
+<p>Reason:</p>
+<ul>
+<li>single-node infrastructure topology</li>
+<li>replica scheduling limitations</li>
+<li>non-HA development environment</li>
+<li>single-node Longhorn replica constraints</li>
+</ul>
+<p>Critical operational lesson:</p>
+<pre><code>degraded != broken
+</code></pre>
+<p>This state is currently:</p>
+<pre><code>non-blocking for Stage-08 governance
+</code></pre>
+<p>because:</p>
+<ul>
+<li>persistence operational</li>
+<li>PVCs bound</li>
+<li>databases operational</li>
+<li>replay persistence operational</li>
+<li>deterministic recovery operational</li>
+</ul>
+<p>Deferred for future HA reconciliation stages.</p>
+<hr>
+<h1>WAL GOVERNANCE STATE</h1>
+<p>Validated:</p>
+<ul>
+<li>wal_level = replica</li>
+</ul>
+<p>Deferred intentionally:</p>
+<ul>
+<li>full WAL archival enablement</li>
+<li>PITR operational topology</li>
+<li>remote archive substrate</li>
+<li>HA archival governance</li>
+</ul>
+<p>This deferment is:</p>
+<pre><code>intentional institutional staging
+</code></pre>
+<p>NOT incomplete architecture.</p>
+<hr>
+<h1>BACKUP GOVERNANCE</h1>
+<p>Validated backup scripts:</p>
+<pre><code>infrastructure/scripts/storage/backup-postgres.sh
+infrastructure/scripts/storage/backup-timescaledb.sh
+</code></pre>
+<p>Governed backup directories:</p>
+<pre><code>infrastructure/backups/postgres/
+infrastructure/backups/timescaledb/
+infrastructure/backups/wal/
+</code></pre>
+<p>Generated backup artifacts are NEVER Git-authoritative.</p>
+<p>ONLY:</p>
+<ul>
+<li>backup framework</li>
+<li>scripts</li>
+<li>lifecycle governance</li>
+<li>deterministic structure</li>
+</ul>
+<p>remain authoritative.</p>
+<hr>
+<h1>STAGE-08 VALIDATION GOVERNANCE</h1>
+<p>Validation lifecycle operational through:</p>
+<pre><code>infrastructure/phases/stage-08-storage/validate.sh
+</code></pre>
+<p>Validation confirms:</p>
+<ul>
+<li>PostgreSQL readiness</li>
+<li>TimescaleDB readiness</li>
+<li>Timescale extension presence</li>
+<li>Redis authentication governance</li>
+<li>PostgreSQL table validation</li>
+<li>Timescale hypertable validation</li>
+<li>retention policy validation</li>
+<li>financial precision governance</li>
+<li>PVC governance</li>
+</ul>
+<p>Validation convergence achieved successfully.</p>
+<hr>
+<h1>SCRIPT-AUTHORITATIVE GOVERNANCE EVOLUTION</h1>
+<p>The platform execution model evolved further during Stage-08.</p>
+<p>Institutional governance now requires:</p>
+<pre><code>FULL SCRIPT-AUTHORITATIVE EXECUTION
+</code></pre>
+<p>Infrastructure MUST progressively become:</p>
+<ul>
+<li>script-installed</li>
+<li>script-configured</li>
+<li>script-validated</li>
+<li>script-audited</li>
+<li>script-backed-up</li>
+<li>script-rolled-back</li>
+<li>script-recovered</li>
+<li>script-inventoried</li>
+<li>script-snapshotted</li>
+</ul>
+<p>Manual kubectl/runtime operations are allowed ONLY for:</p>
+<ul>
+<li>debugging</li>
+<li>incident recovery</li>
+<li>root-cause analysis</li>
+<li>validation</li>
+<li>emergency reconciliation</li>
+</ul>
+<p>Manual runtime infrastructure operations are NEVER authoritative.</p>
+<p>Every runtime correction MUST eventually normalize into:</p>
+<ul>
+<li>setup scripts</li>
+<li>validation scripts</li>
+<li>lifecycle governance</li>
+<li>rollback workflows</li>
+<li>audit procedures</li>
+<li>recovery automation</li>
+</ul>
+<p>The platform is intentionally evolving away from:</p>
+<ul>
+<li>manual kubectl deployment</li>
+<li>operator-memory operations</li>
+<li>shell-history infrastructure</li>
+<li>runtime mutation dependence</li>
+</ul>
+<p>and toward:</p>
+<pre><code>deterministic replay-safe institutional automation
+</code></pre>
+<hr>
+<h1>AUTHORITATIVE EXECUTION METHODOLOGY</h1>
+<p>Every future stage MUST continue:</p>
+<pre><code>1. zoom-out reconciliation
+2. authoritative scope definition
+3. topology establishment
+4. governance structure creation
+5. install lifecycle
+6. configure lifecycle
+7. validation lifecycle
+8. audit lifecycle
+9. contamination validation
+10. Git reconciliation
+11. backup + recovery checkpoint
+12. snapshot authority
+13. stage lock
+14. transition reconciliation
+15. script normalization reconciliation
+</code></pre>
+<p>NO shortcuts permitted.</p>
+<p>NO governance drift permitted.</p>
+<p>NO undocumented runtime mutation permitted.</p>
+<p>NO permanent manual infrastructure operations permitted.</p>
+<hr>
+<h1>FINAL AUTHORITATIVE CONTINUITY STATE</h1>
+<p>Stages 1–8 established:</p>
+<pre><code>deterministic institutional infrastructure substrate
+</code></pre>
+<p>with:</p>
+<ul>
+<li>governance-first lifecycle discipline</li>
+<li>replay-safe event architecture</li>
+<li>governed persistence topology</li>
+<li>deterministic recovery governance</li>
+<li>authoritative storage lineage</li>
+<li>anti-drift infrastructure evolution</li>
+<li>script-authoritative infrastructure governance</li>
+</ul>
+<p>Git authority remains:</p>
+<pre><code>authoritative infrastructure source-of-truth
+</code></pre>
+
+
+  <div class="doc-footer">
+
+    <span>DOCUMENT KEY: docs:docs_docs_docs_governance_authoritative-platform-execution-model.md.md.md.md</span>
+
+    <span>
+      DOCUMENT NAME: docs docs docs governance authoritative platform execution model.md.md.md
+    </span>
+
+    <span>
+      VERSION: 1.0
+    </span>
+
+  </div>
+
+</body>
+</html>

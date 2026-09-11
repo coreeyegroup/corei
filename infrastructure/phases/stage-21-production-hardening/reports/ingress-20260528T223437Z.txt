@@ -1,0 +1,5 @@
+NAMESPACE   NAME                        CLASS   HOSTS   ADDRESS   PORTS   AGE
+n8n         n8n-ingress                 kong    *                 80      15h
+platform    operational-api-ingress     kong    *                 80      23h
+platform    trading-dashboard-ingress   kong    *                 80      23h
+platform    websocket-gateway-ingress   kong    *                 80      23h

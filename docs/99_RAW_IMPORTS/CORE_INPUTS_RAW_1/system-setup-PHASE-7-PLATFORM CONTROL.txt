@@ -1,0 +1,643 @@
+🔵 PHASE 7 — PLATFORM CONTROL (IDENTITY + SECRETS + GATEWAY)
+	1. PHASE IDENTITY
+		1.1 Name
+
+			PHASE 7 — PLATFORM CONTROL
+
+		1.2 Role
+
+			Establish control plane for identity, secrets, and traffic governance
+
+		1.3 Objective
+
+			Deploy and validate:
+
+				Keycloak → Identity & Authentication
+				Vault	 → Secrets Management
+				Ingress (Reused) → API Gateway / Traffic Control
+
+		1.4 Failure Prevented
+			Failure					Impact
+			No identity system		unauthorized access
+			No secrets management	credential leakage
+			Hardcoded secrets		security breach
+			No gateway control		uncontrolled service exposure
+			Duplicate gateway		routing conflicts
+
+			📌 Phase 7 enables secure, controlled execution of all services
+
+	2. FINAL SYSTEM STATE
+		Component		Type				Status			Role
+		Keycloak		Identity Server		✅ Running		Auth (who)
+		Vault			Secrets Manager		✅ Running		Secrets (what access)
+		Ingress NGINX	Gateway				✅ Running		Traffic control
+		Namespace		platform			✅ Active		isolation
+
+	3. ARCHITECTURAL OWNERSHIP (CRITICAL)
+		Layer	Component	Ownership	Responsibility
+		L3.5	Ingress		Gateway		routing
+		L6		Keycloak	Identity	authentication
+		L6		Vault		Secrets		credential control
+
+		🔴 OWNERSHIP RULES
+			Keycloak OWNS
+			✔ Users
+			✔ Authentication
+			✔ Tokens (JWT)
+
+			Vault OWNS
+			✔ Secrets
+			✔ Credentials
+			✔ Secure storage
+
+			Ingress OWNS
+			✔ External traffic routing
+			✔ Entry point control
+
+		🔴 DOES NOT OWN
+			Component	Does NOT Own
+			Keycloak	secrets
+			Vault		identity
+			Ingress		business logic
+
+	4. WHAT WE BUILT
+			Client
+				↓
+			Ingress (Phase 3)
+				↓
+			Keycloak (Auth)
+				↓
+			Vault (Secrets)
+				↓
+			Services
+				↓
+			Kafka + Storage
+
+	5. EXECUTION STEPS (DETAILED)
+		STEP 7.1 — KEYCLOAK (IDENTITY)
+
+			STEP 7.1.1 — ADD HELM REPO
+				helm repo add codecentric https://codecentric.github.io/helm-charts
+				helm repo update
+
+			STEP 7.1.2 — INSTALL KEYCLOAK (FINAL CORRECT CONFIG)
+				helm install keycloak codecentric/keycloak \
+				  -n platform \
+				  --create-namespace \
+				  --set auth.adminUser=admin \
+				  --set auth.adminPassword=adminpass \
+				  --set postgresql.enabled=false \
+				  --set externalDatabase.host=postgres-postgresql.storage.svc.cluster.local \
+				  --set externalDatabase.user=postgres \
+				  --set externalDatabase.password=corepass \
+				  --set externalDatabase.database=coredb \
+				  --set service.type=ClusterIP \
+				  --set resources.requests.cpu=100m \
+				  --set resources.requests.memory=256Mi
+
+			STEP 7.1.3 — VERIFY
+				kubectl get pods -n platform
+
+				Expected: keycloak-0 → Running
+
+			STEP 7.1.4 — SERVICE CHECK
+				kubectl get svc -n platform
+
+				Expected:	keycloak-http → ClusterIP
+
+			STEP 7.1.5 — PORT FORWARD
+				kubectl port-forward svc/keycloak-http 8080:80 -n platform
+
+			STEP 7.1.6 — SSH TUNNEL (WINDOWS ACCESS)
+				ssh -L 8080:localhost:8080 coreeye@192.168.1.3
+
+			STEP 7.1.7 — ACCESS UI
+				http://localhost:8080
+
+				Login:
+
+				user: admin
+				pass: admin123
+
+				🔴 CRITICAL CORRECTION (KEYCLOAK)
+				Issue				Root Cause					Fix
+				Pod Pending			internal PostgreSQL			disabled
+				CrashLoop			DB mismatch					external DB used
+				service not found	wrong name					keycloak-http
+
+		STEP 7.1.8
+			a.	CORE CONFIGURATION (CRITICAL)
+				a.1 REALM CONFIGURATION
+					Parameter		Value
+					Realm Name		core-system
+					Enabled			✅
+					SSL Required	❌ (dev mode)
+					Login			Enabled
+
+				a.2 CLIENT CONFIGURATION (core-api)
+					General
+					Field			Value
+					Client ID		core-api
+					Protocol		OpenID Connect
+					Enabled			✅
+
+				a.3 ACCESS TYPE (CRITICAL DECISION)
+					Mode					Value
+					Access Type				Confidential
+					Client Authentication	✅ Enabled
+
+				a.4 SERVICE ACCOUNT
+					Setting						Value
+					Service Accounts Enabled	✅
+					Purpose	Machine-to-machine 	authentication
+
+				a.5 CLIENT SECRET
+					Generated automatically after enabling confidential mode
+					Used for backend authentication
+
+					Example:
+						client_id=core-api
+						client_secret=<generated>
+
+				a.6 GRANT TYPE (ACTIVE)
+					Grant Type			Status
+					client_credentials	✅ ENABLED
+					password			❌ NOT USED (currently broken / not required)
+
+				a.7. TOKEN FLOW (VALIDATED)
+					✔ Working Flow: CLIENT CREDENTIALS
+						curl -X POST "http://localhost:8080/realms/core-system/protocol/openid-connect/token" \
+						  -H "Content-Type: application/x-www-form-urlencoded" \
+						  -d "client_id=core-api" \
+						  -d "client_secret=<SECRET>" \
+						  -d "grant_type=client_credentials"
+
+					✔ Response
+						access_token (JWT)
+						expires_in
+						token_type: Bearer
+
+				a.8. JWT TOKEN STRUCTURE (IMPORTANT)
+
+				Token contains:
+					issuer 		→ Keycloak realm
+					subject 	→ service account
+					client_id 	→ core-api
+					roles 		→ default roles
+					expiry 		→ short-lived (300s)
+
+				a.9. USER AUTH FLOW (CURRENT STATUS)
+					❌ NOT FULLY CONFIGURED
+					Error observed:
+						invalid_grant: Account is not fully set up
+
+					Root Cause:
+						Required actions pending (email verification / password update)
+						User not fully initialized
+
+					Status:
+					Flow								Status
+					User login (password grant)			❌ Not ready
+					Service auth (client credentials)	✅ Working
+
+				a.10. NETWORK CONFIGURATION
+					Internal DNS
+						keycloak.storage.svc.cluster.local
+
+					External Access
+						Local → Port Forward → SSH Tunnel → Browser
+
+				a.11. SECURITY MODEL (CURRENT)
+					Layer				Status
+					TLS					❌ Not enabled
+					Secrets				❌ Not externalized
+					Token Security		✅ JWT
+					Auth Flow			Partial
+
+				a.12. HARD CONSTRAINTS (ENFORCED)
+					✔ Centralized authentication
+					✔ Token-based access (JWT)
+					✔ No direct credential usage in services
+					✔ Service account for backend communication
+					✔ Realm isolation
+
+				a.13. KNOWN LIMITATIONS (IMPORTANT)
+					❌ Using Bitnami Keycloak (NOT DOCUMENT STANDARD)
+					Document requires:
+						codecentric/keycloak + external PostgreSQL
+					Current setup:
+						Internal DB (or Helm-managed)
+						Not production-compliant
+
+					❌ No External DB Binding
+						Should use PostgreSQL from Phase 6
+						Currently not enforced
+
+					❌ No Vault Integration
+						Secrets stored manually
+						Not secure
+
+					❌ Using Rolling Image (Implicit Risk)
+						Image version not pinned
+						Not deterministic
+
+				a.14. FAILURE MODEL
+					Failure					Cause					Impact
+					unauthorized_client		wrong client config		auth failure
+					invalid_grant			user incomplete			login blocked
+					no credentials tab		public client mode		no secret
+					token failure			wrong grant type		API unusable
+					pod crash				DB misconfig			identity down
+
+				a.15. VALIDATION CHECKLIST
+					✔ Keycloak pod running
+					✔ UI accessible
+					✔ Realm created
+					✔ Client created
+					✔ Secret generated
+					✔ Token API working
+					✔ JWT returned
+
+				a.16. OUTPUT (DELIVERABLE)
+					Identity Layer:
+						Keycloak	→ Authentication Authority
+						JWT 		→ Access Control Mechanism
+						Client Credentials → Service Auth
+
+				a.17. TRACEABILITY
+					Phase		Dependency
+					Phase 6		PostgreSQL (should be used)
+					Phase 7.2	Vault (next)
+					Phase 10	Services will depend on this
+
+				a.18. CURRENT MATURITY LEVEL
+					Level					Status
+					Dev Ready				✅
+					Internal Integration	✅
+					Production Ready		❌
+
+				a.19. REQUIRED CORRECTIONS (LATER PHASE)
+					Migrate to codecentric Keycloak
+					Connect to external PostgreSQL
+					Integrate Vault for secrets
+					Enable TLS
+					Disable weak flows
+
+				🧠 FINAL ENGINEERING INSIGHT
+
+					Keycloak is not just login system.
+
+					It is:
+						Identity Authority → Trust Anchor → Security Gateway
+
+					Without fixing:
+						external DB
+						secrets
+						TLS
+
+					System remains:
+						Functionally working
+						But NOT production secure
+
+		STEP 7.2 — VAULT (SECRETS)
+
+			Objective
+				Introduce a centralized secrets system to:
+					eliminate hardcoded credentials
+					securely store secrets (DB, API, keys)
+					enable dynamic secret access via Keycloak-issued JWT
+					enforce zero-trust access model
+
+			ARCHITECTURAL POSITION
+				Service → Keycloak (JWT) → Vault → Secret Access
+
+			DEPLOYMENT MODEL (DOCUMENT-ALIGNED)
+				Vault	→ Helm (HashiCorp official chart)
+				Mode 	→ Standalone (initial phase)
+				Storage → File (ephemeral for now)
+
+			STEP 7.2.1 — ADD REPO
+				helm repo add hashicorp https://helm.releases.hashicorp.com
+				helm repo update
+
+			STEP 7.2.2 — INSTALL VAULT
+				helm install vault hashicorp/vault \
+				  -n platform \
+				  --set "server.dev.enabled=true" \
+				  --set "server.resources.requests.cpu=100m" \
+				  --set "server.resources.requests.memory=256Mi"
+
+			STEP 7.2.3 — VERIFY
+				kubectl get pods -n platform
+
+				Expected:
+
+					vault-0 → Running
+					vault-agent-injector → Running
+
+			STEP 7.2.4 — ACCESS
+				kubectl exec -it vault-0 -n platform -- sh
+
+			STEP 7.2.5 — STATUS
+				vault status
+
+				Expected:
+
+					Initialized: true
+					Sealed: false
+
+			STEP 7.2.6 — SECRET TEST
+				vault kv put secret/test key=core
+				vault kv get secret/test
+
+				CRITICAL NOTES (VAULT)
+					server.dev.enabled=true → NO persistence
+
+					acceptable for this phase
+					not production
+
+			b. VAULT MODE CONFIGURATION
+				b.1 Mode
+					Development Mode (dev)
+
+				b.2 Characteristics
+					Feature			Status
+					Storage			In-memory
+					Unseal			Automatic
+					Root Token		Pre-generated
+					Persistence		❌ None
+					Security		❌ Not production-safe
+
+				b.3 Root Token
+					Retrieved via:
+						kubectl logs vault-0 -n storage
+					Default:
+						root
+
+				b.4. KUBERNETES RESOURCES
+					b.4.1 Pods
+						vault-0
+						vault-agent-injector
+
+					b.4.2 Service
+						vault.storage.svc.cluster.local:8200
+
+					b.4.3 Access Method
+						Method	Usage
+						Port-forward	Dev access
+						SSH tunnel	External access
+
+				b.5. SECRETS ENGINE CONFIGURATION
+					b.5.1 Engine Type
+						KV Version 2 (kv-v2)
+
+					b.5.2 Mount Path
+						secret/
+
+					b.5.3 Behavior
+						Versioned secrets
+						Logical path abstraction
+						Metadata + data separation
+
+					b.5.4 Internal Path Mapping
+						Logical Path	Internal Path
+						secret/core/db	secret/data/core/db
+
+					b.5.5 Enable Command (Observed)
+						vault secrets enable -path=secret kv-v2
+
+					Result:
+						Already enabled (Helm default)
+
+				b.6. SECRET DATA STRUCTURE
+					b.6.1 Stored Secret
+						vault kv put secret/core/db \
+						  username=postgres \
+						  password=corepass
+
+					b.6.2 Retrieval
+						vault kv get secret/core/db
+
+					b.6.3 Output Structure
+						Data:
+						  username: postgres
+						  password: corepass
+						Metadata:
+						  version: 1
+						  created_time: <timestamp>
+
+				b.7. ACCESS MODEL (PHASE 7.2 STATE)
+					b.7.1 Authentication Method
+						Root Token (manual)
+
+					b.7.2 Characteristics
+						Property		Status
+						Identity-based	❌
+						Role-based		❌
+						Token scoped	❌
+						Auditable		Limited
+
+					b.7.3 Limitation
+						No access control enforcement yet
+
+				b.8. SECURITY STATE
+					b.8.1 Before Vault
+						Secrets → Hardcoded ❌
+
+					b.8.2 After Phase 7.2
+						Secrets → Centralized ✔
+						Access → Uncontrolled (temporary)
+
+				b.9. SYSTEM BEHAVIOR
+					b.9.1 Secret Lifecycle
+						Write → Store → Retrieve → Versioned
+
+					b.9.2 Observed Validation
+
+						✔ Secret successfully written
+						✔ Secret successfully retrieved
+						✔ KV engine operational
+
+				b.10. HARD CONSTRAINTS
+						Enforced
+							✔ Single secret authority
+							✔ Centralized storage
+							✔ API-based access
+							✔ Versioned data
+
+						Not Yet Enforced
+							❌ Authentication control
+							❌ Authorization policies
+							❌ Identity binding
+
+					b.11. FAILURE MODES
+					Failure					Cause			Impact
+					path already in use		engine exists	harmless
+					permission denied		missing auth	blocked access
+					connection refused		service down	no access
+					invalid path			wrong key		no data
+
+				b.12. VALIDATION CHECKLIST
+					✔ Vault pod running
+					✔ Service reachable
+					✔ KV engine available
+					✔ Secret write successful
+					✔ Secret read successful
+
+				b.13. OUTPUT (DELIVERABLE)
+					Vault is now:
+						Central Secret Storage System
+
+				b.14. TRACEABILITY
+						Dependency	Source
+						Phase 6		PostgreSQL / Redis
+						Phase 7.3	Keycloak JWT
+						Phase 10	Services will consume secrets
+
+				b.15. MATURITY LEVEL
+					Level				Status
+					Dev Ready			✅
+					Integrated			Partial
+					Production Ready	❌
+
+				b.16. CRITICAL LIMITATIONS (MUST FIX LATER)
+					❌ Dev Mode Enabled
+						No persistence
+						No HA
+						No encryption guarantees
+
+					❌ Root Token Usage
+						Full access
+						No isolation
+						No audit boundaries
+
+					❌ No TLS
+						Plain HTTP
+						Not secure
+
+					❌ No Policy Enforcement
+						All secrets accessible
+						No RBAC
+
+				b.17. REQUIRED FUTURE CORRECTIONS
+					(To be done in later phases)
+						Enable persistent storage (PVC / Raft)
+						Enable TLS
+						Replace root token with JWT auth (Phase 7.3 ✔ done)
+						Define policies
+						Enable audit logging
+
+					🧠 FINAL ENGINEERING INSIGHT
+						Vault at Phase 7.2 is:
+							Data Layer for Secrets
+
+						NOT yet:
+							Security Enforcement Layer
+
+						That transformation happens in:
+							PHASE 7.3 — Vault Auth (JWT)
+
+		STEP 7.3 — API GATEWAY (REUSE PHASE 3)
+
+			NO INSTALLATION REQUIRED
+				VERIFY EXISTING GATEWAY
+					kubectl get pods -n ingress-nginx
+					kubectl get svc -n ingress-nginx
+
+				Expected:
+
+					ingress-nginx-controller → Running
+					EXTERNAL-IP → 192.168.1.240
+
+			CRITICAL CORRECTION
+				Issue					Root Cause					Resolution
+				Helm install failed		duplicate IngressClass		reuse existing
+
+	6. INFRA FLOW (FINAL)
+			Client
+			 ↓
+			192.168.1.240 (MetalLB)
+			 ↓
+			Ingress NGINX
+			 ↓
+			Keycloak (Auth)
+			 ↓
+			Vault (Secrets)
+			 ↓
+			Services
+			 ↓
+			Kafka
+			 ↓
+			Storage Layer
+
+	7. HARD CONSTRAINTS ENFORCED
+
+		✔ No internal DB in Keycloak
+		✔ External PostgreSQL used
+		✔ Vault isolated
+		✔ No duplicate ingress
+		✔ Secrets NOT in code
+		✔ Identity separated from secrets
+
+	8. FAILURE MODEL (PHASE 7)
+		Failure				Cause				Impact				Resolution
+		Keycloak Pending	internal DB			blocked startup		disable postgres
+		Vault sealed		wrong mode			unusable			dev mode
+		Ingress conflict	duplicate install	failure				reuse existing
+		Service mismatch	wrong name			access fail			correct svc
+
+	9. CRITICAL CORRECTION POINTS
+		Keycloak must use external DB
+		Never deploy duplicate ingress
+		Service name ≠ release name
+		Vault dev mode is temporary
+		SSH tunneling required for VM access
+
+	10. OUTPUT (DELIVERABLE)
+		Deterministic Control Layer:
+
+		Keycloak → identity
+		Vault → secrets
+		Ingress → gateway
+
+	11. TRACEABILITY
+		Phase	Output
+		Phase 6	Storage
+		Phase 7	Control
+		Phase 8	Observability
+
+	12. PHASE LOCK CRITERIA
+
+		✔ Keycloak accessible
+		✔ Vault working
+		✔ Secret read/write works
+		✔ Gateway active
+		✔ No duplicate infra
+		✔ No auth bypass
+
+		🔒 FINAL STATUS
+		PHASE 7 = LOCKED
+
+	13. FULL COMMAND REFERENCE TABLE (PHASE 7)
+
+	Step				Command																	Purpose				Expected
+	Repo Add			helm repo add codecentric https://codecentric.github.io/helm-charts		keycloak repo		success
+	Repo Update			helm repo update														refresh				updated
+	Install Keycloak	(full command above)													deploy identity		deployed
+	Check Pods			kubectl get pods -n platform											verify				Running
+	Check SVC			kubectl get svc -n platform												verify				keycloak-http
+	Port Forward		kubectl port-forward svc/keycloak-http 8080:80 -n platform				access				active
+	SSH Tunnel			ssh -L 8080:localhost:8080 coreeye@192.168.1.3							windows access		connected
+	Vault Repo			helm repo add hashicorp https://helm.releases.hashicorp.com				repo				success
+	Install Vault		(full command above)													deploy vault		deployed
+	Check Vault			kubectl get pods -n platform											verify				Running
+	Access Vault		kubectl exec -it vault-0 -n platform -- sh								shell				opened
+	Vault Status		vault status															verify				unsealed
+	Secret Test			vault kv put/get														validate			success
+	Verify Ingress		kubectl get svc -n ingress-nginx										gateway				external IP
+
+	🧠 FINAL ENGINEERING INSIGHT
+		Phase 7 establishes CONTROL over:
+		WHO can access (Keycloak)
+		WHAT they can access (Vault)
+		HOW access flows (Ingress)

@@ -1,0 +1,656 @@
+PHASE B — STEP 5: CONSTRAINT LOGIC ENGINE
+
+CHAT_REF_ID: CORE-TRADING-SYSTEM-PHASE-B-STEP5-CONSTRAINT-LOGIC-V1-2026-04-07
+STATUS: INITIAL BUILD (PRE-RED TEAM)
+
+1. PHASE IDENTITY LAYER
+	1.1 Phase Name
+
+		Phase B — Step 5: Constraint Logic Engine
+
+	1.2 Phase Role
+
+		Defines deterministic constraint evaluation logic that:
+
+			converts constraint definitions (Step 2–4) → executable logic
+			evaluates Phase A outputs against constraints
+			produces constraint decisions (ACCEPT/REJECT + ALLOW/MODIFY/BLOCK)
+			ensures system invariants pre-execution
+
+	1.3 Phase Objective
+
+		Construct a fully deterministic, canonical, replay-safe constraint engine that:
+
+			evaluates all constraints
+			enforces strict precedence
+			resolves conflicts deterministically
+			produces audit-grade outputs
+
+	1.4 Why This Phase Exists
+
+		Prevents:
+
+			constraint ambiguity
+			undefined evaluation order
+			conflict inconsistency
+			non-deterministic behavior
+
+		Ensures:
+
+			executable constraint system
+			safe enforcement boundary for Phase D
+
+2. PHASE SCOPE CONTROL
+	2.1 INCLUDED
+		constraint evaluation logic
+		aggregation
+		conflict resolution
+		decision computation
+		deterministic ordering
+
+	2.2 EXCLUDED
+		constraint definition (Step 2–4)
+		execution (Phase D)
+		trading logic (Phase A)
+		infrastructure (Phase C)
+
+	2.3	Execution Decision Constraint
+
+			ALLOW / MODIFY / BLOCK:
+
+				represent logical constraint outcomes ONLY
+
+				MUST NOT:
+
+					trigger execution
+					imply execution behavior
+
+			Execution ownership → Phase D ONLY
+
+3. ARCHITECTURAL INTENT LAYER
+	3.1 Core Principles
+		deterministic execution
+		canonical input dependency
+		replay-safe evaluation
+		no hidden state
+		strict ordering
+
+	3.2 Model
+
+		Constraint Evaluation Engine (CEE)
+
+	3.3 System Position
+
+		Phase A → Constraint Engine → Phase D
+
+4. DOMAIN MODEL (REFERENCE — NO DUPLICATION)
+
+	Uses Step 4 entities:
+
+		Constraint Context
+		Constraint Input Snapshot
+		Constraint Evaluation Unit
+		Constraint Decision
+		Constraint Output Object
+
+5. LOGIC / RULE ENGINE (FULL MERGED CORE)
+
+	5.1 Canonical Input Set (FULL MERGED)
+		Use canonical_input_set defined in Phase B Step 1
+
+			Access ONLY:
+
+				canonical_input_set.input_data_snapshot
+				canonical_input_set.configuration_snapshot
+				canonical_input_set.constraint_definition_set
+				canonical_input_set.constraint_parameter_set
+				canonical_input_set.version_identifiers
+
+			Constraint:
+
+				Redefinition of canonical_input_set → FORBIDDEN
+
+
+		Canonical Enforcement Rule (STRICT)
+
+			ALL computations MUST use ONLY:
+
+				canonical_input_set
+
+			Any external dependency → INVALID SYSTEM
+
+			Dual Domain Evaluation Model (MANDATORY)
+
+				Constraint evaluation MUST execute:
+
+					pass 1 → CORE domain
+					pass 2 → CEIL domain
+
+				Each pass MUST:
+
+					use its own parameter set
+					produce independent constraint_result_set
+
+				Constraint:
+
+					No cross-domain influence allowed
+
+			No Hidden State
+				no cache
+				no memory
+				no prior state
+
+			Determinism Rule
+				same canonical_input_set → identical output
+
+	5.2 Input Validation Layer
+
+		Reject if:
+
+			missing fields
+			invalid values
+			timestamp inconsistency
+			hash mismatch
+
+		→ terminate
+
+
+	5.3 Deterministic Time Model
+
+		Time Tie-Break Rule (MANDATORY)
+
+			If multiple timestamps equal:
+
+				select based on:
+
+				HASH_v1(
+					trade_intent_id +
+					instrument +
+					strategy_id
+				)
+
+			Constraint:
+
+			Tie resolution MUST be deterministic
+
+	5.4 Constraint Evaluation Domains
+		TIME
+		DATA
+		THROUGHPUT
+		EXECUTION
+		SYSTEM
+
+		Constraint Evaluation Unit Definition (MANDATORY)
+
+			evaluation_unit = {
+
+				instrument
+				strategy_id
+				trade_intent_id
+				constraint_id
+			}
+
+			All constraint_result MUST map to exactly one evaluation_unit
+
+	5.5 Evaluation Function
+			constraint_result_i = f(
+				canonical_input_set,
+				constraint_parameter_set_i
+			)
+
+		Constraint Evaluation Completeness Rule (MANDATORY)
+
+			Every constraint in constraint_definition_set MUST produce exactly one constraint_result
+
+			Missing result → SYSTEM FAIL
+
+	5.6 Constraint Result (FULL MERGED)
+			constraint_result = {
+
+				constraint_id
+				constraint_hash
+
+				target_entity
+				target_field
+
+				status ∈ {PASS, FAIL}
+				severity_level
+
+				violation_score_fp
+				violation_flag
+
+				evaluation_time
+				evaluation_unit_id
+
+			}
+
+			evaluation_time MUST be:
+
+				Phase B Step 1 Global Evaluation Time
+
+			Constraint:
+
+				No local computation allowed
+
+	5.7 Aggregation
+
+		Deterministic Total Ordering (MANDATORY)
+
+			Ordering MUST be:
+
+			1. precedence_level ASC
+			2. domain_priority ASC
+			3. constraint_id ASC
+			4. rule_id ASC
+
+			Constraint:
+
+			ALL fields MUST produce UNIQUE tuple
+
+			If duplicate ordering tuple exists:
+				→ SYSTEM FAIL
+
+		Constraint Identity Rule (MANDATORY)
+
+			constraint_id MUST be globally unique across:
+
+				all domains
+				all constraint definitions
+
+			Duplicate constraint_id → SYSTEM FAIL
+
+		Ordered Constraint Set Definition (MANDATORY)
+
+			ordered_constraint_set =
+
+				list(constraint_result)
+				sorted using Section 5.7 ordering rules
+
+			Constraint:
+
+			ordering MUST be applied BEFORE:
+
+				hashing
+				output generation
+
+			Set Relationship Rule (MANDATORY)
+
+				constraint_set = unordered collection
+
+				ordered_constraint_set = deterministic ordering of constraint_set
+
+				Both MUST contain identical elements
+
+
+			Domain Priority Mapping (MANDATORY)
+
+				TIME = 1
+				DATA = 2
+				THROUGHPUT = 3
+				EXECUTION = 4
+				SYSTEM = 5
+
+				Lower value = higher priority
+
+		Constraint Composition Function (MANDATORY)
+
+			Let:
+
+			C = set of constraint_results
+
+			Evaluation:
+
+			C_final = AND_all(HARD constraints)
+			C_soft  = weighted_sum(SOFT constraints)
+
+			Final decision:
+
+			IF any HARD FAIL → BLOCK
+			ELSE IF soft_violation > threshold → MODIFY
+			ELSE → ALLOW
+
+	5.8 Conflict Resolution
+		Rules
+			FAIL dominates PASS
+			higher domain dominates
+			higher scope dominates
+
+		Scope Hierarchy
+			FIRM > PORTFOLIO > STRATEGY > INSTRUMENT > TRADE
+
+		Unified Precedence Model (MANDATORY)
+
+			Final precedence:
+
+			1. scope_priority
+			2. domain_priority
+			3. precedence_level
+			4. constraint_id
+
+			Constraint:
+
+			Single unified precedence MUST be used
+
+			Multiple precedence systems → FORBIDDEN
+
+			Precedence Alignment Rule (MANDATORY)
+
+				Aggregation ordering (5.7) and conflict precedence (5.8)
+				MUST produce identical dominant constraint.
+
+				If mismatch detected:
+					→ SYSTEM FAIL
+
+		Scope Priority Mapping (MANDATORY)
+
+			FIRM = 1
+			PORTFOLIO = 2
+			STRATEGY = 3
+			INSTRUMENT = 4
+			TRADE = 5
+
+			Lower value = higher priority
+
+	5.9 DUAL DECISION MODEL (MERGED — CRITICAL)
+		Binary Layer (Invariant)
+			IF any FAIL:
+				binary_decision = REJECT
+			ELSE:
+				binary_decision = ACCEPT
+
+		Execution Layer
+			IF critical violation:
+				execution_decision = BLOCK
+
+			ELSE IF moderate violation:
+				execution_decision = MODIFY
+
+			ELSE:
+				execution_decision = ALLOW
+
+		Dominance
+			BLOCK > MODIFY > ALLOW
+			REJECT ↔ BLOCK
+
+		Decision Mapping Rule (MANDATORY)
+
+			binary_decision → execution_decision mapping:
+
+			REJECT → BLOCK
+			ACCEPT → {ALLOW | MODIFY}
+
+			Constraint:
+
+			binary layer MUST dominate
+
+			execution layer MUST NOT override binary layer
+
+	5.10 Modification Vector
+		size_adjustment ∈ [0,1]
+		direction_override ∈ {-1,0,1}
+
+	5.11 Constraint Score
+		constraint_score ∈ [0,1]
+
+	5.12 RULE EXECUTION ORDER
+		1. Input Validation
+		2. Domain Evaluation
+		3. Aggregation
+		4. Conflict Resolution
+		5. Invariant Validation
+		6. Decision Computation
+		7. Output Emission
+
+	5.13 Short-Circuit Constraint (CLARIFIED)
+
+			IF CRITICAL constraint FAIL:
+
+				STOP further evaluation
+
+			BUT:
+
+				constraint_set MUST include:
+
+					all evaluated constraints until stop point
+
+			Completeness invariant applies ONLY to evaluated subset
+
+	5.14 Numeric Model
+		value = integer / 10^6
+
+	5.15 Invariants
+		deterministic output
+		ordering invariant
+		conflict invariant
+		completeness invariant
+
+		Additional Invariants:
+
+			Monotonicity:
+				increase violation_score → constraint_score MUST NOT decrease
+
+			Identity:
+				identical input → identical decision_id
+
+			Normalization:
+				constraint_score ∈ [0,1] strictly
+
+	5.16 Idempotence
+		F(F(x)) = F(x)
+
+	No additional fields allowed.
+
+		FORBIDDEN:
+
+			signal_snapshot_reference
+			system_state_snapshot
+			constraint_configuration_snapshot
+
+6. FLOW ARCHITECTURE
+	Input → Validate → Evaluate → Aggregate → Resolve → Decide → Output
+
+7. PIPELINE STRUCTURE
+	pending → validated → evaluated → resolved → emitted
+
+8. CONTROL & CONSTRAINTS
+	strict determinism
+	no external input
+	no ambiguity
+	strict precedence
+
+	Numeric Safety Enforcement (MANDATORY)
+
+		overflow → HARD FAIL
+		underflow → clamp to 0
+
+		division-by-zero → REJECT
+
+		value MUST remain within:
+
+		[min_value, max_value]
+
+		Else → INVALID OUTPUT
+
+9. STATE MODEL
+
+	States:
+
+		pending
+		evaluated
+		finalized
+
+	Reconstruction Rule (MANDATORY)
+
+		Full system state MUST be reconstructable as:
+
+		f(
+			canonical_input_set,
+			constraint_set,
+			ordering_rules
+		)
+
+		No hidden intermediate state allowed
+
+10. FAILURE MODEL
+
+	Scenarios:
+
+		invalid input
+		ordering conflict
+		invariant violation
+
+	Response:
+
+		reject
+		abort
+
+11. ASSUMPTION REGISTER
+	Assumption						Status
+	constraint completeness			OPEN
+	input validity					VALIDATED
+
+12. Validation MUST cover:
+
+	- all 13 Red Team attack layers
+	- deterministic replay validation
+	- invariant validation
+	- traceability validation
+	- ambiguity validation
+
+	Acceptance:
+
+	ZERO:
+
+		ambiguity
+		replay mismatch
+		invariant violation
+
+	Validation Evidence Requirement (MANDATORY)
+
+		Each validation MUST include:
+
+			canonical_input_set reference
+			output snapshot
+			hash comparison
+			rule reference
+
+13. OUTPUT (FULL MERGED)
+		constraint_decision_output = {
+
+				decision_id
+				input_hash_reference
+
+				binary_decision
+				execution_decision
+
+				violated_constraints_set
+				evaluated_constraints_set
+
+				dominant_constraint_id
+
+				modification_vector
+				constraint_score
+
+				evaluation_time
+
+				constraint_engine_version
+				config_version
+			}
+
+		decision_id = HASH_v1(
+
+				ordered_constraint_set +
+				canonical_input_set +
+				version_identifiers
+
+			)
+
+			Constraint:
+
+			ordering MUST match Section 5.7
+
+		Canonical Serialization Rule (MANDATORY)
+
+			All hash inputs MUST be serialized using:
+
+				deterministic field ordering
+				fixed encoding format (UTF-8)
+				no optional fields omission
+
+			Constraint:
+
+			same logical input → identical byte stream
+
+		evaluated_constraints_set =
+
+			set of all constraint_id evaluated during execution
+
+		Phase D Contract Enforcement (MANDATORY)
+
+			constraint_decision_output MUST include:
+
+				binary_decision
+				execution_decision
+				modification_vector
+				violated_constraints_set
+				dominant_constraint_id
+
+			Missing field → INVALID OUTPUT
+
+14. TRACEABILITY
+	output
+	 → constraint_set
+	 → constraint_definition
+	 → canonical_input_set
+
+	constraint_decision_output
+		 → constraint_set
+		 → constraint_result
+		 → evaluation_unit
+		 → rule_id
+		 → canonical_input_set
+
+		Missing link → INVALID SYSTEM
+
+15. CROSS-PHASE CONSISTENCY
+
+	Aligned with:
+
+		Phase A outputs
+		Step 4 domain model
+		Phase D enforcement
+
+16. SCALABILITY MODEL
+	O(N constraints)
+	per-unit evaluation
+	stateless
+
+17. GOVERNANCE
+	version-controlled
+	immutable configs
+	approval required
+
+18. AUDITABILITY
+	full trace
+	deterministic replay
+	hash verification
+
+19. VERSIONING
+constraint_engine_version
+config_version
+hash_version
+
+20. SECURITY MODEL
+	no external dependency
+	no runtime mutation
+	strict validation
+
+21. LOCK CRITERIA
+
+	Phase locks only if:
+
+	deterministic
+	replay-safe
+	UPS compliant
+	no ambiguity
+	fully validated

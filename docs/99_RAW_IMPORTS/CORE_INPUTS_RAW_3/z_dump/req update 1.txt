@@ -1,0 +1,238 @@
+trading-platform/
+│
+├── README.md
+├── Makefile
+├── VERSION
+├── .env.example
+├── .gitignore
+│
+├── .github/
+│   └── workflows/
+│       ├── build.yaml
+│       ├── deploy.yaml
+│       └── rollback.yaml
+│
+├── cicd/
+│   ├── policies/
+│   │   ├── deployment-policy.yaml
+│   │   ├── rollback-policy.yaml
+│   │   └── promotion-policy.yaml
+│   ├── strategies/
+│   │   ├── canary/
+│   │   │   └── canary-rules.yaml
+│   │   ├── blue-green/
+│   │   │   └── blue-green.yaml
+│   │   └── rollback/
+│   │       └── auto-rollback.yaml
+│   └── argocd/
+│       ├── app-of-apps.yaml
+│       ├── mapping.yaml
+│       ├── dev/
+│       ├── staging/
+│       └── prod/
+│
+├── schemas/
+│   ├── versioning-policy.md
+│   ├── registry/
+│   │   └── schema-registry.yaml
+│   ├── compatibility/
+│   │   └── compatibility-tests.md
+│   ├── signal_v1.avsc
+│   ├── trade_intent_v1.avsc
+│   ├── execution_intent_v1.avsc
+│   ├── execution_order_v1.avsc
+│   ├── fill_v1.avsc
+│   ├── kill_switch_v1.avsc
+│   └── audit_event_v1.avsc
+│
+├── platform/
+│   ├── event-bus/
+│   │   ├── router.py
+│   │   ├── partitioning.py
+│   │   ├── deduplication.py
+│   │   ├── ordering.py
+│   │   └── contracts/
+│   │       └── routing-rules.yaml
+│   │
+│   ├── workflow-engine/
+│   │   ├── state_machine.py
+│   │   ├── transitions.py
+│   │   ├── saga_orchestrator.py
+│   │   ├── retry_policies.py
+│   │   └── definitions/
+│   │       ├── trading-lifecycle.yaml
+│   │       └── execution-lifecycle.yaml
+│   │
+│   ├── execution-coordinator/
+│   │   ├── coordinator.py
+│   │   ├── execution_graph.py
+│   │   ├── dependency_resolver.py
+│   │   └── routing_rules.yaml
+│   │
+│   ├── portfolio-orchestrator/
+│   │   ├── aggregator.py
+│   │   ├── pnl_engine.py
+│   │   ├── exposure_aggregator.py
+│   │   └── capital_allocator.py
+│   │
+│   ├── system-registry/
+│   │   ├── service_registry.yaml
+│   │   ├── topic_registry.yaml
+│   │   ├── ownership_registry.yaml
+│   │   └── dependency_graph.yaml
+│   │
+│   ├── lineage/
+│   │   ├── hasher.py
+│   │   ├── lineage_tracker.py
+│   │   ├── trace_propagation.py
+│   │   └── storage/
+│   │       └── lineage_store.py
+│   │
+│   ├── flow-control/
+│   │   ├── rate_limiter.py
+│   │   ├── lag_monitor.py
+│   │   ├── throttle_controller.py
+│   │   ├── queue_prioritizer.py
+│   │   └── policies/
+│   │       └── flow-rules.yaml
+│   │
+│   ├── config-control/
+│   │   ├── config_distributor.py
+│   │   ├── feature_flags.py
+│   │   ├── rollout_manager.py
+│   │   └── schemas/
+│   │       └── config-schema.yaml
+│   │
+│   ├── resilience/
+│   │   ├── circuit_breaker.py
+│   │   ├── fallback_manager.py
+│   │   ├── isolation_controller.py
+│   │   └── policies/
+│   │       └── resilience-rules.yaml
+│   │
+│   └── replay/
+│       ├── replay_controller.py
+│       ├── snapshot_manager.py
+│       ├── state_rebuilder.py
+│       ├── determinism_validator.py
+│       └── policies/
+│           └── replay-rules.yaml
+│
+├── infrastructure/
+│   ├── config/
+│   │   ├── global.env
+│   │   ├── versions.env
+│   │   └── secrets.example.env
+│   │
+│   ├── state/
+│   │   └── install.state
+│   │
+│   ├── event-governance/
+│   │   ├── validator/
+│   │   │   ├── schema_validator.py
+│   │   │   ├── compatibility_checker.py
+│   │   │   └── registry_client.py
+│   │   ├── enforcement/
+│   │   │   ├── producer_guard.py
+│   │   │   ├── consumer_guard.py
+│   │   │   ├── dead_letter_router.py
+│   │   │   └── retry_router.py
+│   │   └── middleware/
+│   │       └── kafka_interceptor.py
+│   │
+│   ├── security/
+│   │   ├── rbac/
+│   │   │   └── roles.yaml
+│   │   ├── psa/
+│   │   │   └── pod-security.yaml
+│   │   ├── image-security/
+│   │   │   ├── signing-policy.yaml
+│   │   │   └── verification.sh
+│   │   └── runtime/
+│   │       └── falco-rules.yaml
+│   │
+│   ├── time/
+│   │   ├── ntp-setup.sh
+│   │   ├── drift-monitor.sh
+│   │   └── validation.sh
+│   │
+│   ├── scripts/
+│   │   ├── lib/
+│   │   ├── master/
+│   │   ├── verify/
+│   │   ├── secrets/
+│   │   └── debug/
+│   │
+│   ├── components/
+│   ├── phases/
+│   ├── kubernetes/
+│   └── terraform/
+│
+├── services/
+│   ├── _template/
+│   │   ├── contracts/
+│   │   │   ├── api.yaml
+│   │   │   ├── events.md
+│   │   │   └── dependencies.yaml
+│   │   ├── app/
+│   │   ├── tests/
+│   │   ├── configs/
+│   │   ├── kafka/
+│   │   ├── observability/
+│   │   └── helm/
+│   │
+│   ├── market-data-ingestion-service/
+│   │   ├── contracts/
+│   │   │   ├── api.yaml
+│   │   │   ├── events.md
+│   │   │   └── dependencies.yaml
+│   │   ├── app/
+│   │   ├── tests/
+│   │   ├── configs/
+│   │   ├── kafka/
+│   │   ├── observability/
+│   │   └── helm/
+│
+│   ├── market-data-normalizer-service/
+│   │   ├── contracts/
+│   │   │   ├── api.yaml
+│   │   │   ├── events.md
+│   │   │   └── dependencies.yaml
+│   │   ├── app/
+│   │   ├── tests/
+│   │   ├── configs/
+│   │   ├── kafka/
+│   │   ├── observability/
+│   │   └── helm/
+│
+│   ├── ... (ALL REMAINING SERVICES KEEP SAME STRUCTURE + contracts/ ADDED)
+│
+│   └── trading-dashboard-frontend/
+│       ├── contracts/
+│       │   ├── api.yaml
+│       │   ├── events.md
+│       │   └── dependencies.yaml
+│       ├── src/
+│       ├── tests/
+│       ├── configs/
+│       ├── observability/
+│       └── helm/
+│
+├── docs/
+│   ├── architecture/
+│   ├── runbooks/
+│   └── adr/
+│
+└── tests/
+    ├── unit/
+    ├── integration/
+    ├── e2e/
+    ├── fixtures/
+    ├── mock-services/
+    └── orchestration/
+        ├── test-runner.py
+        ├── environment-manager.py
+        ├── chaos-tests/
+        │   └── chaos-engine.py
+        └── load-tests/
+            └── k6-scenarios.js

@@ -1,0 +1,35 @@
+{
+  "type": "record",
+  "name": "InstrumentMonitorEvent_v1",
+  "namespace": "core.trading.monitoring",
+  "fields": [
+    {
+      "name": "instrument_id",
+      "type": "string"
+    },
+    {
+      "name": "monitor_state",
+      "type": "string"
+    },
+    {
+      "name": "strategy_context",
+      "type": "string"
+    },
+    {
+      "name": "session_state",
+      "type": "string"
+    },
+    {
+      "name": "volatility_regime",
+      "type": "string"
+    },
+    {
+      "name": "news_block_active",
+      "type": "boolean"
+    },
+    {
+      "name": "event_time",
+      "type": "string"
+    }
+  ]
+}

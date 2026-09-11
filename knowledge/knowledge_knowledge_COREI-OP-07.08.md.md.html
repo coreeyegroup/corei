@@ -1,0 +1,2221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <title>knowledge COREI OP 07.08.md</title>
+  <style>
+  body {
+    background: #0A0D12;
+    color: #E3E7EC;
+    font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px 40px;
+  }
+
+  h1 {
+    font-size: 26px;
+    font-weight: 600;
+    color: #C6A46A;
+    margin: 24px 0 12px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 8px;
+  }
+
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #D4B88A;
+    margin: 20px 0 10px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 6px;
+  }
+
+  h3 {
+    font-size: 17px;
+    font-weight: 500;
+    color: #E3E7EC;
+    margin: 16px 0 8px 0;
+  }
+
+  h4 {
+    font-size: 15px;
+    font-weight: 500;
+    color: #C5CED9;
+    margin: 12px 0 6px 0;
+  }
+
+  p {
+    margin-bottom: 8px;
+    color: #C5CED9;
+  }
+
+  ul,
+  ol {
+    padding-left: 24px;
+    margin-bottom: 8px;
+    color: #C5CED9;
+  }
+
+  li {
+    margin-bottom: 2px;
+  }
+
+  code {
+    font-family: 'JetBrains Mono', 'Cascadia Code', monospace;
+    font-size: 13px;
+    background: rgba(255,255,255,0.05);
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid #28303C;
+    color: #C5CED9;
+  }
+
+  pre {
+    background: #18202A;
+    border: 1px solid #28303C;
+    border-radius: 6px;
+    padding: 16px 20px;
+    overflow: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 12px 0 16px 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #C5CED9;
+  }
+
+  pre code {
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 16px 0;
+    font-size: 13px;
+    color: #C5CED9;
+  }
+
+  th {
+    background: #18202A;
+    color: #C5CED9;
+    font-weight: 600;
+    text-align: left;
+    padding: 6px 12px;
+    border: 1px solid #28303C;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  td {
+    padding: 4px 12px;
+    border: 1px solid #28303C;
+    background: #0E1219;
+  }
+
+  tr:nth-child(even) td {
+    background: #121821;
+  }
+
+  blockquote {
+    border-left: 3px solid #C6A46A;
+    padding-left: 16px;
+    margin: 8px 0 12px 0;
+    color: #6E7883;
+    font-style: italic;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #28303C;
+    margin: 24px 0;
+  }
+
+  a {
+    color: #8BB4F0;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  strong {
+    color: #E3E7EC;
+    font-weight: 600;
+  }
+
+  img {
+    max-width: 100%;
+    border-radius: 4px;
+    border: 1px solid #28303C;
+  }
+
+  .doc-footer {
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid #28303C;
+    font-size: 12px;
+    color: #6E7883;
+    font-family: monospace;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+</style>
+</head>
+
+<body>
+
+  <div
+    class="doc-header"
+    style="
+      background:#121821;
+      border:1px solid #28303C;
+      border-radius:8px;
+      padding:1.2rem 1.8rem;
+      margin-bottom:1.8rem;
+    "
+  >
+
+    <div
+      style="
+        color:#C6A46A;
+        font-weight:600;
+        font-size:13px;
+        text-transform:uppercase;
+        letter-spacing:0.05em;
+      "
+    >
+      COREI · Knowledge System
+    </div>
+
+
+
+    <h1
+      style="
+        font-size:28px;
+        font-weight:600;
+        color:#E3E7EC;
+        margin:0.1rem 0;
+        border-bottom:none;
+        padding-bottom:0;
+      "
+    >
+      knowledge COREI OP 07.08.md
+    </h1>
+
+    <div
+      style="
+        font-size:16px;
+        color:#C5CED9;
+      "
+    >
+      Foundation
+      ·
+      Constitutional
+    </div>
+
+    <div
+      style="
+        display:flex;
+        flex-wrap:wrap;
+        gap:0.6rem 1.8rem;
+        margin-top:0.6rem;
+        font-size:13px;
+      "
+    >
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Status
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          Approved
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Version
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          1.0
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Classification
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          Constitutional
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Owner
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          COREI
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Repository
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+            font-family:monospace;
+          "
+        >
+          knowledge/knowledge_COREI-OP-07.08.md.md
+        </span>
+      </span>
+
+    </div>
+
+
+
+  </div>
+
+
+
+  <h1>COREI INCIDENT AND RECOVERY OPERATIONS</h1>
+<h1>DOCUMENT ID</h1>
+<h1>COREI-OP-07.08</h1>
+<h1>DOCUMENT NAME</h1>
+<h1>INCIDENT AND RECOVERY OPERATIONS</h1>
+<h1>REPOSITORY FILE</h1>
+<h1>knowledge/07-operations/COREI-OP-07.08-INCIDENT-AND-RECOVERY-OPERATIONS.md</h1>
+<h1>VERSION</h1>
+<h1>1.0</h1>
+<h1>STATUS</h1>
+<h1>APPROVED</h1>
+<h1>CLASSIFICATION</h1>
+<h1>CONSTITUTIONAL</h1>
+<h1>1. PURPOSE</h1>
+<p>The COREI Incident and Recovery Operations document<br>
+defines the authoritative institutional model for</p>
+<p>detecting,</p>
+<p>declaring,</p>
+<p>classifying,</p>
+<p>containing,</p>
+<p>stabilizing,</p>
+<p>recovering,</p>
+<p>validating,</p>
+<p>reconciling,</p>
+<p>learning from,</p>
+<p>and permanently resolving</p>
+<p>operational incidents.</p>
+<p>Its purpose is to ensure that failures do not become</p>
+<p>hidden,</p>
+<p>unowned,</p>
+<p>unbounded,</p>
+<p>unrecoverable,</p>
+<p>or institutionally forgotten.</p>
+<p>Incident response SHALL preserve</p>
+<p>safety,</p>
+<p>authority,</p>
+<p>evidence,</p>
+<p>continuity,</p>
+<p>financial integrity,</p>
+<p>data integrity,</p>
+<p>security,</p>
+<p>and institutional trust.</p>
+<h1>2. SCOPE</h1>
+<p>This document governs incidents and recovery across</p>
+<p>infrastructure,</p>
+<p>networks,</p>
+<p>storage,</p>
+<p>databases,</p>
+<p>messaging,</p>
+<p>platforms,</p>
+<p>services,</p>
+<p>applications,</p>
+<p>data,</p>
+<p>security,</p>
+<p>identity,</p>
+<p>providers,</p>
+<p>brokers,</p>
+<p>trading,</p>
+<p>portfolios,</p>
+<p>risk,</p>
+<p>execution,</p>
+<p>positions,</p>
+<p>performance,</p>
+<p>automation,</p>
+<p>artificial intelligence systems,</p>
+<p>operator environments,</p>
+<p>and future institutional capability.</p>
+<p>It governs</p>
+<p>detection,</p>
+<p>triage,</p>
+<p>declaration,</p>
+<p>classification,</p>
+<p>ownership,</p>
+<p>escalation,</p>
+<p>containment,</p>
+<p>stabilization,</p>
+<p>recovery,</p>
+<p>reconciliation,</p>
+<p>validation,</p>
+<p>communication,</p>
+<p>evidence,</p>
+<p>post-incident review,</p>
+<p>corrective action,</p>
+<p>and institutional learning.</p>
+<h1>3. INCIDENT OPERATIONS PRINCIPLE</h1>
+<p>Incident Operations SHALL operate according to the<br>
+chain</p>
+<p>Detect</p>
+<p>↓</p>
+<p>Acknowledge</p>
+<p>↓</p>
+<p>Triage</p>
+<p>↓</p>
+<p>Declare</p>
+<p>↓</p>
+<p>Classify</p>
+<p>↓</p>
+<p>Assign Authority</p>
+<p>↓</p>
+<p>Contain</p>
+<p>↓</p>
+<p>Stabilize</p>
+<p>↓</p>
+<p>Recover</p>
+<p>↓</p>
+<p>Reconcile</p>
+<p>↓</p>
+<p>Validate</p>
+<p>↓</p>
+<p>Resume</p>
+<p>↓</p>
+<p>Review</p>
+<p>↓</p>
+<p>Correct</p>
+<p>↓</p>
+<p>Learn</p>
+<p>↓</p>
+<p>Improve</p>
+<p>Every material transition SHALL remain traceable.</p>
+<h1>4. INCIDENT DEFINITION</h1>
+<p>An incident is an unplanned event or condition that</p>
+<p>causes,</p>
+<p>degrades,</p>
+<p>threatens,</p>
+<p>or creates uncertainty about</p>
+<p>the safe,<br>
+correct,<br>
+secure,<br>
+available,<br>
+or authorized operation</p>
+<p>of COREI capability.</p>
+<p>An incident MAY exist even when systems remain<br>
+technically available.</p>
+<h1>5. INCIDENT IS NOT LIMITED TO OUTAGE</h1>
+<p>An incident MAY include</p>
+<p>service outage,</p>
+<p>degraded performance,</p>
+<p>incorrect data,</p>
+<p>stale data,</p>
+<p>security compromise,</p>
+<p>unauthorized access,</p>
+<p>configuration drift,</p>
+<p>broker discrepancy,</p>
+<p>unknown order state,</p>
+<p>position mismatch,</p>
+<p>financial discrepancy,</p>
+<p>risk-control failure,</p>
+<p>or incorrect system behaviour.</p>
+<p>Availability alone SHALL NOT define incident state.</p>
+<h1>6. INCIDENT OWNERSHIP</h1>
+<p>Every active incident SHALL have explicit ownership.</p>
+<p>Ownership SHALL identify</p>
+<p>Incident Commander</p>
+<p>and</p>
+<p>appropriate technical or domain owners.</p>
+<p>An unowned active incident is an operational<br>
+failure.</p>
+<h1>7. INCIDENT AUTHORITY</h1>
+<p>Incident authority SHALL define who may</p>
+<p>declare an incident,</p>
+<p>change severity,</p>
+<p>contain systems,</p>
+<p>suspend capability,</p>
+<p>invoke emergency controls,</p>
+<p>authorize recovery,</p>
+<p>approve resumption,</p>
+<p>and close the incident.</p>
+<p>Technical access SHALL NOT automatically create<br>
+incident authority.</p>
+<h1>8. INCIDENT COMMAND</h1>
+<p>Material incidents SHALL establish clear incident<br>
+command.</p>
+<p>The Incident Commander SHALL coordinate</p>
+<p>scope,</p>
+<p>priorities,</p>
+<p>ownership,</p>
+<p>communication,</p>
+<p>decisions,</p>
+<p>containment,</p>
+<p>recovery,</p>
+<p>and closure.</p>
+<p>Incident command SHALL reduce ambiguity.</p>
+<h1>9. INCIDENT COMMANDER</h1>
+<p>The Incident Commander SHALL own coordination of<br>
+the incident.</p>
+<p>The Incident Commander SHALL NOT be required to<br>
+personally perform every technical action.</p>
+<p>Responsibilities include</p>
+<p>maintaining incident state,</p>
+<p>assigning work,</p>
+<p>tracking decisions,</p>
+<p>coordinating escalation,</p>
+<p>protecting recovery discipline,</p>
+<p>and determining when closure criteria are met.</p>
+<h1>10. DOMAIN OWNERS</h1>
+<p>Domain owners SHALL provide authoritative expertise<br>
+for affected capability.</p>
+<p>Domain owners MAY include</p>
+<p>Infrastructure Owner</p>
+<p>Platform Owner</p>
+<p>Service Owner</p>
+<p>Data Owner</p>
+<p>Security Owner</p>
+<p>Trading Owner</p>
+<p>Risk Authority</p>
+<p>Portfolio Authority</p>
+<p>Execution Owner</p>
+<p>Broker Owner</p>
+<p>or other responsible authority.</p>
+<p>Domain ownership SHALL remain explicit.</p>
+<h1>11. INCIDENT DETECTION</h1>
+<p>Incidents MAY be detected through</p>
+<p>monitoring,</p>
+<p>alerting,</p>
+<p>operators,</p>
+<p>users,</p>
+<p>reconciliation,</p>
+<p>security systems,</p>
+<p>providers,</p>
+<p>brokers,</p>
+<p>automated controls,</p>
+<p>or external notification.</p>
+<p>Detection source SHALL be recorded where<br>
+applicable.</p>
+<h1>12. INCIDENT ACKNOWLEDGEMENT</h1>
+<p>Critical incident signals SHALL be acknowledged.</p>
+<p>Acknowledgement SHALL indicate that a responsible<br>
+party has accepted investigation responsibility.</p>
+<p>Acknowledgement SHALL NOT imply resolution.</p>
+<h1>13. INCIDENT TRIAGE</h1>
+<p>Triage SHALL determine</p>
+<p>what happened,</p>
+<p>what is affected,</p>
+<p>when it started,</p>
+<p>whether it is ongoing,</p>
+<p>current impact,</p>
+<p>potential impact,</p>
+<p>affected authority,</p>
+<p>affected dependencies,</p>
+<p>and immediate safety requirements.</p>
+<p>Unknown information SHALL remain explicitly<br>
+unknown.</p>
+<h1>14. INCIDENT DECLARATION</h1>
+<p>An incident SHALL be formally declared when<br>
+operational coordination is required.</p>
+<p>Declaration SHALL establish</p>
+<p>incident identity,</p>
+<p>time,</p>
+<p>initial scope,</p>
+<p>initial severity,</p>
+<p>ownership,</p>
+<p>and communication context.</p>
+<p>Delayed declaration SHALL not be used to preserve<br>
+false operational health.</p>
+<h1>15. INCIDENT IDENTITY</h1>
+<p>Every material incident SHALL have unique identity.</p>
+<p>Incident identity SHALL support correlation across</p>
+<p>alerts,</p>
+<p>logs,</p>
+<p>changes,</p>
+<p>actions,</p>
+<p>communications,</p>
+<p>evidence,</p>
+<p>recovery,</p>
+<p>and post-incident review.</p>
+<h1>16. INCIDENT CLASSIFICATION</h1>
+<p>Incidents SHALL be classified according to<br>
+institutional impact.</p>
+<p>Classification SHALL consider</p>
+<p>availability,</p>
+<p>correctness,</p>
+<p>security,</p>
+<p>data integrity,</p>
+<p>financial impact,</p>
+<p>trading impact,</p>
+<p>customer or operator impact,</p>
+<p>blast radius,</p>
+<p>and recovery complexity.</p>
+<h1>17. INCIDENT SEVERITY</h1>
+<p>COREI MAY use severity levels such as</p>
+<p>SEV-1 — Critical</p>
+<p>SEV-2 — Major</p>
+<p>SEV-3 — Significant</p>
+<p>SEV-4 — Minor</p>
+<p>The exact severity SHALL be based upon impact,<br>
+not organizational convenience.</p>
+<h1>18. SEV-1 CRITICAL INCIDENT</h1>
+<p>A SEV-1 incident MAY include</p>
+<p>systemic production failure,</p>
+<p>active security compromise,</p>
+<p>uncontrolled trading,</p>
+<p>material financial uncertainty,</p>
+<p>widespread data corruption,</p>
+<p>critical authority compromise,</p>
+<p>or failure threatening institutional continuity.</p>
+<p>SEV-1 incidents SHALL receive immediate<br>
+institutional response.</p>
+<h1>19. SEV-2 MAJOR INCIDENT</h1>
+<p>A SEV-2 incident MAY include</p>
+<p>major service degradation,</p>
+<p>material broker outage,</p>
+<p>significant trading restriction,</p>
+<p>important data failure,</p>
+<p>major platform failure,</p>
+<p>or serious but contained security impact.</p>
+<p>SEV-2 incidents require urgent coordinated<br>
+response.</p>
+<h1>20. SEV-3 SIGNIFICANT INCIDENT</h1>
+<p>A SEV-3 incident MAY include</p>
+<p>limited production degradation,</p>
+<p>contained service failure,</p>
+<p>non-systemic reconciliation issue,</p>
+<p>or operational defect requiring coordinated<br>
+response.</p>
+<p>SEV-3 incidents SHALL remain owned and tracked.</p>
+<h1>21. SEV-4 MINOR INCIDENT</h1>
+<p>A SEV-4 incident MAY include</p>
+<p>limited impact,</p>
+<p>low-risk degradation,</p>
+<p>or minor operational interruption.</p>
+<p>Minor SHALL NOT mean undocumented.</p>
+<h1>22. SEVERITY CHANGE</h1>
+<p>Incident severity MAY change as evidence develops.</p>
+<p>Severity changes SHALL be</p>
+<p>explicit,</p>
+<p>time-stamped,</p>
+<p>and attributable</p>
+<p>where required.</p>
+<p>Initial underestimation SHALL not block later<br>
+escalation.</p>
+<h1>23. BLAST RADIUS</h1>
+<p>Every material incident SHALL assess blast radius.</p>
+<p>Blast radius MAY include</p>
+<p>services,</p>
+<p>platforms,</p>
+<p>clusters,</p>
+<p>accounts,</p>
+<p>brokers,</p>
+<p>strategies,</p>
+<p>portfolios,</p>
+<p>markets,</p>
+<p>regions,</p>
+<p>users,</p>
+<p>data,</p>
+<p>or security boundaries.</p>
+<p>Unknown blast radius SHALL be treated cautiously.</p>
+<h1>24. IMPACT ASSESSMENT</h1>
+<p>Impact assessment SHALL consider</p>
+<p>what has failed,</p>
+<p>what may fail,</p>
+<p>what state may be incorrect,</p>
+<p>what authority may be compromised,</p>
+<p>and what irreversible consequence may occur.</p>
+<p>Potential impact SHALL matter before confirmed<br>
+damage exists.</p>
+<h1>25. INCIDENT PRIORITY</h1>
+<p>Incident priority SHALL follow institutional risk.</p>
+<p>Priority SHOULD protect in order</p>
+<p>human safety where applicable,</p>
+<p>security,</p>
+<p>capital,</p>
+<p>financial integrity,</p>
+<p>data integrity,</p>
+<p>institutional authority,</p>
+<p>critical continuity,</p>
+<p>and service availability.</p>
+<p>Availability SHALL not automatically receive the<br>
+highest priority.</p>
+<h1>26. CONTAINMENT</h1>
+<p>Containment SHALL limit further impact.</p>
+<p>Containment MAY include</p>
+<p>isolating systems,</p>
+<p>revoking access,</p>
+<p>blocking traffic,</p>
+<p>disabling services,</p>
+<p>suspending strategies,</p>
+<p>blocking new orders,</p>
+<p>entering close-only mode,</p>
+<p>disconnecting providers,</p>
+<p>or activating fallback.</p>
+<p>Containment SHALL be deliberate.</p>
+<h1>27. CONTAINMENT BEFORE ROOT CAUSE</h1>
+<p>Complete root cause understanding SHALL NOT be<br>
+required before necessary containment.</p>
+<p>Where continued operation creates unacceptable<br>
+risk,<br>
+containment SHALL take priority.</p>
+<p>Containment actions SHALL remain traceable.</p>
+<h1>28. STABILIZATION</h1>
+<p>Stabilization establishes a controlled operational<br>
+state.</p>
+<p>A stabilized system MAY remain</p>
+<p>degraded,</p>
+<p>restricted,</p>
+<p>partially unavailable,</p>
+<p>or operating under temporary controls.</p>
+<p>Stable SHALL NOT automatically mean recovered.</p>
+<h1>29. TEMPORARY CONTROLS</h1>
+<p>Temporary controls MAY be used during incidents.</p>
+<p>Every temporary control SHALL define</p>
+<p>reason,</p>
+<p>scope,</p>
+<p>owner,</p>
+<p>risk,</p>
+<p>monitoring,</p>
+<p>and removal condition.</p>
+<p>Temporary controls SHALL NOT silently become<br>
+permanent architecture.</p>
+<h1>30. RECOVERY OBJECTIVE</h1>
+<p>Recovery SHALL restore trusted capability.</p>
+<p>Recovery SHALL NOT merely restore process<br>
+availability.</p>
+<p>Trusted recovery requires confidence in</p>
+<p>identity,</p>
+<p>configuration,</p>
+<p>data,</p>
+<p>state,</p>
+<p>dependencies,</p>
+<p>security,</p>
+<p>and domain correctness.</p>
+<h1>31. RECOVERY AUTHORITY</h1>
+<p>Recovery actions SHALL be performed by authorized<br>
+owners.</p>
+<p>Recovery authority SHALL distinguish</p>
+<p>technical restoration,</p>
+<p>domain validation,</p>
+<p>and institutional resumption approval.</p>
+<p>Technical recovery SHALL not automatically<br>
+authorize business resumption.</p>
+<h1>32. RECOVERY PLAN</h1>
+<p>Material incidents SHALL maintain an explicit<br>
+recovery plan.</p>
+<p>The plan SHOULD define</p>
+<p>target state,</p>
+<p>recovery sequence,</p>
+<p>owners,</p>
+<p>dependencies,</p>
+<p>validation,</p>
+<p>rollback,</p>
+<p>and resumption criteria.</p>
+<p>Unstructured trial-and-error SHALL be avoided.</p>
+<h1>33. DEPENDENCY-AWARE RECOVERY</h1>
+<p>Recovery SHALL follow actual dependency order.</p>
+<p>A typical sequence MAY include</p>
+<p>Infrastructure</p>
+<p>↓</p>
+<p>Security and Identity</p>
+<p>↓</p>
+<p>Data and Storage</p>
+<p>↓</p>
+<p>Messaging</p>
+<p>↓</p>
+<p>Platform Runtime</p>
+<p>↓</p>
+<p>Services</p>
+<p>↓</p>
+<p>Domain Capability</p>
+<p>↓</p>
+<p>External Connectivity</p>
+<p>↓</p>
+<p>Reconciliation</p>
+<p>↓</p>
+<p>Readiness Validation</p>
+<p>↓</p>
+<p>Controlled Resumption</p>
+<p>The exact sequence SHALL follow system reality.</p>
+<h1>34. RECOVERY POINT OBJECTIVE</h1>
+<p>Critical stateful capability SHOULD define a<br>
+Recovery Point Objective where appropriate.</p>
+<p>RPO SHALL describe the maximum acceptable amount of<br>
+data loss measured in time or equivalent state.</p>
+<p>RPO SHALL reflect institutional impact.</p>
+<h1>35. RECOVERY TIME OBJECTIVE</h1>
+<p>Critical capability SHOULD define a Recovery Time<br>
+Objective where appropriate.</p>
+<p>RTO SHALL describe the target time to restore<br>
+required capability.</p>
+<p>RTO SHALL not justify unsafe recovery.</p>
+<h1>36. RPO AND RTO REALISM</h1>
+<p>RPO and RTO SHALL reflect</p>
+<p>architecture,</p>
+<p>dependencies,</p>
+<p>backup capability,</p>
+<p>replication,</p>
+<p>operational staffing,</p>
+<p>and actual recovery procedures.</p>
+<p>Unvalidated recovery objectives are assumptions.</p>
+<h1>37. RECOVERY FROM BACKUP</h1>
+<p>Backup restoration SHALL verify</p>
+<p>backup identity,</p>
+<p>backup integrity,</p>
+<p>restore target,</p>
+<p>data consistency,</p>
+<p>security,</p>
+<p>and application compatibility.</p>
+<p>Successful restore command SHALL NOT alone prove<br>
+successful recovery.</p>
+<h1>38. STATE RECOVERY</h1>
+<p>State recovery SHALL identify authoritative state.</p>
+<p>Authoritative state MAY exist in</p>
+<p>database,</p>
+<p>event log,</p>
+<p>broker,</p>
+<p>provider,</p>
+<p>custodian,</p>
+<p>or another external authority.</p>
+<p>Recovery SHALL not create conflicting hidden state.</p>
+<h1>39. DATA RECOVERY</h1>
+<p>Data recovery SHALL preserve</p>
+<p>integrity,</p>
+<p>lineage,</p>
+<p>time,</p>
+<p>schema,</p>
+<p>and authority.</p>
+<p>Recovered data SHALL be validated before normal<br>
+consumption.</p>
+<h1>40. EVENT RECOVERY</h1>
+<p>Event-driven systems SHALL recover with explicit<br>
+understanding of</p>
+<p>offsets,</p>
+<p>ordering,</p>
+<p>duplication,</p>
+<p>replay,</p>
+<p>idempotency,</p>
+<p>and downstream state.</p>
+<p>Replay SHALL not create unintended duplicate<br>
+effects.</p>
+<h1>41. SERVICE RECOVERY</h1>
+<p>Service recovery SHALL validate</p>
+<p>process health,</p>
+<p>dependencies,</p>
+<p>configuration,</p>
+<p>state,</p>
+<p>security,</p>
+<p>and domain behaviour.</p>
+<p>A running service SHALL not automatically be<br>
+declared recovered.</p>
+<h1>42. PLATFORM RECOVERY</h1>
+<p>Platform recovery SHALL restore shared capability<br>
+without creating false downstream readiness.</p>
+<p>Consumers SHALL validate their own domain readiness<br>
+after platform restoration.</p>
+<h1>43. INFRASTRUCTURE RECOVERY</h1>
+<p>Infrastructure recovery SHALL restore</p>
+<p>compute,</p>
+<p>network,</p>
+<p>storage,</p>
+<p>orchestration,</p>
+<p>security foundations,</p>
+<p>and observability</p>
+<p>according to dependency order.</p>
+<p>Infrastructure availability SHALL not automatically<br>
+mean application recovery.</p>
+<h1>44. SECURITY RECOVERY</h1>
+<p>Security recovery SHALL validate</p>
+<p>identity,</p>
+<p>access,</p>
+<p>credentials,</p>
+<p>secrets,</p>
+<p>keys,</p>
+<p>certificates,</p>
+<p>controls,</p>
+<p>and evidence.</p>
+<p>Known compromise SHALL be removed before<br>
+unrestricted resumption.</p>
+<h1>45. TRADING RECOVERY</h1>
+<p>Trading recovery SHALL validate</p>
+<p>market data,</p>
+<p>broker connectivity,</p>
+<p>orders,</p>
+<p>executions,</p>
+<p>positions,</p>
+<p>balances,</p>
+<p>margin,</p>
+<p>risk,</p>
+<p>portfolio state,</p>
+<p>and trading readiness.</p>
+<p>Trading SHALL NOT resume solely because services<br>
+are online.</p>
+<h1>46. ORDER RECOVERY</h1>
+<p>After execution-related incidents,<br>
+all material orders SHALL be reconciled.</p>
+<p>Recovery SHALL identify</p>
+<p>submitted orders,</p>
+<p>acknowledged orders,</p>
+<p>open orders,</p>
+<p>partially filled orders,</p>
+<p>filled orders,</p>
+<p>cancelled orders,</p>
+<p>rejected orders,</p>
+<p>and unknown orders.</p>
+<p>Unknown order state SHALL remain blocking where<br>
+financial risk exists.</p>
+<h1>47. POSITION RECOVERY</h1>
+<p>Position recovery SHALL establish authoritative<br>
+position state.</p>
+<p>Recovery SHALL reconcile</p>
+<p>internal positions,</p>
+<p>broker positions,</p>
+<p>and custodian positions</p>
+<p>where applicable.</p>
+<p>Unknown material position differences SHALL block<br>
+normal trading.</p>
+<h1>48. FINANCIAL RECOVERY</h1>
+<p>Financial recovery SHALL validate</p>
+<p>cash,</p>
+<p>balances,</p>
+<p>margin,</p>
+<p>collateral,</p>
+<p>fees,</p>
+<p>PnL,</p>
+<p>and other consequential financial state</p>
+<p>where applicable.</p>
+<p>Technical recovery SHALL not conceal financial<br>
+discrepancy.</p>
+<h1>49. RECONCILIATION</h1>
+<p>Reconciliation is a mandatory recovery control.</p>
+<p>Reconciliation SHALL compare internal state with<br>
+authoritative external or independent state where<br>
+applicable.</p>
+<p>Unknown discrepancy SHALL remain visible.</p>
+<h1>50. RECOVERY VALIDATION</h1>
+<p>Recovery SHALL be validated.</p>
+<p>Validation SHALL determine whether</p>
+<p>the original failure is contained,</p>
+<p>required capability is restored,</p>
+<p>state is correct,</p>
+<p>security is intact,</p>
+<p>dependencies are healthy,</p>
+<p>and residual risk is acceptable.</p>
+<p>Validation SHALL be evidence-based.</p>
+<h1>51. RESUMPTION</h1>
+<p>Resumption is the controlled return to normal<br>
+operation.</p>
+<p>Resumption MAY be</p>
+<p>partial,</p>
+<p>restricted,</p>
+<p>staged,</p>
+<p>or complete.</p>
+<p>Resumption SHALL require appropriate authority.</p>
+<h1>52. STAGED RESUMPTION</h1>
+<p>High-risk capability SHOULD resume progressively<br>
+where appropriate.</p>
+<p>Stages MAY include</p>
+<p>Observe Only</p>
+<p>Read Only</p>
+<p>Restricted Operation</p>
+<p>Close-Only</p>
+<p>Limited Production</p>
+<p>Normal Production</p>
+<p>Progression SHALL follow validation evidence.</p>
+<h1>53. RESUMPTION AUTHORITY</h1>
+<p>The authority to resume SHALL reflect the affected<br>
+domain.</p>
+<p>Examples include</p>
+<p>Security Authority</p>
+<p>Infrastructure Authority</p>
+<p>Service Owner</p>
+<p>Data Authority</p>
+<p>Risk Authority</p>
+<p>Trading Authority</p>
+<p>or Executive Authority</p>
+<p>where required.</p>
+<p>Technical restoration SHALL not bypass domain<br>
+authority.</p>
+<h1>54. INCIDENT COMMUNICATION</h1>
+<p>Incident communication SHALL be</p>
+<p>accurate,</p>
+<p>timely,</p>
+<p>controlled,</p>
+<p>role-appropriate,</p>
+<p>and evidence-aware.</p>
+<p>Communication SHALL distinguish</p>
+<p>confirmed facts,</p>
+<p>working hypotheses,</p>
+<p>unknowns,</p>
+<p>decisions,</p>
+<p>and next actions.</p>
+<h1>55. INCIDENT STATUS</h1>
+<p>Material incidents SHALL maintain explicit status.</p>
+<p>Status MAY include</p>
+<p>Detected</p>
+<p>Triaging</p>
+<p>Declared</p>
+<p>Contained</p>
+<p>Stabilized</p>
+<p>Recovering</p>
+<p>Validating</p>
+<p>Monitoring</p>
+<p>Resolved</p>
+<p>Closed</p>
+<p>Status SHALL reflect actual state.</p>
+<h1>56. INCIDENT TIMELINE</h1>
+<p>Material incidents SHALL maintain a timeline.</p>
+<p>The timeline SHOULD record</p>
+<p>detection,</p>
+<p>acknowledgement,</p>
+<p>declaration,</p>
+<p>severity changes,</p>
+<p>major findings,</p>
+<p>containment,</p>
+<p>recovery actions,</p>
+<p>validation,</p>
+<p>resumption,</p>
+<p>and closure.</p>
+<p>The timeline SHALL support reconstruction.</p>
+<h1>57. DECISION LOG</h1>
+<p>Material incident decisions SHOULD be recorded.</p>
+<p>Decision records SHOULD identify</p>
+<p>time,</p>
+<p>decision,</p>
+<p>authority,</p>
+<p>reason,</p>
+<p>known evidence,</p>
+<p>and expected effect.</p>
+<p>Decision logging SHALL not obstruct urgent action.</p>
+<h1>58. ACTION LOG</h1>
+<p>Material incident actions SHALL be traceable.</p>
+<p>Actions MAY include</p>
+<p>commands,</p>
+<p>configuration changes,</p>
+<p>deployments,</p>
+<p>access changes,</p>
+<p>service restarts,</p>
+<p>traffic changes,</p>
+<p>trading controls,</p>
+<p>and recovery actions.</p>
+<p>Untracked emergency action creates recovery risk.</p>
+<h1>59. EVIDENCE PRESERVATION</h1>
+<p>Incident response SHALL preserve relevant evidence.</p>
+<p>Evidence MAY include</p>
+<p>logs,</p>
+<p>metrics,</p>
+<p>traces,</p>
+<p>events,</p>
+<p>configuration,</p>
+<p>deployment history,</p>
+<p>audit records,</p>
+<p>database state,</p>
+<p>broker records,</p>
+<p>provider records,</p>
+<p>and communications.</p>
+<p>Evidence SHALL not be destroyed for convenience.</p>
+<h1>60. FORENSIC INTEGRITY</h1>
+<p>Where forensic investigation is required,<br>
+evidence SHALL preserve</p>
+<p>identity,</p>
+<p>time,</p>
+<p>source,</p>
+<p>integrity,</p>
+<p>and handling history.</p>
+<p>Recovery SHALL avoid unnecessary destruction of<br>
+forensic evidence.</p>
+<h1>61. CHANGE FREEZE</h1>
+<p>Material incidents MAY require change freeze.</p>
+<p>A change freeze SHALL define</p>
+<p>scope,</p>
+<p>exceptions,</p>
+<p>authority,</p>
+<p>and removal condition.</p>
+<p>Unrelated change SHALL not increase incident<br>
+uncertainty.</p>
+<h1>62. EMERGENCY CHANGE</h1>
+<p>Emergency change MAY be necessary during incident<br>
+response.</p>
+<p>Emergency change SHALL still preserve</p>
+<p>owner,</p>
+<p>purpose,</p>
+<p>scope,</p>
+<p>risk,</p>
+<p>action,</p>
+<p>validation,</p>
+<p>and follow-up.</p>
+<p>Emergency SHALL NOT mean undocumented.</p>
+<h1>63. ROLLBACK</h1>
+<p>Rollback MAY be used where</p>
+<p>the previous state is known,</p>
+<p>rollback is safe,</p>
+<p>state compatibility is understood,</p>
+<p>and rollback reduces risk.</p>
+<p>Rollback SHALL not be assumed safe merely because a<br>
+previous version existed.</p>
+<h1>64. ROLL FORWARD</h1>
+<p>Roll-forward MAY be preferable when</p>
+<p>state has changed,</p>
+<p>rollback is unsafe,</p>
+<p>or the corrective version is lower risk.</p>
+<p>Recovery strategy SHALL follow system reality.</p>
+<h1>65. FAILOVER</h1>
+<p>Failover SHALL be controlled.</p>
+<p>Failover SHALL validate</p>
+<p>target readiness,</p>
+<p>data consistency,</p>
+<p>identity,</p>
+<p>networking,</p>
+<p>dependencies,</p>
+<p>and authority.</p>
+<p>Automatic failover SHALL not create split-brain or<br>
+duplicate financial action.</p>
+<h1>66. FAILBACK</h1>
+<p>Failback SHALL be treated as a controlled change.</p>
+<p>Failback SHALL validate</p>
+<p>source readiness,</p>
+<p>state synchronization,</p>
+<p>traffic transition,</p>
+<p>and recovery.</p>
+<p>Restoring the original environment SHALL not be<br>
+assumed trivial.</p>
+<h1>67. DEGRADED MODE</h1>
+<p>A system MAY operate in degraded mode when</p>
+<p>the mode is defined,</p>
+<p>risk is understood,</p>
+<p>authority approves,</p>
+<p>and monitoring is sufficient.</p>
+<p>Degraded mode SHALL be visible.</p>
+<h1>68. RESTRICTED MODE</h1>
+<p>Restricted mode SHALL allow only explicitly<br>
+permitted operations.</p>
+<p>Restrictions MAY apply to</p>
+<p>users,</p>
+<p>services,</p>
+<p>accounts,</p>
+<p>brokers,</p>
+<p>strategies,</p>
+<p>markets,</p>
+<p>or actions.</p>
+<p>Restricted mode SHALL remain enforceable.</p>
+<h1>69. SAFE MODE</h1>
+<p>Critical systems MAY define a safe mode.</p>
+<p>Safe mode SHALL prioritize preservation of</p>
+<p>security,</p>
+<p>capital,</p>
+<p>data,</p>
+<p>state,</p>
+<p>and recoverability</p>
+<p>over normal throughput or feature availability.</p>
+<h1>70. INCIDENT ESCALATION</h1>
+<p>Escalation SHALL be based upon</p>
+<p>severity,</p>
+<p>impact,</p>
+<p>uncertainty,</p>
+<p>duration,</p>
+<p>authority,</p>
+<p>financial risk,</p>
+<p>security risk,</p>
+<p>and recovery complexity.</p>
+<p>Escalation SHALL not depend solely upon elapsed<br>
+time.</p>
+<h1>71. TECHNICAL ESCALATION</h1>
+<p>Technical escalation SHALL involve owners with<br>
+required system expertise.</p>
+<p>Escalation SHALL preserve current findings and<br>
+actions.</p>
+<p>New responders SHALL not need to reconstruct the<br>
+incident from memory.</p>
+<h1>72. DOMAIN ESCALATION</h1>
+<p>Domain escalation SHALL involve appropriate</p>
+<p>data,</p>
+<p>security,</p>
+<p>risk,</p>
+<p>portfolio,</p>
+<p>trading,</p>
+<p>or financial authority</p>
+<p>when the incident crosses technical boundaries.</p>
+<h1>73. EXECUTIVE ESCALATION</h1>
+<p>Executive escalation MAY be required for</p>
+<p>systemic incidents,</p>
+<p>material financial impact,</p>
+<p>critical security compromise,</p>
+<p>institutional continuity risk,</p>
+<p>or major external obligations.</p>
+<p>Executive escalation SHALL receive concise,<br>
+decision-relevant information.</p>
+<h1>74. EXTERNAL ESCALATION</h1>
+<p>External escalation MAY involve</p>
+<p>providers,</p>
+<p>brokers,</p>
+<p>custodians,</p>
+<p>exchanges,</p>
+<p>vendors,</p>
+<p>or other authorized parties.</p>
+<p>External dependency SHALL not remove internal<br>
+incident ownership.</p>
+<h1>75. INCIDENT HANDOVER</h1>
+<p>Incident responsibility transfer SHALL preserve</p>
+<p>current status,</p>
+<p>severity,</p>
+<p>impact,</p>
+<p>timeline,</p>
+<p>hypotheses,</p>
+<p>confirmed facts,</p>
+<p>actions completed,</p>
+<p>actions pending,</p>
+<p>temporary controls,</p>
+<p>risks,</p>
+<p>and next decisions.</p>
+<p>Handover SHALL be explicit.</p>
+<h1>76. 24X7 INCIDENT OPERATIONS</h1>
+<p>Where COREI operates continuously,<br>
+incident response SHALL support continuous<br>
+ownership.</p>
+<p>No critical incident SHALL become unowned because<br>
+of time zone,<br>
+shift,<br>
+or operator availability.</p>
+<h1>77. INCIDENT FATIGUE</h1>
+<p>Long-running incidents SHALL manage responder<br>
+fatigue.</p>
+<p>Incident command SHOULD rotate responsibilities<br>
+where necessary while preserving continuity.</p>
+<p>Fatigue SHALL not silently degrade decision quality.</p>
+<h1>78. INCIDENT TOOLING</h1>
+<p>Incident tooling MAY support</p>
+<p>alerts,</p>
+<p>incident identity,</p>
+<p>timeline,</p>
+<p>communication,</p>
+<p>runbooks,</p>
+<p>evidence,</p>
+<p>tasks,</p>
+<p>and post-incident review.</p>
+<p>Tool failure SHALL not eliminate the ability to<br>
+manage incidents.</p>
+<h1>79. INCIDENT AUTOMATION</h1>
+<p>Automation MAY support</p>
+<p>detection,</p>
+<p>enrichment,</p>
+<p>routing,</p>
+<p>containment,</p>
+<p>evidence collection,</p>
+<p>recovery,</p>
+<p>and validation.</p>
+<p>Automation SHALL remain bounded by explicit<br>
+authority.</p>
+<h1>80. AUTOMATED CONTAINMENT</h1>
+<p>Automated containment MAY be used where</p>
+<p>trigger,</p>
+<p>scope,</p>
+<p>authority,</p>
+<p>failure behaviour,</p>
+<p>and reversal</p>
+<p>are defined.</p>
+<p>High-impact automated containment SHALL be tested.</p>
+<h1>81. AUTOMATED RECOVERY</h1>
+<p>Automated recovery MAY be used for well-understood<br>
+failure modes.</p>
+<p>Automation SHALL validate successful recovery.</p>
+<p>Repeated automatic restart without root cause<br>
+visibility SHALL not be considered resilience.</p>
+<h1>82. SELF-HEALING</h1>
+<p>Self-healing capability SHALL be</p>
+<p>bounded,</p>
+<p>observable,</p>
+<p>deterministic where required,</p>
+<p>and safe.</p>
+<p>Self-healing SHALL not hide persistent structural<br>
+failure.</p>
+<h1>83. RECOVERY LOOP PROTECTION</h1>
+<p>Automated recovery SHALL prevent uncontrolled loops.</p>
+<p>Repeated failed recovery attempts SHALL</p>
+<p>stop,</p>
+<p>escalate,</p>
+<p>or enter safe state</p>
+<p>according to policy.</p>
+<p>Infinite recovery loops are prohibited.</p>
+<h1>84. RUNBOOKS</h1>
+<p>Critical incident classes SHALL maintain usable<br>
+runbooks.</p>
+<p>Runbooks SHOULD define</p>
+<p>trigger,</p>
+<p>triage,</p>
+<p>containment,</p>
+<p>recovery,</p>
+<p>validation,</p>
+<p>escalation,</p>
+<p>communication,</p>
+<p>and closure.</p>
+<p>Runbooks SHALL reflect actual architecture.</p>
+<h1>85. RUNBOOK EXECUTION</h1>
+<p>Runbook execution SHALL remain adaptable to<br>
+evidence.</p>
+<p>Runbooks guide response.</p>
+<p>They SHALL NOT require responders to ignore system<br>
+reality.</p>
+<h1>86. RUNBOOK VALIDATION</h1>
+<p>Critical runbooks SHALL be periodically validated.</p>
+<p>Validation MAY include</p>
+<p>tabletop exercises,</p>
+<p>simulation,</p>
+<p>staging tests,</p>
+<p>or controlled production tests.</p>
+<p>Untested recovery procedures SHALL be treated as<br>
+risk.</p>
+<h1>87. DISASTER RECOVERY</h1>
+<p>Disaster Recovery addresses failure exceeding<br>
+normal local recovery.</p>
+<p>Disaster scenarios MAY include</p>
+<p>site failure,</p>
+<p>cluster loss,</p>
+<p>storage loss,</p>
+<p>regional outage,</p>
+<p>major security compromise,</p>
+<p>or systemic infrastructure failure.</p>
+<p>Disaster recovery SHALL preserve institutional<br>
+authority.</p>
+<h1>88. BUSINESS CONTINUITY</h1>
+<p>Business continuity SHALL define how critical<br>
+institutional functions continue during disruption.</p>
+<p>Continuity MAY use</p>
+<p>alternate systems,</p>
+<p>alternate providers,</p>
+<p>alternate brokers,</p>
+<p>manual controls,</p>
+<p>restricted operation,</p>
+<p>or temporary suspension.</p>
+<p>Continuity SHALL not bypass mandatory safety<br>
+controls.</p>
+<h1>89. MINIMUM VIABLE OPERATING STATE</h1>
+<p>Critical domains SHOULD define the minimum viable<br>
+operating state required during major disruption.</p>
+<p>The state SHALL identify</p>
+<p>essential capability,</p>
+<p>essential authority,</p>
+<p>essential data,</p>
+<p>essential controls,</p>
+<p>and prohibited activity.</p>
+<h1>90. DISASTER DECLARATION</h1>
+<p>Disaster declaration SHALL be explicit.</p>
+<p>Declaration SHALL identify</p>
+<p>scope,</p>
+<p>authority,</p>
+<p>affected capability,</p>
+<p>recovery strategy,</p>
+<p>and communication model.</p>
+<p>Disaster mode SHALL not be entered casually.</p>
+<h1>91. DISASTER RECOVERY SITE</h1>
+<p>Where alternate recovery environments exist,<br>
+they SHALL maintain appropriate</p>
+<p>security,</p>
+<p>configuration,</p>
+<p>data,</p>
+<p>capacity,</p>
+<p>connectivity,</p>
+<p>and validation.</p>
+<p>An untested recovery site is not proven recovery<br>
+capability.</p>
+<h1>92. BACKUP OPERATIONS</h1>
+<p>Critical state SHALL have backup appropriate to its<br>
+recovery requirements.</p>
+<p>Backup operations SHALL define</p>
+<p>scope,</p>
+<p>frequency,</p>
+<p>retention,</p>
+<p>security,</p>
+<p>integrity,</p>
+<p>and restore testing.</p>
+<p>Backup success SHALL be observable.</p>
+<h1>93. RESTORE TESTING</h1>
+<p>Backups SHALL be periodically restored and<br>
+validated according to criticality.</p>
+<p>A backup that has never been restored is not proven<br>
+recovery capability.</p>
+<h1>94. RECOVERY EXERCISES</h1>
+<p>COREI SHOULD conduct recovery exercises for<br>
+critical capability.</p>
+<p>Exercises MAY validate</p>
+<p>people,</p>
+<p>authority,</p>
+<p>runbooks,</p>
+<p>tools,</p>
+<p>dependencies,</p>
+<p>communication,</p>
+<p>and technical recovery.</p>
+<p>Exercise findings SHALL produce improvement.</p>
+<h1>95. GAME DAYS</h1>
+<p>Controlled failure exercises MAY be used to test<br>
+resilience.</p>
+<p>Game days SHALL be</p>
+<p>authorized,</p>
+<p>bounded,</p>
+<p>observable,</p>
+<p>and recoverable.</p>
+<p>Testing SHALL not create uncontrolled production<br>
+risk.</p>
+<h1>96. CHAOS ENGINEERING</h1>
+<p>Chaos engineering MAY be used for mature capability<br>
+where appropriate.</p>
+<p>Chaos experiments SHALL define</p>
+<p>hypothesis,</p>
+<p>scope,</p>
+<p>blast radius,</p>
+<p>safety controls,</p>
+<p>observation,</p>
+<p>and stop condition.</p>
+<p>Random uncontrolled failure injection is<br>
+prohibited.</p>
+<h1>97. POST-INCIDENT REVIEW</h1>
+<p>Material incidents SHALL receive post-incident<br>
+review.</p>
+<p>The review SHALL determine</p>
+<p>what happened,</p>
+<p>why it happened,</p>
+<p>why controls did or did not work,</p>
+<p>how response performed,</p>
+<p>and what must change.</p>
+<p>The objective is institutional improvement.</p>
+<h1>98. BLAMELESS DOES NOT MEAN ACCOUNTABILITY-FREE</h1>
+<p>Post-incident review SHOULD avoid unproductive<br>
+personal blame.</p>
+<p>However,<br>
+blameless review SHALL NOT eliminate</p>
+<p>ownership,</p>
+<p>authority,</p>
+<p>responsibility,</p>
+<p>or corrective action.</p>
+<p>System learning and accountability SHALL coexist.</p>
+<h1>99. ROOT CAUSE</h1>
+<p>Root cause analysis SHALL seek the conditions that<br>
+made the incident possible.</p>
+<p>Root cause SHALL not stop at</p>
+<p>human error,</p>
+<p>service crashed,</p>
+<p>or configuration changed.</p>
+<p>Analysis SHALL examine</p>
+<p>system design,</p>
+<p>controls,</p>
+<p>process,</p>
+<p>authority,</p>
+<p>observability,</p>
+<p>and recovery.</p>
+<h1>100. CONTRIBUTING FACTORS</h1>
+<p>Incidents MAY have multiple contributing factors.</p>
+<p>Factors MAY include</p>
+<p>architecture,</p>
+<p>implementation,</p>
+<p>configuration,</p>
+<p>dependency,</p>
+<p>operational process,</p>
+<p>monitoring,</p>
+<p>documentation,</p>
+<p>training,</p>
+<p>or external systems.</p>
+<p>Single-cause simplification SHALL be avoided.</p>
+<h1>101. FIVE WHYS</h1>
+<p>Techniques such as Five Whys MAY support analysis.</p>
+<p>The technique SHALL not be used mechanically.</p>
+<p>The objective is actionable systemic understanding.</p>
+<h1>102. CORRECTIVE ACTION</h1>
+<p>Post-incident corrective actions SHALL be</p>
+<p>specific,</p>
+<p>owned,</p>
+<p>prioritized,</p>
+<p>and tracked.</p>
+<p>Actions MAY include</p>
+<p>architecture correction,</p>
+<p>implementation correction,</p>
+<p>monitoring,</p>
+<p>automation,</p>
+<p>documentation,</p>
+<p>testing,</p>
+<p>or governance change.</p>
+<h1>103. CORRECTIVE ACTION PRIORITY</h1>
+<p>Corrective actions SHALL be prioritized according<br>
+to</p>
+<p>recurrence risk,</p>
+<p>impact,</p>
+<p>exploitability,</p>
+<p>financial risk,</p>
+<p>security risk,</p>
+<p>and systemic importance.</p>
+<p>Cosmetic closure SHALL not replace meaningful<br>
+correction.</p>
+<h1>104. INCIDENT RECURRENCE</h1>
+<p>Repeated incidents of the same class SHALL trigger<br>
+deeper review.</p>
+<p>Recurrence MAY indicate</p>
+<p>structural defect,</p>
+<p>insufficient corrective action,</p>
+<p>weak ownership,</p>
+<p>or ineffective controls.</p>
+<p>Repeated manual recovery is not institutional<br>
+resilience.</p>
+<h1>105. KNOWN ERROR</h1>
+<p>A known unresolved defect causing recurring<br>
+incidents SHALL be explicitly tracked.</p>
+<p>Known errors SHALL define</p>
+<p>impact,</p>
+<p>workaround,</p>
+<p>risk,</p>
+<p>owner,</p>
+<p>and permanent correction plan.</p>
+<p>Workaround SHALL not become invisible architecture.</p>
+<h1>106. INCIDENT DEBT</h1>
+<p>Unresolved incident findings SHALL create visible<br>
+operational debt.</p>
+<p>Debt SHALL be</p>
+<p>owned,</p>
+<p>prioritized,</p>
+<p>tracked,</p>
+<p>and reviewed.</p>
+<p>Incident closure SHALL not erase unresolved risk.</p>
+<h1>107. INCIDENT KNOWLEDGE</h1>
+<p>Incident knowledge SHALL be preserved<br>
+institutionally.</p>
+<p>Knowledge SHOULD include</p>
+<p>symptoms,</p>
+<p>detection,</p>
+<p>root cause,</p>
+<p>containment,</p>
+<p>recovery,</p>
+<p>validation,</p>
+<p>and prevention.</p>
+<p>Critical recovery knowledge SHALL not depend upon<br>
+one individual.</p>
+<h1>108. INCIDENT METRICS</h1>
+<p>Incident metrics MAY include</p>
+<p>incident count,</p>
+<p>severity distribution,</p>
+<p>time to detect,</p>
+<p>time to acknowledge,</p>
+<p>time to contain,</p>
+<p>time to recover,</p>
+<p>time to reconcile,</p>
+<p>time to close,</p>
+<p>recurrence rate,</p>
+<p>and corrective action completion.</p>
+<p>Metrics SHALL support improvement.</p>
+<h1>109. MEAN TIME TO DETECT</h1>
+<p>Mean Time to Detect MAY measure how quickly<br>
+incidents become visible.</p>
+<p>Detection speed SHALL be interpreted with detection<br>
+quality.</p>
+<h1>110. MEAN TIME TO ACKNOWLEDGE</h1>
+<p>Mean Time to Acknowledge MAY measure how quickly<br>
+responsibility is accepted.</p>
+<p>Fast acknowledgement without action SHALL not be<br>
+treated as successful response.</p>
+<h1>111. MEAN TIME TO CONTAIN</h1>
+<p>Mean Time to Contain MAY measure how quickly further<br>
+impact is limited.</p>
+<p>Containment quality SHALL matter more than speed<br>
+alone.</p>
+<h1>112. MEAN TIME TO RECOVER</h1>
+<p>Mean Time to Recover MAY measure restoration of<br>
+trusted capability.</p>
+<p>Service restart time SHALL not automatically equal<br>
+recovery time.</p>
+<h1>113. RECOVERY CONFIDENCE</h1>
+<p>Recovery confidence SHALL be based upon</p>
+<p>validation,</p>
+<p>reconciliation,</p>
+<p>monitoring,</p>
+<p>and evidence.</p>
+<p>Confidence SHALL not be based solely upon absence<br>
+of new alerts.</p>
+<h1>114. INCIDENT AUDIT</h1>
+<p>Material incident activity SHALL preserve audit<br>
+evidence.</p>
+<p>Audit MAY include</p>
+<p>declaration,</p>
+<p>severity changes,</p>
+<p>authority changes,</p>
+<p>containment,</p>
+<p>emergency access,</p>
+<p>configuration changes,</p>
+<p>recovery,</p>
+<p>resumption,</p>
+<p>and closure.</p>
+<h1>115. INCIDENT CLOSURE</h1>
+<p>An incident SHALL be closed only when</p>
+<p>active impact is resolved or accepted,</p>
+<p>required recovery is complete,</p>
+<p>state is reconciled,</p>
+<p>residual risk is understood,</p>
+<p>ownership of follow-up exists,</p>
+<p>and evidence is preserved.</p>
+<p>Closure SHALL not mean all corrective work is<br>
+complete.</p>
+<h1>116. RESOLVED VERSUS CLOSED</h1>
+<p>Resolved means active incident impact has ended.</p>
+<p>Closed means incident handling requirements have<br>
+been completed.</p>
+<p>These states SHALL remain distinct where useful.</p>
+<h1>117. INCIDENT REOPENING</h1>
+<p>An incident MAY be reopened when</p>
+<p>impact returns,</p>
+<p>recovery proves incomplete,</p>
+<p>or new evidence materially changes understanding.</p>
+<p>Reopening SHALL preserve original incident history.</p>
+<h1>118. EXTERNAL INCIDENTS</h1>
+<p>Provider,<br>
+broker,<br>
+exchange,<br>
+custodian,<br>
+or vendor incidents</p>
+<p>SHALL still receive internal ownership.</p>
+<p>External responsibility SHALL not eliminate<br>
+internal operational response.</p>
+<h1>119. PROVIDER INCIDENTS</h1>
+<p>Provider incidents SHALL assess</p>
+<p>affected data,</p>
+<p>affected services,</p>
+<p>fallback,</p>
+<p>staleness,</p>
+<p>integrity,</p>
+<p>and recovery.</p>
+<p>Provider status communication SHALL not replace<br>
+internal validation.</p>
+<h1>120. BROKER INCIDENTS</h1>
+<p>Broker incidents SHALL assess</p>
+<p>accounts,</p>
+<p>orders,</p>
+<p>executions,</p>
+<p>positions,</p>
+<p>balances,</p>
+<p>margin,</p>
+<p>and financial exposure.</p>
+<p>Broker recovery SHALL be followed by reconciliation.</p>
+<h1>121. SECURITY INCIDENTS</h1>
+<p>Security incidents SHALL preserve</p>
+<p>containment,</p>
+<p>evidence,</p>
+<p>credential control,</p>
+<p>forensics,</p>
+<p>eradication,</p>
+<p>and trusted recovery.</p>
+<p>Security recovery SHALL not sacrifice evidence<br>
+without explicit authority.</p>
+<h1>122. DATA INCIDENTS</h1>
+<p>Data incidents SHALL assess</p>
+<p>authority,</p>
+<p>quality,</p>
+<p>freshness,</p>
+<p>lineage,</p>
+<p>integrity,</p>
+<p>consumers,</p>
+<p>and derived state.</p>
+<p>Corrected source data MAY require downstream<br>
+recomputation.</p>
+<h1>123. TRADING INCIDENTS</h1>
+<p>Trading incidents SHALL prioritize</p>
+<p>capital protection,</p>
+<p>risk containment,</p>
+<p>order certainty,</p>
+<p>position certainty,</p>
+<p>financial reconciliation,</p>
+<p>and controlled resumption.</p>
+<p>Unknown financial state SHALL remain explicit.</p>
+<h1>124. AI INCIDENTS</h1>
+<p>Artificial intelligence incidents MAY include</p>
+<p>unsafe tool use,</p>
+<p>incorrect authority,</p>
+<p>untrusted context influence,</p>
+<p>model failure,</p>
+<p>provider failure,</p>
+<p>or uncontrolled automation.</p>
+<p>AI incident response SHALL preserve deterministic<br>
+institutional controls.</p>
+<h1>125. NO INCIDENT PATCH WORK</h1>
+<p>Incident Operations SHALL NOT permanently<br>
+compensate for structural defects through</p>
+<p>operator memory,</p>
+<p>repeated restarts,</p>
+<p>manual reconciliation,</p>
+<p>hidden scripts,</p>
+<p>or undocumented emergency procedures.</p>
+<p>Permanent correction SHALL occur at the proper<br>
+ownership layer.</p>
+<h1>126. NO FALSE RECOVERY</h1>
+<p>A system SHALL NOT be declared recovered solely<br>
+because</p>
+<p>processes restarted,</p>
+<p>health checks passed,</p>
+<p>alerts stopped,</p>
+<p>or dashboards appear normal.</p>
+<p>Recovery SHALL require domain-valid state.</p>
+<h1>127. NO BLIND RESTART</h1>
+<p>Repeated restart without understanding state and<br>
+impact SHALL not be treated as recovery.</p>
+<p>Restart MAY be appropriate.</p>
+<p>Blind restart loops are prohibited.</p>
+<h1>128. NO HIDDEN UNKNOWN STATE</h1>
+<p>Unknown state SHALL remain explicit.</p>
+<p>Unknown</p>
+<p>order state,</p>
+<p>position state,</p>
+<p>data state,</p>
+<p>security state,</p>
+<p>or financial state</p>
+<p>SHALL not be silently converted into assumed<br>
+normality.</p>
+<h1>129. NO UNOWNED INCIDENT</h1>
+<p>Every active material incident SHALL have an owner.</p>
+<p>If ownership changes,<br>
+handover SHALL be explicit.</p>
+<h1>130. NO UNTRACKED EMERGENCY CHANGE</h1>
+<p>Emergency change SHALL remain traceable.</p>
+<p>Urgency SHALL not remove institutional memory.</p>
+<h1>131. NO AVAILABILITY-ONLY RECOVERY</h1>
+<p>Availability SHALL NOT be the sole recovery<br>
+criterion.</p>
+<p>Correctness,<br>
+security,<br>
+state,<br>
+authority,<br>
+and reconciliation</p>
+<p>SHALL also be considered.</p>
+<h1>132. NO AUTOMATIC RESUMPTION OF HIGH-RISK ACTIVITY</h1>
+<p>High-risk activity SHALL NOT automatically resume<br>
+solely because a dependency recovered.</p>
+<p>Trading,<br>
+privileged operations,<br>
+or other consequential capability</p>
+<p>SHALL require readiness validation where mandated.</p>
+<h1>133. NO INCIDENT MEMORY LOSS</h1>
+<p>Incident knowledge SHALL not disappear after<br>
+closure.</p>
+<p>Material incidents SHALL contribute to</p>
+<p>documentation,</p>
+<p>runbooks,</p>
+<p>monitoring,</p>
+<p>testing,</p>
+<p>architecture,</p>
+<p>and institutional knowledge.</p>
+<h1>134. INCIDENT LIFECYCLE</h1>
+<p>Every material incident follows the lifecycle</p>
+<p>Detection</p>
+<p>↓</p>
+<p>Acknowledgement</p>
+<p>↓</p>
+<p>Triage</p>
+<p>↓</p>
+<p>Declaration</p>
+<p>↓</p>
+<p>Classification</p>
+<p>↓</p>
+<p>Ownership</p>
+<p>↓</p>
+<p>Containment</p>
+<p>↓</p>
+<p>Stabilization</p>
+<p>↓</p>
+<p>Recovery</p>
+<p>↓</p>
+<p>Reconciliation</p>
+<p>↓</p>
+<p>Validation</p>
+<p>↓</p>
+<p>Resumption</p>
+<p>↓</p>
+<p>Resolution</p>
+<p>↓</p>
+<p>Review</p>
+<p>↓</p>
+<p>Corrective Action</p>
+<p>↓</p>
+<p>Closure</p>
+<p>↓</p>
+<p>Institutional Learning</p>
+<p>The lifecycle SHALL remain traceable.</p>
+<h1>135. RECOVERY LIFECYCLE</h1>
+<p>Every material recovery follows the lifecycle</p>
+<p>Identify Trusted Target State</p>
+<p>↓</p>
+<p>Identify Authoritative State</p>
+<p>↓</p>
+<p>Establish Recovery Sequence</p>
+<p>↓</p>
+<p>Restore Dependencies</p>
+<p>↓</p>
+<p>Restore Capability</p>
+<p>↓</p>
+<p>Reconcile State</p>
+<p>↓</p>
+<p>Validate Security</p>
+<p>↓</p>
+<p>Validate Domain Correctness</p>
+<p>↓</p>
+<p>Validate Readiness</p>
+<p>↓</p>
+<p>Authorize Resumption</p>
+<p>↓</p>
+<p>Monitor</p>
+<p>The lifecycle SHALL remain explicit.</p>
+<h1>136. INCIDENT EVOLUTION</h1>
+<p>Incident Operations SHALL evolve through</p>
+<p>incident evidence,</p>
+<p>recovery exercises,</p>
+<p>architecture changes,</p>
+<p>new dependencies,</p>
+<p>security threats,</p>
+<p>trading requirements,</p>
+<p>and institutional growth.</p>
+<p>Evolution SHALL preserve authority and traceability.</p>
+<h1>137. RELATIONSHIP TO PRODUCTION OPERATIONS</h1>
+<p>Production Operations defines the common<br>
+institutional operating model.</p>
+<p>Incident and Recovery Operations defines how COREI<br>
+responds when normal operation fails or becomes<br>
+uncertain.</p>
+<p>Every production capability SHALL comply with<br>
+applicable incident and recovery requirements.</p>
+<h1>138. RELATIONSHIP TO PLATFORM OPERATIONS</h1>
+<p>Platform incidents MAY affect many consumers.</p>
+<p>Platform recovery SHALL restore shared capability.</p>
+<p>Consumer domains SHALL independently validate their<br>
+own readiness before consequential resumption.</p>
+<h1>139. RELATIONSHIP TO SERVICE OPERATIONS</h1>
+<p>Service Operations owns service-specific recovery.</p>
+<p>Incident Operations coordinates cross-service and<br>
+cross-domain response.</p>
+<p>Service health SHALL not alone define incident<br>
+closure.</p>
+<h1>140. RELATIONSHIP TO INFRASTRUCTURE OPERATIONS</h1>
+<p>Infrastructure Operations owns recovery of<br>
+technical foundations.</p>
+<p>Incident Operations coordinates broader impact and<br>
+dependency-aware restoration.</p>
+<p>Infrastructure recovery SHALL not automatically<br>
+declare application recovery.</p>
+<h1>141. RELATIONSHIP TO DATA OPERATIONS</h1>
+<p>Data Operations owns recovery of authoritative data<br>
+state.</p>
+<p>Incident Operations ensures data incidents preserve</p>
+<p>impact assessment,</p>
+<p>consumer coordination,</p>
+<p>reconciliation,</p>
+<p>and recovery validation.</p>
+<h1>142. RELATIONSHIP TO SECURITY OPERATIONS</h1>
+<p>Security Operations owns security-specific</p>
+<p>containment,</p>
+<p>eradication,</p>
+<p>forensics,</p>
+<p>and trusted recovery.</p>
+<p>Incident Operations provides institutional<br>
+coordination where security incidents affect<br>
+broader capability.</p>
+<h1>143. RELATIONSHIP TO TRADING OPERATIONS</h1>
+<p>Trading Operations owns financial and trading<br>
+recovery.</p>
+<p>Incident Operations coordinates cross-domain<br>
+response.</p>
+<p>Trading resumption SHALL require trading-specific<br>
+readiness and reconciliation.</p>
+<h1>144. MINIMUM INCIDENT READINESS GATE</h1>
+<p>Before critical capability enters production,<br>
+the following SHALL be established where<br>
+applicable.</p>
+<p>Incident Owner Defined</p>
+<p>Escalation Path Defined</p>
+<p>Incident Authority Defined</p>
+<p>Detection Available</p>
+<p>Alerting Available</p>
+<p>Acknowledgement Path Defined</p>
+<p>Severity Model Defined</p>
+<p>Containment Actions Defined</p>
+<p>Safe State Defined</p>
+<p>Recovery Procedure Defined</p>
+<p>Dependency Order Known</p>
+<p>Authoritative State Identified</p>
+<p>Backup Defined Where Required</p>
+<p>Restore Procedure Defined</p>
+<p>Reconciliation Defined</p>
+<p>Validation Defined</p>
+<p>Resumption Authority Defined</p>
+<p>Communication Path Defined</p>
+<p>Evidence Sources Known</p>
+<p>Runbooks Available</p>
+<p>Emergency Access Defined</p>
+<p>Temporary Control Governance Defined</p>
+<p>Post-Incident Review Defined</p>
+<p>Corrective Action Tracking Defined</p>
+<p>No Unowned Critical Alert</p>
+<p>No Unknown Recovery Authority</p>
+<p>No Untested Critical Restore Assumption</p>
+<p>Capability failing mandatory criteria SHALL remain<br>
+incident-readiness incomplete.</p>
+<h1>145. MINIMUM INCIDENT RESPONSE GATE</h1>
+<p>For every material active incident,<br>
+the following SHALL be established as soon as<br>
+operationally possible.</p>
+<p>Incident Identity Assigned</p>
+<p>Incident Declared</p>
+<p>Severity Assigned</p>
+<p>Incident Commander Assigned</p>
+<p>Affected Scope Identified</p>
+<p>Known Impact Recorded</p>
+<p>Unknowns Recorded</p>
+<p>Immediate Risk Assessed</p>
+<p>Containment Decision Made</p>
+<p>Domain Owners Engaged</p>
+<p>Communication Established</p>
+<p>Timeline Started</p>
+<p>Major Actions Tracked</p>
+<p>Evidence Preserved</p>
+<p>Recovery Strategy Defined</p>
+<p>Resumption Criteria Defined</p>
+<p>Failure of a mandatory condition SHALL be corrected<br>
+during active response.</p>
+<h1>146. MINIMUM RECOVERY GATE</h1>
+<p>Before material capability is declared recovered,<br>
+the following SHALL be established where<br>
+applicable.</p>
+<p>Incident Contained</p>
+<p>Trusted Target State Defined</p>
+<p>Authoritative State Identified</p>
+<p>Dependencies Restored</p>
+<p>Security Validated</p>
+<p>Configuration Validated</p>
+<p>Data Validated</p>
+<p>Service Behaviour Validated</p>
+<p>External State Reconciled</p>
+<p>Financial State Reconciled Where Applicable</p>
+<p>Unknown Critical State Resolved</p>
+<p>Monitoring Restored</p>
+<p>Residual Risk Understood</p>
+<p>Temporary Controls Documented</p>
+<p>Domain Readiness Confirmed</p>
+<p>Resumption Authority Confirmed</p>
+<p>Evidence Preserved</p>
+<p>Recovery SHALL NOT be declared solely because<br>
+technical availability returned.</p>
+<h1>147. MINIMUM INCIDENT CLOSURE GATE</h1>
+<p>Before a material incident is closed,<br>
+the following SHALL be established where<br>
+applicable.</p>
+<p>Active Impact Ended</p>
+<p>Recovery Completed</p>
+<p>Required Reconciliation Completed</p>
+<p>Residual Risk Recorded</p>
+<p>Timeline Completed</p>
+<p>Major Decisions Recorded</p>
+<p>Evidence Preserved</p>
+<p>Root Cause or Sufficient Causal Analysis Completed</p>
+<p>Contributing Factors Identified</p>
+<p>Corrective Actions Defined</p>
+<p>Corrective Action Owners Assigned</p>
+<p>Runbook Updates Identified</p>
+<p>Monitoring Improvements Identified</p>
+<p>Documentation Updates Identified</p>
+<p>Institutional Learning Preserved</p>
+<p>Incident SHALL remain open or follow-up SHALL remain<br>
+explicit if mandatory work is incomplete.</p>
+<h1>148. INCIDENT VALIDATION QUESTIONS</h1>
+<p>Every critical capability shall answer the<br>
+following institutional incident and recovery<br>
+questions.</p>
+<p>How is failure detected?</p>
+<p>Who receives the alert?</p>
+<p>Who owns the incident?</p>
+<p>Who may declare the incident?</p>
+<p>How is severity determined?</p>
+<p>What is the blast radius?</p>
+<p>What must be contained first?</p>
+<p>What is the safe state?</p>
+<p>What emergency controls exist?</p>
+<p>What dependencies must recover first?</p>
+<p>What is the authoritative state?</p>
+<p>What data may be lost?</p>
+<p>What is the RPO?</p>
+<p>What is the RTO?</p>
+<p>Where are backups?</p>
+<p>Have backups been restored successfully?</p>
+<p>How is state reconciled?</p>
+<p>How is security validated?</p>
+<p>How is domain correctness validated?</p>
+<p>Who may authorize resumption?</p>
+<p>Can operation resume in restricted mode?</p>
+<p>What unknown state would block resumption?</p>
+<p>What evidence must be preserved?</p>
+<p>How is the incident timeline maintained?</p>
+<p>How are emergency changes tracked?</p>
+<p>How are temporary controls removed?</p>
+<p>How is root cause determined?</p>
+<p>How are corrective actions tracked?</p>
+<p>How is recurrence detected?</p>
+<p>Can the complete incident be reconstructed?</p>
+<p>Can the capability recover without relying on one<br>
+individual’s memory?</p>
+<p>If any mandatory answer is negative,</p>
+<p>incident and recovery readiness remains incomplete.</p>
+<h1>149. INCIDENT AND RECOVERY OPERATIONS DECLARATION</h1>
+<p>COREI Incident and Recovery Operations shall ensure<br>
+that failure never becomes</p>
+<p>hidden,</p>
+<p>unowned,</p>
+<p>unbounded,</p>
+<p>unrecoverable,</p>
+<p>or institutionally forgotten.</p>
+<p>Incident response SHALL remain</p>
+<p>detectable,</p>
+<p>owned,</p>
+<p>classified,</p>
+<p>contained,</p>
+<p>evidence-preserving,</p>
+<p>dependency-aware,</p>
+<p>state-aware,</p>
+<p>security-aware,</p>
+<p>financially aware,</p>
+<p>reconcilable,</p>
+<p>validated,</p>
+<p>recoverable,</p>
+<p>and continuously improving.</p>
+<p>Recovery SHALL not merely restart systems.</p>
+<p>It SHALL restore trusted institutional capability.</p>
+<h1>150. CONSTITUTIONAL COMMITMENT</h1>
+<p>COREI Incident and Recovery Operations shall remain</p>
+<p>identity-aligned,</p>
+<p>governance-driven,</p>
+<p>architecture-faithful,</p>
+<p>engineering-supported,</p>
+<p>standards-derived,</p>
+<p>specification-compliant,</p>
+<p>production-disciplined,</p>
+<p>ownership-explicit,</p>
+<p>authority-aware,</p>
+<p>detection-driven,</p>
+<p>classification-based,</p>
+<p>containment-capable,</p>
+<p>stabilization-aware,</p>
+<p>dependency-aware,</p>
+<p>state-aware,</p>
+<p>security-preserving,</p>
+<p>data-preserving,</p>
+<p>financially conscious,</p>
+<p>reconciliation-driven,</p>
+<p>validation-based,</p>
+<p>evidence-preserving,</p>
+<p>recovery-capable,</p>
+<p>resumption-controlled,</p>
+<p>audit-supported,</p>
+<p>knowledge-preserving,</p>
+<p>and continuously evolvable.</p>
+<p>Incident and recovery operations shall preserve<br>
+institutional continuity across</p>
+<p>infrastructure,</p>
+<p>networks,</p>
+<p>storage,</p>
+<p>databases,</p>
+<p>messaging,</p>
+<p>platforms,</p>
+<p>services,</p>
+<p>applications,</p>
+<p>data,</p>
+<p>security,</p>
+<p>identity,</p>
+<p>providers,</p>
+<p>brokers,</p>
+<p>accounts,</p>
+<p>strategies,</p>
+<p>portfolios,</p>
+<p>markets,</p>
+<p>regions,</p>
+<p>currencies,</p>
+<p>custodians,</p>
+<p>exchanges,</p>
+<p>jurisdictions,</p>
+<p>automation,</p>
+<p>artificial intelligence systems,</p>
+<p>and generations of technology.</p>
+<h1>151. AUTHORITY</h1>
+<p>This document defines the authoritative Incident and<br>
+Recovery Operations model of COREI.</p>
+<p>Every production platform,</p>
+<p>service,</p>
+<p>infrastructure system,</p>
+<p>data system,</p>
+<p>security system,</p>
+<p>identity system,</p>
+<p>provider integration,</p>
+<p>broker integration,</p>
+<p>trading capability,</p>
+<p>risk capability,</p>
+<p>portfolio capability,</p>
+<p>execution capability,</p>
+<p>operator environment,</p>
+<p>automation system,</p>
+<p>artificial intelligence system,</p>
+<p>and future institutional capability</p>
+<p>shall comply with this document.</p>
+<p>Domain-specific incident and recovery documents MAY<br>
+extend this model.</p>
+<p>No extension may weaken constitutional,<br>
+governance,<br>
+architectural,<br>
+engineering,<br>
+standards,<br>
+specification,<br>
+production,<br>
+platform,<br>
+service,<br>
+infrastructure,<br>
+data,<br>
+security,<br>
+trading,<br>
+incident,<br>
+recovery,<br>
+reconciliation,<br>
+evidence,<br>
+audit,<br>
+or institutional continuity requirements.</p>
+<p>Changes to this document require constitutional<br>
+review.</p>
+<h1>END OF DOCUMENT</h1>
+<h1>DOCUMENT ID</h1>
+<h1>COREI-OP-07.08</h1>
+<h1>DOCUMENT NAME</h1>
+<h1>INCIDENT AND RECOVERY OPERATIONS</h1>
+<h1>REPOSITORY FILE</h1>
+<h1>knowledge/07-operations/COREI-OP-07.08-INCIDENT-AND-RECOVERY-OPERATIONS.md</h1>
+
+
+  <div class="doc-footer">
+
+    <span>DOCUMENT KEY: knowledge:knowledge_COREI-OP-07.08.md.md</span>
+
+    <span>
+      DOCUMENT NAME: knowledge COREI OP 07.08.md
+    </span>
+
+    <span>
+      VERSION: 1.0
+    </span>
+
+  </div>
+
+</body>
+</html>

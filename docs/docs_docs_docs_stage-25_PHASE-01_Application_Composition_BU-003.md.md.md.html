@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <title>docs docs stage 25 PHASE 01 Application Composition BU 003.md.md</title>
+  <style>
+  body {
+    background: #0A0D12;
+    color: #E3E7EC;
+    font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px 40px;
+  }
+
+  h1 {
+    font-size: 26px;
+    font-weight: 600;
+    color: #C6A46A;
+    margin: 24px 0 12px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 8px;
+  }
+
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #D4B88A;
+    margin: 20px 0 10px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 6px;
+  }
+
+  h3 {
+    font-size: 17px;
+    font-weight: 500;
+    color: #E3E7EC;
+    margin: 16px 0 8px 0;
+  }
+
+  h4 {
+    font-size: 15px;
+    font-weight: 500;
+    color: #C5CED9;
+    margin: 12px 0 6px 0;
+  }
+
+  p {
+    margin-bottom: 8px;
+    color: #C5CED9;
+  }
+
+  ul,
+  ol {
+    padding-left: 24px;
+    margin-bottom: 8px;
+    color: #C5CED9;
+  }
+
+  li {
+    margin-bottom: 2px;
+  }
+
+  code {
+    font-family: 'JetBrains Mono', 'Cascadia Code', monospace;
+    font-size: 13px;
+    background: rgba(255,255,255,0.05);
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid #28303C;
+    color: #C5CED9;
+  }
+
+  pre {
+    background: #18202A;
+    border: 1px solid #28303C;
+    border-radius: 6px;
+    padding: 16px 20px;
+    overflow: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 12px 0 16px 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #C5CED9;
+  }
+
+  pre code {
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 16px 0;
+    font-size: 13px;
+    color: #C5CED9;
+  }
+
+  th {
+    background: #18202A;
+    color: #C5CED9;
+    font-weight: 600;
+    text-align: left;
+    padding: 6px 12px;
+    border: 1px solid #28303C;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  td {
+    padding: 4px 12px;
+    border: 1px solid #28303C;
+    background: #0E1219;
+  }
+
+  tr:nth-child(even) td {
+    background: #121821;
+  }
+
+  blockquote {
+    border-left: 3px solid #C6A46A;
+    padding-left: 16px;
+    margin: 8px 0 12px 0;
+    color: #6E7883;
+    font-style: italic;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #28303C;
+    margin: 24px 0;
+  }
+
+  a {
+    color: #8BB4F0;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  strong {
+    color: #E3E7EC;
+    font-weight: 600;
+  }
+
+  img {
+    max-width: 100%;
+    border-radius: 4px;
+    border: 1px solid #28303C;
+  }
+
+  .doc-footer {
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid #28303C;
+    font-size: 12px;
+    color: #6E7883;
+    font-family: monospace;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+</style>
+</head>
+
+<body>
+
+  <div
+    class="doc-header"
+    style="
+      background:#121821;
+      border:1px solid #28303C;
+      border-radius:8px;
+      padding:1.2rem 1.8rem;
+      margin-bottom:1.8rem;
+    "
+  >
+
+    <div
+      style="
+        color:#C6A46A;
+        font-weight:600;
+        font-size:13px;
+        text-transform:uppercase;
+        letter-spacing:0.05em;
+      "
+    >
+      COREI · Stage Documentation
+    </div>
+
+
+
+    <h1
+      style="
+        font-size:28px;
+        font-weight:600;
+        color:#E3E7EC;
+        margin:0.1rem 0;
+        border-bottom:none;
+        padding-bottom:0;
+      "
+    >
+      docs docs stage 25 PHASE 01 Application Composition BU 003.md.md
+    </h1>
+
+    <div
+      style="
+        font-size:16px;
+        color:#C5CED9;
+      "
+    >
+      Stage Documentation
+      ·
+      Operational
+    </div>
+
+    <div
+      style="
+        display:flex;
+        flex-wrap:wrap;
+        gap:0.6rem 1.8rem;
+        margin-top:0.6rem;
+        font-size:13px;
+      "
+    >
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Status
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          Approved
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Version
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          1.0
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Classification
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          Operational
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Owner
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          COREI
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Repository
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+            font-family:monospace;
+          "
+        >
+          docs/docs_docs_stage-25_PHASE-01_Application_Composition_BU-003.md.md.md
+        </span>
+      </span>
+
+    </div>
+
+
+
+  </div>
+
+
+
+  <h1>BUILD UNIT-003</h1>
+<h2>Title</h2>
+<p>COREI OS Bootstrap Composition</p>
+<hr>
+<h2>Objective</h2>
+<p>Compose the Bootstrap Framework into the COREI OS application startup pipeline.</p>
+<p>This Build Unit establishes Bootstrap as the first executable stage of the application lifecycle. Rather than introducing a new bootstrap implementation, it integrates the Bootstrap framework created during Stage-24 into the application composition root.</p>
+<p>Bootstrap now becomes the authoritative first startup service executed by COREI OS.</p>
+<hr>
+<h1>Scope</h1>
+<p>Implemented:</p>
+<ul>
+<li>Bootstrap Composition Repository</li>
+<li>Bootstrap Context</li>
+<li>Bootstrap Composition</li>
+<li>Application Root Integration</li>
+<li>Startup Wiring</li>
+<li>Validation</li>
+</ul>
+<hr>
+<h1>Startup Architecture</h1>
+<p>Before BU-003</p>
+<pre><code>Browser
+
+↓
+
+main.tsx
+
+↓
+
+AppProvider
+
+↓
+
+ApplicationRoot
+</code></pre>
+<p>After BU-003</p>
+<pre><code>Browser
+
+↓
+
+main.tsx
+
+↓
+
+AppProvider
+
+↓
+
+ApplicationRoot
+
+↓
+
+composeBootstrap()
+
+↓
+
+Bootstrap Framework
+
+↓
+
+Ready
+</code></pre>
+<p>Bootstrap is now the first executable service in the startup pipeline.</p>
+<hr>
+<h1>Repository Structure</h1>
+<p>Created</p>
+<pre><code>src/app/bootstrap/
+
+bootstrap-context.ts
+
+bootstrap-composition.ts
+</code></pre>
+<p>Updated</p>
+<pre><code>src/app/components/
+
+ApplicationRoot.tsx
+</code></pre>
+<hr>
+<h1>Bootstrap Context</h1>
+<p>Implemented:</p>
+<pre><code>bootstrap-context.ts
+</code></pre>
+<p>Current responsibilities:</p>
+<ul>
+<li>Bootstrap Initialization State</li>
+</ul>
+<p>Current properties:</p>
+<ul>
+<li>Initialized</li>
+</ul>
+<p>Future responsibilities:</p>
+<ul>
+<li>Startup Metadata</li>
+<li>Bootstrap Health</li>
+<li>Environment State</li>
+<li>Initialization Diagnostics</li>
+</ul>
+<hr>
+<h1>Bootstrap Composition</h1>
+<p>Implemented:</p>
+<pre><code>bootstrap-composition.ts
+</code></pre>
+<p>Current responsibility:</p>
+<ul>
+<li>Compose the Bootstrap Framework into the application startup sequence.</li>
+</ul>
+<p>Current operation:</p>
+<pre><code>composeBootstrap()
+
+↓
+
+bootstrap()
+</code></pre>
+<p>Future responsibilities:</p>
+<ul>
+<li>Bootstrap Orchestration</li>
+<li>Startup Telemetry</li>
+<li>Failure Recovery</li>
+<li>Initialization Timing</li>
+<li>Bootstrap Diagnostics</li>
+</ul>
+<hr>
+<h1>Application Integration</h1>
+<p>Updated:</p>
+<pre><code>ApplicationRoot.tsx
+</code></pre>
+<p>Current startup behavior:</p>
+<pre><code>ApplicationRoot
+
+↓
+
+useEffect()
+
+↓
+
+composeBootstrap()
+
+↓
+
+Bootstrap Framework
+</code></pre>
+<p>Bootstrap executes once during application initialization.</p>
+<hr>
+<h1>Startup Pipeline</h1>
+<p>Current institutional startup sequence:</p>
+<pre><code>Browser
+
+↓
+
+main.tsx
+
+↓
+
+StrictMode
+
+↓
+
+AppProvider
+
+↓
+
+Theme Provider
+
+↓
+
+Runtime Provider
+
+↓
+
+Platform Provider
+
+↓
+
+SDK Provider
+
+↓
+
+ApplicationRoot
+
+↓
+
+composeBootstrap()
+
+↓
+
+Bootstrap Framework
+
+↓
+
+Ready
+</code></pre>
+<p>Future Build Units will extend this sequence without changing the established order.</p>
+<hr>
+<h1>Validation</h1>
+<p>Successfully validated:</p>
+<ul>
+<li>Bootstrap Repository</li>
+<li>Bootstrap Context</li>
+<li>Bootstrap Composition</li>
+<li>Application Root Integration</li>
+<li>Startup Wiring</li>
+<li>TypeScript Compilation</li>
+<li>Vite Production Build</li>
+</ul>
+<p>Validation Result</p>
+<pre><code>TypeScript Compilation     PASS
+
+Vite Production Build      PASS
+</code></pre>
+<hr>
+<h1>Deliverables</h1>
+<p>Completed:</p>
+<ul>
+<li>Bootstrap Composition Repository</li>
+<li>Bootstrap Context</li>
+<li>Bootstrap Composition</li>
+<li>Application Startup Integration</li>
+</ul>
+<hr>
+<h1>Repository Impact</h1>
+<p>Created:</p>
+<pre><code>src/app/bootstrap/
+</code></pre>
+<p>Updated:</p>
+<pre><code>src/app/components/ApplicationRoot.tsx
+</code></pre>
+<p>Bootstrap is now formally integrated into the COREI OS startup lifecycle.</p>
+<hr>
+<h1>Result</h1>
+<p>COREI OS now executes the Bootstrap Framework as the first operational service during application startup.</p>
+<p>The application startup pipeline has transitioned from a static composition into an executable lifecycle.</p>
+<p>This Build Unit establishes the foundation upon which Runtime, Platform, and SDK initialization will be layered in the subsequent Build Units.</p>
+<hr>
+<h1>Architecture Impact</h1>
+<p>Application startup now follows a deterministic composition model.</p>
+<pre><code>Application Root
+
+↓
+
+Bootstrap
+
+↓
+
+Runtime
+
+↓
+
+Platform
+
+↓
+
+SDK
+
+↓
+
+Shell
+
+↓
+
+Workspace
+
+↓
+
+Experiences
+</code></pre>
+<p>Only the Bootstrap stage has been activated in this Build Unit.</p>
+<p>The remaining stages will be introduced incrementally to preserve deterministic initialization and simplify validation.</p>
+<hr>
+<h1>Next Build Unit</h1>
+<p><strong>BU-004 – Runtime Composition</strong></p>
+<p>Implementation Order</p>
+<ul>
+<li>Runtime Composition</li>
+<li>Runtime Initialization</li>
+<li>Runtime Integration</li>
+<li>Startup Wiring</li>
+<li>Validation</li>
+</ul>
+<hr>
+<h1>Status</h1>
+<p><strong>COMPLETED</strong></p>
+
+
+  <div class="doc-footer">
+
+    <span>DOCUMENT KEY: docs:docs_docs_stage-25_PHASE-01_Application_Composition_BU-003.md.md.md</span>
+
+    <span>
+      DOCUMENT NAME: docs docs stage 25 PHASE 01 Application Composition BU 003.md.md
+    </span>
+
+    <span>
+      VERSION: 1.0
+    </span>
+
+  </div>
+
+</body>
+</html>

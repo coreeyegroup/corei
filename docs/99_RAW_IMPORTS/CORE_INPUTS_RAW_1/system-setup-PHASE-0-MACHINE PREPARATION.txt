@@ -1,0 +1,345 @@
+🔵 PHASE 0 — MACHINE PREPARATION (UBUNTU + SYSTEM TUNING)
+
+	1. PHASE IDENTITY
+		1.1 Name
+			PHASE 0 — MACHINE PREPARATION
+
+		1.2 Role
+			Establish deterministic OS + system baseline
+
+		1.3 Objective
+			Create a production-grade Ubuntu node ready for container runtime
+
+		1.4 Failure Prevented
+			Non-deterministic infra, unstable runtime, Kubernetes failure
+
+	2. FINAL SYSTEM STATE (YOUR NODE)
+			Node Name    : core-node
+			IP Address   : 192.168.1.3
+			OS           : Ubuntu Server 22.04 LTS
+			CPU          : 4 cores
+			RAM          : ~8 GB
+			Disk         : 60 GB (SSD)
+			Access       : SSH enabled
+			Network      : Bridged
+
+	3. EXECUTION STEPS (DETAILED)
+		STEP 0.1 — VM CREATION
+			Actions
+				Installed VMware Workstation
+				Created VM:
+					Name: core-node
+					Disk: 60 GB
+					CPU	: 4 cores
+					RAM	: 8 GB
+					Network: NAT → later switched to Bridged
+
+			Outcome
+				Isolated Linux node environment
+
+		STEP 0.2 — UBUNTU INSTALLATION
+			Actions
+				Installed Ubuntu Server 22.04 LTS
+				Enabled OpenSSH
+				Configured user:
+
+					user: coreeye
+
+			Outcome
+				Minimal server OS (no GUI)
+
+		STEP 0.3 — NETWORK CONFIGURATION (CRITICAL)
+				Problem
+					NAT mode blocked SSH
+
+				Actions
+					Restored VMware networks
+					Created VMnet0 (bridged)
+					Mapped to WiFi adapter
+					Switched VM to Bridged mode
+
+				Result
+					IP: 192.168.1.3
+					SSH: working
+
+		STEP 0.4 — SSH ACCESS
+				Actions
+					ssh coreeye@192.168.1.3
+
+				Outcome
+					Remote terminal established (primary interface)
+
+		STEP 0.5 — SYSTEM UPDATE
+				sudo apt update && sudo apt upgrade -y
+				sudo apt autoremove -y
+
+			Outcome
+				Clean, updated base system
+
+		STEP 0.6 — SWAP DISABLE (CRITICAL)
+				Actions
+					sudo swapoff -a
+
+				File Edit
+					sudo nano /etc/fstab
+
+				Change:
+					# /swap.img none swap sw 0 0
+
+				Verification
+					free -h
+					→ Swap: 0B
+
+				Outcome
+					Kubernetes-compatible memory model
+
+		STEP 0.7 — HOSTNAME STANDARDIZATION
+				Issue
+					sourcescore-node (incorrect)
+
+				Command
+					sudo hostnamectl set-hostname core-node
+
+				File Edit
+					sudo nano /etc/hosts
+
+				Ensure
+					127.0.1.1 core-node
+
+				Outcome
+					Consistent system identity
+
+		STEP 0.8 — TIME SYNCHRONIZATION (CHRONY)
+				Install
+					sudo apt install chrony -y
+
+				File Edit
+					sudo nano /etc/chrony/chrony.conf
+
+				Change
+					pool pool.ntp.org iburst
+
+				Apply
+					sudo systemctl restart chrony
+
+				Verification
+					chronyc sources
+					→ active source selected
+
+				Outcome
+					Deterministic time synchronization
+
+		STEP 0.9 — ULIMIT CONFIGURATION
+				File Edit
+					sudo nano /etc/security/limits.conf
+
+					Add
+						* soft nofile 1048576
+						* hard nofile 1048576
+						* soft nproc  65535
+						* hard nproc  65535
+
+				File Edit
+					sudo nano /etc/pam.d/common-session
+
+					Add
+						session required pam_limits.so
+
+				File Edit
+					sudo nano /etc/pam.d/common-session-noninteractive
+
+					Add
+						session required pam_limits.so
+
+				Verify
+					ulimit -n
+
+				Outcome
+					1048576 (High concurrency capability)
+
+		STEP 0.10 — KERNEL TUNING
+				File Edit
+					sudo nano /etc/sysctl.conf
+
+				Add:
+					net.core.somaxconn = 65535
+					net.core.netdev_max_backlog = 5000
+					net.ipv4.tcp_max_syn_backlog = 4096
+					net.ipv4.tcp_tw_reuse = 1
+					vm.swappiness = 0
+					vm.max_map_count = 262144
+					fs.file-max = 2097152
+
+				Apply
+					sudo sysctl -p
+
+				Outcome
+					Optimized network + memory performance
+
+		STEP 0.11 — BASE UTILITIES
+				sudo apt install -y \
+				curl wget git vim htop net-tools jq unzip
+
+		STEP 0.12 — SNAPSHOT CREATION
+				Action
+					VM → Snapshot → Take Snapshot
+					Name: phase-0-complete-core-node
+
+				Outcome
+					Rollback checkpoint created
+
+		STEP 0.13 — GUI INSTALLATION & CONTROL (OPTIONAL DEBUG LAYER)
+				Install Minimal GUI
+					sudo apt install -y ubuntu-desktop-minimal
+
+					Purpose
+						Install lightweight GUI for debugging/troubleshooting
+
+				Prevent GUI Auto-Start (CRITICAL)
+					sudo systemctl set-default multi-user.target
+
+					Purpose
+						Ensure system boots in CLI mode (server-safe)
+
+				Verify Boot Mode
+						systemctl get-default
+
+					Expected Output
+
+						multi-user.target
+
+				Stop GUI Service (Immediate Control)
+					sudo systemctl stop gdm3
+
+					Purpose
+						Stop GUI to free system resources
+
+				Start GUI Manually (When Needed)
+					sudo systemctl start gdm3
+
+					OR
+
+					startx
+
+					Purpose
+					Enable GUI only for debugging sessions
+
+				Note:
+					GUI is installed ONLY for debugging purposes.
+					All infrastructure operations must be performed via SSH.
+					GUI must not run by default.
+
+		STEP 0.14 — CONSOLE DISPLAY TUNING (VMWARE)
+				Install Console Setup
+					sudo apt install -y console-setup
+
+				Reconfigure Console
+					sudo dpkg-reconfigure console-setup
+
+				Selected Options:
+					Setting				Value
+					Encoding			UTF-8
+					Character Set		Guess optimal
+					Font				Terminus
+					Font Size			16x32 / 20x40
+
+				Apply Console Config
+					sudo setupcon
+
+				Reboot
+					sudo reboot
+
+				Fix GRUB Display Override (IMPORTANT)
+					sudo nano /etc/default/grub
+
+					Change:
+						# GRUB_GFXMODE=1024x768
+
+					Then:
+						sudo update-grub
+						sudo reboot
+
+
+	4. FINAL VALIDATION
+		Commands
+			hostname
+			free -h
+			ulimit -n
+			sysctl vm.swappiness
+			chronyc sources
+
+		Output (Expected)
+			hostname      → core-node
+			swap          → 0B
+			ulimit        → 1048576
+			swappiness    → 0
+			time sync     → active
+
+	5. HARD CONSTRAINTS ENFORCED
+		✔ Swap disabled
+		✔ Deterministic time sync
+		✔ High file descriptor limit
+		✔ Kernel tuned
+		✔ Network reachable (SSH)
+		✔ Stable hostname
+
+	6. FAILURE MODEL (PHASE 0)
+		Failure				Impact
+		Swap enabled		K8s failure
+		Low ulimit			service crash
+		bad hostname		cluster inconsistency
+		no time sync		event drift
+		NAT network			no cluster
+
+	7. OUTPUT (DELIVERABLE)
+		Deterministic Linux Node:
+			→ Kubernetes-ready
+			→ Docker-ready
+			→ High-throughput capable
+
+	8. TRACEABILITY
+		Phase 0 → feeds into Phase 1 (Docker runtime)
+		Phase 1 → feeds into Kubernetes
+		Phase 2 → feeds into event system
+
+	9. PHASE LOCK CRITERIA
+		✔ All configs applied
+		✔ All validations passed
+		✔ Snapshot created
+		✔ No ambiguity in system state
+
+		🔒 FINAL STATUS
+		PHASE 0 = LOCKED
+
+	10. COMMAND REFERENCE TABLE (PHASE 0)
+
+	Step					Command											Purpose							Expected Output
+	SSH Access				ssh coreeye@192.168.1.3							Connect to node					login success
+	Update					sudo apt update && sudo apt upgrade -y			update system					no errors
+	Cleanup					sudo apt autoremove -y							remove unused packages			clean system
+	Disable Swap			sudo swapoff -a									disable runtime swap			no output
+	Verify Swap				free -h											check memory					Swap = 0B
+	Hostname Set			sudo hostnamectl set-hostname core-node			set identity					no error
+	Hostname Check			hostname										verify name						core-node
+	Install Chrony			sudo apt install chrony -y						time sync service				installed
+	Restart Chrony			sudo systemctl restart chrony					apply config					no error
+	Verify Time				chronyc sources									check NTP						^* active source
+	Ulimit Check			ulimit -n										file descriptor limit			1048576
+	Kernel Apply			sudo sysctl -p									apply sysctl config				values printed
+	Kernel Verify			sysctl vm.swappiness							verify memory tuning			0
+	Kernel Verify			sysctl net.core.somaxconn						verify network tuning			65535
+	Utilities Install		sudo apt install -y curl wget git vim htop net-tools jq unzip	base tools	installed
+	Network Check			ip a											check IP						192.168.x.x
+	Internet Check			ping -c 3 google.com							connectivity					success
+	SSH Service				sudo systemctl status ssh						verify SSH						active
+	Install GUI				sudo apt install -y ubuntu-desktop-minimal		install debug GUI				installed
+	Set CLI Boot			sudo systemctl set-default multi-user.target	disable GUI auto-start			no error
+	Check Boot Mode			systemctl get-default							verify mode						multi-user.target
+	Stop GUI				sudo systemctl stop gdm3						free resources					stopped
+	Start GUI				sudo systemctl start gdm3						launch GUI						GUI starts
+	Install Console Setup	sudo apt install -y console-setup				enable console config			installed
+	Reconfigure Console		sudo dpkg-reconfigure console-setup				adjust font/display				config applied
+	Apply Console			sudo setupcon									apply font changes				no error
+	Edit GRUB				sudo nano /etc/default/grub						remove forced resolution		file updated
+	Apply GRUB				sudo update-grub								apply boot config				updated
+	Reboot					sudo reboot										apply system changes			system restarts

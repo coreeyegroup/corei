@@ -1,0 +1,455 @@
+==================================================
+STAGE-10A TESTING RUNTIME INSTALLATION
+==================================================
+[1/10] Installing system dependencies...
+Hit:1 https://download.docker.com/linux/ubuntu jammy InRelease
+Hit:2 https://apt.releases.hashicorp.com jammy InRelease
+Hit:3 https://deb.nodesource.com/node_20.x nodistro InRelease
+Get:4 https://cli.github.com/packages stable InRelease [3,917 B]
+Get:5 http://security.ubuntu.com/ubuntu jammy-security InRelease [129 kB]
+Hit:7 http://in.archive.ubuntu.com/ubuntu jammy InRelease
+Hit:6 https://prod-cdn.packages.k8s.io/repositories/isv:/kubernetes:/core:/stable:/v1.29/deb  InRelease
+Hit:8 https://ppa.launchpadcontent.net/deadsnakes/ppa/ubuntu jammy InRelease
+Hit:9 http://in.archive.ubuntu.com/ubuntu jammy-updates InRelease
+Get:10 http://security.ubuntu.com/ubuntu jammy-security/main amd64 Packages [3,250 kB]
+Hit:11 http://in.archive.ubuntu.com/ubuntu jammy-backports InRelease
+Get:12 http://security.ubuntu.com/ubuntu jammy-security/universe amd64 Packages [1,031 kB]
+Fetched 4,414 kB in 2s (2,313 kB/s)
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+ca-certificates is already the newest version (20240203~22.04.1).
+curl is already the newest version (7.81.0-1ubuntu1.24).
+gnupg is already the newest version (2.2.27-3ubuntu2.5).
+jq is already the newest version (1.6-2.1ubuntu3.2).
+unzip is already the newest version (6.0-26ubuntu3.2).
+wget is already the newest version (1.21.2-2ubuntu1.1).
+python3-pip is already the newest version (22.0.2+dfsg-1ubuntu0.7).
+The following additional packages will be installed:
+  python3-pip-whl python3-setuptools-whl python3.10-venv
+The following NEW packages will be installed:
+  python3-pip-whl python3-setuptools-whl python3-venv python3.10-venv
+0 upgraded, 4 newly installed, 0 to remove and 12 not upgraded.
+Need to get 2,479 kB of archives.
+After this operation, 2,897 kB of additional disk space will be used.
+Get:1 http://in.archive.ubuntu.com/ubuntu jammy-updates/universe amd64 python3-pip-whl all 22.0.2+dfsg-1ubuntu0.7 [1,683 kB]
+Get:2 http://in.archive.ubuntu.com/ubuntu jammy-updates/universe amd64 python3-setuptools-whl all 59.6.0-1.2ubuntu0.22.04.3 [789 kB]
+Get:3 http://in.archive.ubuntu.com/ubuntu jammy-updates/universe amd64 python3.10-venv amd64 3.10.12-1~22.04.15 [5,714 B]
+Get:4 http://in.archive.ubuntu.com/ubuntu jammy-updates/universe amd64 python3-venv amd64 3.10.6-1~22.04.1 [1,042 B]
+Fetched 2,479 kB in 2s (1,319 kB/s)
+Selecting previously unselected package python3-pip-whl.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 199627 files and directories currently installed.)
+Preparing to unpack .../python3-pip-whl_22.0.2+dfsg-1ubuntu0.7_all.deb ...
+Unpacking python3-pip-whl (22.0.2+dfsg-1ubuntu0.7) ...
+Selecting previously unselected package python3-setuptools-whl.
+Preparing to unpack .../python3-setuptools-whl_59.6.0-1.2ubuntu0.22.04.3_all.deb ...
+Unpacking python3-setuptools-whl (59.6.0-1.2ubuntu0.22.04.3) ...
+Selecting previously unselected package python3.10-venv.
+Preparing to unpack .../python3.10-venv_3.10.12-1~22.04.15_amd64.deb ...
+Unpacking python3.10-venv (3.10.12-1~22.04.15) ...
+Selecting previously unselected package python3-venv.
+Preparing to unpack .../python3-venv_3.10.6-1~22.04.1_amd64.deb ...
+Unpacking python3-venv (3.10.6-1~22.04.1) ...
+Setting up python3-setuptools-whl (59.6.0-1.2ubuntu0.22.04.3) ...
+Setting up python3-pip-whl (22.0.2+dfsg-1ubuntu0.7) ...
+Setting up python3.10-venv (3.10.12-1~22.04.15) ...
+Setting up python3-venv (3.10.6-1~22.04.1) ...
+[2/10] Creating governed Python venv...
+[3/10] Activating venv...
+[4/10] Upgrading pip...
+Requirement already satisfied: pip in ./runtime/python/testing/venv/lib/python3.10/site-packages (22.0.2)
+Collecting pip
+  Downloading pip-26.1.1-py3-none-any.whl (1.8 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.8/1.8 MB 8.8 MB/s eta 0:00:00
+Requirement already satisfied: setuptools in ./runtime/python/testing/venv/lib/python3.10/site-packages (59.6.0)
+Collecting setuptools
+  Downloading setuptools-82.0.1-py3-none-any.whl (1.0 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.0/1.0 MB 10.5 MB/s eta 0:00:00
+Collecting wheel
+  Downloading wheel-0.47.0-py3-none-any.whl (32 kB)
+Collecting packaging>=24.0
+  Downloading packaging-26.2-py3-none-any.whl (100 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100.2/100.2 KB 15.9 MB/s eta 0:00:00
+Installing collected packages: setuptools, pip, packaging, wheel
+  Attempting uninstall: setuptools
+    Found existing installation: setuptools 59.6.0
+    Uninstalling setuptools-59.6.0:
+      Successfully uninstalled setuptools-59.6.0
+  Attempting uninstall: pip
+    Found existing installation: pip 22.0.2
+    Uninstalling pip-22.0.2:
+      Successfully uninstalled pip-22.0.2
+Successfully installed packaging-26.2 pip-26.1.1 setuptools-82.0.1 wheel-0.47.0
+[5/10] Installing Python testing stack...
+Collecting pytest==8.3.2
+  Downloading pytest-8.3.2-py3-none-any.whl.metadata (7.5 kB)
+Collecting pytest-asyncio==0.23.8
+  Downloading pytest_asyncio-0.23.8-py3-none-any.whl.metadata (3.9 kB)
+Collecting pact-python==2.1.3
+  Downloading pact_python-2.1.3-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (27 kB)
+Collecting httpx==0.27.0
+  Downloading httpx-0.27.0-py3-none-any.whl.metadata (7.2 kB)
+Collecting aiokafka==0.10.0
+  Downloading aiokafka-0.10.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (17 kB)
+Collecting confluent-kafka==2.5.3
+  Downloading confluent_kafka-2.5.3-cp310-cp310-manylinux_2_28_x86_64.whl.metadata (2.3 kB)
+Collecting fastavro==1.9.5
+  Downloading fastavro-1.9.5-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (5.5 kB)
+Collecting faker==26.0.0
+  Downloading Faker-26.0.0-py3-none-any.whl.metadata (15 kB)
+Collecting iniconfig (from pytest==8.3.2)
+  Downloading iniconfig-2.3.0-py3-none-any.whl.metadata (2.5 kB)
+Requirement already satisfied: packaging in ./runtime/python/testing/venv/lib/python3.10/site-packages (from pytest==8.3.2) (26.2)
+Collecting pluggy<2,>=1.5 (from pytest==8.3.2)
+  Downloading pluggy-1.6.0-py3-none-any.whl.metadata (4.8 kB)
+Collecting exceptiongroup>=1.0.0rc8 (from pytest==8.3.2)
+  Downloading exceptiongroup-1.3.1-py3-none-any.whl.metadata (6.7 kB)
+Collecting tomli>=1 (from pytest==8.3.2)
+  Using cached tomli-2.4.1-py3-none-any.whl.metadata (10 kB)
+Collecting cffi~=1.0 (from pact-python==2.1.3)
+  Downloading cffi-1.17.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (1.5 kB)
+Collecting click~=8.0 (from pact-python==2.1.3)
+  Downloading click-8.4.1-py3-none-any.whl.metadata (2.6 kB)
+Collecting fastapi~=0.0 (from pact-python==2.1.3)
+  Downloading fastapi-0.136.3-py3-none-any.whl.metadata (27 kB)
+Collecting psutil~=5.0 (from pact-python==2.1.3)
+  Downloading psutil-5.9.8-cp36-abi3-manylinux_2_12_x86_64.manylinux2010_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (21 kB)
+Collecting requests~=2.0 (from pact-python==2.1.3)
+  Downloading requests-2.34.2-py3-none-any.whl.metadata (4.8 kB)
+Collecting six~=1.0 (from pact-python==2.1.3)
+  Downloading six-1.17.0-py2.py3-none-any.whl.metadata (1.7 kB)
+Collecting uvicorn~=0.0 (from pact-python==2.1.3)
+  Downloading uvicorn-0.48.0-py3-none-any.whl.metadata (6.7 kB)
+Collecting yarl~=1.0 (from pact-python==2.1.3)
+  Downloading yarl-1.24.2-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (94 kB)
+Collecting anyio (from httpx==0.27.0)
+  Downloading anyio-4.13.0-py3-none-any.whl.metadata (4.5 kB)
+Collecting certifi (from httpx==0.27.0)
+  Downloading certifi-2026.5.20-py3-none-any.whl.metadata (2.5 kB)
+Collecting httpcore==1.* (from httpx==0.27.0)
+  Downloading httpcore-1.0.9-py3-none-any.whl.metadata (21 kB)
+Collecting idna (from httpx==0.27.0)
+  Downloading idna-3.16-py3-none-any.whl.metadata (6.4 kB)
+Collecting sniffio (from httpx==0.27.0)
+  Downloading sniffio-1.3.1-py3-none-any.whl.metadata (3.9 kB)
+Collecting async-timeout (from aiokafka==0.10.0)
+  Downloading async_timeout-5.0.1-py3-none-any.whl.metadata (5.1 kB)
+Collecting python-dateutil>=2.4 (from faker==26.0.0)
+  Downloading python_dateutil-2.9.0.post0-py2.py3-none-any.whl.metadata (8.4 kB)
+Collecting pycparser (from cffi~=1.0->pact-python==2.1.3)
+  Downloading pycparser-3.0-py3-none-any.whl.metadata (8.2 kB)
+Collecting starlette>=0.46.0 (from fastapi~=0.0->pact-python==2.1.3)
+  Downloading starlette-1.1.0-py3-none-any.whl.metadata (6.3 kB)
+Collecting pydantic>=2.9.0 (from fastapi~=0.0->pact-python==2.1.3)
+  Downloading pydantic-2.13.4-py3-none-any.whl.metadata (109 kB)
+Collecting typing-extensions>=4.8.0 (from fastapi~=0.0->pact-python==2.1.3)
+  Downloading typing_extensions-4.15.0-py3-none-any.whl.metadata (3.3 kB)
+Collecting typing-inspection>=0.4.2 (from fastapi~=0.0->pact-python==2.1.3)
+  Downloading typing_inspection-0.4.2-py3-none-any.whl.metadata (2.6 kB)
+Collecting annotated-doc>=0.0.2 (from fastapi~=0.0->pact-python==2.1.3)
+  Downloading annotated_doc-0.0.4-py3-none-any.whl.metadata (6.6 kB)
+Collecting h11>=0.16 (from httpcore==1.*->httpx==0.27.0)
+  Downloading h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
+Collecting charset_normalizer<4,>=2 (from requests~=2.0->pact-python==2.1.3)
+  Downloading charset_normalizer-3.4.7-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (40 kB)
+Collecting urllib3<3,>=1.26 (from requests~=2.0->pact-python==2.1.3)
+  Downloading urllib3-2.7.0-py3-none-any.whl.metadata (6.9 kB)
+Collecting multidict>=4.0 (from yarl~=1.0->pact-python==2.1.3)
+  Downloading multidict-6.7.1-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (5.3 kB)
+Collecting propcache>=0.2.1 (from yarl~=1.0->pact-python==2.1.3)
+  Downloading propcache-0.5.2-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (16 kB)
+Collecting annotated-types>=0.6.0 (from pydantic>=2.9.0->fastapi~=0.0->pact-python==2.1.3)
+  Downloading annotated_types-0.7.0-py3-none-any.whl.metadata (15 kB)
+Collecting pydantic-core==2.46.4 (from pydantic>=2.9.0->fastapi~=0.0->pact-python==2.1.3)
+  Downloading pydantic_core-2.46.4-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.6 kB)
+Downloading pytest-8.3.2-py3-none-any.whl (341 kB)
+Downloading pytest_asyncio-0.23.8-py3-none-any.whl (17 kB)
+Downloading pact_python-2.1.3-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (35.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 35.2/35.2 MB 2.1 MB/s  0:00:17
+Downloading httpx-0.27.0-py3-none-any.whl (75 kB)
+Downloading aiokafka-0.10.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (1.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.1/1.1 MB 9.0 MB/s  0:00:00
+Downloading confluent_kafka-2.5.3-cp310-cp310-manylinux_2_28_x86_64.whl (3.9 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.9/3.9 MB 3.0 MB/s  0:00:01
+Downloading fastavro-1.9.5-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (3.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.1/3.1 MB 4.4 MB/s  0:00:00
+Downloading Faker-26.0.0-py3-none-any.whl (1.8 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.8/1.8 MB 3.4 MB/s  0:00:00
+Downloading cffi-1.17.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (446 kB)
+Downloading click-8.4.1-py3-none-any.whl (116 kB)
+Downloading fastapi-0.136.3-py3-none-any.whl (117 kB)
+Downloading httpcore-1.0.9-py3-none-any.whl (78 kB)
+Downloading pluggy-1.6.0-py3-none-any.whl (20 kB)
+Downloading psutil-5.9.8-cp36-abi3-manylinux_2_12_x86_64.manylinux2010_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl (288 kB)
+Downloading requests-2.34.2-py3-none-any.whl (73 kB)
+Downloading charset_normalizer-3.4.7-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (216 kB)
+Downloading idna-3.16-py3-none-any.whl (74 kB)
+Downloading six-1.17.0-py2.py3-none-any.whl (11 kB)
+Downloading urllib3-2.7.0-py3-none-any.whl (131 kB)
+Downloading uvicorn-0.48.0-py3-none-any.whl (71 kB)
+Downloading yarl-1.24.2-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (106 kB)
+Downloading annotated_doc-0.0.4-py3-none-any.whl (5.3 kB)
+Downloading certifi-2026.5.20-py3-none-any.whl (134 kB)
+Downloading exceptiongroup-1.3.1-py3-none-any.whl (16 kB)
+Downloading h11-0.16.0-py3-none-any.whl (37 kB)
+Downloading multidict-6.7.1-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (243 kB)
+Downloading propcache-0.5.2-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (60 kB)
+Downloading pydantic-2.13.4-py3-none-any.whl (472 kB)
+Downloading pydantic_core-2.46.4-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.1/2.1 MB 8.9 MB/s  0:00:00
+Downloading annotated_types-0.7.0-py3-none-any.whl (13 kB)
+Downloading python_dateutil-2.9.0.post0-py2.py3-none-any.whl (229 kB)
+Downloading starlette-1.1.0-py3-none-any.whl (72 kB)
+Downloading anyio-4.13.0-py3-none-any.whl (114 kB)
+Using cached tomli-2.4.1-py3-none-any.whl (14 kB)
+Downloading typing_extensions-4.15.0-py3-none-any.whl (44 kB)
+Downloading typing_inspection-0.4.2-py3-none-any.whl (14 kB)
+Downloading async_timeout-5.0.1-py3-none-any.whl (6.2 kB)
+Downloading iniconfig-2.3.0-py3-none-any.whl (7.5 kB)
+Downloading pycparser-3.0-py3-none-any.whl (48 kB)
+Downloading sniffio-1.3.1-py3-none-any.whl (10 kB)
+Installing collected packages: confluent-kafka, urllib3, typing-extensions, tomli, sniffio, six, pycparser, psutil, propcache, pluggy, iniconfig, idna, h11, fastavro, click, charset_normalizer, certifi, async-timeout, annotated-types, annotated-doc, uvicorn, typing-inspection, requests, python-dateutil, pydantic-core, multidict, httpcore, exceptiongroup, cffi, aiokafka, yarl, pytest, pydantic, faker, anyio, starlette, pytest-asyncio, httpx, fastapi, pact-python
+
+Successfully installed aiokafka-0.10.0 annotated-doc-0.0.4 annotated-types-0.7.0 anyio-4.13.0 async-timeout-5.0.1 certifi-2026.5.20 cffi-1.17.1 charset_normalizer-3.4.7 click-8.4.1 confluent-kafka-2.5.3 exceptiongroup-1.3.1 faker-26.0.0 fastapi-0.136.3 fastavro-1.9.5 h11-0.16.0 httpcore-1.0.9 httpx-0.27.0 idna-3.16 iniconfig-2.3.0 multidict-6.7.1 pact-python-2.1.3 pluggy-1.6.0 propcache-0.5.2 psutil-5.9.8 pycparser-3.0 pydantic-2.13.4 pydantic-core-2.46.4 pytest-8.3.2 pytest-asyncio-0.23.8 python-dateutil-2.9.0.post0 requests-2.34.2 six-1.17.0 sniffio-1.3.1 starlette-1.1.0 tomli-2.4.1 typing-extensions-4.15.0 typing-inspection-0.4.2 urllib3-2.7.0 uvicorn-0.48.0 yarl-1.24.2
+[6/10] Installing yq...
+[7/10] Installing k6...
+deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main
+Hit:1 https://download.docker.com/linux/ubuntu jammy InRelease
+Hit:2 https://apt.releases.hashicorp.com jammy InRelease
+Get:3 https://dl.k6.io/deb stable InRelease [4,149 B]
+Get:4 https://cli.github.com/packages stable InRelease [3,917 B]
+Hit:5 https://deb.nodesource.com/node_20.x nodistro InRelease
+Hit:6 http://security.ubuntu.com/ubuntu jammy-security InRelease
+Hit:7 http://in.archive.ubuntu.com/ubuntu jammy InRelease
+Hit:8 http://in.archive.ubuntu.com/ubuntu jammy-updates InRelease
+Hit:9 https://prod-cdn.packages.k8s.io/repositories/isv:/kubernetes:/core:/stable:/v1.29/deb  InRelease
+Hit:10 http://in.archive.ubuntu.com/ubuntu jammy-backports InRelease
+Hit:11 https://ppa.launchpadcontent.net/deadsnakes/ppa/ubuntu jammy InRelease
+Get:12 https://dl.k6.io/deb stable/main amd64 Packages [6,748 B]
+Fetched 14.8 kB in 1s (12.0 kB/s)
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following NEW packages will be installed:
+  k6
+0 upgraded, 1 newly installed, 0 to remove and 12 not upgraded.
+Need to get 27.9 MB of archives.
+After this operation, 62.7 MB of additional disk space will be used.
+Get:1 https://dl.k6.io/deb stable/main amd64 k6 amd64 2.0.0 [27.9 MB]
+Fetched 27.9 MB in 3s (8,632 kB/s)
+Selecting previously unselected package k6.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 199643 files and directories currently installed.)
+Preparing to unpack .../archives/k6_2.0.0_amd64.deb ...
+Unpacking k6 (2.0.0) ...
+Setting up k6 (2.0.0) ...
+[8/10] Creating pytest configuration...
+scripts/testing/setup-test-env.sh: line 78: /home/coreeye/corei/tests/config/pytest.ini: No such file or directory
+==================================================
+STAGE-10A TESTING RUNTIME INSTALLATION
+==================================================
+[1/10] Installing system dependencies...
+Get:1 https://cli.github.com/packages stable InRelease [3,917 B]
+Hit:2 https://download.docker.com/linux/ubuntu jammy InRelease
+Hit:3 https://apt.releases.hashicorp.com jammy InRelease
+Hit:4 https://deb.nodesource.com/node_20.x nodistro InRelease
+Hit:5 https://dl.k6.io/deb stable InRelease
+Hit:6 http://security.ubuntu.com/ubuntu jammy-security InRelease
+Hit:7 http://in.archive.ubuntu.com/ubuntu jammy InRelease
+Hit:8 http://in.archive.ubuntu.com/ubuntu jammy-updates InRelease
+Hit:9 https://prod-cdn.packages.k8s.io/repositories/isv:/kubernetes:/core:/stable:/v1.29/deb  InRelease
+Hit:10 http://in.archive.ubuntu.com/ubuntu jammy-backports InRelease
+Hit:11 https://ppa.launchpadcontent.net/deadsnakes/ppa/ubuntu jammy InRelease
+Fetched 3,917 B in 1s (3,226 B/s)
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+ca-certificates is already the newest version (20240203~22.04.1).
+curl is already the newest version (7.81.0-1ubuntu1.24).
+gnupg is already the newest version (2.2.27-3ubuntu2.5).
+jq is already the newest version (1.6-2.1ubuntu3.2).
+unzip is already the newest version (6.0-26ubuntu3.2).
+wget is already the newest version (1.21.2-2ubuntu1.1).
+python3-pip is already the newest version (22.0.2+dfsg-1ubuntu0.7).
+python3-venv is already the newest version (3.10.6-1~22.04.1).
+0 upgraded, 0 newly installed, 0 to remove and 12 not upgraded.
+[2/10] Creating governed Python venv...
+[3/10] Activating venv...
+[4/10] Upgrading pip...
+Requirement already satisfied: pip in ./runtime/python/testing/venv/lib/python3.10/site-packages (26.1.1)
+Requirement already satisfied: setuptools in ./runtime/python/testing/venv/lib/python3.10/site-packages (82.0.1)
+Requirement already satisfied: wheel in ./runtime/python/testing/venv/lib/python3.10/site-packages (0.47.0)
+Requirement already satisfied: packaging>=24.0 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from wheel) (26.2)
+[5/10] Installing Python testing stack...
+Requirement already satisfied: pytest==8.3.2 in ./runtime/python/testing/venv/lib/python3.10/site-packages (8.3.2)
+Requirement already satisfied: pytest-asyncio==0.23.8 in ./runtime/python/testing/venv/lib/python3.10/site-packages (0.23.8)
+Requirement already satisfied: pact-python==2.1.3 in ./runtime/python/testing/venv/lib/python3.10/site-packages (2.1.3)
+Requirement already satisfied: httpx==0.27.0 in ./runtime/python/testing/venv/lib/python3.10/site-packages (0.27.0)
+Requirement already satisfied: aiokafka==0.10.0 in ./runtime/python/testing/venv/lib/python3.10/site-packages (0.10.0)
+Requirement already satisfied: confluent-kafka==2.5.3 in ./runtime/python/testing/venv/lib/python3.10/site-packages (2.5.3)
+Requirement already satisfied: fastavro==1.9.5 in ./runtime/python/testing/venv/lib/python3.10/site-packages (1.9.5)
+Requirement already satisfied: faker==26.0.0 in ./runtime/python/testing/venv/lib/python3.10/site-packages (26.0.0)
+Requirement already satisfied: iniconfig in ./runtime/python/testing/venv/lib/python3.10/site-packages (from pytest==8.3.2) (2.3.0)
+Requirement already satisfied: packaging in ./runtime/python/testing/venv/lib/python3.10/site-packages (from pytest==8.3.2) (26.2)
+Requirement already satisfied: pluggy<2,>=1.5 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from pytest==8.3.2) (1.6.0)
+Requirement already satisfied: exceptiongroup>=1.0.0rc8 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from pytest==8.3.2) (1.3.1)
+Requirement already satisfied: tomli>=1 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from pytest==8.3.2) (2.4.1)
+Requirement already satisfied: cffi~=1.0 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from pact-python==2.1.3) (1.17.1)
+Requirement already satisfied: click~=8.0 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from pact-python==2.1.3) (8.4.1)
+Requirement already satisfied: fastapi~=0.0 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from pact-python==2.1.3) (0.136.3)
+Requirement already satisfied: psutil~=5.0 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from pact-python==2.1.3) (5.9.8)
+Requirement already satisfied: requests~=2.0 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from pact-python==2.1.3) (2.34.2)
+Requirement already satisfied: six~=1.0 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from pact-python==2.1.3) (1.17.0)
+Requirement already satisfied: uvicorn~=0.0 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from pact-python==2.1.3) (0.48.0)
+Requirement already satisfied: yarl~=1.0 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from pact-python==2.1.3) (1.24.2)
+Requirement already satisfied: anyio in ./runtime/python/testing/venv/lib/python3.10/site-packages (from httpx==0.27.0) (4.13.0)
+Requirement already satisfied: certifi in ./runtime/python/testing/venv/lib/python3.10/site-packages (from httpx==0.27.0) (2026.5.20)
+Requirement already satisfied: httpcore==1.* in ./runtime/python/testing/venv/lib/python3.10/site-packages (from httpx==0.27.0) (1.0.9)
+Requirement already satisfied: idna in ./runtime/python/testing/venv/lib/python3.10/site-packages (from httpx==0.27.0) (3.16)
+Requirement already satisfied: sniffio in ./runtime/python/testing/venv/lib/python3.10/site-packages (from httpx==0.27.0) (1.3.1)
+Requirement already satisfied: async-timeout in ./runtime/python/testing/venv/lib/python3.10/site-packages (from aiokafka==0.10.0) (5.0.1)
+Requirement already satisfied: python-dateutil>=2.4 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from faker==26.0.0) (2.9.0.post0)
+Requirement already satisfied: pycparser in ./runtime/python/testing/venv/lib/python3.10/site-packages (from cffi~=1.0->pact-python==2.1.3) (3.0)
+Requirement already satisfied: starlette>=0.46.0 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from fastapi~=0.0->pact-python==2.1.3) (1.1.0)
+Requirement already satisfied: pydantic>=2.9.0 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from fastapi~=0.0->pact-python==2.1.3) (2.13.4)
+Requirement already satisfied: typing-extensions>=4.8.0 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from fastapi~=0.0->pact-python==2.1.3) (4.15.0)
+Requirement already satisfied: typing-inspection>=0.4.2 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from fastapi~=0.0->pact-python==2.1.3) (0.4.2)
+Requirement already satisfied: annotated-doc>=0.0.2 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from fastapi~=0.0->pact-python==2.1.3) (0.0.4)
+Requirement already satisfied: h11>=0.16 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from httpcore==1.*->httpx==0.27.0) (0.16.0)
+Requirement already satisfied: charset_normalizer<4,>=2 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from requests~=2.0->pact-python==2.1.3) (3.4.7)
+Requirement already satisfied: urllib3<3,>=1.26 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from requests~=2.0->pact-python==2.1.3) (2.7.0)
+Requirement already satisfied: multidict>=4.0 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from yarl~=1.0->pact-python==2.1.3) (6.7.1)
+Requirement already satisfied: propcache>=0.2.1 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from yarl~=1.0->pact-python==2.1.3) (0.5.2)
+Requirement already satisfied: annotated-types>=0.6.0 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from pydantic>=2.9.0->fastapi~=0.0->pact-python==2.1.3) (0.7.0)
+Requirement already satisfied: pydantic-core==2.46.4 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from pydantic>=2.9.0->fastapi~=0.0->pact-python==2.1.3) (2.46.4)
+[6/10] Installing yq...
+[7/10] Installing k6...
+deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main
+Hit:1 https://download.docker.com/linux/ubuntu jammy InRelease
+Hit:2 https://apt.releases.hashicorp.com jammy InRelease
+Hit:3 https://deb.nodesource.com/node_20.x nodistro InRelease
+Get:4 https://cli.github.com/packages stable InRelease [3,917 B]
+Hit:5 https://dl.k6.io/deb stable InRelease
+Hit:6 http://security.ubuntu.com/ubuntu jammy-security InRelease
+Hit:7 https://prod-cdn.packages.k8s.io/repositories/isv:/kubernetes:/core:/stable:/v1.29/deb  InRelease
+Hit:8 http://in.archive.ubuntu.com/ubuntu jammy InRelease
+Hit:9 http://in.archive.ubuntu.com/ubuntu jammy-updates InRelease
+Hit:10 https://ppa.launchpadcontent.net/deadsnakes/ppa/ubuntu jammy InRelease
+Hit:11 http://in.archive.ubuntu.com/ubuntu jammy-backports InRelease
+Fetched 3,917 B in 1s (3,192 B/s)
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+k6 is already the newest version (2.0.0).
+0 upgraded, 0 newly installed, 0 to remove and 12 not upgraded.
+[8/10] Creating pytest configuration...
+[9/10] Creating runtime configuration...
+[10/10] Runtime installation completed
+
+STAGE-10A TESTING TOOLCHAIN INSTALLED
+==================================================
+STAGE-10A TESTING RUNTIME INSTALLATION
+==================================================
+[1/10] Installing system dependencies...
+Get:1 https://cli.github.com/packages stable InRelease [3,917 B]
+Hit:2 https://download.docker.com/linux/ubuntu jammy InRelease
+Hit:3 https://deb.nodesource.com/node_20.x nodistro InRelease
+Hit:4 https://apt.releases.hashicorp.com jammy InRelease
+Hit:5 http://security.ubuntu.com/ubuntu jammy-security InRelease
+Hit:6 http://in.archive.ubuntu.com/ubuntu jammy InRelease
+Hit:8 http://in.archive.ubuntu.com/ubuntu jammy-updates InRelease
+Hit:7 https://prod-cdn.packages.k8s.io/repositories/isv:/kubernetes:/core:/stable:/v1.29/deb  InRelease
+Hit:9 http://in.archive.ubuntu.com/ubuntu jammy-backports InRelease
+Hit:10 https://ppa.launchpadcontent.net/deadsnakes/ppa/ubuntu jammy InRelease
+Hit:11 https://dl.k6.io/deb stable InRelease
+Fetched 3,917 B in 5s (749 B/s)
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+ca-certificates is already the newest version (20240203~22.04.1).
+curl is already the newest version (7.81.0-1ubuntu1.24).
+gnupg is already the newest version (2.2.27-3ubuntu2.5).
+jq is already the newest version (1.6-2.1ubuntu3.2).
+unzip is already the newest version (6.0-26ubuntu3.2).
+wget is already the newest version (1.21.2-2ubuntu1.1).
+python3-pip is already the newest version (22.0.2+dfsg-1ubuntu0.7).
+python3-venv is already the newest version (3.10.6-1~22.04.1).
+0 upgraded, 0 newly installed, 0 to remove and 12 not upgraded.
+[2/10] Creating governed Python venv...
+[3/10] Activating venv...
+[4/10] Upgrading pip...
+Requirement already satisfied: pip in ./runtime/python/testing/venv/lib/python3.10/site-packages (26.1.1)
+Requirement already satisfied: setuptools in ./runtime/python/testing/venv/lib/python3.10/site-packages (82.0.1)
+Requirement already satisfied: wheel in ./runtime/python/testing/venv/lib/python3.10/site-packages (0.47.0)
+Requirement already satisfied: packaging>=24.0 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from wheel) (26.2)
+[5/10] Installing Python testing stack...
+Requirement already satisfied: pytest==8.3.2 in ./runtime/python/testing/venv/lib/python3.10/site-packages (8.3.2)
+Requirement already satisfied: pytest-asyncio==0.23.8 in ./runtime/python/testing/venv/lib/python3.10/site-packages (0.23.8)
+Requirement already satisfied: pact-python==2.1.3 in ./runtime/python/testing/venv/lib/python3.10/site-packages (2.1.3)
+Requirement already satisfied: httpx==0.27.0 in ./runtime/python/testing/venv/lib/python3.10/site-packages (0.27.0)
+Requirement already satisfied: aiokafka==0.10.0 in ./runtime/python/testing/venv/lib/python3.10/site-packages (0.10.0)
+Requirement already satisfied: confluent-kafka==2.5.3 in ./runtime/python/testing/venv/lib/python3.10/site-packages (2.5.3)
+Requirement already satisfied: fastavro==1.9.5 in ./runtime/python/testing/venv/lib/python3.10/site-packages (1.9.5)
+Requirement already satisfied: faker==26.0.0 in ./runtime/python/testing/venv/lib/python3.10/site-packages (26.0.0)
+Requirement already satisfied: iniconfig in ./runtime/python/testing/venv/lib/python3.10/site-packages (from pytest==8.3.2) (2.3.0)
+Requirement already satisfied: packaging in ./runtime/python/testing/venv/lib/python3.10/site-packages (from pytest==8.3.2) (26.2)
+Requirement already satisfied: pluggy<2,>=1.5 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from pytest==8.3.2) (1.6.0)
+Requirement already satisfied: exceptiongroup>=1.0.0rc8 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from pytest==8.3.2) (1.3.1)
+Requirement already satisfied: tomli>=1 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from pytest==8.3.2) (2.4.1)
+Requirement already satisfied: cffi~=1.0 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from pact-python==2.1.3) (1.17.1)
+Requirement already satisfied: click~=8.0 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from pact-python==2.1.3) (8.4.1)
+Requirement already satisfied: fastapi~=0.0 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from pact-python==2.1.3) (0.136.3)
+Requirement already satisfied: psutil~=5.0 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from pact-python==2.1.3) (5.9.8)
+Requirement already satisfied: requests~=2.0 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from pact-python==2.1.3) (2.34.2)
+Requirement already satisfied: six~=1.0 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from pact-python==2.1.3) (1.17.0)
+Requirement already satisfied: uvicorn~=0.0 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from pact-python==2.1.3) (0.48.0)
+Requirement already satisfied: yarl~=1.0 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from pact-python==2.1.3) (1.24.2)
+Requirement already satisfied: anyio in ./runtime/python/testing/venv/lib/python3.10/site-packages (from httpx==0.27.0) (4.13.0)
+Requirement already satisfied: certifi in ./runtime/python/testing/venv/lib/python3.10/site-packages (from httpx==0.27.0) (2026.5.20)
+Requirement already satisfied: httpcore==1.* in ./runtime/python/testing/venv/lib/python3.10/site-packages (from httpx==0.27.0) (1.0.9)
+Requirement already satisfied: idna in ./runtime/python/testing/venv/lib/python3.10/site-packages (from httpx==0.27.0) (3.16)
+Requirement already satisfied: sniffio in ./runtime/python/testing/venv/lib/python3.10/site-packages (from httpx==0.27.0) (1.3.1)
+Requirement already satisfied: async-timeout in ./runtime/python/testing/venv/lib/python3.10/site-packages (from aiokafka==0.10.0) (5.0.1)
+Requirement already satisfied: python-dateutil>=2.4 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from faker==26.0.0) (2.9.0.post0)
+Requirement already satisfied: pycparser in ./runtime/python/testing/venv/lib/python3.10/site-packages (from cffi~=1.0->pact-python==2.1.3) (3.0)
+Requirement already satisfied: starlette>=0.46.0 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from fastapi~=0.0->pact-python==2.1.3) (1.1.0)
+Requirement already satisfied: pydantic>=2.9.0 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from fastapi~=0.0->pact-python==2.1.3) (2.13.4)
+Requirement already satisfied: typing-extensions>=4.8.0 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from fastapi~=0.0->pact-python==2.1.3) (4.15.0)
+Requirement already satisfied: typing-inspection>=0.4.2 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from fastapi~=0.0->pact-python==2.1.3) (0.4.2)
+Requirement already satisfied: annotated-doc>=0.0.2 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from fastapi~=0.0->pact-python==2.1.3) (0.0.4)
+Requirement already satisfied: h11>=0.16 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from httpcore==1.*->httpx==0.27.0) (0.16.0)
+Requirement already satisfied: charset_normalizer<4,>=2 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from requests~=2.0->pact-python==2.1.3) (3.4.7)
+Requirement already satisfied: urllib3<3,>=1.26 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from requests~=2.0->pact-python==2.1.3) (2.7.0)
+Requirement already satisfied: multidict>=4.0 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from yarl~=1.0->pact-python==2.1.3) (6.7.1)
+Requirement already satisfied: propcache>=0.2.1 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from yarl~=1.0->pact-python==2.1.3) (0.5.2)
+Requirement already satisfied: annotated-types>=0.6.0 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from pydantic>=2.9.0->fastapi~=0.0->pact-python==2.1.3) (0.7.0)
+Requirement already satisfied: pydantic-core==2.46.4 in ./runtime/python/testing/venv/lib/python3.10/site-packages (from pydantic>=2.9.0->fastapi~=0.0->pact-python==2.1.3) (2.46.4)
+[6/10] Installing yq...
+[7/10] Installing k6...
+Get:1 https://cli.github.com/packages stable InRelease [3,917 B]
+Hit:2 https://deb.nodesource.com/node_20.x nodistro InRelease
+Hit:3 https://download.docker.com/linux/ubuntu jammy InRelease
+Hit:4 https://apt.releases.hashicorp.com jammy InRelease
+Hit:5 https://dl.k6.io/deb stable InRelease
+Hit:6 http://security.ubuntu.com/ubuntu jammy-security InRelease
+Hit:8 http://in.archive.ubuntu.com/ubuntu jammy InRelease
+Hit:7 https://prod-cdn.packages.k8s.io/repositories/isv:/kubernetes:/core:/stable:/v1.29/deb  InRelease
+Hit:9 https://ppa.launchpadcontent.net/deadsnakes/ppa/ubuntu jammy InRelease
+Hit:10 http://in.archive.ubuntu.com/ubuntu jammy-updates InRelease
+Hit:11 http://in.archive.ubuntu.com/ubuntu jammy-backports InRelease
+Fetched 3,917 B in 1s (3,044 B/s)
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+k6 is already the newest version (2.0.0).
+0 upgraded, 0 newly installed, 0 to remove and 12 not upgraded.
+[8/10] Creating pytest configuration...
+[9/10] Creating runtime configuration...
+[10/10] Runtime installation completed
+
+STAGE-10A TESTING TOOLCHAIN INSTALLED

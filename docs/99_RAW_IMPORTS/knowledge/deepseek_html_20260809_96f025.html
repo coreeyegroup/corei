@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>COREI Knowledge Asset Template</title>
+
+  <!-- ============================================================
+       COREI INSTITUTIONAL DOCUMENTATION STYLESHEET
+       Version: 1.0 | Classification: Constitutional
+       ============================================================ -->
+  <style>
+    /* ── Reset & Base ── */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-primary: #0A0D12;
+      --bg-secondary: #0E1219;
+      --bg-tertiary: #121821;
+      --bg-panel: #18202A;
+      --border-color: #28303C;
+      --text-primary: #E3E7EC;
+      --text-secondary: #C5CED9;
+      --text-muted: #6E7883;
+      --text-dim: #4A525E;
+      --gold: #C6A46A;
+      --gold-light: #D4B88A;
+      --gold-dark: #A88950;
+      --green: #52A36B;
+      --red: #B95A5A;
+      --yellow: #D1A64A;
+      --blue: #8BB4F0;
+      --font-sans: 'Inter', 'Segoe UI', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', 'Cascadia Code', monospace;
+      --sidebar-width: 260px;
+    }
+
+    body {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.6;
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg-secondary); }
+    ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--gold-dark); }
+
+    /* ── Sidebar ── */
+    .sidebar-wrapper {
+      display: flex;
+      flex-shrink: 0;
+      height: 100vh;
+      position: sticky;
+      top: 0;
+      overflow: hidden;
+    }
+
+    .sidebar {
+      width: var(--sidebar-width);
+      min-width: 160px;
+      max-width: 380px;
+      background: var(--bg-secondary);
+      border-right: 1px solid var(--border-color);
+      padding: 0.6rem 0.3rem 0.6rem 0.5rem;
+      overflow-y: auto;
+      overflow-x: hidden;
+      height: 100vh;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      resize: horizontal;
+    }
+
+    .sidebar::-webkit-resizer {
+      background: var(--border-color);
+      border-radius: 0 0 4px 0;
+    }
+
+    .sidebar-brand {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.06em;
+      padding: 0 0.3rem 0.5rem 0.3rem;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      flex-shrink: 0;
+    }
+    .sidebar-brand span {
+      color: var(--text-muted);
+      font-weight: 300;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+    }
+    .sidebar-brand .badge-ks {
+      font-size: 10px;
+      background: var(--gold-dark);
+      color: var(--bg-primary);
+      padding: 0.05rem 0.4rem;
+      border-radius: 10px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      margin-left: auto;
+    }
+
+    /* Sidebar Navigation */
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 0.08rem;
+      flex: 1;
+      overflow-y: auto;
+    }
+    .sidebar-nav .nav-group {
+      margin-top: 0.2rem;
+    }
+    .sidebar-nav .nav-group-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+      padding: 0.2rem 0.3rem 0.1rem 0.3rem;
+      font-weight: 600;
+      cursor: default;
+    }
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      padding: 0.2rem 0.3rem 0.2rem 0.5rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 12px;
+      border-radius: 3px;
+      transition: background 0.12s, color 0.12s;
+      line-height: 1.4;
+      white-space: nowrap;
+      gap: 0.3rem;
+    }
+    .sidebar-nav a:hover {
+      background: var(--bg-panel);
+      color: var(--text-primary);
+    }
+    .sidebar-nav a.active {
+      background: var(--border-color);
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+    .sidebar-nav a .s-id {
+      color: var(--text-dim);
+      font-size: 10px;
+      font-weight: 400;
+      font-family: var(--font-mono);
+      width: 52px;
+      flex-shrink: 0;
+    }
+    .sidebar-nav a .s-title {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .sidebar-nav a .s-status {
+      font-size: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 0.05rem 0.3rem;
+      border-radius: 8px;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+    .s-status.approved { background: rgba(82, 163, 107, 0.2); color: var(--green); }
+    .s-status.constitutional { background: rgba(198, 164, 106, 0.2); color: var(--gold); }
+
+    /* ── Main Content ── */
+    .main-content {
+      flex: 1;
+      padding: 2rem 2.5rem 3rem 2.5rem;
+      max-width: 1200px;
+      min-width: 0;
+      overflow-x: auto;
+    }
+
+    /* ── Document Header ── */
+    .doc-header {
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.2rem 1.8rem;
+      margin-bottom: 1.8rem;
+    }
+    .doc-header .org {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gold);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .doc-header .doc-id {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      margin-top: 0.1rem;
+    }
+    .doc-header .doc-title {
+      font-size: 28px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 0.1rem 0;
+    }
+    .doc-header .doc-sub {
+      font-size: 16px;
+      color: var(--text-secondary);
+    }
+    .doc-header .doc-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem 1.8rem;
+      margin-top: 0.6rem;
+      font-size: 13px;
+    }
+    .doc-header .doc-meta .dm-item {
+      display: flex;
+      align-items: baseline;
+      gap: 0.3rem;
+    }
+    .doc-header .doc-meta .dm-label {
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-size: 10px;
+      letter-spacing: 0.04em;
+      font-weight: 600;
+    }
+    .doc-header .doc-meta .dm-value {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+    .doc-header .doc-meta .dm-value.mono {
+      font-family: var(--font-mono);
+    }
+
+    /* ── Badges ── */
+    .badge {
+      display: inline-block;
+      padding: 0.05rem 0.6rem;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+    .badge-constitutional { background: rgba(198, 164, 106, 0.2); color: var(--gold); border: 1px solid var(--gold-dark); }
+    .badge-foundational  { background: rgba(139, 180, 240, 0.15); color: var(--blue); border: 1px solid rgba(139, 180, 240, 0.3); }
+    .badge-authoritative { background: rgba(82, 163, 107, 0.15); color: var(--green); border: 1px solid rgba(82, 163, 107, 0.3); }
+    .badge-approved      { background: rgba(82, 163, 107, 0.2); color: var(--green); }
+    .badge-draft         { background: rgba(209, 166, 74, 0.2); color: var(--yellow); }
+    .badge-frozen        { background: rgba(198, 164, 106, 0.15); color: var(--gold); border: 1px solid var(--gold-dark); }
+    .badge-deprecated    { background: rgba(185, 90, 90, 0.2); color: var(--red); }
+    .badge-archived      { background: rgba(110, 120, 131, 0.2); color: var(--text-muted); border: 1px solid var(--text-muted); }
+
+    .status-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 0.3rem;
+    }
+    .status-dot.approved  { background: var(--green); }
+    .status-dot.draft     { background: var(--yellow); }
+    .status-dot.frozen    { background: var(--gold); }
+    .status-dot.deprecated{ background: var(--red); }
+
+    /* ── Metadata Table ── */
+    .meta-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin: 0.6rem 0 1.2rem 0;
+    }
+    .meta-table td {
+      padding: 0.2rem 0.6rem;
+      border: 1px solid var(--border-color);
+      background: var(--bg-secondary);
+      vertical-align: top;
+    }
+    .meta-table tr:nth-child(even) td {
+      background: var(--bg-tertiary);
+    }
+    .meta-table .mt-label {
+      color: var(--text-muted);
+      width: 140px;
+      font-weight: 400;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .meta-table .mt-value {
+      font-weight: 500;
+      font-family: var(--font-mono);
+      font-size: 13px;
+    }
+    .meta-table .mt-value a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+    .meta-table .mt-value a:hover {
+      text-decoration: underline;
+    }
+
+    /* ── Dependency Graph ── */
+    .dep-graph {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 0.8rem 1.2rem;
+      margin: 0.6rem 0 1.2rem 0;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-secondary);
+      overflow-x: auto;
+      line-height: 2;
+    }
+    .dep-graph .node {
+      color: var(--gold);
+      font-weight: 600;
+    }
+    .dep-graph .arrow {
+      color: var(--text-dim);
+    }
+    .dep-graph .dep {
+      color: var(--blue);
+    }
+
+    /* ── Markdown Body ── */
+    .markdown-body {
+      color: var(--text-primary);
+      line-height: 1.7;
+    }
+    .markdown-body h1 {
+      font-size: 26px;
+      font-weight: 600;
+      color: var(--gold);
+      margin: 24px 0 12px 0;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 8px;
+    }
+    .markdown-body h2 {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--gold-light);
+      margin: 20px 0 10px 0;
+    }
+    .markdown-body h3 {
+      font-size: 17px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin: 16px 0 8px 0;
+    }
+    .markdown-body h4 {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin: 12px 0 6px 0;
+    }
+    .markdown-body p {
+      margin-bottom: 8px;
+    }
+    .markdown-body ul, .markdown-body ol {
+      padding-left: 24px;
+      margin-bottom: 8px;
+    }
+    .markdown-body li {
+      margin-bottom: 2px;
+    }
+    .markdown-body code {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 1px 6px;
+      border-radius: 3px;
+      border: 1px solid var(--border-color);
+    }
+    .markdown-body pre {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 16px 20px;
+      overflow: auto;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.5;
+      margin: 12px 0 16px 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .markdown-body pre code {
+      background: transparent;
+      border: none;
+      padding: 0;
+    }
+    .markdown-body table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0 16px 0;
+      font-size: 13px;
+    }
+    .markdown-body th {
+      background: var(--bg-panel);
+      color: var(--text-secondary);
+      font-weight: 600;
+      text-align: left;
+      padding: 6px 12px;
+      border: 1px solid var(--border-color);
+    }
+    .markdown-body td {
+      padding: 4px 12px;
+      border: 1px solid var(--border-color);
+    }
+    .markdown-body hr {
+      border: none;
+      border-top: 1px solid var(--border-color);
+      margin: 24px 0;
+    }
+
+    /* ── Document Footer ── */
+    .document-footer {
+      margin-top: 32px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      gap: 0.5rem;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      body {
+        flex-direction: column;
+      }
+      .sidebar-wrapper {
+        height: auto;
+        position: static;
+        overflow: visible;
+      }
+      .sidebar {
+        width: 100% !important;
+        height: auto;
+        max-width: none !important;
+        min-width: unset;
+        resize: none;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        padding: 0.4rem 0.5rem;
+        overflow-y: visible;
+      }
+      .sidebar-nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.05rem;
+        overflow-y: visible;
+      }
+      .sidebar-nav a {
+        padding: 0.1rem 0.3rem;
+        font-size: 11px;
+        white-space: nowrap;
+      }
+      .sidebar-nav a .s-id {
+        width: auto;
+        font-size: 9px;
+      }
+      .sidebar-nav .nav-group-label {
+        display: none;
+      }
+      .sidebar-brand .badge-ks {
+        display: none;
+      }
+      .main-content {
+        padding: 1rem 1.2rem;
+      }
+      .doc-header {
+        padding: 0.8rem 1rem;
+      }
+      .doc-header .doc-title {
+        font-size: 22px;
+      }
+      .doc-header .doc-meta {
+        flex-direction: column;
+        gap: 0.2rem;
+      }
+      .meta-table .mt-label {
+        width: 100px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .main-content {
+        padding: 0.6rem 0.8rem;
+      }
+      .doc-header .doc-title {
+        font-size: 19px;
+      }
+      .doc-header .doc-sub {
+        font-size: 14px;
+      }
+    }
+
+    /* ── Print ── */
+    @media print {
+      .sidebar-wrapper {
+        display: none !important;
+      }
+      body {
+        background: white;
+        color: black;
+        display: block;
+      }
+      .main-content {
+        padding: 0.8in;
+        max-width: 100%;
+      }
+      .doc-header, .dep-graph, .meta-table, pre, table {
+        border-color: #ccc !important;
+        background: #f9f9f9 !important;
+        color: black !important;
+      }
+      .doc-header .doc-meta .dm-label {
+        color: #666 !important;
+      }
+      .doc-header .doc-meta .dm-value {
+        color: #000 !important;
+      }
+      .badge {
+        border: 1px solid #999 !important;
+        background: transparent !important;
+        color: #000 !important;
+      }
+      .badge-constitutional { border-color: #b8963a !important; color: #b8963a !important; }
+      .badge-approved { border-color: #2a7a3a !important; color: #2a7a3a !important; }
+      .text-gold { color: #b8963a !important; }
+      .text-success { color: #2a7a3a !important; }
+      .text-muted { color: #666 !important; }
+      .dep-graph .node { color: #b8963a !important; }
+      .dep-graph .dep { color: #2a6a8a !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+  SIDEBAR – Document Navigation (static example)
+  ============================================================ -->
+  <div class="sidebar-wrapper">
+    <aside class="sidebar" role="navigation" aria-label="Knowledge Navigation">
+      <div class="sidebar-brand">
+        COREI <span>·</span> KNOWLEDGE
+        <span class="badge-ks">KS</span>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-group">
+          <div class="nav-group-label">Foundation</div>
+          <a href="#" class="active"><span class="s-id">KS-00.00</span><span class="s-title">Knowledge Foundation</span><span class="s-status constitutional">Const</span></a>
+          <a href="#"><span class="s-id">KS-00.01</span><span class="s-title">Knowledge Model</span><span class="s-status constitutional">Const</span></a>
+          <a href="#"><span class="s-id">KS-00.02</span><span class="s-title">Knowledge System</span><span class="s-status constitutional">Const</span></a>
+          <a href="#"><span class="s-id">KS-00.03</span><span class="s-title">Knowledge Architecture</span><span class="s-status constitutional">Const</span></a>
+          <a href="#"><span class="s-id">KS-00.04</span><span class="s-title">Knowledge Governance</span><span class="s-status constitutional">Const</span></a>
+          <a href="#"><span class="s-id">KS-00.05</span><span class="s-title">Knowledge Lifecycle</span><span class="s-status constitutional">Const</span></a>
+          <a href="#"><span class="s-id">KS-00.06</span><span class="s-title">Knowledge Classification</span><span class="s-status constitutional">Const</span></a>
+          <a href="#"><span class="s-id">KS-00.07</span><span class="s-title">Knowledge Asset Standard</span><span class="s-status constitutional">Const</span></a>
+          <a href="#"><span class="s-id">KS-00.08</span><span class="s-title">Knowledge Naming Standard</span><span class="s-status constitutional">Const</span></a>
+          <a href="#"><span class="s-id">KS-00.09</span><span class="s-title">Knowledge Repository Standard</span><span class="s-status constitutional">Const</span></a>
+        </div>
+        <div class="nav-group">
+          <div class="nav-group-label">Identity</div>
+          <a href="#"><span class="s-id">ID-01.00</span><span class="s-title">Identity System</span><span class="s-status constitutional">Const</span></a>
+          <a href="#"><span class="s-id">ID-01.01</span><span class="s-title">Identity Model</span><span class="s-status constitutional">Const</span></a>
+          <a href="#"><span class="s-id">ID-01.02</span><span class="s-title">COREI</span><span class="s-status constitutional">Const</span></a>
+          <a href="#"><span class="s-id">ID-01.03</span><span class="s-title">Vision</span><span class="s-status constitutional">Const</span></a>
+          <a href="#"><span class="s-id">ID-01.04</span><span class="s-title">Mission</span><span class="s-status constitutional">Const</span></a>
+          <a href="#"><span class="s-id">ID-01.05</span><span class="s-title">Philosophy</span><span class="s-status constitutional">Const</span></a>
+          <a href="#"><span class="s-id">ID-01.06</span><span class="s-title">Core Values</span><span class="s-status constitutional">Const</span></a>
+          <a href="#"><span class="s-id">ID-01.07</span><span class="s-title">Manifesto</span><span class="s-status constitutional">Const</span></a>
+          <a href="#"><span class="s-id">ID-01.08</span><span class="s-title">COREI DNA</span><span class="s-status constitutional">Const</span></a>
+          <a href="#"><span class="s-id">ID-01.09</span><span class="s-title">Strategic Direction</span><span class="s-status constitutional">Const</span></a>
+        </div>
+      </nav>
+    </aside>
+  </div>
+
+  <!-- ============================================================
+  MAIN CONTENT – RENDERED KNOWLEDGE ASSET
+  ============================================================ -->
+  <main class="main-content">
+
+    <!-- ============================================================
+    DOCUMENT HEADER
+    ============================================================ -->
+    <header class="doc-header">
+      <div class="org">COREI · Knowledge System</div>
+      <div class="doc-id">COREI-KS-00.00</div>
+      <h1 class="doc-title">Knowledge Foundation</h1>
+      <div class="doc-sub">Constitutional Foundation of the Knowledge System</div>
+
+      <div class="doc-meta">
+        <span class="dm-item">
+          <span class="dm-label">Version</span>
+          <span class="dm-value">1.0</span>
+        </span>
+        <span class="dm-item">
+          <span class="dm-label">Status</span>
+          <span class="dm-value"><span class="badge badge-approved">Approved</span></span>
+        </span>
+        <span class="dm-item">
+          <span class="dm-label">Classification</span>
+          <span class="dm-value"><span class="badge badge-constitutional">Constitutional</span></span>
+        </span>
+        <span class="dm-item">
+          <span class="dm-label">Owner</span>
+          <span class="dm-value">COREI</span>
+        </span>
+        <span class="dm-item">
+          <span class="dm-label">Repository</span>
+          <span class="dm-value mono">knowledge/00-foundation/</span>
+        </span>
+      </div>
+    </header>
+
+    <!-- ============================================================
+    METADATA TABLE (Complete frontmatter)
+    ============================================================ -->
+    <table class="meta-table">
+      <tr><td class="mt-label">asset_id</td><td class="mt-value">COREI-KS-00.00</td></tr>
+      <tr><td class="mt-label">title</td><td class="mt-value">Knowledge Foundation</td></tr>
+      <tr><td class="mt-label">domain</td><td class="mt-value">Knowledge Foundation</td></tr>
+      <tr><td class="mt-label">domain_code</td><td class="mt-value">KS</td></tr>
+      <tr><td class="mt-label">document_number</td><td class="mt-value">00.00</td></tr>
+      <tr><td class="mt-label">classification</td><td class="mt-value"><span class="badge badge-constitutional">Constitutional</span></td></tr>
+      <tr><td class="mt-label">authority</td><td class="mt-value">Authoritative</td></tr>
+      <tr><td class="mt-label">version</td><td class="mt-value">1.0</td></tr>
+      <tr><td class="mt-label">status</td><td class="mt-value"><span class="badge badge-approved">Approved</span></td></tr>
+      <tr><td class="mt-label">owner</td><td class="mt-value">COREI</td></tr>
+      <tr><td class="mt-label">repository</td><td class="mt-value">knowledge/00-foundation/</td></tr>
+      <tr><td class="mt-label">depends_on</td><td class="mt-value"><span class="text-muted">—</span></td></tr>
+      <tr><td class="mt-label">supersedes</td><td class="mt-value"><span class="text-muted">—</span></td></tr>
+      <tr><td class="mt-label">superseded_by</td><td class="mt-value"><span class="text-muted">—</span></td></tr>
+    </table>
+
+    <!-- ============================================================
+    DEPENDENCY GRAPH
+    ============================================================ -->
+    <div class="dep-graph">
+      <span class="node">KS-00.00</span>
+      <span class="arrow"> ──► </span>
+      <span class="dep">KS-00.01</span>
+      <span class="arrow"> ──► </span>
+      <span class="dep">KS-00.02</span>
+      <span class="arrow"> ──► </span>
+      <span class="dep">KS-00.03</span>
+      <span class="arrow"> ──► </span>
+      <span class="dep">KS-00.04</span>
+      <span class="arrow"> ──► </span>
+      <span class="dep">KS-00.05</span>
+      <span class="arrow"> ──► </span>
+      <span class="dep">KS-00.06</span>
+      <span class="arrow"> ──► </span>
+      <span class="dep">KS-00.07</span>
+      <span class="arrow"> ──► </span>
+      <span class="dep">KS-00.08</span>
+      <span class="arrow"> ──► </span>
+      <span class="dep">KS-00.09</span>
+    </div>
+
+    <!-- ============================================================
+    DOCUMENT BODY (Rendered Markdown)
+    ============================================================ -->
+    <div class="markdown-body">
+
+      <h1>1. PURPOSE</h1>
+      <p>The COREI Knowledge Foundation establishes the constitutional foundation of the COREI Knowledge System.</p>
+      <p>It defines the principles, structure, governance, architecture, standards and operating rules that govern every Knowledge Asset within the COREI repository.</p>
+      <p>This foundation exists to ensure that institutional knowledge remains structured, authoritative, traceable and continuously reusable across generations.</p>
+
+      <h1>2. OBJECTIVES</h1>
+      <ul>
+        <li>Establish one institutional knowledge architecture</li>
+        <li>Define one authoritative knowledge model</li>
+        <li>Govern the lifecycle of knowledge</li>
+        <li>Standardize Knowledge Assets</li>
+        <li>Eliminate ambiguity</li>
+        <li>Preserve institutional continuity</li>
+        <li>Support deterministic engineering</li>
+        <li>Support artificial intelligence</li>
+        <li>Prevent knowledge loss</li>
+        <li>Enable institutional learning</li>
+      </ul>
+
+      <h1>3. DESIGN PRINCIPLES</h1>
+      <p>The COREI Knowledge Foundation follows six constitutional principles.</p>
+      <ol>
+        <li><strong>Knowledge is an institutional asset.</strong></li>
+        <li><strong>Knowledge belongs to one authoritative owner.</strong></li>
+        <li><strong>Knowledge exists in one authoritative location.</strong></li>
+        <li><strong>Knowledge continuously evolves.</strong></li>
+        <li><strong>Institutional identity remains stable.</strong></li>
+        <li><strong>Every Knowledge Asset shall strengthen institutional intelligence.</strong></li>
+      </ol>
+
+      <h1>4. KNOWLEDGE FOUNDATION STRUCTURE</h1>
+      <p>The Knowledge Foundation consists of the following constitutional Knowledge Assets.</p>
+      <table>
+        <thead>
+          <tr><th>Asset ID</th><th>Title</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>COREI-KS-00.00</code></td><td>Knowledge Foundation</td></tr>
+          <tr><td><code>COREI-KS-00.01</code></td><td>Knowledge Model</td></tr>
+          <tr><td><code>COREI-KS-00.02</code></td><td>Knowledge System</td></tr>
+          <tr><td><code>COREI-KS-00.03</code></td><td>Knowledge Architecture</td></tr>
+          <tr><td><code>COREI-KS-00.04</code></td><td>Knowledge Governance</td></tr>
+          <tr><td><code>COREI-KS-00.05</code></td><td>Knowledge Lifecycle</td></tr>
+          <tr><td><code>COREI-KS-00.06</code></td><td>Knowledge Classification</td></tr>
+          <tr><td><code>COREI-KS-00.07</code></td><td>Knowledge Asset Standard</td></tr>
+          <tr><td><code>COREI-KS-00.08</code></td><td>Knowledge Naming Standard</td></tr>
+          <tr><td><code>COREI-KS-00.09</code></td><td>Knowledge Repository Standard</td></tr>
+        </tbody>
+      </table>
+
+      <!-- Continue with sections 5 to 10... -->
+      <h1>5. KNOWLEDGE DOMAINS</h1>
+      <p>The COREI Knowledge System is organized into eleven institutional knowledge domains.</p>
+      <table>
+        <thead>
+          <tr><th>Code</th><th>Domain</th><th>Responsibility</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>ID</strong></td><td>01 Identity</td><td>Institutional identity and philosophy</td></tr>
+          <tr><td><strong>GV</strong></td><td>02 Governance</td><td>Institutional governance and authority</td></tr>
+          <tr><td><strong>AR</strong></td><td>03 Architecture</td><td>Platform architecture and design</td></tr>
+          <tr><td><strong>EN</strong></td><td>04 Engineering</td><td>Engineering practices and discipline</td></tr>
+          <tr><td><strong>ST</strong></td><td>05 Standards</td><td>Institutional standards and policies</td></tr>
+          <tr><td><strong>SP</strong></td><td>06 Specifications</td><td>Technical specifications and contracts</td></tr>
+          <tr><td><strong>OP</strong></td><td>07 Operations</td><td>Operational procedures and runbooks</td></tr>
+          <tr><td><strong>IM</strong></td><td>08 Implementation</td><td>Implementation knowledge and patterns</td></tr>
+          <tr><td><strong>RF</strong></td><td>09 Reference</td><td>Reference material, glossaries, taxonomies</td></tr>
+          <tr><td><strong>HS</strong></td><td>10 History</td><td>Institutional history and evolution</td></tr>
+          <tr><td><strong>RS</strong></td><td>11 Research</td><td>Research, investigations, experiments</td></tr>
+        </tbody>
+      </table>
+      <p>Each domain owns one institutional responsibility. Responsibilities shall never overlap.</p>
+
+      <h1>6. KNOWLEDGE OWNERSHIP</h1>
+      <p>Every Knowledge Asset shall define:</p>
+      <ul>
+        <li>Purpose</li>
+        <li>Scope</li>
+        <li>Ownership</li>
+        <li>Authority</li>
+        <li>Classification</li>
+        <li>Version</li>
+        <li>Dependencies</li>
+        <li>Review Status</li>
+        <li>Repository Location</li>
+      </ul>
+      <p>Every Knowledge Asset shall have exactly one authoritative owner.</p>
+
+      <h1>7. KNOWLEDGE LIFECYCLE</h1>
+      <pre>Observation
+↓
+Discussion
+↓
+Discovery
+↓
+Institutional Review
+↓
+Decision
+↓
+Knowledge Asset
+↓
+Repository
+↓
+Institutional Intelligence</pre>
+      <p>Knowledge shall not remain inside conversations. Knowledge becomes institutional only after it has been incorporated into the authoritative repository.</p>
+
+      <h1>8. KNOWLEDGE GOVERNANCE</h1>
+      <p>The Knowledge Foundation governs the Knowledge System. Every Knowledge Asset within COREI shall comply with the Knowledge Model, Knowledge Architecture, Knowledge Governance Standard, Knowledge Lifecycle, Knowledge Classification Standard, Knowledge Asset Standard, Knowledge Naming Standard, and Knowledge Repository Standard.</p>
+
+      <h1>9. AI COMPATIBILITY</h1>
+      <p>The Knowledge Foundation is intentionally designed to support both human and artificial intelligence. Every Knowledge Asset shall remain structured, deterministic, machine-readable, traceable, version controlled, and semantically consistent.</p>
+
+      <h1>10. AUTHORITY</h1>
+      <p>The COREI Knowledge Foundation represents the constitutional layer of the COREI Knowledge System.</p>
+      <p>Every future Knowledge Domain, Knowledge Asset, architecture, engineering practice, platform, workflow, AI capability, and operational system shall inherit from this foundation.</p>
+      <p>Changes to this foundation shall require constitutional review. This foundation is expected to remain stable throughout the lifetime of COREI.</p>
+
+    </div>
+
+    <!-- ============================================================
+    DOCUMENT FOOTER
+    ============================================================ -->
+    <footer class="document-footer">
+      <span>DOCUMENT ID: COREI-KS-00.00</span>
+      <span>DOCUMENT NAME: Knowledge Foundation</span>
+      <span>VERSION: 1.0</span>
+      <span>Generated: 2026-08-09</span>
+    </footer>
+
+  </main>
+
+</body>
+</html>

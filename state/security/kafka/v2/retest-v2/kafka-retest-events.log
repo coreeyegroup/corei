@@ -1,0 +1,3 @@
+LAST SEEN   TYPE      REASON    OBJECT        MESSAGE
+2m14s       Warning   BackOff   pod/kafka-0   Back-off restarting failed container kafka in pod kafka-0_kafka(a7cf9b73-47d2-4405-9f16-618ff1083700)
+57m         Normal    Pulled    pod/kafka-0   Container image "apache/kafka:3.7.1" already present on machine

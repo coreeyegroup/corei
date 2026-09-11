@@ -1,0 +1,67 @@
+==================================================
+STAGE-19 RECOVERY TEST 04 — BROKER RECONNECT
+==================================================
+[STEP-1] VALIDATE PRE-RECONNECT EXECUTION HEALTH
+=========================================
+VALIDATE EXECUTION HEALTH
+=========================================
+[Execution] Checking EMS rollout
+deployment "ems" successfully rolled out
+[Execution] Checking broker adapter rollout
+deployment "broker-adapter-service" successfully rolled out
+[Execution] Checking smart-order-router rollout
+deployment "smart-order-router" successfully rolled out
+[PASS] Execution recovery validation successful
+=========================================
+[STEP-2] DISCONNECT EMS
+=========================================
+EMS DISCONNECT SIMULATION
+=========================================
+[Reconnect-Test] Scaling EMS deployment to 0
+deployment.apps/ems scaled
+[Reconnect-Test] Waiting for EMS shutdown
+[Reconnect-Test] EMS disconnect simulation complete
+=========================================
+[STEP-3] RESTORE EMS
+=========================================
+RESTORE EMS
+=========================================
+[Reconnect-Test] Restoring EMS deployment
+deployment.apps/ems scaled
+[Reconnect-Test] Waiting for EMS rollout
+Waiting for deployment "ems" rollout to finish: 0 of 1 updated replicas are available...
+deployment "ems" successfully rolled out
+[Reconnect-Test] EMS restoration complete
+=========================================
+[STEP-4] VALIDATE OMS CONTINUITY
+=========================================
+VALIDATE OMS CONTINUITY
+=========================================
+[OMS] Validating OMS deployment health
+deployment "oms" successfully rolled out
+[OMS] Validating OMS pod state
+oms-59586b895d-q9p27                      1/1     Running   0          20h
+[PASS] OMS continuity validation successful
+=========================================
+[STEP-5] VALIDATE EXECUTION HEALTH
+=========================================
+VALIDATE EXECUTION HEALTH
+=========================================
+[Execution] Checking EMS rollout
+deployment "ems" successfully rolled out
+[Execution] Checking broker adapter rollout
+deployment "broker-adapter-service" successfully rolled out
+[Execution] Checking smart-order-router rollout
+deployment "smart-order-router" successfully rolled out
+[PASS] Execution recovery validation successful
+=========================================
+[STEP-6] MEASURE BROKER RECONNECT
+=========================================
+BROKER RECONNECT MEASUREMENT
+=========================================
+[Reconnect] Recovery Time (seconds): 13
+[WARN] Broker reconnect exceeded target
+=========================================
+==================================================
+RECOVERY TEST 04 COMPLETE
+==================================================

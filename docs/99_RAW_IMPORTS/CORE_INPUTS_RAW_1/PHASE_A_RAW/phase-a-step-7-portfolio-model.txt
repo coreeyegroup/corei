@@ -1,0 +1,791 @@
+PHASE A — STEP 7: PORTFOLIO MODEL
+
+	Reference ID: CORE-TRADING-PHASE-A-STEP7-PORTFOLIO-001
+	Status: DETERMINISTIC SPECIFICATION
+
+
+	1. PHASE IDENTITY LAYER
+
+		1.1 Phase Name
+
+			Phase A — Step 7: Portfolio Model
+
+		1.2 Phase Role
+
+			Defines the deterministic structure, composition, and behavior of the portfolio as the aggregation layer above capital allocation and below system-level execution.
+
+		1.3 Phase Objective
+
+			To construct a fully deterministic, multi-strategy, multi-asset portfolio structure that transforms allocated capital (Step 5) and approved trade intents (Step 6) into a coherent exposure system.
+
+		1.4 Why This Phase Exists
+
+			Prevents:
+
+				uncontrolled exposure aggregation
+				hidden correlation risks
+				non-deterministic portfolio composition
+				capital fragmentation across strategies
+
+
+	2. PHASE SCOPE CONTROL
+
+		2.1 Included Scope (STRICT)
+
+			Portfolio structure definition
+			Strategy aggregation rules
+			Exposure composition logic
+			Diversification model (logical)
+			Portfolio-level constraints (logical only)
+			Portfolio state definition
+
+		2.2 Excluded Scope (STRICT)
+
+			Execution logic (Phase D)
+			Risk enforcement (Step 4 owns risk philosophy)
+			Capital allocation computation (Step 5 owns)
+			Signal / decision logic (Steps 2–3)
+			Infrastructure / storage
+
+
+	3. ARCHITECTURAL INTENT LAYER
+
+		3.1 Core Design Principles
+
+			Deterministic aggregation
+			Modular strategy composition
+			Full auditability of exposure
+			Scalable across assets and strategies
+
+		3.2 Architectural Model
+
+			Logical aggregation layer:
+
+				Strategy Outputs → Capital Allocation → Portfolio Composition → Portfolio State
+
+		3.3 System Positioning
+
+			Sits between:
+
+				Input:
+
+				Step 6 (Capital Allocation Model)
+				Step 4 (Execution Behavior System)
+				Output: Portfolio State (input to Phase D)
+
+
+	4. DOMAIN MODEL DEFINITION
+
+		4.1 Entities
+
+			Portfolio
+			Strategy Allocation Unit
+			Exposure Unit
+			Asset Bucket
+			Correlation Cluster
+			Portfolio State Snapshot
+
+		4.2 Attributes
+
+			Portfolio
+
+				portfolio_id
+				total_allocated_capital
+				active_strategies_set
+				exposure_vector
+				diversification_profile
+
+			Strategy Allocation Unit
+
+				strategy_id
+				allocated_capital
+				strategy_weight
+				strategy_exposure_vector
+
+			Exposure Unit
+
+				asset_id
+				direction (long/short/neutral)
+				notional_exposure
+				normalized_weight
+
+				Exposure Computation Definition (MANDATORY)
+
+					strategy_exposure(asset_id) MUST be defined as:
+
+						signed_notional_exposure
+
+					Where:
+
+						signed_notional_exposure =
+							+notional_exposure  (if direction = long)
+							−notional_exposure  (if direction = short)
+							0                   (if direction = neutral)
+
+					net_exposure(asset_id) = Σ(signed_notional_exposure across strategies)
+
+			Asset Bucket
+
+				asset_class
+				instruments_set
+				bucket_exposure
+
+				Asset Bucket Mapping Rule (MANDATORY)
+
+					asset_id MUST map to:
+
+						asset_class (bucket)
+
+					Mapping MUST be provided via:
+
+						asset_to_bucket_mapping (from canonical_input_set)
+
+					Each asset MUST map to exactly ONE bucket
+
+			Correlation Cluster
+
+				cluster_id
+				member_assets
+				aggregate_exposure
+
+				Correlation Cluster Mapping Rule (MANDATORY)
+
+					cluster_id MUST be derived from:
+
+						asset_id → cluster_id (predefined mapping)
+
+					Mapping MUST come from:
+
+						configuration_snapshot
+
+					Each asset MUST map to exactly one cluster
+
+			Portfolio State Snapshot
+
+				timestamp
+				portfolio_exposure_vector
+				concentration_metrics
+				diversification_score
+
+		4.3 Relationships
+
+			Portfolio → contains → Strategy Allocation Units
+			Strategy Allocation Unit → generates → Exposure Units
+			Exposure Units → grouped into → Asset Buckets
+			Asset Buckets → mapped into → Correlation Clusters
+			All → produce → Portfolio State Snapshot
+
+			Traceability Mapping (MANDATORY)
+
+				trade_intent → strategy_allocation_unit → exposure_unit
+
+				Each exposure_unit MUST include:
+
+					source_strategy_id
+					source_trade_intent_id
+
+			Extended Traceability Mapping (MANDATORY)
+
+				exposure_unit → asset_bucket → correlation_cluster
+
+				Each mapping MUST be:
+
+					deterministic
+					traceable via canonical_input_set
+
+		4.4 Ownership
+
+			Portfolio structure → Phase A Step 7
+			Capital values → Step 5 (referenced only)
+			Trade intents → Step 6 (referenced only)
+
+
+	5. LOGIC / RULE ENGINE
+
+		Deterministic Strategy Ordering (MANDATORY)
+
+			All strategies MUST be processed in:
+
+				strategy_id (lexicographic ascending)
+
+			Applies to:
+
+				extraction
+				aggregation
+				normalization
+
+		Deterministic Asset Ordering (MANDATORY)
+
+			All asset-level operations MUST follow:
+
+				asset_id (lexicographic ascending)
+
+			Applies to:
+
+				exposure aggregation
+				bucket mapping
+				cluster mapping
+				output generation
+
+			Violation if:
+
+				any asset iteration is unordered
+
+		5.1 Rules
+
+			R1: Portfolio Composition Rule
+
+				Portfolio = deterministic aggregation of all strategy exposures
+
+			R2: Exposure Normalization Rule
+
+				All exposures must be normalized relative to total allocated capital
+
+				R2.1 Normalization Formula (MANDATORY)
+
+					Let:
+
+						E_i = net_exposure for asset i
+						C_total = total_allocated_capital
+
+					Normalized Exposure:
+
+						W_i = E_i / C_total
+
+					Constraint:
+
+						C_total > 0
+
+					IF C_total == 0:
+
+						ALL W_i = 0
+						system MUST enter ZERO_PORTFOLIO_STATE
+
+			R3: Aggregation Rule
+
+				For each asset:
+
+					net_exposure(asset) = Σ(strategy_exposure(asset))
+
+			R4: Diversification Rule
+
+				Portfolio must maintain distribution across:
+
+					asset buckets
+					correlation clusters
+
+			R5: Concentration Rule
+
+				No single:
+
+					strategy
+					asset
+					cluster
+
+					may dominate portfolio beyond threshold defined in configuration_snapshot
+
+
+		5.2 Conditions
+
+			Only approved strategies (Step 6) enter portfolio
+			Only allocated capital (Step 5) contributes
+
+			All exposures must be:
+
+				finite
+				signed
+				normalized
+
+			Asset Definition Enforcement (MANDATORY)
+
+				All asset_id in:
+
+					exposure_unit
+					asset_to_bucket_mapping
+					asset_to_cluster_mapping
+
+				MUST exist in:
+
+					asset_definition_set
+
+				Violation → REJECT INPUT
+
+			configuration_snapshot MUST include:
+
+				strategy_threshold_map:
+					strategy_id → max_weight
+
+				asset_threshold_map:
+					asset_id → max_weight
+
+				cluster_threshold_map:
+					cluster_id → max_weight
+
+				All thresholds MUST be:
+
+					numeric
+					finite
+					≥ 0
+
+
+		5.3 Decision Logic
+
+			Step-by-step:
+
+				Collect strategy allocation units
+				Extract exposure vectors
+				Normalize exposures
+				Aggregate by asset
+				Map to asset buckets
+				Map to correlation clusters
+				Compute concentration structure
+				Generate portfolio state
+
+
+		5.4 Constraints
+
+			No hidden exposure
+			No unallocated capital
+			No orphan strategy
+
+
+		5.5 RULE EXECUTION ORDER
+
+			Strategy Inclusion Validation
+			Capital Mapping
+			Exposure Extraction
+			Normalization
+			Aggregation (asset level)
+			Bucket Mapping
+			Cluster Mapping
+			Concentration Evaluation
+			Portfolio State Generation
+
+			No rule override allowed.
+
+		Before hashing:
+
+			signal_ids_sorted = sort(signal_ids)
+
+			signal_ids_sorted MUST be:
+
+			- immutable
+			- final
+			- no post-hash modification allowed
+
+
+	6. FLOW ARCHITECTURE
+
+		6.0 Canonical Input Set
+
+			canonical_input_set = {
+
+					strategy_allocation_snapshot
+					trade_intent_snapshot
+					asset_definition_set
+					asset_to_bucket_mapping
+					asset_to_cluster_mapping
+					configuration_snapshot
+					version_identifiers
+
+				}
+
+				Constraints:
+
+					all mappings MUST be explicit
+					no implicit derivation allowed
+
+					Mapping Completeness and Uniqueness (MANDATORY)
+
+						For every asset_id in asset_definition_set:
+
+							exactly one bucket mapping MUST exist
+							exactly one cluster mapping MUST exist
+
+						No duplicates allowed:
+
+							asset_id → multiple buckets → INVALID
+							asset_id → multiple clusters → INVALID
+
+						No missing mappings allowed
+
+		External Exposure Exclusion (MANDATORY)
+
+			Portfolio Model MUST include ONLY:
+
+				CORE trade intents
+				CORE allocations
+
+			External trades (CEIL):
+
+				MUST NOT be included in portfolio construction
+
+			External exposure handling is performed in Phase D
+
+		6.1 Input Definition
+
+			Allocated capital per strategy
+			Strategy exposure outputs
+
+
+		6.2 Processing Flow
+
+			Input
+			→ Validate strategies
+			→ Extract exposures
+			→ Normalize
+			→ Aggregate (asset)
+			→ Bucket mapping
+			→ Cluster mapping
+			→ Compute portfolio structure
+			→ Generate state
+
+
+		6.3 Output Definition
+
+			Portfolio State Snapshot
+			Exposure Vector
+			Concentration Structure
+
+			Exposure Vector Canonical Form (MANDATORY)
+
+				exposure_vector MUST be an ordered sequence:
+
+					ordered by asset_id (ascending)
+
+				Each entry MUST be:
+
+					(asset_id, normalized_exposure)
+
+				No missing or duplicate asset_id allowed
+
+			Portfolio State Snapshot MUST support deterministic derivation of outcome_record_set
+
+		6.4 Flow Model
+
+			Strategy Allocations + Trade Intents
+			→ Exposure Aggregation
+			→ Portfolio Structuring
+			→ Portfolio State
+
+
+	7. PIPELINE STRUCTURE
+
+		Portfolio Lifecycle:
+
+			Construct → Evaluate → Maintain → Rebalance → Persist State → Update
+
+		Transitions:
+
+			Triggered by:
+
+				new allocations
+				strategy changes
+				exposure shifts
+
+
+	8. CONTROL & CONSTRAINTS
+
+		8.1 Hard Rules
+
+			Deterministic aggregation only
+			No duplication of exposure
+			Full capital accounting required
+
+		8.2 Soft Rules
+
+			Prefer diversification across clusters
+			Prefer balanced strategy contribution
+
+		8.3 Guardrails
+
+			Prevent empty portfolio
+			Prevent single-strategy dominance
+
+		8.4 Boundary Definitions
+
+			For any exposure metric:
+
+				min = full short
+				max = full long
+				edge = neutral (0)
+				invalid = undefined / NaN / infinite
+
+
+	9. STATE & DATA MODEL
+
+		9.1 State Definition
+
+			Portfolio State = full representation of:
+
+				exposures
+				allocations
+				structure
+
+			ZERO_PORTFOLIO_STATE
+
+				Definition:
+
+					all exposures = 0
+					all allocations = 0
+					portfolio_exposure_vector = 0
+
+				Trigger:
+
+					total_allocated_capital == 0
+
+		9.2 State Transitions
+
+			Triggered by:
+
+				capital reallocation
+				strategy activation/deactivation
+				exposure change
+
+		9.3 Source of Truth
+
+			Logical ownership: Phase A
+			Physical ownership: Phase C (future)
+
+
+	10. FAILURE MODEL
+
+		10.1 Failure Scenarios
+
+			F1: Missing strategy allocation
+			F2: Exposure mismatch
+			F3: Non-normalized exposure
+			F4: Concentration violation
+			F5: Incomplete portfolio state
+
+		10.2 Failure Impact
+
+			invalid portfolio composition
+			hidden risk
+			downstream execution errors
+
+		10.3 Mitigation Logic
+
+			reject portfolio construction
+			enforce recomputation
+			block output emission
+
+		10.4 Detection Rule
+
+			Each failure must define:
+
+				Failure    Trigger                    Detection              Response
+				F1         missing allocation         null check             reject
+				F2         mismatch                   aggregation diff       recompute
+				F3         normalization fail         sum != 1               reject
+				F4         concentration breach       threshold violation    flag
+				F5         missing fields             schema validation      reject
+
+
+	11. ASSUMPTION REGISTER
+
+		Assumption                              Reason                              Validation Phase   Status
+
+		Strategy outputs are valid              ensured by Step 6                  Phase D            OPEN
+		Capital allocation correct             ensured by Step 5                  Phase B            OPEN
+		Correlation clusters predefined        required for diversification       Phase B            OPEN
+
+
+	12. VALIDATION FRAMEWORK
+
+		12.1 Completeness Checklist
+
+			All entities defined
+			All flows deterministic
+			No undefined variables
+
+		12.2 Validation Method
+
+			deterministic replay
+			synthetic portfolio construction
+
+		12.3 Acceptance Criteria
+
+			identical input → identical portfolio
+			no ambiguity in aggregation
+
+		12.4 Coverage Rule
+
+			All rules mapped to validation scenarios
+
+		12.5 Ambiguity Check
+
+			No multiple interpretations possible
+
+
+	13. OUTPUT (DELIVERABLE SPEC)
+
+		portfolio_spec = {
+
+			portfolio_id
+			strategy_allocation_map
+			exposure_vector
+			asset_bucket_distribution
+			correlation_cluster_distribution
+			concentration_profile
+			portfolio_state_snapshot
+
+		}
+
+		Portfolio Spec Canonical Ordering (MANDATORY)
+
+			portfolio_spec fields MUST follow exact order:
+
+				portfolio_id
+				strategy_allocation_map
+				exposure_vector
+				asset_bucket_distribution
+				correlation_cluster_distribution
+				concentration_profile
+				portfolio_state_snapshot
+
+			No reordering allowed
+
+
+	14. TRACEABILITY MAPPING
+
+		Step 1 → strategies define structure
+		Step 2 → signals define exposure intent
+		Step 3 → decisions select strategies
+		Step 4 → risk defines boundaries
+		Step 6 → capital defines weights
+		Step 4 → execution defines valid trades
+
+		→ Step 7 aggregates ALL into portfolio
+
+
+	15. CROSS-PHASE CONSISTENCY RULES
+
+		OWNED:
+
+			portfolio structure
+			exposure aggregation
+
+		REFERENCED:
+
+			capital (Step 5)
+			trade intent (Step 6)
+
+
+	16. SCALABILITY MODEL
+
+		Supports:
+
+			unlimited strategies
+			multi-asset expansion
+			hierarchical portfolio structures
+
+
+	17. GOVERNANCE INTEGRATION
+
+		Requires Phase A approval
+
+		Versioned as:
+
+			PORTFOLIO_MODEL_v1.0
+
+		Any change → full impact analysis
+
+
+	18. AUDITABILITY & OBSERVABILITY
+
+		Must log:
+
+			inputs (allocations, exposures)
+			transformations
+			outputs
+
+		Replay:
+
+			full deterministic reconstruction required
+
+
+	19. RISK CONSIDERATIONS
+
+		Risks:
+
+			concentration risk
+			correlation risk
+			hidden exposure
+
+		Controls:
+
+			deterministic aggregation
+			structural constraints
+
+
+	20. FAILURE CONDITION (PHASE LEVEL)
+
+		Phase FAILS if:
+
+			any ambiguity exists
+			aggregation is non-deterministic
+			traceability broken
+			missing constraints
+
+
+	21. PHASE LOCK CRITERIA
+
+		Phase can be LOCKED only if:
+
+			all sections complete
+			validation passed
+			no ambiguity
+			governance approval obtained
+
+
+	FINAL OUTPUT SUMMARY
+
+		This Portfolio Model establishes:
+
+			fully deterministic
+			strictly layered
+			traceable from Step 1 → Step 6
+			compliant with universal-phase-structure
+			free from execution / infra leakage
+
+	signal_ids MUST be:
+
+		- complete
+		- sorted
+		- immutable
+
+	Identity Chain Rule:
+
+		signal_id = HASH(signal_payload)
+
+		trade_intent_id = HASH(signal_ids + payload)
+
+		Chain MUST be reconstructable end-to-end
+
+	event_time in TradeIntent:
+
+		- MUST equal latest(signal.event_time)
+		- MUST NOT be modified downstream
+
+	hash_version: "v1"
+
+	Hash Version Governance:
+
+		- hash_version field MUST be included in TradeIntent
+		- allowed values: {v1}
+
+		Future rule:
+
+		IF hash_version changes:
+			→ full replay validation REQUIRED
+			→ version mixing NOT allowed
+
+		trade_intent_id = HASH_v1(canonical_trade_intent_payload)
+
+		event_time:
+			- mandatory
+			- epoch_ns
+			- UTC
+
+		TradeIntent.event_time = MAX(signal.event_time)

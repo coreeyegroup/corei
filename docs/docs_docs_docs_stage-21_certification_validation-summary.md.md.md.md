@@ -1,0 +1,33 @@
+# VALIDATION SUMMARY
+
+VALIDATION ENGINE #1
+
+PASS
+
+---
+
+GENERATED MANIFEST VALIDATION
+
+PASS
+
+---
+
+VALIDATED CONTROLS
+
+TLS volume
+
+JAAS volume
+
+TLS mount
+
+JAAS mount
+
+KAFKA_OPTS
+
+9094 listener
+
+---
+
+RESULT
+
+PASS

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COREI EN 04.06</title>
+  <style>
+  body {
+    background: #0A0D12;
+    color: #E3E7EC;
+    font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px 40px;
+  }
+  h1 {
+    font-size: 26px;
+    font-weight: 600;
+    color: #C6A46A;
+    margin: 24px 0 12px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 8px;
+  }
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #D4B88A;
+    margin: 20px 0 10px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 6px;
+  }
+  h3 {
+    font-size: 17px;
+    font-weight: 500;
+    color: #E3E7EC;
+    margin: 16px 0 8px 0;
+  }
+  h4 {
+    font-size: 15px;
+    font-weight: 500;
+    color: #C5CED9;
+    margin: 12px 0 6px 0;
+  }
+  p { margin-bottom: 8px; color: #C5CED9; }
+  ul, ol { padding-left: 24px; margin-bottom: 8px; color: #C5CED9; }
+  li { margin-bottom: 2px; }
+  code {
+    font-family: 'JetBrains Mono', 'Cascadia Code', monospace;
+    font-size: 13px;
+    background: rgba(255,255,255,0.05);
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid #28303C;
+    color: #C5CED9;
+  }
+  pre {
+    background: #18202A;
+    border: 1px solid #28303C;
+    border-radius: 6px;
+    padding: 16px 20px;
+    overflow: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 12px 0 16px 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #C5CED9;
+  }
+  pre code { background: transparent; border: none; padding: 0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 16px 0;
+    font-size: 13px;
+    color: #C5CED9;
+  }
+  th {
+    background: #18202A;
+    color: #C5CED9;
+    font-weight: 600;
+    text-align: left;
+    padding: 6px 12px;
+    border: 1px solid #28303C;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  td {
+    padding: 4px 12px;
+    border: 1px solid #28303C;
+    background: #0E1219;
+  }
+  tr:nth-child(even) td { background: #121821; }
+  blockquote {
+    border-left: 3px solid #C6A46A;
+    padding-left: 16px;
+    margin: 8px 0 12px 0;
+    color: #6E7883;
+    font-style: italic;
+  }
+  hr { border: none; border-top: 1px solid #28303C; margin: 24px 0; }
+  a { color: #8BB4F0; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  strong { color: #E3E7EC; font-weight: 600; }
+  img { max-width: 100%; border-radius: 4px; border: 1px solid #28303C; }
+  .doc-footer {
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid #28303C;
+    font-size: 12px;
+    color: #6E7883;
+    font-family: monospace;
+  }
+</style>
+</head>
+<body>
+  <div class="doc-header" style="background:#121821;border:1px solid #28303C;border-radius:8px;padding:1.2rem 1.8rem;margin-bottom:1.8rem;">
+    <div style="color:#C6A46A;font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:0.05em;">COREI · Knowledge System</div>
+    <div style="color:#6E7883;font-family:monospace;font-size:14px;margin-top:0.1rem;"></div>
+    <h1 style="font-size:28px;font-weight:600;color:#E3E7EC;margin:0.1rem 0;border-bottom:none;padding-bottom:0;">COREI EN 04.06</h1>
+    <div style="font-size:16px;color:#C5CED9;">00 · Constitutional</div>
+    <div style="display:flex;flex-wrap:wrap;gap:0.6rem 1.8rem;margin-top:0.6rem;font-size:13px;">
+      <span style="display:flex;align-items:baseline;gap:0.3rem;"><span style="color:#6E7883;text-transform:uppercase;font-size:10px;letter-spacing:0.04em;font-weight:600;">Status</span><span style="color:#E3E7EC;font-weight:500;">Approved</span></span>
+      <span style="display:flex;align-items:baseline;gap:0.3rem;"><span style="color:#6E7883;text-transform:uppercase;font-size:10px;letter-spacing:0.04em;font-weight:600;">Version</span><span style="color:#E3E7EC;font-weight:500;">1.0</span></span>
+      <span style="display:flex;align-items:baseline;gap:0.3rem;"><span style="color:#6E7883;text-transform:uppercase;font-size:10px;letter-spacing:0.04em;font-weight:600;">Classification</span><span style="color:#E3E7EC;font-weight:500;">Constitutional</span></span>
+      <span style="display:flex;align-items:baseline;gap:0.3rem;"><span style="color:#6E7883;text-transform:uppercase;font-size:10px;letter-spacing:0.04em;font-weight:600;">Owner</span><span style="color:#E3E7EC;font-weight:500;">COREI</span></span>
+      <span style="display:flex;align-items:baseline;gap:0.3rem;"><span style="color:#6E7883;text-transform:uppercase;font-size:10px;letter-spacing:0.04em;font-weight:600;">Repository</span><span style="color:#E3E7EC;font-weight:500;font-family:monospace;">knowledge/00-00/</span></span>
+    </div>
+
+  </div>
+
+
+
+  <h1>COREI INSTITUTIONAL STANDARDS</h1>
+<h1>DOCUMENT ID</h1>
+<h1>COREI-EN-04.06</h1>
+<h1>DOCUMENT NAME</h1>
+<h1>INSTITUTIONAL STANDARDS</h1>
+<h1>VERSION</h1>
+<h1>1.0</h1>
+<h1>STATUS</h1>
+<h1>APPROVED</h1>
+<h1>CLASSIFICATION</h1>
+<h1>CONSTITUTIONAL</h1>
+<h1>1. PURPOSE</h1>
+<p>The COREI Institutional Standards establish the<br>
+constitutional engineering standards governing every<br>
+engineering activity, implementation, repository,<br>
+platform, service, workflow, automation, and future<br>
+institutional capability.</p>
+<p>These standards preserve engineering consistency,<br>
+institutional quality, architectural integrity,<br>
+knowledge continuity, and long-term maintainability<br>
+throughout the COREI Institution.</p>
+<h1>2. ENGINEERING STANDARD PHILOSOPHY</h1>
+<p>Within COREI,</p>
+<p>standards do not exist to restrict engineering.</p>
+<p>Standards exist to preserve institutional<br>
+understanding.</p>
+<p>Every engineering standard shall reduce ambiguity,<br>
+increase consistency, strengthen architectural<br>
+fidelity, improve engineering quality, and preserve<br>
+institutional knowledge.</p>
+<p>Engineering freedom exists inside constitutional<br>
+boundaries.</p>
+<p>Engineering inconsistency does not.</p>
+<h1>3. CONSTITUTIONAL ENGINEERING STANDARDS</h1>
+<p>Every engineering implementation shall comply with<br>
+the following constitutional standards.</p>
+<p>Standard 1</p>
+<p>Identity Alignment</p>
+<p>Every implementation shall preserve the<br>
+constitutional identity of COREI.</p>
+<p>Standard 2</p>
+<p>Governance Compliance</p>
+<p>Every engineering activity shall comply with<br>
+constitutional governance.</p>
+<p>Standard 3</p>
+<p>Architecture Fidelity</p>
+<p>Engineering shall faithfully implement approved<br>
+architecture without reinterpretation.</p>
+<p>Standard 4</p>
+<p>Deterministic Engineering</p>
+<p>Every implementation shall produce predictable,<br>
+repeatable, reproducible behaviour.</p>
+<p>Standard 5</p>
+<p>Institution Before Technology</p>
+<p>Technology choices shall support institutional<br>
+architecture rather than define it.</p>
+<p>Standard 6</p>
+<p>Describe → Implement → Validate → Document</p>
+<p>Every engineering activity shall follow the<br>
+constitutional execution sequence.</p>
+<p>No implementation shall bypass documentation<br>
+or validation.</p>
+<p>Standard 7</p>
+<p>No Patch Work</p>
+<p>Temporary fixes shall never become institutional<br>
+solutions.</p>
+<p>Root causes shall be identified and resolved<br>
+through constitutional engineering.</p>
+<p>Standard 8</p>
+<p>Production-Grade Engineering</p>
+<p>Every implementation shall be designed for<br>
+operational reliability from its inception.</p>
+<p>Prototype practices shall not migrate into<br>
+production environments.</p>
+<p>Standard 9</p>
+<p>Knowledge Preservation</p>
+<p>Every engineering decision shall increase<br>
+institutional knowledge through documentation,<br>
+traceability, and learning.</p>
+<p>Standard 10</p>
+<p>Continuous Improvement</p>
+<p>Every completed engineering activity shall improve<br>
+future engineering capability.</p>
+<h1>4. IMPLEMENTATION STANDARDS</h1>
+<p>Every implementation shall define</p>
+<p>constitutional purpose,</p>
+<p>institutional ownership,</p>
+<p>architectural dependencies,</p>
+<p>explicit interfaces,</p>
+<p>published contracts,</p>
+<p>security controls,</p>
+<p>observability,</p>
+<p>verification criteria,</p>
+<p>validation criteria,</p>
+<p>operational readiness,</p>
+<p>knowledge documentation,</p>
+<p>and maintenance responsibilities.</p>
+<p>Incomplete implementations are constitutionally<br>
+non-compliant.</p>
+<h1>5. REPOSITORY STANDARDS</h1>
+<p>Every repository shall maintain</p>
+<p>clear ownership,</p>
+<p>defined architectural boundaries,</p>
+<p>modular organization,</p>
+<p>version control discipline,</p>
+<p>documented public interfaces,</p>
+<p>dependency governance,</p>
+<p>traceable engineering decisions,</p>
+<p>automated validation,</p>
+<p>and production readiness.</p>
+<p>Repositories shall preserve institutional<br>
+knowledge as well as source code.</p>
+<h1>6. ENGINEERING VALIDATION</h1>
+<p>Every engineering implementation shall answer<br>
+the following constitutional questions.</p>
+<p>Does it preserve Identity?</p>
+<p>Does it comply with Governance?</p>
+<p>Does it faithfully implement Architecture?</p>
+<p>Does it satisfy Engineering Principles?</p>
+<p>Has it followed the institutional lifecycle?</p>
+<p>Has quality been engineered?</p>
+<p>Has documentation been completed?</p>
+<p>Can another engineering team maintain it?</p>
+<p>Has institutional knowledge increased?</p>
+<p>If any answer is negative,</p>
+<p>the engineering work remains incomplete.</p>
+<h1>7. STANDARDS DECLARATION</h1>
+<p>COREI Institutional Standards exist to ensure<br>
+that engineering excellence remains consistent<br>
+throughout every generation of institutional<br>
+growth.</p>
+<p>Standards shall preserve</p>
+<p>institutional understanding,</p>
+<p>architectural integrity,</p>
+<p>engineering quality,</p>
+<p>knowledge continuity,</p>
+<p>operational reliability,</p>
+<p>and constitutional consistency.</p>
+<p>Standards shall continuously mature through<br>
+institutional learning.</p>
+<h1>8. AUTHORITY</h1>
+<p>This document defines the constitutional<br>
+Institutional Standards of COREI.</p>
+<p>Every repository,</p>
+<p>engineering standard,</p>
+<p>coding standard,</p>
+<p>implementation guide,</p>
+<p>architecture standard,</p>
+<p>platform,</p>
+<p>service,</p>
+<p>workflow,</p>
+<p>automation,</p>
+<p>deployment,</p>
+<p>runtime,</p>
+<p>and future engineering capability</p>
+<p>shall inherit from these standards.</p>
+<p>Changes to these standards require constitutional<br>
+review.</p>
+<h1>END OF DOCUMENT</h1>
+<h1>DOCUMENT ID</h1>
+<h1>COREI-EN-04.06</h1>
+<h1>DOCUMENT NAME</h1>
+<h1>INSTITUTIONAL STANDARDS</h1>
+
+
+  <div class="doc-footer">
+    <span>DOCUMENT ID: </span>
+    <span>DOCUMENT NAME: COREI EN 04.06</span>
+    <span>VERSION: 1.0</span>
+  </div>
+</body>
+</html>

@@ -1,0 +1,932 @@
+PHASE B — STEP 2: SCOPE CONTROL (LOCKED — DETERMINISTIC)
+
+Reference: CORE-TRADING-SYSTEM-PHASE-B-STEP2-SCOPE-CONTROL-V4-2026-04-07
+Context Continuity: Follows Step 1 (Identity Lock)
+Compliance: Universal Phase Structure — FULLY COMPLIANT
+
+
+--------------------------------------------------
+1. PHASE IDENTITY LAYER
+
+1.1 Phase Name
+Phase B — Scope Control
+
+1.2 Phase Role
+Defines strict constraint-domain boundaries governing the entire constraint system.
+
+1.3 Phase Objective
+Ensure all constraint definitions operate within deterministic, isolated, non-overlapping scope boundaries.
+
+1.4 Why This Phase Exists
+Prevents:
+    cross-phase leakage
+    undefined constraint behavior
+    non-deterministic constraint interaction
+
+
+--------------------------------------------------
+2. PHASE SCOPE CONTROL (LOCKED — DETERMINISTIC)
+
+2.1 INCLUDED SCOPE (STRICT — EXHAUSTIVE)
+
+This phase defines ALL constraint-domain boundaries governing the system.
+
+A. Constraint Definition Layer (CORE)
+
+    Global system constraints (cross-phase)
+    Phase-specific constraints (A, B, C, D applicability mapping)
+
+    Constraint classification system:
+
+        hard constraints (non-violable)
+        soft constraints (preference-level)
+        guardrails (invalid state prevention)
+
+    Constraint precedence hierarchy (mandatory ordering)
+
+B. Numeric Constraint Framework
+
+    All bounded variables definition:
+
+        min
+        max
+        edge behavior
+        invalid condition
+
+    Parameter domain constraints:
+
+        thresholds (θ_entry, θ_exit, etc.)
+        limits (staleness_limit, exposure caps)
+        scaling factors
+
+    Fixed-point numeric enforcement rules (global consistency)
+
+C. Canonical Constraint Binding
+
+    Binding of constraints to:
+
+        canonical_input_set (ALL phases)
+        configuration_snapshot (global + local)
+        version_identifiers
+
+    Constraint immutability rules:
+
+        constraints MUST be versioned
+        runtime mutation forbidden
+
+D. Cross-Layer Constraint Mapping
+
+    Defines how constraints apply across:
+
+        Strategy Layer (Step 1)
+        Signal Model (Step 2)
+        Decision Engine (Step 3)
+        Execution Behavior (Step 4)
+        Risk Philosophy (Step 5)
+        Capital Allocation (Step 6)
+        Portfolio Model (Step 7)
+        Feedback Model (Step 8)
+
+    Constraint mapping MUST define:
+
+        applicability scope
+        enforcement layer (logical vs execution)
+        inheritance rules
+
+E. Constraint Interaction Model
+
+    Conflict resolution between constraints
+
+    Priority enforcement:
+
+        higher-order constraint dominance
+
+    Constraint composition rules:
+
+        AND / OR / precedence chaining
+
+    Deadlock prevention rules
+
+F. Validation Constraints (Meta-Constraints)
+
+    Determinism enforcement constraints
+    Replay consistency constraints
+    Input completeness constraints
+    Time consistency constraints
+    Hash integrity constraints
+
+G. Boundary Enforcement Model
+
+    Explicit boundary definition for:
+
+        numeric variables
+        logical states
+        time variables
+
+    Edge-case behavior definition:
+
+        saturation
+        rejection
+        fallback
+
+    Invalid state handling:
+
+        immediate rejection (hard fail)
+        constraint flagging
+
+H. Constraint State Definitions (Logical)
+
+    constraint_state:
+
+        active
+        violated
+        satisfied
+
+    constraint_flag system:
+
+        deterministic boolean mapping
+
+    constraint evaluation snapshot definition
+
+I. Constraint Versioning & Governance Binding
+
+    Each constraint MUST include:
+
+        constraint_id
+        version_id
+        hash_reference
+
+    Change control:
+
+        no modification without version increment
+
+    Governance linkage:
+
+        approval required before activation
+
+
+--------------------------------------------------
+2.2 EXCLUDED SCOPE (STRICT — ZERO TOLERANCE)
+
+This phase MUST NOT include any logic outside constraint definition.
+
+A. Trading Logic (Phase A Ownership)
+
+    Strategy logic
+    Signal generation
+    Decision aggregation
+    Trade intent generation
+
+B. Execution Logic (Phase D Ownership)
+
+    Order placement
+    Broker interaction
+    Execution routing
+    Fill handling
+
+C. Infrastructure / System Design (Phase C Ownership)
+
+    APIs
+    message queues
+    databases
+    microservices
+    latency engineering
+
+D. Risk Enforcement (Phase D)
+
+    Stop-loss execution
+    liquidation logic
+    margin enforcement
+    real-time exposure control
+
+E. Capital Allocation Execution
+
+    Actual position sizing execution
+    capital deployment mechanics
+
+F. Portfolio State Computation
+
+    Portfolio aggregation logic
+    exposure computation
+
+G. Learning / Adaptation Execution
+
+    model retraining
+    parameter updates execution
+    runtime adaptation
+
+H. Runtime State Mutation
+
+    No dynamic constraint updates
+    No adaptive constraint tuning
+    No feedback-driven constraint changes
+
+
+--------------------------------------------------
+2.3 STRICT BOUNDARY ENFORCEMENT RULES (MANDATORY)
+
+Rule B1 — No Logic Leakage
+
+    Constraint layer MUST NOT:
+
+        compute signals
+        alter decisions
+        generate trade intents
+
+    Violation → PHASE INVALID
+
+
+Rule B2 — No Execution Awareness
+
+    Constraint layer MUST NOT include:
+
+        broker knowledge
+        order book awareness
+        latency considerations
+
+
+Rule B3 — No Infra Coupling
+
+    Constraint definitions MUST be:
+
+        infra-independent
+        storage-independent
+        transport-independent
+
+
+Rule B4 — Constraint Purity Rule
+
+    Constraints MUST ONLY:
+
+        define limits
+        define boundaries
+        define validity
+
+    Constraints MUST NOT:
+
+        perform transformations
+        produce outputs beyond validation
+
+
+Rule B5 — Canonical Dependency Rule
+
+    All constraints MUST depend ONLY on:
+
+        canonical_input_set
+        configuration_snapshot
+        version_identifiers
+
+    No external inputs allowed.
+
+
+Rule B6 — Deterministic Evaluation Rule
+
+    Constraint evaluation MUST be:
+
+        order-defined
+        replayable
+        input-complete
+
+    Same input → identical constraint outcome
+
+
+--------------------------------------------------
+2.4 SCOPE VALIDATION INVARIANT (MANDATORY)
+
+Phase B Step 2 is VALID only if:
+
+    Included scope is:
+
+        exhaustive
+        non-overlapping
+
+    Excluded scope is:
+
+        complete
+        strictly enforced
+
+    No concept exists in both included and excluded sections
+
+    No cross-phase leakage exists
+
+Violation of any condition → SCOPE FAILURE
+
+
+--------------------------------------------------
+3. ARCHITECTURAL INTENT LAYER
+
+3.1 Core Design Principles
+
+    Determinism
+    Isolation
+    Non-leakage
+    Canonical dependency
+
+3.2 Architectural Model
+
+    Constraint Domain Isolation Model
+
+3.3 System Positioning
+
+    Phase A → Phase B → Phase D
+    Logic → Constraints → Enforcement
+
+
+--------------------------------------------------
+4. DOMAIN MODEL DEFINITION (MANDATORY)
+
+4.1 Core Entity — Constraint
+
+    constraint = {
+
+        constraint_id
+        constraint_type
+        scope_level
+        target_binding
+        min_value
+        max_value
+        edge_behavior
+        invalid_condition
+        precedence_level
+        enforcement_layer
+        version_id
+
+    }
+
+Numeric Constraint Rules (MANDATORY)
+
+    min_value and max_value MUST be:
+
+        finite
+        non-NaN
+        fixed-point numeric
+
+    Constraint:
+
+        min_value ≤ max_value
+
+    Invalid:
+
+        NaN
+        +∞
+        -∞
+
+4.2 Constraint Type (ENUM)
+
+    constraint_type ∈ {
+
+        NUMERIC_BOUND
+        STATE_BOUND
+        TIME_BOUND
+        STRUCTURAL_CONSTRAINT
+
+    }
+
+4.3 Scope Level (ENUM)
+
+    scope_level ∈ {
+
+        GLOBAL
+        STRATEGY
+        SIGNAL
+        DECISION
+        EXECUTION
+        RISK
+        PORTFOLIO
+
+    }
+
+4.4 Precedence Definition
+
+    precedence_level:
+
+        integer
+
+        lower value = higher priority
+
+    Constraint:
+
+        precedence_level MUST be unique per constraint
+
+4.5 Deterministic Ordering Rule
+
+    All constraints MUST be ordered by:
+
+        1. precedence_level ASC
+        2. constraint_id ASC
+
+4.6 Edge Behavior Definition (MANDATORY)
+
+    edge_behavior ∈ {
+
+        CLAMP
+        REJECT
+        SATURATE
+
+    }
+
+4.7 Relationships
+
+    constraint_set → composed of constraint
+    constraint → applies to target_binding
+
+4.8 Ownership
+
+    All constraint entities owned by Phase B
+
+
+--------------------------------------------------
+5. LOGIC / RULE ENGINE (MANDATORY)
+
+5.1 Input Validation Rules (MANDATORY)
+
+    Reject input if:
+
+        constraint_id missing
+        duplicate constraint_id exists
+
+        precedence_level duplicated
+
+        constraint_type ∉ defined ENUM
+        scope_level ∉ defined ENUM
+
+        target_binding missing
+
+        min_value or max_value is:
+
+            null
+            NaN
+            infinite
+
+        min_value > max_value
+
+        edge_behavior ∉ defined ENUM
+
+    Constraint:
+
+        All numeric values MUST be:
+
+            finite
+            fixed-point
+            non-NaN
+
+    If validation fails:
+
+        scope_control_spec MUST NOT be generated
+
+
+5.2 Constraint Ordering
+
+    ordered_constraints =
+
+        sort(constraint_definition_set by:
+
+            precedence_level ASC
+            constraint_id ASC
+        )
+
+
+5.3 Conflict Resolution Rule
+
+    If multiple constraints apply to same target_binding:
+
+        select constraint with:
+
+            lowest precedence_level
+
+    Tie condition:
+
+        select constraint with:
+
+            lowest constraint_id
+
+    Constraint:
+
+        lower-priority constraints MUST NOT override higher-priority constraints
+
+
+5.4 Rule Execution Order
+
+    Input Validation
+        → Constraint Ordering
+        → Constraint Evaluation
+        → Conflict Resolution
+        → Output Generation
+
+
+--------------------------------------------------
+6. FLOW ARCHITECTURE (MANDATORY)
+
+6.0 Canonical Contract
+
+   canonical_input_set = {
+
+			input_data_snapshot {
+
+				trade_intent_snapshot
+				execution_instruction_snapshot
+				portfolio_state_snapshot
+				capital_allocation_snapshot
+
+			}
+
+			configuration_snapshot
+
+			constraint_definition_set
+			constraint_parameter_set
+
+			version_identifiers
+		}
+
+    Constraint:
+
+        immutable
+        complete
+        hash-identifiable
+
+
+6.1 Input Definition
+
+    Input ← Phase A outputs + configuration
+
+
+6.2 Evaluation Time
+	6.2 Evaluation Time (MANDATORY)
+
+		evaluation_time MUST be sourced from:
+
+			Phase B Step 1 Global Evaluation Time
+
+		Constraint:
+
+			No redefinition allowed
+
+
+
+6.3 Processing Flow
+
+    canonical_input_set
+        → constraint ordering
+        → constraint evaluation
+        → conflict resolution
+        → output generation
+
+
+6.4 Output (MANDATORY)
+
+    scope_control_spec = {
+
+        constraint_set
+        boundary_definition_set
+        precedence_ordering
+        constraint_scope_map
+
+    }
+
+    constraint_set:
+
+        ordered list of constraints
+
+        ordering MUST follow:
+
+            precedence_level ASC
+            constraint_id ASC
+
+    boundary_definition_set:
+
+        mapping:
+
+            target_binding →
+                (min_value, max_value, edge_behavior)
+
+    precedence_ordering:
+
+        ordered list of constraint_id
+
+    constraint_scope_map:
+
+        mapping:
+
+            constraint_id → scope_level
+
+    Output Hash (MANDATORY):
+
+        scope_control_hash =
+            HASH_v1(scope_control_spec)
+
+    Hash Constraint:
+
+        scope_control_spec MUST be serialized using:
+
+            canonical binary encoding
+            fixed field order
+            no optional fields
+
+        identical input → identical hash
+
+    Constraints:
+
+        serialization MUST be deterministic
+
+        field order MUST be EXACTLY:
+
+            1. constraint_set
+            2. boundary_definition_set
+            3. precedence_ordering
+            4. constraint_scope_map
+
+        no reordering allowed
+
+    Hash Standard (MANDATORY)
+
+        HASH_v1 MUST be defined as:
+
+            algorithm: SHA-256
+            input: canonical binary serialization of scope_control_spec
+            encoding: UTF-8 (no whitespace variation)
+
+        Constraint:
+
+            identical input → identical hash (bit-level)
+
+
+6.5 Flow Diagram
+
+    Input → Constraint Processing → Output
+
+
+--------------------------------------------------
+7. PIPELINE STRUCTURE
+
+    Constraint Validation
+        → Constraint Ordering
+        → Constraint Evaluation
+        → Output Generation
+
+
+--------------------------------------------------
+8. CONTROL & CONSTRAINTS
+
+8.1 Hard Rules
+
+    determinism mandatory
+    no external dependency
+    no runtime state
+
+8.2 Soft Rules
+
+    prefer minimal overlap
+
+8.3 Guardrails
+
+    reject invalid input
+
+8.4 Boundary Definition Rule
+
+    satisfied via numeric constraint rules
+
+
+--------------------------------------------------
+9. STATE & DATA MODEL
+
+9.1 State Definition
+
+    No persistent state
+
+9.2 State Transitions
+
+    None
+
+9.3 Source of Truth
+
+    canonical_input_set
+
+
+--------------------------------------------------
+10. FAILURE MODEL
+
+10.1 Failure Scenarios
+
+    invalid constraint
+    missing input
+    ambiguity
+
+10.2 Failure Impact
+
+    constraint system invalid
+
+10.3 Mitigation
+
+    reject input
+
+10.4 Detection
+
+    validation failure
+
+
+--------------------------------------------------
+11. ASSUMPTION REGISTER
+
+Assumption:
+
+    canonical_input_set complete
+
+Status:
+
+    CONTROLLED
+
+
+--------------------------------------------------
+12. VALIDATION FRAMEWORK
+
+12.1 Completeness
+
+    all sections present
+
+12.2 Method
+
+    Red Team + Blue Team
+
+12.3 Acceptance
+
+    PASS / FAIL
+
+12.4 Coverage
+
+    all rules tested
+
+12.5 Ambiguity Check
+
+    single interpretation enforced
+
+
+--------------------------------------------------
+13. OUTPUT (DELIVERABLE SPEC)
+
+    This step contributes to:
+
+		constraint_output.definition_layer.scope_control_spec
+
+		Hash contribution:
+
+		included in constraint_output.constraint_hash
+
+		Standalone outputs → FORBIDDEN
+
+
+--------------------------------------------------
+14. TRACEABILITY MAPPING (MANDATORY)
+
+Each constraint MUST map to:
+
+    constraint_id →
+
+        {
+            input_source
+            target_phase
+            target_binding
+        }
+
+Where:
+
+    input_source → configuration_snapshot field
+
+Constraint:
+
+    Every constraint MUST be traceable:
+
+        input → constraint → affected system component
+
+
+Traceability Ordering Rule:
+
+    mappings MUST be ordered by:
+
+        constraint_id ASC
+
+
+traceability_mapping =
+
+    ordered list of:
+
+        constraint_id →
+
+            {
+                input_source
+                target_phase
+                target_binding
+            }
+
+
+Traceability Hash:
+
+    traceability_hash =
+        HASH_v1(traceability_mapping)
+
+
+Constraint:
+
+    identical constraint_set → identical traceability mapping
+
+
+Output Traceability (MANDATORY)
+
+    Each constraint MUST map to:
+
+        affected_output_fields:
+
+            {
+                boundary_definition_set
+                precedence_ordering
+                constraint_scope_map
+            }
+
+Constraint:
+
+    Every output field MUST be traceable back to:
+
+        originating constraint_id
+
+
+--------------------------------------------------
+15. CROSS-PHASE CONSISTENCY
+
+Owns:
+
+    constraint system
+
+References:
+
+    Phase A outputs
+
+
+--------------------------------------------------
+16. SCALABILITY MODEL
+
+Supports multi-strategy constraint evaluation
+
+
+--------------------------------------------------
+17. GOVERNANCE INTEGRATION
+
+version-controlled
+approval required
+
+
+--------------------------------------------------
+18. AUDITABILITY & OBSERVABILITY
+
+full traceability
+deterministic replay
+
+
+--------------------------------------------------
+19. RISK CONSIDERATIONS
+
+constraint failure = system risk
+
+
+--------------------------------------------------
+20. FAILURE CONDITION (PHASE LEVEL)
+
+Phase fails if:
+
+    ambiguity exists
+    determinism breaks
+    canonical_input incomplete
+
+
+--------------------------------------------------
+21. PHASE LOCK CRITERIA
+
+Phase locked only if:
+
+    all sections complete
+    validation passed
+    no ambiguity
+    deterministic output guaranteed
+
+--------------------------------------------------
+
+CEI VALIDATION NOTE (CRITICAL)
+
+This step establishes architectural containment.
+
+If Scope Control is weak:
+
+    Phase B becomes non-deterministic
+    Phase C builds wrong infra abstractions
+    Phase D enforces incorrect constraints
+
+→ System-wide failure propagation
+
+
+--------------------------------------------------
+
+LOCK STATUS
+
+    Scope boundaries: CLOSED
+    Cross-phase leakage: ELIMINATED
+    Constraint domain: ISOLATED
+
+    Ready for: Step 3 — Architectural Intent Layer

@@ -1,0 +1,4 @@
+NAMESPACE   NAME                 STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+kafka       kafka-data-kafka-0   Bound    pvc-94aa2c07-d8c7-4293-97f6-461bea9c88fd   20Gi       RWO            longhorn       <unset>                 2d11h
+research    claim-coreeye        Bound    pvc-5ae553fe-8457-4806-9324-588758592dfb   10Gi       RWO            longhorn       <unset>                 2d5h
+research    hub-db-dir           Bound    pvc-a2ab8b90-3ac2-4eab-a02d-d80949d83797   1Gi        RWO            longhorn       <unset>                 2d6h

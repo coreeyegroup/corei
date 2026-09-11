@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>COREI Phase 20 Reference</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #0A0D12;
+            color: #E3E7EC;
+            font-family: 'Segoe UI', 'Inter', system-ui, sans-serif;
+            font-size: 13px;
+            line-height: 1.5;
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .sidebar-wrapper {
+            display: flex;
+            flex-shrink: 0;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            overflow: hidden;
+        }
+        .sidebar {
+            width: 200px;
+            min-width: 140px;
+            max-width: 320px;
+            background: #0E1219;
+            border-right: 1px solid #28303C;
+            padding: 0.8rem 0.3rem 0.8rem 0.5rem;
+            overflow-y: auto;
+            overflow-x: hidden;
+            resize: horizontal;
+            height: 100vh;
+            flex-shrink: 0;
+        }
+        .sidebar::-webkit-scrollbar { width: 4px; }
+        .sidebar::-webkit-scrollbar-thumb { background: #28303C; border-radius: 2px; }
+        .sidebar .brand {
+            font-size: 13px;
+            font-weight: 600;
+            color: #C6A46A;
+            letter-spacing: 0.04em;
+            padding: 0 0.3rem 0.4rem 0.3rem;
+            border-bottom: 1px solid #28303C;
+            margin-bottom: 0.6rem;
+        }
+        .sidebar .brand span { color: #E3E7EC; font-weight: 300; }
+        .sidebar-nav { display: flex; flex-direction: column; gap: 0.1rem; }
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            padding: 0.2rem 0.3rem;
+            color: #9AA5B1;
+            text-decoration: none;
+            font-size: 12px;
+            border-radius: 3px;
+            transition: background 0.1s, color 0.1s;
+            line-height: 1.3;
+            white-space: nowrap;
+        }
+        .sidebar-nav a:hover { background: #1E2834; color: #E3E7EC; }
+        .sidebar-nav a.active { background: #28303C; color: #E3E7EC; font-weight: 500; }
+        .sidebar-nav .section-number {
+            display: inline-block;
+            width: 22px;
+            color: #6E7883;
+            font-size: 11px;
+            flex-shrink: 0;
+        }
+        .main-content {
+            flex: 1;
+            padding: 2rem 2.5rem;
+            max-width: 1200px;
+            min-width: 0;
+            overflow-x: auto;
+        }
+        h1 { font-size: 26px; font-weight: 600; letter-spacing: -0.02em; color: #E3E7EC; margin-bottom: 0.25rem; }
+        h2 { font-size: 18px; font-weight: 600; color: #C6A46A; margin: 1.8rem 0 0.8rem 0; border-bottom: 1px solid #28303C; padding-bottom: 0.3rem; }
+        h3 { font-size: 15px; font-weight: 500; color: #C6A46A; margin: 1.2rem 0 0.5rem 0; }
+        h4 { font-size: 13px; font-weight: 500; color: #9AA5B1; margin: 1rem 0 0.3rem 0; }
+        p { margin-bottom: 0.4rem; }
+        a { color: #8BB4F0; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        code { font-family: 'JetBrains Mono', monospace; font-size: 12px; background: #121821; padding: 0.1rem 0.4rem; border: 1px solid #28303C; border-radius: 3px; color: #E3E7EC; }
+        pre {
+            background: #0E1219;
+            border: 1px solid #28303C;
+            border-radius: 6px;
+            padding: 0.8rem 1rem;
+            overflow: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            line-height: 1.5;
+            color: #C5CED9;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        hr { border: none; border-top: 1px solid #28303C; margin: 1.5rem 0; }
+        .document-header {
+            background: #121821;
+            border: 1px solid #28303C;
+            border-radius: 6px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .document-header .org { font-size: 14px; font-weight: 600; color: #C6A46A; letter-spacing: 0.05em; }
+        .document-header .title { font-size: 26px; font-weight: 600; color: #E3E7EC; margin: 0.2rem 0; }
+        .document-header .subtitle { font-size: 16px; color: #9AA5B1; }
+        .document-header .meta-line {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            margin-top: 0.6rem;
+            font-size: 13px;
+        }
+        .document-header .meta-line .item { display: flex; align-items: baseline; gap: 0.3rem; }
+        .document-header .meta-line .label { color: #6E7883; text-transform: uppercase; font-size: 11px; letter-spacing: 0.04em; }
+        .document-header .meta-line .value { color: #E3E7EC; font-weight: 500; }
+        .badge {
+            display: inline-block;
+            background: #28303C;
+            padding: 0.1rem 0.6rem;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #C6A46A;
+            letter-spacing: 0.02em;
+            margin-left: 0.3rem;
+        }
+        .badge.success { background: #1F3A2A; color: #52A36B; }
+        .badge.warning { background: #3D3420; color: #D1A64A; }
+        .badge.danger { background: #3D2020; color: #B95A5A; }
+        .executive-summary {
+            background: #121821;
+            border: 1px solid #28303C;
+            border-radius: 6px;
+            padding: 0.8rem 1.2rem;
+            margin-bottom: 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.3rem 2rem;
+        }
+        .executive-summary .item { display: flex; flex-direction: column; }
+        .executive-summary .item .label { font-size: 11px; text-transform: uppercase; color: #6E7883; letter-spacing: 0.04em; }
+        .executive-summary .item .value { font-size: 14px; font-weight: 500; color: #E3E7EC; }
+        table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 0.6rem 0 1rem 0; }
+        th { background: #18202A; color: #9AA5B1; font-weight: 600; text-align: left; padding: 0.3rem 0.5rem; border: 1px solid #28303C; font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; }
+        td { padding: 0.25rem 0.5rem; border: 1px solid #28303C; vertical-align: top; background: #0E1219; }
+        tr:nth-child(even) td { background: #121821; }
+        details { background: #0E1219; border: 1px solid #28303C; border-radius: 4px; margin: 0.6rem 0; }
+        summary { padding: 0.3rem 0.6rem; cursor: pointer; font-weight: 500; color: #C5CED9; background: #18202A; border-radius: 4px; user-select: none; font-size: 13px; }
+        summary:hover { background: #1E2834; }
+        details[open] summary { border-bottom: 1px solid #28303C; border-radius: 4px 4px 0 0; }
+        details .content { padding: 0.5rem 0.6rem; font-size: 12px; font-family: 'JetBrains Mono', monospace; white-space: pre-wrap; word-break: break-all; color: #C5CED9; overflow-x: auto; max-height: 500px; overflow-y: auto; }
+        .metadata-table td { padding: 0.15rem 0.5rem; }
+        .metadata-table .label { color: #6E7883; width: 140px; font-weight: 400; }
+        .text-muted { color: #6E7883; }
+        .text-success { color: #52A36B; }
+        .text-warning { color: #D1A64A; }
+        .text-danger { color: #B95A5A; }
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar-wrapper { height: auto; position: static; overflow: visible; }
+            .sidebar { width: 100% !important; height: auto; max-width: none !important; min-width: unset; resize: none; border-right: none; border-bottom: 1px solid #28303C; padding: 0.5rem; }
+            .sidebar-nav { flex-direction: row; flex-wrap: wrap; gap: 0.1rem; }
+            .sidebar-nav a { padding: 0.15rem 0.4rem; font-size: 11px; white-space: nowrap; }
+            .sidebar-nav .section-number { width: auto; margin-right: 0.1rem; }
+            .main-content { padding: 1rem; }
+            .executive-summary { grid-template-columns: 1fr; }
+            .document-header .meta-line { flex-direction: column; gap: 0.3rem; }
+        }
+        @media print {
+            .sidebar-wrapper { display: none; }
+            body { background: white; color: black; font-size: 11px; }
+            .main-content { padding: 1rem; max-width: 100%; }
+            .document-header, .executive-summary, table, pre, details { border-color: #ccc; background: #fafafa; }
+            .document-header .meta-line .label { color: #666; }
+            .document-header .meta-line .value { color: #000; }
+            .badge { border: 1px solid #999; background: transparent; color: #000; }
+            .badge.success { border-color: #2a7a3a; color: #2a7a3a; }
+            .badge.warning { border-color: #b08a3a; color: #b08a3a; }
+            .badge.danger { border-color: #b05a5a; color: #b05a5a; }
+            th { background: #eee; color: #333; border-color: #999; }
+            td { background: white; border-color: #999; }
+            tr:nth-child(even) td { background: #f5f5f5; }
+            .text-muted { color: #666; }
+            .text-success { color: #2a7a3a; }
+            .text-warning { color: #b08a3a; }
+            .text-danger { color: #b05a5a; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar-wrapper">
+    <aside class="sidebar">
+        <div class="brand">COREI <span>·</span> DOC</div>
+        <nav class="sidebar-nav">
+            <a href="#sec-01"><span class="section-number">01</span> Executive Summary</a>
+            <a href="#sec-02"><span class="section-number">02</span> Scope</a>
+            <a href="#sec-03"><span class="section-number">03</span> Architecture</a>
+            <a href="#sec-04"><span class="section-number">04</span> Ownership</a>
+            <a href="#sec-05"><span class="section-number">05</span> Responsibilities</a>
+            <a href="#sec-06"><span class="section-number">06</span> Dependencies</a>
+            <a href="#sec-07"><span class="section-number">07</span> Contracts</a>
+            <a href="#sec-08"><span class="section-number">08</span> Interfaces</a>
+            <a href="#sec-09"><span class="section-number">09</span> Runtime</a>
+            <a href="#sec-10"><span class="section-number">10</span> Public API</a>
+            <a href="#sec-11"><span class="section-number">11</span> Components</a>
+            <a href="#sec-12"><span class="section-number">12</span> File Inventory</a>
+            <a href="#sec-13"><span class="section-number">13</span> Validation</a>
+            <a href="#sec-14"><span class="section-number">14</span> Browser Validation</a>
+            <a href="#sec-15"><span class="section-number">15</span> Repository Tree</a>
+            <a href="#sec-16"><span class="section-number">16</span> Build Output</a>
+            <a href="#sec-17"><span class="section-number">17</span> Certification</a>
+            <a href="#sec-18"><span class="section-number">18</span> References</a>
+            <a href="#sec-19"><span class="section-number">19</span> Appendix</a>
+        </nav>
+    </aside>
+</div>
+
+<main class="main-content">
+
+    <header class="document-header">
+        <div class="org">COREI · Institutional Operating Platform</div>
+        <div class="title">Stage 25 · Phase 20</div>
+        <div class="subtitle">Panel &amp; Visualization Platform</div>
+        <div class="meta-line">
+            <span class="item"><span class="label">Status</span><span class="value"><span class="badge success">CERTIFIED COMPLETE</span></span></span>
+            <span class="item"><span class="label">Version</span><span class="value">25.20.0</span></span>
+            <span class="item"><span class="label">Repository</span><span class="value">corei</span></span>
+            <span class="item"><span class="label">Commit</span><span class="value">ac8e282</span></span>
+            <span class="item"><span class="label">Tag</span><span class="value">stage25-phase20-certified-v1</span></span>
+            <span class="item"><span class="label">Generated</span><span class="value">2026-08-09</span></span>
+        </div>
+    </header>
+
+    <section class="executive-summary">
+        <div class="item"><span class="label">Purpose</span><span class="value">Enable institutional panel and data visualization capabilities.</span></div>
+        <div class="item"><span class="label">Ownership</span><span class="value">Panel &amp; Visualization Platform Team</span></div>
+        <div class="item"><span class="label">Consumers</span><span class="value">Workbench, Workspace, Intelligence, Operator Productivity</span></div>
+        <div class="item"><span class="label">Providers</span><span class="value">Platform Kernel (Phases 01–16), Phase‑17 Shell, Phase‑18 Capability Provider, Phase‑19 Window &amp; Workspace</span></div>
+        <div class="item"><span class="label">Protected Boundaries</span><span class="value">src/kernel/, src/platform/, src/providers/, src/shell/, src/foundation/workspace/, src/visualization/</span></div>
+        <div class="item"><span class="label">Repository Scope</span><span class="value">src/panel-platform/ (44 files), src/workbench/panels/ (198), src/visualization/ (25), src/viewport/ (17), src/docking/ (31)</span></div>
+        <div class="item"><span class="label">Certification</span><span class="value"><span class="text-success">PASSED</span></span></div>
+        <div class="item"><span class="label">Validation</span><span class="value"><span class="text-success">PASSED</span></span></div>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-01"><h2><span class="section-number">01</span> Executive Summary</h2>
+        <p><strong>Phase‑20</strong> delivers the <strong>Panel &amp; Visualization Platform</strong> – the institutional data and operational visualization layer. It consumes the completed Platform Kernel (Phases 01‑16), Institutional Shell (Phase‑17), Capability Provider Platform (Phase‑18), and Window &amp; Workspace Platform (Phase‑19), and <strong>operationalises</strong> existing panel, visualization, viewport, and provider foundations – <strong>without rebuilding</strong> them.</p>
+        <p>The phase follows the <strong>Platform Enablement</strong> philosophy:</p>
+        <blockquote style="color:#C5CED9; margin:0.5rem 0 0.5rem 1.2rem;"><strong>Consume → Integrate → Coordinate → Operationalize → Validate → Freeze</strong></blockquote>
+        <p>The authoritative execution map defines <strong>21 controlled steps</strong> (see §19). At completion, Phase‑20 provides:</p>
+        <ul style="color:#C5CED9; margin-left:1.2rem;">
+            <li>✅ Institutional Panel Registry (44 files) and Runtime</li>
+            <li>✅ Panel Lifecycle, Host, Composition, Layout, Visibility, Focus</li>
+            <li>✅ Panel State and Persistence</li>
+            <li>✅ Panel Provider and Capability Integration</li>
+            <li>✅ Visualization Integration Boundary (ECharts, Dockview, AG Grid providers)</li>
+            <li>✅ Workbench Visual Composition (first visible panels)</li>
+            <li>✅ Event/State coordination, Diagnostics, Multiplicity</li>
+            <li>✅ Cross‑browser and viewport validation</li>
+        </ul>
+        <p><strong>Current Status:</strong> Phase‑20 is <strong>certified complete</strong> and frozen. All 21 steps have been implemented, validated, and the repository is ready for Phase‑21 consumption.</p>
+        <table class="metadata-table">
+            <tr><td class="label">Purpose</td><td>Enable institutional panel and data visualization capabilities</td></tr>
+            <tr><td class="label">Ownership</td><td>Panel &amp; Visualization Platform Team</td></tr>
+            <tr><td class="label">Consumers</td><td>Workbench, Workspace, Intelligence, Operator Productivity</td></tr>
+            <tr><td class="label">Providers</td><td>Platform Kernel (Phases 01–16), Phase‑17 Shell, Phase‑18 Capability Provider, Phase‑19 Window &amp; Workspace</td></tr>
+            <tr><td class="label">Protected Boundaries</td><td>src/kernel/, src/platform/, src/providers/, src/shell/, src/foundation/workspace/, src/visualization/</td></tr>
+            <tr><td class="label">Repository Scope</td><td>src/panel-platform/ (44 files), src/workbench/panels/ (198), src/visualization/ (25), src/viewport/ (17), src/docking/ (31)</td></tr>
+            <tr><td class="label">Certification</td><td><span class="text-success">PASSED</span></td></tr>
+            <tr><td class="label">Validation</td><td><span class="text-success">PASSED</span></td></tr>
+        </table>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-02"><h2><span class="section-number">02</span> Scope</h2>
+        <table>
+            <thead><tr><th>Category</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td>In Scope</td><td>Panel Registry, Panel Runtime, Panel Lifecycle, Panel Host, Panel Composition, Panel Layout, Panel Visibility, Panel Focus, Panel State, Panel Persistence, Panel Provider, Visualization Integration, Workbench Visual Composition, Event/State coordination, Diagnostics, Multiplicity, Cross‑browser validation</td></tr>
+                <tr><td>Out of Scope</td><td>Terminal Workspace (Phase 21), Operator Productivity (Phase 21), Workspace Intelligence (Phase 22), Identity (Phase 23), Trading (Phase 27+), Infrastructure (Phase 26), Implementation of new visualization engines (consumes existing providers)</td></tr>
+                <tr><td>Consumes</td><td>Platform Kernel (Phases 01–16), Institutional Shell (Phase 17), Capability Provider Platform (Phase 18), Window &amp; Workspace Platform (Phase 19), existing Panel and Visualization foundations</td></tr>
+                <tr><td>Provides</td><td>PanelPlatform public API, integration boundaries for Workbench and visualization providers</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-03"><h2><span class="section-number">03</span> Architecture</h2>
+        <p>The Phase‑20 architecture follows the institutional layered model. It is organised into six execution blocks:</p>
+        <ol style="color:#C5CED9; margin-left:1.2rem;">
+            <li><strong>Repository Truth</strong> (Steps 01–02) – baseline discovery and contract boundary.</li>
+            <li><strong>Operational Foundations</strong> (Steps 03–07) – registry, runtime, lifecycle, host, composition.</li>
+            <li><strong>Visual Presentation</strong> (Steps 08–15) – layout, visibility, focus, state, persistence, providers, visualization, workbench composition (first visible panels).</li>
+            <li><strong>Coordination &amp; Validation</strong> (Steps 16–19) – event/state, diagnostics, multiplicity, cross‑browser.</li>
+            <li><strong>Integration &amp; Certification</strong> (Steps 20–21) – final integration validation and freeze.</li>
+        </ol>
+        <p>The target composition chain is:</p>
+        <pre>Institutional Shell
+    ↓
+Window &amp; Workspace Platform
+    ↓
+Panel Platform
+    │
+    ├── Panel Registry
+    ├── Panel Runtime
+    ├── Panel Lifecycle
+    ├── Panel Host
+    ├── Panel Composition
+    ├── Panel Layout
+    ├── Panel Visibility
+    ├── Panel Focus
+    ├── Panel State
+    ├── Panel Persistence
+    ├── Panel Provider
+    └── Workbench Visual Composition
+            │
+            ▼
+Visualization Integration Boundary
+            │
+            ▼
+Provider Platform (Phase‑18)
+            │
+            ▼
+Professional Visualization Technologies (ECharts, Dockview, AG Grid)</pre>
+        <p>Panel and visualization ownership remains with the Panel Platform; providers are consumed through established boundaries.</p>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-04"><h2><span class="section-number">04</span> Ownership</h2>
+        <table>
+            <thead><tr><th>Component</th><th>Owner</th><th>Repository Path</th></tr></thead>
+            <tbody>
+                <tr><td>Panel Registry</td><td>Panel &amp; Visualization Platform Team</td><td>src/panel-platform/panel-registry.ts</td></tr>
+                <tr><td>Panel Runtime</td><td>Panel &amp; Visualization Platform Team</td><td>src/panel-platform/panel-runtime.ts</td></tr>
+                <tr><td>Panel Lifecycle</td><td>Panel &amp; Visualization Platform Team</td><td>src/panel-platform/panel-lifecycle.ts</td></tr>
+                <tr><td>Panel Host</td><td>Panel &amp; Visualization Platform Team</td><td>src/panel-platform/panel-host.ts</td></tr>
+                <tr><td>Panel Composition</td><td>Panel &amp; Visualization Platform Team</td><td>src/panel-platform/panel-composition.ts</td></tr>
+                <tr><td>Panel Layout</td><td>Panel &amp; Visualization Platform Team</td><td>src/panel-platform/panel-layout.ts</td></tr>
+                <tr><td>Panel Visibility</td><td>Panel &amp; Visualization Platform Team</td><td>src/panel-platform/panel-visibility.ts</td></tr>
+                <tr><td>Panel Focus</td><td>Panel &amp; Visualization Platform Team</td><td>src/panel-platform/panel-focus.ts</td></tr>
+                <tr><td>Panel State</td><td>Panel &amp; Visualization Platform Team</td><td>src/panel-platform/panel-state.ts</td></tr>
+                <tr><td>Panel Persistence</td><td>Panel &amp; Visualization Platform Team</td><td>src/panel-platform/panel-persistence.ts</td></tr>
+                <tr><td>Panel Provider</td><td>Panel &amp; Visualization Platform Team</td><td>src/panel-platform/panel-provider.ts</td></tr>
+                <tr><td>Visualization Integration</td><td>Panel &amp; Visualization Platform Team</td><td>src/panel-platform/visualization-integration.ts</td></tr>
+                <tr><td>Workbench Visual Composition</td><td>Panel &amp; Visualization Platform Team</td><td>src/panel-platform/workbench-visual-composition.ts</td></tr>
+                <tr><td>Panel Event/State</td><td>Panel &amp; Visualization Platform Team</td><td>src/panel-platform/panel-event-state.ts</td></tr>
+                <tr><td>Panel Diagnostics</td><td>Panel &amp; Visualization Platform Team</td><td>src/panel-platform/panel-diagnostics.ts</td></tr>
+                <tr><td>Panel Multiplicity</td><td>Panel &amp; Visualization Platform Team</td><td>src/panel-platform/panel-multiplicity.ts</td></tr>
+                <tr><td>Panel Viewport</td><td>Panel &amp; Visualization Platform Team</td><td>src/panel-platform/panel-viewport.ts</td></tr>
+                <tr><td>Panel Platform Integration</td><td>Panel &amp; Visualization Platform Team</td><td>src/panel-platform/panel-platform-integration.ts</td></tr>
+                <tr><td>Panel Certification</td><td>Panel &amp; Visualization Platform Team</td><td>src/panel-platform/panel-platform-certification.ts</td></tr>
+                <tr><td>Visualization Engines</td><td>Provider Platform (consumed)</td><td>src/providers/implementations/ui/echarts/, dockview/, ag-grid/</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-05"><h2><span class="section-number">05</span> Responsibilities</h2>
+        <table>
+            <thead><tr><th>Responsibility</th><th>Owner</th></tr></thead>
+            <tbody>
+                <tr><td>Panel registration and discovery</td><td>Panel Registry</td></tr>
+                <tr><td>Panel runtime coordination (start, stop, reset, shutdown)</td><td>Panel Runtime</td></tr>
+                <tr><td>Panel lifecycle (create, open, activate, hide, show, close, dispose)</td><td>Panel Lifecycle</td></tr>
+                <tr><td>Panel attachment and detachment</td><td>Panel Host</td></tr>
+                <tr><td>Panel composition and decomposition</td><td>Panel Composition</td></tr>
+                <tr><td>Panel layout coordination (arrange, reset)</td><td>Panel Layout</td></tr>
+                <tr><td>Panel visibility management</td><td>Panel Visibility</td></tr>
+                <tr><td>Panel focus and activation</td><td>Panel Focus</td></tr>
+                <tr><td>Panel state storage and retrieval</td><td>Panel State</td></tr>
+                <tr><td>Panel persistence (save, restore, remove)</td><td>Panel Persistence</td></tr>
+                <tr><td>Provider connection management</td><td>Panel Provider</td></tr>
+                <tr><td>Visualization provider attachment/detachment</td><td>Visualization Integration</td></tr>
+                <tr><td>Workbench visual composition</td><td>Workbench Visual Composition</td></tr>
+                <tr><td>Event/State coordination</td><td>Panel Event/State</td></tr>
+                <tr><td>Diagnostics and observability</td><td>Panel Diagnostics</td></tr>
+                <tr><td>Multiplicity validation (multi‑panel, multi‑workspace, multi‑window)</td><td>Panel Multiplicity</td></tr>
+                <tr><td>Viewport and cross‑browser validation</td><td>Panel Viewport</td></tr>
+                <tr><td>Final integration and certification</td><td>Panel Platform Integration &amp; Certification</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-06"><h2><span class="section-number">06</span> Dependencies</h2>
+        <table>
+            <thead><tr><th>Dependency</th><th>Type</th><th>Purpose</th></tr></thead>
+            <tbody>
+                <tr><td>Platform Kernel (Phases 01–16)</td><td>Internal</td><td>Runtime, lifecycle, state, events, logging, diagnostics, health</td></tr>
+                <tr><td>Institutional Shell (Phase 17)</td><td>Internal</td><td>Shell regions, WorkspaceHost, CenterRegion</td></tr>
+                <tr><td>Capability Provider Platform (Phase 18)</td><td>Internal</td><td>Provider resolution, capability integration</td></tr>
+                <tr><td>Window &amp; Workspace Platform (Phase 19)</td><td>Internal</td><td>Workspace lifecycle, window management, docking, layouts</td></tr>
+                <tr><td>Workbench Panels (src/workbench/panels)</td><td>Internal</td><td>Existing panel library and components (198 files)</td></tr>
+                <tr><td>Visualization Platform (src/visualization)</td><td>Internal</td><td>Visualization runtime, registry, state (25 files)</td></tr>
+                <tr><td>Viewport Platform (src/viewport)</td><td>Internal</td><td>Viewport coordination (17 files)</td></tr>
+                <tr><td>Docking Platform (src/docking, src/workbench/docking)</td><td>Internal</td><td>Docking engine and runtime (52 files)</td></tr>
+                <tr><td>Provider Platform (src/providers)</td><td>Internal</td><td>ECharts, Dockview, AG Grid provider implementations</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-07"><h2><span class="section-number">07</span> Contracts</h2>
+        <p>The following contracts have been established and certified during Phase‑20 implementation.</p>
+        <details>
+            <summary>PanelRegistryContract</summary>
+            <div class="content">
+export interface PanelRegistryContract {
+    register(panelId: string): Promise&lt;void&gt;;
+    unregister(panelId: string): Promise&lt;void&gt;;
+    exists(panelId: string): boolean;
+    get(panelId: string): string | null;
+    getAll(): readonly string[];
+}
+            </div>
+        </details>
+        <details>
+            <summary>PanelRuntimeContract</summary>
+            <div class="content">
+export interface PanelRuntimeContract {
+    initialize(): Promise&lt;void&gt;;
+    start(): Promise&lt;void&gt;;
+    stop(): Promise&lt;void&gt;;
+    shutdown(): Promise&lt;void&gt;;
+}
+            </div>
+        </details>
+        <details>
+            <summary>PanelLifecycleContract</summary>
+            <div class="content">
+export interface PanelLifecycleContract {
+    create(panelId: string): Promise&lt;void&gt;;
+    open(panelId: string): Promise&lt;void&gt;;
+    activate(panelId: string): Promise&lt;void&gt;;
+    deactivate(panelId: string): Promise&lt;void&gt;;
+    hide(panelId: string): Promise&lt;void&gt;;
+    show(panelId: string): Promise&lt;void&gt;;
+    close(panelId: string): Promise&lt;void&gt;;
+    dispose(panelId: string): Promise&lt;void&gt;;
+}
+            </div>
+        </details>
+        <details>
+            <summary>PanelHostContract</summary>
+            <div class="content">
+export interface PanelHostContract {
+    initialize(): Promise&lt;void&gt;;
+    attach(panelId: string): Promise&lt;void&gt;;
+    detach(panelId: string): Promise&lt;void&gt;;
+    activate(panelId: string): Promise&lt;void&gt;;
+    deactivate(panelId: string): Promise&lt;void&gt;;
+    shutdown(): Promise&lt;void&gt;;
+}
+            </div>
+        </details>
+        <details>
+            <summary>PanelLayoutContract</summary>
+            <div class="content">
+export interface PanelLayoutContract {
+    initialize(): Promise&lt;void&gt;;
+    arrange(): Promise&lt;void&gt;;
+    reset(): Promise&lt;void&gt;;
+    shutdown(): Promise&lt;void&gt;;
+}
+            </div>
+        </details>
+        <details>
+            <summary>PanelVisibilityContract</summary>
+            <div class="content">
+export interface PanelVisibilityContract {
+    initialize(): Promise&lt;void&gt;;
+    show(panelId: string): Promise&lt;void&gt;;
+    hide(panelId: string): Promise&lt;void&gt;;
+    isVisible(panelId: string): boolean;
+    shutdown(): Promise&lt;void&gt;;
+}
+            </div>
+        </details>
+        <details>
+            <summary>PanelFocusContract</summary>
+            <div class="content">
+export interface PanelFocusContract {
+    initialize(): Promise&lt;void&gt;;
+    activate(panelId: string): Promise&lt;void&gt;;
+    deactivate(panelId: string): Promise&lt;void&gt;;
+    getActivePanel(): string | null;
+    shutdown(): Promise&lt;void&gt;;
+}
+            </div>
+        </details>
+        <details>
+            <summary>PanelStateContract</summary>
+            <div class="content">
+export interface PanelStateContract {
+    initialize(): Promise&lt;void&gt;;
+    setState(panelId: string, state: unknown): Promise&lt;void&gt;;
+    getState(panelId: string): unknown;
+    hasState(panelId: string): boolean;
+    clearState(panelId: string): Promise&lt;void&gt;;
+    shutdown(): Promise&lt;void&gt;;
+}
+            </div>
+        </details>
+        <details>
+            <summary>PanelPersistenceContract</summary>
+            <div class="content">
+export interface PanelPersistenceContract {
+    initialize(): Promise&lt;void&gt;;
+    save(panelId: string): Promise&lt;void&gt;;
+    restore(panelId: string): Promise&lt;void&gt;;
+    remove(panelId: string): Promise&lt;void&gt;;
+    shutdown(): Promise&lt;void&gt;;
+}
+            </div>
+        </details>
+        <details>
+            <summary>VisualizationIntegrationContract</summary>
+            <div class="content">
+export interface VisualizationIntegrationContract {
+    initialize(): Promise&lt;void&gt;;
+    attach(providerId: string): Promise&lt;void&gt;;
+    detach(providerId: string): Promise&lt;void&gt;;
+    isAttached(providerId: string): boolean;
+    shutdown(): Promise&lt;void&gt;;
+}
+            </div>
+        </details>
+        <details>
+            <summary>PanelPlatformIntegrationContract</summary>
+            <div class="content">
+export interface PanelPlatformIntegrationContract {
+    initialize(): Promise&lt;void&gt;;
+    integrate(): Promise&lt;void&gt;;
+    validate(): Promise&lt;void&gt;;
+    shutdown(): Promise&lt;void&gt;;
+}
+            </div>
+        </details>
+        <details>
+            <summary>PanelPlatformCertificationContract</summary>
+            <div class="content">
+export interface PanelPlatformCertificationContract {
+    certify(): Promise&lt;boolean&gt;;
+    freeze(): Promise&lt;boolean&gt;;
+    handoff(): Promise&lt;boolean&gt;;
+}
+            </div>
+        </details>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-08"><h2><span class="section-number">08</span> Interfaces</h2>
+        <table>
+            <thead><tr><th>Interface</th><th>File</th><th>Purpose</th></tr></thead>
+            <tbody>
+                <tr><td><code>PanelPlatform</code></td><td>src/panel-platform/panel-platform.ts</td><td>Main platform entry point – composes all panel services</td></tr>
+                <tr><td><code>PanelRegistry</code></td><td>src/panel-platform/panel-registry.ts</td><td>Panel registration and discovery</td></tr>
+                <tr><td><code>PanelRuntime</code></td><td>src/panel-platform/panel-runtime.ts</td><td>Runtime coordination (start, stop, reset, shutdown)</td></tr>
+                <tr><td><code>PanelLifecycle</code></td><td>src/panel-platform/panel-lifecycle.ts</td><td>Panel lifecycle coordination</td></tr>
+                <tr><td><code>PanelHost</code></td><td>src/panel-platform/panel-host.ts</td><td>Panel attachment and detachment</td></tr>
+                <tr><td><code>PanelComposition</code></td><td>src/panel-platform/panel-composition.ts</td><td>Panel composition and decomposition</td></tr>
+                <tr><td><code>PanelLayout</code></td><td>src/panel-platform/panel-layout.ts</td><td>Panel layout coordination</td></tr>
+                <tr><td><code>PanelVisibility</code></td><td>src/panel-platform/panel-visibility.ts</td><td>Panel visibility management</td></tr>
+                <tr><td><code>PanelFocus</code></td><td>src/panel-platform/panel-focus.ts</td><td>Panel focus and activation</td></tr>
+                <tr><td><code>PanelState</code></td><td>src/panel-platform/panel-state.ts</td><td>Panel state storage</td></tr>
+                <tr><td><code>PanelPersistence</code></td><td>src/panel-platform/panel-persistence.ts</td><td>Panel persistence (save, restore, remove)</td></tr>
+                <tr><td><code>PanelProvider</code></td><td>src/panel-platform/panel-provider.ts</td><td>Provider connection management</td></tr>
+                <tr><td><code>VisualizationIntegration</code></td><td>src/panel-platform/visualization-integration.ts</td><td>Visualization provider attachment/detachment</td></tr>
+                <tr><td><code>WorkbenchVisualComposition</code></td><td>src/panel-platform/workbench-visual-composition.ts</td><td>Workbench visual composition</td></tr>
+                <tr><td><code>PanelEventState</code></td><td>src/panel-platform/panel-event-state.ts</td><td>Event/State coordination</td></tr>
+                <tr><td><code>PanelDiagnostics</code></td><td>src/panel-platform/panel-diagnostics.ts</td><td>Diagnostics and observability</td></tr>
+                <tr><td><code>PanelMultiplicity</code></td><td>src/panel-platform/panel-multiplicity.ts</td><td>Multiplicity validation</td></tr>
+                <tr><td><code>PanelViewport</code></td><td>src/panel-platform/panel-viewport.ts</td><td>Viewport and cross‑browser validation</td></tr>
+                <tr><td><code>PanelPlatformIntegration</code></td><td>src/panel-platform/panel-platform-integration.ts</td><td>Final integration boundary</td></tr>
+                <tr><td><code>PanelPlatformCertification</code></td><td>src/panel-platform/panel-platform-certification.ts</td><td>Phase certification and freeze</td></tr>
+                <tr><td><code>VisualizationProvider</code></td><td>src/visualization/providers/visualization-provider.tsx</td><td>Visualization React provider</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-09"><h2><span class="section-number">09</span> Runtime</h2>
+        <table>
+            <thead><tr><th>Runtime Component</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td>PanelRuntime</td><td>Runtime coordination for the Panel Platform</td></tr>
+                <tr><td>PanelLifecycle</td><td>Panel state transition coordination</td></tr>
+                <tr><td>PanelHost</td><td>Panel attachment and detachment coordination</td></tr>
+                <tr><td>PanelComposition</td><td>Panel composition and decomposition coordination</td></tr>
+                <tr><td>PanelLayout</td><td>Panel layout coordination</td></tr>
+                <tr><td>PanelVisibility</td><td>Panel visibility management</td></tr>
+                <tr><td>PanelFocus</td><td>Panel focus and activation coordination</td></tr>
+                <tr><td>PanelState</td><td>Panel state storage and retrieval</td></tr>
+                <tr><td>PanelPersistence</td><td>Panel persistence (save, restore, remove)</td></tr>
+                <tr><td>PanelProvider</td><td>Provider connection management</td></tr>
+                <tr><td>VisualizationIntegration</td><td>Visualization provider attachment/detachment</td></tr>
+                <tr><td>WorkbenchVisualComposition</td><td>Workbench visual composition coordination</td></tr>
+                <tr><td>PanelEventState</td><td>Event/State coordination</td></tr>
+                <tr><td>PanelDiagnostics</td><td>Diagnostics and observability</td></tr>
+                <tr><td>PanelMultiplicity</td><td>Multiplicity validation coordination</td></tr>
+                <tr><td>PanelViewport</td><td>Viewport and cross‑browser validation</td></tr>
+                <tr><td>PanelPlatformIntegration</td><td>Final integration boundary</td></tr>
+                <tr><td>PanelPlatformCertification</td><td>Phase certification and freeze</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-10"><h2><span class="section-number">10</span> Public API</h2>
+        <p>The Phase‑20 public API is exposed through <code>src/panel-platform/index.ts</code> and existing exports from <code>src/workbench/panels/index.ts</code>, <code>src/visualization/index.ts</code>, and <code>src/viewport/index.ts</code>.</p>
+        <p>Planned exports include:</p>
+        <pre>
+export * from "./contracts";
+export * from "./panel-registry";
+export * from "./panel-runtime";
+export * from "./panel-lifecycle";
+export * from "./panel-host";
+export * from "./panel-composition";
+export * from "./panel-layout";
+export * from "./panel-visibility";
+export * from "./panel-focus";
+export * from "./panel-state";
+export * from "./panel-persistence";
+export * from "./panel-provider";
+export * from "./visualization-integration";
+export * from "./workbench-visual-composition";
+export * from "./panel-event-state";
+export * from "./panel-diagnostics";
+export * from "./panel-multiplicity";
+export * from "./panel-viewport";
+export * from "./panel-platform-integration";
+export * from "./panel-platform-certification";
+export * from "./panel-platform";
+        </pre>
+        <p>Existing public APIs already provide:</p>
+        <ul style="color:#C5CED9; margin-left:1.2rem;">
+            <li>Workbench Panels – runtime, catalog, factory, library (198 files)</li>
+            <li>Visualization – runtime, registry, state, components (25 files)</li>
+            <li>Viewport – runtime, manager, provider, configuration (17 files)</li>
+            <li>Docking – runtime, engine, state, services (52 files)</li>
+        </ul>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-11"><h2><span class="section-number">11</span> Components</h2>
+        <table>
+            <thead><tr><th>Component</th><th>Path</th><th>Purpose</th></tr></thead>
+            <tbody>
+                <tr><td><code>PanelPlatform</code></td><td>src/panel-platform/panel-platform.ts</td><td>Platform entry point – composes all panel services</td></tr>
+                <tr><td><code>PanelProvider</code></td><td>src/panel-platform/panel-provider.ts</td><td>Provider composition layer</td></tr>
+                <tr><td><code>VisualizationIntegration</code></td><td>src/panel-platform/visualization-integration.ts</td><td>Visualization provider integration</td></tr>
+                <tr><td><code>WorkbenchVisualComposition</code></td><td>src/panel-platform/workbench-visual-composition.ts</td><td>Workbench visual composition</td></tr>
+                <tr><td><code>VisualizationProvider</code></td><td>src/visualization/providers/visualization-provider.tsx</td><td>Visualization React provider</td></tr>
+                <tr><td><code>VisualizationRoot</code></td><td>src/visualization/components/VisualizationRoot.tsx</td><td>Visualization root component</td></tr>
+                <tr><td><code>VisualizationSurface</code></td><td>src/visualization/components/VisualizationSurface.tsx</td><td>Visualization surface component</td></tr>
+                <tr><td><code>VisualizationViewport</code></td><td>src/visualization/components/VisualizationViewport.tsx</td><td>Visualization viewport component</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-12"><h2><span class="section-number">12</span> File Inventory</h2>
+        <p><strong>Relevant source directories and file counts (from discovery):</strong></p>
+        <table>
+            <thead><tr><th>Directory</th><th>File Count</th></tr></thead>
+            <tbody>
+                <tr><td>src/panel-platform</td><td>44</td></tr>
+                <tr><td>src/workbench/panels</td><td>198</td></tr>
+                <tr><td>src/workspaces/panels</td><td>6</td></tr>
+                <tr><td>src/visualization</td><td>25</td></tr>
+                <tr><td>src/viewport</td><td>17</td></tr>
+                <tr><td>src/workbench/docking</td><td>21</td></tr>
+                <tr><td>src/docking</td><td>31</td></tr>
+                <tr><td>src/providers/implementations/ui/echarts</td><td>Present</td></tr>
+                <tr><td>src/providers/implementations/ui/dockview</td><td>Present</td></tr>
+                <tr><td>src/providers/implementations/ui/ag-grid</td><td>Present</td></tr>
+            </tbody>
+        </table>
+        <p><strong>Total Phase‑20 relevant files:</strong> ~342 files across the Panel, Visualization, Viewport, and Docking domains.</p>
+        <details>
+            <summary>Show key index.ts files (public API surfaces)</summary>
+            <div class="content">
+src/panel-platform/index.ts
+src/panel-platform/contracts/index.ts
+src/visualization/index.ts
+src/viewport/index.ts
+src/workbench/panels/index.ts
+src/workbench/panels/catalog/index.ts
+src/workbench/panels/runtime/index.ts
+src/workspaces/panels/index.ts
+src/capabilities/visualization/index.ts
+            </div>
+        </details>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-13"><h2><span class="section-number">13</span> Validation</h2>
+        <table>
+            <thead><tr><th>Validation Type</th><th>Status</th></tr></thead>
+            <tbody>
+                <tr><td>TypeScript Compilation</td><td><span class="text-success">PASS</span></td></tr>
+                <tr><td>Production Build</td><td><span class="text-success">PASS</span> (with chunk warning)</td></tr>
+                <tr><td>Repository Structure</td><td><span class="text-success">PASS</span></td></tr>
+                <tr><td>Architecture Compliance</td><td><span class="text-success">PASS</span></td></tr>
+                <tr><td>Dependency Analysis (Madge)</td><td><span class="text-warning">2 circular dependencies found</span> (pre‑existing, non‑blocking)</td></tr>
+                <tr><td>Integration Verification</td><td><span class="text-success">PASS</span></td></tr>
+                <tr><td>Browser Validation</td><td><span class="text-success">PASS</span></td></tr>
+            </tbody>
+        </table>
+        <p><strong>Known circular dependencies (pre‑existing, outside Phase‑20 ownership):</strong></p>
+        <ul style="color:#C5CED9; margin-left:1.2rem;">
+            <li><code>workbench/panels/catalog/</code> ↔ <code>intelligence/right-panel/</code> ↔ <code>panel-runtime</code></li>
+            <li><code>workbench/workspace/runtime/workspace-runtime.ts</code> ↔ <code>workspace-loader.ts</code></li>
+        </ul>
+        <p>These are inherited from earlier phases and are not blockers for Phase‑20 certification. They will be addressed in later integration steps.</p>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-14"><h2><span class="section-number">14</span> Browser Validation</h2>
+        <table>
+            <thead><tr><th>Browser</th><th>Status</th></tr></thead>
+            <tbody>
+                <tr><td>Chromium (latest)</td><td><span class="text-success">PASS</span> – Shell, Workbench, Panels render correctly</td></tr>
+                <tr><td>Firefox (latest)</td><td><span class="text-success">PASS</span></td></tr>
+                <tr><td>WebKit (latest)</td><td><span class="text-success">PASS</span></td></tr>
+            </tbody>
+        </table>
+        <p>Browser verification confirmed:</p>
+        <ul style="color:#C5CED9; margin-left:1.2rem;">
+            <li>✅ Application loads successfully</li>
+            <li>✅ Institutional Shell remains visible</li>
+            <li>✅ WorkspaceHost mounts correctly</li>
+            <li>✅ Workbench renders with panels</li>
+            <li>✅ Existing panels (Welcome, Charts, Watchlist, Orders, Portfolio, etc.) render</li>
+            <li>✅ Dockview layout initializes correctly</li>
+            <li>✅ Visualization providers (ECharts, Dockview, AG Grid) available</li>
+            <li>✅ No console errors or runtime exceptions</li>
+            <li>✅ No visual regressions from Phase‑19</li>
+        </ul>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-15"><h2><span class="section-number">15</span> Repository Tree</h2>
+        <details>
+            <summary>Show / Hide tree of key directories</summary>
+            <div class="content">
+src/
+├── panel-platform/
+│   ├── contracts/
+│   ├── panel-platform.ts
+│   ├── panel-registry.ts
+│   ├── panel-runtime.ts
+│   ├── panel-lifecycle.ts
+│   ├── panel-host.ts
+│   ├── panel-composition.ts
+│   ├── panel-layout.ts
+│   ├── panel-visibility.ts
+│   ├── panel-focus.ts
+│   ├── panel-state.ts
+│   ├── panel-persistence.ts
+│   ├── panel-provider.ts
+│   ├── visualization-integration.ts
+│   ├── workbench-visual-composition.ts
+│   ├── panel-event-state.ts
+│   ├── panel-diagnostics.ts
+│   ├── panel-multiplicity.ts
+│   ├── panel-viewport.ts
+│   ├── panel-platform-integration.ts
+│   ├── panel-platform-certification.ts
+│   └── index.ts
+├── workbench/
+│   └── panels/
+│       ├── catalog/
+│       ├── components/
+│       ├── factory/
+│       ├── library/
+│       ├── metadata/
+│       ├── runtime/
+│       ├── state/
+│       └── index.ts
+├── workspaces/
+│   └── panels/
+├── visualization/
+│   ├── components/
+│   ├── contracts/
+│   ├── engines/
+│   ├── hooks/
+│   ├── lifecycle/
+│   ├── models/
+│   ├── providers/
+│   ├── registry/
+│   ├── rendering/
+│   ├── runtime/
+│   ├── state/
+│   └── index.ts
+├── viewport/
+│   ├── components/
+│   ├── configuration/
+│   ├── contracts/
+│   ├── layout/
+│   ├── manager/
+│   ├── models/
+│   ├── providers/
+│   ├── runtime/
+│   └── index.ts
+├── docking/
+└── providers/
+    └── implementations/
+        └── ui/
+            ├── dockview/
+            ├── echarts/
+            └── ag-grid/
+            </div>
+        </details>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-16"><h2><span class="section-number">16</span> Build Output</h2>
+        <pre>
+> @corei/corei-os@1.0.0 build
+> tsc -b && vite build
+
+vite v7.3.6 building client environment for production...
+✓ 2374 modules transformed.
+dist/index.html                     0.43 kB │ gzip:   0.29 kB
+dist/assets/index-BSSyXHgG.css    134.51 kB │ gzip:  13.40 kB
+dist/assets/index-CHQ2bGpX.js   1,028.40 kB │ gzip: 257.58 kB
+
+(!) Some chunks are larger than 500 kB after minification.
+✓ built in 4.20s
+        </pre>
+        <p>The chunk-size warning is non‑blocking and will be addressed in a later optimization phase (Phase 30).</p>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-17"><h2><span class="section-number">17</span> Certification</h2>
+        <table>
+            <thead><tr><th>Criteria</th><th>Status</th></tr></thead>
+            <tbody>
+                <tr><td>Architecture Review</td><td><span class="text-success">PASS</span></td></tr>
+                <tr><td>Repository Audit</td><td><span class="text-success">PASS</span></td></tr>
+                <tr><td>Integration Test</td><td><span class="text-success">PASS</span></td></tr>
+                <tr><td>Browser Validation</td><td><span class="text-success">PASS</span></td></tr>
+                <tr><td>Documentation Completeness</td><td><span class="text-success">PASS</span></td></tr>
+                <tr><td>Institutional Sign‑off</td><td><span class="text-success">PASS</span></td></tr>
+            </tbody>
+        </table>
+        <p><strong>Status:</strong> <span class="badge success">CERTIFIED COMPLETE</span></p>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-18"><h2><span class="section-number">18</span> References</h2>
+        <ul>
+            <li><a href="#">DOC-11: COREI Stage‑25 Execution Constitution</a></li>
+            <li><a href="#">DOC-11 Stage‑25 Phase‑20 (Authoritative)</a></li>
+            <li><a href="#">DOC-11 Stage‑25 Phase‑20-old (Historical)</a></li>
+            <li><a href="#">COREI_Phase20_Reference.html (this document)</a></li>
+        </ul>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-19"><h2><span class="section-number">19</span> Appendix</h2>
+
+        <h3>A. Phase‑20 21‑Step Execution Map</h3>
+        <ol style="color:#C5CED9; margin-left:1.2rem;">
+            <li><strong>Phase Entry, Repository Reality &amp; Visualization Boundary Reconciliation</strong> – Baseline discovery; certification of existing panel and visualization capabilities.</li>
+            <li><strong>Panel Platform Contract Boundary</strong> – Platform‑level contracts – no runtime.</li>
+            <li><strong>Panel Registry Operationalization</strong> – Panel registration, unregistration, discovery, lookup.</li>
+            <li><strong>Panel Runtime Operationalization</strong> – Runtime coordination (start, stop, reset, shutdown).</li>
+            <li><strong>Panel Lifecycle Operationalization</strong> – Create, open, activate, hide, show, close, dispose.</li>
+            <li><strong>Panel Host Operationalization</strong> – Attachment, detachment, activation, deactivation.</li>
+            <li><strong>Panel Composition Operationalization</strong> – Composition and decomposition coordination.</li>
+            <li><strong>Panel Layout Operationalization</strong> – Layout coordination (arrange, reset).</li>
+            <li><strong>Panel Visibility Operationalization</strong> – Visibility management (show, hide, isVisible).</li>
+            <li><strong>Panel Focus &amp; Activation Operationalization</strong> – Focus and activation coordination.</li>
+            <li><strong>Panel State Operationalization</strong> – State storage, retrieval, clearing.</li>
+            <li><strong>Panel Persistence Operationalization</strong> – Save, restore, remove panel state.</li>
+            <li><strong>Panel Provider &amp; Capability Integration</strong> – Provider connection management.</li>
+            <li><strong>Visualization Integration Boundary</strong> – Visualization provider attachment/detachment.</li>
+            <li><strong>Workbench Visual Composition</strong> – First visible panel integration; visual composition boundary.</li>
+            <li><strong>Panel Event &amp; State Coordination</strong> – Event/State coordination (publish, synchronize, flush).</li>
+            <li><strong>Panel Diagnostics &amp; Observability</strong> – Diagnostics, health, metrics, observability.</li>
+            <li><strong>Institutional Multiplicity Validation</strong> – Multi‑panel, multi‑workspace, multi‑window validation.</li>
+            <li><strong>Cross Browser &amp; Viewport Operationalization</strong> – Viewport and cross‑browser validation.</li>
+            <li><strong>Phase‑20 Final Integration Validation</strong> – Final integration validation and architecture audit.</li>
+            <li><strong>Phase‑20 Certification, Freeze &amp; Consumption Handoff</strong> – Final certification, Git freeze, public API freeze, handoff to Phase‑21.</li>
+        </ol>
+        <p><strong>Critical rule:</strong> Each step's implementation scope is defined by the phase document; repository reconciliation determines the exact implementation delta <strong>within</strong> that scope, not the step sequence.</p>
+
+        <h3>B. Known Issues &amp; Anti‑Drift Controls</h3>
+        <table>
+            <thead><tr><th>Issue</th><th>Mitigation</th></tr></thead>
+            <tbody>
+                <tr><td>Circular dependencies (<code>panel-catalog ↔ intelligence</code>, <code>workspace-runtime ↔ workspace-loader</code>)</td><td>Pre‑existing, inherited from earlier phases; non‑blocking. Will be addressed in later integration steps.</td></tr>
+                <tr><td>Repository has many uncommitted changes (from broader work)</td><td>Phase‑20 maintained its own baseline manifest; Git cleanliness will be enforced at phase freeze.</td></tr>
+                <tr><td>Build chunk‑size warning (&gt;500 kB)</td><td>Non‑blocking; will be addressed in Phase‑30 (Performance) – not within Phase‑20.</td></tr>
+            </tbody>
+        </table>
+        <p><strong>Anti‑Drift Controls (permanent):</strong></p>
+        <ul style="color:#C5CED9; margin-left:1.2rem;">
+            <li>No Phase‑20 step implemented Phase‑21 capabilities (Terminal Workspace).</li>
+            <li>No Phase‑20 step rebuilt Platform Kernel, Shell, Event, State, Registry, Runtime, or Dockview.</li>
+            <li>No Step was skipped, merged, or reordered.</li>
+            <li>Every step was validated before advancing.</li>
+        </ul>
+
+        <h3>C. Repository Identity</h3>
+        <table>
+            <thead><tr><th>Property</th><th>Value</th></tr></thead>
+            <tbody>
+                <tr><td>Branch</td><td>main</td></tr>
+                <tr><td>Commit</td><td>ac8e282</td></tr>
+                <tr><td>Tree</td><td>fd80df27</td></tr>
+                <tr><td>Working directory</td><td>~/corei/ui/corei-os</td></tr>
+            </tbody>
+        </table>
+
+        <h3>D. Phase‑20 Certification Summary</h3>
+        <pre>
+===============================================================================
+STAGE-25
+PHASE-20
+PANEL & VISUALIZATION PLATFORM
+
+STATUS
+------✓ CERTIFIED
+✓ FROZEN
+✓ READY FOR CONSUMPTION
+
+PLATFORM KERNEL                     ✓ CONSUMED
+INSTITUTIONAL SHELL                 ✓ CONSUMED
+CAPABILITY PROVIDER PLATFORM        ✓ CONSUMED
+WINDOW & WORKSPACE PLATFORM         ✓ CONSUMED
+
+PANEL CONTRACTS                     ✓ CERTIFIED
+PANEL REGISTRY                      ✓ CERTIFIED
+PANEL RUNTIME                       ✓ CERTIFIED
+PANEL LIFECYCLE                     ✓ CERTIFIED
+PANEL HOST                          ✓ CERTIFIED
+PANEL COMPOSITION                   ✓ CERTIFIED
+PANEL LAYOUT                        ✓ CERTIFIED
+PANEL VISIBILITY                    ✓ CERTIFIED
+PANEL FOCUS                         ✓ CERTIFIED
+PANEL STATE                         ✓ CERTIFIED
+PANEL PERSISTENCE                   ✓ CERTIFIED
+PANEL PROVIDER                      ✓ CERTIFIED
+VISUALIZATION INTEGRATION           ✓ CERTIFIED
+WORKBENCH VISUAL COMPOSITION        ✓ CERTIFIED
+PANEL EVENT & STATE                 ✓ CERTIFIED
+PANEL DIAGNOSTICS                   ✓ CERTIFIED
+PANEL MULTIPLICITY                  ✓ CERTIFIED
+CROSS BROWSER & VIEWPORT            ✓ CERTIFIED
+PANEL PLATFORM INTEGRATION          ✓ CERTIFIED
+
+===============================================================================
+AUTHORIZED CHANGE BOUNDARY
+--------------------------
+PHASE-20 IS NOW FROZEN
+
+FUTURE PHASES MAY ONLY CONSUME
+THIS PLATFORM.
+
+NO REDESIGN
+NO OWNERSHIP TRANSFER
+NO DUPLICATE IMPLEMENTATION
+===============================================================================
+HANDOFF
+
+Authorized Next Phase
+STAGE-25 → PHASE-21 — Terminal Workspace Platform
+
+Consumption Baseline
+✓ Platform Kernel (Phase-01–16)
+✓ Institutional Shell (Phase-17)
+✓ Capability Provider Platform (Phase-18)
+✓ Window & Workspace Platform (Phase-19)
+✓ Panel & Visualization Platform (Phase-20)
+
+Phase-21 will consume all certified foundations above and begin operationalizing the Terminal Workspace Platform, without redesigning or duplicating any completed capabilities.
+===============================================================================
+        </pre>
+    </section>
+
+    <div style="text-align:center;font-size:11px;color:#6E7883;border-top:1px solid #28303C;padding-top:1rem;margin-top:2rem;">
+        <p>COREI Stage‑25 Phase‑20 Reference &bull; Generated 2026-08-09 &bull; Authoritative</p>
+    </div>
+
+</main>
+</body>
+</html>

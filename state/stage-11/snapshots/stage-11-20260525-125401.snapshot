@@ -1,0 +1,261 @@
+/home/coreeye/corei/platform
+├── config-control
+├── contracts
+│   ├── health
+│   │   └── health-contract.md
+│   └── metadata
+│       └── service-metadata-contract.md
+├── determinism
+├── event-bus
+├── flow-control
+├── governance
+├── lineage
+├── mode-governance
+├── policy-runtime
+├── README.md
+├── replay
+├── resilience
+├── runtime
+├── runtime-governance
+│   ├── health
+│   ├── ingress
+│   ├── namespace
+│   │   └── platform-namespace.yaml
+│   ├── network
+│   │   └── platform-network-policy.yaml
+│   ├── policies
+│   ├── rbac
+│   │   ├── platform-role-binding.yaml
+│   │   ├── platform-role.yaml
+│   │   └── platform-service-account.yaml
+│   └── validate-runtime-governance.sh
+├── sdk
+│   ├── artifacts
+│   ├── dist
+│   │   ├── trading_platform_sdk-0.1.0-py3-none-any.whl
+│   │   └── trading_platform_sdk-0.1.0.tar.gz
+│   ├── pyproject.toml
+│   ├── README.md
+│   ├── registry
+│   │   ├── harbor-pypi.conf
+│   │   └── validate-registry.sh
+│   ├── requirements.txt
+│   ├── sdk
+│   │   ├── bootstrap
+│   │   │   ├── __init__.py
+│   │   │   ├── __pycache__
+│   │   │   │   ├── __init__.cpython-310.pyc
+│   │   │   │   └── validator.cpython-310.pyc
+│   │   │   └── validator.py
+│   │   ├── config
+│   │   │   ├── client.py
+│   │   │   └── __init__.py
+│   │   ├── context
+│   │   │   ├── execution_context.py
+│   │   │   ├── __init__.py
+│   │   │   └── trace_context.py
+│   │   ├── event
+│   │   │   ├── client.py
+│   │   │   ├── governance.py
+│   │   │   ├── __init__.py
+│   │   │   ├── interceptor.py
+│   │   │   └── __pycache__
+│   │   │       ├── __init__.cpython-310.pyc
+│   │   │       └── interceptor.cpython-310.pyc
+│   │   ├── flow_control
+│   │   │   ├── client.py
+│   │   │   └── __init__.py
+│   │   ├── __init__.py
+│   │   ├── lineage
+│   │   │   ├── client.py
+│   │   │   ├── __init__.py
+│   │   │   └── __pycache__
+│   │   │       ├── client.cpython-310.pyc
+│   │   │       └── __init__.cpython-310.pyc
+│   │   ├── __pycache__
+│   │   │   └── __init__.cpython-310.pyc
+│   │   ├── resilience
+│   │   │   ├── client.py
+│   │   │   └── __init__.py
+│   │   └── workflow
+│   │       ├── client.py
+│   │       └── __init__.py
+│   ├── setup.py
+│   ├── tests
+│   │   ├── __pycache__
+│   │   │   └── test_sdk.cpython-310-pytest-8.3.2.pyc
+│   │   └── test_sdk.py
+│   ├── trading_platform_sdk.egg-info
+│   │   ├── dependency_links.txt
+│   │   ├── PKG-INFO
+│   │   ├── requires.txt
+│   │   ├── SOURCES.txt
+│   │   └── top_level.txt
+│   ├── validate-version.py
+│   └── VERSION
+├── security
+├── service-template
+│   ├── config
+│   ├── Dockerfile
+│   ├── helm
+│   │   ├── Chart.yaml
+│   │   ├── templates
+│   │   │   └── deployment.yaml
+│   │   └── values.yaml
+│   ├── requirements.txt
+│   ├── scripts
+│   │   └── validate-service-template.sh
+│   ├── src
+│   │   ├── app.py
+│   │   └── __pycache__
+│   │       └── app.cpython-310.pyc
+│   └── tests
+│       ├── __pycache__
+│       │   └── test_health_contracts.cpython-310-pytest-8.3.2.pyc
+│       └── test_health_contracts.py
+├── shared
+├── system
+│   ├── deployment_order_enforcer.py
+│   ├── health
+│   │   └── health_aggregator.py
+│   └── kill-switch
+├── system-registry
+│   └── README.md
+├── system-state
+└── workflow-engine
+/home/coreeye/corei/services
+├── alert-service
+│   ├── config
+│   ├── helm
+│   │   └── templates
+│   ├── src
+│   └── tests
+├── audit-service
+│   ├── config
+│   ├── helm
+│   │   └── templates
+│   ├── src
+│   └── tests
+├── config-service
+│   ├── config
+│   ├── helm
+│   │   └── templates
+│   ├── src
+│   └── tests
+├── config-snapshot-service
+│   ├── config
+│   ├── helm
+│   │   └── templates
+│   ├── src
+│   └── tests
+├── event-ingestion-service
+│   ├── config
+│   ├── helm
+│   │   └── templates
+│   ├── src
+│   └── tests
+├── event-ordering-service
+│   ├── config
+│   ├── helm
+│   │   └── templates
+│   ├── src
+│   └── tests
+├── event-validation-service
+│   ├── config
+│   ├── helm
+│   │   └── templates
+│   ├── src
+│   └── tests
+├── failure-handling-service
+│   ├── config
+│   ├── helm
+│   │   └── templates
+│   ├── src
+│   └── tests
+├── identity-service
+│   ├── config
+│   ├── helm
+│   │   └── templates
+│   ├── src
+│   └── tests
+├── market-data-service
+│   ├── app
+│   │   └── main.py
+│   ├── config
+│   │   └── service.yaml
+│   ├── contracts
+│   │   └── events.yaml
+│   ├── Dockerfile
+│   ├── helm
+│   │   ├── Chart.yaml
+│   │   ├── templates
+│   │   │   ├── deployment.yaml
+│   │   │   └── service.yaml
+│   │   └── values.yaml
+│   ├── Makefile
+│   ├── README.md
+│   ├── scripts
+│   │   └── start.sh
+│   ├── service-metadata.yaml
+│   ├── service.yaml
+│   ├── src
+│   └── tests
+│       └── test_health.py
+├── orchestration-service
+│   ├── config
+│   ├── helm
+│   │   └── templates
+│   ├── src
+│   └── tests
+├── platform
+│   ├── audit-service
+│   ├── config
+│   ├── config-service
+│   ├── config-snapshot-service
+│   ├── helm
+│   │   └── templates
+│   ├── src
+│   └── tests
+├── portfolio-service
+│   ├── config
+│   ├── helm
+│   │   └── templates
+│   ├── src
+│   └── tests
+├── README.md
+├── replay-engine-service
+│   ├── config
+│   ├── helm
+│   │   └── templates
+│   ├── src
+│   └── tests
+├── snapshot-service
+│   ├── config
+│   ├── helm
+│   │   └── templates
+│   ├── src
+│   └── tests
+└── _template
+    ├── app
+    │   └── main.py
+    ├── config
+    │   └── service.yaml
+    ├── contracts
+    │   └── events.yaml
+    ├── Dockerfile
+    ├── helm
+    │   ├── Chart.yaml
+    │   ├── templates
+    │   │   ├── deployment.yaml
+    │   │   └── service.yaml
+    │   └── values.yaml
+    ├── Makefile
+    ├── README.md
+    ├── scripts
+    │   └── start.sh
+    ├── service.yaml
+    ├── src
+    └── tests
+        └── test_health.py
+
+105 directories, 28 files

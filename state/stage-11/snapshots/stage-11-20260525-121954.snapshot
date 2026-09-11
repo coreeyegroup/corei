@@ -1,0 +1,178 @@
+/home/coreeye/corei/platform
+├── config-control
+├── contracts
+├── determinism
+├── event-bus
+├── flow-control
+├── governance
+├── lineage
+├── mode-governance
+├── policy-runtime
+├── README.md
+├── replay
+├── resilience
+├── runtime
+├── sdk
+│   └── sdk
+│       ├── bootstrap
+│       │   └── __init__.py
+│       ├── config
+│       │   └── __init__.py
+│       ├── context
+│       │   └── __init__.py
+│       ├── event
+│       │   └── __init__.py
+│       ├── flow_control
+│       │   └── __init__.py
+│       ├── __init__.py
+│       ├── lineage
+│       │   └── __init__.py
+│       ├── resilience
+│       │   └── __init__.py
+│       └── workflow
+│           └── __init__.py
+├── security
+├── shared
+├── system
+│   ├── health
+│   └── kill-switch
+├── system-registry
+│   └── README.md
+├── system-state
+└── workflow-engine
+/home/coreeye/corei/services
+├── alert-service
+│   ├── config
+│   ├── helm
+│   │   └── templates
+│   ├── src
+│   └── tests
+├── audit-service
+│   ├── config
+│   ├── helm
+│   │   └── templates
+│   ├── src
+│   └── tests
+├── config-service
+│   ├── config
+│   ├── helm
+│   │   └── templates
+│   ├── src
+│   └── tests
+├── config-snapshot-service
+│   ├── config
+│   ├── helm
+│   │   └── templates
+│   ├── src
+│   └── tests
+├── event-ingestion-service
+│   ├── config
+│   ├── helm
+│   │   └── templates
+│   ├── src
+│   └── tests
+├── event-ordering-service
+│   ├── config
+│   ├── helm
+│   │   └── templates
+│   ├── src
+│   └── tests
+├── event-validation-service
+│   ├── config
+│   ├── helm
+│   │   └── templates
+│   ├── src
+│   └── tests
+├── failure-handling-service
+│   ├── config
+│   ├── helm
+│   │   └── templates
+│   ├── src
+│   └── tests
+├── identity-service
+│   ├── config
+│   ├── helm
+│   │   └── templates
+│   ├── src
+│   └── tests
+├── market-data-service
+│   ├── app
+│   │   └── main.py
+│   ├── config
+│   │   └── service.yaml
+│   ├── contracts
+│   │   └── events.yaml
+│   ├── Dockerfile
+│   ├── helm
+│   │   ├── Chart.yaml
+│   │   ├── templates
+│   │   │   ├── deployment.yaml
+│   │   │   └── service.yaml
+│   │   └── values.yaml
+│   ├── Makefile
+│   ├── README.md
+│   ├── scripts
+│   │   └── start.sh
+│   ├── service-metadata.yaml
+│   ├── service.yaml
+│   ├── src
+│   └── tests
+│       └── test_health.py
+├── orchestration-service
+│   ├── config
+│   ├── helm
+│   │   └── templates
+│   ├── src
+│   └── tests
+├── platform
+│   ├── audit-service
+│   ├── config
+│   ├── config-service
+│   ├── config-snapshot-service
+│   ├── helm
+│   │   └── templates
+│   ├── src
+│   └── tests
+├── portfolio-service
+│   ├── config
+│   ├── helm
+│   │   └── templates
+│   ├── src
+│   └── tests
+├── README.md
+├── replay-engine-service
+│   ├── config
+│   ├── helm
+│   │   └── templates
+│   ├── src
+│   └── tests
+├── snapshot-service
+│   ├── config
+│   ├── helm
+│   │   └── templates
+│   ├── src
+│   └── tests
+└── _template
+    ├── app
+    │   └── main.py
+    ├── config
+    │   └── service.yaml
+    ├── contracts
+    │   └── events.yaml
+    ├── Dockerfile
+    ├── helm
+    │   ├── Chart.yaml
+    │   ├── templates
+    │   │   ├── deployment.yaml
+    │   │   └── service.yaml
+    │   └── values.yaml
+    ├── Makefile
+    ├── README.md
+    ├── scripts
+    │   └── start.sh
+    ├── service.yaml
+    ├── src
+    └── tests
+        └── test_health.py
+
+105 directories, 28 files

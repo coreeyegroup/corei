@@ -29,6 +29,9 @@ spec:
             - configMapRef:
                 name: market-data-config
 
+            - secretRef:
+                name: market-data-secrets
+
           command:
             - python
 

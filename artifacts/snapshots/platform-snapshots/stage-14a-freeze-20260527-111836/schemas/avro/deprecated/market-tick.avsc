@@ -1,0 +1,36 @@
+{
+  "type": "record",
+  "name": "MarketTick",
+  "namespace": "core.market",
+
+  "fields": [
+    {
+      "name": "event_id",
+      "type": "string"
+    },
+    {
+      "name": "instrument",
+      "type": "string"
+    },
+    {
+      "name": "timestamp",
+      "type": "long"
+    },
+    {
+      "name": "bid_price",
+      "type": "string"
+    },
+    {
+      "name": "ask_price",
+      "type": "string"
+    },
+    {
+      "name": "bid_size",
+      "type": "string"
+    },
+    {
+      "name": "ask_size",
+      "type": "string"
+    }
+  ]
+}

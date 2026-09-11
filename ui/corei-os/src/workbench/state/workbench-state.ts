@@ -1,25 +1,46 @@
 /**
  * ============================================================================
- * STAGE-25
- * STEP-01
- * BUILD UNIT-11
+ * COREI OPERATING SYSTEM
  *
- * FILE
+ * STAGE-25 / PHASE-17
+ *
+ * FILE:
  * workbench-state.ts
  *
- * PURPOSE
+ * PURPOSE:
  * Central Workbench State
+ *
+ * ACTIVITY MODEL:
+ * Operator-priority institutional navigation.
+ *
+ * Existing state ownership is preserved.
+ * Activity selection remains owned by Workbench State.
  * ============================================================================
  */
 
 import { create } from "zustand";
 
+
+/* ==========================================================================
+ * ACTIVITY TYPE
+ * ========================================================================== */
+
 export type ActivityType =
     | "trading"
     | "infrastructure"
-    | "research"
     | "risk"
+    | "market"
+    | "research"
+    | "portfolio"
+    | "corei-os"
+    | "executive"
+    | "compliance"
     | "ai";
+
+
+/* ==========================================================================
+ * WORKBENCH STATE
+ * ========================================================================== */
 
 export interface WorkbenchState {
 
@@ -33,9 +54,13 @@ export interface WorkbenchState {
 
     bottomVisible: boolean;
 
-    setActivity(activity: ActivityType): void;
+    setActivity(
+        activity: ActivityType
+    ): void;
 
-    setWorkspace(workspace: string): void;
+    setWorkspace(
+        workspace: string
+    ): void;
 
     toggleSidebar(): void;
 
@@ -45,37 +70,62 @@ export interface WorkbenchState {
 
 }
 
-export const useWorkbenchState = create<WorkbenchState>((set) => ({
 
-    activity: "trading",
+/* ==========================================================================
+ * DEFAULT STATE
+ * ========================================================================== */
 
-    workspace: "trading",
+export const useWorkbenchState =
+    create<WorkbenchState>((set) => ({
 
-    sidebarVisible: true,
+        /*
+         * Trading remains the primary operator entry point.
+         */
+        activity: "trading",
 
-    rightVisible: true,
+        workspace: "trading",
 
-    bottomVisible: true,
+        sidebarVisible: true,
 
-    setActivity: (activity) =>
-        set({ activity }),
+        rightVisible: true,
 
-    setWorkspace: (workspace) =>
-        set({ workspace }),
+        bottomVisible: true,
 
-    toggleSidebar: () =>
-        set((state) => ({
-            sidebarVisible: !state.sidebarVisible
-        })),
 
-    toggleRight: () =>
-        set((state) => ({
-            rightVisible: !state.rightVisible
-        })),
+        setActivity: (
+            activity
+        ) =>
+            set({
+                activity
+            }),
 
-    toggleBottom: () =>
-        set((state) => ({
-            bottomVisible: !state.bottomVisible
-        }))
 
-}));
+        setWorkspace: (
+            workspace
+        ) =>
+            set({
+                workspace
+            }),
+
+
+        toggleSidebar: () =>
+            set((state) => ({
+                sidebarVisible:
+                    !state.sidebarVisible
+            })),
+
+
+        toggleRight: () =>
+            set((state) => ({
+                rightVisible:
+                    !state.rightVisible
+            })),
+
+
+        toggleBottom: () =>
+            set((state) => ({
+                bottomVisible:
+                    !state.bottomVisible
+            }))
+
+    }));

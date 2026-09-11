@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <title>Architecture Principles</title>
+  <style>
+  body {
+    background: #0A0D12;
+    color: #E3E7EC;
+    font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px 40px;
+  }
+
+  h1 {
+    font-size: 26px;
+    font-weight: 600;
+    color: #C6A46A;
+    margin: 24px 0 12px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 8px;
+  }
+
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #D4B88A;
+    margin: 20px 0 10px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 6px;
+  }
+
+  h3 {
+    font-size: 17px;
+    font-weight: 500;
+    color: #E3E7EC;
+    margin: 16px 0 8px 0;
+  }
+
+  h4 {
+    font-size: 15px;
+    font-weight: 500;
+    color: #C5CED9;
+    margin: 12px 0 6px 0;
+  }
+
+  p {
+    margin-bottom: 8px;
+    color: #C5CED9;
+  }
+
+  ul,
+  ol {
+    padding-left: 24px;
+    margin-bottom: 8px;
+    color: #C5CED9;
+  }
+
+  li {
+    margin-bottom: 2px;
+  }
+
+  code {
+    font-family: 'JetBrains Mono', 'Cascadia Code', monospace;
+    font-size: 13px;
+    background: rgba(255,255,255,0.05);
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid #28303C;
+    color: #C5CED9;
+  }
+
+  pre {
+    background: #18202A;
+    border: 1px solid #28303C;
+    border-radius: 6px;
+    padding: 16px 20px;
+    overflow: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 12px 0 16px 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #C5CED9;
+  }
+
+  pre code {
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 16px 0;
+    font-size: 13px;
+    color: #C5CED9;
+  }
+
+  th {
+    background: #18202A;
+    color: #C5CED9;
+    font-weight: 600;
+    text-align: left;
+    padding: 6px 12px;
+    border: 1px solid #28303C;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  td {
+    padding: 4px 12px;
+    border: 1px solid #28303C;
+    background: #0E1219;
+  }
+
+  tr:nth-child(even) td {
+    background: #121821;
+  }
+
+  blockquote {
+    border-left: 3px solid #C6A46A;
+    padding-left: 16px;
+    margin: 8px 0 12px 0;
+    color: #6E7883;
+    font-style: italic;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #28303C;
+    margin: 24px 0;
+  }
+
+  a {
+    color: #8BB4F0;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  strong {
+    color: #E3E7EC;
+    font-weight: 600;
+  }
+
+  img {
+    max-width: 100%;
+    border-radius: 4px;
+    border: 1px solid #28303C;
+  }
+
+  .doc-footer {
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid #28303C;
+    font-size: 12px;
+    color: #6E7883;
+    font-family: monospace;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+</style>
+</head>
+
+<body>
+
+  <div
+    class="doc-header"
+    style="
+      background:#121821;
+      border:1px solid #28303C;
+      border-radius:8px;
+      padding:1.2rem 1.8rem;
+      margin-bottom:1.8rem;
+    "
+  >
+
+    <div
+      style="
+        color:#C6A46A;
+        font-weight:600;
+        font-size:13px;
+        text-transform:uppercase;
+        letter-spacing:0.05em;
+      "
+    >
+      COREI · Knowledge System
+    </div>
+
+
+    <div
+      style="
+        color:#6E7883;
+        font-family:monospace;
+        font-size:14px;
+        margin-top:0.1rem;
+      "
+    >
+      COREI-AR-03.02
+    </div>
+
+
+    <h1
+      style="
+        font-size:28px;
+        font-weight:600;
+        color:#E3E7EC;
+        margin:0.1rem 0;
+        border-bottom:none;
+        padding-bottom:0;
+      "
+    >
+      Architecture Principles
+    </h1>
+
+    <div
+      style="
+        font-size:16px;
+        color:#C5CED9;
+      "
+    >
+      03 — Architecture
+      ·
+      Constitutional
+    </div>
+
+    <div
+      style="
+        display:flex;
+        flex-wrap:wrap;
+        gap:0.6rem 1.8rem;
+        margin-top:0.6rem;
+        font-size:13px;
+      "
+    >
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Status
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          Approved
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Version
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          1
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Classification
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          Constitutional
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Owner
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          COREI
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Repository
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+            font-family:monospace;
+          "
+        >
+          knowledge/03-architecture/
+        </span>
+      </span>
+
+    </div>
+
+
+    <div
+      style="
+        margin-top:0.8rem;
+        padding-top:0.6rem;
+        border-top:1px solid #28303C;
+        display:flex;
+        flex-wrap:wrap;
+        gap:0.3rem;
+        align-items:center;
+      "
+    >
+      <span
+        style="
+          font-size:11px;
+          text-transform:uppercase;
+          color:#6E7883;
+          letter-spacing:0.04em;
+          font-weight:600;
+          margin-right:0.4rem;
+        "
+      >
+        Depends On
+      </span>
+
+      <span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-KS-00.00</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-KS-00.01</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-KS-00.02</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-KS-00.03</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-KS-00.04</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ID-01.00</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ID-01.01</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ID-01.02</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ID-01.05</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-GV-02.00</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-GV-02.01</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-GV-02.02</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-GV-02.03</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-AR-03.00</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-AR-03.01</span>
+
+    </div>
+
+
+  </div>
+
+
+  <div
+    style="
+      background:#0E1219;
+      border:1px solid #28303C;
+      border-radius:6px;
+      padding:0.8rem 1.2rem;
+      margin:0.6rem 0 1.2rem 0;
+      font-family:monospace;
+      font-size:12px;
+      color:#C5CED9;
+      overflow-x:auto;
+      line-height:2;
+    "
+  >
+
+    <div
+      style="
+        font-weight:600;
+        color:#C6A46A;
+        margin-bottom:0.25rem;
+      "
+    >
+      Dependency Chain
+    </div>
+
+    <div
+      style="
+        display:flex;
+        flex-wrap:wrap;
+        align-items:center;
+        gap:4px;
+      "
+    >
+
+      <span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-KS-00.00</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-KS-00.01</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-KS-00.02</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-KS-00.03</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-KS-00.04</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ID-01.00</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ID-01.01</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ID-01.02</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ID-01.05</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-GV-02.00</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-GV-02.01</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-GV-02.02</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-GV-02.03</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-AR-03.00</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-AR-03.01</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span>
+
+
+      <span
+        style="
+          color:#C6A46A;
+          font-weight:600;
+          background:rgba(198,164,106,0.15);
+          padding:0 8px;
+          border-radius:3px;
+          white-space:nowrap;
+        "
+      >
+        COREI-AR-03.02
+      </span>
+
+
+    </div>
+
+  </div>
+
+
+  <h1>COREI ARCHITECTURE PRINCIPLES</h1>
+<h1>DOCUMENT ID</h1>
+<h1>COREI-AR-03.02</h1>
+<h1>DOCUMENT NAME</h1>
+<h1>ARCHITECTURE PRINCIPLES</h1>
+<h1>VERSION</h1>
+<h1>1.0</h1>
+<h1>STATUS</h1>
+<h1>APPROVED</h1>
+<h1>CLASSIFICATION</h1>
+<h1>CONSTITUTIONAL</h1>
+<h1>1. PURPOSE</h1>
+<p>The COREI Architecture Principles establish the<br>
+constitutional architectural principles governing<br>
+every institutional architecture, platform,<br>
+system, capability, and future evolution of COREI.</p>
+<p>These principles define the permanent architectural<br>
+boundaries of the institution.</p>
+<p>No architecture shall violate these principles.</p>
+<h1>2. CONSTITUTIONAL PRINCIPLE</h1>
+<p>Architecture exists to faithfully represent the<br>
+Unseen Core of a complex system.</p>
+<p>Every architectural decision shall preserve<br>
+institutional understanding while enabling<br>
+responsible implementation and long-term evolution.</p>
+<h1>3. FUNDAMENTAL ARCHITECTURE PRINCIPLES</h1>
+<p>The COREI Institution is governed by the following<br>
+constitutional architectural principles.</p>
+<p>Principle 1</p>
+<p>Understanding Before Structure.</p>
+<p>No architecture shall be created without validated<br>
+institutional understanding.</p>
+<p>Principle 2</p>
+<p>Identity Before Design.</p>
+<p>Every architecture shall preserve the constitutional<br>
+identity of COREI.</p>
+<p>Principle 3</p>
+<p>Governance Before Implementation.</p>
+<p>Architectural decisions shall remain within<br>
+constitutional governance boundaries.</p>
+<p>Principle 4</p>
+<p>Structure Before Technology.</p>
+<p>Technology implements architecture.</p>
+<p>Technology never defines architecture.</p>
+<p>Principle 5</p>
+<p>Institution Before Solution.</p>
+<p>Institutional architecture takes precedence over<br>
+individual project or solution architecture.</p>
+<p>Principle 6</p>
+<p>Modularity Before Complexity.</p>
+<p>Architectures shall consist of cohesive,<br>
+loosely coupled,<br>
+well-defined components.</p>
+<p>Principle 7</p>
+<p>Explicit Boundaries.</p>
+<p>Every architectural responsibility,<br>
+ownership,<br>
+interface,<br>
+and dependency shall be explicitly defined.</p>
+<p>Principle 8</p>
+<p>Deterministic Design.</p>
+<p>Architectures shall behave predictably,<br>
+consistently,<br>
+and reproducibly.</p>
+<p>Principle 9</p>
+<p>Evolution Without Identity Loss.</p>
+<p>Architectures shall continuously evolve while<br>
+preserving constitutional identity.</p>
+<p>Principle 10</p>
+<p>Knowledge Preservation.</p>
+<p>Architectural knowledge is an institutional asset<br>
+and shall remain documented,<br>
+traceable,<br>
+and continuously improved.</p>
+<h1>4. ARCHITECTURAL PRIORITIES</h1>
+<p>When architectural objectives conflict,<br>
+the following priority order shall apply.</p>
+<p>Constitutional Identity</p>
+<p>↓</p>
+<p>Governance</p>
+<p>↓</p>
+<p>Institutional Understanding</p>
+<p>↓</p>
+<p>Architectural Integrity</p>
+<p>↓</p>
+<p>Long-Term Maintainability</p>
+<p>↓</p>
+<p>Scalability</p>
+<p>↓</p>
+<p>Performance</p>
+<p>↓</p>
+<p>Technology Preference</p>
+<p>↓</p>
+<p>Implementation Convenience</p>
+<p>Lower priorities shall never compromise<br>
+higher priorities.</p>
+<h1>5. ARCHITECTURAL CONSTRAINTS</h1>
+<p>Architectures shall never</p>
+<p>contradict COREI Identity,</p>
+<p>violate Governance Principles,</p>
+<p>hide structural complexity,</p>
+<p>introduce unclear ownership,</p>
+<p>create circular dependencies,</p>
+<p>couple unrelated responsibilities,</p>
+<p>depend upon temporary technologies,</p>
+<p>or compromise institutional continuity.</p>
+<p>Architectural shortcuts are constitutionally<br>
+prohibited.</p>
+<h1>6. ARCHITECTURAL APPLICATION</h1>
+<p>These principles govern every COREI architecture.</p>
+<p>Institutional Architecture</p>
+<p>Knowledge Architecture</p>
+<p>Business Architecture</p>
+<p>Intelligence Architecture</p>
+<p>Platform Architecture</p>
+<p>System Architecture</p>
+<p>Data Architecture</p>
+<p>Security Architecture</p>
+<p>Infrastructure Architecture</p>
+<p>Artificial Intelligence Architecture</p>
+<p>Future architectural domains</p>
+<p>shall inherit these principles.</p>
+<h1>7. ARCHITECTURE VALIDATION</h1>
+<p>Every significant architecture shall answer the<br>
+following questions.</p>
+<p>Does it preserve COREI Identity?</p>
+<p>Does it accurately represent the Unseen Core?</p>
+<p>Is governance preserved?</p>
+<p>Are responsibilities explicit?</p>
+<p>Are boundaries clearly defined?</p>
+<p>Is the architecture deterministic?</p>
+<p>Can it evolve without losing identity?</p>
+<p>Will it strengthen long-term institutional capability?</p>
+<p>If any answer is negative,</p>
+<p>the architecture shall be reviewed before approval.</p>
+<h1>8. ARCHITECTURE DECLARATION</h1>
+<p>COREI architectures exist to transform institutional<br>
+understanding into enduring institutional structures.</p>
+<p>Architectures shall remain</p>
+<p>knowledge-driven,</p>
+<p>identity-aligned,</p>
+<p>governance-compliant,</p>
+<p>modular,</p>
+<p>deterministic,</p>
+<p>technology-independent,</p>
+<p>and continuously evolvable.</p>
+<p>Architectural excellence is measured by the quality<br>
+of understanding it preserves, not by the complexity<br>
+of its implementation.</p>
+<h1>9. AUTHORITY</h1>
+<p>This document defines the constitutional<br>
+Architecture Principles of COREI.</p>
+<p>Every Institutional Architecture,</p>
+<p>Knowledge Architecture,</p>
+<p>Business Architecture,</p>
+<p>Platform Architecture,</p>
+<p>System Architecture,</p>
+<p>Engineering Standard,</p>
+<p>Platform,</p>
+<p>Artificial Intelligence capability,</p>
+<p>and future architectural capability</p>
+<p>shall comply with these principles.</p>
+<p>Changes to these principles require<br>
+constitutional review.</p>
+<h1>END OF DOCUMENT</h1>
+<h1>DOCUMENT ID</h1>
+<h1>COREI-AR-03.02</h1>
+<h1>DOCUMENT NAME</h1>
+<h1>ARCHITECTURE PRINCIPLES</h1>
+
+
+  <div class="doc-footer">
+
+    <span>DOCUMENT ID: COREI-AR-03.02</span>
+
+    <span>
+      DOCUMENT NAME: Architecture Principles
+    </span>
+
+    <span>
+      VERSION: 1
+    </span>
+
+  </div>
+
+</body>
+</html>

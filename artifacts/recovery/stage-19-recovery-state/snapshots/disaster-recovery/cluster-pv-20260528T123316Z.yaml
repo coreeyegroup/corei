@@ -1,0 +1,152 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    annotations:
+      longhorn.io/volume-scheduling-error: ""
+      pv.kubernetes.io/provisioned-by: driver.longhorn.io
+      volume.kubernetes.io/provisioner-deletion-secret-name: ""
+      volume.kubernetes.io/provisioner-deletion-secret-namespace: ""
+    creationTimestamp: "2026-05-26T16:59:27Z"
+    finalizers:
+    - external-provisioner.volume.kubernetes.io/finalizer
+    - kubernetes.io/pv-protection
+    - external-attacher/driver-longhorn-io
+    name: pvc-5ae553fe-8457-4806-9324-588758592dfb
+    resourceVersion: "211424"
+    uid: b730cd28-e5c5-4156-81fc-43010ef0fd29
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 10Gi
+    claimRef:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      name: claim-coreeye
+      namespace: research
+      resourceVersion: "136582"
+      uid: 5ae553fe-8457-4806-9324-588758592dfb
+    csi:
+      driver: driver.longhorn.io
+      fsType: ext4
+      volumeAttributes:
+        backupTargetName: default
+        dataEngine: v1
+        dataLocality: disabled
+        disableRevisionCounter: "true"
+        fromBackup: ""
+        fsType: ext4
+        numberOfReplicas: "3"
+        staleReplicaTimeout: "30"
+        storage.kubernetes.io/csiProvisionerIdentity: 1779693850406-48-driver.longhorn.io
+        unmapMarkSnapChainRemoved: ignored
+      volumeHandle: pvc-5ae553fe-8457-4806-9324-588758592dfb
+    persistentVolumeReclaimPolicy: Delete
+    storageClassName: longhorn
+    volumeMode: Filesystem
+  status:
+    lastPhaseTransitionTime: "2026-05-26T16:59:27Z"
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    annotations:
+      longhorn.io/volume-scheduling-error: replica scheduling failed
+      pv.kubernetes.io/provisioned-by: driver.longhorn.io
+      volume.kubernetes.io/provisioner-deletion-secret-name: ""
+      volume.kubernetes.io/provisioner-deletion-secret-namespace: ""
+    creationTimestamp: "2026-05-26T11:29:00Z"
+    finalizers:
+    - external-provisioner.volume.kubernetes.io/finalizer
+    - kubernetes.io/pv-protection
+    - external-attacher/driver-longhorn-io
+    name: pvc-94aa2c07-d8c7-4293-97f6-461bea9c88fd
+    resourceVersion: "213664"
+    uid: fef36c65-8787-4de5-a94e-303e9f4ec7c2
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 20Gi
+    claimRef:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      name: kafka-data-kafka-0
+      namespace: kafka
+      resourceVersion: "106699"
+      uid: 94aa2c07-d8c7-4293-97f6-461bea9c88fd
+    csi:
+      driver: driver.longhorn.io
+      fsType: ext4
+      volumeAttributes:
+        backupTargetName: default
+        dataEngine: v1
+        dataLocality: disabled
+        disableRevisionCounter: "true"
+        fromBackup: ""
+        fsType: ext4
+        numberOfReplicas: "3"
+        staleReplicaTimeout: "30"
+        storage.kubernetes.io/csiProvisionerIdentity: 1779693850406-48-driver.longhorn.io
+        unmapMarkSnapChainRemoved: ignored
+      volumeHandle: pvc-94aa2c07-d8c7-4293-97f6-461bea9c88fd
+    persistentVolumeReclaimPolicy: Delete
+    storageClassName: longhorn
+    volumeMode: Filesystem
+  status:
+    lastPhaseTransitionTime: "2026-05-26T11:29:00Z"
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    annotations:
+      longhorn.io/volume-scheduling-error: replica scheduling failed
+      pv.kubernetes.io/provisioned-by: driver.longhorn.io
+      volume.kubernetes.io/provisioner-deletion-secret-name: ""
+      volume.kubernetes.io/provisioner-deletion-secret-namespace: ""
+    creationTimestamp: "2026-05-26T15:48:11Z"
+    finalizers:
+    - external-provisioner.volume.kubernetes.io/finalizer
+    - kubernetes.io/pv-protection
+    - external-attacher/driver-longhorn-io
+    name: pvc-a2ab8b90-3ac2-4eab-a02d-d80949d83797
+    resourceVersion: "213666"
+    uid: 1c9c6e13-cbb8-4330-9eaf-a8ff9575fa84
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 1Gi
+    claimRef:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      name: hub-db-dir
+      namespace: research
+      resourceVersion: "134458"
+      uid: a2ab8b90-3ac2-4eab-a02d-d80949d83797
+    csi:
+      driver: driver.longhorn.io
+      fsType: ext4
+      volumeAttributes:
+        backupTargetName: default
+        dataEngine: v1
+        dataLocality: disabled
+        disableRevisionCounter: "true"
+        fromBackup: ""
+        fsType: ext4
+        numberOfReplicas: "3"
+        staleReplicaTimeout: "30"
+        storage.kubernetes.io/csiProvisionerIdentity: 1779693850406-48-driver.longhorn.io
+        unmapMarkSnapChainRemoved: ignored
+      volumeHandle: pvc-a2ab8b90-3ac2-4eab-a02d-d80949d83797
+    persistentVolumeReclaimPolicy: Delete
+    storageClassName: longhorn
+    volumeMode: Filesystem
+  status:
+    lastPhaseTransitionTime: "2026-05-26T15:48:11Z"
+    phase: Bound
+kind: List
+metadata:
+  resourceVersion: ""

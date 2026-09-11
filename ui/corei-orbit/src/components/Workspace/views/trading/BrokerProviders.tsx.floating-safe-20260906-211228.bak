@@ -1,0 +1,2747 @@
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+
+import { useBrokerIntelligenceStore } from '../../../../store/brokerIntelligenceStore';
+import { brokerIntelligenceService } from '../../../../services/brokerIntelligenceService';
+import { toast } from 'sonner';
+
+import './BrokerProviders.css';
+
+type ProviderRecord = Record<string, any>;
+
+type ColumnKey =
+  | 'provider'
+  | 'type'
+  | 'adapter'
+  | 'version'
+  | 'region'
+  | 'environment'
+  | 'state'
+  | 'accounts';
+
+type ColumnWidths = Record<ColumnKey, number>;
+
+const DEFAULT_COLUMN_WIDTHS: ColumnWidths = {
+  provider: 180,
+  type: 105,
+  adapter: 210,
+  version: 105,
+  region: 105,
+  environment: 135,
+  state: 130,
+  accounts: 95,
+};
+
+const MIN_COLUMN_WIDTHS: ColumnWidths = {
+  provider: 110,
+  type: 80,
+  adapter: 120,
+  version: 85,
+  region: 80,
+  environment: 105,
+  state: 100,
+  accounts: 75,
+};
+
+const COLUMN_DEFINITIONS: Array<{
+  key: ColumnKey;
+  label: string;
+  filterable: boolean;
+  align?: 'left' | 'right' | 'center';
+}> = [
+  {
+    key: 'provider',
+    label: 'PROVIDER',
+    filterable: true,
+    align: 'left',
+  },
+  {
+    key: 'type',
+    label: 'TYPE',
+    filterable: true,
+    align: 'left',
+  },
+  {
+    key: 'adapter',
+    label: 'ADAPTER',
+    filterable: true,
+    align: 'left',
+  },
+  {
+    key: 'version',
+    label: 'VERSION',
+    filterable: true,
+    align: 'left',
+  },
+  {
+    key: 'region',
+    label: 'REGION',
+    filterable: true,
+    align: 'left',
+  },
+  {
+    key: 'environment',
+    label: 'ENVIRONMENT',
+    filterable: true,
+    align: 'left',
+  },
+  {
+    key: 'state',
+    label: 'STATE',
+    filterable: true,
+    align: 'left',
+  },
+  {
+    key: 'accounts',
+    label: 'ACCOUNTS',
+    filterable: true,
+    align: 'right',
+  },
+];
+
+const EMPTY_FORM = {
+  id: '',
+  name: '',
+  adapterName: 'MockAdapter',
+  adapterVersion: '1.0.0',
+  type: 'BROKER',
+  region: 'IN',
+  environment: 'PAPER',
+  apiBaseUrl: '',
+  websocketUrl: '',
+  credentialFields: 'client_id\nclient_secret\napi_key',
+};
+
+const normalize = (value: unknown): string =>
+  String(value ?? '').trim().toUpperCase();
+
+const valueOrUnknown = (value: unknown): string => {
+  if (
+    value === undefined ||
+    value === null ||
+    String(value).trim() === ''
+  ) {
+    return 'UNKNOWN';
+  }
+
+  return String(value);
+};
+
+const providerName = (provider: ProviderRecord): string =>
+  valueOrUnknown(
+    provider.name ??
+      provider.displayName ??
+      provider.providerName ??
+      provider.id ??
+      provider.provider_id,
+  );
+
+const providerId = (provider: ProviderRecord): string =>
+  valueOrUnknown(
+    provider.id ??
+      provider.providerId ??
+      provider.provider_id,
+  );
+
+const providerType = (provider: ProviderRecord): string =>
+  valueOrUnknown(
+    provider.type ??
+      provider.providerType ??
+      provider.provider_type,
+  );
+
+const providerAdapter = (provider: ProviderRecord): string =>
+  valueOrUnknown(
+    provider.adapterName ??
+      provider.adapter_name ??
+      provider.adapter ??
+      provider.adapterId ??
+      provider.adapter_id,
+  );
+
+const providerVersion = (provider: ProviderRecord): string =>
+  valueOrUnknown(
+    provider.adapterVersion ??
+      provider.adapter_version ??
+      provider.version,
+  );
+
+const providerRegion = (provider: ProviderRecord): string =>
+  valueOrUnknown(
+    provider.region ??
+      provider.metadata?.region,
+  );
+
+const providerEnvironment = (
+  provider: ProviderRecord,
+): string =>
+  valueOrUnknown(
+    provider.environment ??
+      provider.metadata?.environment,
+  ).toUpperCase();
+
+const providerState = (provider: ProviderRecord): string =>
+  valueOrUnknown(
+    provider.state ??
+      provider.status ??
+      provider.health,
+  ).toUpperCase();
+
+const providerAccounts = (provider: ProviderRecord): number => {
+  const value = Number(
+    provider.accountCount ??
+      provider.account_count ??
+      provider.accountsCount ??
+      0,
+  );
+
+  return Number.isFinite(value) ? value : 0;
+};
+
+const stateTone = (value: unknown): string => {
+  const state = normalize(value);
+
+  if (
+    [
+      'HEALTHY',
+      'READY',
+      'CONNECTED',
+      'OPERATIONAL',
+      'ACTIVE',
+    ].includes(state)
+  ) {
+    return 'operational';
+  }
+
+  if (
+    [
+      'DEGRADED',
+      'WARNING',
+      'ATTENTION',
+    ].includes(state)
+  ) {
+    return 'warning';
+  }
+
+  if (
+    [
+      'FAILED',
+      'ERROR',
+      'CRITICAL',
+      'DISCONNECTED',
+    ].includes(state)
+  ) {
+    return 'critical';
+  }
+
+  if (
+    [
+      'DISABLED',
+      'INACTIVE',
+    ].includes(state)
+  ) {
+    return 'disabled';
+  }
+
+  return 'neutral';
+};
+
+const getColumnValue = (
+  provider: ProviderRecord,
+  key: ColumnKey,
+): string => {
+  switch (key) {
+    case 'provider':
+      return providerName(provider);
+
+    case 'type':
+      return providerType(provider);
+
+    case 'adapter':
+      return providerAdapter(provider);
+
+    case 'version':
+      return providerVersion(provider);
+
+    case 'region':
+      return providerRegion(provider);
+
+    case 'environment':
+      return providerEnvironment(provider);
+
+    case 'state':
+      return providerState(provider);
+
+    case 'accounts':
+      return String(providerAccounts(provider));
+
+    default:
+      return 'UNKNOWN';
+  }
+};
+
+export const BrokerProviders: React.FC = () => {
+  const providers = useBrokerIntelligenceStore(
+    (state) => state.providers,
+  );
+
+  const accounts = useBrokerIntelligenceStore(
+    (state) => state.accounts,
+  );
+
+  const [selectedProvider, setSelectedProvider] =
+    useState<ProviderRecord | null>(null);
+
+  const [isInspectorEditing, setIsInspectorEditing] =
+    useState(false);
+
+  const [isInspectorSaving, setIsInspectorSaving] =
+    useState(false);
+
+  const [inspectorFormData, setInspectorFormData] =
+    useState({
+      name: '',
+      adapterName: '',
+      adapterVersion: '',
+      type: 'BROKER',
+      region: '',
+      environment: 'TEST',
+      enabled: true,
+      apiBaseUrl: '',
+      websocketUrl: '',
+      credentialFields: '',
+    });
+
+  const [inspectorBaseline, setInspectorBaseline] =
+    useState({
+      name: '',
+      adapterName: '',
+      adapterVersion: '',
+      type: 'BROKER',
+      region: '',
+      environment: 'TEST',
+      enabled: true,
+      apiBaseUrl: '',
+      websocketUrl: '',
+      credentialFields: '',
+    });
+
+  const [isAddModalOpen, setIsAddModalOpen] =
+    useState(false);
+
+  const [isSubmitting, setIsSubmitting] =
+    useState(false);
+
+  const [columnFilters, setColumnFilters] =
+    useState<Record<ColumnKey, string[] | null>>({
+      provider: null,
+      type: null,
+      adapter: null,
+      version: null,
+      region: null,
+      environment: null,
+      state: null,
+      accounts: null,
+    });
+
+  const [openFilter, setOpenFilter] =
+    useState<ColumnKey | null>(null);
+
+  const [pendingFilter, setPendingFilter] =
+    useState<Record<ColumnKey, string[] | null>>({
+      provider: null,
+      type: null,
+      adapter: null,
+      version: null,
+      region: null,
+      environment: null,
+      state: null,
+      accounts: null,
+    });
+
+  /*
+   * Table sorting is a registry-level operation, independent of
+   * per-column filter selection. Only one primary sort is active
+   * at a time; choosing another column simply changes the primary
+   * sort column. This keeps every filter menu independently usable.
+   */
+  const [tableSort, setTableSort] =
+    useState<{
+      key: ColumnKey | null;
+      direction: 'asc' | 'desc';
+    }>({
+      key: null,
+      direction: 'asc',
+    });
+
+  /*
+   * Each filter menu remembers its own option-list ordering.
+   * This is intentionally separate from tableSort: the table has
+   * one active sort, while every column menu can retain its last
+   * A-Z / Z-A presentation when reopened.
+   */
+  const [filterSortDirection, setFilterSortDirection] =
+    useState<Record<ColumnKey, 'asc' | 'desc'>>({
+      provider: 'asc',
+      type: 'asc',
+      adapter: 'asc',
+      version: 'asc',
+      region: 'asc',
+      environment: 'asc',
+      state: 'asc',
+      accounts: 'asc',
+    });
+
+  const filterMenuRef = useRef<HTMLDivElement | null>(null);
+  const filterButtonRefs = useRef<
+    Partial<Record<ColumnKey, HTMLButtonElement | null>>
+  >({});
+  const [filterMenuPosition, setFilterMenuPosition] = useState<{
+    top: number;
+    left: number;
+  } | null>(null);
+  const [columnWidths, setColumnWidths] =
+    useState<ColumnWidths>(
+      DEFAULT_COLUMN_WIDTHS,
+    );
+
+  /*
+   * Free-floating inspector window state.
+   * The first open is centered; after that the operator controls
+   * the window position by dragging the inspector header.
+   */
+  const [inspectorPosition, setInspectorPosition] =
+    useState<{ x: number; y: number } | null>(null);
+
+  const [inspectorSize, setInspectorSize] =
+    useState<{ width: number; height: number } | null>(null);
+
+  const inspectorDragRef = useRef<{
+    offsetX: number;
+    offsetY: number;
+  } | null>(null);
+
+  const inspectorResizeRef = useRef<{
+    startX: number;
+    startY: number;
+    startWidth: number;
+    startHeight: number;
+  } | null>(null);
+
+  const inspectorRef = useRef<HTMLElement | null>(null);
+
+  const [formData, setFormData] =
+    useState(EMPTY_FORM);
+
+  const resizeRef = useRef<{
+    key: ColumnKey;
+    startX: number;
+    startWidth: number;
+  } | null>(null);
+
+  useEffect(() => {
+    void brokerIntelligenceService.fetchAll();
+  }, []);
+
+  const normalizedProviders = useMemo(
+    () =>
+      Array.isArray(providers)
+        ? providers
+        : [],
+    [providers],
+  );
+
+  /*
+   * ------------------------------------------------------------
+   * HEADER FILTER OPTIONS
+   * ------------------------------------------------------------
+   *
+   * Every option is derived from the actual provider dataset.
+   * No artificial broker/state values are injected.
+   */
+  const filterOptions = useMemo(() => {
+    const options = {} as Record<
+      ColumnKey,
+      string[]
+    >;
+
+    COLUMN_DEFINITIONS.forEach(
+      ({ key }) => {
+        const values = new Set<string>();
+
+        normalizedProviders.forEach(
+          (provider) => {
+            values.add(
+              getColumnValue(provider, key),
+            );
+          },
+        );
+
+        options[key] = Array.from(values).sort(
+          (a, b) =>
+            a.localeCompare(b, undefined, {
+              numeric: true,
+              sensitivity: 'base',
+            }),
+        );
+      },
+    );
+
+    return options;
+  }, [normalizedProviders]);
+
+  /*
+   * ------------------------------------------------------------
+   * DATASET FILTERING
+   * ------------------------------------------------------------
+   *
+   * Filtering is performed through the compact controls
+   * embedded directly in the grid headers.
+   */
+  const filteredProviders = useMemo(() => {
+    return normalizedProviders.filter(
+      (provider) =>
+        COLUMN_DEFINITIONS.every(
+          ({ key }) => {
+            const selected =
+              columnFilters[key];
+
+            /*
+             * Empty selection means ALL values for
+             * that column. Non-empty selection is an
+             * Excel-style OR set within the column.
+             */
+            if (selected === null) {
+              return true;
+            }
+
+            return selected.includes(
+              getColumnValue(provider, key),
+            );
+          },
+        ),
+    );
+  }, [
+    normalizedProviders,
+    columnFilters,
+  ]);
+
+  const activeFilterCount = useMemo(
+    () =>
+      Object.values(columnFilters).filter(
+        (value) => value !== null,
+      ).length,
+    [columnFilters],
+  );
+
+  /*
+   * ------------------------------------------------------------
+   * TABLE SORTING
+   * ------------------------------------------------------------
+   * Sort the already-filtered dataset. The comparator uses the
+   * canonical column accessor used by the grid itself, so sorting
+   * cannot diverge from displayed values. Provider identity is the
+   * deterministic tie-breaker.
+   */
+  const sortedProviders = useMemo(() => {
+    const rows = filteredProviders.map(
+      (provider, index) => ({ provider, index }),
+    );
+
+    if (tableSort.key === null) {
+      return rows.map(({ provider }) => provider);
+    }
+
+    const key = tableSort.key;
+    const direction = tableSort.direction === 'asc' ? 1 : -1;
+
+    rows.sort((left, right) => {
+      const leftValue = getColumnValue(left.provider, key);
+      const rightValue = getColumnValue(right.provider, key);
+
+      let comparison = 0;
+
+      if (key === 'accounts') {
+        const leftNumber = Number(leftValue);
+        const rightNumber = Number(rightValue);
+
+        if (leftNumber < rightNumber) comparison = -1;
+        else if (leftNumber > rightNumber) comparison = 1;
+      } else {
+        comparison = leftValue.localeCompare(
+          rightValue,
+          undefined,
+          { numeric: true, sensitivity: 'base' },
+        );
+      }
+
+      if (comparison !== 0) {
+        return comparison * direction;
+      }
+
+      const leftId = providerId(left.provider);
+      const rightId = providerId(right.provider);
+      const idComparison = leftId.localeCompare(
+        rightId,
+        undefined,
+        { numeric: true, sensitivity: 'base' },
+      );
+
+      return idComparison !== 0
+        ? idComparison
+        : left.index - right.index;
+    });
+
+    return rows.map(({ provider }) => provider);
+  }, [filteredProviders, tableSort]);
+
+  const setTableSortForColumn = (
+    key: ColumnKey,
+    direction: 'asc' | 'desc',
+  ) => {
+    /*
+     * One click drives both views: the registry table is sorted by
+     * this column and the corresponding filter option list is sorted
+     * in the same direction. Other columns retain their own menu
+     * ordering and remain independently sortable.
+     */
+    setTableSort({ key, direction });
+    setFilterSortDirection((current) => ({
+      ...current,
+      [key]: direction,
+    }));
+  };
+
+  const getSortedFilterOptions = (
+    key: ColumnKey,
+  ): string[] => {
+    const direction = filterSortDirection[key] === 'desc' ? -1 : 1;
+
+    return [...(filterOptions[key] ?? [])].sort((a, b) => {
+      if (key === 'accounts') {
+        const leftNumber = Number(a);
+        const rightNumber = Number(b);
+
+        if (Number.isFinite(leftNumber) && Number.isFinite(rightNumber)) {
+          return (leftNumber - rightNumber) * direction;
+        }
+      }
+
+      return (
+        a.localeCompare(b, undefined, {
+          numeric: true,
+          sensitivity: 'base',
+        }) * direction
+      );
+    });
+  };
+
+  const clearFilters = useCallback(() => {
+    const cleared = {
+      provider: null,
+      type: null,
+      adapter: null,
+      version: null,
+      region: null,
+      environment: null,
+      state: null,
+      accounts: null,
+    } as Record<ColumnKey, string[] | null>;
+
+    setColumnFilters(cleared);
+    setPendingFilter(cleared);
+    setOpenFilter(null);
+  }, []);
+
+  const openColumnFilter = (
+    key: ColumnKey,
+  ) => {
+    setPendingFilter(
+      (current) => ({
+        ...current,
+        [key]:
+          columnFilters[key] === null
+            ? null
+            : [...columnFilters[key]],
+      }),
+    );
+    setOpenFilter(key);
+  };
+
+  const togglePendingFilterValue = (
+    key: ColumnKey,
+    value: string,
+  ) => {
+    setPendingFilter(
+      (current) => {
+        const selected = current[key];
+        const base =
+          selected === null
+            ? [...(filterOptions[key] ?? [])]
+            : [...(selected ?? [])];
+
+        return {
+          ...current,
+          [key]: base.includes(value)
+            ? base.filter(
+                (item) => item !== value,
+              )
+            : [...base, value],
+        };
+      },
+    );
+  };
+
+  const selectAllPendingFilter = (
+    key: ColumnKey,
+  ) => {
+    setPendingFilter(
+      (current) => ({
+        ...current,
+        [key]: null,
+      }),
+    );
+  };
+
+  const clearPendingFilter = (
+    key: ColumnKey,
+  ) => {
+    setPendingFilter(
+      (current) => ({
+        ...current,
+        [key]: [],
+      }),
+    );
+  };
+
+  const applyColumnFilter = (
+    key: ColumnKey,
+  ) => {
+    setColumnFilters(
+      (current) => ({
+        ...current,
+        [key]:
+          pendingFilter[key] === null
+            ? null
+            : [...pendingFilter[key]],
+      }),
+    );
+    setOpenFilter(null);
+  };
+
+  const filterIsActive = (
+    key: ColumnKey,
+  ): boolean => columnFilters[key] !== null;
+
+  useEffect(() => {
+    if (!openFilter) {
+      setFilterMenuPosition(null);
+      return;
+    }
+
+    const updateFilterMenuPosition = () => {
+      const button = filterButtonRefs.current[openFilter];
+
+      if (!button) {
+        return;
+      }
+
+      const rect = button.getBoundingClientRect();
+      const menuWidth = 170;
+      const viewportPadding = 8;
+
+      let left = rect.right - menuWidth;
+      left = Math.max(
+        viewportPadding,
+        Math.min(
+          left,
+          window.innerWidth - menuWidth - viewportPadding,
+        ),
+      );
+
+      setFilterMenuPosition({
+        top: rect.bottom + 3,
+        left,
+      });
+    };
+
+    updateFilterMenuPosition();
+
+    window.addEventListener(
+      'resize',
+      updateFilterMenuPosition,
+    );
+    window.addEventListener(
+      'scroll',
+      updateFilterMenuPosition,
+      true,
+    );
+
+    return () => {
+      window.removeEventListener(
+        'resize',
+        updateFilterMenuPosition,
+      );
+      window.removeEventListener(
+        'scroll',
+        updateFilterMenuPosition,
+        true,
+      );
+    };
+  }, [openFilter]);
+
+  useEffect(() => {
+    if (!openFilter) {
+      return;
+    }
+
+    const handleDocumentPointerDown = (
+      event: PointerEvent,
+    ) => {
+      const target = event.target as Node;
+      const menu = filterMenuRef.current;
+      const button = filterButtonRefs.current[openFilter];
+
+      if (
+        menu?.contains(target) ||
+        button?.contains(target)
+      ) {
+        return;
+      }
+
+      setOpenFilter(null);
+    };
+
+    document.addEventListener(
+      'pointerdown',
+      handleDocumentPointerDown,
+    );
+
+    return () => {
+      document.removeEventListener(
+        'pointerdown',
+        handleDocumentPointerDown,
+      );
+    };
+  }, [openFilter]);
+
+  /*
+   * ------------------------------------------------------------
+   * COLUMN RESIZE
+   * ------------------------------------------------------------
+   *
+   * Native pointer interaction keeps the grid independent from
+   * another UI library and allows the operator to establish
+   * their own workstation geometry.
+   */
+  const beginColumnResize = (
+    event: React.PointerEvent,
+    key: ColumnKey,
+  ) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    resizeRef.current = {
+      key,
+      startX: event.clientX,
+      startWidth: columnWidths[key],
+    };
+
+    document.body.classList.add(
+      'bi-provider-column-resizing',
+    );
+
+    const handlePointerMove = (
+      moveEvent: PointerEvent,
+    ) => {
+      const active = resizeRef.current;
+
+      if (!active) {
+        return;
+      }
+
+      const delta =
+        moveEvent.clientX -
+        active.startX;
+
+      const minimum =
+        MIN_COLUMN_WIDTHS[
+          active.key
+        ];
+
+      const nextWidth = Math.max(
+        minimum,
+        active.startWidth + delta,
+      );
+
+      setColumnWidths(
+        (current) => ({
+          ...current,
+          [active.key]: nextWidth,
+        }),
+      );
+    };
+
+    const handlePointerUp = () => {
+      resizeRef.current = null;
+
+      document.body.classList.remove(
+        'bi-provider-column-resizing',
+      );
+
+      document.removeEventListener(
+        'pointermove',
+        handlePointerMove,
+        true,
+      );
+
+      document.removeEventListener(
+        'pointerup',
+        handlePointerUp,
+        true,
+      );
+    };
+
+    document.addEventListener(
+      'pointermove',
+      handlePointerMove,
+      true,
+    );
+
+    window.addEventListener(
+      'pointerup',
+      handlePointerUp,
+      {
+        once: true,
+      },
+    );
+  };
+
+  /*
+   * ------------------------------------------------------------
+   * REFRESH
+   * ------------------------------------------------------------
+   */
+  const handleRefresh = async () => {
+    try {
+      await brokerIntelligenceService.fetchAll();
+      toast.success(
+        'Provider registry refreshed',
+      );
+    } catch {
+      /*
+       * brokerIntelligenceService owns the actual
+       * error reporting path.
+       */
+    }
+  };
+
+  /*
+   * ------------------------------------------------------------
+   * ADD PROVIDER
+   * ------------------------------------------------------------
+   */
+  const handleInputChange = (
+    event: React.ChangeEvent<
+      HTMLInputElement |
+        HTMLSelectElement |
+        HTMLTextAreaElement
+    >,
+  ) => {
+    const {
+      name,
+      value,
+    } = event.target;
+
+    setFormData(
+      (current) => ({
+        ...current,
+        [name]: value,
+      }),
+    );
+  };
+
+  const resetForm = () => {
+    setFormData({
+      ...EMPTY_FORM,
+    });
+  };
+
+  const handleAddProvider = async (
+    event: React.FormEvent,
+  ) => {
+    event.preventDefault();
+
+    const id =
+      formData.id.trim();
+
+    const name =
+      formData.name.trim();
+
+    if (!id || !name) {
+      toast.error(
+        'Provider ID and Name are required.',
+      );
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      await brokerIntelligenceService.addProvider(
+        {
+          id,
+          name,
+          adapterName:
+            formData.adapterName,
+          adapterVersion:
+            formData.adapterVersion,
+          type:
+            formData.type,
+          region:
+            formData.region,
+          environment:
+            formData.environment,
+          metadata: {
+            apiBaseUrl:
+              formData.apiBaseUrl.trim(),
+            websocketUrl:
+              formData.websocketUrl.trim(),
+            credentialSchema:
+              formData.credentialFields
+                .split('\n')
+                .map(
+                  (value) =>
+                    value.trim(),
+                )
+                .filter(Boolean),
+          },
+        },
+      );
+
+      toast.success(
+        `Provider ${name} registered.`,
+      );
+
+      await brokerIntelligenceService.fetchAll();
+
+      setIsAddModalOpen(false);
+
+      resetForm();
+    } catch (error: any) {
+      toast.error(
+        `Failed to add provider: ${
+          error?.message ??
+          'Unknown error'
+        }`,
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  /*
+   * ------------------------------------------------------------
+   * INSPECTOR
+   * ------------------------------------------------------------
+   */
+  const buildInspectorForm = (
+    provider: ProviderRecord,
+  ) => {
+    const metadata = provider.metadata ?? {};
+    const credentialFields = Array.isArray(
+      metadata.credentialSchema,
+    )
+      ? metadata.credentialSchema
+          .map((value: unknown) => String(value))
+          .join('\n')
+      : '';
+
+    return {
+      name: providerName(provider),
+      adapterName: providerAdapter(provider),
+      adapterVersion: providerVersion(provider),
+      type: providerType(provider),
+      region: providerRegion(provider),
+      environment: providerEnvironment(provider),
+      enabled: provider.enabled !== false,
+      apiBaseUrl: String(
+        provider.apiBaseUrl ??
+          metadata.apiBaseUrl ??
+          '',
+      ),
+      websocketUrl: String(
+        provider.websocketUrl ??
+          metadata.websocketUrl ??
+          '',
+      ),
+      credentialFields,
+    };
+  };
+
+  /*
+   * ------------------------------------------------------------
+   * FLOATING INSPECTOR WINDOW CONTROL
+   * ------------------------------------------------------------
+   *
+   * The Inspector is a viewport-level window. It has no relationship
+   * to the Provider Registry geometry. Mouse drag is intentionally
+   * document-scoped so the window remains movable across the entire
+   * workspace after the pointer leaves the title bar.
+   */
+  const beginInspectorResize = (
+    event: React.PointerEvent<HTMLDivElement>,
+  ) => {
+    if (event.button !== 0) {
+      return;
+    }
+
+    const inspector = inspectorRef.current;
+
+    if (!inspector) {
+      return;
+    }
+
+    const rect = inspector.getBoundingClientRect();
+
+    inspectorResizeRef.current = {
+      startX: event.clientX,
+      startY: event.clientY,
+      startWidth: rect.width,
+      startHeight: rect.height,
+    };
+
+    document.body.classList.add('bi-inspector-is-resizing');
+
+    /*
+     * Resize ownership is document/window scoped.
+     * Do not use pointer capture here: the global pointermove listener
+     * is the sole resize event authority.
+     */
+    event.preventDefault();
+    event.stopPropagation();
+  };
+
+  const beginInspectorDrag = (
+    event: React.MouseEvent<HTMLElement>,
+  ) => {
+    if (event.button !== 0) {
+      return;
+    }
+
+    const target = event.target as HTMLElement;
+    if (target.closest('button, input, select, textarea, a')) {
+      return;
+    }
+
+    const inspector = inspectorRef.current;
+
+    if (!inspector) {
+      return;
+    }
+
+    const rect = inspector.getBoundingClientRect();
+    inspectorDragRef.current = {
+      offsetX: event.clientX - rect.left,
+      offsetY: event.clientY - rect.top,
+    };
+
+    document.body.classList.add('bi-inspector-is-dragging');
+    event.preventDefault();
+  };
+
+  useEffect(() => {
+    const handlePointerMove = (event: PointerEvent) => {
+      const resize = inspectorResizeRef.current;
+
+      if (!resize) {
+        return;
+      }
+
+      const inspector = inspectorRef.current;
+
+      if (!inspector) {
+        return;
+      }
+
+      const rect = inspector.getBoundingClientRect();
+      const margin = 8;
+
+      const maxWidth = Math.max(
+        300,
+        window.innerWidth - rect.left - margin,
+      );
+
+      const maxHeight = Math.max(
+        300,
+        window.innerHeight - rect.top - margin,
+      );
+
+      const width = Math.min(
+        Math.max(
+          300,
+          resize.startWidth + event.clientX - resize.startX,
+        ),
+        maxWidth,
+      );
+
+      const height = Math.min(
+        Math.max(
+          300,
+          resize.startHeight + event.clientY - resize.startY,
+        ),
+        maxHeight,
+      );
+
+      setInspectorSize({
+        width: Math.round(width),
+        height: Math.round(height),
+      });
+
+      event.preventDefault();
+    };
+
+    const stopInspectorResize = () => {
+      inspectorResizeRef.current = null;
+      document.body.classList.remove('bi-inspector-is-resizing');
+    };
+
+    window.addEventListener('pointermove', handlePointerMove, true);
+    window.addEventListener('pointerup', stopInspectorResize, true);
+    window.addEventListener('pointercancel', stopInspectorResize, true);
+    window.addEventListener('blur', stopInspectorResize);
+
+    return () => {
+      window.removeEventListener('pointermove', handlePointerMove, true);
+      window.removeEventListener('pointerup', stopInspectorResize, true);
+      window.removeEventListener('pointercancel', stopInspectorResize, true);
+      window.removeEventListener('blur', stopInspectorResize);
+      document.body.classList.remove('bi-inspector-is-resizing');
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleMouseMove = (event: MouseEvent) => {
+      const drag = inspectorDragRef.current;
+      if (!drag) {
+        return;
+      }
+
+      const inspector = inspectorRef.current;
+
+      if (!inspector) {
+        return;
+      }
+
+      const width = inspector.getBoundingClientRect().width;
+      const height = inspector.getBoundingClientRect().height;
+      const margin = 8;
+      const maxX = Math.max(
+        margin,
+        window.innerWidth - width - margin,
+      );
+      const maxY = Math.max(
+        margin,
+        window.innerHeight - height - margin,
+      );
+
+      setInspectorPosition({
+        x: Math.min(
+          Math.max(margin, event.clientX - drag.offsetX),
+          maxX,
+        ),
+        y: Math.min(
+          Math.max(margin, event.clientY - drag.offsetY),
+          maxY,
+        ),
+      });
+    };
+
+    const stopInspectorDrag = () => {
+      inspectorDragRef.current = null;
+      document.body.classList.remove('bi-inspector-is-dragging');
+    };
+
+    document.addEventListener('mousemove', handleMouseMove, true);
+    document.addEventListener('mouseup', stopInspectorDrag, true);
+    window.addEventListener('blur', stopInspectorDrag);
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove, true);
+      document.removeEventListener('mouseup', stopInspectorDrag, true);
+      window.removeEventListener('blur', stopInspectorDrag);
+      document.body.classList.remove('bi-inspector-is-dragging');
+    };
+  }, []);
+
+  useEffect(() => {
+    const clampInspectorPosition = () => {
+      setInspectorPosition((current) => {
+        if (!current) {
+          return current;
+        }
+
+        const inspector = inspectorRef.current;
+
+        if (!inspector) {
+          return current;
+        }
+
+        const margin = 8;
+        const maxX = Math.max(
+          margin,
+          window.innerWidth -
+            inspector.offsetWidth -
+            margin,
+        );
+        const maxY = Math.max(
+          margin,
+          window.innerHeight -
+            inspector.offsetHeight -
+            margin,
+        );
+
+        const next = {
+          x: Math.min(
+            Math.max(margin, current.x),
+            maxX,
+          ),
+          y: Math.min(
+            Math.max(margin, current.y),
+            maxY,
+          ),
+        };
+
+        if (
+          next.x === current.x &&
+          next.y === current.y
+        ) {
+          return current;
+        }
+
+        return next;
+      });
+    };
+
+    window.addEventListener(
+      'resize',
+      clampInspectorPosition,
+    );
+
+    return () => {
+      window.removeEventListener(
+        'resize',
+        clampInspectorPosition,
+      );
+    };
+  }, []);
+
+  useEffect(() => {
+    const clampInspectorSize = () => {
+      setInspectorSize((current) => {
+        if (!current || !inspectorRef.current) {
+          return current;
+        }
+
+        const rect = inspectorRef.current.getBoundingClientRect();
+        const margin = 8;
+        const maxWidth = Math.max(300, window.innerWidth - rect.left - margin);
+        const maxHeight = Math.max(300, window.innerHeight - rect.top - margin);
+
+        const next = {
+          width: Math.min(current.width, maxWidth),
+          height: Math.min(current.height, maxHeight),
+        };
+
+        if (
+          next.width === current.width &&
+          next.height === current.height
+        ) {
+          return current;
+        }
+
+        return next;
+      });
+    };
+
+    window.addEventListener('resize', clampInspectorSize);
+
+    return () => {
+      window.removeEventListener('resize', clampInspectorSize);
+    };
+  }, []);
+
+  const openInspector = (
+    provider: ProviderRecord,
+    event?: React.MouseEvent<HTMLTableRowElement>,
+  ) => {
+    setSelectedProvider(provider);
+    setIsInspectorEditing(false);
+    setIsInspectorSaving(false);
+
+    const nextForm = buildInspectorForm(provider);
+    setInspectorFormData(nextForm);
+    setInspectorBaseline(nextForm);
+
+    /*
+     * First-open placement is contextual, not anchored. The window
+     * opens near the operator's selection, then becomes completely
+     * independent and draggable.
+     */
+    if (event && inspectorPosition === null) {
+      const width = Math.min(390, window.innerWidth - 24);
+      const height = Math.min(520, Math.max(300, window.innerHeight - 48));
+      const margin = 12;
+      const preferredX = event.clientX + 18;
+      const preferredY = event.clientY - 48;
+
+      setInspectorPosition({
+        x: Math.min(
+          Math.max(margin, preferredX),
+          Math.max(
+            margin,
+            window.innerWidth - width - margin,
+          ),
+        ),
+        y: Math.min(
+          Math.max(margin, preferredY),
+          Math.max(
+            margin,
+            window.innerHeight - height - margin,
+          ),
+        ),
+      });
+    }
+  };
+
+  const closeInspector = () => {
+    if (isInspectorSaving) {
+      return;
+    }
+
+    setIsInspectorEditing(false);
+    setSelectedProvider(null);
+  };
+
+  const cancelInspectorEdit = () => {
+    if (isInspectorSaving) {
+      return;
+    }
+
+    setInspectorFormData(inspectorBaseline);
+    setIsInspectorEditing(false);
+  };
+
+  const inspectorDirty =
+    JSON.stringify(inspectorFormData) !==
+    JSON.stringify(inspectorBaseline);
+
+  const handleInspectorInputChange = (
+    event: React.ChangeEvent<
+      HTMLInputElement |
+        HTMLSelectElement |
+        HTMLTextAreaElement
+    >,
+  ) => {
+    const { name, value } = event.target;
+
+    setInspectorFormData((current) => ({
+      ...current,
+      [name]: value,
+    }));
+  };
+
+  const handleInspectorEnabledChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setInspectorFormData((current) => ({
+      ...current,
+      enabled: event.target.checked,
+    }));
+  };
+
+  const saveInspector = async () => {
+    if (!selectedProvider || !inspectorDirty) {
+      return;
+    }
+
+    const id = providerId(selectedProvider);
+    const name = inspectorFormData.name.trim();
+    const adapterName = inspectorFormData.adapterName.trim();
+    const adapterVersion = inspectorFormData.adapterVersion.trim();
+    const region = inspectorFormData.region.trim();
+
+    if (!name || !adapterName || !adapterVersion || !region) {
+      toast.error(
+        'Provider name, adapter, version and region are required.',
+      );
+      return;
+    }
+
+    setIsInspectorSaving(true);
+
+    try {
+      const existingMetadata =
+        selectedProvider.metadata &&
+        typeof selectedProvider.metadata === 'object'
+          ? selectedProvider.metadata
+          : {};
+
+      await brokerIntelligenceService.addProvider({
+        id,
+        name,
+        adapterName,
+        adapterVersion,
+        type: inspectorFormData.type,
+        region,
+        environment: inspectorFormData.environment,
+        enabled: inspectorFormData.enabled,
+        metadata: {
+          ...existingMetadata,
+          apiBaseUrl: inspectorFormData.apiBaseUrl.trim(),
+          websocketUrl: inspectorFormData.websocketUrl.trim(),
+          credentialSchema: inspectorFormData.credentialFields
+            .split('\n')
+            .map((value) => value.trim())
+            .filter(Boolean),
+        },
+      });
+
+      await brokerIntelligenceService.fetchAll();
+
+      const refreshedProviders =
+        useBrokerIntelligenceStore.getState().providers;
+      const refreshedProvider = refreshedProviders.find(
+        (provider) =>
+          providerId(provider) === id,
+      );
+
+      if (refreshedProvider) {
+        setSelectedProvider(refreshedProvider);
+        const nextForm = buildInspectorForm(
+          refreshedProvider,
+        );
+        setInspectorFormData(nextForm);
+        setInspectorBaseline(nextForm);
+      } else {
+        setInspectorBaseline(inspectorFormData);
+      }
+
+      setIsInspectorEditing(false);
+      toast.success(`Provider ${name} updated.`);
+    } catch (error: any) {
+      toast.error(
+        `Failed to update provider: ${
+          error?.message ?? 'Unknown error'
+        }`,
+      );
+    } finally {
+      setIsInspectorSaving(false);
+    }
+  };
+
+  const inspectorMetadata =
+    selectedProvider?.metadata ??
+    {};
+
+  const selectedProviderAccounts = useMemo(
+    () =>
+      selectedProvider
+        ? accounts.filter(
+            (account: any) =>
+              String(
+                account.brokerId ??
+                  account.broker_id ??
+                  account.broker ??
+                  '',
+              ) === providerId(selectedProvider),
+          )
+        : [],
+    [accounts, selectedProvider],
+  );
+
+  const credentialSchema =
+    Array.isArray(
+      inspectorMetadata
+        ?.credentialSchema,
+    )
+      ? inspectorMetadata
+          .credentialSchema
+      : [];
+
+  const selectedProviderState =
+    selectedProvider
+      ? providerState(
+          selectedProvider,
+        )
+      : 'UNKNOWN';
+
+  return (
+    <div className="bi-providers">
+      {/* ========================================================
+       * COMPACT REGISTRY COMMAND BAR
+       * ======================================================== */}
+      <header className="bi-provider-commandbar">
+        <div className="bi-provider-commandbar-left">
+          <div className="bi-provider-section-marker">
+            PROVIDER REGISTRY
+          </div>
+
+          <div className="bi-provider-title">
+            Institutional Broker Providers
+          </div>
+
+          <div className="bi-provider-count">
+            {filteredProviders.length}
+            <span>/</span>
+            {normalizedProviders.length}
+          </div>
+
+          {activeFilterCount > 0 && (
+            <button
+              type="button"
+              className="bi-provider-filter-state"
+              onClick={clearFilters}
+              title="Clear active column filters"
+            >
+              {activeFilterCount}
+              {' '}
+              FILTER
+              {activeFilterCount !== 1
+                ? 'S'
+                : ''}
+            </button>
+          )}
+        </div>
+
+        <div className="bi-provider-commandbar-right">
+          <button
+            type="button"
+            className="bi-grid-action"
+            onClick={handleRefresh}
+          >
+            REFRESH
+          </button>
+
+          <button
+            type="button"
+            className="bi-grid-action bi-grid-action-primary"
+            onClick={() =>
+              setIsAddModalOpen(true)
+            }
+          >
+            ADD PROVIDER
+          </button>
+        </div>
+      </header>
+
+      {/* ========================================================
+       * DATA GRID
+       * ======================================================== */}
+      <section className="bi-provider-grid-shell">
+        <div className="bi-provider-grid-scroll">
+          <table
+            className="bi-provider-grid"
+            style={{
+              width: `${Object.values(
+                columnWidths,
+              ).reduce(
+                (sum, width) =>
+                  sum + width,
+                0,
+              )}px`,
+            }}
+          >
+            <colgroup>
+              {COLUMN_DEFINITIONS.map(
+                ({ key }) => (
+                  <col
+                    key={key}
+                    style={{
+                      width: `${columnWidths[key]}px`,
+                    }}
+                  />
+                ),
+              )}
+            </colgroup>
+
+            <thead>
+              <tr>
+                {COLUMN_DEFINITIONS.map(
+                  ({
+                    key,
+                    label,
+                    align,
+                  }) => (
+                    <th
+                      key={key}
+                      className={`bi-grid-header-cell ${
+                        align === 'right'
+                          ? 'is-right'
+                          : ''
+                      }`}
+                    >
+                      <div className="bi-grid-header">
+                        <div className="bi-grid-header-label">
+                          {label}
+                        </div>
+
+                        <div
+                          className="bi-grid-header-filter"
+                        >
+                          <button
+                            type="button"
+                            className={`bi-grid-filter-button ${
+                              filterIsActive(key)
+                                ? 'is-active'
+                                : ''
+                            }`}
+                            aria-label={`${label} filter`}
+                            aria-haspopup="menu"
+                            aria-expanded={
+                              openFilter === key
+                            }
+                            ref={(node) => {
+                              filterButtonRefs.current[key] = node;
+                            }}
+                            onClick={(event) => {
+                              event.stopPropagation();
+
+                              if (
+                                openFilter === key
+                              ) {
+                                setOpenFilter(null);
+                              } else {
+                                openColumnFilter(key);
+                              }
+                            }}
+                          >
+                            <span className="bi-grid-filter-button-icon">
+                              {filterIsActive(key)
+                                ? '●'
+                                : '▼'}
+                            </span>
+                          </button>
+
+                          {openFilter === key &&
+                            filterMenuPosition && (
+                              <div
+                                ref={filterMenuRef}
+                                className="bi-grid-filter-menu"
+                                role="menu"
+                                aria-label={`${label} filter options`}
+                                style={{
+                                  top: filterMenuPosition.top,
+                                  left: filterMenuPosition.left,
+                                }}
+                              >
+                                <div className="bi-grid-filter-menu-header">
+                                  <div className="bi-grid-filter-menu-title">
+                                    {label}
+                                  </div>
+
+                                  <div className="bi-grid-filter-menu-count">
+                                    {pendingFilter[key] === null
+                                      ? 'ALL SELECTED'
+                                      : `${pendingFilter[key].length} SELECTED`}
+                                  </div>
+                                </div>
+
+                                <div className="bi-grid-filter-menu-actions">
+                                  <button
+                                    type="button"
+                                    onClick={() =>
+                                      selectAllPendingFilter(key)
+                                    }
+                                  >
+                                    SELECT ALL
+                                  </button>
+
+                                  <button
+                                    type="button"
+                                    onClick={() =>
+                                      clearPendingFilter(key)
+                                    }
+                                  >
+                                    CLEAR
+                                  </button>
+
+                                  <button
+                                    type="button"
+                                    className={`bi-grid-filter-sort-button ${
+                                      tableSort.key === key && tableSort.direction === 'asc'
+                                        ? 'is-active'
+                                        : ''
+                                    }`}
+                                    aria-label="Sort A-Z"
+                                    title="Sort A-Z"
+                                    onClick={() =>
+                                      setTableSortForColumn(key, 'asc')
+                                    }
+                                  >
+                                    ▼
+                                  </button>
+
+                                  <button
+                                    type="button"
+                                    className={`bi-grid-filter-sort-button ${
+                                      tableSort.key === key && tableSort.direction === 'desc'
+                                        ? 'is-active'
+                                        : ''
+                                    }`}
+                                    aria-label="Sort Z-A"
+                                    title="Sort Z-A"
+                                    onClick={() =>
+                                      setTableSortForColumn(key, 'desc')
+                                    }
+                                  >
+                                    ▲
+                                  </button>
+                                </div>
+
+                                <div className="bi-grid-filter-options">
+                                  {getSortedFilterOptions(key).map((option) => {
+                                      const checked =
+                                        pendingFilter[key] === null
+                                          ? true
+                                          : pendingFilter[key].includes(option);
+
+                                      return (
+                                        <label
+                                          key={`${key}-${option}`}
+                                          className={`bi-grid-filter-option ${
+                                            checked
+                                              ? 'is-checked'
+                                              : ''
+                                          }`}
+                                        >
+                                          <input
+                                            type="checkbox"
+                                            checked={checked}
+                                            onChange={() =>
+                                              togglePendingFilterValue(
+                                                key,
+                                                option,
+                                              )
+                                            }
+                                          />
+
+                                          <span className="bi-grid-filter-checkbox">
+                                            {checked ? '✓' : ''}
+                                          </span>
+
+                                          <span className="bi-grid-filter-option-label">
+                                            {option}
+                                          </span>
+                                        </label>
+                                      );
+                                    })}
+                                </div>
+
+                                <div className="bi-grid-filter-menu-footer">
+                                  <button
+                                    type="button"
+                                    className="bi-grid-filter-cancel"
+                                    onClick={() =>
+                                      setOpenFilter(null)
+                                    }
+                                  >
+                                    CANCEL
+                                  </button>
+
+                                  <button
+                                    type="button"
+                                    className="bi-grid-filter-apply"
+                                    onClick={() =>
+                                      applyColumnFilter(key)
+                                    }
+                                  >
+                                    APPLY
+                                  </button>
+                                </div>
+                              </div>
+                            )}
+                        </div>
+
+                        <span
+                          className="bi-column-resize"
+                          role="separator"
+                          aria-orientation="vertical"
+                          aria-label={`Resize ${label} column`}
+                          onPointerDown={(
+                            event,
+                          ) =>
+                            beginColumnResize(
+                              event,
+                              key,
+                            )
+                          }
+                        />
+                      </div>
+                    </th>
+                  ),
+                )}
+              </tr>
+            </thead>
+
+            <tbody>
+              {filteredProviders.length ===
+                0 && (
+                <tr>
+                  <td
+                    colSpan={
+                      COLUMN_DEFINITIONS.length
+                    }
+                    className="bi-provider-empty"
+                  >
+                    <span>
+                      {normalizedProviders.length ===
+                      0
+                        ? 'NO PROVIDERS REGISTERED'
+                        : 'NO ROWS MATCH CURRENT COLUMN FILTERS'}
+                    </span>
+
+                    {activeFilterCount >
+                      0 && (
+                      <button
+                        type="button"
+                        onClick={
+                          clearFilters
+                        }
+                      >
+                        CLEAR FILTERS
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              )}
+
+              {sortedProviders.map(
+                (provider) => {
+                  const id =
+                    providerId(
+                      provider,
+                    );
+
+                  const selected =
+                    selectedProvider !==
+                      null &&
+                    providerId(
+                      selectedProvider,
+                    ) === id;
+
+                  const state =
+                    providerState(
+                      provider,
+                    );
+
+                  return (
+                    <tr
+                      key={id}
+                      className={
+                        selected
+                          ? 'is-selected'
+                          : ''
+                      }
+                      onClick={(event) =>
+                        openInspector(provider, event)
+                      }
+                    >
+                      <td className="bi-provider-cell bi-provider-cell-primary">
+                        {providerName(
+                          provider,
+                        )}
+                      </td>
+
+                      <td className="bi-provider-cell">
+                        {providerType(
+                          provider,
+                        )}
+                      </td>
+
+                      <td className="bi-provider-cell bi-provider-cell-mono">
+                        {providerAdapter(
+                          provider,
+                        )}
+                      </td>
+
+                      <td className="bi-provider-cell bi-provider-cell-mono">
+                        {providerVersion(
+                          provider,
+                        )}
+                      </td>
+
+                      <td className="bi-provider-cell">
+                        {providerRegion(
+                          provider,
+                        )}
+                      </td>
+
+                      <td className="bi-provider-cell">
+                        <span
+                          className="bi-environment-value"
+                          data-environment={normalize(
+                            providerEnvironment(
+                              provider,
+                            ),
+                          )}
+                        >
+                          {providerEnvironment(
+                            provider,
+                          )}
+                        </span>
+                      </td>
+
+                      <td className="bi-provider-cell">
+                        <span
+                          className="bi-state-value"
+                          data-tone={stateTone(
+                            state,
+                          )}
+                        >
+                          <span className="bi-state-dot" />
+                          {state}
+                        </span>
+                      </td>
+
+                      <td className="bi-provider-cell bi-provider-cell-number">
+                        {providerAccounts(
+                          provider,
+                        )}
+                      </td>
+                    </tr>
+                  );
+                },
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        {/* ======================================================
+         * GRID STATUS LINE
+         * ====================================================== */}
+        <footer className="bi-provider-grid-status">
+          <div>
+            ROWS
+            <strong>
+              {filteredProviders.length}
+            </strong>
+            /
+            {normalizedProviders.length}
+          </div>
+
+          <div>
+            COLUMNS
+            <strong>
+              {COLUMN_DEFINITIONS.length}
+            </strong>
+          </div>
+
+          <div>
+            GRID
+            <strong>
+              RESIZABLE
+            </strong>
+          </div>
+
+          <div className="bi-grid-status-spacer" />
+
+          <div>
+            HEADER
+            <strong>
+              FILTER / SELECT
+            </strong>
+          </div>
+
+          <div>
+            CLICK ROW
+            <strong>
+              INSPECT
+            </strong>
+          </div>
+        </footer>
+      </section>
+
+      {/* ========================================================
+       * FLOATING PROVIDER INSPECTOR
+       * ======================================================== */}
+      {selectedProvider && (
+        <aside
+          ref={inspectorRef}
+          className={`bi-provider-inspector ${
+            isInspectorEditing ? 'is-editing' : ''
+          }`}
+          aria-label="Provider Inspector"
+          style={
+            inspectorPosition
+              ? {
+                  left: `${inspectorPosition.x}px`,
+                  top: `${inspectorPosition.y}px`,
+                  ...(inspectorSize
+                    ? {
+                        width: `${inspectorSize.width}px`,
+                        height: `${inspectorSize.height}px`,
+                      }
+                    : {}),
+                }
+              : undefined
+          }
+        >
+          <header
+            className="bi-inspector-header"
+            onMouseDown={beginInspectorDrag}
+          >
+            <div className="bi-inspector-title-block">
+              <span className="bi-inspector-eyebrow">PROVIDER INSPECTOR</span>
+              <div className="bi-inspector-title-line">
+                <h3>{providerName(selectedProvider)}</h3>
+                <span className="bi-inspector-status-chip">
+                  {selectedProviderState}
+                </span>
+              </div>
+              <span className="bi-inspector-id">
+                {providerId(selectedProvider)}
+              </span>
+            </div>
+
+            <button
+              type="button"
+              className="bi-inspector-close"
+              aria-label="Close Provider Inspector"
+              onClick={closeInspector}
+              disabled={isInspectorSaving}
+            >
+              ×
+            </button>
+          </header>
+
+          <div className="bi-inspector-toolbar">
+            {!isInspectorEditing ? (
+              <button
+                type="button"
+                className="bi-inspector-action bi-inspector-action-primary"
+                onClick={() => {
+                  const nextForm = buildInspectorForm(selectedProvider);
+                  setInspectorFormData(nextForm);
+                  setInspectorBaseline(nextForm);
+                  setIsInspectorEditing(true);
+                }}
+              >
+                EDIT
+              </button>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  className="bi-inspector-action bi-inspector-action-primary"
+                  onClick={() => void saveInspector()}
+                  disabled={!inspectorDirty || isInspectorSaving}
+                >
+                  {isInspectorSaving ? 'SAVING' : 'SAVE'}
+                </button>
+                <button
+                  type="button"
+                  className="bi-inspector-action"
+                  onClick={cancelInspectorEdit}
+                  disabled={isInspectorSaving}
+                >
+                  CANCEL
+                </button>
+              </>
+            )}
+            <span className="bi-inspector-toolbar-state">
+              {isInspectorEditing
+                ? inspectorDirty
+                  ? 'UNSAVED CHANGES'
+                  : 'EDIT MODE'
+                : 'READ ONLY'}
+            </span>
+          </div>
+
+          <div className="bi-inspector-body">
+            <section className="bi-inspector-section">
+              <div className="bi-inspector-section-title">IDENTITY</div>
+              <div className="bi-inspector-row">
+                <span className="bi-inspector-label">PROVIDER ID</span>
+                <strong className="is-mono">{providerId(selectedProvider)}</strong>
+              </div>
+              <div className="bi-inspector-row">
+                <span className="bi-inspector-label">NAME</span>
+                {isInspectorEditing ? (
+                  <input
+                    className="bi-inspector-value-control"
+                    name="name"
+                    value={inspectorFormData.name}
+                    onChange={handleInspectorInputChange}
+                    spellCheck={false}
+                  />
+                ) : (
+                  <strong>{providerName(selectedProvider)}</strong>
+                )}
+              </div>
+              <div className="bi-inspector-row">
+                <span className="bi-inspector-label">TYPE</span>
+                {isInspectorEditing ? (
+                  <select
+                    className="bi-inspector-value-control"
+                    name="type"
+                    value={inspectorFormData.type}
+                    onChange={handleInspectorInputChange}
+                  >
+                    <option value="BROKER">BROKER</option>
+                    <option value="FEEDER">FEEDER</option>
+                    <option value="EXCHANGE">EXCHANGE</option>
+                  </select>
+                ) : (
+                  <strong>{providerType(selectedProvider)}</strong>
+                )}
+              </div>
+              <div className="bi-inspector-row">
+                <span className="bi-inspector-label">REGION</span>
+                {isInspectorEditing ? (
+                  <input
+                    className="bi-inspector-value-control"
+                    name="region"
+                    value={inspectorFormData.region}
+                    onChange={handleInspectorInputChange}
+                    spellCheck={false}
+                  />
+                ) : (
+                  <strong>{providerRegion(selectedProvider)}</strong>
+                )}
+              </div>
+            </section>
+
+            <section className="bi-inspector-section">
+              <div className="bi-inspector-section-title">ADAPTER</div>
+              <div className="bi-inspector-row">
+                <span className="bi-inspector-label">ADAPTER</span>
+                {isInspectorEditing ? (
+                  <input
+                    className="bi-inspector-value-control is-mono"
+                    name="adapterName"
+                    value={inspectorFormData.adapterName}
+                    onChange={handleInspectorInputChange}
+                    spellCheck={false}
+                  />
+                ) : (
+                  <strong className="is-mono">{providerAdapter(selectedProvider)}</strong>
+                )}
+              </div>
+              <div className="bi-inspector-row">
+                <span className="bi-inspector-label">VERSION</span>
+                {isInspectorEditing ? (
+                  <input
+                    className="bi-inspector-value-control is-mono"
+                    name="adapterVersion"
+                    value={inspectorFormData.adapterVersion}
+                    onChange={handleInspectorInputChange}
+                    spellCheck={false}
+                  />
+                ) : (
+                  <strong className="is-mono">{providerVersion(selectedProvider)}</strong>
+                )}
+              </div>
+            </section>
+
+            <section className="bi-inspector-section">
+              <div className="bi-inspector-section-title">RUNTIME</div>
+              <div className="bi-inspector-row">
+                <span className="bi-inspector-label">STATE</span>
+                <strong
+                  className="bi-state-value"
+                  data-tone={stateTone(selectedProviderState)}
+                >
+                  <span className="bi-state-dot" />
+                  {selectedProviderState}
+                </strong>
+              </div>
+              <div className="bi-inspector-row">
+                <span className="bi-inspector-label">ENVIRONMENT</span>
+                {isInspectorEditing ? (
+                  <select
+                    name="environment"
+                    value={inspectorFormData.environment}
+                    onChange={handleInspectorInputChange}
+                    className="bi-inspector-value-control"
+                  >
+                    <option value="TEST">TEST</option>
+                    <option value="PAPER">PAPER</option>
+                    <option value="LIVE">LIVE</option>
+                  </select>
+                ) : (
+                  <strong>{providerEnvironment(selectedProvider)}</strong>
+                )}
+              </div>
+              <div className="bi-inspector-row">
+                <span className="bi-inspector-label">ENABLED</span>
+                {isInspectorEditing ? (
+                  <label className="bi-inspector-toggle">
+                    <input
+                      type="checkbox"
+                      checked={inspectorFormData.enabled}
+                      onChange={handleInspectorEnabledChange}
+                    />
+                    <span>{inspectorFormData.enabled ? 'YES' : 'NO'}</span>
+                  </label>
+                ) : (
+                  <strong>{selectedProvider.enabled === false ? 'NO' : 'YES'}</strong>
+                )}
+              </div>
+              <div className="bi-inspector-row">
+                <span className="bi-inspector-label">ACCOUNTS</span>
+                <strong>
+                  {selectedProviderAccounts.length || providerAccounts(selectedProvider)}
+                </strong>
+              </div>
+            </section>
+
+            <section className="bi-inspector-section">
+              <div className="bi-inspector-section-title">CONNECTIVITY</div>
+              <div className="bi-inspector-row bi-inspector-row-url">
+                <span className="bi-inspector-label">API BASE URL</span>
+                {isInspectorEditing ? (
+                  <input
+                    className="bi-inspector-value-control is-mono"
+                    name="apiBaseUrl"
+                    value={inspectorFormData.apiBaseUrl}
+                    onChange={handleInspectorInputChange}
+                    spellCheck={false}
+                    placeholder="Not configured"
+                  />
+                ) : (
+                  <strong className="is-mono">
+                    {valueOrUnknown(selectedProvider.apiBaseUrl ?? inspectorMetadata.apiBaseUrl)}
+                  </strong>
+                )}
+              </div>
+              <div className="bi-inspector-row bi-inspector-row-url">
+                <span className="bi-inspector-label">WEBSOCKET</span>
+                {isInspectorEditing ? (
+                  <input
+                    className="bi-inspector-value-control is-mono"
+                    name="websocketUrl"
+                    value={inspectorFormData.websocketUrl}
+                    onChange={handleInspectorInputChange}
+                    spellCheck={false}
+                    placeholder="Not configured"
+                  />
+                ) : (
+                  <strong className="is-mono">
+                    {valueOrUnknown(selectedProvider.websocketUrl ?? inspectorMetadata.websocketUrl)}
+                  </strong>
+                )}
+              </div>
+            </section>
+
+            <section className="bi-inspector-section">
+              <div className="bi-inspector-section-title">ACCOUNTS</div>
+              {selectedProviderAccounts.length > 0 ? (
+                <div className="bi-inspector-account-list">
+                  {selectedProviderAccounts.map((account: any) => (
+                    <div
+                      key={String(account.id ?? account.account_id)}
+                      className="bi-inspector-account-row"
+                    >
+                      <span>
+                        {String(
+                          account.displayName ??
+                            account.display_name ??
+                            account.id ??
+                            account.account_id ??
+                            'UNKNOWN',
+                        )}
+                      </span>
+                      <strong className="is-mono">
+                        {String(account.id ?? account.account_id ?? 'UNKNOWN')}
+                      </strong>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="bi-inspector-empty-line">NO LINKED ACCOUNTS</div>
+              )}
+            </section>
+
+            <section className="bi-inspector-section">
+              <div className="bi-inspector-section-title">CREDENTIAL GOVERNANCE</div>
+              <div className="bi-inspector-row">
+                <span className="bi-inspector-label">STATUS</span>
+                <strong>
+                  {Number(selectedProvider.credentialCount ?? 0) > 0 ||
+                  selectedProvider.credentialRef ||
+                  selectedProvider.credential_id
+                    ? 'CONFIGURED'
+                    : 'NOT CONFIGURED'}
+                </strong>
+              </div>
+              <div className="bi-inspector-row">
+                <span className="bi-inspector-label">CREDENTIAL REF</span>
+                <strong className="is-mono">
+                  {valueOrUnknown(selectedProvider.credentialRef ?? selectedProvider.credential_id)}
+                </strong>
+              </div>
+              {isInspectorEditing ? (
+                <label className="bi-inspector-row bi-inspector-row-textarea">
+                  <span className="bi-inspector-label">REQUIRED FIELDS</span>
+                  <textarea
+                    className="bi-inspector-value-control"
+                    name="credentialFields"
+                    value={inspectorFormData.credentialFields}
+                    onChange={handleInspectorInputChange}
+                    rows={2}
+                    spellCheck={false}
+                  />
+                </label>
+              ) : (
+                <div className="bi-inspector-row">
+                  <span className="bi-inspector-label">REQUIRED FIELDS</span>
+                  <strong>
+                    {credentialSchema.length > 0 ? credentialSchema.join(', ') : 'UNKNOWN'}
+                  </strong>
+                </div>
+              )}
+              <div className="bi-inspector-note">
+                Secret values are never displayed or stored in this inspector.
+              </div>
+            </section>
+
+            <section className="bi-inspector-section bi-inspector-authority">
+              <div className="bi-inspector-section-title">GOVERNANCE</div>
+              <div className="bi-inspector-row">
+                <span className="bi-inspector-label">SOURCE</span>
+                <strong>BROKER INTELLIGENCE SERVICE</strong>
+              </div>
+              <div className="bi-inspector-row">
+                <span className="bi-inspector-label">UI ROLE</span>
+                <strong>
+                  {isInspectorEditing ? 'READ / MODIFY / SAVE' : 'READ / SELECT / INSPECT'}
+                </strong>
+              </div>
+              <div className="bi-inspector-row">
+                <span className="bi-inspector-label">IDENTITY</span>
+                <strong>PROVIDER ID IMMUTABLE</strong>
+              </div>
+            </section>
+          </div>
+
+          <div
+            className="bi-inspector-resize-handle"
+            role="presentation"
+            aria-hidden="true"
+            onPointerDown={beginInspectorResize}
+          />
+        </aside>
+      )}
+
+      {/* ========================================================
+       * ADD PROVIDER MODAL
+       * ======================================================== */}
+      {isAddModalOpen && (
+        <div
+          className="bi-provider-modal-overlay"
+          role="presentation"
+          onMouseDown={(event) => {
+            if (
+              event.target ===
+              event.currentTarget
+            ) {
+              if (!isSubmitting) {
+                setIsAddModalOpen(
+                  false,
+                );
+              }
+            }
+          }}
+        >
+          <div
+            className="bi-provider-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="add-provider-title"
+          >
+            <header className="bi-provider-modal-header">
+              <div>
+                <span>
+                  PROVIDER REGISTRATION
+                </span>
+
+                <h3 id="add-provider-title">
+                  Add Provider
+                </h3>
+              </div>
+
+              <button
+                type="button"
+                className="bi-provider-modal-close"
+                onClick={() => {
+                  if (!isSubmitting) {
+                    setIsAddModalOpen(
+                      false,
+                    );
+                  }
+                }}
+                disabled={
+                  isSubmitting
+                }
+              >
+                ×
+              </button>
+            </header>
+
+            <form
+              onSubmit={
+                handleAddProvider
+              }
+            >
+              <div className="bi-provider-modal-body">
+                <section className="bi-modal-section">
+                  <div className="bi-modal-section-title">
+                    PROVIDER IDENTITY
+                  </div>
+
+                  <div className="bi-modal-grid">
+                    <label>
+                      PROVIDER ID
+                      <input
+                        name="id"
+                        value={
+                          formData.id
+                        }
+                        onChange={
+                          handleInputChange
+                        }
+                        placeholder="mt5"
+                        autoComplete="off"
+                      />
+                    </label>
+
+                    <label>
+                      PROVIDER NAME
+                      <input
+                        name="name"
+                        value={
+                          formData.name
+                        }
+                        onChange={
+                          handleInputChange
+                        }
+                        placeholder="MetaTrader 5"
+                        autoComplete="off"
+                      />
+                    </label>
+
+                    <label>
+                      ADAPTER
+                      <select
+                        name="adapterName"
+                        value={
+                          formData.adapterName
+                        }
+                        onChange={
+                          handleInputChange
+                        }
+                      >
+                        <option value="MockAdapter">
+                          MockAdapter
+                        </option>
+
+                        <option value="Mt5DataAdapter">
+                          Mt5DataAdapter
+                        </option>
+
+                        <option value="UpstoxAdapter">
+                          UpstoxAdapter
+                        </option>
+
+                        <option value="TestAdapter">
+                          TestAdapter
+                        </option>
+                      </select>
+                    </label>
+
+                    <label>
+                      ADAPTER VERSION
+                      <input
+                        name="adapterVersion"
+                        value={
+                          formData.adapterVersion
+                        }
+                        onChange={
+                          handleInputChange
+                        }
+                        placeholder="1.0.0"
+                      />
+                    </label>
+
+                    <label>
+                      TYPE
+                      <select
+                        name="type"
+                        value={
+                          formData.type
+                        }
+                        onChange={
+                          handleInputChange
+                        }
+                      >
+                        <option value="BROKER">
+                          BROKER
+                        </option>
+
+                        <option value="FEEDER">
+                          FEEDER
+                        </option>
+
+                        <option value="EXCHANGE">
+                          EXCHANGE
+                        </option>
+                      </select>
+                    </label>
+
+                    <label>
+                      REGION
+                      <input
+                        name="region"
+                        value={
+                          formData.region
+                        }
+                        onChange={
+                          handleInputChange
+                        }
+                        placeholder="IN"
+                      />
+                    </label>
+
+                    <label>
+                      ENVIRONMENT
+                      <select
+                        name="environment"
+                        value={
+                          formData.environment
+                        }
+                        onChange={
+                          handleInputChange
+                        }
+                      >
+                        <option value="TEST">
+                          TEST
+                        </option>
+
+                        <option value="PAPER">
+                          PAPER
+                        </option>
+
+                        <option value="LIVE">
+                          LIVE
+                        </option>
+                      </select>
+                    </label>
+                  </div>
+                </section>
+
+                <section className="bi-modal-section">
+                  <div className="bi-modal-section-title">
+                    CONNECTION METADATA
+                  </div>
+
+                  <div className="bi-modal-grid">
+                    <label>
+                      API BASE URL
+                      <input
+                        name="apiBaseUrl"
+                        value={
+                          formData.apiBaseUrl
+                        }
+                        onChange={
+                          handleInputChange
+                        }
+                        placeholder="Optional metadata"
+                      />
+                    </label>
+
+                    <label>
+                      WEBSOCKET URL
+                      <input
+                        name="websocketUrl"
+                        value={
+                          formData.websocketUrl
+                        }
+                        onChange={
+                          handleInputChange
+                        }
+                        placeholder="Optional metadata"
+                      />
+                    </label>
+                  </div>
+                </section>
+
+                <section className="bi-modal-section">
+                  <div className="bi-modal-section-title">
+                    CREDENTIAL SCHEMA
+                  </div>
+
+                  <label className="bi-modal-field-full">
+                    REQUIRED FIELDS
+                    <textarea
+                      name="credentialFields"
+                      value={
+                        formData.credentialFields
+                      }
+                      onChange={
+                        handleInputChange
+                      }
+                      rows={4}
+                    />
+
+                    <span>
+                      Field names only. Secret values
+                      are stored through the governed
+                      credential path.
+                    </span>
+                  </label>
+                </section>
+              </div>
+
+              <footer className="bi-provider-modal-footer">
+                <button
+                  type="button"
+                  className="bi-grid-action"
+                  onClick={() =>
+                    setIsAddModalOpen(
+                      false,
+                    )
+                  }
+                  disabled={
+                    isSubmitting
+                  }
+                >
+                  CANCEL
+                </button>
+
+                <button
+                  type="submit"
+                  className="bi-grid-action bi-grid-action-primary"
+                  disabled={
+                    isSubmitting
+                  }
+                >
+                  {isSubmitting
+                    ? 'REGISTERING...'
+                    : 'REGISTER PROVIDER'}
+                </button>
+              </footer>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default BrokerProviders;

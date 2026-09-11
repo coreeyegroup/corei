@@ -1,0 +1,460 @@
+/******************************************************************************
+ *
+ * COREI OPERATING SYSTEM
+ *
+ * TOP RIBBON – ROW 1
+ * Institutional Developer / Operator Control Surface
+ *
+ * Redesigned for clarity, comfort, and professional aesthetics.
+ *
+ ******************************************************************************/
+
+/* ── Ribbon container ── */
+.corei-top-ribbon {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    height: 34px;
+    min-height: 34px;
+    max-height: 34px;
+
+    display: flex;
+    flex-direction: column;
+
+    box-sizing: border-box;
+
+    overflow: visible;
+
+    background: var(--corei-color-surface-1);
+    color: var(--corei-color-text-primary);
+
+    border-bottom: 1px solid var(--corei-color-border);
+
+    font-family: var(--corei-font-family);
+
+    white-space: nowrap;
+}
+
+/* ── Primary row ── */
+.corei-ribbon-primary-row {
+    width: 100%;
+    min-width: 0;
+    height: 34px;
+    min-height: 34px;
+    max-height: 34px;
+
+    display: flex;
+    align-items: center;
+
+    box-sizing: border-box;
+
+    overflow: visible;
+
+    padding: 0 6px;
+
+    gap: 8px;
+}
+
+/* ── Typography ── */
+.corei-top-ribbon,
+.corei-top-ribbon button,
+.corei-top-ribbon input {
+    font-family: var(--corei-font-family);
+}
+
+/* ── Identity section ── */
+.corei-ribbon-identity {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 0 0 auto;
+    height: 34px;
+    padding: 0 4px;
+}
+
+.corei-ribbon-product {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--corei-color-text-primary);
+    letter-spacing: .015em;
+}
+
+.corei-ribbon-institution-name {
+    font-size: 10px;
+    font-weight: 400;
+    color: var(--corei-color-text-secondary);
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ── Separator between sections ── */
+.corei-ribbon-separator {
+    width: 1px;
+    height: 20px;
+    background: var(--corei-color-border);
+    flex: 0 0 1px;
+}
+
+/* ── Selectors (ORG, WORKSPACE) ── */
+.corei-ribbon-selector {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 34px;
+    flex: 0 1 auto;
+    min-width: 0;
+    padding: 0 4px;
+}
+
+.corei-ribbon-selector[data-ribbon-block="org"] {
+    width: 155px;
+    min-width: 120px;
+}
+
+.corei-ribbon-selector[data-ribbon-block="workspace"] {
+    width: 140px;
+    min-width: 110px;
+}
+
+.corei-ribbon-selector-trigger {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    width: 100%;
+    height: 34px;
+    padding: 0 6px;
+    border: none;
+    background: transparent;
+    color: var(--corei-color-text-primary);
+    font: inherit;
+    cursor: pointer;
+    border-radius: 2px;
+}
+
+.corei-ribbon-selector-trigger:hover {
+    background: var(--corei-color-surface-2);
+}
+
+.corei-ribbon-selector-label {
+    font-size: 9px;
+    font-weight: 500;
+    color: var(--corei-color-text-secondary);
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+.corei-ribbon-selector-value {
+    font-size: 11px;
+    font-weight: 450;
+    color: var(--corei-color-text-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+}
+
+.corei-ribbon-selector-chevron {
+    font-size: 8px;
+    color: var(--corei-color-text-secondary);
+    flex: 0 0 auto;
+}
+
+/* ── Dropdown menu ── */
+.corei-ribbon-selector-menu {
+    position: absolute;
+    top: calc(100% + 2px);
+    left: 0;
+    z-index: 10000;
+    min-width: 100%;
+    max-width: 300px;
+    padding: 4px;
+    background: var(--corei-color-surface-2);
+    border: 1px solid var(--corei-color-border);
+    border-radius: 4px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .35);
+}
+
+.corei-ribbon-selector-menu button {
+    width: 100%;
+    min-height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 8px;
+    border: none;
+    border-radius: 2px;
+    background: transparent;
+    color: var(--corei-color-text-primary);
+    font: inherit;
+    font-size: 11px;
+    font-weight: 450;
+    cursor: pointer;
+}
+
+.corei-ribbon-selector-menu button:hover,
+.corei-ribbon-selector-menu button[aria-selected="true"] {
+    background: var(--corei-color-surface-3);
+}
+
+.corei-ribbon-selector-menu button[aria-selected="true"] {
+    color: #ddb25c;
+}
+
+/* ── Status indicators (ENV, OPERATOR, RUNTIME, ALERTS) ── */
+.corei-ribbon-status-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 0 1 auto;
+    height: 34px;
+    padding: 0 4px;
+}
+
+.corei-ribbon-status {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0 2px;
+    height: 34px;
+}
+
+.corei-ribbon-status-label {
+    font-size: 9px;
+    font-weight: 500;
+    color: var(--corei-color-text-secondary);
+    letter-spacing: .055em;
+}
+
+.corei-ribbon-status-value {
+    font-size: 11px;
+    font-weight: 450;
+    color: var(--corei-color-text-primary);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.corei-ribbon-status-value i {
+    width: 5px;
+    height: 5px;
+    display: inline-block;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+/* ── Status tones ── */
+.corei-ribbon-status[data-status-tone="operational"] .corei-ribbon-status-value {
+    color: #82c96b;
+}
+.corei-ribbon-status[data-status-tone="operational"] .corei-ribbon-status-value i {
+    background: #82c96b;
+}
+
+.corei-ribbon-status[data-status-tone="attention"] .corei-ribbon-status-value {
+    color: #d5ad58;
+}
+.corei-ribbon-status[data-status-tone="attention"] .corei-ribbon-status-value i {
+    background: #d5ad58;
+}
+
+.corei-ribbon-status[data-status-tone="critical"] .corei-ribbon-status-value {
+    color: #d75b5b;
+}
+.corei-ribbon-status[data-status-tone="critical"] .corei-ribbon-status-value i {
+    background: #d75b5b;
+}
+
+.corei-ribbon-status[data-status-tone="neutral"] .corei-ribbon-status-value {
+    color: var(--corei-color-text-secondary);
+}
+.corei-ribbon-status[data-status-tone="neutral"] .corei-ribbon-status-value i {
+    display: none;
+}
+
+/* ── Flexible spacer ── */
+.corei-ribbon-primary-spacer {
+    flex: 1 1 auto;
+    min-width: 8px;
+}
+
+/* ── SEARCH / FIND ── */
+.corei-ribbon-search {
+    flex: 0 1 190px;
+    min-width: 140px;
+    max-width: 220px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    padding: 0 4px;
+    border: 1px solid var(--corei-color-border);
+    border-radius: 3px;
+    background: var(--corei-color-surface-0);
+}
+
+.corei-ribbon-search-icon {
+    color: var(--corei-color-text-secondary);
+    font-size: 13px;
+    margin-right: 4px;
+}
+
+.corei-ribbon-search-input {
+    flex: 1 1 auto;
+    min-width: 0;
+    width: 100%;
+    height: 22px;
+    padding: 0 2px;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: var(--corei-color-text-primary);
+    font: inherit;
+    font-size: 11px;
+    font-weight: 400;
+}
+
+.corei-ribbon-search-input::placeholder {
+    color: var(--corei-color-text-secondary);
+    opacity: .85;
+}
+
+.corei-ribbon-search-key {
+    color: var(--corei-color-text-secondary);
+    font-size: 9px;
+    font-weight: 400;
+    padding-left: 6px;
+}
+
+/* ── COMMAND, HELP, SETTINGS ── */
+.corei-ribbon-actions {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex: 0 0 auto;
+}
+
+.corei-ribbon-command,
+.corei-ribbon-help,
+.corei-ribbon-settings {
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 0 8px;
+    border: none;
+    background: transparent;
+    color: var(--corei-color-text-secondary);
+    font: inherit;
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 2px;
+}
+
+.corei-ribbon-command:hover,
+.corei-ribbon-help:hover,
+.corei-ribbon-settings:hover {
+    background: var(--corei-color-surface-2);
+    color: var(--corei-color-text-primary);
+}
+
+.corei-ribbon-command kbd {
+    color: var(--corei-color-text-secondary);
+    font-size: 9px;
+    font-weight: 400;
+}
+
+.corei-ribbon-help span,
+.corei-ribbon-settings span {
+    font-size: 13px;
+    line-height: 1;
+}
+
+/* ── CLOCK ── */
+.corei-ribbon-clock {
+    flex: 0 0 85px;
+    min-width: 75px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+    padding: 0 4px;
+    font-size: 11px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    color: var(--corei-color-text-primary);
+}
+
+.corei-ribbon-clock-zone {
+    font-size: 9px;
+    font-weight: 450;
+    color: var(--corei-color-text-secondary);
+}
+
+/* ── Responsive ── */
+@media (max-width: 1100px) {
+    .corei-ribbon-selector[data-ribbon-block="org"] {
+        width: 120px;
+        min-width: 90px;
+    }
+
+    .corei-ribbon-selector[data-ribbon-block="workspace"] {
+        width: 110px;
+        min-width: 80px;
+    }
+
+    .corei-ribbon-search {
+        min-width: 100px;
+        max-width: 160px;
+    }
+
+    .corei-ribbon-clock {
+        flex: 0 0 75px;
+        min-width: 65px;
+    }
+}
+
+@media (max-width: 760px) {
+    .corei-ribbon-institution-name {
+        display: none;
+    }
+
+    .corei-ribbon-selector[data-ribbon-block="org"] {
+        width: 90px;
+        min-width: 70px;
+    }
+
+    .corei-ribbon-selector[data-ribbon-block="workspace"] {
+        width: 80px;
+        min-width: 60px;
+    }
+
+    .corei-ribbon-status-group {
+        gap: 6px;
+    }
+
+    .corei-ribbon-search {
+        min-width: 70px;
+        max-width: 120px;
+    }
+
+    .corei-ribbon-command {
+        font-size: 9px;
+        padding: 0 4px;
+    }
+
+    .corei-ribbon-clock {
+        flex: 0 0 65px;
+        min-width: 55px;
+    }
+
+    .corei-ribbon-clock-zone {
+        display: none;
+    }
+
+    .corei-ribbon-command kbd {
+        display: none;
+    }
+}

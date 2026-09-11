@@ -1,0 +1,1095 @@
+MASTER PHASE BLUEPRINT (A → D)
+
+This is your control document — it defines what each phase is, why it exists, what it must produce, and what must NOT leak across phases.
+This will act as reference + guardrail for all future steps.
+
+SECTION: GLOBAL TRADING OBJECTIVE
+	Define clearly:
+		Primary Objective:
+			→ Consistent risk-adjusted returns at scale
+
+		Key Metrics:
+			→ Sharpe Ratio target
+			→ Max Drawdown limit
+			→ Capital growth rate
+			→ Strategy win-rate consistency
+
+SECTION: PERFORMANCE & EVALUATION FRAMEWORK
+	Define:
+		evaluation frequency:
+			real-time
+			daily
+			weekly
+		evaluation scope:
+			trade level
+			strategy level
+			portfolio level
+		action rules:
+			when to reduce capital
+			when to scale
+			when to disable strategy
+
+SECTION: TRACEABILITY & LINEAGE MODEL
+	Define:
+		every phase output must map to:
+			previous phase inputs
+
+		Example:
+			Phase D (execution rules)
+			→ must map to Phase A (trading logic)
+			Phase C (infra decisions)
+			→ must map to Phase B (constraints)
+
+		Why this?
+		Prevents:
+			silent drift
+			broken assumptions
+			inconsistent system behavior
+
+SECTION: AUDITABILITY & OBSERVABILITY REQUIREMENTS
+
+	Define:
+
+	Every phase must ensure:
+
+		traceability:
+			→ every output maps to input
+
+		explainability:
+			→ every decision must be reproducible
+
+		logging requirements:
+			→ inputs
+			→ outputs
+			→ transformations
+
+		replay capability:
+			→ full system must support deterministic replay
+
+	Constraint:
+		auditability must be:
+			complete
+			deterministic
+			phase-aligned
+
+SECTION: CROSS-PHASE CONSISTENCY CONTROL
+	Define:
+		if a concept appears in multiple phases:
+			one phase = owner
+			others = reference only
+
+		Why this?
+		Prevents:
+			duplication
+			conflicting definitions
+
+SECTION: SCALABILITY INTENT
+	Define:
+		system must support:
+			multi-asset
+			multi-strategy
+			high capital deployment
+		scalability is:
+			horizontal
+			modular
+
+		Why Important
+		Anchors design toward:
+			institutional scale (not retail system)
+
+GLOBAL ARCHITECTURAL INVARIANT — SINGLE OWNERSHIP (MANDATORY)
+
+	Definition:
+		Each concept in the system MUST have exactly ONE owning section.
+		Concepts include (but are not limited to):
+			entities
+			attributes
+			state models
+			computation logic
+			constraints
+			invariants
+			time models
+			hashing models
+
+	Ownership Rule:
+		Each concept MUST be defined in exactly one location:
+			Domain concepts → Section 4 (Domain Model)
+			Computation logic → Section 5 (Logic Engine)
+			Input / Output contracts → Section 6 (Flow Architecture)
+			Constraints / invariants → Section 8
+			State transitions → Section 9
+			Traceability / hashing → Section 18
+
+	Reference Rule:
+		Other sections MAY reference a concept,
+		but MUST NOT redefine or duplicate it.
+
+	Violation Conditions:
+
+		A violation occurs if:
+			the same concept is defined in multiple sections
+			conflicting definitions exist
+			derived fields are redefined outside owning section
+
+	Impact:
+
+		Violations introduce:
+
+			ambiguity
+			drift
+			non-determinism
+			replay inconsistency
+
+	Enforcement:
+
+		All phases (A, B, C, D) MUST comply.
+
+		Red Team MUST treat violation as HIGH severity.
+
+PHASE 0 — (NEW) SYSTEM GOVERNANCE LAYER
+
+	0.1 Decision Authority Model
+		who approves:
+			trading model changes
+			constraint changes
+			architecture changes
+		hierarchy:
+			research → engineering → risk → final approval
+	0.2 Versioning & Change Control
+		versioning for:
+			trading model
+			constraints
+			architecture
+		change must include:
+			reason
+			impact analysis
+			rollback plan
+	0.3 Phase Gate Rules
+		each phase must be:
+			reviewed
+			validated
+			locked
+		no forward movement without approval
+	0.4 Documentation Control
+		single source of truth enforcement
+		no duplicate or conflicting documents
+
+SECTION: FIRM-LEVEL RISK POLICY
+	Define:
+		max capital at risk
+		max daily loss (firm level)
+		max drawdown tolerance
+		crisis behavior:
+			full shutdown conditions
+
+SECTION: OPERATING MODEL
+	Define:
+		roles:
+			research
+			trading ops
+			risk oversight
+		manual intervention rules:
+			when humans can override
+			when system is fully autonomous
+
+	External Input Policy Rules
+
+		Policy MUST define rules for:
+
+			allowed instruments
+			allowed time windows
+			allowed trade sizes
+			allowed market conditions
+
+		Policy MUST have authority to reject all EXTERNAL inputs.
+
+SECTION: PHASE VALIDATION CRITERIA
+	Each phase must define:
+		completeness checklist
+		validation method
+		acceptance criteria
+
+		Example:
+			Phase B is valid only if:
+			→ all constraints are quantified
+			→ no vague statements exist
+
+	Why this?
+	Without this:
+		phases get “approved” without being complete
+
+SECTION: ASSUMPTION REGISTER
+	Define:
+		every assumption must be:
+			explicitly written
+			validated in next phase
+			removed or confirmed
+
+		Why this?
+		Institutional systems:
+			never allow hidden assumptions
+
+SECTION: FLOW VS PIPELINE DISTINCTION (CRITICAL)
+
+	Define:
+
+	Flow:
+		→ logical transformation
+		→ example:
+			Signal → Decision → Trade Intent
+
+	Pipeline:
+		→ lifecycle stages over time
+		→ example:
+			Generate → Validate → Emit → Expire
+
+	Rule:
+		Flow defines transformation logic
+		Pipeline defines lifecycle behavior
+
+	Both MUST be defined separately in each phase
+
+SECTION: CONTROLLED EXTERNAL INPUT LAYER (CEIL)
+
+	Define:
+
+	CEIL is a system-level input control layer that allows externally generated trade intents to enter the trading platform under strict validation, risk, and policy enforcement.
+
+	CEIL is NOT:
+
+		part of Phase A (trading logic)
+		part of Phase B (constraints)
+		part of Phase C (infrastructure)
+		part of Phase D core logic
+
+	CEIL acts as an additional input channel at the Trade Intent boundary.
+
+	DEFINITION CONSTRAINT
+
+		External Source is defined as:
+
+			any system outside Phase A–D that generates trade intents
+
+		Validation Complete is defined as:
+
+			all CEIL validation rules satisfied with no violation
+
+
+	SYSTEM POSITION
+
+	Core Flow:
+		Market → Strategy → Signal → Decision → Trade Intent
+
+	CEIL Flow:
+		External Source → CEIL → Validated Trade Intent
+
+	Merge Point:
+		Core Trade Intent + CEIL Trade Intent
+				↓
+			Risk Engine
+				↓
+			Policy Engine
+				↓
+			Execution
+
+
+	INPUT CLASSIFICATION (MANDATORY)
+
+	Every trade intent MUST include:
+
+		origin_type ∈ {CORE, EXTERNAL}
+
+		CORE:
+			generated by Decision Engine
+
+		EXTERNAL:
+			generated outside core system
+
+	CANONICAL INPUT SET (MANDATORY)
+
+		External inputs MUST be processed using:
+
+			canonical_external_input_set = {
+				external_trade_intent_snapshot
+				configuration_snapshot
+				version_identifiers
+			}
+
+		Constraints:
+
+			snapshot MUST be immutable
+			snapshot MUST be complete (no implicit fields)
+			snapshot MUST be hash-identifiable
+
+		All CEIL processing MUST use ONLY canonical_external_input_set
+
+	DETERMINISTIC IDENTITY (MANDATORY)
+
+		Each external trade intent MUST have a deterministic identifier:
+
+			external_intent_id = HASH_v1(canonical_external_payload)
+
+		Where canonical_external_payload includes:
+
+			instrument
+			direction
+			size
+			timestamp
+			source_identifier
+
+		Constraints:
+
+			canonical field order MUST be fixed
+			identical payload MUST produce identical external_intent_id
+
+		Purpose:
+
+			ensures deduplication
+			ensures replay consistency
+			ensures traceability
+
+
+	ISOLATION RULES (STRICT)
+
+	External inputs MUST NOT:
+
+		enter Strategy layer
+		enter Signal model
+		enter Decision engine
+
+	External inputs MUST NOT:
+
+		influence signal generation
+		influence decision aggregation
+		modify system parameters
+
+
+	VALIDATION REQUIREMENTS
+
+	All external inputs MUST pass CEIL validation:
+
+		schema validation
+		instrument validity
+		timestamp validity
+		duplication check
+		completeness check
+
+	If validation fails:
+		input MUST be rejected
+
+	DUPLICATION RULE (MANDATORY)
+
+		External trade intents MUST be uniquely identified by:
+
+			external_intent_id
+
+		Constraint:
+
+			if external_intent_id already exists within active validation window:
+
+				duplicate MUST be rejected
+
+			OR
+
+				duplicate handling MUST follow deterministic rule:
+					(e.g., first accepted, subsequent rejected)
+
+		No implicit duplication handling allowed
+
+		ACTIVE VALIDATION WINDOW (MANDATORY)
+
+			Active validation window MUST be defined as:
+
+				time interval = [current_time - max_allowed_delay, current_time]
+
+			Constraint:
+
+				duplication checks MUST operate ONLY within this window
+
+			Window definition MUST be globally consistent
+
+	RULE EXECUTION ORDER (MANDATORY)
+
+		External input processing MUST follow strict sequence:
+
+			1. Validation (CEIL)
+			2. Risk Engine
+			3. Policy Engine
+			4. Execution
+
+		Precedence:
+
+			Risk Engine MUST execute BEFORE Policy Engine
+
+			If Risk rejects:
+				Policy MUST NOT execute
+
+			If Policy rejects:
+				Execution MUST NOT proceed
+
+		No reordering permitted
+
+	INPUT DOMAIN CONSTRAINTS (MANDATORY)
+
+		Validation MUST enforce:
+
+			size > 0
+			instrument MUST exist in reference universe
+			direction ∈ {BUY, SELL}
+			timestamp MUST be within valid time window
+
+		Invalid domain values MUST be rejected
+
+		Schema-valid but logically invalid inputs MUST NOT be accepted
+
+	TIME VALIDITY CONSTRAINT (MANDATORY)
+
+		External trade intent MUST satisfy:
+
+			current_time - timestamp ≤ max_allowed_delay
+
+		Where:
+
+			max_allowed_delay is globally defined
+
+		If violated:
+
+			input MUST be rejected as stale
+
+	ORDERING RULE (MANDATORY)
+
+		External inputs MUST be processed in deterministic order:
+
+			ordered by:
+
+				1. timestamp (ascending)
+				2. external_intent_id (lexicographic)
+
+		Constraint:
+
+			identical input set MUST produce identical processing order
+
+		No runtime-dependent ordering allowed
+
+
+	RISK ENFORCEMENT (MANDATORY)
+
+	All CEIL inputs MUST pass Risk Engine.
+
+	Constraints:
+
+		stricter limits than CORE
+		bounded capital usage
+		exposure caps
+		loss limits
+
+	Risk Engine may:
+
+		reduce
+		reject
+		terminate
+
+
+	POLICY ENFORCEMENT (MANDATORY)
+
+	Policy Engine acts as final approval.
+
+	Policy may:
+
+		allow
+		restrict
+		reject
+
+
+	CAPITAL PARTITIONING (MANDATORY)
+
+	System MUST define:
+
+		Core Capital
+		External Capital
+
+	Constraints:
+
+		External capital MUST be isolated
+		External inputs MUST NOT use core capital
+
+	INPUT RATE CONTROL (MANDATORY)
+
+		System MUST enforce:
+
+			maximum external inputs per instrument per time window
+
+		If exceeded:
+
+			excess inputs MUST be rejected deterministically
+
+		RATE LIMIT ENFORCEMENT RULE
+
+			If rate limit exceeded:
+
+				inputs MUST be rejected in deterministic order:
+
+					lowest priority = latest timestamp
+
+					tie-breaker = highest external_intent_id
+
+			No random rejection allowed
+
+
+	NO FEEDBACK RULE (CRITICAL)
+
+	CEIL outputs MUST NOT feed into:
+
+		strategy design
+		signal model
+		decision engine
+
+
+	KILL SWITCH (MANDATORY)
+
+	System MUST support:
+
+		independent CEIL shutdown
+		zero impact on core system
+
+
+	TRACEABILITY
+
+	Each external trade MUST include:
+
+		origin_type = EXTERNAL
+		source_identifier
+		validation_status
+		risk_decision_reference
+		policy_decision_reference
+
+	TRACEABILITY IDENTITY (MANDATORY)
+
+		Each external trade MUST include:
+
+			external_intent_id
+
+		Constraint:
+
+			all downstream references MUST use this identifier
+
+			trace must be reconstructable from canonical input
+
+
+	FAILURE CONDITIONS
+
+	CEIL fails if:
+
+		validation is bypassed
+		risk is bypassed
+		policy is bypassed
+		capital isolation is violated
+		feedback into core system exists
+
+
+PHASE A — TRADING MODEL DESIGN (PURE LOGIC LAYER)
+	1. WHAT IT IS
+		A technology-agnostic definition of how the firm trades.
+		It defines behavior, not system.
+
+	2. WHY IT EXISTS
+		Prevents building infra without purpose
+		Eliminates random / inconsistent strategy thinking
+		Creates single source of truth for trading logic
+
+	3. OBJECTIVE
+		Define a complete, scalable, multi-strategy trading model that can operate at institutional scale.
+
+	4. SCOPE
+		INCLUDED
+		strategy taxonomy (intraday, swing, stat-arb, etc.)
+		signal model (standardized signals)
+		decision logic (aggregation, conflict resolution)
+		execution behavior (NOT system)
+		risk philosophy (multi-layer)
+		capital allocation logic
+		portfolio structure
+		feedback loop (learning model)
+		EXCLUDED (STRICT)
+		infrastructure
+		tools
+		APIs
+		databases
+		message brokers
+		latency engineering
+
+	5. MAIN REQUIREMENTS
+		deterministic logic (same input → same decision)
+		modular strategy definition
+		separation of:
+		signal
+		decision
+		execution
+		risk
+		scalability (multi-strategy, multi-asset)
+		auditability (traceable decisions)
+
+	6. FLOW ARCHITECTURE (LOGICAL)
+
+		Define:
+
+		6.1 Input
+			→ market state
+			→ strategy signals
+
+		6.2 Processing
+			→ signal evaluation
+			→ aggregation
+			→ decision logic
+
+		6.3 Output
+			→ trade intent (logical)
+
+		6.4 Flow Model
+			→ Market State → Strategy → Signal → Decision → Trade Intent
+
+	7. FAILURE IF DONE WRONG
+		system becomes conceptual (like current state)
+		no clear system mapping later
+		inconsistent strategy behavior
+
+	8.1 Strategy Lifecycle Model
+	Define lifecycle:
+		Research → Backtest → Validation → Paper Trading → Production → Monitoring → Retirement
+
+	Include:
+		entry criteria
+		promotion thresholds
+		deactivation rules
+
+	8.2 Signal Quality Framework
+	define:
+		signal accuracy metrics
+		decay behavior
+		confidence scoring rules
+
+	8.3 Capital Allocation Rules (Formalization)
+	allocation formula basis:
+		Sharpe
+		drawdown
+		correlation
+	rebalancing frequency
+
+	8.4 Portfolio Constraints (Logical)
+		max strategies active
+		diversification rules
+		exposure caps (logical, not numeric yet)
+
+	8.5 Decision Conflict Resolution Logic
+	what happens when:
+		strategies disagree
+	priority rules:
+		weighted voting / hierarchy
+
+	SECTION: BACKTEST & SIMULATION FRAMEWORK
+	Define:
+		historical replay model
+		simulation vs live parity
+		validation metrics
+
+	SECTION: STRATEGY CAPACITY MODEL
+	Define:
+		max capital per strategy
+		liquidity constraints
+		slippage impact thresholds
+		capacity saturation rules
+
+	SECTION: CAPITAL MODEL
+	Define:
+		total capital structure:
+			deployable capital
+			reserve capital
+		capital allocation tiers:
+			strategy level
+			portfolio level
+		scaling rules:
+			when capital increases
+			when capital is reduced
+
+	SECTION: STATE MODEL (LOGICAL)
+
+		Define:
+
+		State Types:
+			→ signal state (active / expired)
+			→ decision state (ephemeral)
+			→ portfolio logical state (exposure, allocation)
+
+		State Rules:
+			→ all state must be:
+				deterministic
+				reconstructable
+				time-bound
+
+		Source of Truth:
+			→ defined logically in Phase A
+			→ physical ownership defined in Phase C
+
+		State Constraints:
+			→ no hidden state
+			→ no non-reproducible memory
+
+PHASE B — SYSTEM CONSTRAINT DEFINITION (REALITY LAYER)
+	1. WHAT IT IS
+		Translation of trading model into quantified system constraints
+		Converts logic → engineering requirements
+
+	2. WHY IT EXISTS
+		prevents unrealistic architecture
+		defines system limits before building
+		ensures trading model is executable in reality
+
+	3. OBJECTIVE
+		Define hard boundaries within which system must operate
+
+	4. SCOPE
+		INCLUDED
+		latency requirements (ms / sec level)
+		throughput (ticks/sec, orders/sec)
+		data granularity (tick, 1s, 1m)
+		determinism level (strict / relaxed)
+		fault tolerance expectations
+		scale assumptions (capital, instruments)
+		EXCLUDED
+		actual infra design
+		tools (Kafka, DB, etc.)
+		service definitions
+
+	5. MAIN REQUIREMENTS
+		quantified (no vague statements)
+		aligned with trading model
+		realistic (based on market + strategy type)
+		enforceable
+
+	6. OUTPUT (DELIVERABLE)
+
+		A System Constraints Spec, including:
+
+		latency class (e.g., sub-second, seconds)
+		data volume expectations
+		execution frequency
+		failure tolerance model
+
+	7. FAILURE IF DONE WRONG
+		over-engineering or under-engineering
+		system collapse under load
+		strategy not executable
+
+	8.1 Time Model Definition (CRITICAL)
+	Define:
+		event time vs processing time
+		acceptable delay
+		ordering guarantees
+
+	8.2 Determinism Level Definition
+	strict replay required? (yes/no)
+	tolerance for:
+		out-of-order events
+		delayed data
+
+	8.3 Data Volume & Growth Model
+	expected:
+		ticks/sec
+		signals/sec
+		orders/sec
+	growth projection
+
+	8.4 Failure Tolerance Model
+	Define:
+		acceptable downtime
+		acceptable data loss (ideally zero)
+		recovery time expectations
+
+	8.5 Execution Frequency Profile
+	per strategy class:
+		trade frequency
+		burst behavior
+
+	SECTION: DATA DOMAIN MODEL
+	Define:
+		market data types:
+			tick
+			OHLC
+			order book
+		reference data:
+			instruments
+			contracts
+		derived data:
+			indicators
+			signals
+
+PHASE C — SYSTEM SETUP DESIGN (INFRA + ARCHITECTURE)
+	1. WHAT IT IS
+		Design of the entire technical foundation
+		This is where system becomes real (but not yet implemented)
+
+	2. WHY IT EXISTS
+		converts constraints into architecture
+		ensures deterministic, scalable infrastructure
+		defines system boundaries clearly
+
+	3. OBJECTIVE
+		Build a production-grade architecture blueprint for the platform
+
+	4. SCOPE
+		INCLUDED
+		A. Core Architecture
+			microservices structure
+			service boundaries
+		B. Event System
+			message broker (Kafka / Redis Streams)
+			event topics / streams
+			event contracts
+		C. Data Layer
+			ingestion pipelines
+			storage systems (time-series, relational)
+			data validation
+		D. Infrastructure
+			containerization (Docker)
+			orchestration (K8s optional)
+			networking
+		E. Reliability
+			retries
+			idempotency
+			fault handling
+		F. Observability
+			logging
+			metrics
+			tracing
+			EXCLUDED
+			trading logic details
+			strategy implementation
+
+	5. MAIN REQUIREMENTS
+		event-driven design
+		deterministic processing
+		modular services
+		scalable data pipelines
+		fault-tolerant
+
+	6. OUTPUT (DELIVERABLE)
+		A System Architecture Blueprint, including:
+
+		service map
+		event flow diagram
+		data flow architecture
+		infra stack definition
+
+	7. FAILURE IF DONE WRONG
+		system drift
+		non-deterministic behavior
+		scaling failure
+		operational instability
+
+	8.1 State Ownership Model (CRITICAL)
+	Define:
+	source of truth for:
+		orders
+		positions
+		portfolio
+	event vs database authority
+
+	8.2 Event Contract & Schema Governance
+		schema versioning rules
+		backward compatibility
+		validation enforcement
+
+	8.3 Failure & Recovery Architecture
+	Define:
+		service restart behavior
+		replay mechanism
+		reconciliation processes
+
+	8.4 Observability Objectives (NOT JUST TOOLS)
+	Define:
+	what must be tracked:
+		latency
+		event lag
+		execution success
+		system health
+	alert conditions
+
+	8.5 Data Validation Layer
+		data integrity checks
+		anomaly detection (bad ticks, gaps)
+
+	SECTION: DEPLOYMENT MODEL
+	Define:
+		release strategy:
+			rolling
+			blue-green
+		rollback mechanism
+
+	SECTION: SECURITY MODEL
+	Define:
+		service authentication
+		access control (RBAC)
+		secrets management
+
+	SECTION: ENVIRONMENT STRATEGY
+	Define:
+		environments:
+			dev
+			staging
+			production
+		promotion rules:
+			how code moves across environments
+
+🟥 PHASE D — TRADING PLATFORM DESIGN (SYSTEM IMPLEMENTATION DESIGN)
+	1. WHAT IT IS
+		Design of actual trading system components inside the architecture
+		This is where trading meets system
+
+	2. WHY IT EXISTS
+		translates trading model into executable system
+		defines real pipelines and services
+		ensures trading operates within infra constraints
+
+	3. OBJECTIVE
+		Design a fully functional, event-driven trading platform
+
+	4. SCOPE
+		INCLUDED
+		A. Strategy Engine
+			signal generation services
+			pluggable strategies
+
+		B. Decision Engine
+			signal aggregation
+			trade intent generation
+
+		C. Risk Engine
+			enforcement layer
+			overrides all decisions
+
+			External Trade Classification
+
+				Risk Engine MUST classify:
+
+					origin_type = EXTERNAL
+
+				as high-risk category.
+
+				Apply stricter constraints:
+
+					reduced capital allocation
+					tighter exposure limits
+					stricter drawdown thresholds
+
+		D. Execution Engine
+			OMS (order management)
+			EMS (execution logic)
+			broker integration
+
+			External Trade Intent Handling (REFERENCE)
+
+				Execution Engine MUST accept trade intents from:
+
+					CORE (Decision Engine)
+					EXTERNAL (CEIL validated inputs)
+
+				Constraints:
+
+					All trade intents MUST pass:
+						Risk Engine
+						Policy Engine
+
+					Execution Engine MUST NOT introduce logic based on origin_type
+
+
+		E. Portfolio State
+			positions
+			PnL tracking
+			exposure
+			EXCLUDED
+			infra redesign
+			core architecture changes
+
+	5. MAIN REQUIREMENTS
+		event-driven pipeline
+		strict risk enforcement
+		state consistency
+		execution reliability
+		auditability
+	6. OUTPUT (DELIVERABLE)
+		A Trading Platform Design Spec, including:
+
+		service-level flows
+		event interactions
+		execution lifecycle
+		risk enforcement model
+
+	7. FAILURE IF DONE WRONG
+		system cannot trade
+		risk breaches
+		inconsistent state
+		capital loss
+
+	8.1 Capital Safety Protocol (CRITICAL)
+	Define:
+		global kill switch
+		max daily loss threshold
+		automatic trading halt conditions
+
+	8.2 Order Lifecycle Definition
+	Define full lifecycle:
+		Create → Validate → Send → Acknowledge → Fill → Partial Fill → Cancel → Close
+
+	8.3 Portfolio State Consistency Rules
+		how positions are updated
+		reconciliation with broker
+		mismatch handling
+
+	8.4 Risk Enforcement Hierarchy
+	priority:
+		firm-level > portfolio > strategy > trade
+	override rules
+
+	8.5 Execution Failure Handling
+	Define:
+		order rejection handling
+		retry logic
+		fallback behavior
+
+	SECTION: BACKTEST & SIMULATION FRAMEWORK
+	Define:
+		historical replay model
+		simulation vs live parity
+		validation metrics
+
+	SECTION: PnL & ACCOUNTING MODEL
+	Define:
+		realized vs unrealized PnL
+		fee / slippage inclusion
+		mark-to-market logic
+		reconciliation with broker
+
+FULL SYSTEM VIEW (PHASE RELATION)
+PHASE 0 →	governance, versioning, control
+
+PHASE A → 	defines WHAT to trade and HOW logically
+			strategy lifecycle, signal quality, allocation rules
+
+PHASE B → 	defines WHAT is POSSIBLE in reality
+			time model, determinism, data volume, failure tolerance
+
+PHASE C → 	defines WHERE and HOW system runs
+			state ownership, event contracts, recovery, observability
+
+PHASE D → 	defines HOW trading actually executes in system
+			capital safety, order lifecycle, execution failure handling
+
+FINAL CONTROL SUMMARY
+Phase	Role				Output
+A		Trading logic		Trading Model Spec
+B		Constraints			System Constraints Spec
+C		Infra design		Architecture Blueprint
+D		Trading system		Platform Design Spec
+
+EXECUTION RULE
+If any phase is weak → all next phases collapse

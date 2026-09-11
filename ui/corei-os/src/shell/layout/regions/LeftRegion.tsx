@@ -13,19 +13,23 @@
  * Institutional Navigation Workspace Boundary
  *
  * DESCRIPTION:
- * Defines the Phase-17 left shell region.
+ * Composes the existing Activity Bar and existing Workbench Sidebar
+ * into the institutional left navigation surface.
  *
- * Composes:
+ * Existing capabilities consumed:
  *
- * Activity Ribbon
- * Navigation Surface
+ * - ActivityBar
+ * - Sidebar
+ * - Explorer
+ * - Existing Activity Runtime
+ * - Existing Sidebar Runtime
+ * - Existing Explorer Runtime
+ * - Existing Sidebar State
  *
- * Activity ownership remains with Workbench Activity Platform.
- *
- * Navigation ownership remains with Navigation Platform.
- *
- * This component only composes existing capabilities into the
- * Institutional Shell boundary.
+ * No new navigation provider.
+ * No new runtime.
+ * No new state model.
+ * No navigation architecture redesign.
  *
  * OWNERSHIP:
  * Institutional Shell
@@ -41,29 +45,46 @@ import {
 } from "../../../workbench/activity-bar/ActivityBar";
 
 import {
-    Navigation
-} from "../../../navigation/components/Navigation";
+    Sidebar
+} from "../../../workbench/sidebar/Sidebar";
 
+
+/* ==========================================================================
+ * LEFT REGION
+ * ========================================================================== */
 
 export function LeftRegion(): ReactElement {
 
     return (
 
         <section
-
             className="corei-region corei-region-left"
-
             data-shell-surface="navigation"
-
         >
 
             <div
                 className="corei-left-navigation-container"
             >
 
+                {/* =========================================================
+                 * ACTIVITY BAR
+                 *
+                 * Existing activity navigation surface.
+                 * ========================================================= */}
+
                 <ActivityBar />
 
-                <Navigation />
+
+                {/* =========================================================
+                 * WORKBENCH SIDEBAR
+                 *
+                 * Existing Sidebar → Explorer composition.
+                 *
+                 * Visibility is controlled by the existing Sidebar
+                 * runtime/state.
+                 * ========================================================= */}
+
+                <Sidebar />
 
             </div>
 

@@ -1,0 +1,776 @@
+PHASE D — MACRO DESIGN (STEP 0 EQUIVALENT)
+
+	Execution Layer — Institutional Specification (LOCK-GRADE)
+
+	CONTEXT ALIGNMENT (MANDATORY TRACE)
+
+	This phase strictly follows:
+
+		Phase A → Trading Logic (WHAT)
+		Phase B → Constraints (WHAT IS ALLOWED)
+		Phase C → Infrastructure + State + Output
+
+	And must comply with:
+
+		Master Phase Blueprint
+		Universal Phase Structure (UPS — 21 Sections)
+
+1. PHASE IDENTITY LAYER
+	1.1 Phase Name
+
+		Phase D — Trading Platform Execution Design (Macro Layer)
+
+	1.2 Phase Role
+
+		Defines the end-to-end execution system architecture that:
+
+		consumes execution_instruction_stream (from Phase C)
+		enforces Phase B constraints
+		executes trades deterministically
+		integrates CEIL external inputs
+		produces broker-ready execution behavior
+
+	1.3 Phase Objective
+
+	Construct a deterministic, risk-controlled, policy-governed execution pipeline such that:
+
+		execution_instruction_stream
+		+ constraint_specification
+		+ configuration_snapshot
+		→ deterministic execution outcomes (orders, fills, state transitions)
+
+	1.4 Why This Phase Exists
+
+		Prevents:
+
+			Uncontrolled execution (bypassing risk/policy)
+			Constraint violations at runtime
+			Non-deterministic order behavior
+			CEIL contamination into core logic
+			Broken auditability (execution ≠ intent)
+
+2. PHASE SCOPE CONTROL
+	2.1 INCLUDED (STRICT)
+		Execution architecture (OMS / EMS abstraction)
+		Risk enforcement system (runtime)
+		Policy enforcement system
+		Order lifecycle model
+		Execution pipeline design
+		CEIL integration (execution boundary only)
+		Core vs External capital handling
+		Deterministic execution ordering
+
+	2.2 EXCLUDED (STRICT)
+		Strategy / signal / decision logic (Phase A)
+		Constraint definition (Phase B)
+		Infrastructure design (Phase C)
+		Broker API implementation (only abstracted)
+		Market microstructure optimization (micro phase)
+
+3. ARCHITECTURAL INTENT
+	3.1 Core Principles
+		Deterministic execution
+		Strict rule precedence (Validation → Risk → Policy → Execution)
+		Zero logic leakage across phases
+		CEIL isolation
+		Full audit traceability
+		Replay-safe execution
+
+	3.2 Architectural Model
+		Execution_Output = F(
+			execution_instruction_stream,
+			constraint_specification,
+			configuration_snapshot
+		)
+
+	3.3 System Positioning
+		Phase A → Signal → Decision → Trade Intent
+		Phase B → Constraints
+		Phase C → execution_instruction_stream
+		Phase D → EXECUTION (THIS PHASE)
+
+	3.4 Component Interaction Model (MANDATORY)
+	Component Interaction Model
+
+		Define deterministic interaction contracts between core execution components.
+
+		Interaction Chain:
+
+		TradeIntent
+		→ Risk Engine
+		→ Policy Engine
+		→ Execution Engine
+		→ Order Lifecycle
+
+		Formal Contracts:
+
+		RiskDecision = f(TradeIntent, constraint_specification)
+
+		PolicyDecision = f(RiskDecision, policy_rules)
+
+		ExecutionOrder = f(PolicyDecision)
+
+		Interaction Rules:
+
+		- Each component MUST consume ONLY the immediate upstream output
+		- No component may access upstream layers directly (no bypass)
+		- No shared mutable state across components
+		- All interactions MUST be stateless and deterministic
+		- Output of each component MUST be fully defined and schema-bound
+
+		Violation:
+		→ NON-DETERMINISTIC EXECUTION
+
+4. DOMAIN MODEL (MACRO ENTITIES)
+	Core Entities
+	ExecutionInstruction
+	TradeIntent (CORE / EXTERNAL)
+	RiskDecision
+	PolicyDecision
+	ExecutionOrder
+	OrderState
+	PortfolioState
+	ExecutionEvent
+
+	Ownership
+	Execution entities → Phase D ONLY
+	No duplication from Phase A/B/C (Single Ownership Rule)
+
+5. LOGIC / RULE ENGINE (MACRO ORDER)
+	GLOBAL EXECUTION ORDER (LOCKED)
+		1. CEIL Validation (if EXTERNAL)
+		2. Risk Engine
+		3. Policy Engine
+		4. Execution Engine
+
+	Invariant (MANDATORY):
+
+		If Risk rejects → STOP
+		If Policy rejects → STOP
+		No bypass allowed
+		No reordering allowed
+
+		(Aligned with CEIL rules in blueprint)
+
+	Core Rule Classes
+		R1 — Deterministic Input Consumption
+			Only canonical input allowed
+
+		R2 — Origin Isolation
+			origin_type ∈ {CORE, EXTERNAL}
+
+		R3 — Capital Partitioning
+			CORE capital ≠ EXTERNAL capital
+
+		R4 — Execution Determinism
+			Same input → same order output
+
+	Execution Ordering Rule (MANDATORY)
+
+		Execution Ordering Rule
+
+		All execution instructions MUST be globally ordered before processing.
+
+		Ordering Key:
+
+		1. event_time ASC
+		2. origin_type priority:
+		   CORE = 1
+		   EXTERNAL = 2
+		3. trade_intent_id ASC
+
+		Tie-Break Rule:
+
+		If all fields equal:
+		→ use deterministic hash(trade_intent_id)
+
+		Constraints:
+
+		- Ordering MUST be identical across all executions
+		- Ordering MUST NOT depend on runtime/system time
+		- Ordering MUST match Phase C event ordering guarantees
+
+		Violation:
+		→ EXECUTION NON-DETERMINISM
+
+	PolicyDecision Types:
+
+		ALLOW
+		MODIFY
+		REJECT
+
+	Numeric Model (MANDATORY)
+
+		All numeric values MUST use fixed-point representation:
+
+		value = integer / 10^6
+
+		Rules:
+
+		- floating point operations are forbidden
+		- rounding MUST be deterministic (floor only)
+		- overflow → HARD FAIL
+		- underflow → treated as zero
+
+		Applies to:
+
+		- order size
+		- price_reference
+		- portfolio values
+
+		Violation:
+		→ NON-DETERMINISTIC CALCULATION
+
+6. FLOW ARCHITECTURE (CRITICAL)
+	6.0 Canonical Input Set (MANDATORY)
+		canonical_input_set_D = {
+			execution_instruction_stream,
+			constraint_specification,
+			configuration_snapshot,
+			version_identifiers
+		}
+
+		Canonical Enforcement Rule (MANDATORY)
+
+			All execution computations MUST use ONLY canonical_input_set_D.
+
+			Prohibited:
+
+			- runtime system variables
+			- external state not present in canonical_input_set_D
+			- implicit defaults
+
+			Constraint:
+
+			execution_output MUST be a pure function of canonical_input_set_D
+
+			Violation:
+			→ NON-DETERMINISTIC EXECUTION
+
+	6.1 Input
+
+		From Phase C:
+
+		execution_instruction_stream
+
+		Contains:
+
+		trade intents (CORE)
+		execution instructions
+		CEIL validated intents (EXTERNAL path)
+
+	6.2 PROCESSING FLOW (MACRO)
+		Execution Instruction
+				↓
+		[Origin Classification]
+				↓
+		[CEIL Validation] (EXTERNAL only)
+				↓
+		[Risk Engine]
+				↓
+		[Policy Engine]
+				↓
+		[Execution Engine]
+				↓
+		[Order Generation]
+
+	6.3 Output
+		execution_output = {
+			order_stream,
+			execution_state_updates,
+			portfolio_updates,
+			audit_trace
+		}
+
+		ExecutionOrder Schema (MANDATORY)
+
+			ExecutionOrder = {
+				order_id
+				trade_intent_id
+				instrument
+				direction
+				size
+				price_reference
+				timestamp
+				origin_type
+			}
+
+			Order ID Rule:
+
+			order_id = HASH_v1(
+				trade_intent_id +
+				instrument +
+				direction +
+				size +
+				timestamp
+			)
+
+			Constraints:
+
+			- MUST be deterministic
+			- MUST be unique
+			- MUST be reproducible during replay
+
+			Violation:
+			→ INVALID EXECUTION OUTPUT
+
+	6.4 FLOW VS PIPELINE (STRICT SEPARATION)
+		Flow (Logic Transformation)
+			Trade Intent → Risk → Policy → Order
+
+		Pipeline (Lifecycle)
+			Receive → Validate → Approve → Execute → Settle → Archive
+
+		(Strictly enforced from blueprint)
+
+	6.5 Time Model (MANDATORY)
+			Time Model
+
+		Defines deterministic time handling across execution.
+
+		Time Types:
+
+		- event_time → inherited from Phase C (source of truth)
+		- processing_time → system execution time
+
+		Rules:
+
+		- event_time MUST be used for ordering and logic
+		- processing_time MUST NOT influence execution decisions
+		- execution MUST strictly follow event_time ordering
+
+		Constraint:
+
+		- identical event_time sequence → identical execution outcome
+
+		Violation:
+		→ NON-REPLAYABLE SYSTEM
+
+7. PIPELINE STRUCTURE (EXECUTION LIFECYCLE)
+	Order Lifecycle Pipeline
+		P1: Intent Received
+		P2: Validation Stage (CEIL)
+		P3: Risk Evaluation
+		P4: Policy Evaluation
+		P5: Order Creation
+		P6: Order Routing
+		P7: Execution / Fill
+		P8: State Update
+		P9: Completion / Archive
+
+		Execution Mode:
+
+			- synchronous logical execution
+			- physical execution abstracted (broker layer)
+
+		Execution Completion Model (MANDATORY)
+
+			Execution states:
+
+			- NEW
+			- PARTIALLY_FILLED
+			- FILLED
+			- FAILED
+
+			Rules:
+
+			- PARTIALLY_FILLED → state update per execution_event
+			- FILLED → final state transition
+			- FAILED → no portfolio update
+
+			Completion Condition:
+
+			order is COMPLETE only when:
+
+			executed_size == order.size
+
+			Violation:
+			→ STATE INCONSISTENCY
+
+8. CONTROL & CONSTRAINTS
+	Hard Rules
+		No execution without risk approval
+		No execution without policy approval
+		No cross-capital usage
+		No external influence on decision layer
+		Deterministic ordering mandatory
+
+	Guardrails
+		Reject invalid intent
+		Reject stale CEIL inputs
+		Reject duplicate external intents
+		Reject constraint violations
+
+	Capital Application Model
+
+		Defines deterministic mapping from TradeIntent → ExecutionOrder size.
+
+		ExecutionOrder.size = f(
+			TradeIntent.size,
+			constraint_specification.capital_limits,
+			portfolio_state
+		)
+
+		Rules:
+
+		- CORE capital MUST be used ONLY for CORE intents
+		- EXTERNAL capital MUST be used ONLY for EXTERNAL intents
+		- Capital allocation MUST NOT exceed constraint_specification limits
+		- Capital evaluation MUST occur AFTER Risk Engine approval
+
+		Boundary Conditions:
+
+		- min_size = 0 → reject if zero
+		- max_size = capital_limit
+		- overflow → reject intent
+
+		Violation:
+		→ CAPITAL BREACH / SYSTEM FAILURE
+
+		Cross-Entity Consistency Rule (MANDATORY)
+
+			Constraints:
+
+			- ExecutionOrder.size MUST match approved TradeIntent.size
+			- Portfolio update MUST reflect executed_size ONLY
+			- No transformation allowed between:
+
+				TradeIntent → ExecutionOrder → PortfolioState
+
+			Consistency Check:
+
+			IF mismatch detected:
+			→ reject execution
+
+			Violation:
+			→ STATE CORRUPTION
+
+9. STATE MODEL (MACRO)
+	State Types
+		OrderState
+		ExecutionState
+		PortfolioState
+
+	Source of Truth
+		Derived from Phase C state + execution events
+
+	State Transition Model
+		TradeIntent → Order → Fill → Portfolio Update
+
+	State Update Function (MANDATORY)
+
+		PortfolioState(t+1) = f(
+			PortfolioState(t),
+			ExecutionEvent
+		)
+
+		ExecutionEvent includes:
+
+		- order_id
+		- fill_status
+		- executed_size
+		- execution_price
+
+		Rules:
+
+		- State update MUST occur ONLY after execution confirmation
+		- No speculative state updates allowed
+		- State MUST remain consistent with Phase C state lineage
+
+		Constraint:
+
+		- State MUST be reconstructable from execution events
+
+		Violation:
+		→ STATE INCONSISTENCY / AUDIT FAILURE
+
+10. FAILURE MODEL (MACRO)
+		Failure Scenarios
+		Risk bypass
+		Policy bypass
+		Duplicate execution
+		CEIL contamination
+		Non-deterministic ordering
+
+	Detection
+		rule violation checks
+		state mismatch
+		trace inconsistency
+
+	Response
+		reject execution
+		halt pipeline
+		trigger audit flag
+
+	Stage-Level Failure Handling
+
+		Failure Behavior by Stage:
+
+		CEIL Validation Failure:
+		→ Reject external intent
+
+		Risk Engine Failure:
+		→ Reject trade intent
+
+		Policy Engine Failure:
+		→ Reject trade intent
+
+		Execution Engine Failure:
+		→ Mark order as FAILED
+		→ No retry unless deterministic retry rule defined
+
+		Rules:
+
+		- No implicit retry allowed
+		- No partial execution allowed
+		- Failure MUST be logged and traceable
+
+		Violation:
+		→ UNCONTROLLED EXECUTION STATE
+
+11. ASSUMPTION REGISTER
+	Assumption								Reason								Validation Phase		Status
+	Phase C output deterministic			Required for execution correctness	Phase C validation		VALIDATED
+	Constraint_specification complete		Required for enforcement			Phase B lock			VALIDATED
+	execution_instruction_stream complete	No missing trade intents			Phase C					CONTROLLED
+	CEIL validation correctness				External safety						Phase D Step 8			OPEN
+
+12. VALIDATION FRAMEWORK
+
+	12.1 Completeness Checklist
+		execution order defined
+		CEIL integration defined
+		flow vs pipeline separated
+		canonical input enforced
+
+	12.2 Validation Method
+		Red Team (13 layers)
+		Blue Team validation
+		deterministic replay testing
+
+	12.3 Acceptance Criteria
+		PASS if:
+		- no ambiguity
+		- deterministic output proven
+		- no rule conflict
+		- full traceability chain exists
+
+	12.4 Validation Coverage Rule
+
+		Each rule MUST map to:
+
+			Red Team attack layer
+			Blue Team validation layer
+
+	12.5 Ambiguity Check
+
+		Test:
+
+			multiple execution paths
+			→ must produce identical output
+
+13. OUTPUT (DELIVERABLE SPEC)
+		phase_d_macro_spec = {
+			execution_flow_model
+			execution_pipeline_model
+			domain_model
+			risk_policy_precedence_model
+			ceil_integration_model
+			order_lifecycle_model
+			traceability_model
+		}
+
+14. TRACEABILITY MAPPING (MANDATORY)
+		Phase A → Signal
+				→ Decision
+				→ Trade Intent
+		Phase C → Execution Instruction
+		Phase D → Order → Fill → Portfolio
+
+	Full chain MUST exist:
+
+		signal_id → decision_id → trade_intent_id → order_id → fill_id
+
+	(Strict blueprint requirement)
+
+	CEIL INTEGRATION MODEL (CRITICAL)
+	Position in System
+	External Source
+		↓
+	CEIL
+		↓
+	Validated Trade Intent (origin_type = EXTERNAL)
+		↓
+	MERGE with CORE intents
+		↓
+	Risk → Policy → Execution
+
+	Isolation Rules (ENFORCED)
+	Cannot enter Strategy / Signal / Decision layers
+	Only enters at Trade Intent boundary
+	Must follow same execution pipeline
+
+	(Strict CEIL isolation)
+
+	CORE VS EXTERNAL EXECUTION HANDLING
+	Aspect				CORE				EXTERNAL
+	Origin				Decision Engine		External System
+	Validation			Internal			CEIL required
+	Capital				Core capital		External capital
+	Risk Limits			Standard			Stricter
+	Policy				Standard			Restrictive
+
+	Trade Intent Merge Rule (MANDATORY)
+
+		merged_trade_intents = sort(
+			CORE_trade_intents ∪ EXTERNAL_trade_intents
+		)
+
+		Sorting Key:
+
+		1. event_time ASC
+		2. origin_type priority:
+		   CORE = 1
+		   EXTERNAL = 2
+		3. trade_intent_id ASC
+
+		Constraints:
+
+		- Merge MUST occur BEFORE Risk Engine
+		- No duplicate trade_intent_id allowed
+		- External intents MUST NOT override CORE intents
+
+		Violation:
+		→ CEIL CONTAMINATION / NON-DETERMINISM
+
+	Hash Chain Model (MANDATORY)
+
+		Each execution artifact MUST include lineage hash:
+
+		trade_intent_hash = HASH_v1(trade_intent_payload)
+
+		order_id = HASH_v1(trade_intent_hash + order_payload)
+
+		execution_event_hash = HASH_v1(order_id + execution_payload)
+
+		Constraints:
+
+		- MUST be deterministic
+		- MUST allow full reconstruction chain
+		- MUST match Phase C hash lineage
+
+		Violation:
+		→ AUDIT FAILURE
+
+15. CROSS-PHASE CONSISTENCY
+	Phase D OWNS:
+		execution logic
+		order lifecycle
+		risk enforcement
+
+	Phase D REFERENCES:
+		Phase A → trade intent
+		Phase B → constraints
+		Phase C → execution stream
+
+16. SCALABILITY MODEL
+		multi-asset execution
+		horizontal scaling of execution engine
+		partitioned order processing
+
+		Constraints
+			ordering MUST remain deterministic
+			scaling MUST NOT affect output
+
+17. GOVERNANCE INTEGRATION
+
+	From Phase 0 blueprint
+
+	execution model versioned
+	risk rules require approval
+	policy rules require approval
+	changes require:
+		reason
+		impact analysis
+		rollback plan
+
+18. AUDITABILITY & OBSERVABILITY
+	Mandatory
+		full execution trace
+		input → output mapping
+		deterministic replay
+
+	Logging
+		trade intent
+		risk decision
+		policy decision
+		order execution
+
+	Replay Requirement
+		Same canonical_input_set_D
+		→ identical execution output
+
+19. RISK / POLICY PRECEDENCE MODEL
+		Risk Engine > Policy Engine > Execution
+
+	Why:
+		Risk = survival constraint
+		Policy = governance constraint
+		Execution = action layer
+
+	execution slippage risk
+		latency risk
+		external input abuse risk
+		capital misallocation risk
+
+	Controls
+		strict risk engine enforcement
+		CEIL validation
+		capital partitioning
+
+20. PHASE FAILURE CONDITION
+
+	Phase D MACRO FAILS if:
+
+		execution order undefined
+		CEIL improperly placed
+		risk/policy precedence violated
+		flow vs pipeline mixed
+		canonical input not enforced
+		traceability broken
+
+21. PHASE LOCK CRITERIA
+
+	Macro is LOCKED only if:
+
+		full execution pipeline defined
+		CEIL integration correct
+		deterministic flow ensured
+		ordering rules fixed
+		traceability complete
+		no cross-phase leakage
+
+FINAL OUTPUT (THIS STEP)
+Phase D Macro Specification
+
+	Includes:
+
+		Execution Flow Architecture
+		Execution Pipeline Model
+		Component Interaction Model
+		Risk/Policy Precedence Model
+		CEIL Integration Model
+		Core vs External Handling Model
+		Traceability Chain
+
+NEXT STEP
+Phase D — Step 1: Strategy Engine (MICRO BUILD)
+
+	We will now begin:
+
+		Full UPS 21-section build
+		Strategy Engine (execution-side interpretation)
+		Mapping Phase A strategy outputs → execution inputs
+		Red Team (13 layers)
+		Blue Team (13 layers)
+		CEI validation

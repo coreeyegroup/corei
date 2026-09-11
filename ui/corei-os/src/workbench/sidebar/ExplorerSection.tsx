@@ -1,24 +1,42 @@
 /**
  * ============================================================================
+ * COREI OPERATING SYSTEM
+ *
  * STAGE-25
  * STEP-02
  * BUILD UNIT-02
  *
- * FILE
+ * FILE:
  * ExplorerSection.tsx
+ *
+ * PURPOSE:
+ * Institutional Explorer Section
+ *
+ * EXISTING CAPABILITIES:
+ * - Explorer runtime
+ * - Explorer state
+ * - Explorer service
+ *
+ * EXECUTION BOUNDARY:
+ * - No new runtime.
+ * - No new state.
+ * - No navigation redesign.
  * ============================================================================
  */
 
 import {
-
     ChevronDown,
     ChevronRight
-
 } from "lucide-react";
 
-import { explorerService } from "./services";
+import {
+    explorerService
+} from "./services";
 
-import { useExplorerState } from "./state";
+import {
+    useExplorerState
+} from "./state";
+
 
 interface ExplorerSectionProps {
 
@@ -28,100 +46,106 @@ interface ExplorerSectionProps {
 
     children: React.ReactNode;
 
+    /**
+     * Optional badge count (e.g., number of items in the section)
+     * Displayed on the right side of the section header.
+     */
+    badge?: number;
+
 }
 
+
 export function ExplorerSection(
-
     props: ExplorerSectionProps
-
 ): React.JSX.Element {
 
-    const expanded = useExplorerState(
+    const expanded =
+        useExplorerState(
+            state =>
+                state.isExpanded(
+                    props.id
+                )
+        );
 
-        state =>
-
-            state.isExpanded(
-
-                props.id
-
-            )
-
-    );
 
     return (
 
-        <div>
+        <section
+            className="corei-explorer-section"
+        >
 
             <button
-
+                type="button"
+                className="corei-explorer-section-header"
+                aria-expanded={expanded}
                 onClick={() =>
-
                     explorerService.toggle(
-
                         props.id
-
                     )
-
                 }
-
-                style={{
-
-                    width: "100%",
-
-                    display: "flex",
-
-                    alignItems: "center",
-
-                    gap: "6px",
-
-                    padding: "6px 10px",
-
-                    border: 0,
-
-                    cursor: "pointer",
-
-                    background: "transparent",
-
-                    color: "#d4d4d4",
-
-                    fontWeight: 600,
-
-                    fontSize: "12px"
-
-                }}
-
             >
 
+                <span
+                    className="corei-explorer-section-chevron"
+                    aria-hidden="true"
+                >
+
+                    {
+                        expanded
+                            ? (
+                                <ChevronDown
+                                    size={12}
+                                    strokeWidth={1.8}
+                                />
+                            )
+                            : (
+                                <ChevronRight
+                                    size={12}
+                                    strokeWidth={1.8}
+                                />
+                            )
+                    }
+
+                </span>
+
+
+                <span
+                    className="corei-explorer-section-title"
+                >
+                    {props.title}
+                </span>
+
                 {
-
-                    expanded
-
-                        ? <ChevronDown size={14}/>
-
-                        : <ChevronRight size={14}/>
-
+                    props.badge !== undefined && props.badge > 0 && (
+                        <span
+                            className="corei-explorer-section-badge"
+                            aria-label={`${props.badge} items`}
+                        >
+                            {props.badge}
+                        </span>
+                    )
                 }
-
-                {props.title}
 
             </button>
 
-            {
 
+            {
                 expanded && (
 
-                    <div>
-
+                    <div
+                        className="corei-explorer-section-content"
+                    >
                         {props.children}
-
                     </div>
 
                 )
-
             }
 
-        </div>
+        </section>
 
     );
 
 }
+
+
+export default ExplorerSection;

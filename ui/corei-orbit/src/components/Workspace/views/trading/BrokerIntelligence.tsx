@@ -1,0 +1,1299 @@
+import React, { useEffect, useState } from 'react';
+
+import { useBrokerIntelligenceStore } from '../../../../store/brokerIntelligenceStore';
+import { brokerIntelligenceService } from '../../../../services/brokerIntelligenceService';
+import { toast } from 'sonner'; // <--- Added Toast Import
+
+import './BrokerIntelligence.css';
+
+import { BrokerProviders } from './BrokerProviders';
+
+type BrokerTab =
+  | 'Overview'
+  | 'Providers'
+  | 'Accounts'
+  | 'Credentials'
+  | 'Connectivity'
+  | 'Sessions'
+  | 'Market Access'
+  | 'Data Sources'
+  | 'Execution'
+  | 'Routing'
+  | 'Health'
+  | 'Controls'
+  | 'Diagnostics'
+  | 'Audit';
+
+type ObjectType =
+  | 'provider'
+  | 'account'
+  | 'credential'
+  | 'session'
+  | 'data-source'
+  | 'execution'
+  | 'route'
+  | 'event';
+
+type StatusTone =
+  | 'operational'
+  | 'attention'
+  | 'warning'
+  | 'critical'
+  | 'neutral'
+  | 'disabled';
+
+const TABS: BrokerTab[] = [
+  'Overview', 'Providers', 'Accounts', 'Credentials', 'Connectivity', 'Sessions',
+  'Market Access', 'Data Sources', 'Execution', 'Routing', 'Health', 'Controls',
+  'Diagnostics', 'Audit',
+];
+
+const normalize = (value: unknown): string =>
+  String(value ?? '').toLowerCase();
+
+const statusTone = (value: unknown): StatusTone => {
+  const state = normalize(value);
+
+  if (
+    state.includes('critical') ||
+    state.includes('failed') ||
+    state.includes('error') ||
+    state.includes('disconnected')
+  ) {
+    return 'critical';
+  }
+
+  if (
+    state.includes('warning') ||
+    state.includes('degraded') ||
+    state.includes('attention') ||
+    state.includes('expir')
+  ) {
+    return 'warning';
+  }
+
+  if (
+    state.includes('disabled') ||
+    state.includes('inactive')
+  ) {
+    return 'disabled';
+  }
+
+  if (
+    state.includes('connected') ||
+    state.includes('ready') ||
+    state.includes('healthy') ||
+    state.includes('active') ||
+    state.includes('operational')
+  ) {
+    return 'operational';
+  }
+
+  return 'neutral';
+};
+
+const displayValue = (
+  value: unknown,
+  fallback = '—',
+): string => {
+  if (
+    value === undefined ||
+    value === null ||
+    value === ''
+  ) {
+    return fallback;
+  }
+
+  return String(value);
+};
+
+const boolLabel = (value: unknown): string =>
+  value === true ? 'ENABLED' : 'DISABLED';
+
+const EmptyState: React.FC<{
+  label: string;
+  detail?: string;
+}> = ({ label, detail }) => (
+  <div className="bi-state bi-empty-state">
+    <strong>{label}</strong>
+    {detail && <span>{detail}</span>}
+  </div>
+);
+
+const StateBadge: React.FC<{
+  value: unknown;
+}> = ({ value }) => {
+  const label = displayValue(value, 'UNKNOWN').toUpperCase();
+
+  return (
+    <span
+      className="bi-state-badge"
+      data-tone={statusTone(value)}
+    >
+      <i aria-hidden="true" />
+      {label}
+    </span>
+  );
+};
+
+const Metric: React.FC<{
+  label: string;
+  value: string | number;
+  tone?: StatusTone;
+}> = ({ label, value, tone = 'neutral' }) => (
+  <div className="bi-metric">
+    <span className="bi-metric-label">{label}</span>
+    <strong
+      className="bi-metric-value"
+      data-tone={tone}
+    >
+      {value}
+    </strong>
+  </div>
+);
+
+const DetailInspector: React.FC<{
+  objectType: ObjectType;
+  object: Record<string, any> | null;
+  onClose: () => void;
+}> = ({ objectType, object, onClose }) => {
+  if (!object) {
+    return null;
+  }
+
+  const title =
+    displayValue(
+      object.name ??
+        object.display_name ??
+        object.displayName ??
+        object.account_id ??
+        object.accountId ??
+        object.credential_id ??
+        object.credentialId ??
+        object.id,
+      'Selected Object',
+    );
+
+  return (
+    <aside
+      className="bi-inspector"
+      aria-label="Broker Intelligence detail inspector"
+    >
+      <div className="bi-inspector-header">
+        <div>
+          <span className="bi-eyebrow">
+            {objectType.replace('-', ' ').toUpperCase()}
+          </span>
+          <h3>{title}</h3>
+        </div>
+
+        <button
+          type="button"
+          className="bi-icon-button"
+          onClick={onClose}
+          aria-label="Close detail inspector"
+        >
+          ×
+        </button>
+      </div>
+
+      <div className="bi-inspector-body">
+        {Object.entries(object)
+          .filter(
+            ([key]) =>
+              !normalize(key).includes('secret') &&
+              !normalize(key).includes('token') &&
+              !normalize(key).includes('password'),
+          )
+          .map(([key, value]) => (
+            <div
+              className="bi-inspector-row"
+              key={key}
+            >
+              <span>
+                {key
+                  .replace(/_/g, ' ')
+                  .replace(/([A-Z])/g, ' $1')
+                  .toUpperCase()}
+              </span>
+
+              <strong>
+                {typeof value === 'object'
+                  ? JSON.stringify(value)
+                  : displayValue(value)}
+              </strong>
+            </div>
+          ))}
+      </div>
+    </aside>
+  );
+};
+
+export const BrokerIntelligence: React.FC = () => {
+  const store = useBrokerIntelligenceStore();
+
+  const [activeTab, setActiveTab] =
+    useState<BrokerTab>('Overview');
+
+  const [selected, setSelected] =
+    useState<{
+      type: ObjectType;
+      id: string;
+      object: Record<string, any>;
+    } | null>(null);
+
+  // NOTE: Auto Refresh and Refresh button are now globally controlled in Workspace.tsx.
+  // This component will re-mount (and re-fetch) when the global refresh action occurs.
+  useEffect(() => {
+    void brokerIntelligenceService.fetchAll();
+  }, []);
+
+  const providers = Array.isArray(store.providers) ? store.providers : [];
+  const accounts = Array.isArray(store.accounts) ? store.accounts : [];
+  const credentials = Array.isArray(store.credentials) ? store.credentials : [];
+
+  /*
+   * Provider-local search/filter state intentionally removed.
+   *
+   * Provider filtering belongs to the Provider data-grid header.
+   * COREI Orbit already owns the single global workspace search.
+   *
+   * Accounts and credentials remain sourced directly from the
+   * authoritative Broker Intelligence store.
+   */
+  const filteredAccounts = accounts;
+  const filteredCredentials = credentials;
+
+  const connectedAccounts = accounts.filter(
+    (account: any) =>
+      account.connected === true ||
+      normalize(account.connection).includes('connected'),
+  ).length;
+
+  const enabledAccounts = accounts.filter(
+    (account: any) => account.enabled !== false,
+  ).length;
+
+  const disabledAccounts =
+    accounts.length - enabledAccounts;
+
+  const attentionCount = accounts.filter(
+    (account: any) => {
+      const tone = statusTone(
+        account.state ??
+          account.status ??
+          account.connection,
+      );
+
+      return (
+        tone === 'warning' ||
+        tone === 'critical'
+      );
+    },
+  ).length;
+
+  const openInspector = (
+    type: ObjectType,
+    object: Record<string, any>,
+  ) => {
+    const id = displayValue(
+      object.id ??
+        object.account_id ??
+        object.accountId ??
+        object.credential_id ??
+        object.credentialId ??
+        object.session_id ??
+        object.sessionId,
+      `${type}-selected`,
+    );
+
+    setSelected({
+      type,
+      id,
+      object,
+    });
+  };
+
+  const handleConnect = async (
+    accountId: string,
+  ) => {
+    await brokerIntelligenceService.connectAccount(
+      accountId,
+    );
+    await brokerIntelligenceService.fetchAll();
+  };
+
+  // REMOVED: handleDisconnect, handleEnableProvider, handleDisableProvider, handleRotateCredential
+  // Because these backend APIs are not exposed in the current OpenAPI spec.
+
+  const renderOverview = () => (
+    <div className="bi-view">
+      <section className="bi-summary-strip">
+        <Metric
+          label="PROVIDERS"
+          value={providers.length}
+        />
+        <Metric
+          label="ACCOUNTS"
+          value={accounts.length}
+        />
+        <Metric
+          label="CREDENTIALS"
+          value={credentials.length}
+        />
+        <Metric
+          label="CONNECTED"
+          value={connectedAccounts}
+          tone={
+            connectedAccounts > 0
+              ? 'operational'
+              : 'neutral'
+          }
+        />
+        <Metric
+          label="ENABLED"
+          value={enabledAccounts}
+          tone="operational"
+        />
+        <Metric
+          label="DISABLED"
+          value={disabledAccounts}
+        />
+        <Metric
+          label="ATTENTION"
+          value={attentionCount}
+          tone={
+            attentionCount > 0
+              ? 'warning'
+              : 'neutral'
+          }
+        />
+      </section>
+
+      <div className="bi-overview-grid">
+        <section className="bi-panel">
+          <div className="bi-panel-header">
+            <div>
+              <span className="bi-eyebrow">
+                PROVIDER REGISTRY
+              </span>
+              <h3>Broker Providers</h3>
+            </div>
+
+            <div className="bi-registry-actions">
+              <button
+                type="button"
+                className="bi-btn"
+                onClick={() =>
+                  setActiveTab('Providers')
+                }
+              >
+                OPEN REGISTRY
+              </button>
+
+              <button
+                type="button"
+                className="bi-btn bi-btn-primary"
+                onClick={() =>
+                  setActiveTab('Providers')
+                }
+              >
+                ADD / CONFIGURE
+              </button>
+            </div>
+          </div>
+
+          <ProviderTable
+            providers={providers.slice(0, 8)}
+            onSelect={openInspector}
+          />
+        </section>
+
+        <section className="bi-panel">
+          <div className="bi-panel-header">
+            <div>
+              <span className="bi-eyebrow">
+                ACCOUNT REGISTRY
+              </span>
+              <h3>Broker Accounts</h3>
+            </div>
+
+            <div className="bi-registry-actions">
+              <button
+                type="button"
+                className="bi-btn"
+                onClick={() =>
+                  setActiveTab('Accounts')
+                }
+              >
+                OPEN ACCOUNTS
+              </button>
+
+              <button
+                type="button"
+                className="bi-btn bi-btn-primary"
+                onClick={() =>
+                  document
+                    .querySelector(
+                      '.bi-provisioning-panel'
+                    )
+                    ?.scrollIntoView({
+                      behavior: 'smooth',
+                      block: 'start',
+                    })
+                }
+              >
+                ADD ACCOUNT
+              </button>
+            </div>
+          </div>
+
+          <AccountTable
+            accounts={accounts.slice(0, 8)}
+            onSelect={openInspector}
+            onConnect={handleConnect}
+            // onDisconnect removed
+          />
+        </section>
+      </div>
+
+      <section className="bi-panel bi-flow-panel">
+        <div className="bi-panel-header">
+          <div>
+            <span className="bi-eyebrow">
+              COREI ROUTING MODEL
+            </span>
+            <h3>Data Source ≠ Execution Destination</h3>
+          </div>
+        </div>
+
+        <div className="bi-architecture-flow">
+          <div>
+            <span>DATA SOURCE</span>
+            <strong>
+              Broker / Fast Feeder / Exchange
+            </strong>
+          </div>
+
+          <i>→</i>
+
+          <div>
+            <span>INTELLIGENCE</span>
+            <strong>
+              Market / Signal / Decision
+            </strong>
+          </div>
+
+          <i>→</i>
+
+          <div>
+            <span>ROUTING</span>
+            <strong>
+              Policy / Destination Selection
+            </strong>
+          </div>
+
+          <i>→</i>
+
+          <div>
+            <span>EXECUTION</span>
+            <strong>
+              Broker + Account
+            </strong>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+
+  const renderProviders = () => {
+    return <BrokerProviders />;
+  };
+
+  const renderAccounts = () => (
+    <div className="bi-view">
+      <section className="bi-panel">
+        <div className="bi-panel-header">
+          <div>
+            <span className="bi-eyebrow">
+              ACCOUNT MANAGEMENT
+            </span>
+            <h3>Multi-Broker / Multi-Account Registry</h3>
+          </div>
+        </div>
+
+        <AccountTable
+          accounts={filteredAccounts}
+          onSelect={openInspector}
+          onConnect={handleConnect}
+          // onDisconnect removed
+        />
+      </section>
+    </div>
+  );
+
+  const renderCredentials = () => (
+    <div className="bi-view">
+      <section className="bi-panel">
+        <div className="bi-panel-header">
+          <div>
+            <span className="bi-eyebrow">
+              CREDENTIAL GOVERNANCE
+            </span>
+            <h3>Credential Registry</h3>
+          </div>
+
+          <span className="bi-security-note">
+            SECRET MATERIAL NEVER DISPLAYED
+          </span>
+        </div>
+
+        {filteredCredentials.length === 0 ? (
+          <EmptyState
+            label="NO CREDENTIALS"
+            detail="No credential records are currently returned by the authorized backend."
+          />
+        ) : (
+          <div className="bi-table-wrap">
+            <table className="bi-table">
+              <thead>
+                <tr>
+                  <th>CREDENTIAL</th>
+                  <th>PROVIDER</th>
+                  <th>ACCOUNT</th>
+                  <th>TYPE</th>
+                  <th>ENVIRONMENT</th>
+                  <th>STATE</th>
+                  <th>ACTION</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {filteredCredentials.map(
+                  (credential: any) => {
+                    const id =
+                      credential.credential_id ??
+                      credential.credentialId ??
+                      credential.id;
+
+                    return (
+                      <tr
+                        key={String(id)}
+                        onClick={() =>
+                          openInspector(
+                            'credential',
+                            credential,
+                          )
+                        }
+                      >
+                        <td className="bi-primary-cell">
+                          {displayValue(id)}
+                        </td>
+
+                        <td>
+                          {displayValue(
+                            credential.broker_id ??
+                              credential.brokerId ??
+                              credential.broker,
+                          )}
+                        </td>
+
+                        <td>
+                          {displayValue(
+                            credential.account_id ??
+                              credential.accountId,
+                          )}
+                        </td>
+
+                        <td>
+                          {displayValue(
+                            credential.credential_type ??
+                              credential.credentialType,
+                          )}
+                        </td>
+
+                        <td>
+                          {displayValue(
+                            credential.environment,
+                          )}
+                        </td>
+
+                        <td>
+                          <StateBadge
+                            value={
+                              credential.enabled === false
+                                ? 'DISABLED'
+                                : 'ENABLED'
+                            }
+                          />
+                        </td>
+
+                        <td>
+                          <button
+                            type="button"
+                            className="bi-table-action"
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              // Fixed: Replaced non-existent handleRotateCredential with Toast
+                              toast.info("Credential rotation endpoint not yet exposed.");
+                            }}
+                          >
+                            ROTATE
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  },
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
+    </div>
+  );
+
+  const renderConnectivity = () => (
+    <div className="bi-view bi-two-column">
+      <section className="bi-panel">
+        <div className="bi-panel-header">
+          <div>
+            <span className="bi-eyebrow">
+              CONNECTIVITY
+            </span>
+            <h3>Connection Control</h3>
+          </div>
+        </div>
+
+        <AccountTable
+          accounts={filteredAccounts}
+          onSelect={openInspector}
+          onConnect={handleConnect}
+          // onDisconnect removed
+        />
+      </section>
+
+      <section className="bi-panel">
+        <div className="bi-panel-header">
+          <div>
+            <span className="bi-eyebrow">
+              OPERATING MODEL
+            </span>
+            <h3>Connection Lifecycle</h3>
+          </div>
+        </div>
+
+        <div className="bi-lifecycle">
+          {[
+            'DISCOVER',
+            'AUTHENTICATE',
+            'CONNECT',
+            'SESSION',
+            'HEARTBEAT',
+            'RECONNECT',
+            'DISCONNECT',
+          ].map((stage, index) => (
+            <div
+              className="bi-lifecycle-step"
+              key={stage}
+            >
+              <span>{String(index + 1).padStart(2, '0')}</span>
+              <strong>{stage}</strong>
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
+  );
+
+  const renderUnavailable = (
+    title: string,
+    detail: string,
+  ) => (
+    <div className="bi-view">
+      <section className="bi-panel">
+        <div className="bi-panel-header">
+          <div>
+            <span className="bi-eyebrow">
+              {title.toUpperCase()}
+            </span>
+            <h3>{title}</h3>
+          </div>
+        </div>
+
+        <EmptyState
+          label="DATA UNAVAILABLE"
+          detail={detail}
+        />
+      </section>
+    </div>
+  );
+
+  const renderControls = () => (
+    <div className="bi-view">
+      <section className="bi-panel">
+        <div className="bi-panel-header">
+          <div>
+            <span className="bi-eyebrow">
+              OPERATIONAL CONTROL
+            </span>
+            <h3>Broker Controls</h3>
+          </div>
+        </div>
+
+        <div className="bi-control-grid">
+          <ControlBlock
+            title="OBSERVE"
+            description="Read broker, account, credential and connection state."
+            actions={[
+              'VIEW PROVIDERS',
+              'VIEW ACCOUNTS',
+              'VIEW CREDENTIALS',
+              'VIEW HEALTH',
+            ]}
+          />
+
+          <ControlBlock
+            title="CONFIGURE"
+            description="Configuration controls are exposed only when authorized backend capability exists."
+            actions={[
+              'PROVIDER CONFIG',
+              'ACCOUNT CONFIG',
+              'CREDENTIAL MANAGEMENT',
+              'ROUTING CONFIG',
+            ]}
+          />
+
+          <ControlBlock
+            title="OPERATE"
+            description="Operational actions must execute through the authorized broker service."
+            actions={[
+              'CONNECT',
+              'DISCONNECT',
+              'RECONNECT',
+              'DIAGNOSTICS',
+            ]}
+          />
+
+          <ControlBlock
+            title="EMERGENCY"
+            description="High-impact trading controls require backend authorization and explicit confirmation."
+            actions={[
+              'DISABLE BROKER',
+              'DISABLE ACCOUNT',
+              'DISABLE EXECUTION',
+              'DISABLE ROUTING',
+            ]}
+            critical
+          />
+        </div>
+      </section>
+    </div>
+  );
+
+  const renderTab = () => {
+    switch (activeTab) {
+      case 'Overview':
+        return renderOverview();
+
+      case 'Providers':
+        return renderProviders();
+
+      case 'Accounts':
+        return renderAccounts();
+
+      case 'Credentials':
+        return renderCredentials();
+
+      case 'Connectivity':
+        return renderConnectivity();
+
+      case 'Sessions':
+        return renderUnavailable(
+          'Sessions',
+          'Session-level backend capability is not currently returned by the verified frontend contract.',
+        );
+
+      case 'Market Access':
+        return renderUnavailable(
+          'Market Access',
+          'Market-access capability must be populated from the authorized broker backend.',
+        );
+
+      case 'Data Sources':
+        return renderUnavailable(
+          'Data Sources',
+          'Data-source management remains independent from execution-provider state.',
+        );
+
+      case 'Execution':
+        return renderUnavailable(
+          'Execution',
+          'Execution destination state must come from the authorized execution backend.',
+        );
+
+      case 'Routing':
+        return renderUnavailable(
+          'Routing',
+          'Routing policies must come from the authorized routing capability.',
+        );
+
+      case 'Health':
+        return renderUnavailable(
+          'Health & Diagnostics',
+          'Health and latency metrics must not be fabricated when the backend does not provide them.',
+        );
+
+      case 'Controls':
+        return renderControls();
+
+      case 'Diagnostics':
+        return renderUnavailable(
+          'Diagnostics',
+          'No diagnostic event stream is currently returned by the verified broker intelligence contract.',
+        );
+
+      case 'Audit':
+        return renderUnavailable(
+          'Audit',
+          'No audit event stream is currently returned by the verified broker intelligence contract.',
+        );
+
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <section
+      className="broker-intelligence"
+      aria-label="Broker Intelligence"
+    >
+      <header className="bi-command-header">
+        <div className="bi-command-identity">
+          <span className="bi-eyebrow">
+            COREI / ORBIT / TRADING
+          </span>
+          <h2>BROKER INTELLIGENCE</h2>
+          <span className="bi-command-subtitle">
+            INSTITUTIONAL BROKER & ACCOUNT CONTROL SURFACE
+          </span>
+        </div>
+
+        <div className="bi-command-state">
+          <div>
+            <span>PROVIDERS</span>
+            <strong>{providers.length}</strong>
+          </div>
+
+          <div>
+            <span>ACCOUNTS</span>
+            <strong>{accounts.length}</strong>
+          </div>
+
+          <div>
+            <span>CONNECTED</span>
+            <strong>{connectedAccounts}</strong>
+          </div>
+
+          <div>
+            <span>ATTENTION</span>
+            <strong
+              data-tone={
+                attentionCount > 0
+                  ? 'warning'
+                  : 'neutral'
+              }
+            >
+              {attentionCount}
+            </strong>
+          </div>
+        </div>
+        {/* Refresh controls are now managed globally in Workspace.tsx */}
+      </header>
+
+      <nav
+        className="bi-tab-strip"
+        aria-label="Broker Intelligence sections"
+      >
+        {TABS.map((tab) => (
+          <button
+            type="button"
+            key={tab}
+            className={
+              activeTab === tab
+                ? 'active'
+                : ''
+            }
+            onClick={() => setActiveTab(tab)}
+          >
+            {tab}
+          </button>
+        ))}
+      </nav>
+
+      {/* Provider/account filtering is owned by the active data-grid
+          headers. No secondary Broker Intelligence filter toolbar. */}
+
+      <main className="bi-content">
+        {store.loading && !store.lastRefresh ? (
+          <div className="bi-state bi-loading-state">
+            <strong>LOADING</strong>
+            <span>
+              Loading Broker Intelligence from the
+              authorized backend.
+            </span>
+          </div>
+        ) : store.error ? (
+          <div className="bi-state bi-error-state">
+            <strong>SERVICE ERROR</strong>
+            <span>{store.error}</span>
+            <button
+              type="button"
+              className="bi-btn"
+              onClick={() => void brokerIntelligenceService.fetchAll()}
+            >
+              RETRY
+            </button>
+          </div>
+        ) : (
+          renderTab()
+        )}
+      </main>
+
+      {selected && (
+        <DetailInspector
+          objectType={selected.type}
+          object={selected.object}
+          onClose={() => setSelected(null)}
+        />
+      )}
+    </section>
+  );
+};
+
+const ProviderTable: React.FC<{
+  providers: any[];
+  onSelect: (
+    type: ObjectType,
+    object: Record<string, any>,
+  ) => void;
+  onEnable?: (id: string) => Promise<void>;
+  onDisable?: (id: string) => Promise<void>;
+}> = ({
+  providers,
+  onSelect,
+  onEnable,
+  onDisable,
+}) => {
+  if (providers.length === 0) {
+    return (
+      <EmptyState
+        label="NO PROVIDERS"
+        detail="No broker providers were returned by the authorized backend."
+      />
+    );
+  }
+
+  return (
+    <div className="bi-table-wrap">
+      <table className="bi-table">
+        <thead>
+          <tr>
+            <th>PROVIDER</th>
+            <th>ADAPTER</th>
+            <th>STATE</th>
+            <th>ENABLED</th>
+            <th>ACTION</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {providers.map((provider: any) => {
+            const id =
+              provider.id ??
+              provider.broker_id ??
+              provider.brokerId;
+
+            return (
+              <tr
+                key={String(id)}
+                onClick={() =>
+                  onSelect('provider', provider)
+                }
+              >
+                <td className="bi-primary-cell">
+                  {displayValue(
+                    provider.display_name ??
+                      provider.displayName ??
+                      id,
+                  )}
+                </td>
+
+                <td>
+                  {displayValue(
+                    provider.adapter_name ??
+                      provider.adapterName,
+                  )}
+                </td>
+
+                <td>
+                  <StateBadge
+                    value={
+                      provider.state ??
+                      provider.status ??
+                      (provider.enabled === false
+                        ? 'DISABLED'
+                        : 'READY')
+                    }
+                  />
+                </td>
+
+                <td>
+                  {boolLabel(provider.enabled)}
+                </td>
+
+                <td>
+                  {provider.enabled === false ? (
+                    <button
+                      type="button"
+                      className="bi-table-action"
+                      disabled={!onEnable}
+                      onClick={(event) => {
+                        event.stopPropagation();
+
+                        if (onEnable && id) {
+                          void onEnable(
+                            String(id),
+                          );
+                        }
+                      }}
+                    >
+                      ENABLE
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      className="bi-table-action danger"
+                      disabled={!onDisable}
+                      onClick={(event) => {
+                        event.stopPropagation();
+
+                        if (onDisable && id) {
+                          void onDisable(
+                            String(id),
+                          );
+                        }
+                      }}
+                    >
+                      DISABLE
+                    </button>
+                  )}
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+const AccountTable: React.FC<{
+  accounts: any[];
+  onSelect: (
+    type: ObjectType,
+    object: Record<string, any>,
+  ) => void;
+  onConnect: (id: string) => Promise<void>;
+  onDisconnect?: (id: string) => Promise<void>; // Made optional
+}> = ({
+  accounts,
+  onSelect,
+  onConnect,
+  onDisconnect,
+}) => {
+  if (accounts.length === 0) {
+    return (
+      <EmptyState
+        label="NO ACCOUNTS"
+        detail="The authorized backend currently reports zero broker accounts. No placeholder accounts are displayed."
+      />
+    );
+  }
+
+  return (
+    <div className="bi-table-wrap">
+      <table className="bi-table">
+        <thead>
+          <tr>
+            <th>ACCOUNT</th>
+            <th>BROKER</th>
+            <th>ENV</th>
+            <th>ENABLED</th>
+            <th>CONNECTION</th>
+            <th>SESSION</th>
+            <th>ACTION</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {accounts.map((account: any) => {
+            const id =
+              account.account_id ??
+              account.accountId ??
+              account.id;
+
+            const connected =
+              account.connected === true;
+
+            return (
+              <tr
+                key={String(id)}
+                onClick={() =>
+                  onSelect('account', account)
+                }
+              >
+                <td className="bi-primary-cell">
+                  {displayValue(
+                    account.display_name ??
+                      account.displayName ??
+                      id,
+                  )}
+                </td>
+
+                <td>
+                  {displayValue(
+                    account.broker ??
+                      account.broker_id ??
+                      account.brokerId,
+                  )}
+                </td>
+
+                <td>
+                  <span className="bi-environment">
+                    {displayValue(
+                      account.environment,
+                    ).toUpperCase()}
+                  </span>
+                </td>
+
+                <td>
+                  {boolLabel(account.enabled)}
+                </td>
+
+                <td>
+                  <StateBadge
+                    value={
+                      connected
+                        ? 'CONNECTED'
+                        : 'DISCONNECTED'
+                    }
+                  />
+                </td>
+
+                <td>
+                  {displayValue(
+                    account.session_id ??
+                      account.sessionId,
+                    'NONE',
+                  )}
+                </td>
+
+                <td>
+                  {connected ? (
+                    onDisconnect ? (
+                      <button
+                        type="button"
+                        className="bi-table-action danger"
+                        onClick={(event) => {
+                          event.stopPropagation();
+
+                          if (id) {
+                            void onDisconnect(
+                              String(id),
+                            );
+                          }
+                        }}
+                      >
+                        DISCONNECT
+                      </button>
+                    ) : (
+                      <span className="bi-environment">—</span>
+                    )
+                  ) : (
+                    <button
+                      type="button"
+                      className="bi-table-action"
+                      disabled={
+                        account.enabled === false
+                      }
+                      onClick={(event) => {
+                        event.stopPropagation();
+
+                        if (
+                          id &&
+                          account.enabled !== false
+                        ) {
+                          void onConnect(
+                            String(id),
+                          );
+                        }
+                      }}
+                    >
+                      CONNECT
+                    </button>
+                  )}
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+const ControlBlock: React.FC<{
+  title: string;
+  description: string;
+  actions: string[];
+  critical?: boolean;
+}> = ({
+  title,
+  description,
+  actions,
+  critical = false,
+}) => (
+  <section
+    className="bi-control-block"
+    data-critical={critical}
+  >
+    <div>
+      <span className="bi-eyebrow">
+        {title}
+      </span>
+      <p>{description}</p>
+    </div>
+
+    <div className="bi-control-actions">
+      {actions.map((action) => (
+        <button
+          type="button"
+          className={
+            critical
+              ? 'bi-control-action critical'
+              : 'bi-control-action'
+          }
+          key={action}
+          disabled
+          title="CONTROL UNAVAILABLE — backend capability required"
+        >
+          {action}
+        </button>
+      ))}
+    </div>
+  </section>
+);
+
+export default BrokerIntelligence;

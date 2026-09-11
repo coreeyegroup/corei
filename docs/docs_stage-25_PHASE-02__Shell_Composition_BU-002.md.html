@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <title>BU 002</title>
+  <style>
+  body {
+    background: #0A0D12;
+    color: #E3E7EC;
+    font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px 40px;
+  }
+
+  h1 {
+    font-size: 26px;
+    font-weight: 600;
+    color: #C6A46A;
+    margin: 24px 0 12px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 8px;
+  }
+
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #D4B88A;
+    margin: 20px 0 10px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 6px;
+  }
+
+  h3 {
+    font-size: 17px;
+    font-weight: 500;
+    color: #E3E7EC;
+    margin: 16px 0 8px 0;
+  }
+
+  h4 {
+    font-size: 15px;
+    font-weight: 500;
+    color: #C5CED9;
+    margin: 12px 0 6px 0;
+  }
+
+  p {
+    margin-bottom: 8px;
+    color: #C5CED9;
+  }
+
+  ul,
+  ol {
+    padding-left: 24px;
+    margin-bottom: 8px;
+    color: #C5CED9;
+  }
+
+  li {
+    margin-bottom: 2px;
+  }
+
+  code {
+    font-family: 'JetBrains Mono', 'Cascadia Code', monospace;
+    font-size: 13px;
+    background: rgba(255,255,255,0.05);
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid #28303C;
+    color: #C5CED9;
+  }
+
+  pre {
+    background: #18202A;
+    border: 1px solid #28303C;
+    border-radius: 6px;
+    padding: 16px 20px;
+    overflow: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 12px 0 16px 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #C5CED9;
+  }
+
+  pre code {
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 16px 0;
+    font-size: 13px;
+    color: #C5CED9;
+  }
+
+  th {
+    background: #18202A;
+    color: #C5CED9;
+    font-weight: 600;
+    text-align: left;
+    padding: 6px 12px;
+    border: 1px solid #28303C;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  td {
+    padding: 4px 12px;
+    border: 1px solid #28303C;
+    background: #0E1219;
+  }
+
+  tr:nth-child(even) td {
+    background: #121821;
+  }
+
+  blockquote {
+    border-left: 3px solid #C6A46A;
+    padding-left: 16px;
+    margin: 8px 0 12px 0;
+    color: #6E7883;
+    font-style: italic;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #28303C;
+    margin: 24px 0;
+  }
+
+  a {
+    color: #8BB4F0;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  strong {
+    color: #E3E7EC;
+    font-weight: 600;
+  }
+
+  img {
+    max-width: 100%;
+    border-radius: 4px;
+    border: 1px solid #28303C;
+  }
+
+  .doc-footer {
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid #28303C;
+    font-size: 12px;
+    color: #6E7883;
+    font-family: monospace;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+</style>
+</head>
+
+<body>
+
+  <div
+    class="doc-header"
+    style="
+      background:#121821;
+      border:1px solid #28303C;
+      border-radius:8px;
+      padding:1.2rem 1.8rem;
+      margin-bottom:1.8rem;
+    "
+  >
+
+    <div
+      style="
+        color:#C6A46A;
+        font-weight:600;
+        font-size:13px;
+        text-transform:uppercase;
+        letter-spacing:0.05em;
+      "
+    >
+      COREI · Stage Documentation
+    </div>
+
+
+
+    <h1
+      style="
+        font-size:28px;
+        font-weight:600;
+        color:#E3E7EC;
+        margin:0.1rem 0;
+        border-bottom:none;
+        padding-bottom:0;
+      "
+    >
+      BU 002
+    </h1>
+
+    <div
+      style="
+        font-size:16px;
+        color:#C5CED9;
+      "
+    >
+      Stage Documentation
+      ·
+      Operational
+    </div>
+
+    <div
+      style="
+        display:flex;
+        flex-wrap:wrap;
+        gap:0.6rem 1.8rem;
+        margin-top:0.6rem;
+        font-size:13px;
+      "
+    >
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Status
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          Approved
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Version
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          1.0
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Classification
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          Operational
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Owner
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          COREI
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Repository
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+            font-family:monospace;
+          "
+        >
+          docs/stage-25/PHASE-02  Shell Composition/BU-002.md
+        </span>
+      </span>
+
+    </div>
+
+
+
+  </div>
+
+
+
+  <h1>BUILD UNIT-002</h1>
+<h2>Title</h2>
+<p>COREI OS Shell Layout</p>
+<hr>
+<h1>Objective</h1>
+<p>Establish the institutional shell layout for COREI OS.</p>
+<p>This Build Unit introduces the structural layout that will permanently host the five cognitive regions of the operating workstation. The layout becomes the authoritative visual structure of COREI OS while remaining independent of the individual region implementations.</p>
+<p>No cognitive regions are implemented in this Build Unit. Only the layout container is introduced.</p>
+<hr>
+<h1>Scope</h1>
+<p>Implemented:</p>
+<ul>
+<li>Shell Layout Repository</li>
+<li>Layout Contract</li>
+<li>Layout Model</li>
+<li>Layout Context</li>
+<li>Shell Layout Component</li>
+<li>Shell Integration</li>
+<li>Validation</li>
+</ul>
+<hr>
+<h1>Architectural Principle</h1>
+<p>The Shell is responsible for visual composition.</p>
+<p>The Shell Layout is responsible for structural organization.</p>
+<p>The cognitive regions are responsible only for their own content.</p>
+<p>Ownership hierarchy:</p>
+<pre><code>Application
+
+↓
+
+Shell
+
+↓
+
+Shell Layout
+
+↓
+
+Top Ribbon
+
+Left Navigation
+
+Center Workspace
+
+Right Intelligence
+
+Bottom Timeline
+</code></pre>
+<p>This separation is permanent.</p>
+<hr>
+<h1>Institutional Layout</h1>
+<p>The workstation layout is defined as:</p>
+<pre><code>┌──────────────────────────────────────────────────────────────────────────────┐
+│                              TOP RIBBON                                      │
+├──────────────┬───────────────────────────────────────────┬───────────────────┤
+│              │                                           │                   │
+│ LEFT NAV     │          CENTER WORKSPACE                 │ RIGHT PANEL       │
+│              │                                           │                   │
+├──────────────┴───────────────────────────────────────────┴───────────────────┤
+│                           BOTTOM TIMELINE                                    │
+└──────────────────────────────────────────────────────────────────────────────┘
+</code></pre>
+<p>The layout contract is now frozen.</p>
+<hr>
+<h1>Repository Structure</h1>
+<p>Created</p>
+<pre><code>src/shell/layout/
+
+contracts/
+    layout-contract.ts
+
+models/
+    layout.ts
+
+context/
+    layout-context.ts
+
+components/
+    ShellLayout.tsx
+</code></pre>
+<p>Updated</p>
+<pre><code>src/shell/components/
+
+Shell.tsx
+</code></pre>
+<hr>
+<h1>Layout Contract</h1>
+<p>Implemented:</p>
+<pre><code>layout-contract.ts
+</code></pre>
+<p>Current properties:</p>
+<ul>
+<li>Identifier</li>
+<li>Name</li>
+</ul>
+<p>Future extensions:</p>
+<ul>
+<li>Layout Version</li>
+<li>Layout Profile</li>
+<li>Grid Configuration</li>
+<li>Display Profile</li>
+<li>Responsive Strategy</li>
+</ul>
+<hr>
+<h1>Layout Model</h1>
+<p>Implemented:</p>
+<pre><code>layout.ts
+</code></pre>
+<p>Current properties:</p>
+<ul>
+<li>Initialized</li>
+</ul>
+<p>Future responsibilities:</p>
+<ul>
+<li>Active Layout</li>
+<li>Workspace Dimensions</li>
+<li>Region Visibility</li>
+<li>Multi-Monitor Profile</li>
+<li>Docking Configuration</li>
+</ul>
+<hr>
+<h1>Layout Context</h1>
+<p>Implemented:</p>
+<pre><code>layout-context.ts
+</code></pre>
+<p>Current responsibilities:</p>
+<ul>
+<li>Layout Identity</li>
+<li>Initialization State</li>
+</ul>
+<p>Future responsibilities:</p>
+<ul>
+<li>Active Layout Configuration</li>
+<li>Region Metadata</li>
+<li>Layout Preferences</li>
+<li>Display Configuration</li>
+</ul>
+<hr>
+<h1>Shell Layout Component</h1>
+<p>Implemented:</p>
+<pre><code>ShellLayout.tsx
+</code></pre>
+<p>Current responsibility:</p>
+<p>Provide the structural container for the institutional workstation.</p>
+<p>Current rendering:</p>
+<pre><code>Shell Layout
+
+↓
+
+COREI SHELL LAYOUT
+</code></pre>
+<p>Future responsibilities:</p>
+<ul>
+<li>Region Grid</li>
+<li>Layout Rendering</li>
+<li>Responsive Structure</li>
+<li>Workspace Hosting</li>
+</ul>
+<hr>
+<h1>Shell Integration</h1>
+<p>Updated:</p>
+<pre><code>Shell.tsx
+</code></pre>
+<p>Current rendering flow:</p>
+<pre><code>Shell
+
+↓
+
+ShellLayout
+</code></pre>
+<p>The Shell delegates structural rendering to the Shell Layout component.</p>
+<hr>
+<h1>Visual Composition</h1>
+<p>Current visual hierarchy:</p>
+<pre><code>Application
+
+↓
+
+Shell
+
+↓
+
+Shell Layout
+
+↓
+
+Ready
+</code></pre>
+<p>No cognitive regions are mounted at this stage.</p>
+<hr>
+<h1>Validation</h1>
+<p>Successfully validated:</p>
+<ul>
+<li>Layout Repository</li>
+<li>Layout Contract</li>
+<li>Layout Model</li>
+<li>Layout Context</li>
+<li>Shell Layout Component</li>
+<li>Shell Integration</li>
+<li>TypeScript Compilation</li>
+<li>Vite Production Build</li>
+</ul>
+<p>Validation Result</p>
+<pre><code>TypeScript Compilation     PASS
+
+Vite Production Build      PASS
+</code></pre>
+<hr>
+<h1>Deliverables</h1>
+<p>Completed:</p>
+<ul>
+<li>Layout Repository</li>
+<li>Layout Contract</li>
+<li>Layout Model</li>
+<li>Layout Context</li>
+<li>Shell Layout</li>
+<li>Shell Integration</li>
+</ul>
+<hr>
+<h1>Repository Impact</h1>
+<p>Created:</p>
+<pre><code>src/shell/layout/
+</code></pre>
+<p>Updated:</p>
+<pre><code>src/shell/components/Shell.tsx
+</code></pre>
+<p>The Shell Layout is now the permanent structural container for the COREI OS workstation.</p>
+<hr>
+<h1>Result</h1>
+<p>COREI OS now separates visual composition into two independent layers:</p>
+<ul>
+<li>Shell (visual composition root)</li>
+<li>Shell Layout (structural layout container)</li>
+</ul>
+<p>This architecture ensures that future cognitive regions can be introduced independently without modifying the Shell or the Application Root.</p>
+<hr>
+<h1>Architecture Impact</h1>
+<p>Current application hierarchy:</p>
+<pre><code>Application
+
+↓
+
+Startup Lifecycle
+
+↓
+
+Shell
+
+↓
+
+Shell Layout
+
+↓
+
+Cognitive Regions
+
+↓
+
+Hosted Experiences
+</code></pre>
+<p>Only the Shell Layout has been established in this Build Unit.</p>
+<p>The cognitive regions will be introduced individually in subsequent Build Units.</p>
+<hr>
+<h1>Lessons Learned</h1>
+<p>Separating the Shell from the Shell Layout reinforces the distinction between composition and structure.</p>
+<p>The Shell owns the visual composition boundary, while the Shell Layout owns the workstation geometry. This architecture enables future enhancements—such as multi-monitor layouts, workspace presets, and responsive rendering—without affecting application startup or region implementations.</p>
+<hr>
+<h1>Next Build Unit</h1>
+<p><strong>BU-003 – Top Ribbon Composition</strong></p>
+<p>Implementation Order</p>
+<ul>
+<li>Top Ribbon Contract</li>
+<li>Top Ribbon Model</li>
+<li>Top Ribbon Context</li>
+<li>Top Ribbon Component</li>
+<li>Shell Layout Integration</li>
+<li>Validation</li>
+</ul>
+<hr>
+<h1>Status</h1>
+<p><strong>COMPLETED</strong></p>
+
+
+  <div class="doc-footer">
+
+    <span>DOCUMENT KEY: docs:stage-25/PHASE-02  Shell Composition/BU-002.md</span>
+
+    <span>
+      DOCUMENT NAME: BU 002
+    </span>
+
+    <span>
+      VERSION: 1.0
+    </span>
+
+  </div>
+
+</body>
+</html>

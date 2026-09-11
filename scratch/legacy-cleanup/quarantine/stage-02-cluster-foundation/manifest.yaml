@@ -1,0 +1,21 @@
+stage: stage-02-cluster-foundation
+
+type: infrastructure-foundation
+
+responsibilities:
+  - namespace-governance
+  - ingress-foundation
+  - certificate-authority
+  - persistent-storage
+  - network-governance
+  - service-mesh-foundation
+  - orchestration-authority
+  - rebuild-governance
+  - recovery-governance
+
+components:
+  - metallb
+  - ingress-nginx
+  - cert-manager
+  - longhorn
+  - istio-base

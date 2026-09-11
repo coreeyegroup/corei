@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <title>docs docs docs docs docs machine spec.md.md.md.md.md</title>
+  <style>
+  body {
+    background: #0A0D12;
+    color: #E3E7EC;
+    font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px 40px;
+  }
+
+  h1 {
+    font-size: 26px;
+    font-weight: 600;
+    color: #C6A46A;
+    margin: 24px 0 12px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 8px;
+  }
+
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #D4B88A;
+    margin: 20px 0 10px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 6px;
+  }
+
+  h3 {
+    font-size: 17px;
+    font-weight: 500;
+    color: #E3E7EC;
+    margin: 16px 0 8px 0;
+  }
+
+  h4 {
+    font-size: 15px;
+    font-weight: 500;
+    color: #C5CED9;
+    margin: 12px 0 6px 0;
+  }
+
+  p {
+    margin-bottom: 8px;
+    color: #C5CED9;
+  }
+
+  ul,
+  ol {
+    padding-left: 24px;
+    margin-bottom: 8px;
+    color: #C5CED9;
+  }
+
+  li {
+    margin-bottom: 2px;
+  }
+
+  code {
+    font-family: 'JetBrains Mono', 'Cascadia Code', monospace;
+    font-size: 13px;
+    background: rgba(255,255,255,0.05);
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid #28303C;
+    color: #C5CED9;
+  }
+
+  pre {
+    background: #18202A;
+    border: 1px solid #28303C;
+    border-radius: 6px;
+    padding: 16px 20px;
+    overflow: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 12px 0 16px 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #C5CED9;
+  }
+
+  pre code {
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 16px 0;
+    font-size: 13px;
+    color: #C5CED9;
+  }
+
+  th {
+    background: #18202A;
+    color: #C5CED9;
+    font-weight: 600;
+    text-align: left;
+    padding: 6px 12px;
+    border: 1px solid #28303C;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  td {
+    padding: 4px 12px;
+    border: 1px solid #28303C;
+    background: #0E1219;
+  }
+
+  tr:nth-child(even) td {
+    background: #121821;
+  }
+
+  blockquote {
+    border-left: 3px solid #C6A46A;
+    padding-left: 16px;
+    margin: 8px 0 12px 0;
+    color: #6E7883;
+    font-style: italic;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #28303C;
+    margin: 24px 0;
+  }
+
+  a {
+    color: #8BB4F0;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  strong {
+    color: #E3E7EC;
+    font-weight: 600;
+  }
+
+  img {
+    max-width: 100%;
+    border-radius: 4px;
+    border: 1px solid #28303C;
+  }
+
+  .doc-footer {
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid #28303C;
+    font-size: 12px;
+    color: #6E7883;
+    font-family: monospace;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+</style>
+</head>
+
+<body>
+
+  <div
+    class="doc-header"
+    style="
+      background:#121821;
+      border:1px solid #28303C;
+      border-radius:8px;
+      padding:1.2rem 1.8rem;
+      margin-bottom:1.8rem;
+    "
+  >
+
+    <div
+      style="
+        color:#C6A46A;
+        font-weight:600;
+        font-size:13px;
+        text-transform:uppercase;
+        letter-spacing:0.05em;
+      "
+    >
+      COREI · Stage Documentation
+    </div>
+
+
+
+    <h1
+      style="
+        font-size:28px;
+        font-weight:600;
+        color:#E3E7EC;
+        margin:0.1rem 0;
+        border-bottom:none;
+        padding-bottom:0;
+      "
+    >
+      docs docs docs docs docs machine spec.md.md.md.md.md
+    </h1>
+
+    <div
+      style="
+        font-size:16px;
+        color:#C5CED9;
+      "
+    >
+      Stage Documentation
+      ·
+      Operational
+    </div>
+
+    <div
+      style="
+        display:flex;
+        flex-wrap:wrap;
+        gap:0.6rem 1.8rem;
+        margin-top:0.6rem;
+        font-size:13px;
+      "
+    >
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Status
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          Approved
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Version
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          1.0
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Classification
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          Operational
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Owner
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          COREI
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Repository
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+            font-family:monospace;
+          "
+        >
+          docs/docs_docs_docs_docs_docs_machine-spec.md.md.md.md.md.md
+        </span>
+      </span>
+
+    </div>
+
+
+
+  </div>
+
+
+
+  <h1>COREI PLATFORM — MACHINE SPECIFICATION</h1>
+<h1>STAGE 1 — MACHINE FOUNDATION</h1>
+<hr>
+<h1>MACHINE IDENTITY</h1>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hostname</td>
+<td>core-node</td>
+</tr>
+<tr>
+<td>Platform Root</td>
+<td>/home/coreeye/corei</td>
+</tr>
+<tr>
+<td>Environment Type</td>
+<td>VMware VM</td>
+</tr>
+<tr>
+<td>OS</td>
+<td>Ubuntu 22.04.5 LTS</td>
+</tr>
+<tr>
+<td>Kernel</td>
+<td>5.15.0-176-generic</td>
+</tr>
+<tr>
+<td>Architecture</td>
+<td>linux/amd64</td>
+</tr>
+<tr>
+<td>Deployment Mode</td>
+<td>LOW RESOURCE</td>
+</tr>
+<tr>
+<td>Stage Status</td>
+<td>READY</td>
+</tr>
+<tr>
+<td>Validation Status</td>
+<td>PASS</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h1>HARDWARE PROFILE</h1>
+<h2>CPU</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CPU Cores</td>
+<td>4</td>
+</tr>
+<tr>
+<td>CPU Mode</td>
+<td>Virtualized</td>
+</tr>
+<tr>
+<td>Hypervisor</td>
+<td>VMware</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>MEMORY</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Total RAM</td>
+<td>7GB</td>
+</tr>
+<tr>
+<td>Swap</td>
+<td>Disabled</td>
+</tr>
+<tr>
+<td>Swappiness</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>STORAGE</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Root Disk</td>
+<td>57G</td>
+</tr>
+<tr>
+<td>Free Disk</td>
+<td>~15G</td>
+</tr>
+<tr>
+<td>Corei Storage Root</td>
+<td>/var/corei</td>
+</tr>
+<tr>
+<td>Backup Root</td>
+<td>/home/coreeye/corei/backups</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h1>NETWORK PROFILE</h1>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hostname</td>
+<td>core-node</td>
+</tr>
+<tr>
+<td>Primary IP</td>
+<td>192.168.1.4</td>
+</tr>
+<tr>
+<td>Firewall</td>
+<td>UFW Enabled</td>
+</tr>
+<tr>
+<td>VPN Base</td>
+<td>WireGuard Installed</td>
+</tr>
+<tr>
+<td>IP Forwarding</td>
+<td>Enabled</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h1>KERNEL FOUNDATION</h1>
+<h2>Kernel Modules</h2>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>overlay</td>
+<td>Loaded</td>
+</tr>
+<tr>
+<td>br_netfilter</td>
+<td>Loaded</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>Kernel Persistence</h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/etc/modules-load.d/corei.conf</td>
+<td>Persistent module loading</td>
+</tr>
+<tr>
+<td>/etc/sysctl.d/corei.conf</td>
+<td>Runtime kernel tuning</td>
+</tr>
+<tr>
+<td>/etc/security/limits.d/corei.conf</td>
+<td>System resource limits</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h1>SYSCTL CONFIGURATION</h1>
+<h2>Active Runtime Parameters</h2>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>net.ipv4.ip_forward</td>
+<td>1</td>
+</tr>
+<tr>
+<td>vm.swappiness</td>
+<td>0</td>
+</tr>
+<tr>
+<td>vm.max_map_count</td>
+<td>262144</td>
+</tr>
+<tr>
+<td>fs.file-max</td>
+<td>2097152</td>
+</tr>
+<tr>
+<td>fs.inotify.max_user_watches</td>
+<td>524288</td>
+</tr>
+<tr>
+<td>net.bridge.bridge-nf-call-iptables</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h1>SYSTEM LIMITS</h1>
+<table>
+<thead>
+<tr>
+<th>Limit</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nofile soft</td>
+<td>1048576</td>
+</tr>
+<tr>
+<td>nofile hard</td>
+<td>1048576</td>
+</tr>
+<tr>
+<td>nproc soft</td>
+<td>65535</td>
+</tr>
+<tr>
+<td>nproc hard</td>
+<td>65535</td>
+</tr>
+<tr>
+<td>memlock soft</td>
+<td>unlimited</td>
+</tr>
+<tr>
+<td>memlock hard</td>
+<td>unlimited</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h1>CONTAINER RUNTIME STACK</h1>
+<h2>Docker Runtime</h2>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Docker Engine</td>
+<td>29.4.3</td>
+</tr>
+<tr>
+<td>Docker API</td>
+<td>1.54</td>
+</tr>
+<tr>
+<td>containerd</td>
+<td>v2.2.3</td>
+</tr>
+<tr>
+<td>runc</td>
+<td>1.3.5</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>Runtime Design</h2>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Runtime</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Container Runtime</td>
+<td>Docker CE</td>
+</tr>
+<tr>
+<td>OCI Runtime</td>
+<td>runc</td>
+</tr>
+<tr>
+<td>Runtime Supervisor</td>
+<td><a href="http://containerd.io">containerd.io</a></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h1>PLATFORM TOOLCHAIN</h1>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Python</td>
+<td>3.10.12</td>
+</tr>
+<tr>
+<td>Go</td>
+<td>1.22.0</td>
+</tr>
+<tr>
+<td>Rust</td>
+<td>1.95.0</td>
+</tr>
+<tr>
+<td>kubectl</td>
+<td>v1.36.0</td>
+</tr>
+<tr>
+<td>Helm</td>
+<td>v3.20.2</td>
+</tr>
+<tr>
+<td>Terraform</td>
+<td>v1.15.2</td>
+</tr>
+<tr>
+<td>GitHub CLI</td>
+<td>v2.92.0</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h1>TIME SYNCHRONIZATION</h1>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Chrony</td>
+<td>Active</td>
+</tr>
+<tr>
+<td>NTP Sync</td>
+<td>Enabled</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h1>SECURITY BASELINE</h1>
+<h2>Firewall Rules</h2>
+<table>
+<thead>
+<tr>
+<th>Port</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>22</td>
+<td>SSH</td>
+</tr>
+<tr>
+<td>80</td>
+<td>HTTP</td>
+</tr>
+<tr>
+<td>443</td>
+<td>HTTPS</td>
+</tr>
+<tr>
+<td>6443</td>
+<td>Kubernetes API</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>Security Components</h2>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UFW</td>
+<td>Enabled</td>
+</tr>
+<tr>
+<td>WireGuard</td>
+<td>Installed</td>
+</tr>
+<tr>
+<td>Journald Limits</td>
+<td>Configured</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h1>JOURNALD CONFIGURATION</h1>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SystemMaxUse</td>
+<td>2G</td>
+</tr>
+<tr>
+<td>MaxRetentionSec</td>
+<td>2week</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h1>DIRECTORY STRUCTURE</h1>
+<h2>Corei Workspace</h2>
+<pre><code class="language-text">/home/coreeye/corei
+├── infrastructure/
+├── platform/
+├── services/
+├── schemas/
+├── docs/
+├── scripts/
+├── tests/
+├── backups/
+├── logs/
+└── repos/
+
+# Infrastructure Runtime
+/var/corei
+├── data/
+├── logs/
+└── backups/
+
+# INSTALLATION STATE SYSTEM
+Component	Purpose
+.install.state	Persistent execution checkpoints
+install.log	Runtime installation logs
+install.sh	Deterministic bootstrap orchestrator
+
+# VALIDATION MODEL
+Validation Guarantees
+The Stage 1 installer validates:
+ hostname integrity
+ swap disablement
+ kernel runtime parameters
+ kernel module loading
+ module persistence
+ Docker daemon runtime
+ Chrony runtime
+ storage availability
+ Kubernetes tooling
+ Terraform tooling
+ Helm tooling
+
+# EXECUTION MODEL
+Installer Characteristics
+Capability		Status
+Idempotent		Yes
+Stateful		Yes
+Resumable		Yes
+Deterministic		Yes
+Validation Driven	Yes
+Runtime Verified	Yes
+
+# MACHINE CLASSIFICATION
+Current Classification
+Attribute		Value
+Environment		Development
+Resource Tier		Low Resource
+Production Ready	Partial
+Kubernetes Ready	Yes
+Docker Ready		Yes
+Observability Ready	Partial
+
+# PLATFORM READINESS
+Completed Foundation Areas
+machine bootstrap
+kernel tuning
+container runtime
+firewall baseline
+VPN baseline
+persistent runtime configuration
+deterministic validation
+execution state orchestration
+infrastructure reporting
+
+# KNOWN LIMITATIONS
+Current Constraints
+running in VMware virtualized environment
+low-resource memory profile (7GB RAM)
+GitHub org repository creation permission pending
+Kubernetes cluster not yet initialized
+observability stack not yet installed
+
+# AUTHORITATIVE STATUS
+Layer			Status
+Stage 1			COMPLETE
+Validation		PASS
+Runtime			HEALTHY
+Bootstrap Framework	STABLE
+</code></pre>
+
+
+  <div class="doc-footer">
+
+    <span>DOCUMENT KEY: docs:docs_docs_docs_docs_docs_machine-spec.md.md.md.md.md.md</span>
+
+    <span>
+      DOCUMENT NAME: docs docs docs docs docs machine spec.md.md.md.md.md
+    </span>
+
+    <span>
+      VERSION: 1.0
+    </span>
+
+  </div>
+
+</body>
+</html>

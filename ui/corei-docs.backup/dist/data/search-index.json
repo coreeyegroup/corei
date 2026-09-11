@@ -1,0 +1,35 @@
+[
+  {
+    "id": "stage-25-phase-17-step-1",
+    "stage": 25,
+    "phase": 17,
+    "step": 1,
+    "title": "Repository Reality & Architecture Reconciliation",
+    "content": "\n## Current Position\n\n| Item | Value |\n|------|-------|\n| Stage | Stage-25 |\n| Phase | Phase-17 |\n| Step | 01 |\n| Execution Class | Repository Certification |\n| Source Modification | None |\n\n## Objective\n\nEnter Phase-17 without architectural drift and establish the certified implementation boundary for the Institutional Shell.\n\nThis step certifies:\n\n- Repository reality\n- Platform ownership\n- Existing shell capability\n- Existing consumer/provider relationships\n- Authorized Phase-17 change boundary\n\nNo implementation begins in this step.\n\n## Implementation\n\nRead-only repository certification.\n\nActivities:\n\n- Repository inspection\n- Ownership reconciliation\n- Existing capability discovery\n- Dependency verification\n- Change boundary certification\n\nNo contracts. No runtime changes. No services. No UI changes.\n\n## Validation\n\n### Repository\n\n- Repository reality certified\n- Existing shell capabilities identified\n- Ownership boundaries verified\n\n### Build\n\n```bash\npnpm exec tsc --noEmit\npnpm build\neof\n}\n",
+    "status": "FROZEN",
+    "commit": "671cad22",
+    "tag": "stage25-phase17-step01-v1",
+    "updated": "2026-08-04",
+    "source_files": [
+      "src/shell/index.ts",
+      "src/shell/runtime/shell-runtime.ts"
+    ],
+    "slug": "stage-25-phase-17-step-1",
+    "phaseTitle": "Phase 17"
+  },
+  {
+    "id": "stage-24-phase-3-step-2",
+    "stage": 24,
+    "phase": 3,
+    "step": 2,
+    "title": "Step 2",
+    "content": "",
+    "status": "PENDING",
+    "commit": "",
+    "tag": "",
+    "updated": "",
+    "source_files": [],
+    "slug": "stage-24-phase-3-step-2",
+    "phaseTitle": "Phase 3"
+  }
+]

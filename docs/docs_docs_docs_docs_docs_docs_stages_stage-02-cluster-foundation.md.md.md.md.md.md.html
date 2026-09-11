@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <title>docs docs docs docs docs stages stage 02 cluster foundation.md.md.md.md.md</title>
+  <style>
+  body {
+    background: #0A0D12;
+    color: #E3E7EC;
+    font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px 40px;
+  }
+
+  h1 {
+    font-size: 26px;
+    font-weight: 600;
+    color: #C6A46A;
+    margin: 24px 0 12px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 8px;
+  }
+
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #D4B88A;
+    margin: 20px 0 10px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 6px;
+  }
+
+  h3 {
+    font-size: 17px;
+    font-weight: 500;
+    color: #E3E7EC;
+    margin: 16px 0 8px 0;
+  }
+
+  h4 {
+    font-size: 15px;
+    font-weight: 500;
+    color: #C5CED9;
+    margin: 12px 0 6px 0;
+  }
+
+  p {
+    margin-bottom: 8px;
+    color: #C5CED9;
+  }
+
+  ul,
+  ol {
+    padding-left: 24px;
+    margin-bottom: 8px;
+    color: #C5CED9;
+  }
+
+  li {
+    margin-bottom: 2px;
+  }
+
+  code {
+    font-family: 'JetBrains Mono', 'Cascadia Code', monospace;
+    font-size: 13px;
+    background: rgba(255,255,255,0.05);
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid #28303C;
+    color: #C5CED9;
+  }
+
+  pre {
+    background: #18202A;
+    border: 1px solid #28303C;
+    border-radius: 6px;
+    padding: 16px 20px;
+    overflow: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 12px 0 16px 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #C5CED9;
+  }
+
+  pre code {
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 16px 0;
+    font-size: 13px;
+    color: #C5CED9;
+  }
+
+  th {
+    background: #18202A;
+    color: #C5CED9;
+    font-weight: 600;
+    text-align: left;
+    padding: 6px 12px;
+    border: 1px solid #28303C;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  td {
+    padding: 4px 12px;
+    border: 1px solid #28303C;
+    background: #0E1219;
+  }
+
+  tr:nth-child(even) td {
+    background: #121821;
+  }
+
+  blockquote {
+    border-left: 3px solid #C6A46A;
+    padding-left: 16px;
+    margin: 8px 0 12px 0;
+    color: #6E7883;
+    font-style: italic;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #28303C;
+    margin: 24px 0;
+  }
+
+  a {
+    color: #8BB4F0;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  strong {
+    color: #E3E7EC;
+    font-weight: 600;
+  }
+
+  img {
+    max-width: 100%;
+    border-radius: 4px;
+    border: 1px solid #28303C;
+  }
+
+  .doc-footer {
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid #28303C;
+    font-size: 12px;
+    color: #6E7883;
+    font-family: monospace;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+</style>
+</head>
+
+<body>
+
+  <div
+    class="doc-header"
+    style="
+      background:#121821;
+      border:1px solid #28303C;
+      border-radius:8px;
+      padding:1.2rem 1.8rem;
+      margin-bottom:1.8rem;
+    "
+  >
+
+    <div
+      style="
+        color:#C6A46A;
+        font-weight:600;
+        font-size:13px;
+        text-transform:uppercase;
+        letter-spacing:0.05em;
+      "
+    >
+      COREI · Stage Documentation
+    </div>
+
+
+
+    <h1
+      style="
+        font-size:28px;
+        font-weight:600;
+        color:#E3E7EC;
+        margin:0.1rem 0;
+        border-bottom:none;
+        padding-bottom:0;
+      "
+    >
+      docs docs docs docs docs stages stage 02 cluster foundation.md.md.md.md.md
+    </h1>
+
+    <div
+      style="
+        font-size:16px;
+        color:#C5CED9;
+      "
+    >
+      Stage Documentation
+      ·
+      Operational
+    </div>
+
+    <div
+      style="
+        display:flex;
+        flex-wrap:wrap;
+        gap:0.6rem 1.8rem;
+        margin-top:0.6rem;
+        font-size:13px;
+      "
+    >
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Status
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          Approved
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Version
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          1.0
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Classification
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          Operational
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Owner
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          COREI
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Repository
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+            font-family:monospace;
+          "
+        >
+          docs/docs_docs_docs_docs_docs_stages_stage-02-cluster-foundation.md.md.md.md.md.md
+        </span>
+      </span>
+
+    </div>
+
+
+
+  </div>
+
+
+
+  <h1>STAGE 02 — CLUSTER FOUNDATION</h1>
+<hr>
+<h1>PURPOSE</h1>
+<p>Stage 02 establishes the deterministic infrastructure lifecycle foundation required for all future platform runtime operations.</p>
+<p>This stage transforms a raw Kubernetes cluster into a governed operational substrate capable of supporting:</p>
+<ul>
+<li>ingress routing</li>
+<li>persistent storage</li>
+<li>certificate management</li>
+<li>namespace governance</li>
+<li>network isolation</li>
+<li>service mesh foundation</li>
+<li>orchestration governance</li>
+<li>deterministic rebuilds</li>
+<li>resumable installs</li>
+<li>disaster recovery</li>
+<li>migration governance</li>
+<li>install state authority</li>
+</ul>
+<p>This stage establishes the full infrastructure lifecycle authority layer.</p>
+<hr>
+<h1>AUTHORITATIVE OBJECTIVE</h1>
+<p>Primary objective:</p>
+<p>deterministic infrastructure operational readiness</p>
+<p>Stage 02 establishes:</p>
+<ul>
+<li>infrastructure orchestration authority</li>
+<li>rebuild governance</li>
+<li>recovery governance</li>
+<li>install governance</li>
+<li>infrastructure dependency governance</li>
+</ul>
+<p>before runtime systems activate.</p>
+<hr>
+<h1>RESPONSIBILITIES</h1>
+<p>Stage 02 is responsible for:</p>
+<hr>
+<h1>CLUSTER FOUNDATION</h1>
+<h2>Namespace Topology</h2>
+<p>Establishes bounded namespace domains for:</p>
+<ul>
+<li>trading</li>
+<li>market-data</li>
+<li>execution</li>
+<li>portfolio</li>
+<li>observability</li>
+<li>governance</li>
+<li>replay</li>
+<li>infrastructure</li>
+<li>security</li>
+</ul>
+<p>Purpose:</p>
+<ul>
+<li>workload isolation</li>
+<li>governance separation</li>
+<li>operational boundaries</li>
+</ul>
+<hr>
+<h2>Ingress Foundation</h2>
+<p>Deploys ingress authority layer:</p>
+<ul>
+<li>ingress-nginx</li>
+<li>ingress classes</li>
+<li>routing baseline</li>
+</ul>
+<p>Purpose:</p>
+<ul>
+<li>north-south traffic control</li>
+<li>API ingress management</li>
+<li>deterministic routing authority</li>
+</ul>
+<hr>
+<h2>Certificate Authority</h2>
+<p>Deploys:</p>
+<ul>
+<li>cert-manager</li>
+<li>internal issuers</li>
+<li>certificate lifecycle management</li>
+</ul>
+<p>Purpose:</p>
+<ul>
+<li>TLS governance</li>
+<li>secure runtime communication</li>
+<li>certificate authority lifecycle</li>
+</ul>
+<hr>
+<h2>Storage Foundation</h2>
+<p>Deploys:</p>
+<ul>
+<li>Longhorn</li>
+<li>persistent volume authority</li>
+<li>storage governance</li>
+</ul>
+<p>Purpose:</p>
+<ul>
+<li>runtime durability</li>
+<li>replay durability</li>
+<li>operational persistence</li>
+<li>recovery durability</li>
+</ul>
+<hr>
+<h2>Load Balancer Foundation</h2>
+<p>Deploys:</p>
+<ul>
+<li>MetalLB</li>
+<li>IP pools</li>
+<li>L2 advertisements</li>
+</ul>
+<p>Purpose:</p>
+<ul>
+<li>deterministic service exposure</li>
+<li>stable ingress routing</li>
+<li>infrastructure networking authority</li>
+</ul>
+<hr>
+<h2>Resource Governance</h2>
+<p>Deploys:</p>
+<ul>
+<li>quotas</li>
+<li>limit ranges</li>
+<li>priority classes</li>
+<li>disruption budgets</li>
+</ul>
+<p>Purpose:</p>
+<ul>
+<li>workload governance</li>
+<li>runtime stability</li>
+<li>operational safety</li>
+</ul>
+<hr>
+<h2>Network Governance</h2>
+<p>Deploys baseline:</p>
+<ul>
+<li>namespace isolation</li>
+<li>deny-all policies</li>
+<li>controlled communication rules</li>
+</ul>
+<p>Purpose:</p>
+<ul>
+<li>operational isolation</li>
+<li>blast radius reduction</li>
+<li>security segmentation</li>
+</ul>
+<hr>
+<h2>Service Mesh Foundation</h2>
+<p>Deploys:</p>
+<ul>
+<li>Istio base</li>
+<li>CRDs</li>
+<li>ingress gateway foundation</li>
+</ul>
+<p>Purpose:</p>
+<ul>
+<li>future mTLS</li>
+<li>policy enforcement</li>
+<li>runtime traffic governance</li>
+</ul>
+<p>Strict runtime mesh governance belongs to:</p>
+<ul>
+<li>Stage 03</li>
+<li>Stage 03A</li>
+</ul>
+<hr>
+<h1>INFRASTRUCTURE LIFECYCLE GOVERNANCE</h1>
+<p>Stage 02 establishes deterministic infrastructure lifecycle authority.</p>
+<p>This is one of the most critical responsibilities of this stage.</p>
+<hr>
+<h2>ORCHESTRATION AUTHORITY</h2>
+<p>Authoritative orchestration layer:</p>
+<p>infrastructure/orchestrator/</p>
+<p>Responsibilities:</p>
+<ul>
+<li>rebuild sequencing</li>
+<li>phase execution</li>
+<li>dependency resolution</li>
+<li>checkpoint management</li>
+<li>resumable installs</li>
+<li>recovery coordination</li>
+</ul>
+<p>This becomes the global infrastructure execution authority.</p>
+<hr>
+<h2>INSTALL GOVERNANCE</h2>
+<p>Authoritative install governance:</p>
+<p>infrastructure/governance/install/</p>
+<p>Defines:</p>
+<ul>
+<li>retry semantics</li>
+<li>rollback semantics</li>
+<li>failure governance</li>
+<li>checkpoint governance</li>
+<li>execution governance</li>
+</ul>
+<p>Purpose:</p>
+<ul>
+<li>deterministic rebuild behavior</li>
+<li>replayable infrastructure lifecycle</li>
+<li>operational consistency</li>
+</ul>
+<hr>
+<h2>RECOVERY GOVERNANCE</h2>
+<p>Authoritative recovery governance:</p>
+<p>infrastructure/recovery/</p>
+<p>Defines:</p>
+<ul>
+<li>cluster recovery</li>
+<li>rebuild recovery</li>
+<li>storage recovery</li>
+<li>disaster recovery</li>
+<li>migration governance</li>
+</ul>
+<p>Purpose:</p>
+<ul>
+<li>VPS migration</li>
+<li>node recovery</li>
+<li>infra restoration</li>
+<li>operational continuity</li>
+</ul>
+<hr>
+<h2>INSTALL STATE AUTHORITY</h2>
+<p>Authoritative install state tracking:</p>
+<p>infrastructure/state/install/</p>
+<p>Defines:</p>
+<ul>
+<li>rebuild history</li>
+<li>checkpoints</li>
+<li>recovery state</li>
+<li>install manifests</li>
+<li>resumable execution state</li>
+</ul>
+<p>Purpose:</p>
+<ul>
+<li>replayable rebuilds</li>
+<li>resumable installs</li>
+<li>deterministic migration</li>
+</ul>
+<hr>
+<h2>PHASE SHARED GOVERNANCE</h2>
+<p>Authoritative phase lifecycle standards:</p>
+<p>infrastructure/phases/_shared/</p>
+<p>Defines:</p>
+<ul>
+<li>phase contracts</li>
+<li>validation contracts</li>
+<li>rollback contracts</li>
+<li>checkpoint schemas</li>
+<li>manifest schemas</li>
+</ul>
+<p>Purpose:</p>
+<ul>
+<li>prevent lifecycle drift</li>
+<li>standardize phase execution</li>
+<li>preserve deterministic governance</li>
+</ul>
+<hr>
+<h2>REPRODUCIBILITY LOCKS</h2>
+<p>Authoritative lock governance:</p>
+<p>infrastructure/locks/</p>
+<p>Defines immutable references for:</p>
+<ul>
+<li>Helm</li>
+<li>Docker</li>
+<li>Kubernetes</li>
+<li>Terraform</li>
+<li>runtime dependencies</li>
+</ul>
+<p>Purpose:</p>
+<ul>
+<li>reproducible infrastructure</li>
+<li>deterministic rebuilds</li>
+<li>immutable deployment governance</li>
+</ul>
+<hr>
+<h2>COMPONENT GOVERNANCE</h2>
+<p>Authoritative component standards:</p>
+<p>infrastructure/components/_standards/</p>
+<p>Defines:</p>
+<ul>
+<li>install contracts</li>
+<li>validation contracts</li>
+<li>rollback contracts</li>
+<li>lifecycle governance</li>
+</ul>
+<p>Purpose:</p>
+<ul>
+<li>component consistency</li>
+<li>deployment standardization</li>
+<li>operational governance</li>
+</ul>
+<hr>
+<h2>REBUILD PLAYBOOKS</h2>
+<p>Authoritative recovery documentation:</p>
+<p>docs/recovery/</p>
+<p>Defines:</p>
+<ul>
+<li>full platform rebuild</li>
+<li>VM to VPS migration</li>
+<li>cluster recovery</li>
+<li>disaster recovery</li>
+<li>node replacement</li>
+</ul>
+<p>Purpose:</p>
+<ul>
+<li>operational continuity</li>
+<li>deterministic migration</li>
+<li>institutional recovery governance</li>
+</ul>
+<hr>
+<h1>EXECUTION MODEL</h1>
+<p>Stage 02 follows deterministic execution ordering.</p>
+<p>Execution sequence:</p>
+<ol>
+<li>cluster validation</li>
+<li>namespace creation</li>
+<li>resource governance</li>
+<li>MetalLB</li>
+<li>ingress-nginx</li>
+<li>cert-manager</li>
+<li>Longhorn</li>
+<li>network policies</li>
+<li>Istio base</li>
+<li>orchestration governance</li>
+<li>recovery governance</li>
+<li>install governance</li>
+<li>validation</li>
+</ol>
+<p>Execution ordering is authoritative.</p>
+<hr>
+<h1>CHECKPOINT GOVERNANCE</h1>
+<p>Stage 02 introduces checkpoint lifecycle governance.</p>
+<p>Checkpoints:</p>
+<ul>
+<li>namespaces.checkpoint</li>
+<li>metallb.checkpoint</li>
+<li>ingress.checkpoint</li>
+<li>cert-manager.checkpoint</li>
+<li>longhorn.checkpoint</li>
+<li>network-policies.checkpoint</li>
+<li>istio-base.checkpoint</li>
+</ul>
+<p>Purpose:</p>
+<ul>
+<li>resumable installs</li>
+<li>deterministic rebuilds</li>
+<li>recovery replayability</li>
+<li>infrastructure continuity</li>
+</ul>
+<hr>
+<h1>VALIDATION MODEL</h1>
+<p>Validation includes:</p>
+<ul>
+<li>cluster readiness</li>
+<li>ingress readiness</li>
+<li>storage readiness</li>
+<li>namespace existence</li>
+<li>orchestration governance</li>
+<li>recovery governance</li>
+<li>install governance</li>
+<li>reproducibility governance</li>
+<li>component governance</li>
+</ul>
+<p>Validation must PASS before proceeding to later stages.</p>
+<hr>
+<h1>OUTPUT OF STAGE 02</h1>
+<p>At completion the platform supports:</p>
+<ul>
+<li>deterministic infrastructure lifecycle</li>
+<li>deterministic rebuilds</li>
+<li>orchestration governance</li>
+<li>recovery governance</li>
+<li>install governance</li>
+<li>reproducible infrastructure</li>
+<li>infrastructure operational readiness</li>
+</ul>
+<p>This stage establishes the institutional infrastructure authority layer for the platform.</p>
+<hr>
+<h1>NEXT STAGES</h1>
+<p>After successful completion:</p>
+<ul>
+<li>Stage 03 — Governance Foundation</li>
+<li>Stage 03A — Platform Governance Stabilization</li>
+<li>Stage 04 — Event Backbone Foundation</li>
+</ul>
+
+
+  <div class="doc-footer">
+
+    <span>DOCUMENT KEY: docs:docs_docs_docs_docs_docs_stages_stage-02-cluster-foundation.md.md.md.md.md.md</span>
+
+    <span>
+      DOCUMENT NAME: docs docs docs docs docs stages stage 02 cluster foundation.md.md.md.md.md
+    </span>
+
+    <span>
+      VERSION: 1.0
+    </span>
+
+  </div>
+
+</body>
+</html>

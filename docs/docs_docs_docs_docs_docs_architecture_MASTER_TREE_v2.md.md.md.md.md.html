@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <title>docs docs docs docs architecture MASTER TREE v2.md.md.md.md</title>
+  <style>
+  body {
+    background: #0A0D12;
+    color: #E3E7EC;
+    font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px 40px;
+  }
+
+  h1 {
+    font-size: 26px;
+    font-weight: 600;
+    color: #C6A46A;
+    margin: 24px 0 12px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 8px;
+  }
+
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #D4B88A;
+    margin: 20px 0 10px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 6px;
+  }
+
+  h3 {
+    font-size: 17px;
+    font-weight: 500;
+    color: #E3E7EC;
+    margin: 16px 0 8px 0;
+  }
+
+  h4 {
+    font-size: 15px;
+    font-weight: 500;
+    color: #C5CED9;
+    margin: 12px 0 6px 0;
+  }
+
+  p {
+    margin-bottom: 8px;
+    color: #C5CED9;
+  }
+
+  ul,
+  ol {
+    padding-left: 24px;
+    margin-bottom: 8px;
+    color: #C5CED9;
+  }
+
+  li {
+    margin-bottom: 2px;
+  }
+
+  code {
+    font-family: 'JetBrains Mono', 'Cascadia Code', monospace;
+    font-size: 13px;
+    background: rgba(255,255,255,0.05);
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid #28303C;
+    color: #C5CED9;
+  }
+
+  pre {
+    background: #18202A;
+    border: 1px solid #28303C;
+    border-radius: 6px;
+    padding: 16px 20px;
+    overflow: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 12px 0 16px 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #C5CED9;
+  }
+
+  pre code {
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 16px 0;
+    font-size: 13px;
+    color: #C5CED9;
+  }
+
+  th {
+    background: #18202A;
+    color: #C5CED9;
+    font-weight: 600;
+    text-align: left;
+    padding: 6px 12px;
+    border: 1px solid #28303C;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  td {
+    padding: 4px 12px;
+    border: 1px solid #28303C;
+    background: #0E1219;
+  }
+
+  tr:nth-child(even) td {
+    background: #121821;
+  }
+
+  blockquote {
+    border-left: 3px solid #C6A46A;
+    padding-left: 16px;
+    margin: 8px 0 12px 0;
+    color: #6E7883;
+    font-style: italic;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #28303C;
+    margin: 24px 0;
+  }
+
+  a {
+    color: #8BB4F0;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  strong {
+    color: #E3E7EC;
+    font-weight: 600;
+  }
+
+  img {
+    max-width: 100%;
+    border-radius: 4px;
+    border: 1px solid #28303C;
+  }
+
+  .doc-footer {
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid #28303C;
+    font-size: 12px;
+    color: #6E7883;
+    font-family: monospace;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+</style>
+</head>
+
+<body>
+
+  <div
+    class="doc-header"
+    style="
+      background:#121821;
+      border:1px solid #28303C;
+      border-radius:8px;
+      padding:1.2rem 1.8rem;
+      margin-bottom:1.8rem;
+    "
+  >
+
+    <div
+      style="
+        color:#C6A46A;
+        font-weight:600;
+        font-size:13px;
+        text-transform:uppercase;
+        letter-spacing:0.05em;
+      "
+    >
+      COREI · Stage Documentation
+    </div>
+
+
+
+    <h1
+      style="
+        font-size:28px;
+        font-weight:600;
+        color:#E3E7EC;
+        margin:0.1rem 0;
+        border-bottom:none;
+        padding-bottom:0;
+      "
+    >
+      docs docs docs docs architecture MASTER TREE v2.md.md.md.md
+    </h1>
+
+    <div
+      style="
+        font-size:16px;
+        color:#C5CED9;
+      "
+    >
+      Stage Documentation
+      ·
+      Operational
+    </div>
+
+    <div
+      style="
+        display:flex;
+        flex-wrap:wrap;
+        gap:0.6rem 1.8rem;
+        margin-top:0.6rem;
+        font-size:13px;
+      "
+    >
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Status
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          Approved
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Version
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          1.0
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Classification
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          Operational
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Owner
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          COREI
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Repository
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+            font-family:monospace;
+          "
+        >
+          docs/docs_docs_docs_docs_architecture_MASTER_TREE_v2.md.md.md.md.md
+        </span>
+      </span>
+
+    </div>
+
+
+
+  </div>
+
+
+
+  <h1>MASTER_TREE_v2.md</h1>
+<h1>INSTITUTIONAL REPOSITORY GOVERNANCE TREE v2</h1>
+<p>STATUS: AUTHORITATIVE<br>
+VERSION: 2.0<br>
+OWNER: PLATFORM GOVERNANCE<br>
+STAGE: STAGE 2 + STAGE 3 RECONCILIATION<br>
+LAST UPDATED: 2026-05-08</p>
+<hr>
+<h1>PURPOSE</h1>
+<p>This document defines the authoritative repository structure for the institutional trading platform.</p>
+<p>This tree is:</p>
+<ul>
+<li>governance-enforced</li>
+<li>operationally scalable</li>
+<li>deterministic</li>
+<li>ownership-aware</li>
+<li>environment-compatible</li>
+<li>CI-validated</li>
+</ul>
+<p>All repository artifacts MUST exist within approved ownership boundaries.</p>
+<p>No artifact may exist without a defined home.</p>
+<hr>
+<h1>CORE GOVERNANCE LAW</h1>
+<p>The repository is the single source of truth for:</p>
+<ul>
+<li>infrastructure</li>
+<li>runtime configuration</li>
+<li>platform services</li>
+<li>schemas</li>
+<li>governance</li>
+<li>orchestration</li>
+<li>operational tooling</li>
+<li>CI/CD</li>
+<li>observability</li>
+<li>recovery</li>
+<li>testing</li>
+<li>deployment topology</li>
+</ul>
+<p>Filesystem organization is an architectural control mechanism.</p>
+<p>Repository structure is NOT cosmetic.</p>
+<hr>
+<h1>ROOT STRUCTURE</h1>
+<pre><code class="language-text">trading-platform/
+│
+├── infrastructure/
+├── platform/
+├── services/
+├── schemas/
+├── governance/
+├── orchestration/
+├── observability/
+├── operations/
+├── replay/
+├── runtime/
+├── cicd/
+├── scripts/
+├── tests/
+├── docs/
+├── tools/
+├── datasets/
+├── research/
+├── ui/
+├── sandbox/
+├── tmp/
+│
+├── .github/
+├── .gitignore
+├── .env.example
+├── Makefile
+├── VERSION
+├── README.md
+└── install.state
+</code></pre>
+<hr>
+<h1>ROOT OWNERSHIP DEFINITIONS</h1>
+<hr>
+<h1>infrastructure/</h1>
+<p>PURPOSE</p>
+<p>Infrastructure substrate definitions.</p>
+<p>ALLOWED</p>
+<ul>
+<li>Terraform</li>
+<li>Kubernetes bootstrap</li>
+<li>cluster provisioning</li>
+<li>storage provisioning</li>
+<li>networking</li>
+<li>ingress</li>
+<li>VPN</li>
+<li>infrastructure Helm charts</li>
+<li>node bootstrap</li>
+<li>infrastructure secrets templates</li>
+</ul>
+<p>PROHIBITED</p>
+<ul>
+<li>business logic</li>
+<li>strategy logic</li>
+<li>runtime market data</li>
+<li>trading services</li>
+</ul>
+<hr>
+<h1>platform/</h1>
+<p>PURPOSE</p>
+<p>Shared institutional platform runtime components.</p>
+<p>ALLOWED</p>
+<ul>
+<li>shared SDK</li>
+<li>lineage libraries</li>
+<li>event libraries</li>
+<li>schema utilities</li>
+<li>config libraries</li>
+<li>auth libraries</li>
+<li>common runtime abstractions</li>
+<li>shared protobuf/avro helpers</li>
+<li>resilience utilities</li>
+</ul>
+<p>PROHIBITED</p>
+<ul>
+<li>service-specific business logic</li>
+<li>strategy implementations</li>
+</ul>
+<p>SUBTREE</p>
+<pre><code class="language-text">platform/
+├── sdk/
+├── lineage/
+├── config/
+├── eventing/
+├── security/
+├── observability/
+├── resilience/
+├── orchestration/
+├── validation/
+└── shared/
+</code></pre>
+<hr>
+<h1>services/</h1>
+<p>PURPOSE</p>
+<p>Bounded-context deployable services.</p>
+<p>RULES</p>
+<ul>
+<li>one service = one ownership boundary</li>
+<li>services never share databases</li>
+<li>services communicate through Kafka only</li>
+<li>each service independently deployable</li>
+</ul>
+<p>SUBTREE</p>
+<pre><code class="language-text">services/
+├── _template/
+├── market-data/
+├── portfolio/
+├── execution/
+├── risk/
+├── broker/
+├── orchestration/
+├── replay/
+├── audit/
+└── ui-backend/
+</code></pre>
+<p>SERVICE STRUCTURE</p>
+<pre><code class="language-text">service-name/
+├── app/
+├── domain/
+├── infrastructure/
+├── adapters/
+├── contracts/
+├── config/
+├── tests/
+├── Dockerfile
+├── Makefile
+└── README.md
+</code></pre>
+<hr>
+<h1>schemas/</h1>
+<p>PURPOSE</p>
+<p>Authoritative schema registry source.</p>
+<p>ALLOWED</p>
+<ul>
+<li>Avro schemas</li>
+<li>schema versioning</li>
+<li>compatibility metadata</li>
+<li>event contracts</li>
+</ul>
+<p>RULES</p>
+<ul>
+<li>backward compatible only</li>
+<li>breaking changes require new topic version</li>
+<li>float forbidden in financial domains</li>
+</ul>
+<p>SUBTREE</p>
+<pre><code class="language-text">schemas/
+├── market-data/
+├── execution/
+├── portfolio/
+├── risk/
+├── broker/
+├── audit/
+└── shared/
+</code></pre>
+<hr>
+<h1>governance/</h1>
+<p>PURPOSE</p>
+<p>Architectural governance authority.</p>
+<p>ALLOWED</p>
+<ul>
+<li>ADRs</li>
+<li>standards</li>
+<li>naming rules</li>
+<li>schema governance</li>
+<li>lineage governance</li>
+<li>service boundary governance</li>
+<li>event governance</li>
+<li>dependency governance</li>
+<li>security governance</li>
+</ul>
+<p>SUBTREE</p>
+<pre><code class="language-text">governance/
+├── adr/
+├── standards/
+├── policies/
+├── contracts/
+├── architecture/
+├── lineage/
+└── validation/
+</code></pre>
+<hr>
+<h1>orchestration/</h1>
+<p>PURPOSE</p>
+<p>Deterministic workflow orchestration.</p>
+<p>ALLOWED</p>
+<ul>
+<li>n8n workflows</li>
+<li>orchestration manifests</li>
+<li>workflow governance</li>
+<li>scheduling policies</li>
+<li>automation pipelines</li>
+</ul>
+<p>SUBTREE</p>
+<pre><code class="language-text">orchestration/
+├── workflows/
+├── schedules/
+├── automation/
+├── validation/
+└── recovery/
+</code></pre>
+<hr>
+<h1>observability/</h1>
+<p>PURPOSE</p>
+<p>Platform-wide observability systems.</p>
+<p>ALLOWED</p>
+<ul>
+<li>dashboards</li>
+<li>metrics</li>
+<li>tracing</li>
+<li>alerting</li>
+<li>log routing</li>
+<li>telemetry standards</li>
+</ul>
+<p>SUBTREE</p>
+<pre><code class="language-text">observability/
+├── grafana/
+├── prometheus/
+├── loki/
+├── jaeger/
+├── alerts/
+└── telemetry/
+</code></pre>
+<hr>
+<h1>operations/</h1>
+<p>PURPOSE</p>
+<p>Operational procedures and production operations.</p>
+<p>ALLOWED</p>
+<ul>
+<li>runbooks</li>
+<li>incident response</li>
+<li>maintenance procedures</li>
+<li>deployment operations</li>
+<li>DR procedures</li>
+<li>operational checklists</li>
+</ul>
+<p>SUBTREE</p>
+<pre><code class="language-text">operations/
+├── runbooks/
+├── incidents/
+├── recovery/
+├── maintenance/
+├── deployment/
+└── procedures/
+</code></pre>
+<hr>
+<h1>replay/</h1>
+<p>PURPOSE</p>
+<p>Deterministic replay and recovery systems.</p>
+<p>ALLOWED</p>
+<ul>
+<li>replay orchestration</li>
+<li>recovery tooling</li>
+<li>lineage reconstruction</li>
+<li>deterministic validation</li>
+<li>historical reconstruction</li>
+</ul>
+<p>SUBTREE</p>
+<pre><code class="language-text">replay/
+├── orchestration/
+├── recovery/
+├── lineage/
+├── validation/
+└── tooling/
+</code></pre>
+<hr>
+<h1>runtime/</h1>
+<p>PURPOSE</p>
+<p>Runtime-generated assets.</p>
+<p>IMPORTANT</p>
+<p>runtime/ is NOT source-controlled except approved metadata.</p>
+<p>ALLOWED</p>
+<ul>
+<li>snapshots</li>
+<li>caches</li>
+<li>generated configs</li>
+<li>temporary exports</li>
+<li>runtime state</li>
+<li>replay artifacts</li>
+<li>generated manifests</li>
+</ul>
+<p>PROHIBITED</p>
+<ul>
+<li>source code</li>
+<li>governance artifacts</li>
+<li>permanent configs</li>
+</ul>
+<p>SUBTREE</p>
+<pre><code class="language-text">runtime/
+├── snapshots/
+├── cache/
+├── generated/
+├── exports/
+├── replay/
+└── temp/
+</code></pre>
+<hr>
+<h1>cicd/</h1>
+<p>PURPOSE</p>
+<p>Deployment automation and GitOps.</p>
+<p>ALLOWED</p>
+<ul>
+<li>GitHub Actions</li>
+<li>ArgoCD</li>
+<li>Helm release definitions</li>
+<li>deployment validation</li>
+<li>promotion gates</li>
+</ul>
+<p>SUBTREE</p>
+<pre><code class="language-text">cicd/
+├── github-actions/
+├── argocd/
+├── helm/
+├── pipelines/
+└── validation/
+</code></pre>
+<hr>
+<h1>scripts/</h1>
+<p>PURPOSE</p>
+<p>Deterministic executable platform automation.</p>
+<p>ALLOWED</p>
+<ul>
+<li>installers</li>
+<li>validators</li>
+<li>generators</li>
+<li>bootstrap scripts</li>
+<li>migration scripts</li>
+</ul>
+<p>RULES</p>
+<ul>
+<li>scripts must be idempotent</li>
+<li>scripts must support non-interactive execution</li>
+</ul>
+<p>SUBTREE</p>
+<pre><code class="language-text">scripts/
+├── foundation/
+├── infrastructure/
+├── governance/
+├── deployment/
+├── validation/
+├── migration/
+└── utilities/
+</code></pre>
+<hr>
+<h1>tests/</h1>
+<p>PURPOSE</p>
+<p>Centralized verification systems.</p>
+<p>SUBTREE</p>
+<pre><code class="language-text">tests/
+├── integration/
+├── replay/
+├── load/
+├── chaos/
+├── performance/
+├── security/
+└── certification/
+</code></pre>
+<hr>
+<h1>docs/</h1>
+<p>PURPOSE</p>
+<p>Institutional documentation authority.</p>
+<p>SUBTREE</p>
+<pre><code class="language-text">docs/
+├── architecture/
+├── operations/
+├── deployment/
+├── governance/
+├── services/
+├── schemas/
+├── recovery/
+└── onboarding/
+</code></pre>
+<hr>
+<h1>tools/</h1>
+<p>PURPOSE</p>
+<p>Engineering support tooling.</p>
+<p>ALLOWED</p>
+<ul>
+<li>local utilities</li>
+<li>helper tooling</li>
+<li>development support tools</li>
+</ul>
+<p>PROHIBITED</p>
+<ul>
+<li>production runtime ownership</li>
+</ul>
+<hr>
+<h1>datasets/</h1>
+<p>PURPOSE</p>
+<p>Structured datasets for research/testing.</p>
+<p>ALLOWED</p>
+<ul>
+<li>historical datasets</li>
+<li>replay datasets</li>
+<li>synthetic datasets</li>
+<li>validation datasets</li>
+</ul>
+<p>PROHIBITED</p>
+<ul>
+<li>production secrets</li>
+<li>unrestricted runtime dumps</li>
+</ul>
+<hr>
+<h1>research/</h1>
+<p>PURPOSE</p>
+<p>Research and experimental analysis.</p>
+<p>RULES</p>
+<ul>
+<li>isolated from production services</li>
+<li>cannot directly deploy to production</li>
+</ul>
+<p>SUBTREE</p>
+<pre><code class="language-text">research/
+├── notebooks/
+├── experiments/
+├── feature-analysis/
+├── models/
+└── prototypes/
+</code></pre>
+<hr>
+<h1>ui/</h1>
+<p>PURPOSE</p>
+<p>Frontend systems and operational interfaces.</p>
+<p>SUBTREE</p>
+<pre><code class="language-text">ui/
+├── operator-console/
+├── admin-console/
+├── monitoring-ui/
+├── replay-ui/
+└── shared/
+</code></pre>
+<hr>
+<h1>sandbox/</h1>
+<p>PURPOSE</p>
+<p>Temporary isolated experimentation.</p>
+<p>RULES</p>
+<ul>
+<li>never production-authoritative</li>
+<li>periodic cleanup mandatory</li>
+</ul>
+<hr>
+<h1>tmp/</h1>
+<p>PURPOSE</p>
+<p>Disposable temporary assets.</p>
+<p>RULES</p>
+<ul>
+<li>fully ignored by git</li>
+<li>auto-cleaned</li>
+<li>never authoritative</li>
+</ul>
+<hr>
+<h1>REPOSITORY GOVERNANCE RULES</h1>
+<hr>
+<h1>RULE 1</h1>
+<p>No service may read another service database directly.</p>
+<p>Cross-service communication MUST occur through Kafka.</p>
+<hr>
+<h1>RULE 2</h1>
+<p>All financial values MUST use fixed-point int64.</p>
+<p>float and decimal are forbidden in trading logic.</p>
+<hr>
+<h1>RULE 3</h1>
+<p>All timestamps MUST use epoch nanoseconds UTC.</p>
+<hr>
+<h1>RULE 4</h1>
+<p>Every deployable service MUST contain:</p>
+<pre><code class="language-text">README.md
+Dockerfile
+health endpoint
+tests/
+config/
+</code></pre>
+<hr>
+<h1>RULE 5</h1>
+<p>Generated artifacts MUST NOT pollute source-controlled domains.</p>
+<hr>
+<h1>RULE 6</h1>
+<p>Runtime state MUST NEVER be treated as governance truth.</p>
+<hr>
+<h1>RULE 7</h1>
+<p>All directories MUST have explicit ownership.</p>
+<p>Orphan directories are architecture violations.</p>
+<hr>
+<h1>RULE 8</h1>
+<p>Filesystem placement violations are CI failures.</p>
+<hr>
+<h1>GOVERNANCE ENFORCEMENT</h1>
+<p>Validation tooling MUST verify:</p>
+<ul>
+<li>tree structure</li>
+<li>prohibited file placement</li>
+<li>naming standards</li>
+<li>schema ownership</li>
+<li>service ownership</li>
+<li>runtime pollution</li>
+<li>generated artifact leakage</li>
+</ul>
+<hr>
+<h1>VALIDATION TARGETS</h1>
+<pre><code class="language-bash">make validate-tree
+make validate-governance
+make validate-placement
+make validate-runtime
+</code></pre>
+<hr>
+<h1>AUTHORITATIVE STATUS</h1>
+<p>This document supersedes:</p>
+<ul>
+<li>MASTER_TREE_FULL_v1</li>
+<li>temporary repository layouts</li>
+<li>experimental filesystem structures</li>
+</ul>
+<p>This document becomes the canonical repository governance authority.</p>
+<p>END OF DOCUMENT</p>
+
+
+  <div class="doc-footer">
+
+    <span>DOCUMENT KEY: docs:docs_docs_docs_docs_architecture_MASTER_TREE_v2.md.md.md.md.md</span>
+
+    <span>
+      DOCUMENT NAME: docs docs docs docs architecture MASTER TREE v2.md.md.md.md
+    </span>
+
+    <span>
+      VERSION: 1.0
+    </span>
+
+  </div>
+
+</body>
+</html>

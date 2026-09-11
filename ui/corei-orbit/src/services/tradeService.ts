@@ -1,117 +1,112 @@
 // src/services/tradeService.ts
+
 import { create } from 'zustand';
-import { useMarketStore } from './marketDataService';
-import { useN8nStore } from './n8nService';
-import { config, isN8nConfigured } from '../config/apiConfig';
+import {
+  fetchPositions,
+  fetchOrders,
+  fetchPortfolioSummary,
+  type Position,
+  type Order,
+  type PortfolioSummary,
+} from './tradingService';
 import { log } from './loggerService';
 
-interface Position {
-  id: string;
-  symbol: string;
-  side: 'BUY' | 'SELL';
-  qty: number;
-  entryPrice: number;
-  currentPrice: number;
-  pnl: number;
-}
-
-interface TradeState {
+export interface TradeState {
   positions: Position[];
-  totalTrades: number;
-  wins: number;
-  losses: number;
-  pnl: number;
-  exposure: number;
-  generateTrade: () => Promise<void>;
+  orders: Order[];
+  portfolio: PortfolioSummary | null;
+  loading: boolean;
+  error: string | null;
+  fetchData: () => Promise<void>;
 }
 
-export const useTradeStore = create<TradeState>((set, get) => ({
+export const useTradeStore = create<TradeState>((set) => ({
   positions: [],
-  totalTrades: 0,
-  wins: 0,
-  losses: 0,
-  pnl: 0,
-  exposure: 0,
+  orders: [],
+  portfolio: null,
+  loading: false,
+  error: null,
 
-  generateTrade: async () => {
-    const instruments = useMarketStore.getState().instruments;
-    const symbols = Object.keys(instruments);
-    const symbol = symbols[Math.floor(Math.random() * symbols.length)];
-    const price = instruments[symbol]?.price || 100;
-    const side = Math.random() > 0.5 ? 'BUY' : 'SELL';
-    const qty = +(0.1 + Math.random() * 1.5).toFixed(2);
+  fetchData: async () => {
+    set({
+      loading: true,
+      error: null,
+    });
 
-    // Determine P&L: random win/loss (for now)
-    const win = Math.random() > 0.4;
-    const pnlChange = win ? (0.5 + Math.random() * 2) : -(0.5 + Math.random() * 3);
-    const pnl = +(qty * pnlChange * (symbol.includes('BTC') ? 100 : 10)).toFixed(2);
+    try {
+      const [positions, orders, portfolio] = await Promise.all([
+        fetchPositions(),
+        fetchOrders(),
+        fetchPortfolioSummary(),
+      ]);
 
-    // If n8n is configured, send execution request
-    if (isN8nConfigured()) {
-      try {
-        const response = await fetch(`${config.n8n.baseUrl}/webhook/execute`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-N8N-API-KEY': config.n8n.apiKey,
-          },
-          body: JSON.stringify({ symbol, side, qty, price }),
-        });
-        if (!response.ok) throw new Error('Execution failed');
-        const result = await response.json();
-        log('trade', `📈 Trade executed via n8n: ${side} ${symbol} @ ${price} | Qty: ${qty}`);
-        // Use actual response data if available
-      } catch (err) {
-        log('error', `❌ Trade execution error: ${err.message}`);
-        // Fallback to mock execution
-      }
-    } else {
-      log('trade', `📈 [MOCK] ${side} ${symbol} @ ${price} | Qty: ${qty}`);
-    }
+      set({
+        positions,
+        orders,
+        portfolio,
+        loading: false,
+        error: null,
+      });
+    } catch (err) {
+      const message =
+        err instanceof Error
+          ? err.message
+          : 'Unable to fetch trading data';
 
-    // Update local state (regardless of execution)
-    const newPosition: Position = {
-      id: `pos-${Date.now()}`,
-      symbol,
-      side,
-      qty,
-      entryPrice: price,
-      currentPrice: price + pnlChange,
-      pnl,
-    };
+      set({
+        loading: false,
+        error: message,
+      });
 
-    set((state) => ({
-      positions: [...state.positions, newPosition],
-      totalTrades: state.totalTrades + 1,
-      wins: state.wins + (win ? 1 : 0),
-      losses: state.losses + (win ? 0 : 1),
-      pnl: state.pnl + pnl,
-      exposure: +(state.exposure + qty * 0.1).toFixed(2),
-    }));
-
-    // Limit positions to 20
-    if (get().positions.length > 20) {
-      set((state) => ({ positions: state.positions.slice(-20) }));
+      log('error', `Trade data fetch error: ${message}`);
     }
   },
 }));
 
-// Start trade simulation interval
-let tradeInterval: NodeJS.Timeout | null = null;
+let tradeInterval: number | null = null;
 
-export function startTradeSimulation() {
-  if (tradeInterval) return;
-  tradeInterval = setInterval(async () => {
-    const state = useN8nStore.getState().state;
-    if (state === 'running') {
-      await useTradeStore.getState().generateTrade();
-    }
-  }, 3000 + Math.random() * 5000);
+export function startTradePolling(
+  intervalMs: number = 10000,
+): void {
+  if (tradeInterval !== null) {
+    return;
+  }
+
+  void useTradeStore.getState().fetchData();
+
+  tradeInterval = window.setInterval(() => {
+    void useTradeStore.getState().fetchData();
+  }, intervalMs);
 }
 
-export function stopTradeSimulation() {
-  if (tradeInterval) {
-    clearInterval(tradeInterval);
+export function stopTradePolling(): void {
+  if (tradeInterval !== null) {
+    window.clearInterval(tradeInterval);
     tradeInterval = null;
   }
 }
+
+/* ==========================================================================
+ * DERIVED TRADING SELECTORS
+ *
+ * These consume the portfolio provider instead of maintaining duplicate
+ * trading state.
+ * ========================================================================== */
+
+export const selectPnl = (state: TradeState): number =>
+  state.portfolio?.pnl ?? 0;
+
+export const selectTotalTrades = (state: TradeState): number =>
+  state.portfolio?.totalTrades ?? state.orders.length;
+
+export const selectWins = (state: TradeState): number =>
+  state.portfolio?.wins ?? 0;
+
+export const selectExposure = (state: TradeState): number =>
+  state.portfolio
+    ? state.portfolio.allocated
+    : state.positions.reduce(
+        (total, position) =>
+          total + Math.abs(position.qty * position.currentPrice),
+        0,
+      );

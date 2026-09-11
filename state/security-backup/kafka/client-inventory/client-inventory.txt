@@ -1,0 +1,21 @@
+=====================================
+KAFKA CLIENT INVENTORY
+=====================================
+
+infrastructure/components/kafka/market-data/create-topics.sh
+infrastructure/components/kafka/market-data/delete-topics.sh
+infrastructure/components/kafka/market-data/topic-config.env
+infrastructure/components/kafka/market-data/validate-topics.sh
+infrastructure/components/kafka/tls/generate-broker-cert.sh
+infrastructure/kubernetes/kafka/bootstrap.env
+infrastructure/kubernetes/kafka/kafka-statefulset.yaml
+infrastructure/kubernetes/kafka/market-topics-job.yaml
+infrastructure/kubernetes/market-data/configmap.yaml
+infrastructure/kubernetes/persistence/persistence-writer.yaml
+infrastructure/phases/stage-12-market-data/manifests/kafka/kafka-statefulset.yaml
+infrastructure/phases/stage-12-market-data/manifests/kafka/market-topics-job.yaml
+infrastructure/phases/stage-21-production-hardening/reports/kafka-client-discovery.txt
+infrastructure/services/persistence-writer/app/main.py
+scripts/security/kafka/build-client-inventory.sh
+scripts/security/kafka/discover-kafka-clients.sh
+scripts/security/vault/kafka/create-kafka-secrets.sh

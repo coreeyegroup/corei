@@ -1,0 +1,15 @@
+
+GROUP                 TOPIC                         PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID                                          HOST             CLIENT-ID
+feature-store-service normalized_market_data_stream 0          58245           58248           3               aiokafka-0.10.0-824766cc-3938-4392-b741-6d69194a9f10 /192.168.117.191 aiokafka-0.10.0
+feature-store-service normalized_market_data_stream 1          58521           58524           3               aiokafka-0.10.0-824766cc-3938-4392-b741-6d69194a9f10 /192.168.117.191 aiokafka-0.10.0
+feature-store-service normalized_market_data_stream 2          58748           58750           2               aiokafka-0.10.0-824766cc-3938-4392-b741-6d69194a9f10 /192.168.117.191 aiokafka-0.10.0
+
+GROUP                  TOPIC                  PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID                                          HOST             CLIENT-ID
+market-data-normalizer raw_market_data_stream 0          34569           34570           1               aiokafka-0.10.0-8f1e9e48-eaa5-4969-8986-a773b70280db /192.168.117.188 aiokafka-0.10.0
+market-data-normalizer raw_market_data_stream 1          34460           34462           2               aiokafka-0.10.0-8f1e9e48-eaa5-4969-8986-a773b70280db /192.168.117.188 aiokafka-0.10.0
+market-data-normalizer raw_market_data_stream 2          34453           34453           0               aiokafka-0.10.0-8f1e9e48-eaa5-4969-8986-a773b70280db /192.168.117.188 aiokafka-0.10.0
+
+GROUP                   TOPIC                         PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID                                          HOST             CLIENT-ID
+market-data-persistence normalized_market_data_stream 0          58245           58248           3               aiokafka-0.10.0-6cad4b6e-077d-4a16-829e-e284482ba378 /192.168.117.162 aiokafka-0.10.0
+market-data-persistence normalized_market_data_stream 1          58523           58524           1               aiokafka-0.10.0-6cad4b6e-077d-4a16-829e-e284482ba378 /192.168.117.162 aiokafka-0.10.0
+market-data-persistence normalized_market_data_stream 2          58748           58750           2               aiokafka-0.10.0-6cad4b6e-077d-4a16-829e-e284482ba378 /192.168.117.162 aiokafka-0.10.0

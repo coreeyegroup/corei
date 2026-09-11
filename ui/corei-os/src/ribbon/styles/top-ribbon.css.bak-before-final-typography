@@ -1,0 +1,685 @@
+/******************************************************************************
+ * COREI OS
+ * TOP RIBBON
+ * Dense Institutional Operational / Developer Surface
+ ******************************************************************************/
+
+.corei-top-ribbon {
+    width: 100%;
+    height: 60px;
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    box-sizing: border-box;
+    overflow: visible;
+
+    background: var(--corei-color-surface-1);
+    color: var(--corei-color-text-primary);
+
+    border-bottom: 1px solid var(--corei-color-border);
+
+    font-family: var(--corei-font-family);
+
+    white-space: nowrap;
+}
+
+
+/* ============================================================================
+   PRIMARY ROW
+   ========================================================================== */
+
+.corei-ribbon-primary-row {
+    width: 100%;
+    height: 32px;
+    min-height: 32px;
+    max-height: 32px;
+
+    display: flex;
+    align-items: stretch;
+
+    box-sizing: border-box;
+    overflow: visible;
+
+    border-bottom: 1px solid var(--corei-color-border);
+}
+
+
+/* ============================================================================
+   INSTITUTION IDENTITY
+   ========================================================================== */
+
+.corei-ribbon-identity {
+    flex: 0 0 auto;
+
+    min-width: 150px;
+    height: 32px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+    padding: 0 9px;
+
+    box-sizing: border-box;
+
+    border-right: 1px solid var(--corei-color-border);
+}
+
+.corei-ribbon-product {
+    color: var(--corei-color-text-primary);
+
+    font-size: 12px;
+    font-weight: 600;
+
+    letter-spacing: .025em;
+}
+
+.corei-ribbon-identity-divider {
+    color: var(--corei-color-border);
+
+    font-size: 10px;
+    font-weight: 400;
+}
+
+.corei-ribbon-identity-type {
+    color: var(--corei-color-text-secondary);
+
+    font-size: 8px;
+    font-weight: 500;
+
+    letter-spacing: .075em;
+}
+
+
+/* ============================================================================
+   CUSTOM SELECTOR
+   ========================================================================== */
+
+.corei-ribbon-selector {
+    position: relative;
+
+    flex: 0 0 auto;
+
+    height: 32px;
+
+    box-sizing: border-box;
+
+    border-right: 1px solid var(--corei-color-border);
+}
+
+.corei-ribbon-selector-trigger {
+    width: 100%;
+    height: 32px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+
+    padding: 0 9px;
+
+    border: 0;
+    border-radius: 0;
+
+    background: transparent;
+    color: var(--corei-color-text-primary);
+
+    font: inherit;
+
+    cursor: pointer;
+}
+
+.corei-ribbon-selector[data-ribbon-block="org"] {
+    width: 190px;
+}
+
+.corei-ribbon-selector[data-ribbon-block="workspace"] {
+    width: 175px;
+}
+
+.corei-ribbon-selector-trigger:hover,
+.corei-ribbon-selector-trigger[aria-expanded="true"] {
+    background: var(--corei-color-surface-2);
+}
+
+.corei-ribbon-selector-label {
+    flex: 0 0 auto;
+
+    color: var(--corei-color-text-secondary);
+
+    font-size: 8px;
+    font-weight: 600;
+
+    letter-spacing: .075em;
+}
+
+.corei-ribbon-selector-value {
+    min-width: 0;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    color: var(--corei-color-text-primary);
+
+    font-size: 10px;
+    font-weight: 500;
+
+    line-height: 1;
+}
+
+.corei-ribbon-selector-chevron {
+    flex: 0 0 auto;
+
+    margin-left: auto;
+
+    color: var(--corei-color-text-secondary);
+
+    font-size: 9px;
+    line-height: 1;
+}
+
+.corei-ribbon-selector-menu {
+    position: absolute;
+
+    z-index: 1000;
+
+    top: calc(100% + 1px);
+    left: 0;
+
+    min-width: 100%;
+
+    padding: 4px;
+
+    box-sizing: border-box;
+
+    background: var(--corei-color-surface-2);
+
+    border: 1px solid var(--corei-color-border);
+
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, .32);
+}
+
+.corei-ribbon-selector-menu button {
+    width: 100%;
+    min-height: 27px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    padding: 0 8px;
+
+    border: 0;
+
+    background: transparent;
+    color: var(--corei-color-text-secondary);
+
+    font: inherit;
+    font-size: 10px;
+    font-weight: 450;
+
+    text-align: left;
+
+    cursor: pointer;
+}
+
+.corei-ribbon-selector-menu button:hover,
+.corei-ribbon-selector-menu button.selected {
+    background: var(--corei-color-surface-1);
+    color: var(--corei-color-text-primary);
+}
+
+.corei-ribbon-selector-check {
+    color: #67c96a;
+
+    font-size: 6px;
+}
+
+
+/* ============================================================================
+   PRIMARY STATUS
+   ========================================================================== */
+
+.corei-ribbon-primary-row .corei-ribbon-status {
+    flex: 0 0 auto;
+
+    min-width: 88px;
+    max-width: 145px;
+    height: 32px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+    padding: 0 8px;
+
+    box-sizing: border-box;
+
+    border-right: 1px solid var(--corei-color-border);
+}
+
+.corei-ribbon-primary-row .corei-ribbon-status-label {
+    flex: 0 0 auto;
+
+    color: var(--corei-color-text-secondary);
+
+    font-size: 8px;
+    font-weight: 500;
+
+    letter-spacing: .07em;
+    line-height: 1;
+}
+
+.corei-ribbon-primary-row .corei-ribbon-status-value {
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+
+    gap: 4px;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    color: var(--corei-color-text-primary);
+
+    font-size: 10.5px;
+    font-weight: 450;
+
+    line-height: 1;
+}
+
+.corei-ribbon-primary-row
+.corei-ribbon-status-value i {
+    width: 5px;
+    height: 5px;
+
+    flex: 0 0 5px;
+
+    border-radius: 50%;
+}
+
+
+/* ============================================================================
+   STATUS TONES
+   ========================================================================== */
+
+.corei-ribbon-status[data-status-tone="operational"]
+.corei-ribbon-status-value {
+    color: #a8d66d;
+}
+
+.corei-ribbon-status[data-status-tone="operational"]
+.corei-ribbon-status-value i {
+    background: #67c96a;
+}
+
+.corei-ribbon-status[data-status-tone="attention"]
+.corei-ribbon-status-value {
+    color: #d5ad58;
+}
+
+.corei-ribbon-status[data-status-tone="attention"]
+.corei-ribbon-status-value i {
+    background: #d5ad58;
+}
+
+.corei-ribbon-status[data-status-tone="critical"]
+.corei-ribbon-status-value {
+    color: #d75b5b;
+}
+
+.corei-ribbon-status[data-status-tone="critical"]
+.corei-ribbon-status-value i {
+    background: #d75b5b;
+}
+
+
+/* ============================================================================
+   PRIMARY FLEX / COMMAND
+   ========================================================================== */
+
+.corei-ribbon-primary-spacer {
+    flex: 1 1 auto;
+    min-width: 8px;
+}
+
+.corei-ribbon-command {
+    flex: 0 0 auto;
+
+    height: 32px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+
+    padding: 0 9px;
+
+    border: 0;
+    border-left: 1px solid var(--corei-color-border);
+
+    background: transparent;
+
+    color: var(--corei-color-text-secondary);
+
+    font: inherit;
+
+    font-size: 9px;
+    font-weight: 500;
+
+    letter-spacing: .045em;
+
+    cursor: pointer;
+}
+
+.corei-ribbon-command:hover {
+    background: var(--corei-color-surface-2);
+    color: var(--corei-color-text-primary);
+}
+
+.corei-ribbon-command-icon {
+    color: var(--corei-color-text-primary);
+
+    font-size: 12px;
+}
+
+.corei-ribbon-command-label {
+    color: inherit;
+}
+
+.corei-ribbon-command kbd {
+    padding: 2px 4px;
+
+    border: 1px solid var(--corei-color-border);
+
+    background: var(--corei-color-surface-2);
+
+    color: var(--corei-color-text-secondary);
+
+    font-family: inherit;
+
+    font-size: 8px;
+    font-weight: 450;
+
+    line-height: 1;
+}
+
+
+/* ============================================================================
+   CLOCK
+   ========================================================================== */
+
+.corei-ribbon-clock {
+    flex: 0 0 108px;
+
+    height: 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 5px;
+
+    padding: 0 8px;
+
+    box-sizing: border-box;
+
+    border-left: 1px solid var(--corei-color-border);
+}
+
+.corei-ribbon-clock-time {
+    color: var(--corei-color-text-primary);
+
+    font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        Monaco,
+        Consolas,
+        monospace;
+
+    font-size: 10.5px;
+    font-weight: 450;
+}
+
+.corei-ribbon-clock-zone {
+    color: var(--corei-color-text-secondary);
+
+    font-size: 8px;
+    font-weight: 500;
+
+    letter-spacing: .055em;
+}
+
+
+/* ============================================================================
+   SECONDARY ROW
+   ========================================================================== */
+
+.corei-ribbon-secondary-row {
+    width: 100%;
+    height: 28px;
+    min-height: 28px;
+    max-height: 28px;
+
+    display: flex;
+    align-items: stretch;
+
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+
+/* ============================================================================
+   TWO INFORMATION TABS
+   ========================================================================== */
+
+.corei-ribbon-tabs {
+    flex: 0 0 170px;
+
+    width: 170px;
+    height: 28px;
+
+    display: flex;
+    align-items: stretch;
+
+    box-sizing: border-box;
+
+    border-right: 1px solid var(--corei-color-border);
+}
+
+.corei-ribbon-tabs button {
+    position: relative;
+
+    flex: 1 1 50%;
+
+    height: 28px;
+
+    padding: 0 7px;
+
+    border: 0;
+
+    background: transparent;
+
+    color: var(--corei-color-text-secondary);
+
+    font: inherit;
+
+    font-size: 9px;
+    font-weight: 500;
+
+    letter-spacing: .055em;
+
+    cursor: pointer;
+}
+
+.corei-ribbon-tabs button:hover {
+    background: var(--corei-color-surface-2);
+    color: var(--corei-color-text-primary);
+}
+
+.corei-ribbon-tabs button.active {
+    background: var(--corei-color-surface-2);
+    color: var(--corei-color-text-primary);
+}
+
+.corei-ribbon-tabs button.active::after {
+    content: "";
+
+    position: absolute;
+
+    left: 8px;
+    right: 8px;
+    bottom: 0;
+
+    height: 2px;
+
+    background: #d5ad58;
+}
+
+
+/* ============================================================================
+   SECONDARY DATA STRIP
+   ========================================================================== */
+
+.corei-ribbon-secondary-content {
+    flex: 1 1 auto;
+
+    min-width: 0;
+
+    display: flex;
+    align-items: stretch;
+
+    overflow: hidden;
+}
+
+.corei-ribbon-secondary-content
+.corei-ribbon-status {
+    flex: 1 1 112px;
+
+    min-width: 96px;
+    max-width: none;
+
+    height: 28px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 0 8px;
+
+    box-sizing: border-box;
+
+    border-right: 1px solid var(--corei-color-border);
+}
+
+.corei-ribbon-secondary-content
+.corei-ribbon-status-label {
+    min-width: 0;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    color: var(--corei-color-text-secondary);
+
+    font-size: 8px;
+    font-weight: 500;
+
+    letter-spacing: .06em;
+}
+
+.corei-ribbon-secondary-content
+.corei-ribbon-status-value {
+    min-width: 0;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    color: var(--corei-color-text-primary);
+
+    font-size: 9.5px;
+    font-weight: 450;
+}
+
+
+/* ============================================================================
+   GLOBAL DENSITY
+   ========================================================================== */
+
+.corei-top-ribbon span,
+.corei-top-ribbon button,
+.corei-top-ribbon section {
+    box-sizing: border-box;
+}
+
+.corei-top-ribbon span {
+    line-height: 1;
+}
+
+.corei-top-ribbon button {
+    line-height: 1;
+}
+
+.corei-top-ribbon .corei-ribbon-status {
+    white-space: nowrap;
+}
+
+.corei-top-ribbon .corei-ribbon-status-value {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* ============================================================================
+   NARROW DESKTOP
+   ========================================================================== */
+
+@media (max-width: 1100px) {
+
+    .corei-ribbon-identity {
+        min-width: 138px;
+    }
+
+    .corei-ribbon-selector[data-ribbon-block="org"] {
+        width: 165px;
+    }
+
+    .corei-ribbon-selector[data-ribbon-block="workspace"] {
+        width: 150px;
+    }
+
+    .corei-ribbon-primary-row .corei-ribbon-status {
+        min-width: 78px;
+        padding-left: 6px;
+        padding-right: 6px;
+    }
+
+    .corei-ribbon-primary-row
+    .corei-ribbon-status-label {
+        font-size: 7.5px;
+    }
+
+    .corei-ribbon-primary-row
+    .corei-ribbon-status-value {
+        font-size: 10px;
+    }
+
+    .corei-ribbon-tabs {
+        flex-basis: 160px;
+        width: 160px;
+    }
+
+    .corei-ribbon-secondary-content
+    .corei-ribbon-status {
+        min-width: 86px;
+        padding-left: 6px;
+        padding-right: 6px;
+    }
+}

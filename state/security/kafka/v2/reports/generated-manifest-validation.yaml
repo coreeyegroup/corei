@@ -1,0 +1,21 @@
+status: PASS
+profile: RECOVERY
+checks:
+  tls_volume_once: true
+  jaas_volume_once: true
+  tls_mount_once: true
+  jaas_mount_once: true
+  kafka_opts_once: true
+  port_9094_once: true
+  sasl_enabled_mechanisms_present: true
+  listener_scram_jaas_present: true
+  listener_sasl_mechanism_present: true
+  ssl_keystore_location_present: true
+  ssl_truststore_location_present: true
+  sasl_ssl_listener_present: true
+  advertised_sasl_ssl_present: true
+  listener_map_contains_sasl_ssl: true
+  recovery_profile: true
+  inter_broker_scram_absent: true
+  inter_broker_security_absent: true
+  sasl_ssl_broker_absent: true

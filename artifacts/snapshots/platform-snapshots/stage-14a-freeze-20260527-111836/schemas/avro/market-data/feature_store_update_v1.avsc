@@ -1,0 +1,39 @@
+{
+  "type": "record",
+  "name": "FeatureStoreUpdateV1",
+  "namespace": "core.marketdata.featurestore",
+  "fields": [
+    {
+      "name": "feature_event_id",
+      "type": "string"
+    },
+    {
+      "name": "canonical_symbol",
+      "type": "string"
+    },
+    {
+      "name": "event_time_ns",
+      "type": "long"
+    },
+    {
+      "name": "feature_name",
+      "type": "string"
+    },
+    {
+      "name": "feature_version",
+      "type": "string"
+    },
+    {
+      "name": "feature_value",
+      "type": "long"
+    },
+    {
+      "name": "lineage_hash",
+      "type": "string"
+    },
+    {
+      "name": "schema_version",
+      "type": "string"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+scripts/messaging
+├── apply-acls.sh
+├── audit-stage-07.sh
+├── check-stage-07-contamination.sh
+├── create-topics.sh
+├── install-kafka.sh
+├── install-kafka-ui.sh
+├── install-schema-registry.sh
+├── register-schemas.sh
+├── validate-acls.sh
+├── validate-event-backbone.sh
+├── validate-replay.sh
+├── validate-schemas.sh
+└── validate-topics.sh
+
+0 directories, 13 files

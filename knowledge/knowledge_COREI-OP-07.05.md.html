@@ -1,0 +1,2114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COREI OP 07.05</title>
+  <style>
+  body {
+    background: #0A0D12;
+    color: #E3E7EC;
+    font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px 40px;
+  }
+  h1 {
+    font-size: 26px;
+    font-weight: 600;
+    color: #C6A46A;
+    margin: 24px 0 12px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 8px;
+  }
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #D4B88A;
+    margin: 20px 0 10px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 6px;
+  }
+  h3 {
+    font-size: 17px;
+    font-weight: 500;
+    color: #E3E7EC;
+    margin: 16px 0 8px 0;
+  }
+  h4 {
+    font-size: 15px;
+    font-weight: 500;
+    color: #C5CED9;
+    margin: 12px 0 6px 0;
+  }
+  p { margin-bottom: 8px; color: #C5CED9; }
+  ul, ol { padding-left: 24px; margin-bottom: 8px; color: #C5CED9; }
+  li { margin-bottom: 2px; }
+  code {
+    font-family: 'JetBrains Mono', 'Cascadia Code', monospace;
+    font-size: 13px;
+    background: rgba(255,255,255,0.05);
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid #28303C;
+    color: #C5CED9;
+  }
+  pre {
+    background: #18202A;
+    border: 1px solid #28303C;
+    border-radius: 6px;
+    padding: 16px 20px;
+    overflow: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 12px 0 16px 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #C5CED9;
+  }
+  pre code { background: transparent; border: none; padding: 0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 16px 0;
+    font-size: 13px;
+    color: #C5CED9;
+  }
+  th {
+    background: #18202A;
+    color: #C5CED9;
+    font-weight: 600;
+    text-align: left;
+    padding: 6px 12px;
+    border: 1px solid #28303C;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  td {
+    padding: 4px 12px;
+    border: 1px solid #28303C;
+    background: #0E1219;
+  }
+  tr:nth-child(even) td { background: #121821; }
+  blockquote {
+    border-left: 3px solid #C6A46A;
+    padding-left: 16px;
+    margin: 8px 0 12px 0;
+    color: #6E7883;
+    font-style: italic;
+  }
+  hr { border: none; border-top: 1px solid #28303C; margin: 24px 0; }
+  a { color: #8BB4F0; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  strong { color: #E3E7EC; font-weight: 600; }
+  img { max-width: 100%; border-radius: 4px; border: 1px solid #28303C; }
+  .doc-footer {
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid #28303C;
+    font-size: 12px;
+    color: #6E7883;
+    font-family: monospace;
+  }
+</style>
+</head>
+<body>
+  <div class="doc-header" style="background:#121821;border:1px solid #28303C;border-radius:8px;padding:1.2rem 1.8rem;margin-bottom:1.8rem;">
+    <div style="color:#C6A46A;font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:0.05em;">COREI · Knowledge System</div>
+    <div style="color:#6E7883;font-family:monospace;font-size:14px;margin-top:0.1rem;"></div>
+    <h1 style="font-size:28px;font-weight:600;color:#E3E7EC;margin:0.1rem 0;border-bottom:none;padding-bottom:0;">COREI OP 07.05</h1>
+    <div style="font-size:16px;color:#C5CED9;">00 · Constitutional</div>
+    <div style="display:flex;flex-wrap:wrap;gap:0.6rem 1.8rem;margin-top:0.6rem;font-size:13px;">
+      <span style="display:flex;align-items:baseline;gap:0.3rem;"><span style="color:#6E7883;text-transform:uppercase;font-size:10px;letter-spacing:0.04em;font-weight:600;">Status</span><span style="color:#E3E7EC;font-weight:500;">Approved</span></span>
+      <span style="display:flex;align-items:baseline;gap:0.3rem;"><span style="color:#6E7883;text-transform:uppercase;font-size:10px;letter-spacing:0.04em;font-weight:600;">Version</span><span style="color:#E3E7EC;font-weight:500;">1.0</span></span>
+      <span style="display:flex;align-items:baseline;gap:0.3rem;"><span style="color:#6E7883;text-transform:uppercase;font-size:10px;letter-spacing:0.04em;font-weight:600;">Classification</span><span style="color:#E3E7EC;font-weight:500;">Constitutional</span></span>
+      <span style="display:flex;align-items:baseline;gap:0.3rem;"><span style="color:#6E7883;text-transform:uppercase;font-size:10px;letter-spacing:0.04em;font-weight:600;">Owner</span><span style="color:#E3E7EC;font-weight:500;">COREI</span></span>
+      <span style="display:flex;align-items:baseline;gap:0.3rem;"><span style="color:#6E7883;text-transform:uppercase;font-size:10px;letter-spacing:0.04em;font-weight:600;">Repository</span><span style="color:#E3E7EC;font-weight:500;font-family:monospace;">knowledge/00-00/</span></span>
+    </div>
+
+  </div>
+
+
+
+  <h1>COREI DATA OPERATIONS</h1>
+<h1>DOCUMENT ID</h1>
+<h1>COREI-OP-07.05</h1>
+<h1>DOCUMENT NAME</h1>
+<h1>DATA OPERATIONS</h1>
+<h1>REPOSITORY FILE</h1>
+<h1>knowledge/07-operations/COREI-OP-07.05-DATA-OPERATIONS.md</h1>
+<h1>VERSION</h1>
+<h1>1.0</h1>
+<h1>STATUS</h1>
+<h1>APPROVED</h1>
+<h1>CLASSIFICATION</h1>
+<h1>CONSTITUTIONAL</h1>
+<h1>1. PURPOSE</h1>
+<p>The COREI Data Operations document defines the<br>
+authoritative institutional model for operating<br>
+data throughout its active institutional lifecycle.</p>
+<p>Its purpose is to ensure that COREI data remains</p>
+<p>owned,</p>
+<p>identifiable,</p>
+<p>available,</p>
+<p>accurate,</p>
+<p>complete,</p>
+<p>timely,</p>
+<p>traceable,</p>
+<p>secure,</p>
+<p>recoverable,</p>
+<p>and operationally trustworthy.</p>
+<p>Data is not merely stored information.</p>
+<p>Data is institutional state,<br>
+evidence,<br>
+context,<br>
+and input to consequential decisions.</p>
+<p>Data Operations SHALL therefore preserve both<br>
+technical availability and institutional meaning.</p>
+<h1>2. SCOPE</h1>
+<p>This document governs operation of</p>
+<p>market data,</p>
+<p>reference data,</p>
+<p>macro data,</p>
+<p>economic data,</p>
+<p>fundamental data,</p>
+<p>alternative data,</p>
+<p>signal data,</p>
+<p>decision data,</p>
+<p>risk data,</p>
+<p>portfolio data,</p>
+<p>order data,</p>
+<p>execution data,</p>
+<p>position data,</p>
+<p>performance data,</p>
+<p>system data,</p>
+<p>security data,</p>
+<p>audit data,</p>
+<p>operational data,</p>
+<p>analytical data,</p>
+<p>historical data,</p>
+<p>streaming data,</p>
+<p>batch data,</p>
+<p>derived data,</p>
+<p>and future institutional data.</p>
+<p>It governs</p>
+<p>data ownership,</p>
+<p>data authority,</p>
+<p>data contracts,</p>
+<p>ingestion,</p>
+<p>validation,</p>
+<p>normalization,</p>
+<p>quality,</p>
+<p>freshness,</p>
+<p>continuity,</p>
+<p>lineage,</p>
+<p>storage,</p>
+<p>processing,</p>
+<p>distribution,</p>
+<p>retention,</p>
+<p>replay,</p>
+<p>reprocessing,</p>
+<p>reconciliation,</p>
+<p>backup,</p>
+<p>recovery,</p>
+<p>and retirement.</p>
+<h1>3. DATA OPERATIONS PRINCIPLE</h1>
+<p>Data SHALL be operated according to the chain</p>
+<p>Data Source</p>
+<p>↓</p>
+<p>Data Acquisition</p>
+<p>↓</p>
+<p>Data Validation</p>
+<p>↓</p>
+<p>Data Normalization</p>
+<p>↓</p>
+<p>Data Authority</p>
+<p>↓</p>
+<p>Data Processing</p>
+<p>↓</p>
+<p>Data Distribution</p>
+<p>↓</p>
+<p>Institutional Consumption</p>
+<p>↓</p>
+<p>Institutional Outcome</p>
+<p>Every material transition SHALL preserve sufficient<br>
+identity,<br>
+context,<br>
+quality,<br>
+and lineage.</p>
+<h1>4. DATA AS INSTITUTIONAL ASSET</h1>
+<p>Institutionally significant data SHALL be treated<br>
+as an owned institutional asset.</p>
+<p>Data Operations SHALL preserve</p>
+<p>meaning,</p>
+<p>authority,</p>
+<p>quality,</p>
+<p>availability,</p>
+<p>security,</p>
+<p>history,</p>
+<p>and recoverability.</p>
+<p>Storage location SHALL NOT define data ownership.</p>
+<h1>5. DATA OWNERSHIP</h1>
+<p>Every critical data domain SHALL have explicit<br>
+ownership.</p>
+<p>The data owner SHALL be accountable for</p>
+<p>meaning,</p>
+<p>authority,</p>
+<p>quality expectations,</p>
+<p>access,</p>
+<p>retention,</p>
+<p>recovery,</p>
+<p>and lifecycle.</p>
+<p>Technical custody SHALL NOT automatically create<br>
+data ownership.</p>
+<h1>6. DATA AUTHORITY</h1>
+<p>Every critical data element or domain SHALL have an<br>
+authoritative source or authority model.</p>
+<p>Authority MAY be</p>
+<p>internal,</p>
+<p>external,</p>
+<p>derived,</p>
+<p>reconciled,</p>
+<p>or composite.</p>
+<p>Where no single authoritative source exists,<br>
+the authority model SHALL define how truth is<br>
+determined.</p>
+<p>Unknown authority is a data governance defect.</p>
+<h1>7. DATA CUSTODY</h1>
+<p>Data custody SHALL remain distinct from data<br>
+authority.</p>
+<p>A database,<br>
+service,<br>
+platform,<br>
+provider,<br>
+or storage system</p>
+<p>MAY hold data without owning its institutional<br>
+meaning.</p>
+<p>Custody SHALL preserve the requirements of the<br>
+authoritative owner.</p>
+<h1>8. DATA CLASSIFICATION</h1>
+<p>Data SHALL be classified according to applicable</p>
+<p>sensitivity,</p>
+<p>criticality,</p>
+<p>authority,</p>
+<p>retention,</p>
+<p>regulatory,</p>
+<p>financial,</p>
+<p>security,</p>
+<p>and operational requirements.</p>
+<p>Classification SHALL influence</p>
+<p>access,</p>
+<p>storage,</p>
+<p>encryption,</p>
+<p>retention,</p>
+<p>monitoring,</p>
+<p>backup,</p>
+<p>and recovery.</p>
+<h1>9. DATA CRITICALITY</h1>
+<p>Critical data SHALL be identified.</p>
+<p>Criticality MAY consider</p>
+<p>trading impact,</p>
+<p>risk impact,</p>
+<p>financial impact,</p>
+<p>security impact,</p>
+<p>operational dependency,</p>
+<p>reconstruction value,</p>
+<p>and recovery urgency.</p>
+<p>Criticality SHALL determine operational rigor.</p>
+<h1>10. DATA IDENTITY</h1>
+<p>Institutionally significant data SHALL preserve<br>
+explicit identity.</p>
+<p>Identity MAY include</p>
+<p>dataset,</p>
+<p>record,</p>
+<p>event,</p>
+<p>instrument,</p>
+<p>account,</p>
+<p>broker,</p>
+<p>strategy,</p>
+<p>portfolio,</p>
+<p>asset,</p>
+<p>market,</p>
+<p>currency,</p>
+<p>provider,</p>
+<p>region,</p>
+<p>exchange,</p>
+<p>custodian,</p>
+<p>jurisdiction,</p>
+<p>time,</p>
+<p>and version.</p>
+<p>Ambiguous data identity is prohibited.</p>
+<h1>11. DATA CONTEXT</h1>
+<p>Data SHALL preserve sufficient context for correct<br>
+interpretation.</p>
+<p>Context MAY include</p>
+<p>source,</p>
+<p>provider,</p>
+<p>market,</p>
+<p>instrument,</p>
+<p>timeframe,</p>
+<p>timezone,</p>
+<p>currency,</p>
+<p>unit,</p>
+<p>adjustment state,</p>
+<p>account,</p>
+<p>portfolio,</p>
+<p>strategy,</p>
+<p>and jurisdiction.</p>
+<p>Context SHALL not depend upon undocumented<br>
+assumption.</p>
+<h1>12. DATA CONTRACT</h1>
+<p>Critical data flows SHALL have explicit contracts.</p>
+<p>A data contract MAY define</p>
+<p>schema,</p>
+<p>semantics,</p>
+<p>identity,</p>
+<p>required fields,</p>
+<p>optional fields,</p>
+<p>units,</p>
+<p>time semantics,</p>
+<p>quality requirements,</p>
+<p>compatibility,</p>
+<p>and ownership.</p>
+<p>Data contracts SHALL be versioned where required.</p>
+<h1>13. DATA SCHEMA</h1>
+<p>Schemas SHALL define the structural representation<br>
+of governed data.</p>
+<p>Schemas SHALL preserve</p>
+<p>field identity,</p>
+<p>type,</p>
+<p>required state,</p>
+<p>constraints,</p>
+<p>and compatibility</p>
+<p>where applicable.</p>
+<p>Schema validity SHALL NOT alone prove semantic<br>
+correctness.</p>
+<h1>14. DATA SEMANTICS</h1>
+<p>Critical data SHALL have defined meaning.</p>
+<p>Semantic definition SHOULD answer</p>
+<p>What does this field represent?</p>
+<p>What is the unit?</p>
+<p>What is the time basis?</p>
+<p>What is the source?</p>
+<p>What transformations have occurred?</p>
+<p>What does absence mean?</p>
+<p>What does zero mean?</p>
+<p>What does unknown mean?</p>
+<p>Semantic ambiguity is an institutional risk.</p>
+<h1>15. DATA SOURCE</h1>
+<p>Every critical data flow SHALL identify its source.</p>
+<p>Sources MAY include</p>
+<p>exchanges,</p>
+<p>brokers,</p>
+<p>market data vendors,</p>
+<p>economic providers,</p>
+<p>internal services,</p>
+<p>databases,</p>
+<p>event systems,</p>
+<p>operators,</p>
+<p>models,</p>
+<p>or derived computation.</p>
+<p>Source identity SHALL remain traceable.</p>
+<h1>16. EXTERNAL DATA PROVIDERS</h1>
+<p>External data providers SHALL be treated as<br>
+explicit dependencies.</p>
+<p>Provider operations SHALL observe</p>
+<p>availability,</p>
+<p>authentication,</p>
+<p>latency,</p>
+<p>rate limits,</p>
+<p>quality,</p>
+<p>coverage,</p>
+<p>schema,</p>
+<p>and continuity.</p>
+<p>Provider data SHALL NOT automatically become<br>
+institutional truth without required validation.</p>
+<h1>17. MULTI-PROVIDER DATA</h1>
+<p>Where multiple providers supply equivalent data,<br>
+COREI SHALL define</p>
+<p>provider identity,</p>
+<p>selection,</p>
+<p>priority,</p>
+<p>fallback,</p>
+<p>normalization,</p>
+<p>quality comparison,</p>
+<p>and authority.</p>
+<p>Provider substitution SHALL not silently change<br>
+data semantics.</p>
+<h1>18. DATA ACQUISITION</h1>
+<p>Data acquisition SHALL be</p>
+<p>controlled,</p>
+<p>observable,</p>
+<p>traceable,</p>
+<p>and recoverable.</p>
+<p>Acquisition SHALL preserve</p>
+<p>source,</p>
+<p>time,</p>
+<p>identity,</p>
+<p>request or subscription context,</p>
+<p>and raw payload</p>
+<p>where required.</p>
+<p>Acquisition failure SHALL become visible.</p>
+<h1>19. STREAMING DATA INGESTION</h1>
+<p>Streaming ingestion SHALL observe</p>
+<p>connection state,</p>
+<p>message rate,</p>
+<p>lag,</p>
+<p>backlog,</p>
+<p>sequence,</p>
+<p>duplicates,</p>
+<p>gaps,</p>
+<p>schema,</p>
+<p>and provider health.</p>
+<p>A connected stream SHALL NOT automatically mean<br>
+healthy data.</p>
+<h1>20. BATCH DATA INGESTION</h1>
+<p>Batch ingestion SHALL preserve</p>
+<p>batch identity,</p>
+<p>source,</p>
+<p>expected scope,</p>
+<p>actual scope,</p>
+<p>start time,</p>
+<p>completion time,</p>
+<p>validation,</p>
+<p>and result.</p>
+<p>Partial batch completion SHALL remain explicit.</p>
+<h1>21. API DATA INGESTION</h1>
+<p>API-based ingestion SHALL define</p>
+<p>authentication,</p>
+<p>request limits,</p>
+<p>pagination,</p>
+<p>timeouts,</p>
+<p>retry,</p>
+<p>idempotency,</p>
+<p>error handling,</p>
+<p>and completeness validation.</p>
+<p>Successful HTTP response SHALL NOT alone prove<br>
+complete data acquisition.</p>
+<h1>22. FILE DATA INGESTION</h1>
+<p>File-based ingestion SHALL preserve</p>
+<p>file identity,</p>
+<p>source,</p>
+<p>checksum where required,</p>
+<p>schema,</p>
+<p>arrival time,</p>
+<p>processing state,</p>
+<p>and lineage.</p>
+<p>Partial or duplicate file processing SHALL be<br>
+detectable.</p>
+<h1>23. RAW DATA PRESERVATION</h1>
+<p>Critical externally acquired data SHOULD preserve a<br>
+raw representation where required for</p>
+<p>audit,</p>
+<p>replay,</p>
+<p>reprocessing,</p>
+<p>provider dispute,</p>
+<p>or reconstruction.</p>
+<p>Raw data SHALL remain distinguishable from</p>
+<p>validated,</p>
+<p>normalized,</p>
+<p>enriched,</p>
+<p>and derived data.</p>
+<h1>24. DATA VALIDATION</h1>
+<p>Data SHALL be validated before entering<br>
+authoritative downstream use according to<br>
+criticality.</p>
+<p>Validation MAY include</p>
+<p>schema,</p>
+<p>type,</p>
+<p>range,</p>
+<p>identity,</p>
+<p>completeness,</p>
+<p>continuity,</p>
+<p>freshness,</p>
+<p>consistency,</p>
+<p>and domain-specific rules.</p>
+<p>Invalid data SHALL not silently become valid state.</p>
+<h1>25. DATA NORMALIZATION</h1>
+<p>Normalization SHALL convert source-specific<br>
+representation into approved institutional<br>
+representation.</p>
+<p>Normalization MAY include</p>
+<p>field mapping,</p>
+<p>type conversion,</p>
+<p>timestamp normalization,</p>
+<p>timezone normalization,</p>
+<p>currency normalization,</p>
+<p>unit normalization,</p>
+<p>symbol normalization,</p>
+<p>and provider abstraction.</p>
+<p>Normalization SHALL preserve lineage.</p>
+<h1>26. DATA ENRICHMENT</h1>
+<p>Enrichment SHALL add derived or contextual<br>
+information without obscuring original authority.</p>
+<p>Enrichment SHALL preserve</p>
+<p>source fields,</p>
+<p>derived fields,</p>
+<p>transformation identity,</p>
+<p>version,</p>
+<p>and lineage</p>
+<p>where required.</p>
+<h1>27. DATA QUALITY</h1>
+<p>Data quality SHALL be explicitly measured for<br>
+critical data.</p>
+<p>Quality dimensions MAY include</p>
+<p>accuracy,</p>
+<p>completeness,</p>
+<p>continuity,</p>
+<p>freshness,</p>
+<p>validity,</p>
+<p>consistency,</p>
+<p>uniqueness,</p>
+<p>and integrity.</p>
+<p>Quality SHALL be evaluated against institutional<br>
+requirements.</p>
+<h1>28. DATA COMPLETENESS</h1>
+<p>Completeness SHALL determine whether required data<br>
+is present.</p>
+<p>Completeness MAY be measured across</p>
+<p>records,</p>
+<p>fields,</p>
+<p>instruments,</p>
+<p>accounts,</p>
+<p>time ranges,</p>
+<p>markets,</p>
+<p>providers,</p>
+<p>or expected events.</p>
+<p>Missing data SHALL remain visible.</p>
+<h1>29. DATA CONTINUITY</h1>
+<p>Time-series and event data SHALL preserve continuity<br>
+where required.</p>
+<p>Continuity validation MAY detect</p>
+<p>gaps,</p>
+<p>missing intervals,</p>
+<p>missing sequence numbers,</p>
+<p>unexpected session breaks,</p>
+<p>or incomplete coverage.</p>
+<p>Expected discontinuity SHALL be distinguishable<br>
+from failure.</p>
+<h1>30. DATA FRESHNESS</h1>
+<p>Critical data SHALL define freshness expectations.</p>
+<p>Freshness SHALL consider</p>
+<p>source time,</p>
+<p>event time,</p>
+<p>ingestion time,</p>
+<p>processing time,</p>
+<p>and current institutional context.</p>
+<p>Stale data SHALL not silently appear current.</p>
+<h1>31. DATA TIMELINESS</h1>
+<p>Timeliness SHALL measure whether data arrives and<br>
+becomes usable within the required operational<br>
+window.</p>
+<p>Timeliness requirements MAY differ by</p>
+<p>market,</p>
+<p>asset,</p>
+<p>strategy,</p>
+<p>risk process,</p>
+<p>portfolio process,</p>
+<p>or operational workflow.</p>
+<h1>32. DATA ACCURACY</h1>
+<p>Accuracy SHALL be assessed against authoritative or<br>
+independent evidence where practical.</p>
+<p>Accuracy validation MAY use</p>
+<p>provider comparison,</p>
+<p>broker comparison,</p>
+<p>exchange data,</p>
+<p>reconciliation,</p>
+<p>constraints,</p>
+<p>or domain logic.</p>
+<p>Unknown accuracy SHALL not be represented as<br>
+confirmed accuracy.</p>
+<h1>33. DATA CONSISTENCY</h1>
+<p>Data consistency SHALL be evaluated across</p>
+<p>records,</p>
+<p>systems,</p>
+<p>replicas,</p>
+<p>services,</p>
+<p>providers,</p>
+<p>and time</p>
+<p>where required.</p>
+<p>Inconsistency SHALL be detected and reconciled.</p>
+<h1>34. DATA UNIQUENESS</h1>
+<p>Where uniqueness is required,<br>
+duplicate data SHALL be detectable.</p>
+<p>Duplicate handling SHALL define</p>
+<p>identity,</p>
+<p>deduplication,</p>
+<p>idempotency,</p>
+<p>and retained evidence.</p>
+<p>Duplicate ingestion SHALL not create uncontrolled<br>
+duplicate institutional effects.</p>
+<h1>35. DATA INTEGRITY</h1>
+<p>Data integrity SHALL preserve data against</p>
+<p>corruption,</p>
+<p>unauthorized mutation,</p>
+<p>partial write,</p>
+<p>loss,</p>
+<p>and inconsistent transformation.</p>
+<p>Integrity controls MAY include</p>
+<p>constraints,</p>
+<p>checksums,</p>
+<p>transactions,</p>
+<p>validation,</p>
+<p>lineage,</p>
+<p>and reconciliation.</p>
+<h1>36. DATA QUALITY STATE</h1>
+<p>Critical datasets SHOULD expose explicit quality<br>
+state.</p>
+<p>States MAY include</p>
+<p>Valid</p>
+<p>Degraded</p>
+<p>Stale</p>
+<p>Incomplete</p>
+<p>Discontinuous</p>
+<p>Quarantined</p>
+<p>Invalid</p>
+<p>Unknown</p>
+<p>Quality state SHALL be visible to downstream<br>
+consumers where relevant.</p>
+<h1>37. DATA QUARANTINE</h1>
+<p>Invalid or suspicious data SHOULD be quarantined<br>
+where continued processing creates risk.</p>
+<p>Quarantine SHALL preserve</p>
+<p>data identity,</p>
+<p>reason,</p>
+<p>source,</p>
+<p>time,</p>
+<p>evidence,</p>
+<p>and disposition process.</p>
+<p>Quarantined data SHALL not silently re-enter normal<br>
+processing.</p>
+<h1>38. DATA REJECTION</h1>
+<p>Data that violates mandatory acceptance criteria<br>
+MAY be rejected.</p>
+<p>Rejection SHALL preserve</p>
+<p>reason,</p>
+<p>source,</p>
+<p>identity,</p>
+<p>and operational visibility</p>
+<p>where required.</p>
+<p>Rejection SHALL not become silent data loss.</p>
+<h1>39. DATA CORRECTION</h1>
+<p>Data correction SHALL be controlled.</p>
+<p>Correction SHALL preserve</p>
+<p>original value,</p>
+<p>corrected value,</p>
+<p>reason,</p>
+<p>authority,</p>
+<p>time,</p>
+<p>and actor or process</p>
+<p>where required.</p>
+<p>Historical data SHALL not be silently rewritten.</p>
+<h1>40. DATA VERSIONING</h1>
+<p>Where data may change materially,<br>
+versioning SHALL be supported according to<br>
+institutional need.</p>
+<p>Versioning MAY apply to</p>
+<p>records,</p>
+<p>datasets,</p>
+<p>schemas,</p>
+<p>models,</p>
+<p>reference data,</p>
+<p>and derived outputs.</p>
+<p>Version identity SHALL support reconstruction.</p>
+<h1>41. DATA LINEAGE</h1>
+<p>Critical data SHALL preserve lineage.</p>
+<p>Lineage SHOULD identify</p>
+<p>source,</p>
+<p>acquisition,</p>
+<p>validation,</p>
+<p>normalization,</p>
+<p>transformation,</p>
+<p>enrichment,</p>
+<p>derivation,</p>
+<p>storage,</p>
+<p>and consumption</p>
+<p>where required.</p>
+<p>Lineage SHALL support institutional reconstruction.</p>
+<h1>42. TRANSFORMATION LINEAGE</h1>
+<p>Material transformations SHALL identify</p>
+<p>input,</p>
+<p>transformation logic,</p>
+<p>version,</p>
+<p>output,</p>
+<p>and execution context</p>
+<p>where required.</p>
+<p>Derived data SHALL remain traceable to its inputs.</p>
+<h1>43. DATA PROVENANCE</h1>
+<p>Provenance SHALL establish where data originated and<br>
+how it reached its current form.</p>
+<p>Provenance MAY include</p>
+<p>provider,</p>
+<p>source endpoint,</p>
+<p>file,</p>
+<p>event,</p>
+<p>service,</p>
+<p>model,</p>
+<p>operator,</p>
+<p>or external authority.</p>
+<p>Unknown provenance is prohibited for critical<br>
+authoritative data.</p>
+<h1>44. DATA TIME SEMANTICS</h1>
+<p>Critical data SHALL define time semantics.</p>
+<p>Time MAY include</p>
+<p>event time,</p>
+<p>market time,</p>
+<p>exchange time,</p>
+<p>provider time,</p>
+<p>ingestion time,</p>
+<p>processing time,</p>
+<p>effective time,</p>
+<p>and system time.</p>
+<p>These SHALL NOT be silently treated as equivalent.</p>
+<h1>45. TIMEZONE OPERATIONS</h1>
+<p>Timezone handling SHALL be explicit.</p>
+<p>Storage SHOULD use an approved canonical time<br>
+representation where practical.</p>
+<p>Presentation MAY convert to local or market<br>
+timezone.</p>
+<p>Timezone ambiguity is prohibited.</p>
+<h1>46. MARKET CALENDAR OPERATIONS</h1>
+<p>Market-related data SHALL respect applicable</p>
+<p>trading sessions,</p>
+<p>holidays,</p>
+<p>early closes,</p>
+<p>market opens,</p>
+<p>market closes,</p>
+<p>and 24x7 market behaviour.</p>
+<p>Expected market closure SHALL not be classified as<br>
+data failure.</p>
+<h1>47. INSTRUMENT IDENTITY</h1>
+<p>Market and trading data SHALL preserve explicit<br>
+instrument identity.</p>
+<p>Instrument identity SHOULD avoid uncontrolled<br>
+dependence upon display symbols alone.</p>
+<p>Mappings between</p>
+<p>provider symbols,</p>
+<p>broker symbols,</p>
+<p>exchange symbols,</p>
+<p>and internal instrument identity</p>
+<p>SHALL be governed.</p>
+<h1>48. REFERENCE DATA OPERATIONS</h1>
+<p>Reference data SHALL be treated as critical<br>
+institutional context where applicable.</p>
+<p>Reference data MAY include</p>
+<p>instruments,</p>
+<p>exchanges,</p>
+<p>currencies,</p>
+<p>calendars,</p>
+<p>accounts,</p>
+<p>brokers,</p>
+<p>portfolios,</p>
+<p>strategies,</p>
+<p>and organizational structures.</p>
+<p>Reference data changes SHALL be controlled.</p>
+<h1>49. MARKET DATA OPERATIONS</h1>
+<p>Market data operations SHALL preserve</p>
+<p>source,</p>
+<p>instrument,</p>
+<p>timestamp,</p>
+<p>price,</p>
+<p>volume where applicable,</p>
+<p>sequence,</p>
+<p>quality,</p>
+<p>freshness,</p>
+<p>continuity,</p>
+<p>and provider context.</p>
+<p>Market data SHALL be validated before consequential<br>
+use according to strategy and risk requirements.</p>
+<h1>50. CANDLE DATA OPERATIONS</h1>
+<p>Candle data SHALL preserve</p>
+<p>instrument,</p>
+<p>timeframe,</p>
+<p>open time,</p>
+<p>close time,</p>
+<p>open,</p>
+<p>high,</p>
+<p>low,</p>
+<p>close,</p>
+<p>volume where applicable,</p>
+<p>source,</p>
+<p>and quality state.</p>
+<p>Candle continuity and completeness SHALL be<br>
+validated where required.</p>
+<h1>51. TICK DATA OPERATIONS</h1>
+<p>Tick data operations SHALL consider</p>
+<p>sequence,</p>
+<p>timestamp precision,</p>
+<p>bid,</p>
+<p>ask,</p>
+<p>trade,</p>
+<p>volume,</p>
+<p>duplicates,</p>
+<p>gaps,</p>
+<p>and ordering</p>
+<p>where applicable.</p>
+<p>Tick data loss SHALL remain visible.</p>
+<h1>52. ORDER BOOK DATA OPERATIONS</h1>
+<p>Order book data SHALL preserve</p>
+<p>instrument,</p>
+<p>side,</p>
+<p>price level,</p>
+<p>quantity,</p>
+<p>sequence,</p>
+<p>snapshot state,</p>
+<p>incremental update state,</p>
+<p>and source</p>
+<p>where applicable.</p>
+<p>Sequence gaps SHALL trigger controlled<br>
+resynchronization where required.</p>
+<h1>53. MACRO DATA OPERATIONS</h1>
+<p>Macroeconomic data SHALL preserve</p>
+<p>series identity,</p>
+<p>source,</p>
+<p>observation period,</p>
+<p>release time,</p>
+<p>revision state,</p>
+<p>unit,</p>
+<p>frequency,</p>
+<p>and lineage.</p>
+<p>Revised macro data SHALL remain distinguishable<br>
+from originally released values where required.</p>
+<h1>54. ECONOMIC EVENT DATA</h1>
+<p>Economic event data SHALL preserve</p>
+<p>event identity,</p>
+<p>country or region,</p>
+<p>scheduled time,</p>
+<p>actual release time,</p>
+<p>expected value,</p>
+<p>previous value,</p>
+<p>actual value,</p>
+<p>revision,</p>
+<p>and source</p>
+<p>where applicable.</p>
+<p>Scheduled and actual event time SHALL remain<br>
+distinct.</p>
+<h1>55. SIGNAL DATA OPERATIONS</h1>
+<p>Signal data SHALL preserve</p>
+<p>signal identity,</p>
+<p>strategy,</p>
+<p>instrument,</p>
+<p>time,</p>
+<p>inputs,</p>
+<p>model or rule version,</p>
+<p>confidence where applicable,</p>
+<p>and lineage.</p>
+<p>Signal data SHALL not silently become execution<br>
+authority.</p>
+<h1>56. DECISION DATA OPERATIONS</h1>
+<p>Decision data SHALL preserve</p>
+<p>decision identity,</p>
+<p>inputs,</p>
+<p>decision authority,</p>
+<p>time,</p>
+<p>result,</p>
+<p>constraints,</p>
+<p>and lineage.</p>
+<p>Decision data SHALL support reconstruction of why<br>
+an institutional action occurred.</p>
+<h1>57. RISK DATA OPERATIONS</h1>
+<p>Risk data SHALL preserve</p>
+<p>risk context,</p>
+<p>account,</p>
+<p>portfolio,</p>
+<p>strategy,</p>
+<p>instrument,</p>
+<p>limits,</p>
+<p>exposure,</p>
+<p>evaluation time,</p>
+<p>and decision state</p>
+<p>where applicable.</p>
+<p>Stale or incomplete risk data SHALL remain visible.</p>
+<h1>58. PORTFOLIO DATA OPERATIONS</h1>
+<p>Portfolio data SHALL preserve</p>
+<p>portfolio identity,</p>
+<p>capital,</p>
+<p>allocation,</p>
+<p>positions,</p>
+<p>exposure,</p>
+<p>currency,</p>
+<p>valuation time,</p>
+<p>and authority.</p>
+<p>Portfolio data SHALL be reconcilable.</p>
+<h1>59. ORDER DATA OPERATIONS</h1>
+<p>Order data SHALL preserve</p>
+<p>order identity,</p>
+<p>account,</p>
+<p>broker,</p>
+<p>strategy,</p>
+<p>portfolio,</p>
+<p>instrument,</p>
+<p>side,</p>
+<p>quantity,</p>
+<p>price instructions,</p>
+<p>state,</p>
+<p>timestamps,</p>
+<p>and correlation.</p>
+<p>Order lifecycle history SHALL remain reconstructable.</p>
+<h1>60. EXECUTION DATA OPERATIONS</h1>
+<p>Execution data SHALL preserve</p>
+<p>execution identity,</p>
+<p>order identity,</p>
+<p>broker,</p>
+<p>account,</p>
+<p>instrument,</p>
+<p>quantity,</p>
+<p>price,</p>
+<p>fees where applicable,</p>
+<p>time,</p>
+<p>and source.</p>
+<p>Broker execution data SHALL be reconciled with<br>
+internal execution state.</p>
+<h1>61. POSITION DATA OPERATIONS</h1>
+<p>Position data SHALL preserve</p>
+<p>position identity,</p>
+<p>account,</p>
+<p>broker,</p>
+<p>strategy,</p>
+<p>portfolio,</p>
+<p>instrument,</p>
+<p>quantity,</p>
+<p>cost basis,</p>
+<p>valuation,</p>
+<p>state,</p>
+<p>and time</p>
+<p>where applicable.</p>
+<p>Conflicting position state SHALL remain visible.</p>
+<h1>62. PERFORMANCE DATA OPERATIONS</h1>
+<p>Performance data SHALL preserve</p>
+<p>scope,</p>
+<p>period,</p>
+<p>currency,</p>
+<p>valuation basis,</p>
+<p>inputs,</p>
+<p>methodology,</p>
+<p>and calculation version</p>
+<p>where applicable.</p>
+<p>Performance outputs SHALL be reproducible from<br>
+authoritative inputs where required.</p>
+<h1>63. AUDIT DATA OPERATIONS</h1>
+<p>Audit data SHALL preserve</p>
+<p>actor,</p>
+<p>action,</p>
+<p>target,</p>
+<p>time,</p>
+<p>result,</p>
+<p>and context</p>
+<p>according to applicable audit requirements.</p>
+<p>Audit data SHALL be protected from unauthorized<br>
+alteration.</p>
+<h1>64. SECURITY DATA OPERATIONS</h1>
+<p>Security data MAY include</p>
+<p>authentication events,</p>
+<p>authorization events,</p>
+<p>access logs,</p>
+<p>security alerts,</p>
+<p>vulnerability data,</p>
+<p>and incident evidence.</p>
+<p>Security data SHALL follow appropriate</p>
+<p>access,</p>
+<p>retention,</p>
+<p>integrity,</p>
+<p>and confidentiality controls.</p>
+<h1>65. DATA STORAGE</h1>
+<p>Data storage SHALL match data requirements.</p>
+<p>Storage selection SHALL consider</p>
+<p>authority,</p>
+<p>latency,</p>
+<p>volume,</p>
+<p>query pattern,</p>
+<p>retention,</p>
+<p>durability,</p>
+<p>security,</p>
+<p>and recovery.</p>
+<p>Technology preference SHALL not override data<br>
+requirements.</p>
+<h1>66. TRANSACTIONAL DATA STORAGE</h1>
+<p>Transactional data SHALL use storage that preserves<br>
+required</p>
+<p>atomicity,</p>
+<p>consistency,</p>
+<p>integrity,</p>
+<p>and recovery.</p>
+<p>Transactional authority SHALL remain explicit.</p>
+<h1>67. TIME-SERIES DATA STORAGE</h1>
+<p>Time-series storage SHALL preserve</p>
+<p>time semantics,</p>
+<p>ordering,</p>
+<p>retention,</p>
+<p>partitioning,</p>
+<p>compression,</p>
+<p>and query requirements.</p>
+<p>Time-series optimization SHALL not destroy required<br>
+historical fidelity.</p>
+<h1>68. EVENT DATA STORAGE</h1>
+<p>Event storage SHALL preserve</p>
+<p>event identity,</p>
+<p>schema,</p>
+<p>ordering requirements,</p>
+<p>retention,</p>
+<p>replay,</p>
+<p>and consumer compatibility.</p>
+<p>Event retention SHALL reflect reconstruction and<br>
+recovery needs.</p>
+<h1>69. CACHE DATA OPERATIONS</h1>
+<p>Cached data SHALL define</p>
+<p>source authority,</p>
+<p>freshness,</p>
+<p>expiration,</p>
+<p>invalidation,</p>
+<p>and fallback.</p>
+<p>Cache state SHALL not silently become authoritative<br>
+truth.</p>
+<h1>70. DATA PARTITIONING</h1>
+<p>Partitioning SHALL preserve</p>
+<p>identity,</p>
+<p>queryability,</p>
+<p>retention,</p>
+<p>scalability,</p>
+<p>and recovery.</p>
+<p>Partition boundaries MAY use</p>
+<p>time,</p>
+<p>account,</p>
+<p>portfolio,</p>
+<p>instrument,</p>
+<p>region,</p>
+<p>or other approved context.</p>
+<p>Partitioning SHALL not create hidden data loss.</p>
+<h1>71. DATA RETENTION</h1>
+<p>Data retention SHALL be governed.</p>
+<p>Retention SHALL consider</p>
+<p>institutional need,</p>
+<p>regulatory requirements,</p>
+<p>audit,</p>
+<p>reconstruction,</p>
+<p>cost,</p>
+<p>security,</p>
+<p>and privacy.</p>
+<p>Retention SHALL be explicit.</p>
+<h1>72. DATA ARCHIVAL</h1>
+<p>Data no longer required for active operations MAY<br>
+be archived.</p>
+<p>Archival SHALL preserve</p>
+<p>identity,</p>
+<p>integrity,</p>
+<p>security,</p>
+<p>retrievability,</p>
+<p>and retention requirements.</p>
+<p>Archived data SHALL remain discoverable where<br>
+required.</p>
+<h1>73. DATA DELETION</h1>
+<p>Data deletion SHALL be authorized and controlled.</p>
+<p>Deletion SHALL consider</p>
+<p>authority,</p>
+<p>retention,</p>
+<p>legal requirements,</p>
+<p>dependencies,</p>
+<p>backup copies,</p>
+<p>and audit.</p>
+<p>Critical data SHALL not be deleted through<br>
+uncontrolled manual action.</p>
+<h1>74. DATA BACKUP</h1>
+<p>Critical data SHALL have governed backup.</p>
+<p>Backup SHALL define</p>
+<p>scope,</p>
+<p>frequency,</p>
+<p>retention,</p>
+<p>security,</p>
+<p>monitoring,</p>
+<p>and ownership.</p>
+<p>Backup success SHALL be observable.</p>
+<h1>75. DATA RESTORE</h1>
+<p>Restore capability SHALL be tested.</p>
+<p>Restore SHALL define</p>
+<p>source,</p>
+<p>target,</p>
+<p>scope,</p>
+<p>authority,</p>
+<p>sequence,</p>
+<p>security,</p>
+<p>validation,</p>
+<p>and reconciliation.</p>
+<p>A backup that has never been restored SHALL NOT be<br>
+assumed recoverable.</p>
+<h1>76. DATA REPLICATION</h1>
+<p>Where replication exists,<br>
+its health SHALL be observable.</p>
+<p>Operations SHALL monitor</p>
+<p>replica availability,</p>
+<p>lag,</p>
+<p>consistency,</p>
+<p>and failover readiness.</p>
+<p>Stale replicas SHALL not silently serve as current<br>
+authoritative data.</p>
+<h1>77. DATA DISTRIBUTION</h1>
+<p>Data distribution SHALL preserve</p>
+<p>identity,</p>
+<p>contract,</p>
+<p>security,</p>
+<p>quality state,</p>
+<p>and consumer expectations.</p>
+<p>Distribution MAY occur through</p>
+<p>APIs,</p>
+<p>events,</p>
+<p>streams,</p>
+<p>files,</p>
+<p>queries,</p>
+<p>or shared analytical systems.</p>
+<p>Distribution SHALL not erase authority or lineage.</p>
+<h1>78. DATA CONSUMER REGISTRATION</h1>
+<p>Critical data consumers SHOULD be identifiable.</p>
+<p>Consumer visibility SHALL support</p>
+<p>impact analysis,</p>
+<p>contract change,</p>
+<p>security,</p>
+<p>capacity,</p>
+<p>and retirement.</p>
+<p>Hidden critical data consumers are operational<br>
+risk.</p>
+<h1>79. DATA ACCESS</h1>
+<p>Data access SHALL follow least privilege.</p>
+<p>Access SHALL reflect</p>
+<p>identity,</p>
+<p>role,</p>
+<p>purpose,</p>
+<p>sensitivity,</p>
+<p>environment,</p>
+<p>and jurisdiction</p>
+<p>where applicable.</p>
+<p>Storage access SHALL not automatically imply<br>
+institutional authority to use data.</p>
+<h1>80. DATA SECURITY</h1>
+<p>Data Operations SHALL preserve</p>
+<p>confidentiality,</p>
+<p>integrity,</p>
+<p>availability,</p>
+<p>access control,</p>
+<p>encryption,</p>
+<p>audit,</p>
+<p>and incident response</p>
+<p>according to classification.</p>
+<p>Data availability SHALL NOT override mandatory<br>
+security controls.</p>
+<h1>81. DATA ENCRYPTION</h1>
+<p>Sensitive data SHALL be encrypted</p>
+<p>in transit</p>
+<p>and</p>
+<p>at rest</p>
+<p>where required.</p>
+<p>Encryption SHALL include appropriate</p>
+<p>key ownership,</p>
+<p>rotation,</p>
+<p>access,</p>
+<p>and recovery.</p>
+<h1>82. DATA MASKING</h1>
+<p>Sensitive data MAY require masking or redaction in</p>
+<p>logs,</p>
+<p>non-production environments,</p>
+<p>operator interfaces,</p>
+<p>exports,</p>
+<p>and analytical systems.</p>
+<p>Masking SHALL preserve operational usefulness while<br>
+reducing exposure.</p>
+<h1>83. PRODUCTION DATA IN NON-PRODUCTION</h1>
+<p>Production data SHALL NOT be copied into<br>
+non-production environments without explicit<br>
+authority and required protection.</p>
+<p>Where production-derived data is required,<br>
+appropriate</p>
+<p>masking,</p>
+<p>anonymization,</p>
+<p>sampling,</p>
+<p>or synthetic replacement</p>
+<p>SHOULD be used.</p>
+<h1>84. DATA PROCESSING</h1>
+<p>Data processing SHALL preserve</p>
+<p>input identity,</p>
+<p>processing logic,</p>
+<p>version,</p>
+<p>output identity,</p>
+<p>quality,</p>
+<p>and lineage</p>
+<p>where required.</p>
+<p>Processing failure SHALL remain visible.</p>
+<h1>85. BATCH PROCESSING</h1>
+<p>Batch processing SHALL preserve</p>
+<p>job identity,</p>
+<p>input scope,</p>
+<p>output scope,</p>
+<p>start,</p>
+<p>completion,</p>
+<p>partial failure,</p>
+<p>retry,</p>
+<p>and validation.</p>
+<p>Partial completion SHALL not silently appear<br>
+complete.</p>
+<h1>86. STREAM PROCESSING</h1>
+<p>Stream processing SHALL observe</p>
+<p>input rate,</p>
+<p>output rate,</p>
+<p>lag,</p>
+<p>backlog,</p>
+<p>state,</p>
+<p>checkpointing,</p>
+<p>failure,</p>
+<p>and recovery.</p>
+<p>Processing continuity SHALL be validated.</p>
+<h1>87. DATA REPROCESSING</h1>
+<p>Critical data pipelines SHALL define reprocessing<br>
+where required.</p>
+<p>Reprocessing SHALL preserve</p>
+<p>input scope,</p>
+<p>processing version,</p>
+<p>idempotency,</p>
+<p>output handling,</p>
+<p>and lineage.</p>
+<p>Reprocessing SHALL not create uncontrolled duplicate<br>
+institutional effects.</p>
+<h1>88. DATA REPLAY</h1>
+<p>Event and historical data MAY support replay.</p>
+<p>Replay SHALL define</p>
+<p>source,</p>
+<p>scope,</p>
+<p>time range,</p>
+<p>ordering,</p>
+<p>consumer isolation,</p>
+<p>idempotency,</p>
+<p>and destination.</p>
+<p>Replay SHALL not accidentally affect live<br>
+production authority.</p>
+<h1>89. DATA BACKFILL</h1>
+<p>Backfill SHALL be controlled.</p>
+<p>Backfill SHALL define</p>
+<p>missing scope,</p>
+<p>source,</p>
+<p>transformation version,</p>
+<p>target,</p>
+<p>validation,</p>
+<p>and consumer impact.</p>
+<p>Backfilled data SHALL remain distinguishable where<br>
+required.</p>
+<h1>90. DATA RECONCILIATION</h1>
+<p>Critical data SHALL be reconciled where multiple<br>
+authoritative or independent sources exist.</p>
+<p>Reconciliation SHALL define</p>
+<p>sources,</p>
+<p>comparison key,</p>
+<p>tolerance,</p>
+<p>difference,</p>
+<p>authority,</p>
+<p>repair,</p>
+<p>and escalation.</p>
+<p>Unknown discrepancy SHALL remain visible.</p>
+<h1>91. MARKET DATA RECONCILIATION</h1>
+<p>Market data MAY be reconciled across</p>
+<p>providers,</p>
+<p>brokers,</p>
+<p>exchanges,</p>
+<p>or historical sources.</p>
+<p>Reconciliation SHALL consider</p>
+<p>timestamp,</p>
+<p>instrument mapping,</p>
+<p>price,</p>
+<p>volume,</p>
+<p>adjustment,</p>
+<p>and provider semantics.</p>
+<h1>92. TRADING DATA RECONCILIATION</h1>
+<p>Trading data SHALL reconcile,<br>
+where applicable,</p>
+<p>orders,</p>
+<p>executions,</p>
+<p>positions,</p>
+<p>balances,</p>
+<p>margin,</p>
+<p>and account state</p>
+<p>between internal and external authorities.</p>
+<p>Unknown financial state SHALL be escalated.</p>
+<h1>93. DATA INCIDENT</h1>
+<p>A data incident is an unplanned condition that<br>
+degrades or threatens</p>
+<p>availability,</p>
+<p>quality,</p>
+<p>integrity,</p>
+<p>freshness,</p>
+<p>continuity,</p>
+<p>security,</p>
+<p>or authority</p>
+<p>of institutional data.</p>
+<p>Data incidents SHALL be handled according to<br>
+impact.</p>
+<h1>94. DATA INCIDENT DETECTION</h1>
+<p>Data incidents MAY be detected through</p>
+<p>quality checks,</p>
+<p>freshness checks,</p>
+<p>continuity checks,</p>
+<p>reconciliation,</p>
+<p>alerts,</p>
+<p>provider notifications,</p>
+<p>consumer reports,</p>
+<p>or operator observation.</p>
+<p>Detection SHALL preserve evidence.</p>
+<h1>95. DATA INCIDENT TRIAGE</h1>
+<p>Triage SHALL determine</p>
+<p>what data is affected,</p>
+<p>which time range is affected,</p>
+<p>which consumers are affected,</p>
+<p>whether authoritative state is affected,</p>
+<p>whether corruption exists,</p>
+<p>whether data is missing,</p>
+<p>whether data is stale,</p>
+<p>and current institutional impact.</p>
+<h1>96. DATA CONTAINMENT</h1>
+<p>Containment MAY include</p>
+<p>quarantine,</p>
+<p>consumer blocking,</p>
+<p>provider isolation,</p>
+<p>pipeline suspension,</p>
+<p>fallback activation,</p>
+<p>or data marking.</p>
+<p>Containment SHALL prevent unsafe downstream use.</p>
+<h1>97. DATA RECOVERY</h1>
+<p>Data recovery MAY include</p>
+<p>reacquisition,</p>
+<p>restore,</p>
+<p>replay,</p>
+<p>reprocessing,</p>
+<p>backfill,</p>
+<p>repair,</p>
+<p>or reconciliation.</p>
+<p>Recovery SHALL preserve lineage and evidence.</p>
+<h1>98. DATA RECOVERY VALIDATION</h1>
+<p>Data recovery SHALL validate</p>
+<p>completeness,</p>
+<p>continuity,</p>
+<p>freshness,</p>
+<p>integrity,</p>
+<p>consistency,</p>
+<p>lineage,</p>
+<p>and consumer usability</p>
+<p>where applicable.</p>
+<p>Pipeline restart SHALL NOT alone prove data<br>
+recovery.</p>
+<h1>99. DATA CONTINUITY OPERATIONS</h1>
+<p>Critical data domains SHALL define continuity<br>
+requirements.</p>
+<p>Continuity SHALL identify</p>
+<p>minimum required data,</p>
+<p>maximum tolerable gap,</p>
+<p>maximum tolerable staleness,</p>
+<p>alternate sources,</p>
+<p>recovery priority,</p>
+<p>and authority.</p>
+<h1>100. DATA PROVIDER FAILOVER</h1>
+<p>Where alternate providers exist,<br>
+provider failover SHALL define</p>
+<p>trigger,</p>
+<p>authority,</p>
+<p>mapping,</p>
+<p>normalization,</p>
+<p>quality validation,</p>
+<p>consumer impact,</p>
+<p>and failback.</p>
+<p>Provider failover SHALL not silently change<br>
+semantics.</p>
+<h1>101. DATA FAILBACK</h1>
+<p>Return to a primary data source SHALL be controlled.</p>
+<p>Failback SHALL consider</p>
+<p>overlap,</p>
+<p>duplicates,</p>
+<p>gaps,</p>
+<p>ordering,</p>
+<p>quality,</p>
+<p>and reconciliation.</p>
+<p>Automatic failback SHALL not create mixed<br>
+unreconciled authority.</p>
+<h1>102. DATA OBSERVABILITY</h1>
+<p>Critical data SHALL be observable as data,<br>
+not merely as infrastructure.</p>
+<p>Data observability SHALL include</p>
+<p>availability,</p>
+<p>volume,</p>
+<p>freshness,</p>
+<p>quality,</p>
+<p>continuity,</p>
+<p>schema,</p>
+<p>lineage,</p>
+<p>and consumer impact.</p>
+<p>Healthy infrastructure SHALL not hide unhealthy<br>
+data.</p>
+<h1>103. DATA METRICS</h1>
+<p>Data metrics MAY include</p>
+<p>records received,</p>
+<p>records accepted,</p>
+<p>records rejected,</p>
+<p>records quarantined,</p>
+<p>missing records,</p>
+<p>duplicate records,</p>
+<p>freshness,</p>
+<p>lag,</p>
+<p>gap count,</p>
+<p>quality score,</p>
+<p>reconciliation differences,</p>
+<p>and processing backlog.</p>
+<p>Metrics SHALL support data decisions.</p>
+<h1>104. DATA ALERTING</h1>
+<p>Critical data conditions SHALL generate actionable<br>
+alerts where required.</p>
+<p>Alerts MAY include</p>
+<p>source unavailable,</p>
+<p>stale data,</p>
+<p>missing data,</p>
+<p>continuity gap,</p>
+<p>schema failure,</p>
+<p>quality degradation,</p>
+<p>reconciliation failure,</p>
+<p>or processing backlog.</p>
+<p>Alerts SHALL have ownership.</p>
+<h1>105. DATA QUALITY SCORE</h1>
+<p>Where useful,<br>
+COREI MAY calculate a data quality or health score.</p>
+<p>The score MAY incorporate</p>
+<p>completeness,</p>
+<p>continuity,</p>
+<p>freshness,</p>
+<p>validity,</p>
+<p>integrity,</p>
+<p>and consistency.</p>
+<p>A score SHALL not hide critical individual failures.</p>
+<h1>106. DATA HEALTH STATE</h1>
+<p>Critical data pipelines SHOULD expose an explicit<br>
+health state.</p>
+<p>Health MAY include</p>
+<p>Healthy</p>
+<p>Degraded</p>
+<p>Stale</p>
+<p>Incomplete</p>
+<p>Discontinuous</p>
+<p>Quarantined</p>
+<p>Unavailable</p>
+<p>Unknown</p>
+<p>Downstream consumers SHOULD receive relevant health<br>
+state where required.</p>
+<h1>107. DATA AUTOMATION</h1>
+<p>Repeatable Data Operations SHOULD be automated.</p>
+<p>Automation MAY include</p>
+<p>ingestion,</p>
+<p>validation,</p>
+<p>quality checks,</p>
+<p>reconciliation,</p>
+<p>backfill,</p>
+<p>retention,</p>
+<p>backup,</p>
+<p>restore,</p>
+<p>and reporting.</p>
+<p>Automation SHALL remain controlled and observable.</p>
+<h1>108. DATA RUNBOOKS</h1>
+<p>Critical data domains SHALL maintain usable<br>
+runbooks.</p>
+<p>Runbooks SHOULD define</p>
+<p>source,</p>
+<p>ownership,</p>
+<p>contracts,</p>
+<p>quality expectations,</p>
+<p>health,</p>
+<p>diagnostics,</p>
+<p>quarantine,</p>
+<p>recovery,</p>
+<p>reprocessing,</p>
+<p>reconciliation,</p>
+<p>and escalation.</p>
+<p>Runbooks SHALL reflect actual data flows.</p>
+<h1>109. DATA ON-CALL</h1>
+<p>Critical data capability SHOULD define an<br>
+appropriate support and escalation model.</p>
+<p>The model SHALL identify</p>
+<p>data owner,</p>
+<p>pipeline owner,</p>
+<p>infrastructure dependencies,</p>
+<p>provider escalation,</p>
+<p>and incident authority.</p>
+<p>Responsibility SHALL not be ambiguous.</p>
+<h1>110. DATA HANDOVER</h1>
+<p>Responsibility transfer SHALL preserve</p>
+<p>active data incidents,</p>
+<p>degraded sources,</p>
+<p>quality issues,</p>
+<p>missing ranges,</p>
+<p>pending backfills,</p>
+<p>provider issues,</p>
+<p>and required follow-up.</p>
+<p>Critical data context SHALL not be lost.</p>
+<h1>111. DATA AUDIT</h1>
+<p>Material data actions SHALL preserve audit evidence<br>
+where required.</p>
+<p>Actions MAY include</p>
+<p>manual correction,</p>
+<p>deletion,</p>
+<p>reprocessing,</p>
+<p>backfill,</p>
+<p>authority change,</p>
+<p>access change,</p>
+<p>and reconciliation repair.</p>
+<p>Audit SHALL support reconstruction.</p>
+<h1>112. DATA EVIDENCE</h1>
+<p>Data Operations SHALL preserve evidence sufficient<br>
+to explain</p>
+<p>what data existed,</p>
+<p>where it came from,</p>
+<p>how it changed,</p>
+<p>who or what changed it,</p>
+<p>and what consumed it</p>
+<p>where institutionally required.</p>
+<h1>113. DATA KNOWLEDGE</h1>
+<p>Critical data knowledge SHALL be preserved<br>
+institutionally.</p>
+<p>Knowledge SHOULD include</p>
+<p>meaning,</p>
+<p>authority,</p>
+<p>sources,</p>
+<p>contracts,</p>
+<p>quality rules,</p>
+<p>lineage,</p>
+<p>storage,</p>
+<p>consumers,</p>
+<p>failure modes,</p>
+<p>and recovery.</p>
+<p>Data operation SHALL not depend upon one<br>
+individual’s memory.</p>
+<h1>114. DATA DOCUMENTATION</h1>
+<p>Critical data domains SHALL maintain authoritative<br>
+documentation.</p>
+<p>Documentation SHOULD define</p>
+<p>owner,</p>
+<p>authority,</p>
+<p>schema,</p>
+<p>semantics,</p>
+<p>source,</p>
+<p>quality,</p>
+<p>lineage,</p>
+<p>storage,</p>
+<p>retention,</p>
+<p>consumers,</p>
+<p>monitoring,</p>
+<p>recovery,</p>
+<p>and escalation.</p>
+<p>Documentation SHALL evolve with data.</p>
+<h1>115. DATA TESTING</h1>
+<p>Data operational capability SHALL be tested.</p>
+<p>Testing MAY include</p>
+<p>schema tests,</p>
+<p>quality tests,</p>
+<p>continuity tests,</p>
+<p>freshness tests,</p>
+<p>provider failure tests,</p>
+<p>replay tests,</p>
+<p>backfill tests,</p>
+<p>reconciliation tests,</p>
+<p>backup tests,</p>
+<p>and restore tests.</p>
+<p>Untested data assumptions SHALL be treated as risk.</p>
+<h1>116. DATA RESILIENCE TESTING</h1>
+<p>Critical data domains SHOULD periodically validate<br>
+resilience against</p>
+<p>provider failure,</p>
+<p>network failure,</p>
+<p>pipeline failure,</p>
+<p>storage failure,</p>
+<p>schema change,</p>
+<p>corruption,</p>
+<p>data loss,</p>
+<p>and recovery.</p>
+<p>Testing SHALL remain controlled.</p>
+<h1>117. DATA DEBT</h1>
+<p>Data operational debt SHALL be visible.</p>
+<p>Debt MAY include</p>
+<p>unknown authority,</p>
+<p>weak lineage,</p>
+<p>missing quality controls,</p>
+<p>manual correction,</p>
+<p>unreconciled differences,</p>
+<p>hidden consumers,</p>
+<p>capacity risk,</p>
+<p>outdated schemas,</p>
+<p>or unresolved data gaps.</p>
+<p>Data debt MAY create hidden institutional risk.</p>
+<h1>118. DATA EXCEPTION</h1>
+<p>Data operational exceptions SHALL be governed.</p>
+<p>Every exception SHALL define</p>
+<p>requirement,</p>
+<p>reason,</p>
+<p>scope,</p>
+<p>affected data,</p>
+<p>affected consumers,</p>
+<p>risk,</p>
+<p>owner,</p>
+<p>compensating controls,</p>
+<p>monitoring,</p>
+<p>and expiration.</p>
+<p>Permanent undocumented data exceptions are<br>
+prohibited.</p>
+<h1>119. NO DATA PATCH WORK</h1>
+<p>Data Operations SHALL NOT permanently compensate<br>
+for structural defects through</p>
+<p>manual correction,</p>
+<p>spreadsheet-only repair,</p>
+<p>hidden transformation,</p>
+<p>consumer-specific workaround,</p>
+<p>or repeated ad hoc backfill.</p>
+<p>The defect SHALL be corrected at its proper<br>
+ownership layer.</p>
+<h1>120. NO SILENT DATA LOSS</h1>
+<p>Critical data loss SHALL become visible.</p>
+<p>Loss MAY be detected through</p>
+<p>sequence,</p>
+<p>continuity,</p>
+<p>completeness,</p>
+<p>reconciliation,</p>
+<p>volume,</p>
+<p>or consumer validation.</p>
+<p>Silent critical data loss is prohibited.</p>
+<h1>121. NO SILENT STALE DATA</h1>
+<p>Stale data SHALL not silently appear current.</p>
+<p>Critical consumers SHALL be able to determine data<br>
+freshness where required.</p>
+<p>Unknown freshness SHALL remain explicit.</p>
+<h1>122. NO SILENT DATA CORRECTION</h1>
+<p>Material data correction SHALL preserve evidence.</p>
+<p>Original values SHALL remain reconstructable where<br>
+required.</p>
+<p>Silent historical rewriting is prohibited.</p>
+<h1>123. NO UNKNOWN DATA AUTHORITY</h1>
+<p>Critical data SHALL not exist without an authority<br>
+model.</p>
+<p>Unknown authority SHALL block authoritative<br>
+institutional use where correctness depends upon<br>
+source of truth.</p>
+<h1>124. NO PROVIDER SEMANTIC LEAKAGE</h1>
+<p>Provider-specific representation SHALL not silently<br>
+become institutional semantics.</p>
+<p>Normalization and provider abstraction SHALL<br>
+preserve stable COREI meaning.</p>
+<h1>125. NO DATA AUTHORITY COLLAPSE</h1>
+<p>Data custody SHALL not automatically create</p>
+<p>data authority,</p>
+<p>decision authority,</p>
+<p>risk authority,</p>
+<p>or execution authority.</p>
+<p>Authority boundaries SHALL remain explicit.</p>
+<h1>126. NO RAW-TO-EXECUTION BYPASS</h1>
+<p>Raw external data SHALL NOT directly become<br>
+consequential execution authority without required</p>
+<p>validation,</p>
+<p>normalization,</p>
+<p>decision,</p>
+<p>risk,</p>
+<p>portfolio,</p>
+<p>and execution controls.</p>
+<p>Production pressure SHALL not bypass the<br>
+institutional chain.</p>
+<h1>127. DATA LIFECYCLE</h1>
+<p>Every critical data domain follows the lifecycle</p>
+<p>Source Identification</p>
+<p>↓</p>
+<p>Contract Definition</p>
+<p>↓</p>
+<p>Acquisition</p>
+<p>↓</p>
+<p>Validation</p>
+<p>↓</p>
+<p>Normalization</p>
+<p>↓</p>
+<p>Authority Establishment</p>
+<p>↓</p>
+<p>Storage</p>
+<p>↓</p>
+<p>Processing</p>
+<p>↓</p>
+<p>Distribution</p>
+<p>↓</p>
+<p>Consumption</p>
+<p>↓</p>
+<p>Monitoring</p>
+<p>↓</p>
+<p>Reconciliation</p>
+<p>↓</p>
+<p>Recovery</p>
+<p>↓</p>
+<p>Retention</p>
+<p>↓</p>
+<p>Archive</p>
+<p>↓</p>
+<p>Retirement or Deletion</p>
+<p>The lifecycle SHALL remain traceable.</p>
+<h1>128. DATA EVOLUTION</h1>
+<p>Data evolution SHALL be driven by</p>
+<p>institutional requirements,</p>
+<p>source changes,</p>
+<p>provider changes,</p>
+<p>consumer needs,</p>
+<p>operational evidence,</p>
+<p>security,</p>
+<p>regulation,</p>
+<p>and architecture.</p>
+<p>Evolution SHALL preserve</p>
+<p>meaning,</p>
+<p>authority,</p>
+<p>compatibility,</p>
+<p>lineage,</p>
+<p>and migration discipline.</p>
+<h1>129. DATA DEPRECATION</h1>
+<p>Deprecated data capability SHALL define</p>
+<p>affected dataset,</p>
+<p>affected contracts,</p>
+<p>affected consumers,</p>
+<p>replacement,</p>
+<p>migration,</p>
+<p>support period,</p>
+<p>and retirement condition.</p>
+<p>Deprecation SHALL be visible.</p>
+<h1>130. DATA RETIREMENT</h1>
+<p>Data capability SHALL be retired only after</p>
+<p>active consumers are migrated,</p>
+<p>dependencies are removed,</p>
+<p>retention requirements are satisfied,</p>
+<p>historical evidence is preserved,</p>
+<p>access is revoked where required,</p>
+<p>and documentation is updated.</p>
+<p>Hidden active consumers SHALL block retirement.</p>
+<h1>131. RELATIONSHIP TO PRODUCTION OPERATIONS</h1>
+<p>Production Operations defines the common<br>
+institutional production model.</p>
+<p>Data Operations extends that model for<br>
+institutional data.</p>
+<p>Every production data capability SHALL comply with<br>
+both.</p>
+<h1>132. RELATIONSHIP TO PLATFORM OPERATIONS</h1>
+<p>Platforms MAY provide shared data capability.</p>
+<p>Platform Operations owns shared platform runtime.</p>
+<p>Data Operations owns data quality,<br>
+authority,<br>
+lineage,<br>
+and lifecycle requirements.</p>
+<p>Platform ownership SHALL not erase data ownership.</p>
+<h1>133. RELATIONSHIP TO SERVICE OPERATIONS</h1>
+<p>Services MAY own,<br>
+process,<br>
+or distribute data.</p>
+<p>Service Operations owns service capability.</p>
+<p>Data Operations governs institutional data<br>
+requirements.</p>
+<p>Service ownership SHALL not erase data authority.</p>
+<h1>134. RELATIONSHIP TO INFRASTRUCTURE OPERATIONS</h1>
+<p>Infrastructure Operations owns</p>
+<p>storage,</p>
+<p>database,</p>
+<p>messaging,</p>
+<p>compute,</p>
+<p>and network foundations.</p>
+<p>Data Operations owns the institutional integrity<br>
+and lifecycle of data using those foundations.</p>
+<p>Storage custody SHALL not imply data authority.</p>
+<h1>135. RELATIONSHIP TO SECURITY OPERATIONS</h1>
+<p>Data Operations SHALL integrate with Security<br>
+Operations for</p>
+<p>classification,</p>
+<p>access,</p>
+<p>encryption,</p>
+<p>data loss,</p>
+<p>security incidents,</p>
+<p>and recovery.</p>
+<p>Data availability SHALL NOT override mandatory<br>
+security controls.</p>
+<h1>136. RELATIONSHIP TO TRADING OPERATIONS</h1>
+<p>Trading Operations consumes and produces critical<br>
+data across</p>
+<p>market,</p>
+<p>signal,</p>
+<p>decision,</p>
+<p>risk,</p>
+<p>portfolio,</p>
+<p>execution,</p>
+<p>position,</p>
+<p>performance,</p>
+<p>and system intelligence.</p>
+<p>Data Operations SHALL preserve the integrity,<br>
+freshness,<br>
+lineage,<br>
+and recoverability of that data.</p>
+<p>Data availability SHALL not create trading<br>
+authority.</p>
+<h1>137. MINIMUM DATA READINESS GATE</h1>
+<p>Before critical data enters production use,<br>
+the following SHALL be established where<br>
+applicable.</p>
+<p>Data Owner Defined</p>
+<p>Data Authority Defined</p>
+<p>Data Custody Defined</p>
+<p>Classification Defined</p>
+<p>Criticality Defined</p>
+<p>Identity Defined</p>
+<p>Context Defined</p>
+<p>Contract Defined</p>
+<p>Schema Defined</p>
+<p>Semantics Defined</p>
+<p>Source Defined</p>
+<p>Provider Identity Defined</p>
+<p>Acquisition Defined</p>
+<p>Validation Defined</p>
+<p>Normalization Defined</p>
+<p>Quality Requirements Defined</p>
+<p>Completeness Defined</p>
+<p>Continuity Defined</p>
+<p>Freshness Defined</p>
+<p>Timeliness Defined</p>
+<p>Integrity Defined</p>
+<p>Quality State Defined</p>
+<p>Lineage Defined</p>
+<p>Time Semantics Defined</p>
+<p>Storage Defined</p>
+<p>Retention Defined</p>
+<p>Access Controlled</p>
+<p>Security Controls Defined</p>
+<p>Backup Defined</p>
+<p>Restore Tested</p>
+<p>Distribution Defined</p>
+<p>Consumers Identified</p>
+<p>Observability Available</p>
+<p>Metrics Available</p>
+<p>Alerting Available</p>
+<p>Recovery Defined</p>
+<p>Reprocessing Defined Where Required</p>
+<p>Reconciliation Defined Where Required</p>
+<p>Runbooks Available</p>
+<p>No Unknown Critical Authority</p>
+<p>No Silent Critical Data Loss</p>
+<p>No Silent Stale Critical Data</p>
+<p>No Uncontrolled Historical Rewrite</p>
+<p>Data failing mandatory criteria SHALL remain<br>
+operationally incomplete.</p>
+<h1>138. MINIMUM DATA CHANGE GATE</h1>
+<p>Before material data change,<br>
+the following SHALL be established where<br>
+applicable.</p>
+<p>Change Owner Defined</p>
+<p>Affected Data Identified</p>
+<p>Affected Contracts Identified</p>
+<p>Affected Schemas Identified</p>
+<p>Affected Semantics Identified</p>
+<p>Affected Sources Identified</p>
+<p>Affected Consumers Identified</p>
+<p>Compatibility Assessed</p>
+<p>Lineage Impact Assessed</p>
+<p>Quality Impact Assessed</p>
+<p>Security Impact Assessed</p>
+<p>Retention Impact Assessed</p>
+<p>Migration Defined</p>
+<p>Validation Defined</p>
+<p>Recovery Defined</p>
+<p>Reconciliation Defined</p>
+<p>Authority Confirmed</p>
+<p>Required Approval Completed</p>
+<p>Evidence Preserved</p>
+<p>High-risk data change failing mandatory criteria<br>
+SHALL remain blocked.</p>
+<h1>139. MINIMUM DATA RECOVERY GATE</h1>
+<p>Before data recovery is declared complete,<br>
+the following SHALL be established where<br>
+applicable.</p>
+<p>Source Restored or Replaced</p>
+<p>Acquisition Restored</p>
+<p>Completeness Validated</p>
+<p>Continuity Validated</p>
+<p>Freshness Validated</p>
+<p>Integrity Validated</p>
+<p>Quality Validated</p>
+<p>Lineage Preserved</p>
+<p>Processing Restored</p>
+<p>Distribution Restored</p>
+<p>Backlog Understood</p>
+<p>Missing Data Backfilled Where Required</p>
+<p>Reprocessing Completed Where Required</p>
+<p>Reconciliation Completed</p>
+<p>Consumers Validated</p>
+<p>Operational Evidence Preserved</p>
+<p>Data recovery SHALL NOT be declared solely because<br>
+a pipeline restarted.</p>
+<h1>140. DATA VALIDATION QUESTIONS</h1>
+<p>Every critical data capability shall answer the<br>
+following institutional questions.</p>
+<p>Who owns the data?</p>
+<p>What is the authoritative source?</p>
+<p>Who has custody?</p>
+<p>What is the data classification?</p>
+<p>What does the data mean?</p>
+<p>What is the schema?</p>
+<p>What is the time basis?</p>
+<p>What is the unit?</p>
+<p>What is the source?</p>
+<p>What transformations occurred?</p>
+<p>What quality requirements apply?</p>
+<p>How is completeness measured?</p>
+<p>How is continuity measured?</p>
+<p>How is freshness measured?</p>
+<p>How is accuracy assessed?</p>
+<p>How is integrity protected?</p>
+<p>How is invalid data handled?</p>
+<p>How is stale data represented?</p>
+<p>How is missing data represented?</p>
+<p>How is unknown data represented?</p>
+<p>How is lineage preserved?</p>
+<p>Where is the data stored?</p>
+<p>How long is it retained?</p>
+<p>Who consumes it?</p>
+<p>How is access controlled?</p>
+<p>How is it backed up?</p>
+<p>How is it restored?</p>
+<p>How is it replayed or reprocessed?</p>
+<p>How is it reconciled?</p>
+<p>How is provider failure handled?</p>
+<p>How is data recovery validated?</p>
+<p>Can the data be reconstructed?</p>
+<p>Can derived data be traced to its inputs?</p>
+<p>Can historical correction be explained?</p>
+<p>Can the data be retired without hidden active<br>
+consumers?</p>
+<p>If any mandatory answer is negative,</p>
+<p>data operational readiness remains incomplete.</p>
+<h1>141. DATA OPERATIONS DECLARATION</h1>
+<p>COREI Data Operations shall preserve institutional<br>
+data as explicit,<br>
+owned,<br>
+traceable,<br>
+secure,<br>
+and recoverable operational capability.</p>
+<p>Data SHALL remain</p>
+<p>authoritative,</p>
+<p>contextual,</p>
+<p>validated,</p>
+<p>normalized,</p>
+<p>quality-aware,</p>
+<p>freshness-aware,</p>
+<p>lineage-preserving,</p>
+<p>observable,</p>
+<p>reconcilable,</p>
+<p>recoverable,</p>
+<p>and continuously evolvable.</p>
+<p>Data SHALL not merely exist.</p>
+<p>It SHALL remain trustworthy enough for the<br>
+institutional decisions that depend upon it.</p>
+<h1>142. CONSTITUTIONAL COMMITMENT</h1>
+<p>COREI Data Operations shall remain</p>
+<p>identity-aligned,</p>
+<p>governance-driven,</p>
+<p>architecture-faithful,</p>
+<p>engineering-supported,</p>
+<p>standards-derived,</p>
+<p>specification-compliant,</p>
+<p>production-disciplined,</p>
+<p>data-authority-aware,</p>
+<p>source-explicit,</p>
+<p>provider-aware,</p>
+<p>contract-driven,</p>
+<p>schema-controlled,</p>
+<p>semantic-preserving,</p>
+<p>quality-conscious,</p>
+<p>freshness-conscious,</p>
+<p>continuity-aware,</p>
+<p>lineage-preserving,</p>
+<p>observable-by-default,</p>
+<p>security-preserving,</p>
+<p>retention-governed,</p>
+<p>recovery-capable,</p>
+<p>reconciliation-driven,</p>
+<p>audit-supported,</p>
+<p>evidence-driven,</p>
+<p>knowledge-preserving,</p>
+<p>and continuously evolvable.</p>
+<p>Data operations shall preserve institutional<br>
+continuity across</p>
+<p>market data,</p>
+<p>macro data,</p>
+<p>reference data,</p>
+<p>signals,</p>
+<p>decisions,</p>
+<p>risk,</p>
+<p>portfolios,</p>
+<p>orders,</p>
+<p>executions,</p>
+<p>positions,</p>
+<p>performance,</p>
+<p>systems,</p>
+<p>security,</p>
+<p>audit,</p>
+<p>providers,</p>
+<p>brokers,</p>
+<p>accounts,</p>
+<p>strategies,</p>
+<p>assets,</p>
+<p>markets,</p>
+<p>regions,</p>
+<p>currencies,</p>
+<p>custodians,</p>
+<p>exchanges,</p>
+<p>jurisdictions,</p>
+<p>and generations of technology.</p>
+<h1>143. AUTHORITY</h1>
+<p>This document defines the authoritative Data<br>
+Operations model of COREI.</p>
+<p>Every production dataset,</p>
+<p>data source,</p>
+<p>data provider,</p>
+<p>data pipeline,</p>
+<p>data contract,</p>
+<p>data schema,</p>
+<p>data store,</p>
+<p>data stream,</p>
+<p>data transformation,</p>
+<p>data quality process,</p>
+<p>data reconciliation process,</p>
+<p>data recovery process,</p>
+<p>market data capability,</p>
+<p>trading data capability,</p>
+<p>analytical data capability,</p>
+<p>and future institutional data capability</p>
+<p>shall comply with this document.</p>
+<p>Data-specific operational documents MAY extend<br>
+this model.</p>
+<p>No extension may weaken constitutional,<br>
+governance,<br>
+architectural,<br>
+engineering,<br>
+standards,<br>
+specification,<br>
+production,<br>
+platform,<br>
+service,<br>
+infrastructure,<br>
+security,<br>
+reliability,<br>
+quality,<br>
+lineage,<br>
+recovery,<br>
+or data requirements.</p>
+<p>Changes to this document require constitutional<br>
+review.</p>
+<h1>END OF DOCUMENT</h1>
+<h1>DOCUMENT ID</h1>
+<h1>COREI-OP-07.05</h1>
+<h1>DOCUMENT NAME</h1>
+<h1>DATA OPERATIONS</h1>
+<h1>REPOSITORY FILE</h1>
+<h1>knowledge/07-operations/COREI-OP-07.05-DATA-OPERATIONS.md</h1>
+
+
+  <div class="doc-footer">
+    <span>DOCUMENT ID: </span>
+    <span>DOCUMENT NAME: COREI OP 07.05</span>
+    <span>VERSION: 1.0</span>
+  </div>
+</body>
+</html>

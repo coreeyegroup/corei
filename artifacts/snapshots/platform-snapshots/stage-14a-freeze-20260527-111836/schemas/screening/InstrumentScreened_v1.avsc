@@ -1,0 +1,43 @@
+{
+  "type": "record",
+  "name": "InstrumentScreened_v1",
+  "namespace": "core.trading.screening",
+  "fields": [
+    {
+      "name": "instrument_id",
+      "type": "string"
+    },
+    {
+      "name": "screen_cycle_id",
+      "type": "string"
+    },
+    {
+      "name": "ranking",
+      "type": "int"
+    },
+    {
+      "name": "liquidity_score",
+      "type": "long"
+    },
+    {
+      "name": "volatility_score",
+      "type": "long"
+    },
+    {
+      "name": "trend_score",
+      "type": "long"
+    },
+    {
+      "name": "momentum_score",
+      "type": "long"
+    },
+    {
+      "name": "correlation_score",
+      "type": "long"
+    },
+    {
+      "name": "event_time",
+      "type": "string"
+    }
+  ]
+}

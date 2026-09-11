@@ -8,6 +8,7 @@
  * ============================================================================
  */
 
+import React from "react";
 import { DockviewReact } from "dockview-react";
 import "dockview/dist/styles/dockview.css";
 
@@ -38,44 +39,33 @@ const components: Record<
 > = {};
 
 for (const panel of panelCatalog) {
-
     components[panel.id] = () => (
-
         <panel.component />
-
     );
-
 }
 
 export function DockviewAdapter(): ReactElement {
+    React.useEffect(() => {
+        return () => {
+            workbenchRuntime.dispose();
+        };
+    }, []);
 
     return (
-
         <div
             style={{
                 width: "100%",
                 height: "100%"
             }}
         >
-
             <DockviewReact
-
                 components={components}
-
                 onReady={(event) => {
-
                     setDockviewApi(event.api);
-
                     workbenchRuntime.initialize();
-
                     workbenchRuntime.start();
-
                 }}
-
             />
-
         </div>
-
     );
-
 }

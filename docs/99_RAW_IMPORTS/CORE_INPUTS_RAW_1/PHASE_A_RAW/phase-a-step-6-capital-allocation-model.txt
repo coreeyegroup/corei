@@ -1,0 +1,497 @@
+PHASE A — STEP 6: CAPITAL ALLOCATION MODEL
+
+	Reference ID: CORE-TRADING-PHASE-A-STEP6-06
+
+	1. PHASE IDENTITY LAYER
+		1.1 Phase Name
+
+			Phase A — Step 6: Capital Allocation Model
+
+		1.2 Phase Role
+
+			Defines deterministic logic for distributing capital across strategies, assets, and trade intents within the trading model.
+
+		1.3 Phase Objective
+
+			Produce a fully deterministic allocation mapping:
+			(decision output → capital weight → position size constraint)
+
+		1.4 Why This Phase Exists
+
+			Prevents:
+				Overexposure concentration risk
+				Inconsistent sizing across similar signals
+				Capital inefficiency under multi-strategy conditions
+
+			Controls:
+				Portfolio balance integrity
+				Risk-normalized allocation consistency
+
+
+	2. PHASE SCOPE CONTROL
+		2.1 Included Scope (STRICT)
+
+			Capital distribution logic
+			Strategy-level allocation rules
+			Signal-strength-based weighting
+			Risk-adjusted sizing logic
+			Portfolio exposure balancing
+
+		2.2 Excluded Scope (STRICT)
+
+			Execution sizing mechanics
+			Order placement logic
+			Broker/margin considerations
+			Latency or slippage handling
+			Infrastructure or capital availability constraints
+
+
+	3. ARCHITECTURAL INTENT LAYER
+		3.1 Core Design Principles
+
+			Deterministic allocation mapping
+			Modular per-strategy allocation
+			Auditability of every capital decision
+			Scalable across N strategies / assets
+
+		3.2 Architectural Model
+
+			Logical allocation engine (pure mathematical + rule-based)
+
+		3.3 System Positioning
+
+			Signal → Decision → Capital Allocation → Trade Intent Structuring
+
+
+	4. DOMAIN MODEL DEFINITION
+		4.1 Entities
+
+			capital_pool
+			strategy_unit
+			allocation_weight
+			signal_strength
+			risk_factor
+			position_size
+			allocation_constraint
+
+		4.2 Attributes
+
+			capital_pool: total_allocatable_value
+			strategy_unit: strategy_id, priority, category
+			allocation_weight: normalized_weight
+			signal_strength: score (0–1 normalized)
+			risk_factor: volatility, drawdown_sensitivity
+			position_size: capital_assigned
+			allocation_constraint: max_cap, min_cap
+
+		4.3 Relationships
+
+			signal_strength → allocation_weight
+			allocation_weight × capital_pool → position_size
+			risk_factor modifies allocation_weight
+
+		4.4 Ownership
+
+			Fully owned by Phase A
+			Referenced by Phase D (execution sizing only)
+
+
+	5. LOGIC / RULE ENGINE (CORE)
+
+		Deterministic Strategy Ordering
+
+			All strategies MUST be processed in strict order:
+
+				1. strategy_id (lexicographic)
+
+			This ordering MUST be used in:
+
+				weight computation
+				aggregation
+				normalization
+
+		5.1 Core Allocation Formula
+
+			Base Allocation Weight
+
+				W_base = f(signal_strength)
+
+			Risk-Adjusted Weight
+
+				W_adj = W_base × Risk_Modifier
+
+			Normalized Allocation
+
+				W_norm = W_constrained / Σ(W_constrained across active strategies)
+
+			Capital Assignment
+
+				Capital_i = Total_Capital × W_norm_i
+
+			Normalization Safety Rule
+
+				Let:
+					S = Σ(W_constrained across active strategies)
+
+				IF S == 0:
+
+					ALL W_norm_i = 0
+					system MUST transition to ZERO_ALLOCATION state
+
+				ELSE:
+
+					W_norm_i = W_constrained_i / S
+
+			Risk Modifier Constraint
+
+				Risk_Modifier MUST be:
+
+					deterministic
+					monotonic decreasing with risk_factor
+					bounded within [0,1]
+
+				Defined in Risk Model (Step 4)
+
+		5.2 Deterministic Rules
+
+			Rule 1: Signal Dominance
+
+				Higher signal_strength → strictly higher allocation weight
+
+			Rule 2: Risk Suppression
+
+				Higher risk_factor → reduces allocation weight
+
+			Rule 3: Strategy Independence
+
+				Each strategy evaluated independently before normalization
+
+			Rule 4: Allocation Normalization
+
+				Total allocation must equal 100% of capital_pool
+
+			Rule 5: Minimum Viability Threshold
+
+				Signals below threshold → allocation = 0
+
+		5.3 Constraints
+
+			No negative allocation
+			No over-allocation (>100%)
+			No allocation without decision validation
+
+			Constraint Integration Rule (MANDATORY)
+
+				Allocation constraints MUST be applied BEFORE normalization:
+
+					W_adj_i → W_constrained_i
+
+				Where:
+
+					W_constrained_i = min(max(W_adj_i, W_min_i), W_max_i)
+
+				Normalization MUST use:
+
+					W_constrained_i (NOT W_adj_i)
+
+				No iterative re-normalization allowed
+
+
+	6. FLOW ARCHITECTURE
+		6.1 Input Definition
+
+			From Step 3 (Decision Engine):
+
+				trade_intent_snapshot
+				signal_strength_global
+
+			From Step 5 (Risk Philosophy):
+
+				risk_profile_snapshot
+
+			External Capital Isolation (MANDATORY)
+
+				Capital Allocation MUST operate ONLY on:
+
+					validated CORE decisions
+
+				External trade intents (CEIL):
+
+					MUST NOT participate in allocation computation
+
+				External capital allocation is handled outside Phase A
+
+		6.2 Processing Flow
+
+			Extract active decisions
+			Compute base weights
+			Apply risk modifiers
+			Apply allocation constraints
+			Normalize weights
+			Assign capital
+
+		6.3 Output Definition
+
+			capital_allocation_map
+			position_size_per_strategy
+
+		6.4 Flow Diagram
+
+			Decision → Weight Calculation → Risk Adjustment → Normalization → Capital Assignment
+
+
+	7. PIPELINE STRUCTURE
+
+		Stages:
+
+			Decision Intake
+			Weight Computation
+			Risk Adjustment
+			Normalization
+			Capital Mapping
+
+		State Transition:
+
+			inactive → eligible → weighted → allocated
+
+
+	8. CONTROL & CONSTRAINTS
+		8.1 Hard Rules
+
+			Allocation sum = 1 (100%)
+			Deterministic mapping only
+			No allocation without validated signal
+
+		8.2 Soft Rules
+
+			Prefer diversification across strategies
+			Avoid concentration bias
+
+		8.3 Guardrails
+
+			Max allocation per strategy cap
+			Minimum allocation threshold
+
+			Constraint Feasibility Condition
+
+				Σ(W_min_i) ≤ 1 ≤ Σ(W_max_i)
+
+				If violated:
+
+					system MUST fail validation
+
+
+	9. STATE & DATA MODEL
+		9.1 State Definition
+
+			allocation_state
+			normalized_weights
+			assigned_capital
+
+		9.2 State Transitions
+
+			pending → computed → normalized → finalized
+
+		9.3 Source of Truth
+
+			Capital Allocation Model (this phase)
+
+
+			Zero Allocation State
+
+				Condition:
+
+					Σ(W_constrained) == 0
+
+				State:
+
+					allocation_state = ZERO_ALLOCATION
+					all position_size = 0
+
+				Transition:
+
+					computed → ZERO_ALLOCATION → finalized
+
+	10. FAILURE MODEL
+		10.1 Failure Scenarios
+
+			Weight normalization failure
+			Missing signal_strength
+			Conflicting allocations
+
+			Constraint infeasibility (Σ(W_min_i) > 1 OR Σ(W_max_i) < 1)
+			Constraint-normalization mismatch
+			Zero-allocation state mis-trigger
+
+
+		10.2 Failure Impact
+
+			Portfolio imbalance
+			Overexposure risk
+			Undefined trade sizing
+
+		10.3 Mitigation Logic
+
+			Reject incomplete inputs
+			Enforce normalization validation
+			Default to zero allocation on invalid signals
+
+
+	11. ASSUMPTION REGISTER
+
+		Assumption						Why							Validation Phase	Status
+
+		Signals are normalized			Required for comparability	Step 2				Validated
+		Risk factors are measurable		Needed for adjustment		Step 4				Validated
+		Capital pool is fixed input		Required determinism		Phase B				Open
+
+
+	12. VALIDATION FRAMEWORK
+		12.1 Completeness Checklist
+
+			All strategies mapped
+			All weights computed
+			Normalization verified
+
+		12.2 Validation Method
+
+			Sum(weights) == 1
+			Deterministic re-run consistency
+
+			Constraint-integrated normalization validation
+
+			Verify:
+
+				Σ(W_constrained) used in normalization
+				Zero-allocation state triggered when Σ(W_constrained) == 0
+
+		12.3 Acceptance Criteria
+
+			Binary pass: exact reproducibility
+
+
+	13. OUTPUT (DELIVERABLE SPEC)
+
+		capital_allocation_spec = {
+		  strategy_id: {
+			weight: float,
+			capital_assigned: float,
+			risk_adjustment: float
+		  }
+		}
+
+
+	14. TRACEABILITY MAPPING
+
+		Input ← Step 5 (Decision Engine)
+		Output → Step 7 (Portfolio Model)
+
+		Every allocation must trace:
+
+			signal → decision → weight → capital
+
+		Mapping Store Requirements:
+
+			- storage: append-only log
+			- key: trade_intent_id
+			- value: ordered signal_ids[]
+
+			Constraints:
+
+			- immutable after write
+			- must survive restart
+
+			trace_id = HASH_v1(signal_ids_sorted)
+
+
+	15. CROSS-PHASE CONSISTENCY RULES
+
+		Owns:
+
+			Allocation logic
+			Weight computation
+
+		References:
+
+			Signal Model (Step 2)
+			Risk Model (Step 4)
+
+
+	16. SCALABILITY MODEL
+
+		Linear scaling with number of strategies
+		Supports multi-asset, multi-strategy expansion
+		No coupling between strategies
+
+
+	17. GOVERNANCE INTEGRATION
+
+		Versioned allocation logic
+
+		Requires approval for:
+
+			weight function changes
+			risk modifier changes
+
+
+	18. AUDITABILITY & OBSERVABILITY
+
+		Must log:
+
+			input signals
+			computed weights
+			normalization results
+			final capital assignment
+
+		Full trace required per strategy
+
+		constrained weights (W_constrained)
+
+	19. RISK CONSIDERATIONS
+
+		Risks:
+
+			Over-concentration
+			Under-diversification
+			Misweighted signals
+
+		Controls:
+
+			normalization
+			caps
+			risk modifiers
+
+
+	20. FAILURE CONDITION (PHASE LEVEL)
+
+		Phase fails if:
+
+			allocation is non-deterministic
+			weights do not sum to 1
+			missing traceability
+			inconsistent outputs for same input
+
+
+	21. PHASE LOCK CRITERIA
+
+		Phase locked only if:
+
+			all 21 sections complete
+			deterministic validation passed
+			traceability confirmed
+			assumptions documented
+			governance approval applied
+
+
+	FINAL OUTPUT SUMMARY
+
+		This Capital Allocation Model establishes:
+
+			Deterministic capital distribution
+			Risk-aware weight adjustment
+			Strategy-level independence
+			Full audit trace from signal → capital
+
+		It completes the core decision chain of Phase A:
+
+			Signal → Decision → Risk → Capital Allocation → (Next: Portfolio Model)

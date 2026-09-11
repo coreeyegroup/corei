@@ -1,0 +1,2559 @@
+/*
+ * ================================================================
+ * COREI ORBIT
+ * BROKER INTELLIGENCE / PROVIDERS
+ *
+ * FULL REPLACEMENT
+ *
+ * Design role:
+ *   Institutional dense data-grid / provider registry.
+ *
+ * Architectural boundary:
+ *   Provider presentation only.
+ *   BrokerIntelligence.css owns the surrounding Broker Intelligence
+ *   shell/navigation.
+ *
+ * Principles:
+ *   - no local search
+ *   - no secondary filter toolbar
+ *   - no KPI dashboard
+ *   - compact workstation geometry
+ *   - readable data
+ *   - Excel-style header filtering
+ *   - operator-adjustable columns
+ *   - floating inspector
+ * ================================================================
+ */
+
+.bi-providers {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+
+  background: #090d12;
+  color: #d8dee7;
+
+  font-family: inherit;
+  font-size: 12px;
+  line-height: 1.25;
+}
+
+.bi-providers,
+.bi-providers *,
+.bi-providers *::before,
+.bi-providers *::after {
+  box-sizing: border-box;
+}
+
+.bi-providers button,
+.bi-providers input,
+.bi-providers select,
+.bi-providers textarea {
+  font: inherit;
+}
+
+.bi-providers button {
+  color: inherit;
+}
+
+/* ================================================================
+ * COMMAND BAR
+ * ================================================================ */
+
+.bi-provider-commandbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  min-height: 35px;
+  height: 35px;
+
+  padding: 0 6px;
+
+  border-bottom: 1px solid #202832;
+
+  background: #0b1016;
+
+  flex: 0 0 35px;
+}
+
+.bi-provider-commandbar-left {
+  display: flex;
+  align-items: center;
+
+  min-width: 0;
+
+  height: 100%;
+
+  gap: 9px;
+}
+
+.bi-provider-section-marker {
+  flex: 0 0 auto;
+
+  color: #6f7d8e;
+
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.9px;
+  line-height: 12px;
+
+  white-space: nowrap;
+}
+
+.bi-provider-title {
+  min-width: 0;
+
+  overflow: hidden;
+
+  color: #e3e8ef;
+
+  font-size: 14px;
+  font-weight: 650;
+  line-height: 18px;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bi-provider-count {
+  display: inline-flex;
+  align-items: center;
+
+  flex: 0 0 auto;
+
+  height: 20px;
+
+  padding: 0 6px;
+
+  border: 1px solid #27313d;
+
+  background: #0d131a;
+
+  color: #b9c3cf;
+
+  font-family:
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Monaco,
+    Consolas,
+    "Liberation Mono",
+    monospace;
+
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 20px;
+
+  white-space: nowrap;
+}
+
+.bi-provider-count span {
+  margin: 0 3px;
+
+  color: #566372;
+}
+
+.bi-provider-filter-state {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 22px;
+
+  padding: 0 7px;
+
+  border: 1px solid #5a4930;
+
+  background: rgba(168, 137, 80, 0.08);
+
+  color: #d8bf8b;
+
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.55px;
+
+  cursor: pointer;
+}
+
+.bi-provider-filter-state:hover {
+  background: rgba(168, 137, 80, 0.15);
+}
+
+/* ================================================================
+ * COMMAND ACTIONS
+ * ================================================================ */
+
+.bi-provider-commandbar-right {
+  display: flex;
+  align-items: center;
+
+  flex: 0 0 auto;
+
+  gap: 5px;
+}
+
+.bi-grid-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 24px;
+  min-width: 62px;
+
+  padding: 0 8px;
+
+  border: 1px solid #2a3541;
+
+  background: #0c1219;
+
+  color: #c6d0dc;
+
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.45px;
+  line-height: 22px;
+
+  white-space: nowrap;
+
+  cursor: pointer;
+}
+
+.bi-grid-action:hover {
+  border-color: #40505f;
+  background: #111821;
+  color: #e1e7ee;
+}
+
+.bi-grid-action:active {
+  background: #0a0f15;
+}
+
+.bi-grid-action:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.bi-grid-action-primary {
+  border-color: rgba(181, 143, 72, 0.62);
+
+  background: rgba(181, 143, 72, 0.09);
+
+  color: #ddc28d;
+}
+
+.bi-grid-action-primary:hover {
+  border-color: rgba(202, 164, 89, 0.78);
+
+  background: rgba(181, 143, 72, 0.15);
+
+  color: #ead39f;
+}
+
+/* ================================================================
+ * GRID SHELL
+ * ================================================================ */
+
+.bi-provider-grid-shell {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+  min-height: 0;
+
+  flex: 1 1 auto;
+
+  overflow: hidden;
+
+  background: #080c11;
+
+  border-bottom: 1px solid #202832;
+}
+
+.bi-provider-grid-scroll {
+  position: relative;
+
+  min-width: 0;
+  min-height: 0;
+
+  flex: 1 1 auto;
+
+  overflow: auto;
+
+  scrollbar-width: thin;
+  scrollbar-color: #2c3743 #090d12;
+}
+
+.bi-provider-grid-scroll::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+
+.bi-provider-grid-scroll::-webkit-scrollbar-track {
+  background: #090d12;
+}
+
+.bi-provider-grid-scroll::-webkit-scrollbar-thumb {
+  background: #29343f;
+  border: 2px solid #090d12;
+}
+
+.bi-provider-grid-scroll::-webkit-scrollbar-thumb:hover {
+  background: #394653;
+}
+
+/* ================================================================
+ * DATA GRID
+ * ================================================================ */
+
+.bi-provider-grid {
+  table-layout: fixed;
+
+  min-width: 1035px;
+
+  border-collapse: separate;
+  border-spacing: 0;
+
+  background: #080c11;
+}
+
+.bi-provider-grid col {
+  width: auto;
+}
+
+/* ================================================================
+ * HEADER
+ * ================================================================ */
+
+.bi-provider-grid thead {
+  position: sticky;
+  top: 0;
+
+  z-index: 8;
+}
+
+.bi-provider-grid th {
+  position: relative;
+
+  height: 30px;
+
+  padding: 0;
+
+  border-right: 1px solid #252f39;
+  border-bottom: 1px solid #303a46;
+
+  background: #10161d;
+
+  color: #8d9bab;
+
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.75px;
+
+  text-align: left;
+
+  white-space: nowrap;
+}
+
+.bi-provider-grid th:last-child {
+  border-right: 0;
+}
+
+.bi-grid-header {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+  height: 30px;
+
+  padding: 0 6px 0 7px;
+
+  overflow: visible;
+}
+
+.bi-grid-header-label {
+  flex: 0 0 auto;
+
+  overflow: hidden;
+
+  color: #8e9bab;
+
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 0.7px;
+  line-height: 12px;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+ .bi-grid-header-filter {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  flex: 0 0 14px;
+
+  width: 14px;
+  min-width: 14px;
+
+  margin-left: auto;
+
+  position: relative;
+  z-index: 20;
+}
+
+.bi-grid-filter-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 14px;
+  height: 20px;
+
+  padding: 0;
+
+  border: 0 !important;
+  border-radius: 0;
+
+  background: transparent !important;
+
+  box-shadow: none !important;
+
+  color: #8794a2;
+
+  outline: none;
+
+  position: relative;
+  z-index: 20;
+
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.bi-grid-filter-button:hover,
+.bi-grid-filter-button:focus-visible,
+.bi-grid-filter-button:active {
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  outline: none;
+  color: #d2dae2;
+}
+
+.bi-grid-filter-button.is-active {
+  border: 0 !important;
+  background: transparent !important;
+  color: #ddc28d;
+}
+
+.bi-grid-filter-button-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 14px;
+  height: 20px;
+
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.bi-grid-filter-button.is-active .bi-grid-filter-button-icon {
+  font-size: 8px;
+}
+
+.bi-grid-filter-menu {
+  position: fixed !important;
+  z-index: 10000;
+
+  pointer-events: auto;
+
+  display: flex;
+  flex-direction: column;
+  width: 170px;
+  max-width: calc(100vw - 16px);
+  max-height: 220px;
+
+  overflow: hidden;
+
+  border: 1px solid #394653;
+
+  background: #0b1117;
+
+  box-shadow:
+    0 14px 32px rgba(0, 0, 0, 0.48),
+    0 3px 10px rgba(0, 0, 0, 0.34);
+}
+
+.bi-grid-filter-menu-header {
+  flex: 0 0 auto;
+
+  padding: 4px 6px;
+
+  border-bottom: 1px solid #26313b;
+
+  background: #10161d;
+}
+
+.bi-grid-filter-menu-title {
+  color: #dce3ea;
+
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 0.5px;
+  line-height: 12px;
+}
+
+.bi-grid-filter-menu-count {
+  margin-top: 0;
+
+  color: #788695;
+
+  font-size: 8px;
+  font-weight: 650;
+  letter-spacing: 0.3px;
+  line-height: 10px;
+}
+
+.bi-grid-filter-menu-actions {
+  display: flex;
+  align-items: center;
+
+  gap: 3px;
+
+  flex: 0 0 auto;
+
+  padding: 2px 4px;
+
+  border-bottom: 1px solid #202a34;
+
+  background: #0d131a;
+}
+
+.bi-grid-filter-menu-actions button,
+.bi-grid-filter-cancel,
+.bi-grid-filter-apply {
+  height: 18px;
+
+  padding: 0 6px;
+
+  border: 1px solid #303b47;
+  border-radius: 2px;
+
+  background: #0b1117;
+
+  color: #aeb9c5;
+
+  font-size: 8px;
+  font-weight: 750;
+  letter-spacing: 0.3px;
+
+  cursor: pointer;
+}
+
+.bi-grid-filter-sort-button {
+  width: 18px;
+  min-width: 18px;
+  padding: 0;
+  font-size: 11px !important;
+  line-height: 1;
+}
+
+.bi-grid-filter-sort-button.is-active {
+  border-color: rgba(181, 143, 72, 0.72);
+  color: #ddc28d;
+}
+
+.bi-grid-filter-menu-actions button:hover,
+.bi-grid-filter-cancel:hover {
+  border-color: #526171;
+  background: #111821;
+  color: #dbe2e9;
+}
+
+.bi-grid-filter-options {
+  min-height: 0;
+
+  flex: 1 1 auto;
+
+  overflow-y: auto;
+
+  padding: 2px 0;
+
+  scrollbar-width: thin;
+  scrollbar-color: #2b3743 #0b1117;
+}
+
+.bi-grid-filter-options::-webkit-scrollbar {
+  width: 7px;
+}
+
+.bi-grid-filter-options::-webkit-scrollbar-track {
+  background: #0b1117;
+}
+
+.bi-grid-filter-options::-webkit-scrollbar-thumb {
+  background: #2b3743;
+}
+
+.bi-grid-filter-option {
+  display: flex;
+  align-items: center;
+
+  min-width: 0;
+
+  min-height: 19px;
+
+  padding: 0 5px;
+
+  gap: 4px;
+
+  color: #c8d1da;
+
+  font-size: 9px;
+  font-weight: 550;
+  line-height: 11px;
+
+  cursor: pointer;
+}
+
+.bi-grid-filter-option:hover {
+  background: #121a22;
+  color: #e0e6ed;
+}
+
+.bi-grid-filter-option.is-checked {
+  background: rgba(181, 143, 72, 0.06);
+  color: #e1e7ed;
+}
+
+.bi-grid-filter-option input {
+  position: absolute;
+
+  width: 1px;
+  height: 1px;
+
+  opacity: 0;
+  pointer-events: none;
+}
+
+.bi-grid-filter-checkbox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  flex: 0 0 11px;
+
+  width: 11px;
+  height: 11px;
+
+  border: 1px solid #465362;
+  border-radius: 2px;
+
+  background: #080e14;
+
+  color: #dfc48e;
+
+  font-size: 7px;
+  font-weight: 800;
+  line-height: 9px;
+}
+
+.bi-grid-filter-option.is-checked .bi-grid-filter-checkbox {
+  border-color: rgba(181, 143, 72, 0.75);
+  background: rgba(181, 143, 72, 0.13);
+}
+
+.bi-grid-filter-option-label {
+  min-width: 0;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bi-grid-filter-menu-footer {
+  display: flex;
+  justify-content: flex-end;
+
+  gap: 5px;
+
+  flex: 0 0 auto;
+
+  padding: 2px 4px;
+
+  border-top: 1px solid #26313b;
+
+  background: #0d131a;
+}
+
+.bi-grid-filter-apply {
+  border-color: rgba(181, 143, 72, 0.68);
+
+  background: rgba(181, 143, 72, 0.10);
+
+  color: #ddc28d;
+}
+
+.bi-grid-filter-apply:hover {
+  border-color: rgba(202, 164, 89, 0.82);
+
+  background: rgba(181, 143, 72, 0.16);
+
+  color: #ead39f;
+}
+
+/*
+ * Dedicated resize zone.
+ *
+ * It is deliberately narrow so the operator can resize columns
+ * without consuming visible table space.
+ */
+
+.bi-column-resize {
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  z-index: 10;
+
+  width: 5px;
+  height: 100%;
+
+  cursor: col-resize;
+
+  background: transparent;
+}
+
+.bi-column-resize:hover {
+  background: #68798b;
+}
+
+.bi-column-resize:active {
+  background: #a88950;
+}
+
+/* ================================================================
+ * BODY ROWS
+ * ================================================================ */
+
+.bi-provider-grid tbody tr {
+  height: 27px;
+
+  background: #080c11;
+
+  cursor: pointer;
+}
+
+.bi-provider-grid tbody tr:hover {
+  background: #0d131a;
+}
+
+.bi-provider-grid tbody tr.is-selected {
+  background: #121920;
+
+  box-shadow:
+    inset 2px 0 0 #a88950;
+}
+
+.bi-provider-grid td {
+  height: 27px;
+
+  padding: 0 6px;
+
+  border-right: 1px solid #171f28;
+  border-bottom: 1px solid #171f28;
+
+  color: #c2ccd7;
+
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 26px;
+
+  text-align: left;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+.bi-provider-grid td:last-child {
+  border-right: 0;
+}
+
+.bi-provider-cell-primary {
+  color: #e0e6ed !important;
+
+  font-size: 11px !important;
+  font-weight: 700 !important;
+}
+
+.bi-provider-cell-mono {
+  font-family:
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Monaco,
+    Consolas,
+    "Liberation Mono",
+    monospace;
+
+  font-size: 11px !important;
+}
+
+.bi-provider-cell-number {
+  color: #d4dce5 !important;
+
+  font-family:
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Monaco,
+    Consolas,
+    "Liberation Mono",
+    monospace;
+
+  font-size: 11px !important;
+  font-weight: 650 !important;
+
+  text-align: right !important;
+}
+
+/* ================================================================
+ * ENVIRONMENT
+ * ================================================================ */
+
+.bi-environment-value {
+  color: #c9d2dc;
+
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.2px;
+}
+
+.bi-environment-value[data-environment="LIVE"] {
+  color: #d7e0e8;
+}
+
+.bi-environment-value[data-environment="PAPER"] {
+  color: #b8c4d0;
+}
+
+.bi-environment-value[data-environment="TEST"] {
+  color: #aeb9c5;
+}
+
+/* ================================================================
+ * STATE
+ * ================================================================ */
+
+.bi-state-value {
+  display: inline-flex;
+  align-items: center;
+
+  max-width: 100%;
+
+  height: 20px;
+
+  padding: 0 6px 0 5px;
+
+  border: 1px solid #2a3540;
+
+  background: #0d1319;
+
+  color: #b6c1cc;
+
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.35px;
+  line-height: 18px;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  vertical-align: middle;
+}
+
+.bi-state-dot {
+  display: inline-block;
+
+  flex: 0 0 auto;
+
+  width: 4px;
+  height: 4px;
+
+  margin-right: 5px;
+
+  border-radius: 50%;
+
+  background: #667382;
+}
+
+.bi-state-value[data-tone="operational"] {
+  border-color: rgba(35, 157, 124, 0.42);
+
+  background: rgba(35, 157, 124, 0.07);
+
+  color: #8fd1bd;
+}
+
+.bi-state-value[data-tone="operational"]
+  .bi-state-dot {
+  background: #35ad8b;
+}
+
+.bi-state-value[data-tone="warning"] {
+  border-color: rgba(180, 140, 55, 0.42);
+
+  background: rgba(180, 140, 55, 0.07);
+
+  color: #d4bb83;
+}
+
+.bi-state-value[data-tone="warning"]
+  .bi-state-dot {
+  background: #c59d50;
+}
+
+.bi-state-value[data-tone="critical"] {
+  border-color: rgba(166, 73, 73, 0.45);
+
+  background: rgba(166, 73, 73, 0.08);
+
+  color: #d59b9b;
+}
+
+.bi-state-value[data-tone="critical"]
+  .bi-state-dot {
+  background: #c66b6b;
+}
+
+.bi-state-value[data-tone="disabled"] {
+  border-color: #303942;
+
+  background: #0c1116;
+
+  color: #77828e;
+}
+
+.bi-state-value[data-tone="disabled"]
+  .bi-state-dot {
+  background: #59636d;
+}
+
+/* ================================================================
+ * EMPTY GRID
+ * ================================================================ */
+
+.bi-provider-empty {
+  height: 70px !important;
+
+  padding: 0 12px !important;
+
+  color: #748190 !important;
+
+  font-size: 10px !important;
+  font-weight: 650 !important;
+  letter-spacing: 0.65px;
+
+  line-height: 68px !important;
+
+  text-align: left !important;
+}
+
+.bi-provider-empty span {
+  margin-right: 12px;
+}
+
+.bi-provider-empty button {
+  height: 24px;
+
+  padding: 0 8px;
+
+  border: 1px solid #35414d;
+
+  background: #0d1319;
+
+  color: #aeb9c5;
+
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+
+  cursor: pointer;
+}
+
+.bi-provider-empty button:hover {
+  border-color: #596876;
+  color: #d0d8e0;
+}
+
+/* ================================================================
+ * GRID STATUS LINE
+ * ================================================================ */
+
+.bi-provider-grid-status {
+  display: flex;
+  align-items: center;
+
+  flex: 0 0 27px;
+
+  height: 27px;
+
+  padding: 0 9px;
+
+  border-top: 1px solid #171f28;
+
+  background: #0b1016;
+
+  color: #637180;
+
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.55px;
+  line-height: 26px;
+
+  white-space: nowrap;
+}
+
+.bi-provider-grid-status > div {
+  margin-right: 14px;
+}
+
+.bi-provider-grid-status strong {
+  margin-left: 5px;
+
+  color: #9daab8;
+
+  font-family:
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Monaco,
+    Consolas,
+    "Liberation Mono",
+    monospace;
+
+  font-size: 9px;
+}
+
+.bi-grid-status-spacer {
+  flex: 1 1 auto;
+}
+
+/* ================================================================
+ * FLOATING PROVIDER INSPECTOR
+ * ================================================================ */
+
+.bi-provider-inspector {
+  position: fixed;
+  left: 12px;
+  top: 72px;
+  z-index: 5000;
+
+  display: flex;
+  flex-direction: column;
+
+  width: 390px;
+  max-width: calc(100vw - 24px);
+  height: min(520px, calc(100vh - 48px));
+  min-height: 300px;
+  max-height: calc(100vh - 24px);
+
+  overflow: hidden;
+  box-sizing: border-box;
+  resize: both;
+
+  border: 1px solid #3a4652;
+  border-top-color: #5a6875;
+  border-radius: 2px;
+
+  background: #0b1219;
+  color: #d8dee6;
+
+  box-shadow:
+    0 18px 42px rgba(0, 0, 0, 0.56),
+    0 4px 12px rgba(0, 0, 0, 0.38),
+    0 0 0 1px rgba(255, 255, 255, 0.018);
+
+  isolation: isolate;
+}
+
+.bi-inspector-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  flex: 0 0 43px;
+  height: 43px;
+  min-height: 43px;
+  box-sizing: border-box;
+
+  padding: 5px 7px 5px 8px;
+
+  border-bottom: 1px solid #27313b;
+  background: #101820;
+
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+}
+
+.bi-inspector-header:active {
+  cursor: grabbing;
+}
+
+.bi-provider-inspector.is-editing .bi-inspector-header {
+  border-bottom-color: #465461;
+}
+
+.bi-inspector-heading {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.bi-inspector-eyebrow {
+  display: block;
+  margin: 0;
+  color: #74818e;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.65px;
+  line-height: 9px;
+}
+
+.bi-inspector-heading h3 {
+  margin: 1px 0 0;
+  overflow: hidden;
+  color: #e1e7ed;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bi-inspector-id {
+  display: block;
+  margin: 0;
+  overflow: hidden;
+  color: #71808d;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 8px;
+  line-height: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bi-inspector-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 20px;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  padding: 0;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #9aa6b2;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 18px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.bi-inspector-close:hover {
+  border-color: #34414d;
+  background: #151e27;
+  color: #e0e6ed;
+}
+
+.bi-inspector-body {
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: #0d141b;
+  scrollbar-width: thin;
+  scrollbar-color: #2a3641 #0d141b;
+}
+
+.bi-inspector-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.bi-inspector-body::-webkit-scrollbar-track {
+  background: #0d141b;
+}
+
+.bi-inspector-body::-webkit-scrollbar-thumb {
+  background: #2a3641;
+}
+
+.bi-provider-inspector .bi-inspector-toolbar {
+  min-height: 25px;
+  height: 25px;
+  flex: 0 0 25px;
+  box-sizing: border-box;
+  padding: 3px 6px;
+  gap: 3px;
+  background: #0c131a;
+  border-bottom: 1px solid #202a34;
+}
+
+.bi-provider-inspector .bi-inspector-action {
+  height: 18px;
+  min-width: 42px;
+  padding: 0 5px;
+  font-size: 9px;
+  line-height: 16px;
+}
+
+.bi-provider-inspector .bi-inspector-toolbar-state {
+  margin-left: auto;
+  font-size: 8px;
+  line-height: 11px;
+  letter-spacing: 0.3px;
+}
+
+/* Dense, table-matched information geometry. */
+.bi-provider-inspector .bi-inspector-section {
+  padding: 5px 7px 5px;
+  border-bottom: 1px solid #1e2831;
+}
+
+.bi-provider-inspector .bi-inspector-section:first-child {
+  padding-top: 5px;
+}
+
+.bi-provider-inspector .bi-inspector-section:last-child {
+  padding-bottom: 5px;
+  border-bottom: 0;
+}
+
+.bi-provider-inspector .bi-inspector-section-title {
+  margin: 0 0 3px;
+  color: #74818e;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.55px;
+  line-height: 9px;
+}
+
+.bi-provider-inspector .bi-inspector-grid {
+  gap: 3px 7px;
+}
+
+.bi-provider-inspector .bi-inspector-grid strong,
+.bi-provider-inspector .bi-inspector-record strong,
+.bi-provider-inspector .bi-inspector-state-line strong,
+.bi-provider-inspector .bi-inspector-authority-row strong {
+  font-size: 10px;
+  line-height: 13px;
+}
+
+.bi-provider-inspector .bi-inspector-grid span,
+.bi-provider-inspector .bi-inspector-record span,
+.bi-provider-inspector .bi-inspector-state-line > span,
+.bi-provider-inspector .bi-inspector-authority-row > span {
+  font-size: 8px;
+  line-height: 10px;
+}
+
+.bi-provider-inspector .bi-inspector-state-line {
+  min-height: 21px;
+}
+
+.bi-provider-inspector .bi-inspector-record {
+  min-height: 21px;
+}
+
+.bi-provider-inspector .bi-inspector-note {
+  margin-top: 4px;
+  padding: 4px 5px;
+  line-height: 11px;
+}
+
+.bi-provider-inspector .bi-inspector-authority-row {
+  min-height: 19px;
+}
+
+.bi-provider-inspector .bi-inspector-field input,
+.bi-provider-inspector .bi-inspector-field select,
+.bi-provider-inspector .bi-inspector-field textarea,
+.bi-provider-inspector .bi-inspector-inline-control {
+  font-size: 10px;
+}
+
+.bi-provider-inspector .bi-inspector-field input,
+.bi-provider-inspector .bi-inspector-field select,
+.bi-provider-inspector .bi-inspector-inline-control {
+  height: 20px;
+}
+
+.bi-provider-inspector .bi-inspector-field textarea {
+  min-height: 42px;
+}
+
+.bi-provider-inspector .bi-inspector-account-row {
+  min-height: 21px;
+}
+
+.bi-provider-inspector .bi-inspector-empty-line {
+  min-height: 21px;
+  line-height: 21px;
+}
+
+.bi-provider-inspector.is-editing {
+  border-color: #465361;
+}
+
+@media (max-width: 650px) {
+  .bi-provider-inspector {
+    width: calc(100vw - 16px);
+    max-width: calc(100vw - 16px);
+  }
+}
+
+/* ================================================================
+ * INSPECTOR SECTIONS
+ * ================================================================ */
+
+.bi-inspector-section {
+  padding: 6px 9px 7px;
+
+  border-bottom: 1px solid #202a34;
+}
+
+.bi-inspector-section-title {
+  margin-bottom: 5px;
+
+  color: #718091;
+
+  font-size: 9px;
+  font-weight: 750;
+  letter-spacing: 0.8px;
+  line-height: 11px;
+}
+
+.bi-inspector-grid {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1fr);
+
+  gap: 5px 10px;
+}
+
+.bi-inspector-grid > div,
+.bi-inspector-record,
+.bi-inspector-state-line {
+  min-width: 0;
+}
+
+.bi-inspector-grid span,
+.bi-inspector-record span,
+.bi-inspector-state-line span,
+.bi-inspector-authority-row span {
+  display: block;
+
+  margin-bottom: 3px;
+
+  color: #667484;
+
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.45px;
+  line-height: 12px;
+}
+
+.bi-inspector-grid strong,
+.bi-inspector-record strong,
+.bi-inspector-state-line strong,
+.bi-inspector-authority-row strong {
+  display: block;
+
+  min-width: 0;
+
+  overflow: hidden;
+
+  color: #d3dae2;
+
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bi-inspector-grid strong.is-mono,
+.bi-inspector-record strong.is-mono {
+  font-family:
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Monaco,
+    Consolas,
+    "Liberation Mono",
+    monospace;
+
+  font-size: 11px;
+}
+
+.bi-inspector-state-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  min-height: 22px;
+
+  border-bottom: 1px solid #151d25;
+}
+
+.bi-inspector-state-line:last-child {
+  border-bottom: 0;
+}
+
+.bi-inspector-state-line span {
+  margin: 0;
+
+  color: #758292;
+}
+
+.bi-inspector-state-line strong {
+  text-align: right;
+}
+
+.bi-inspector-state-line
+  .bi-state-value {
+  display: inline-flex;
+
+  max-width: 190px;
+}
+
+.bi-inspector-record {
+  padding: 4px 0;
+
+  border-bottom: 1px solid #151d25;
+}
+
+.bi-inspector-record:last-of-type {
+  border-bottom: 0;
+}
+
+.bi-inspector-note {
+  margin-top: 5px;
+
+  padding: 5px 6px;
+
+  border-left: 2px solid #374553;
+
+  background: #0d141b;
+
+  color: #7c8997;
+
+  font-size: 9px;
+  line-height: 12px;
+}
+
+.bi-inspector-authority {
+  background: #0a1016;
+}
+
+.bi-inspector-authority-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+
+  min-height: 21px;
+
+  gap: 12px;
+}
+
+.bi-inspector-authority-row span {
+  flex: 0 0 auto;
+
+  margin: 0;
+}
+
+.bi-inspector-authority-row strong {
+  text-align: right;
+
+  color: #9ca9b6;
+
+  font-size: 9px;
+  letter-spacing: 0.35px;
+}
+
+/* ================================================================
+ * ADD PROVIDER MODAL
+ * ================================================================ */
+
+.bi-provider-modal-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background: rgba(2, 5, 8, 0.72);
+}
+
+.bi-provider-modal {
+  display: flex;
+  flex-direction: column;
+
+  width: min(760px, 100%);
+
+  max-height: calc(100vh - 40px);
+
+  overflow: hidden;
+
+  border: 1px solid #394653;
+
+  background: #0b1117;
+
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.55),
+    0 5px 20px rgba(0, 0, 0, 0.4);
+}
+
+.bi-provider-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  min-height: 57px;
+
+  padding: 0 13px;
+
+  border-bottom: 1px solid #27313c;
+
+  background: #0f151c;
+}
+
+.bi-provider-modal-header > div > span {
+  display: block;
+
+  margin-bottom: 3px;
+
+  color: #6f7d8c;
+
+  font-size: 8px;
+  font-weight: 750;
+  letter-spacing: 0.75px;
+}
+
+.bi-provider-modal-header h3 {
+  margin: 0;
+
+  color: #e2e8ef;
+
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 18px;
+}
+
+.bi-provider-modal-close {
+  width: 26px;
+  height: 26px;
+
+  border: 1px solid transparent;
+
+  background: transparent;
+
+  color: #8c98a5;
+
+  font-size: 20px;
+  font-weight: 300;
+
+  cursor: pointer;
+}
+
+.bi-provider-modal-close:hover {
+  border-color: #33404d;
+  background: #121a22;
+  color: #e0e6ed;
+}
+
+.bi-provider-modal-body {
+  min-height: 0;
+
+  overflow-y: auto;
+
+  padding: 0;
+}
+
+.bi-provider-form-section {
+  padding: 10px 13px;
+
+  border-bottom: 1px solid #202a34;
+}
+
+.bi-provider-form-section-header {
+  display: flex;
+  align-items: flex-start;
+
+  gap: 8px;
+
+  margin-bottom: 9px;
+}
+
+.bi-provider-form-section-header > span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  flex: 0 0 22px;
+
+  width: 22px;
+  height: 18px;
+
+  border: 1px solid #303b47;
+
+  background: #0d141b;
+
+  color: #778594;
+
+  font-size: 8px;
+  font-weight: 750;
+  letter-spacing: 0.35px;
+}
+
+.bi-provider-form-section-header > div {
+  min-width: 0;
+}
+
+.bi-provider-form-section-header strong {
+  display: block;
+
+  color: #d8dfe7;
+
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  line-height: 13px;
+}
+
+.bi-provider-form-section-header small {
+  display: block;
+
+  margin-top: 1px;
+
+  color: #687686;
+
+  font-size: 8px;
+  font-weight: 500;
+  line-height: 11px;
+}
+
+.bi-provider-form-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 8px 10px;
+}
+
+.bi-provider-form-field {
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+
+  gap: 4px;
+
+  color: #8996a4;
+
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.35px;
+}
+
+.bi-provider-form-field > span {
+  color: #74818f;
+
+  font-size: 8px;
+  font-weight: 750;
+  letter-spacing: 0.45px;
+  line-height: 10px;
+}
+
+.bi-provider-form-field > span em {
+  margin-left: 3px;
+
+  color: #b58f48;
+
+  font-style: normal;
+}
+
+.bi-provider-form-field input,
+.bi-provider-form-field select {
+  width: 100%;
+  height: 28px;
+
+  min-width: 0;
+
+  padding: 0 7px;
+
+  border: 1px solid #303b47;
+  border-radius: 2px;
+
+  outline: none;
+
+  background: #090f15;
+
+  color: #d2dae2;
+
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 26px;
+}
+
+.bi-provider-form-field input:hover,
+.bi-provider-form-field select:hover {
+  border-color: #465361;
+}
+
+.bi-provider-form-field input:focus,
+.bi-provider-form-field select:focus {
+  border-color: #596978;
+
+  background: #0b1219;
+}
+
+.bi-provider-form-field input:disabled,
+.bi-provider-form-field select:disabled {
+  opacity: 0.55;
+
+  cursor: not-allowed;
+}
+
+.bi-provider-form-field input[readonly] {
+  background: #0c1218;
+
+  color: #8d9aa7;
+
+  cursor: default;
+}
+
+.bi-provider-enabled-field {
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+
+  gap: 4px;
+}
+
+.bi-provider-enabled-field > span {
+  color: #74818f;
+
+  font-size: 8px;
+  font-weight: 750;
+  letter-spacing: 0.45px;
+  line-height: 10px;
+}
+
+.bi-provider-toggle {
+  display: flex;
+  align-items: center;
+
+  min-width: 0;
+
+  height: 28px;
+
+  gap: 7px;
+
+  color: #c7d0da;
+
+  cursor: pointer;
+}
+
+.bi-provider-toggle input {
+  position: absolute;
+
+  width: 1px;
+  height: 1px;
+
+  opacity: 0;
+  pointer-events: none;
+}
+
+.bi-provider-toggle-track {
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+
+  flex: 0 0 28px;
+
+  width: 28px;
+  height: 14px;
+
+  border: 1px solid #465361;
+  border-radius: 8px;
+
+  background: #10171e;
+}
+
+.bi-provider-toggle-thumb {
+  position: absolute;
+
+  left: 2px;
+
+  width: 8px;
+  height: 8px;
+
+  border-radius: 50%;
+
+  background: #657382;
+
+  transition:
+    transform 80ms linear,
+    background 80ms linear;
+}
+
+.bi-provider-toggle input:checked
+  + .bi-provider-toggle-track {
+  border-color: #4e756b;
+
+  background: #12231f;
+}
+
+.bi-provider-toggle input:checked
+  + .bi-provider-toggle-track
+  .bi-provider-toggle-thumb {
+  transform: translateX(14px);
+
+  background: #35ad8b;
+}
+
+.bi-provider-toggle strong {
+  overflow: hidden;
+
+  color: #9eabb8;
+
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.35px;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bi-provider-security-note {
+  display: flex;
+
+  gap: 8px;
+
+  margin: 10px 13px;
+
+  padding: 7px 8px;
+
+  border-left: 2px solid #374553;
+
+  background: #0d141b;
+}
+
+.bi-provider-security-mark {
+  flex: 0 0 auto;
+
+  color: #8b99a7;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.bi-provider-security-note strong {
+  display: block;
+
+  margin-bottom: 2px;
+
+  color: #aeb9c5;
+
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.bi-provider-security-note p {
+  margin: 0;
+
+  color: #707f8d;
+
+  font-size: 8px;
+  line-height: 12px;
+}
+
+.bi-provider-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+
+  gap: 6px;
+
+  min-height: 49px;
+
+  padding: 10px 13px;
+
+  border-top: 1px solid #27313c;
+
+  background: #0d131a;
+}
+
+/* ================================================================
+ * COLUMN RESIZE GLOBAL STATE
+ * ================================================================ */
+
+.bi-provider-column-resizing,
+.bi-provider-column-resizing * {
+  cursor: col-resize !important;
+
+  user-select: none !important;
+}
+
+/* ================================================================
+ * RESPONSIVE
+ * ================================================================ */
+
+@media (max-width: 900px) {
+  .bi-provider-title {
+    max-width: 220px;
+  }
+
+  .bi-provider-inspector {
+    width: 360px;
+
+    right: 8px;
+  }
+
+}
+
+@media (max-width: 650px) {
+  .bi-provider-commandbar {
+    padding: 0 7px;
+  }
+
+  .bi-provider-section-marker {
+    display: none;
+  }
+
+  .bi-provider-title {
+    max-width: 170px;
+
+    font-size: 13px;
+  }
+
+  .bi-provider-inspector {
+    top: 45px;
+    right: 5px;
+    bottom: 34px;
+
+    width: calc(100% - 10px);
+  }
+
+  .bi-provider-grid-status > div:nth-child(3),
+  .bi-provider-grid-status > div:nth-child(4),
+  .bi-provider-grid-status > div:nth-child(5) {
+    display: none;
+  }
+}
+
+/* ================================================================
+ * PROVIDER INSPECTOR — FINAL FREE-FLOATING CONTROL SURFACE
+ *
+ * Independent viewport-level window. It is never docked to the
+ * Provider Registry and never participates in table layout.
+ * Position is controlled by the component's X/Y state and the
+ * document-level drag lifecycle.
+ * ================================================================ */
+
+.bi-provider-inspector {
+  position: fixed !important;
+  left: 0;
+  top: 0;
+  right: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+
+  z-index: 5000 !important;
+
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+
+  width: 390px;
+  min-width: 300px;
+  max-width: calc(100vw - 24px);
+  height: min(520px, calc(100vh - 48px));
+  min-height: 300px;
+  max-height: calc(100vh - 24px);
+
+  overflow: hidden;
+  resize: both;
+
+  border: 1px solid #394652;
+  border-top-color: #596774;
+  border-radius: 2px;
+
+  background: #0b1219;
+  color: #d7dee6;
+
+  box-shadow:
+    0 18px 42px rgba(0, 0, 0, 0.56),
+    0 4px 12px rgba(0, 0, 0, 0.38),
+    0 0 0 1px rgba(255, 255, 255, 0.018);
+
+  isolation: isolate;
+  contain: layout paint;
+}
+
+.bi-provider-inspector::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  z-index: 2;
+  background: #566573;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.bi-provider-inspector .bi-inspector-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 0 0 43px;
+  width: 100%;
+  height: 43px;
+  min-height: 43px;
+  box-sizing: border-box;
+  padding: 5px 7px 5px 8px;
+  border-bottom: 1px solid #28333d;
+  background: #101820;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+}
+
+.bi-provider-inspector .bi-inspector-header:active {
+  cursor: grabbing;
+}
+
+.bi-provider-inspector .bi-inspector-heading {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.bi-provider-inspector .bi-inspector-eyebrow {
+  display: block;
+  margin: 0;
+  color: #73808d;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  line-height: 9px;
+}
+
+.bi-provider-inspector .bi-inspector-heading h3 {
+  margin: 1px 0 0;
+  overflow: hidden;
+  color: #e1e7ed;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bi-provider-inspector .bi-inspector-id {
+  display: block;
+  margin: 0;
+  overflow: hidden;
+  color: #71808d;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 8px;
+  line-height: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bi-provider-inspector .bi-inspector-close {
+  flex: 0 0 20px;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  padding: 0;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #9aa6b2;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 18px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.bi-provider-inspector .bi-inspector-close:hover {
+  border-color: #34414d;
+  background: #151e27;
+  color: #e0e6ed;
+}
+
+.bi-provider-inspector .bi-inspector-toolbar {
+  display: flex;
+  align-items: center;
+  flex: 0 0 25px;
+  min-height: 25px;
+  height: 25px;
+  box-sizing: border-box;
+  padding: 3px 6px;
+  gap: 3px;
+  background: #0c131a;
+  border-bottom: 1px solid #202a34;
+}
+
+.bi-provider-inspector .bi-inspector-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 18px;
+  min-width: 42px;
+  padding: 0 5px;
+  border: 1px solid #2a3541;
+  background: #0d141b;
+  color: #bfc9d4;
+  font-size: 9px;
+  font-weight: 750;
+  letter-spacing: 0.4px;
+  line-height: 16px;
+  cursor: pointer;
+}
+
+.bi-provider-inspector .bi-inspector-action:hover:not(:disabled) {
+  border-color: #465361;
+  background: #121a22;
+  color: #e1e7ed;
+}
+
+.bi-provider-inspector .bi-inspector-action:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+}
+
+.bi-provider-inspector .bi-inspector-toolbar-state {
+  margin-left: auto;
+  color: #657383;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  line-height: 11px;
+  white-space: nowrap;
+}
+
+.bi-provider-inspector .bi-inspector-body {
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: #0d141b;
+  scrollbar-width: thin;
+  scrollbar-color: #2a3641 #0d141b;
+}
+
+.bi-provider-inspector .bi-inspector-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.bi-provider-inspector .bi-inspector-body::-webkit-scrollbar-track {
+  background: #0d141b;
+}
+
+.bi-provider-inspector .bi-inspector-body::-webkit-scrollbar-thumb {
+  background: #2a3641;
+}
+
+.bi-provider-inspector .bi-inspector-section {
+  padding: 5px 7px;
+  border-bottom: 1px solid #1e2831;
+}
+
+.bi-provider-inspector .bi-inspector-section:first-child {
+  padding-top: 5px;
+}
+
+.bi-provider-inspector .bi-inspector-section:last-child {
+  padding-bottom: 5px;
+  border-bottom: 0;
+}
+
+.bi-provider-inspector .bi-inspector-section-title {
+  margin: 0 0 3px;
+  color: #74818e;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.55px;
+  line-height: 9px;
+}
+
+.bi-provider-inspector .bi-inspector-grid {
+  gap: 3px 7px;
+}
+
+.bi-provider-inspector .bi-inspector-grid span,
+.bi-provider-inspector .bi-inspector-record span,
+.bi-provider-inspector .bi-inspector-state-line > span,
+.bi-provider-inspector .bi-inspector-authority-row > span {
+  font-size: 8px;
+  line-height: 10px;
+}
+
+.bi-provider-inspector .bi-inspector-grid strong,
+.bi-provider-inspector .bi-inspector-record strong,
+.bi-provider-inspector .bi-inspector-state-line strong,
+.bi-provider-inspector .bi-inspector-authority-row strong {
+  font-size: 11px;
+  line-height: 13px;
+}
+
+.bi-provider-inspector .bi-inspector-grid strong.is-mono,
+.bi-provider-inspector .bi-inspector-record strong.is-mono {
+  font-size: 9px;
+}
+
+.bi-provider-inspector .bi-inspector-state-line {
+  min-height: 21px;
+}
+
+.bi-provider-inspector .bi-inspector-record {
+  padding: 3px 0;
+}
+
+.bi-provider-inspector .bi-inspector-note {
+  margin-top: 4px;
+  padding: 4px 5px;
+  font-size: 9px;
+  line-height: 11px;
+}
+
+.bi-provider-inspector .bi-inspector-authority-row {
+  min-height: 19px;
+  gap: 7px;
+}
+
+.bi-provider-inspector .bi-inspector-field {
+  display: block;
+  min-width: 0;
+}
+
+.bi-provider-inspector .bi-inspector-field input,
+.bi-provider-inspector .bi-inspector-field select,
+.bi-provider-inspector .bi-inspector-field textarea,
+.bi-provider-inspector .bi-inspector-inline-control {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  border: 1px solid #2b3743;
+  border-radius: 0;
+  outline: none;
+  background: #0a1016;
+  color: #d5dde6;
+  font-size: 10px;
+  line-height: 15px;
+}
+
+.bi-provider-inspector .bi-inspector-field input,
+.bi-provider-inspector .bi-inspector-field select,
+.bi-provider-inspector .bi-inspector-inline-control {
+  height: 20px;
+  padding: 1px 5px;
+}
+
+.bi-provider-inspector .bi-inspector-field textarea {
+  min-height: 42px;
+  padding: 3px 5px;
+  resize: vertical;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+}
+
+.bi-provider-inspector .bi-inspector-field input:focus,
+.bi-provider-inspector .bi-inspector-field select:focus,
+.bi-provider-inspector .bi-inspector-field textarea:focus,
+.bi-provider-inspector .bi-inspector-inline-control:focus {
+  border-color: #4b5967;
+}
+
+.bi-provider-inspector .bi-inspector-inline-control {
+  width: 112px;
+  flex: 0 0 112px;
+}
+
+.bi-provider-inspector .bi-inspector-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #c9d2dc;
+  font-size: 10px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.bi-provider-inspector .bi-inspector-toggle input {
+  width: 12px;
+  height: 12px;
+  margin: 0;
+  accent-color: #18c8a0;
+}
+
+.bi-provider-inspector .bi-inspector-account-list {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid #151d25;
+}
+
+.bi-provider-inspector .bi-inspector-account-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 21px;
+  gap: 7px;
+  border-bottom: 1px solid #151d25;
+  color: #c8d1db;
+  font-size: 10px;
+  line-height: 13px;
+}
+
+.bi-provider-inspector .bi-inspector-account-row > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bi-provider-inspector .bi-inspector-account-row strong {
+  flex: 0 0 auto;
+  color: #8c9aa8;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.bi-provider-inspector .bi-inspector-empty-line {
+  min-height: 21px;
+  color: #657383;
+  font-size: 9px;
+  line-height: 21px;
+}
+
+.bi-provider-inspector.is-editing {
+  border-color: #465361;
+}
+
+@media (max-width: 650px) {
+  .bi-provider-inspector {
+    width: calc(100vw - 16px);
+    max-width: calc(100vw - 16px);
+    min-width: 280px;
+  }
+}
+
+/* ================================================================
+ * COREI PROVIDER INSPECTOR — AUTHORITATIVE FLOATING WINDOW
+ * ================================================================
+ *
+ * Geometry ownership:
+ *
+ *   React -> left / top / width / height
+ *   CSS   -> viewport ownership + structural constraints
+ *
+ * No docking.
+ * No grid participation.
+ * No native browser resize.
+ * ================================================================ */
+
+.bi-inspector-is-dragging,
+.bi-inspector-is-dragging * {
+  cursor: grabbing !important;
+  user-select: none !important;
+}
+
+.bi-provider-inspector {
+  position: fixed;
+
+  left: 0;
+  top: 0;
+
+  right: auto;
+  bottom: auto;
+
+  transform: none;
+
+  z-index: 100000;
+
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+
+  width: 430px;
+  min-width: 340px;
+  max-width: calc(100vw - 16px);
+
+  height: 540px;
+  min-height: 340px;
+  max-height: calc(100vh - 16px);
+
+  margin: 0;
+  padding: 0;
+
+  overflow: hidden;
+
+  /*
+   * Resize is controlled by React pointer events.
+   * Native CSS resize must remain disabled.
+   */
+  resize: none;
+
+  border: 1px solid #46515c;
+  border-radius: 2px;
+
+  background: #0d141b;
+  color: #d5dde5;
+
+  box-shadow:
+    0 16px 36px rgba(0,0,0,.50),
+    0 2px 8px rgba(0,0,0,.34);
+
+  isolation: isolate;
+  contain: none;
+}
+
+/*
+ * Inspector header = drag surface.
+ */
+.bi-provider-inspector .bi-inspector-header {
+  cursor: move;
+  user-select: none;
+  touch-action: none;
+}
+
+/*
+ * React-controlled resize hit area.
+ */
+.bi-provider-inspector .bi-inspector-resize-handle {
+  position: absolute;
+
+  right: 2px;
+  bottom: 2px;
+
+  width: 18px;
+  height: 18px;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+
+  padding: 0;
+  margin: 0;
+
+  border: 0;
+  background: transparent;
+
+  z-index: 20;
+
+  cursor: nwse-resize;
+
+  pointer-events: auto;
+  touch-action: none;
+  user-select: none;
+}
+
+.bi-provider-inspector .bi-inspector-resize-handle::after {
+  content: "";
+
+  position: absolute;
+
+  right: 3px;
+  bottom: 3px;
+
+  width: 9px;
+  height: 9px;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      135deg,
+      transparent 0 19%,
+      rgba(150,162,173,.55) 20% 27%,
+      transparent 28% 42%
+    ),
+    linear-gradient(
+      135deg,
+      transparent 0 39%,
+      rgba(150,162,173,.55) 40% 47%,
+      transparent 48% 62%
+    ),
+    linear-gradient(
+      135deg,
+      transparent 0 59%,
+      rgba(150,162,173,.55) 60% 67%,
+      transparent 68% 100%
+    );
+
+  opacity: .72;
+}
+
+body.bi-inspector-is-dragging,
+body.bi-inspector-is-resizing {
+  user-select: none;
+}
+
+body.bi-inspector-is-dragging {
+  cursor: move;
+}
+
+body.bi-inspector-is-resizing {
+  cursor: nwse-resize;
+}
+
+/*
+ * Responsive rules may constrain dimensions only.
+ * They must never reposition or dock the Inspector.
+ */
+@media (max-width: 650px) {
+  .bi-provider-inspector {
+    min-width: 280px;
+    min-height: 300px;
+    max-width: calc(100vw - 16px);
+    max-height: calc(100vh - 16px);
+  }
+}

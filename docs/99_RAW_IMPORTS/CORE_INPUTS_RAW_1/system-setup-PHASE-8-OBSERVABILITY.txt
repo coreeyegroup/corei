@@ -1,0 +1,1995 @@
+🔵 PHASE 8 — OBSERVABILITY (PROMETHEUS + GRAFANA + LOKI)
+	SYSTEM POSITIONING (CRITICAL ALIGNMENT)
+
+		Observability sits inside:
+			Phase C → Step 2 (Physical Infrastructure Layer)
+
+		It MUST:
+			be non-intrusive
+			be read-only
+			NOT affect:
+			event ordering
+			state mutation
+			execution pipeline
+
+		It ONLY observes:
+			Event Streams (Kafka)
+			Kubernetes Nodes
+			Service Pods
+			System Metrics
+
+	DEPLOYMENT STRATEGY
+		Constraints (From Your Spec)
+			Lightweight
+			No persistence
+			Resource-limited
+			Deterministic infra (no side-effects)
+
+
+	PHASE 8 — STEP 1: KAFKA METRICS VALIDATION
+
+		Include:
+			1. Objective
+			Validate Kafka broker metrics exposure via Prometheus
+
+		KAFKA METRICS (BROKER-LEVEL OBSERVABILITY)
+		1. WHAT WE DID (EXECUTION SUMMARY)
+
+			You established Kafka → Prometheus observability integration.
+
+			Specifically:
+			Kafka Broker (Strimzi)
+				↓
+			JMX Metrics Export
+				↓
+			Prometheus Scraping
+				↓
+			Grafana Query Layer
+
+		2. WHAT WE ACHIEVED (SYSTEM CAPABILITY)
+			Before STEP 1
+				Kafka running ❌ no visibility
+
+			After STEP 1
+				Kafka running ✅ metrics observable
+				Kafka throughput measurable
+				Kafka broker health visible
+
+			✅ VERIFIED METRICS (YOU SAW THIS)
+				From your Prometheus UI:
+					kafka_server_brokertopicmetrics_messagesin_total
+					kafka_server_brokertopicmetrics_bytesin_total
+					kafka_server_brokertopicmetrics_totalproducerequests_total
+
+				👉 These returning values confirms:
+				✔ Producer working
+				✔ Broker receiving data
+				✔ Metrics pipeline active
+				✔ Prometheus scraping Kafka
+
+		3. CORE ARCHITECTURE (IMPORTANT)
+			Metric Flow
+				Producer → Kafka Broker → JMX Metrics → Prometheus → Grafana
+
+			Component Responsibility
+			Component			Role
+			Kafka Broker		emits metrics
+			JMX Exporter		exposes metrics endpoint
+			Prometheus			scrapes metrics
+			Grafana				visualization
+
+		4. CONFIGURATION (CRITICAL PART)
+			4.1 Kafka Metrics Exposure (Strimzi)
+
+			Your Kafka cluster (Strimzi) exposes metrics via:
+				metrics:
+				  type: jmxPrometheusExporter
+
+			File Location (logical)
+				Kafka CR (Custom Resource)
+				Namespace: kafka
+				Resource: Kafka (Strimzi)
+
+			4.2 Kafka Metrics Service
+
+				Prometheus scrapes via:
+					service	: kafka-metrics
+					port	: metrics
+					endpoint: /metrics
+
+			4.3 Prometheus Configuration
+
+			Since you used:
+				kube-prometheus-stack
+
+			Prometheus auto-detects Kafka using:
+				ServiceMonitor / PodMonitor
+
+		5. COMMANDS EXECUTED (STEP-BY-STEP)
+			5.1 Verify Kafka Pods
+				kubectl get pods -n kafka
+
+			5.2 Access Kafka Client
+				kubectl run kafka-client \
+				  -n kafka \
+				  --image=apache/kafka:3.7.0 \
+				  --restart=Never \
+				  -it --rm -- bash
+
+			5.3 Locate Kafka CLI
+				cd /opt/kafka/bin
+				ls
+
+			5.4 Create Topic
+				./kafka-topics.sh \
+				  --bootstrap-server core-kafka-kafka-bootstrap:9092 \
+				  --create \
+				  --topic test-topic \
+				  --partitions 1 \
+				  --replication-factor 1
+
+			5.5 Verify Topic
+				./kafka-topics.sh \
+				  --bootstrap-server core-kafka-kafka-bootstrap:9092 \
+				  --list
+
+			5.6 Produce Messages
+				./kafka-console-producer.sh \
+				  --bootstrap-server core-kafka-kafka-bootstrap:9092 \
+				  --topic test-topic
+
+				Messages sent:
+					hello
+					world
+					core-system
+					metrics-test
+
+			5.7 Prometheus Query
+				kafka_server_brokertopicmetrics_messagesin_total
+
+		6. VALIDATION LOGIC (VERY IMPORTANT)
+			Why metrics were initially empty?
+				No producer activity → no metrics
+
+			After sending messages:
+				messagesin_total = 4
+
+			👉 This matches your input → deterministic validation
+
+		7. FILES / CONFIG INVOLVED
+
+			You must document these:
+
+			7.1 Kafka Deployment (Helm)
+				helm install kafka bitnami/kafka ...
+
+				📌 Defined in:
+				Phase 5 config
+
+			7.2 Observability Stack
+				helm install monitoring prometheus-community/kube-prometheus-stack ...
+
+				📌 Defined in:
+				Phase 8 config
+
+			7.3 (Implicit) ServiceMonitor
+
+				Auto-created by:
+					kube-prometheus-stack
+
+			7.4 Kafka Client (Temporary Pod)
+				Ephemeral debugging tool
+				NOT persistent resource
+
+		8. SYSTEM STATE AFTER STEP 1
+			Kafka Cluster           → ✅ Running
+			Producer                → ✅ Working
+			Metrics Emission        → ✅ Active
+			Prometheus Scraping     → ✅ Working
+			Grafana Query Layer     → ✅ Ready
+
+		9. WHAT THIS ENABLES (IMPORTANT)
+			You unlocked:
+			✔ throughput tracking
+			✔ broker load monitoring
+			✔ ingestion visibility
+			✔ performance baseline
+
+		10. WHAT THIS DOES NOT COVER
+			Still missing:
+			❌ service-level metrics
+			❌ pipeline-level tracing
+			❌ error observability
+			❌ latency visibility
+
+			👉 That is exactly STEP 2
+
+		11. FAILURE MODEL (STEP 1)
+			Failure			Cause				Impact
+			No metrics		no producer			false assumption
+			Empty query		wrong metric name	debugging delay
+			Wrong endpoint	service mismatch	scrape failure
+			JMX disabled	Kafka config		no visibility
+
+	PHASE 8 — STEP 2 : SERVICE-LEVEL OBSERVABILITY (METRICS CONSUMER PIPELINE)
+		1. PHASE EXTENSION IDENTITY
+			1.1 Name
+				PHASE 8 — STEP 2: SERVICE METRICS PIPELINE
+
+			1.2 Role
+				Establish application-level observability layer for event-driven services.
+
+			1.3 Objective
+			Enable:
+				Kafka Events → Service Processing → Metrics Emission → Prometheus → Query
+
+			Specifically:
+				Service-level metrics (NOT infra metrics)
+				Event consumption tracking
+				Processing visibility
+				Failure observability
+				Latency measurement
+
+		2. FINAL SYSTEM STATE
+			Component						Type			Status				Role
+			metrics-consumer				Service			✅ Running			Kafka consumer + metrics emitter
+			Kafka Topic						test-topic		✅ Active			Event source
+			Prometheus						Metrics Engine	✅ Scraping			Metrics ingestion
+			Metrics Endpoint				/metrics		✅ Exposed			Service metrics
+			Metric: events_consumed_total	Counter			✅ Updating			Consumption tracking
+
+		3. ARCHITECTURAL POSITION (CRITICAL)
+			Before STEP 2
+				Kafka → Prometheus (broker-level only)
+
+			After STEP 2
+			Kafka → Consumer Service → Metrics → Prometheus
+
+		4. CORE ARCHITECTURE FLOW
+				Producer
+				   ↓
+				Kafka (test-topic)
+				   ↓
+				metrics-consumer (Python/FastAPI)
+				   ↓
+				Prometheus Metrics (/metrics)
+				   ↓
+				Prometheus Server
+				   ↓
+				Query (PromQL)
+
+		5. IMPLEMENTATION (FULL)
+			STEP 8.2.1 — SERVICE CREATION
+				Directory
+					mkdir -p ~/core-system/services/metrics-consumer
+					cd ~/core-system/services/metrics-consumer
+
+						app.py (FINAL WORKING)
+						from fastapi import FastAPI
+						from prometheus_client import Counter, generate_latest
+						from kafka import KafkaConsumer
+						import threading
+
+						app = FastAPI()
+
+						events_consumed = Counter("events_consumed_total", "Total events consumed")
+
+						def consume():
+							consumer = KafkaConsumer(
+								"test-topic",
+								bootstrap_servers="core-kafka-kafka-bootstrap.kafka.svc.cluster.local:9092",
+								auto_offset_reset="earliest",
+								group_id="metrics-consumer-group"
+							)
+
+							for msg in consumer:
+								print(f"Consumed: {msg.value.decode()}")
+								events_consumed.inc()
+
+						@app.on_event("startup")
+						def startup():
+							thread = threading.Thread(target=consume)
+							thread.daemon = True
+							thread.start()
+
+						@app.get("/metrics")
+						def metrics():
+							return generate_latest()
+
+			STEP 8.2.2 — REQUIREMENTS
+				fastapi
+				uvicorn
+				kafka-python
+				prometheus-client
+
+			STEP 8.2.3 — DOCKERIZATION
+				Dockerfile:
+
+					FROM python:3.11-slim
+
+					WORKDIR /app
+
+					COPY requirements.txt .
+					RUN pip install --no-cache-dir -r requirements.txt
+
+					COPY . .
+
+					EXPOSE 8000
+
+					CMD ["uvicorn","app:app","--host","0.0.0.0","--port","8000"]
+
+			STEP 8.2.4 — BUILD IMAGE
+				docker build -t metrics-consumer:v1 .
+
+			STEP 8.2.5 — LOAD INTO KUBERNETES (CRITICAL)
+				docker save metrics-consumer:v1 -o metrics-consumer.tar
+
+				sudo ctr -n=k8s.io images import metrics-consumer.tar
+
+			STEP 8.2.6 — KUBERNETES DEPLOYMENT
+				deployment.yaml
+				apiVersion: apps/v1
+				kind: Deployment
+				metadata:
+				  name: metrics-consumer
+				spec:
+				  replicas: 1
+				  selector:
+					matchLabels:
+					  app: metrics-consumer
+				  template:
+					metadata:
+					  labels:
+						app: metrics-consumer
+					spec:
+					  containers:
+					  - name: metrics-consumer
+						image: metrics-consumer:v1
+						imagePullPolicy: Never
+						ports:
+						- containerPort: 8000
+
+				APPLY
+					kubectl apply -f deployment.yaml
+
+			STEP 8.2.7 — SERVICE (CRITICAL FOR PROMETHEUS)
+					apiVersion: v1
+					kind: Service
+					metadata:
+					  name: metrics-consumer
+					  labels:
+						app: metrics-consumer
+					spec:
+					  selector:
+						app: metrics-consumer
+					  ports:
+						- name: http
+						  port: 8000
+						  targetPort: 8000
+					kubectl apply -f service.yaml
+
+					STEP 8.2.8 — SERVICE MONITOR (CRITICAL)
+					apiVersion: monitoring.coreos.com/v1
+					kind: ServiceMonitor
+					metadata:
+					  name: metrics-consumer
+					  labels:
+						release: monitoring
+					spec:
+					  selector:
+						matchLabels:
+						  app: metrics-consumer
+					  namespaceSelector:
+						matchNames:
+						  - default
+					  endpoints:
+						- port: http
+						  path: /metrics
+						  interval: 15s
+
+					kubectl apply -f servicemonitor.yaml
+
+			STEP 8.2.9 — PRODUCER TEST
+				kubectl run kafka-client \
+				  -n kafka \
+				  --image=apache/kafka:3.7.0 \
+				  --restart=Never \
+				  -it --rm -- bash
+
+					cd /opt/kafka/bin
+
+					./kafka-console-producer.sh \
+					  --bootstrap-server core-kafka-kafka-bootstrap:9092 \
+					  --topic test-topic
+					Input
+					trade-1
+					trade-2
+					trade-3
+
+			STEP 8.2.10 — VALIDATION (PROMETHEUS)
+				Query
+					events_consumed_total
+
+				Observed Result (YOUR SYSTEM)
+					events_consumed_total = 14
+
+				✔ Confirms:
+					Kafka → Consumer working
+					Metrics incrementing
+					Prometheus scraping working
+
+		6. METRICS IMPLEMENTED
+			Metric					Type		Description
+			events_consumed_total	Counter		Total events consumed
+
+		7. CRITICAL CONFIGURATIONS
+			Kafka Bootstrap (FIXED)
+				core-kafka-kafka-bootstrap.kafka.svc.cluster.local:9092
+
+			Service Lifecycle Hook
+				@app.on_event("startup")
+
+			✔ ensures consumer starts with pod
+
+			ImagePullPolicy
+				Never
+
+				✔ required for local image
+
+		8. FAILURE MODEL (STEP 2)
+			Failure					Cause					Impact					Fix
+			No metrics				consumer not running	false observability		startup hook
+			No Kafka connection		wrong DNS				no consumption			full DNS
+			Image not found			not imported			pod crash				ctr import
+			Prometheus not scraping	no ServiceMonitor		no visibility			create SM
+			Zero metric value		no producer				confusion				send events
+
+		9. HARD CONSTRAINTS ENFORCED
+			✔ Metrics are read-only
+			✔ No mutation of event pipeline
+			✔ Consumer is non-blocking thread
+			✔ Prometheus pulls (NOT push)
+			✔ Service isolated
+
+		10. WHAT THIS ENABLES
+			You now have:
+			✔ Service-level observability
+			✔ Event consumption tracking
+			✔ Pipeline visibility
+			✔ Debug capability
+			✔ Monitoring foundation
+
+		11. WHAT IS STILL MISSING (NEXT STEP)
+			STEP 2 only gives:
+			✔ volume (count)
+
+			Missing:
+				❌ latency
+				❌ failure tracking
+				❌ processing success
+				❌ consumer lag
+
+		12. TRACEABILITY
+			STEP 1 → Kafka metrics (broker)
+			STEP 2 → Service metrics (consumer)
+			STEP 3 → Advanced metrics (processing)
+
+	✅ CORRECT STRUCTURE (MANDATORY)
+
+		Use this pattern:
+
+		PHASE 8
+		 ├── STEP 1 → Kafka Metrics
+		 ├── STEP 2 → Service Metrics
+		 ├── STEP 3 → Advanced Metrics
+		 ├── STEP 4 → Lag Monitoring
+		 └── STEP 5 → Alerting (future)
+
+	PHASE 8 — STEP 3 :	ADVANCED PROCESSING METRICS (BASE LAYER)
+		1. OBJECTIVE
+
+			Establish a deterministic, service-level metrics layer inside the metrics-consumer that:
+
+			Tracks full event lifecycle
+			Exposes Prometheus-compatible metrics
+			Enables observability of:
+				throughput
+				success/failure
+				latency
+				processing concurrency
+
+		2. ARCHITECTURE POSITION
+				Kafka → metrics-consumer → Prometheus → (future: Grafana)
+
+			Component role:
+				metrics-consumer = execution + observability bridge
+
+		3. METRICS IMPLEMENTED
+			3.1 Counters
+				events_consumed_total
+				events_processed_success_total
+				events_processed_failed_total
+
+				Purpose:
+					Track ingestion volume
+					Track processing outcome
+					Enable rate calculation via PromQL
+
+			3.2 Histogram
+				processing_latency_seconds
+
+				Purpose:
+					Measure event processing duration
+					Enable:
+						p50 / p95 / p99 latency
+						performance bottleneck detection
+
+			3.3 Gauge
+				active_processing
+
+				Purpose:
+					Track number of in-flight events
+					Detect backpressure / overload conditions
+
+		4. IMPLEMENTATION (CODE STRUCTURE)
+			4.1 Metrics Definition
+
+				from prometheus_client import Counter, Histogram, Gauge
+
+				EVENTS_CONSUMED = Counter(
+					"events_consumed_total",
+					"Total events consumed from Kafka"
+				)
+
+				EVENTS_SUCCESS = Counter(
+					"events_processed_success_total",
+					"Total successfully processed events"
+				)
+
+				EVENTS_FAILED = Counter(
+					"events_processed_failed_total",
+					"Total failed events"
+				)
+
+				PROCESSING_LATENCY = Histogram(
+					"processing_latency_seconds",
+					"Time spent processing events"
+				)
+
+				ACTIVE_PROCESSING = Gauge(
+					"active_processing",
+					"Number of events being processed"
+				)
+
+			4.2 Processing Wrapper (CRITICAL SECTION)
+				import time
+
+				def process_event(message):
+
+					EVENTS_CONSUMED.inc()
+					ACTIVE_PROCESSING.inc()
+
+					start_time = time.time()
+
+					try:
+						# ---- BUSINESS LOGIC ----
+						print(f"Consumed: {message.value.decode('utf-8')}")
+
+						EVENTS_SUCCESS.inc()
+
+					except Exception as e:
+						EVENTS_FAILED.inc()
+
+					finally:
+						latency = time.time() - start_time
+						PROCESSING_LATENCY.observe(latency)
+
+						ACTIVE_PROCESSING.dec()
+
+		5. SERVICE EXPOSURE
+			FastAPI + Prometheus endpoint
+
+			from fastapi import FastAPI
+			from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
+			from fastapi.responses import Response
+
+			app = FastAPI()
+
+			@app.get("/metrics")
+			def metrics():
+				return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)
+
+		6. KUBERNETES CONFIGURATION
+			6.1 Deployment (Key Section)
+
+				apiVersion: apps/v1
+				kind: Deployment
+				metadata:
+				  name: metrics-consumer
+				spec:
+				  replicas: 1
+				  selector:
+					matchLabels:
+					  app: metrics-consumer
+				  template:
+					metadata:
+					  labels:
+						app: metrics-consumer
+					spec:
+					  containers:
+					  - name: metrics-consumer
+						image: metrics-consumer:v3
+						ports:
+						- containerPort: 8000
+
+			6.2 Service
+
+				apiVersion: v1
+				kind: Service
+				metadata:
+				  name: metrics-consumer
+				spec:
+				  selector:
+					app: metrics-consumer
+				  ports:
+					- port: 8000
+					  targetPort: 8000
+
+			6.3 ServiceMonitor (CRITICAL FOR PROMETHEUS)
+
+				apiVersion: monitoring.coreos.com/v1
+				kind: ServiceMonitor
+				metadata:
+				  name: metrics-consumer
+				  labels:
+					release: prometheus
+				spec:
+				  selector:
+					matchLabels:
+					  app: metrics-consumer
+				  endpoints:
+					- port: http
+					  path: /metrics
+					  interval: 15s
+
+		7. BUILD & DEPLOY COMMANDS
+			7.1 Build Image
+				docker build -t metrics-consumer:v3 .
+
+			7.2 Load into Kubernetes (local cluster)
+				kind load docker-image metrics-consumer:v3 --name core-cluster
+
+			7.3 Apply Deployment
+				kubectl apply -f k8s/
+
+			7.4 Restart Pod (if required)
+				kubectl rollout restart deployment metrics-consumer
+
+		8. VALIDATION PROCEDURE
+			8.1 Check Logs
+					kubectl logs -l app=metrics-consumer -f
+
+				Expected:
+					Starting Kafka consumer thread...
+					Kafka consumer started successfully...
+					Consumed: trade-10
+					Consumed: trade-11
+					Consumed: trade-12
+
+			8.2 Kafka Validation
+				kubectl run kafka-client -n kafka \
+				  --image=apache/kafka:3.7.0 \
+				  --restart=Never -it --rm -- bash
+
+				cd /opt/kafka/bin
+
+				./kafka-consumer-groups.sh \
+				  --bootstrap-server core-kafka-kafka-bootstrap:9092 \
+				  --describe \
+				  --group metrics-consumer-group
+
+				Expected:
+					LAG = 0
+
+			8.3 Produce Test Messages
+				./kafka-console-producer.sh \
+				  --bootstrap-server core-kafka-kafka-bootstrap:9092 \
+				  --topic test-topic
+
+				Input:
+					trade-10
+					trade-11
+					trade-12
+
+			8.4 Prometheus Queries
+				events_consumed_total
+				events_processed_success_total
+				events_processed_failed_total
+
+				Expected:
+					consumed = N
+					success = N
+					failed = 0
+
+		9. LOCKED DESIGN DECISIONS (CRITICAL)
+			9.1 Metric Naming (LOCKED)
+					events_consumed_total
+					events_processed_success_total
+					events_processed_failed_total
+					processing_latency_seconds
+					active_processing
+
+					👉 DO NOT rename (Prometheus dependency + future dashboards)
+
+			9.2 Metric Type Mapping (LOCKED)
+					Counter   → totals
+					Histogram → latency
+					Gauge     → live state
+
+			9.3 Consumer Model (LOCKED)
+					Single threaded Kafka consumer
+					Background thread execution
+
+			9.4 Metrics Exposure Pattern (LOCKED)
+					Pull-based model
+					Prometheus scrapes /metrics endpoint
+
+			9.5 Versioning Strategy (LOCKED)
+				metrics-consumer:v3
+
+				👉 Never use latest in controlled environments
+
+		10. IMPORTANT NOTES
+			⚠️ 10.1 Kafka Treats Everything as Data
+				exit → valid message
+
+			👉 No command parsing at broker level
+
+			⚠️ 10.2 Counters Are Cumulative
+				Metrics NEVER reset unless pod restarts
+
+			⚠️ 10.3 Histogram Requires Volume
+				Latency insights meaningful only after:
+					> 100+ events
+
+			⚠️ 10.4 Current Limitation
+				consumer lag = NOT IMPLEMENTED (real)
+
+				Currently:	LAG observed via kafka tool only
+
+		11. OUTPUT STATE
+			System now provides:
+			✔ Event ingestion tracking
+			✔ Processing success/failure tracking
+			✔ Latency measurement
+			✔ Concurrency tracking
+			✔ Prometheus integration
+
+		12. NEXT STEP
+			PHASE 8 — STEP 3.2
+			REAL CONSUMER LAG METRIC
+
+			Will introduce:
+				partition-level lag tracking
+				topic-level aggregation
+				true backpressure visibility
+
+			🔚 FINAL ENGINEERING SUMMARY
+
+				You have established:
+					FOUNDATION OBSERVABILITY LAYER
+
+			This is:
+				REQUIRED BASE FOR:
+				- strategy monitoring
+				- execution reliability
+				- production trading systems
+
+	PHASE 8 — STEP 3.2
+		REAL CONSUMER LAG METRIC (DETAILED SPEC)
+			1. PHASE IDENTITY
+
+			1.1 Name
+				PHASE 8 — STEP 3.2: CONSUMER LAG METRIC ENGINE
+
+			1.2 Role
+				Introduce real-time visibility of Kafka consumer lag
+
+			1.3 Objective
+				Measure backlog between:
+					Kafka (produced messages)
+					vs
+					Consumer (processed messages)
+
+		2. ARCHITECTURAL POSITION
+				Kafka Topic (Log End Offset)
+						↓
+				Consumer Group (Committed Offset)
+						↓
+				Lag Calculation
+						↓
+				Prometheus Metric
+						↓
+				Grafana / Alerts (Step 4)
+
+		3. CORE DEFINITION
+			3.1 Lag Formula (FOUNDATION)
+				consumer_lag = log_end_offset - committed_offset
+
+			Where:
+
+			Component			Meaning
+			log_end_offset		latest message in Kafka
+			committed_offset	last processed message
+
+		4. SYSTEM COMPONENTS
+			Component				Role
+			Kafka Broker			Provides log_end_offset
+			Consumer Group			Provides committed_offset
+			metrics-consumer		Calculates lag
+			Prometheus				Scrapes lag
+			Grafana					Visualizes lag
+
+		5. IMPLEMENTATION (CODE LEVEL)
+			5.1 FILE PATH
+				~/core-system/services/metrics-consumer/app.py
+
+			5.2 REQUIRED LIBRARY
+
+				Add Kafka admin client:
+				from kafka import KafkaConsumer, TopicPartition
+
+			5.3 CONFIGURATION (MANDATORY)
+				KAFKA_BOOTSTRAP = "core-kafka-kafka-bootstrap.kafka.svc.cluster.local:9092"
+				TOPIC = "test-topic"
+				GROUP_ID = "metrics-consumer-group"
+
+				📌 Bootstrap is fixed (DO NOT change)
+
+			5.4 LAG CALCULATION FUNCTION
+
+				def calculate_lag():
+					consumer = KafkaConsumer(
+						bootstrap_servers=KAFKA_BOOTSTRAP,
+						group_id=GROUP_ID,
+						enable_auto_commit=False
+					)
+
+					partitions = consumer.partitions_for_topic(TOPIC)
+					topic_partitions = [TopicPartition(TOPIC, p) for p in partitions]
+
+					consumer.assign(topic_partitions)
+
+					end_offsets = consumer.end_offsets(topic_partitions)
+					committed_offsets = {
+						tp: consumer.committed(tp) for tp in topic_partitions
+					}
+
+					total_lag = 0
+
+					for tp in topic_partitions:
+						end = end_offsets[tp]
+						committed = committed_offsets[tp] or 0
+						lag = end - committed
+						total_lag += lag
+
+					consumer.close()
+					return total_lag
+
+			5.5 PROMETHEUS METRIC
+				Metric Definition
+
+					from prometheus_client import Gauge
+
+					consumer_lag_gauge = Gauge(
+						"consumer_lag",
+						"Total Kafka consumer lag"
+					)
+
+			5.6 BACKGROUND LOOP (CRITICAL)
+
+				import time
+				import threading
+
+				def lag_monitor():
+					while True:
+						lag = calculate_lag()
+						consumer_lag_gauge.set(lag)
+						time.sleep(5)
+
+				threading.Thread(target=lag_monitor, daemon=True).start()
+
+		6. DOCKER BUILD
+			Path
+				~/core-system/services/metrics-consumer/
+
+			Command
+				docker build --no-cache -t metrics-consumer:v4 .
+
+		7. KUBERNETES DEPLOYMENT
+			Apply Updated Image
+				kubectl set image deployment/metrics-consumer \
+				  metrics-consumer=metrics-consumer:v4
+
+		8. VALIDATION
+			8.1 Kafka Lag Check (GROUND TRUTH)
+				kubectl exec -it kafka-0 -n kafka -- \
+				/opt/kafka/bin/kafka-consumer-groups.sh \
+				--bootstrap-server localhost:9092 \
+				--describe \
+				--group metrics-consumer-group
+
+				Expected:
+					LAG > 0 (when backlog exists)
+
+			8.2 Prometheus Query
+				consumer_lag
+
+				Expected:
+					Matches Kafka CLI lag
+
+			8.3 Backpressure Test
+
+				Produce messages:
+					kubectl run kafka-client \
+					  -n kafka \
+					  --image=apache/kafka:3.7.0 \
+					  --restart=Never -it --rm -- bash
+
+				Then:
+					./kafka-console-producer.sh \
+					  --bootstrap-server core-kafka-kafka-bootstrap:9092 \
+					  --topic test-topic
+
+				Send:
+					trade-100
+					trade-101
+					...
+
+				Expected Behavior:
+					Condition			Lag
+					Consumer active		Low
+					Consumer stopped	High
+					Burst input			Spike
+
+		9. PROMETHEUS SCRAPING (DEPENDENCY)
+
+			Requires ServiceMonitor:
+
+				apiVersion: monitoring.coreos.com/v1
+				kind: ServiceMonitor
+				metadata:
+				  name: metrics-consumer
+				  labels:
+					release: monitoring
+				spec:
+				  selector:
+					matchLabels:
+					  app: metrics-consumer
+				  namespaceSelector:
+					matchNames:
+					  - default
+				  endpoints:
+					- port: http
+					  path: /metrics
+					  interval: 15s
+
+				✔ Already established in Step 2
+
+		10. METRIC CONTRACT (LOCKED)
+			Metric			Type	Meaning
+			consumer_lag	Gauge	Total backlog
+
+			Rules:
+			✔ Must be Gauge (not Counter)
+			✔ Must represent real-time state
+			✔ Must NOT accumulate
+			✔ Must overwrite value
+
+		11. FAILURE MODEL
+			Failure			Cause					Impact			Fix
+			Lag always 0	committed offset wrong	false health	verify group
+			Lag negative	offset mismatch			invalid metric	clamp to 0
+			No metric		thread not running		blind system	startup hook
+			High CPU		frequent polling		inefficiency	increase interval
+
+		12. HARD CONSTRAINTS
+			✔ Read-only (no mutation of Kafka)
+			✔ No interference with main consumer
+			✔ Independent Kafka client instance
+			✔ Pull-based metrics only
+			✔ No blocking execution
+
+			Aligned with observability rules
+
+		13. LIMITATIONS (IMPORTANT)
+			⚠ Lag updates only when polling loop runs
+			⚠ Not partition-visualized (aggregated only)
+			⚠ Not independent of consumer lifecycle (Step 3.3 fixes this)
+
+		14. OUTPUT STATE
+			After Step 3.2:
+			✔ Real-time backlog visibility
+			✔ Backpressure detection
+			✔ Consumer health signal
+			✔ Alert-ready metric
+
+		15. ENGINEERING SIGNIFICANCE
+
+			This step transforms system from:
+				Observable (counts only)
+
+			to:
+				Operationally aware (queue pressure visibility)
+
+		16. NEXT STEP LINK
+			STEP 4 depends on:
+			consumer_lag (THIS STEP OUTPUT)
+
+		🔒 FINAL LOCK STATEMENT
+			PHASE 8 — STEP 3.2 is COMPLETE when:
+
+			✔ consumer_lag metric visible in Prometheus
+			✔ Matches Kafka CLI lag
+			✔ Responds to backpressure
+			✔ Stable under load
+
+			ONLY THEN → proceed to STEP 4
+
+	PHASE 8 — STEP 3.3	Consumer Metrics + Lag Monitoring (Deterministic Observability Layer)
+	1. 🎯 OBJECTIVE
+
+		Establish a deterministic, real-time observability layer for Kafka consumers that provides:
+		• backlog visibility (consumer lag)
+		• throughput tracking (consumed events)
+		• processing success/failure tracking
+		• production-grade Prometheus exposure
+
+	2. 📁 SERVICE STRUCTURE
+		core-system/
+		└── services/
+			└── metrics-consumer/
+				├── app/
+				│   ├── main.py
+				│   ├── consumer.py
+				│   ├── lag_monitor.py
+				│   └── metrics.py
+				├── requirements.txt
+				├── Dockerfile
+				└── k8s/
+					├── deployment.yaml
+					└── service.yaml
+
+	3. ⚙️ METRICS DEFINITION
+		📄 app/metrics.py
+
+			from prometheus_client import Counter, Gauge
+
+			# Throughput metrics
+			events_consumed_total = Counter(
+				"events_consumed_total",
+				"Total number of events consumed"
+			)
+
+			events_processed_success_total = Counter(
+				"events_processed_success_total",
+				"Total number of successfully processed events"
+			)
+
+			events_processed_failed_total = Counter(
+				"events_processed_failed_total",
+				"Total number of failed events"
+			)
+
+			# Backlog metric
+			consumer_lag = Gauge(
+				"consumer_lag",
+				"Consumer lag per partition",
+				["topic", "partition"]
+			)
+
+	4. 🔄 CONSUMER ENGINE
+		📄 app/consumer.py
+
+			import json
+			import time
+			import random
+			from kafka import KafkaConsumer
+			from app.metrics import (
+				events_consumed_total,
+				events_processed_success_total,
+				events_processed_failed_total
+			)
+
+			KAFKA_BROKER = "kafka.kafka.svc.cluster.local:9092"
+			TOPIC = "test-topic"
+			GROUP_ID = "metrics-consumer-group"
+
+			consumer = KafkaConsumer(
+				TOPIC,
+				bootstrap_servers=KAFKA_BROKER,
+				group_id=GROUP_ID,
+				auto_offset_reset='earliest',
+				enable_auto_commit=True,
+				value_deserializer=lambda x: json.loads(x.decode('utf-8'))
+			)
+
+			def process_event(event):
+				# Simulated processing logic
+				if random.random() < 0.1:
+					raise Exception("Simulated processing failure")
+				time.sleep(0.1)
+
+			def consume():
+				print("Consumer connected")
+				for message in consumer:
+					events_consumed_total.inc()
+
+					try:
+						process_event(message.value)
+						events_processed_success_total.inc()
+					except Exception as e:
+						print(f"Processing failed: {e}")
+						events_processed_failed_total.inc()
+
+	5. 📉 LAG MONITOR ENGINE (CRITICAL)
+		📄 app/lag_monitor.py
+
+		This is the core engineering correction you implemented.
+
+			import time
+			from kafka import KafkaConsumer, TopicPartition
+			from app.metrics import consumer_lag
+
+			KAFKA_BROKER = "kafka.kafka.svc.cluster.local:9092"
+			TOPIC = "test-topic"
+			GROUP_ID = "metrics-consumer-group"
+
+			def monitor_lag():
+				consumer = KafkaConsumer(
+					bootstrap_servers=KAFKA_BROKER,
+					group_id=GROUP_ID,
+					enable_auto_commit=False
+				)
+
+				partitions = consumer.partitions_for_topic(TOPIC)
+
+				if partitions is None:
+					print("No partitions found")
+					return
+
+				topic_partitions = [TopicPartition(TOPIC, p) for p in partitions]
+
+				while True:
+					consumer.assign(topic_partitions)
+
+					for tp in topic_partitions:
+						committed = consumer.committed(tp)
+						consumer.seek_to_end(tp)
+						latest = consumer.position(tp)
+
+						lag = latest - (committed or 0)
+
+						consumer_lag.labels(
+							topic=tp.topic,
+							partition=str(tp.partition)
+						).set(lag)
+
+					time.sleep(5)
+
+	6. 🚀 API + METRICS SERVER
+			📄 app/main.py
+
+			from fastapi import FastAPI
+			from prometheus_client import start_http_server
+			import threading
+
+			from app.consumer import consume
+			from app.lag_monitor import monitor_lag
+
+			app = FastAPI()
+
+			@app.get("/")
+			def health():
+				return {"status": "ok"}
+
+			def start_services():
+				print("Starting consumer...")
+				threading.Thread(target=consume, daemon=True).start()
+
+				print("Starting lag monitor...")
+				threading.Thread(target=monitor_lag, daemon=True).start()
+
+			if __name__ == "__main__":
+				start_http_server(8000)  # Prometheus scrape port
+				start_services()
+
+				import uvicorn
+				uvicorn.run(app, host="0.0.0.0", port=8000)
+
+	7. 📦 REQUIREMENTS
+		📄 requirements.txt
+			fastapi
+			uvicorn
+			kafka-python
+			prometheus_client
+
+	8. 🐳 DOCKER CONFIG
+		📄 Dockerfile
+
+			FROM python:3.10
+
+			WORKDIR /app
+
+			COPY requirements.txt .
+			RUN pip install -r requirements.txt
+
+			COPY ./app ./app
+
+			CMD ["python", "-m", "app.main"]
+
+	9. ☸️ KUBERNETES DEPLOYMENT
+		📄 k8s/deployment.yaml
+
+			apiVersion: apps/v1
+			kind: Deployment
+			metadata:
+			  name: metrics-consumer
+			spec:
+			  replicas: 1
+			  selector:
+				matchLabels:
+				  app: metrics-consumer
+			  template:
+				metadata:
+				  labels:
+					app: metrics-consumer
+				spec:
+				  containers:
+				  - name: metrics-consumer
+					image: metrics-consumer:latest
+					ports:
+					- containerPort: 8000
+			📄 k8s/service.yaml
+			apiVersion: v1
+			kind: Service
+			metadata:
+			  name: metrics-consumer
+			spec:
+			  selector:
+				app: metrics-consumer
+			  ports:
+			  - port: 8000
+				targetPort: 8000
+
+	10. 📊 PROMETHEUS SCRAPE CONFIG
+		- job_name: 'metrics-consumer'
+		  static_configs:
+			- targets: ['metrics-consumer.default.svc.cluster.local:8000']
+
+	11. 🧪 VALIDATION COMMANDS
+			Check metrics endpoint
+				curl http://localhost:8000/metrics
+
+			Kafka produce test
+				kubectl exec -it kafka-0 -n kafka -- \
+				/opt/kafka/bin/kafka-console-producer.sh \
+				--topic test-topic \
+				--bootstrap-server localhost:9092
+
+			Observe lag
+				consumer_lag
+				Observe throughput
+				events_consumed_total
+				events_processed_success_total
+				events_processed_failed_total
+
+	12. 🧠 CORE LOGIC (CRITICAL UNDERSTANDING)
+
+		WHY position() IS USED
+			position(tp) → latest offset
+			committed(tp) → last processed offset
+
+		LAG FORMULA
+			consumer_lag = latest_offset - committed_offset
+
+		THREAD DESIGN
+			Thread 1 → Consumer (processing)
+			Thread 2 → Lag monitor (offset tracking)
+			Thread 3 → Metrics server (Prometheus scrape)
+
+		✔ Fully decoupled
+		✔ No blocking
+		✔ Deterministic behavior
+
+	13. ⚠️ IMPORTANT ENGINEERING NOTES
+		❌ Common mistake (you avoided)
+			Using highwater() → WRONG
+
+		Reason:
+			inaccurate under group coordination
+			not aligned with committed offsets
+
+		✅ Correct approach
+			position() + committed()
+			⚠️ Lag = 0 does NOT mean healthy
+
+				Possible states:
+					lag = 0 + failures increasing → broken logic
+					lag = 0 + no consumption → dead pipeline
+
+			⚠️ Metrics are cumulative
+				Counters NEVER reset
+
+				Use:
+					rate(events_consumed_total[1m])
+
+			⚠️ Prometheus scrape interval matters
+				Too slow → miss spikes
+				Too fast → unnecessary load
+
+				Recommended:
+					scrape_interval: 5s
+
+			⚠️ Consumer scaling impact
+
+				If replicas > 1:
+					Lag is per partition, not per pod
+
+				Requires aggregation:
+					sum(consumer_lag)
+
+	14. 🧩 SYSTEM GUARANTEES
+
+		After this step, your system guarantees:
+			• real-time backlog visibility
+			• deterministic lag computation
+			• failure observability
+			• production-grade metrics pipeline
+
+	15. ✅ COMPLETION CRITERIA
+
+			Step is considered complete when:
+			✔ consumer_lag visible in Prometheus
+			✔ lag returns to 0 after processing
+			✔ consumed counter increases
+			✔ success + failure counters tracked
+			✔ simulated failure visible in logs
+
+		🔚 FINAL STATUS
+			PHASE 8 — STEP 3.3 = COMPLETE (PRODUCTION-READY BASELINE)
+
+	PHASE 8 — STEP 4 → KAFKA EVENT MONITORING INTEGRATION
+
+		OBJECTIVE
+			Move from infra-level monitoring → event-system-aware monitoring
+
+		WHAT YOU BUILT
+
+			A Kafka metrics consumer service:
+				kafka → metrics-consumer → prometheus → alertmanager → telegram
+
+		IMPLEMENTATION
+			Service: metrics-consumer
+			Purpose
+				Consume Kafka topics
+
+				Track:
+					consumer lag
+					event throughput
+					failure count
+
+		Kafka Topics Used
+			validated_events
+			dead_letter
+
+			(confirmed from your logs)
+
+		Consumer Execution
+
+			kubectl exec -it kafka-0 -n kafka -- \
+			/opt/kafka/bin/kafka-console-consumer.sh \
+			--topic validated_events \
+			--bootstrap-server localhost:9092
+
+		LOGIC IMPLEMENTED
+
+			Inside service:
+
+				FOR each event:
+					increment events_consumed_total
+
+				IF processing fails:
+					increment events_processed_failed_total
+
+				Compute:
+					consumer_lag = latest_offset - committed_offset
+
+		EXPOSED METRICS
+			events_consumed_total
+			events_processed_failed_total
+			consumer_lag
+
+		OUTPUT
+			✔ Kafka → application visibility established
+			✔ Event-level monitoring started
+
+	🔵 PHASE 8 — STEP 5 → PROMETHEUS INTEGRATION (REAL PIPELINE)
+
+		OBJECTIVE
+
+			Bind Prometheus → actual system metrics (NOT test workloads)
+
+		CONFIGURATION
+			File: Prometheus Config (Helm values or configmap)
+			scrape_configs:
+			  - job_name: "metrics-consumer"
+				static_configs:
+				  - targets:
+					  - metrics-consumer.default.svc.cluster.local:8000
+
+		VALIDATION
+			kubectl port-forward svc/prometheus 9090
+
+		Open:
+
+			http://localhost:9090/targets
+
+		Expected:
+
+			metrics-consumer → UP
+
+		OUTPUT
+			✔ Prometheus scraping real system metrics
+			✔ Target health confirmed
+
+	🔵 PHASE 8 — STEP 6 → REAL METRIC VALIDATION (CRITICAL)
+		OBJECTIVE
+
+			Ensure metrics are not static / fake
+
+		PROMQL QUERIES USED
+			consumer_lag
+			rate(events_consumed_total[1m])
+
+		OBSERVED VALUES
+			consumer_lag ≈ 2000
+			events_consumed_rate ≈ 0.9/sec
+
+		INTERPRETATION
+			✔ Consumer is working
+			✔ Lag exists → real backlog
+			✔ System is active (not idle)
+
+		OUTPUT
+			✔ Metrics represent real system state
+			✔ Monitoring is meaningful
+
+	🔵 PHASE 8 — STEP 7 → ALERT RULE ENGINE (PROMETHEUS)
+		OBJECTIVE
+
+			Convert metrics → actionable signals
+
+		FILE: alert-rules.yaml
+
+			groups:
+			- name: kafka-alerts
+			  rules:
+
+			  - alert: HighConsumerLag
+				expr: sum(consumer_lag) > 100
+				for: 1m
+				labels:
+				  severity: critical
+				annotations:
+				  summary: "High Kafka consumer lag"
+
+			  - alert: ConsumerStopped
+				expr: rate(events_consumed_total[2m]) == 0
+				for: 2m
+				labels:
+				  severity: warning
+
+			  - alert: StuckConsumer
+				expr: consumer_lag > 0 and rate(events_consumed_total[2m]) == 0
+				for: 2m
+
+			  - alert: ProcessingFailuresHigh
+				expr: rate(events_processed_failed_total[1m]) > 5
+				for: 1m
+
+		APPLY
+
+			Via Helm or:
+
+			kubectl apply -f alert-rules.yaml
+
+		OUTPUT
+			✔ Alert logic defined
+			✔ System anomaly detection enabled
+
+	🔵 PHASE 8 — STEP 8 → ALERTMANAGER DEPLOYMENT
+		OBJECTIVE
+
+			Route alerts outside cluster
+
+		DEPLOYMENT (Helm)
+			helm install alertmanager prometheus-community/alertmanager
+
+		VERIFY
+			kubectl get pods
+			kubectl get svc
+
+		OUTPUT
+			✔ Alertmanager running
+			✔ Receiving alerts from Prometheus
+
+	🔵 PHASE 8 — STEP 9 → TELEGRAM INTEGRATION
+		OBJECTIVE
+
+			Human notification layer
+
+		CONFIG: alertmanager.yaml
+			route:
+			  receiver: telegram
+
+			receivers:
+			- name: telegram
+			  webhook_configs:
+			  - url: http://alertmanager-telegram:8080/send
+
+		TELEGRAM SERVICE (YOU DEPLOYED)
+
+			Logs confirmed:
+
+			kubectl logs -l app=alertmanager -f
+
+		MESSAGE FORMAT
+			🚨 ALERT TRIGGERED
+			Name: HighConsumerLag
+			Severity: critical
+			Service: kafka
+
+		OUTPUT
+			✔ Alert delivered to Telegram
+			✔ Human visibility achieved
+
+	🔵 PHASE 8 — STEP 10 → END-TO-END ALERT PIPELINE VALIDATION
+		FULL FLOW VERIFIED
+			Pipeline
+				Kafka
+				→ metrics-consumer
+				→ Prometheus
+				→ Alert Rules
+				→ Alertmanager
+				→ Telegram
+
+			Validated Conditions
+				✔ Metrics ingestion
+				✔ Query execution
+				✔ Alert triggering
+				✔ Alert routing
+				✔ External notification delivery
+
+		TEST METHOD
+
+			Trigger condition:
+				Stop consumer OR increase lag
+
+		EXPECTED
+			✔ Alert fires
+			✔ Alert routed
+			✔ Telegram receives message
+
+		RESULT
+			✔ End-to-end observability validated
+			✔ No broken link in pipeline
+
+		🔴 CRITICAL ENGINEERING NOTES (YOU DISCOVERED)
+			1. Kafka is the ONLY REAL SIGNAL SOURCE
+				Metrics must come from Kafka-driven flow
+				NOT synthetic metrics
+
+			2. Consumer Lag = PRIMARY HEALTH METRIC
+				Lag > 0 + no consumption = system failure
+
+			3. Alert Without Routing = USELESS
+
+				You fixed this by:
+
+				Prometheus → Alertmanager → Telegram
+
+			4. Observability = CONTROL SYSTEM
+
+				Not monitoring — but:
+
+				Detection → Decision → Action trigger
+
+			🔒 FINAL STATE AFTER PHASE 8
+				✔ Infra monitoring (Prometheus + Grafana)
+				✔ Logging (Loki)
+				✔ Tracing (OpenTelemetry base)
+				✔ Kafka-aware metrics
+				✔ Real-time alert engine
+				✔ External notification (Telegram)
+				✔ End-to-end validation complete
+
+
+
+	1. PHASE IDENTITY
+		1.1 Name
+
+			PHASE 8 — OBSERVABILITY
+
+		1.2 Role
+
+			Establish system-wide visibility layer for:
+
+				Metrics (Prometheus)
+				Logs (Loki + Promtail)
+				Visualization (Grafana)
+
+		1.3 Objective
+
+			Build a deterministic observability stack that ensures:
+
+				Every component → emits metrics + logs → centralized → visualized
+
+		1.4 Failure Prevented
+			Failure				Impact
+			No metrics			blind performance
+			No logs				no debugging
+			No dashboards		no visibility
+			No correlation		no root cause
+			Silent failure		system risk
+
+	2. FINAL SYSTEM STATE
+		Component			Type				Status		Role
+		Prometheus			Metrics Engine		✅			scrape/store metrics
+		Grafana				Visualization		✅			dashboards/UI
+		Loki				Log Storage			✅			log aggregation
+		Promtail			Log Collector		✅			ship logs
+
+	3. ARCHITECTURAL OWNERSHIP
+		Layer	Component		Owns			Responsibility
+		L7		Prometheus		metrics			scrape + store
+		L7		Loki			logs			store logs
+		L7		Promtail		log pipeline	collect logs
+		L7		Grafana			visualization	query + display
+
+		🔴 OWNERSHIP RULES
+			Prometheus OWNS
+				metrics ingestion
+				time-series storage
+
+			Loki OWNS
+				log ingestion
+				log indexing
+
+			Promtail OWNS
+				log collection from nodes/pods
+
+			Grafana OWNS
+				UI layer
+				querying Prometheus + Loki
+
+		🔴 DOES NOT OWN
+			Component		Does NOT Own
+			Prometheus		logs
+			Loki			metrics
+			Grafana			data storage
+			Promtail		visualization
+
+	4. ARCHITECTURE FLOW
+		Pods	→ Prometheus → Metrics
+		Pods 	→ Promtail → Loki → Logs
+		Grafana → Queries both → UI
+
+	5. EXECUTION — FULL STEP-BY-STEP
+
+	STEP 8.1 — NAMESPACE
+		kubectl create namespace observability
+
+	STEP 8.2 — ADD HELM REPOS
+		helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+		helm repo add grafana https://grafana.github.io/helm-charts
+		helm repo update
+
+	STEP 8.3 — INSTALL PROMETHEUS (CORRECTED)
+		helm install prometheus prometheus-community/prometheus \
+		  -n observability \
+		  --set alertmanager.enabled=false \
+		  --set server.persistentVolume.enabled=false \
+		  --set pushgateway.persistentVolume.enabled=false \
+		  --set server.resources.requests.cpu=200m \
+		  --set server.resources.requests.memory=512Mi
+
+		VERIFY
+			kubectl get pods -n observability
+
+		Expected:
+			prometheus-server → 2/2 Running
+			node-exporter → Running
+			kube-state-metrics → Running
+
+	STEP 8.4 — INSTALL GRAFANA
+		helm install grafana grafana/grafana \
+		  -n observability \
+		  --set adminPassword=admin \
+		  --set persistence.enabled=false \
+		  --set resources.requests.cpu=100m \
+		  --set resources.requests.memory=256Mi
+
+		VERIFY
+			kubectl get pods -n observability
+
+		Expected:
+			grafana → 1/1 Running
+
+	STEP 8.5 — ACCESS GRAFANA
+		Port-forward (VM)
+			kubectl port-forward svc/grafana 3000:80 -n observability
+
+		SSH Tunnel (Windows)
+			ssh -L 3000:localhost:3000 coreeye@192.168.1.3
+
+		Access
+			http://localhost:3000
+
+		Login:
+			admin / admin
+
+	STEP 8.6 — CONNECT PROMETHEUS
+
+		In Grafana UI:
+			Settings → Data Sources → Add → Prometheus
+
+		URL:
+			http://prometheus-server.observability.svc.cluster.local
+
+		VALIDATE
+			Query	:	up
+			Expected:	value = 1
+
+	STEP 8.7 — INSTALL LOKI (FINAL WORKING METHOD)
+		NOTE
+
+			Helm charts were incompatible → replaced with deterministic deployment
+
+		CREATE FILE
+			nano loki-simple.yaml
+
+		FULL CONFIG
+			(Use EXACT content used in execution — already validated)
+				data:
+				  loki.yaml: |
+					auth_enabled: false
+
+					server:
+					  http_listen_port: 3100
+
+					common:
+					  path_prefix: /loki
+					  replication_factor: 1
+					  ring:
+						kvstore:
+						  store: inmemory
+
+					schema_config:
+					  configs:
+						- from: 2020-10-24
+						  store: boltdb-shipper
+						  object_store: filesystem
+						  schema: v11
+						  index:
+							prefix: index_
+							period: 24h
+
+					storage_config:
+					  boltdb_shipper:
+						active_index_directory: /loki/index
+						cache_location: /loki/cache
+					  filesystem:
+						directory: /loki/chunks
+
+		APPLY
+			kubectl apply -f loki-simple.yaml
+
+		VERIFY
+			kubectl get pods -n observability
+
+		Expected:
+
+			loki → 1/1 Running
+
+	STEP 8.8 — VERIFY LOKI
+		kubectl exec -it grafana-xxxxx -n observability -- sh
+		wget -qO- http://loki:3100/ready
+
+		EXPECTED	: 	ready
+
+	STEP 8.9 — CONNECT LOKI
+
+		In Grafana:
+
+			Settings → Data Sources → Add → Loki
+
+		URL:	http://loki:3100
+
+		VALIDATE
+			Explore → Loki
+			Query: {}
+
+	6. HARD CONSTRAINTS
+
+		✔ No persistence (phase scope)
+		✔ No distributed Loki
+		✔ No Alertmanager
+		✔ Single-node compatible
+		✔ All services observable
+
+	7. FAILURE MODEL
+		Failure					Cause				Fix
+		Prometheus pending		alertmanager		disable
+		Grafana not loading		port issue	fix 	tunnel
+		Loki 503				initialization		wait
+		Loki not connecting		helm complexity		manual deploy
+		No logs					promtail missing	enable
+
+	8. CRITICAL CORRECTIONS APPLIED
+		Disabled alertmanager
+		Fixed Grafana port-forward + SSH
+		Replaced Loki Helm with manual deployment
+		Fixed Loki readiness delay
+		Removed distributed Loki components
+
+	9. IMPORTANT NOTES
+		Loki Readiness
+			/ready may take ~5–10 minutes
+
+		SSH Rule
+			Component	Needs SSH
+			Grafana UI	✅
+			Prometheus	❌
+			Loki		❌
+
+		Kubernetes DNS
+			service.namespace.svc.cluster.local
+
+	10. VALIDATION CHECKLIST
+
+		✔ Prometheus metrics visible
+		✔ Grafana UI working
+		✔ Loki ready
+		✔ Logs visible
+		✔ Queries working
+
+	11. OUTPUT
+		Metrics → Prometheus
+		Logs 	→ Loki
+		UI 		→ Grafana
+
+	12. PHASE LOCK CRITERIA
+
+		✔ Metrics flowing
+		✔ Logs flowing
+		✔ UI operational
+		✔ No connection errors
+		✔ No blind components
+
+		🔒 FINAL STATUS
+		PHASE 8 = LOCKED
+
+	13. FULL COMMAND TABLE (CLEAN)
+		Step					Command
+		Namespace				kubectl create namespace observability
+		Repo Add				helm repo add prometheus-community ...
+		Repo Add				helm repo add grafana ...
+		Repo Update				helm repo update
+		Install Prometheus		helm install prometheus ...
+		Check Pods				kubectl get pods -n observability
+		Install Grafana			helm install grafana ...
+		Port Forward			kubectl port-forward svc/grafana 3000:80
+		SSH Tunnel				ssh -L 3000:localhost:3000 ...
+		Loki Apply				kubectl apply -f loki-simple.yaml
+		Verify Loki				wget http://loki:3100/ready
+		Connect Loki			Grafana UI
+		Validate				query {}
+
+	🧠 FINAL ENGINEERING INSIGHT
+		Without observability → system is blind
+		With observability → system is measurable, debuggable, controllable
+
+	New version for referance
+
+		8a.1. NAMESPACE + PREPARATION
+			kubectl create namespace monitoring
+
+		8a.2. HELM REPOSITORY SETUP (MANDATORY)
+			helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+			helm repo update
+
+		8a.3. FULL DEPLOYMENT COMMAND (HARDENED)
+		✔️ Production-safe minimal (aligned to your constraints)
+			helm install monitoring prometheus-community/kube-prometheus-stack \
+			  -n monitoring \
+			  --create-namespace \
+			  \
+			  --set alertmanager.enabled=false \
+			  \
+			  --set prometheus.prometheusSpec.storageSpec=null \
+			  --set prometheus.prometheusSpec.retention=2h \
+			  --set prometheus.prometheusSpec.resources.requests.memory=512Mi \
+			  --set prometheus.prometheusSpec.resources.limits.memory=1Gi \
+			  --set prometheus.prometheusSpec.resources.requests.ephemeral-storage=200Mi \
+			  --set prometheus.prometheusSpec.resources.limits.ephemeral-storage=500Mi \
+			  \
+			  --set grafana.enabled=true \
+			  --set grafana.resources.requests.memory=256Mi \
+			  --set grafana.resources.limits.memory=512Mi \
+			  --set grafana.resources.requests.ephemeral-storage=100Mi \
+			  --set grafana.resources.limits.ephemeral-storage=200Mi \
+			  \
+			  --set kubeStateMetrics.enabled=true \
+			  --set nodeExporter.enabled=true \
+			  \
+			  --set prometheusOperator.resources.requests.memory=128Mi \
+			  --set prometheusOperator.resources.limits.memory=256Mi \
+			  \
+			  --set defaultRules.create=false
+
+		8a.4. WHY THESE SETTINGS (IMPORTANT)
+			Prometheus
+			Setting				Reason
+			storageSpec=null	disables PVC → matches no persistence constraint
+			retention=6h		limits memory usage
+			512Mi request		fits small node
+			1Gi limit			prevents OOM
+
+			Grafana
+			Setting				Reason
+			256Mi request		minimal UI footprint
+			enabled=true		required for visualization
+
+			Disabled Components
+			Component			Reason
+			Alertmanager		not needed in Phase 8
+			defaultRules		reduces noise + CPU
+			persistence			prohibited by constraint
+
+		8a.5. VERIFY DEPLOYMENT
+			kubectl get pods -n monitoring
+
+			Expected:
+				monitoring-kube-prometheus-prometheus-0
+				monitoring-grafana-xxxx
+				monitoring-kube-state-metrics-xxxx
+				monitoring-prometheus-node-exporter-xxxx
+				monitoring-operator-xxxx
+
+		8a.6 ACCESS GRAFANA (NEXT STEP)
+			Get password
+				kubectl get secret monitoring-grafana -n monitoring -o jsonpath="{.data.admin-password}" | base64 --decode
+
+			Port forward
+				kubectl port-forward svc/monitoring-grafana 3000:80 -n monitoring
+
+			Open:
+			http://localhost:3000
+
+		8a.7. ACCESS PROMETHEUS
+			kubectl port-forward svc/monitoring-kube-prometheus-prometheus 9090 -n monitoring
+
+		8a.8. WHAT YOU SHOULD SEE
+				Grafana:
+					Prometheus datasource auto-configured
+					Kubernetes dashboards (basic)
+
+				Prometheus:
+					Targets:
+						node-exporter
+						kube-state-metrics
+						kubelet
+
+
+	------------

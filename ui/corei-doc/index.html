@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>COREI — Institutional Knowledge System</title>
+
+  <style>
+    :root {
+      --bg: #0b0d10;
+      --surface: #11151a;
+      --surface-2: #171c22;
+      --border: #283039;
+      --text: #e7ebef;
+      --muted: #9aa4ae;
+      --accent: #d3ad64;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      padding: 28px 18px;
+      background: #090b0e;
+      border-right: 1px solid var(--border);
+    }
+
+    .brand {
+      padding: 0 10px 28px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .brand-subtitle {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav {
+      padding-top: 22px;
+    }
+
+    .nav-label {
+      margin: 0 10px 8px;
+      color: var(--accent);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .nav a {
+      display: block;
+      margin: 2px 0;
+      padding: 8px 10px;
+      border-radius: 5px;
+      color: #c7ced5;
+      font-size: 12px;
+    }
+
+    .nav a:hover {
+      background: var(--surface-2);
+      color: var(--text);
+    }
+
+    .content {
+      width: 100%;
+      max-width: 1250px;
+      padding: 54px 58px 100px;
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 900px;
+      margin: 10px 0 16px;
+      font-size: 42px;
+      line-height: 1.12;
+      letter-spacing: -0.025em;
+    }
+
+    .lead {
+      max-width: 850px;
+      color: #c8d0d7;
+      font-size: 17px;
+      line-height: 1.7;
+    }
+
+    .hero {
+      padding-bottom: 52px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    section {
+      padding-top: 52px;
+    }
+
+    h2 {
+      margin: 0 0 15px;
+      font-size: 25px;
+      letter-spacing: -0.01em;
+    }
+
+    h3 {
+      margin: 0 0 7px;
+      font-size: 15px;
+    }
+
+    p {
+      max-width: 900px;
+      color: #c5cdd4;
+    }
+
+    .principle {
+      margin: 28px 0;
+      padding: 25px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 7px;
+    }
+
+    .principle-title {
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .principle-text {
+      margin-top: 8px;
+      font-size: 24px;
+      line-height: 1.35;
+      color: var(--text);
+    }
+
+    .flow {
+      margin: 24px 0;
+      padding: 22px;
+      overflow-x: auto;
+      background: #080a0d;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      color: #d8dee4;
+      font-family:
+        "SFMono-Regular",
+        Consolas,
+        "Liberation Mono",
+        monospace;
+      font-size: 13px;
+      line-height: 1.8;
+      white-space: pre;
+    }
+
+    .areas {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .area {
+      min-height: 145px;
+      padding: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      transition:
+        background 120ms ease,
+        border-color 120ms ease;
+    }
+
+    .area:hover {
+      background: var(--surface-2);
+      border-color: #39434d;
+    }
+
+    .area-number {
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+
+    .area-title {
+      margin-top: 5px;
+      font-size: 18px;
+      font-weight: 650;
+    }
+
+    .area-description {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .orientation {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .orientation-card {
+      padding: 18px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+    }
+
+    .orientation-card strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+
+    .orientation-card span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .rule-list {
+      margin: 22px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .rule-list li {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      color: #c8d0d7;
+    }
+
+    .rule-list strong {
+      color: var(--text);
+    }
+
+    .footer {
+      margin-top: 70px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    @media (max-width: 900px) {
+      .layout {
+        display: block;
+      }
+
+      .sidebar {
+        position: static;
+        height: auto;
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .content {
+        padding: 36px 22px 70px;
+      }
+
+      .areas,
+      .orientation {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 34px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="layout">
+
+  <aside class="sidebar">
+
+    <div class="brand">
+      <div class="brand-title">COREI</div>
+      <div class="brand-subtitle">Institutional Knowledge</div>
+    </div>
+
+    <nav class="nav">
+
+      <div class="nav-label">Start</div>
+
+      <a href="#purpose">Purpose</a>
+      <a href="#core">COREI</a>
+      <a href="#unseen">See the Unseen Core</a>
+      <a href="#system">System Model</a>
+      <a href="#knowledge">Knowledge System</a>
+
+      <div class="nav-label">Knowledge Areas</div>
+
+      <a href="01-core/index.html">01 — Core</a>
+      <a href="02-architecture/index.html">02 — Architecture</a>
+      <a href="03-lifecycle/index.html">03 — Lifecycle</a>
+      <a href="04-implementation/index.html">04 — Implementation</a>
+      <a href="05-operations/index.html">05 — Operations</a>
+      <a href="06-research/index.html">06 — Research</a>
+      <a href="07-archive/index.html">07 — Archive</a>
+
+    </nav>
+
+  </aside>
+
+
+  <main class="content">
+
+    <section class="hero" id="purpose">
+
+      <div class="eyebrow">
+        Institutional Engineering Knowledge System
+      </div>
+
+      <h1>
+        COREI
+      </h1>
+
+      <p class="lead">
+        The institutional knowledge system for understanding, building,
+        operating and continuously evolving COREI.
+      </p>
+
+      <div class="principle">
+
+        <div class="principle-title">
+          Core Object
+        </div>
+
+        <div class="principle-text">
+          See the unseen core.
+        </div>
+
+      </div>
+
+      <p>
+        This system exists so that a person entering COREI does not need
+        to depend on the original authors to understand the platform.
+        The knowledge system provides the context first, then directs
+        the reader into the detailed engineering material.
+      </p>
+
+    </section>
+
+
+    <section id="core">
+
+      <h2>What is COREI?</h2>
+
+      <p>
+        COREI is an institutional trading and technology platform designed
+        to operate across financial markets, instruments, strategies,
+        accounts, companies, operators and infrastructure while preserving
+        deterministic engineering, governance, traceability and continuity.
+      </p>
+
+      <p>
+        COREI is not understood by looking at a single application,
+        service, strategy or infrastructure component. The platform must
+        be understood as a connected system.
+      </p>
+
+      <div class="flow">REALITY
+   ↓
+OBSERVATION
+   ↓
+UNDERSTANDING
+   ↓
+DECISION
+   ↓
+ACTION
+   ↓
+OBSERVATION OF RESULT
+   ↓
+LEARNING / IMPROVEMENT
+   ↺</div>
+
+    </section>
+
+
+    <section id="unseen">
+
+      <h2>See the Unseen Core</h2>
+
+      <p>
+        The visible behaviour of a system is only the surface.
+        COREI investigates what exists underneath that surface.
+      </p>
+
+      <div class="flow">VISIBLE
+   ↓
+UNDERLYING CAUSE
+   ↓
+STRUCTURE
+   ↓
+STATE
+   ↓
+DEPENDENCIES
+   ↓
+CONTROL
+   ↓
+RISK
+   ↓
+FAILURE
+   ↓
+RECOVERY
+   ↓
+INTELLIGENCE</div>
+
+      <p>
+        This principle applies to trading, infrastructure, software,
+        data, execution, operations and institutional knowledge itself.
+      </p>
+
+    </section>
+
+
+    <section id="system">
+
+      <h2>How to Understand COREI</h2>
+
+      <div class="orientation">
+
+        <div class="orientation-card">
+          <strong>CORE</strong>
+          <span>
+            Why COREI exists, what it means and what principles govern it.
+          </span>
+        </div>
+
+        <div class="orientation-card">
+          <strong>ARCHITECTURE</strong>
+          <span>
+            How the platform is designed and how its major systems relate.
+          </span>
+        </div>
+
+        <div class="orientation-card">
+          <strong>LIFECYCLE</strong>
+          <span>
+            Where COREI is in its evolution and how stages, phases and steps
+            progress.
+          </span>
+        </div>
+
+        <div class="orientation-card">
+          <strong>IMPLEMENTATION</strong>
+          <span>
+            Where architecture becomes actual software, infrastructure and
+            deployable systems.
+          </span>
+        </div>
+
+        <div class="orientation-card">
+          <strong>OPERATIONS</strong>
+          <span>
+            How COREI is operated, monitored, maintained and recovered.
+          </span>
+        </div>
+
+        <div class="orientation-card">
+          <strong>RESEARCH</strong>
+          <span>
+            How COREI investigates unknowns, experiments and develops future
+            capabilities.
+          </span>
+        </div>
+
+        <div class="orientation-card">
+          <strong>ARCHIVE</strong>
+          <span>
+            How historical and superseded institutional knowledge is preserved
+            without confusing it with current truth.
+          </span>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <section id="knowledge">
+
+      <h2>The Knowledge System</h2>
+
+      <p>
+        The seven areas are the permanent navigation structure.
+        They are intentionally simple at the top level.
+      </p>
+
+      <div class="areas">
+
+        <a class="area" href="01-core/index.html">
+          <div class="area-number">01</div>
+          <div class="area-title">CORE</div>
+          <div class="area-description">
+            Mission, identity, Anchor Law, principles and governing concepts.
+          </div>
+        </a>
+
+        <a class="area" href="02-architecture/index.html">
+          <div class="area-number">02</div>
+          <div class="area-title">ARCHITECTURE</div>
+          <div class="area-description">
+            Trading, infrastructure, platform, data, events, state, risk,
+            execution, security and integration.
+          </div>
+        </a>
+
+        <a class="area" href="03-lifecycle/index.html">
+          <div class="area-number">03</div>
+          <div class="area-title">LIFECYCLE</div>
+          <div class="area-description">
+            Stages, phases, steps, progression and lifecycle governance.
+          </div>
+        </a>
+
+        <a class="area" href="04-implementation/index.html">
+          <div class="area-number">04</div>
+          <div class="area-title">IMPLEMENTATION</div>
+          <div class="area-description">
+            Repository, services, schemas, configuration, deployment and build.
+          </div>
+        </a>
+
+        <a class="area" href="05-operations/index.html">
+          <div class="area-number">05</div>
+          <div class="area-title">OPERATIONS</div>
+          <div class="area-description">
+            Trading operations, infrastructure operations, monitoring,
+            incidents, recovery and continuity.
+          </div>
+        </a>
+
+        <a class="area" href="06-research/index.html">
+          <div class="area-number">06</div>
+          <div class="area-title">RESEARCH</div>
+          <div class="area-description">
+            Market, quantitative, technology, AI/ML, experiments and future
+            architecture.
+          </div>
+        </a>
+
+        <a class="area" href="07-archive/index.html">
+          <div class="area-number">07</div>
+          <div class="area-title">ARCHIVE</div>
+          <div class="area-description">
+            Historical, superseded, deprecated, reference and conflicting
+            material.
+          </div>
+        </a>
+
+      </div>
+
+    </section>
+
+
+    <section>
+
+      <h2>How a New Engineer Uses This System</h2>
+
+      <div class="flow">START HERE
+   ↓
+UNDERSTAND COREI
+   ↓
+UNDERSTAND THE ARCHITECTURE
+   ↓
+LOCATE THE LIFECYCLE POSITION
+   ↓
+LOCATE THE IMPLEMENTATION
+   ↓
+UNDERSTAND OPERATIONS
+   ↓
+CHECK VALIDATION / RECOVERY
+   ↓
+WORK ON THE COMPONENT</div>
+
+      <p>
+        The objective is not to make every document simple.
+        The objective is to make the route through the knowledge simple.
+        Engineering depth remains inside the appropriate area.
+      </p>
+
+    </section>
+
+
+    <section>
+
+      <h2>Institutional Working Rules</h2>
+
+      <ul class="rule-list">
+
+        <li>
+          <strong>Understand before changing.</strong>
+          A component must be understood in its architectural context before
+          implementation begins.
+        </li>
+
+        <li>
+          <strong>Architecture before implementation.</strong>
+          Code must be understood as an implementation of an architectural
+          responsibility.
+        </li>
+
+        <li>
+          <strong>Preserve source knowledge.</strong>
+          Existing documents are not silently rewritten or discarded during
+          reconstruction.
+        </li>
+
+        <li>
+          <strong>Separate current truth from history.</strong>
+          Historical and superseded material remains available but must not
+          masquerade as current architecture.
+        </li>
+
+        <li>
+          <strong>Do not invent missing knowledge.</strong>
+          Unknown remains unknown until supported by evidence.
+        </li>
+
+        <li>
+          <strong>See the unseen core.</strong>
+          Visible behaviour is never treated as the complete understanding
+          of a system.
+        </li>
+
+      </ul>
+
+    </section>
+
+
+    <section>
+
+      <h2>Knowledge Navigation Principle</h2>
+
+      <div class="principle">
+
+        <div class="principle-text">
+          Easy to enter.<br>
+          Easy to understand.<br>
+          Deep enough to engineer.<br>
+          Precise enough to operate.<br>
+          Strong enough to preserve institutional knowledge.
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <div class="footer">
+      COREI Institutional Knowledge System · Root Entry Point ·
+      Seven-area knowledge structure
+    </div>
+
+  </main>
+
+</div>
+
+</body>
+</html>

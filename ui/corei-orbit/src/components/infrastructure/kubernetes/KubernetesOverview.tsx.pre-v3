@@ -1,0 +1,896 @@
+/**
+ * COREI Kubernetes Overview
+ *
+ * Institutional operational control surface.
+ *
+ * UI ONLY:
+ * - consumes the live Kubernetes payload supplied by KubernetesDetail
+ * - derives presentation metrics
+ * - never calls Kubernetes directly
+ * - never mutates backend state
+ */
+
+import React from 'react';
+import { TablePanel } from '../../Workspace/views/panels';
+
+interface KubernetesOverviewProps {
+  data: any;
+}
+
+const arr = (value: unknown): any[] =>
+  Array.isArray(value) ? value : [];
+
+const obj = (value: unknown): Record<string, any> =>
+  value &&
+  typeof value === 'object' &&
+  !Array.isArray(value)
+    ? value as Record<string, any>
+    : {};
+
+const age = (timestamp: unknown): string => {
+  if (!timestamp) return '—';
+
+  const value = new Date(String(timestamp)).getTime();
+
+  if (!Number.isFinite(value)) {
+    return String(timestamp);
+  }
+
+  const seconds = Math.max(
+    0,
+    Math.floor((Date.now() - value) / 1000)
+  );
+
+  if (seconds < 60) return `${seconds}s`;
+  if (seconds < 3600) return `${Math.floor(seconds / 60)}m`;
+  if (seconds < 86400) return `${Math.floor(seconds / 3600)}h`;
+
+  return `${Math.floor(seconds / 86400)}d`;
+};
+
+const memory = (value: unknown): string => {
+  const raw = String(value ?? '');
+
+  if (raw.endsWith('Ki')) {
+    const n = Number(raw.slice(0, -2));
+
+    if (Number.isFinite(n)) {
+      return `${(n / 1024 / 1024).toFixed(1)} GiB`;
+    }
+  }
+
+  if (raw.endsWith('Mi')) {
+    const n = Number(raw.slice(0, -2));
+
+    if (Number.isFinite(n)) {
+      return `${(n / 1024).toFixed(1)} GiB`;
+    }
+  }
+
+  return raw || '—';
+};
+
+const KubernetesOverview: React.FC<KubernetesOverviewProps> = ({
+  data,
+}) => {
+  const cluster = obj(data.cluster_info);
+  const server = obj(cluster.serverVersion);
+  const client = obj(cluster.clientVersion);
+
+  const nodes = arr(data.node_status);
+  const pods = arr(data.pods);
+  const deployments = arr(data.deployments);
+  const statefulsets = arr(data.statefulsets);
+  const daemonsets = arr(data.daemonsets);
+  const jobs = arr(data.jobs);
+  const cronjobs = arr(data.cronjobs);
+
+  const services = arr(data.services);
+  const endpoints = arr(data.endpoints);
+  const ingresses = arr(data.ingresses);
+  const policies = arr(data.networkpolicies);
+
+  const pvs = arr(data.persistentvolumes);
+  const pvcs = arr(data.persistentvolumeclaims);
+  const storageClasses = arr(data.storageclasses);
+
+  const configmaps = arr(data.configmaps);
+  const secrets = arr(data.secrets);
+  const serviceAccounts = arr(data.serviceaccounts);
+
+  const roles = arr(data.roles);
+  const roleBindings = arr(data.rolebindings);
+  const clusterRoles = arr(data.clusterroles);
+  const clusterBindings = arr(data.clusterrolebindings);
+
+  const events = arr(data.events);
+
+  const version =
+    server.gitVersion ||
+    cluster.version ||
+    '—';
+
+  const context =
+    cluster.context ||
+    cluster.currentContext ||
+    'unknown';
+
+  const apiServer =
+    cluster.server ||
+    cluster.serverAddress ||
+    cluster.apiServer ||
+    '—';
+
+  /* ----------------------------------------------------------
+     NODE CAPACITY
+     ---------------------------------------------------------- */
+
+  const cpuCapacity = nodes.reduce(
+    (sum, node) =>
+      sum + Number(node?.capacity?.cpu || 0),
+    0
+  );
+
+  const cpuAllocatable = nodes.reduce(
+    (sum, node) =>
+      sum + Number(node?.allocatable?.cpu || 0),
+    0
+  );
+
+  const memoryCapacity = nodes.reduce(
+    (sum, node) => {
+      const raw = String(node?.capacity?.memory || '');
+
+      return sum + (
+        raw.endsWith('Ki')
+          ? Number(raw.slice(0, -2)) || 0
+          : 0
+      );
+    },
+    0
+  );
+
+  const memoryAllocatable = nodes.reduce(
+    (sum, node) => {
+      const raw = String(node?.allocatable?.memory || '');
+
+      return sum + (
+        raw.endsWith('Ki')
+          ? Number(raw.slice(0, -2)) || 0
+          : 0
+      );
+    },
+    0
+  );
+
+  const podCapacity = nodes.reduce(
+    (sum, node) =>
+      sum + Number(node?.capacity?.pods || 0),
+    0
+  );
+
+  const podAllocatable = nodes.reduce(
+    (sum, node) =>
+      sum + Number(node?.allocatable?.pods || 0),
+    0
+  );
+
+  /* ----------------------------------------------------------
+     POD STATE
+     ---------------------------------------------------------- */
+
+  const podHealth = pods.reduce(
+    (result, pod) => {
+      const phase = String(
+        pod?.status?.phase ??
+        pod?.status ??
+        'Unknown'
+      ).toLowerCase();
+
+      if (phase === 'running') result.running++;
+      else if (phase === 'pending') result.pending++;
+      else if (phase === 'failed') result.failed++;
+      else if (
+        phase === 'succeeded' ||
+        phase === 'completed'
+      ) {
+        result.succeeded++;
+      } else {
+        result.unknown++;
+      }
+
+      return result;
+    },
+    {
+      running: 0,
+      pending: 0,
+      failed: 0,
+      succeeded: 0,
+      unknown: 0,
+    }
+  );
+
+  const restartCount = pods.reduce(
+    (sum, pod) => {
+      const statuses = arr(
+        pod?.status?.containerStatuses
+      );
+
+      if (statuses.length) {
+        return sum + statuses.reduce(
+          (count, container) =>
+            count +
+            Number(container?.restartCount || 0),
+          0
+        );
+      }
+
+      return sum + Number(pod?.restarts || 0);
+    },
+    0
+  );
+
+  /* ----------------------------------------------------------
+     DEPLOYMENT STATE
+     ---------------------------------------------------------- */
+
+  const deploymentHealth = deployments.reduce(
+    (result, deployment) => {
+      const desired = Number(
+        deployment?.spec?.replicas ??
+        deployment?.replicas ??
+        0
+      );
+
+      const ready = Number(
+        deployment?.status?.readyReplicas ??
+        deployment?.ready ??
+        0
+      );
+
+      const available = Number(
+        deployment?.status?.availableReplicas ??
+        deployment?.available ??
+        0
+      );
+
+      result.desired += desired;
+      result.ready += ready;
+      result.available += available;
+
+      if (ready < desired) {
+        result.unready++;
+      }
+
+      return result;
+    },
+    {
+      desired: 0,
+      ready: 0,
+      available: 0,
+      unready: 0,
+    }
+  );
+
+  /* ----------------------------------------------------------
+     NODE CONDITIONS
+     ---------------------------------------------------------- */
+
+  const nodeHealth = nodes.reduce(
+    (result, node) => {
+      const conditions = arr(node?.conditions);
+
+      const ready = conditions.find(
+        (condition: any) =>
+          condition?.type === 'Ready'
+      );
+
+      if (ready?.status === 'True') {
+        result.ready++;
+      } else {
+        result.notReady++;
+      }
+
+      if (node?.unschedulable === true) {
+        result.unschedulable++;
+      }
+
+      if (
+        conditions.some(
+          (condition: any) =>
+            condition?.type === 'MemoryPressure' &&
+            condition?.status === 'True'
+        )
+      ) {
+        result.memoryPressure++;
+      }
+
+      if (
+        conditions.some(
+          (condition: any) =>
+            condition?.type === 'DiskPressure' &&
+            condition?.status === 'True'
+        )
+      ) {
+        result.diskPressure++;
+      }
+
+      if (
+        conditions.some(
+          (condition: any) =>
+            condition?.type === 'PIDPressure' &&
+            condition?.status === 'True'
+        )
+      ) {
+        result.pidPressure++;
+      }
+
+      if (
+        conditions.some(
+          (condition: any) =>
+            condition?.type === 'NetworkUnavailable' &&
+            condition?.status === 'True'
+        )
+      ) {
+        result.networkUnavailable++;
+      }
+
+      return result;
+    },
+    {
+      ready: 0,
+      notReady: 0,
+      unschedulable: 0,
+      memoryPressure: 0,
+      diskPressure: 0,
+      pidPressure: 0,
+      networkUnavailable: 0,
+    }
+  );
+
+  const eventRows = events
+    .slice(0, 14)
+    .map((event) => ({
+      namespace: event?.namespace ?? '—',
+      reason: event?.reason ?? '—',
+      message: event?.message ?? '—',
+      object:
+        event?.involvedObject?.name ??
+        event?.involved_name ??
+        '—',
+      type: event?.type ?? '—',
+      age:
+        event?.lastTimestamp ||
+        event?.eventTime ||
+        event?.firstTimestamp
+          ? age(
+              event?.lastTimestamp ||
+              event?.eventTime ||
+              event?.firstTimestamp
+            )
+          : event?.age ?? '—',
+    }));
+
+  const inventory = [
+    ['Nodes', nodes.length],
+    ['Pods', pods.length],
+    ['Deployments', deployments.length],
+    ['StatefulSets', statefulsets.length],
+    ['DaemonSets', daemonsets.length],
+    ['Jobs', jobs.length],
+    ['CronJobs', cronjobs.length],
+    ['Services', services.length],
+    ['Endpoints', endpoints.length],
+    ['Ingresses', ingresses.length],
+    ['NetworkPolicies', policies.length],
+    ['PersistentVolumes', pvs.length],
+    ['PersistentClaims', pvcs.length],
+    ['StorageClasses', storageClasses.length],
+    ['ConfigMaps', configmaps.length],
+    ['Secrets', secrets.length],
+    ['ServiceAccounts', serviceAccounts.length],
+    ['Roles', roles.length],
+    ['RoleBindings', roleBindings.length],
+    ['ClusterRoles', clusterRoles.length],
+    ['ClusterBindings', clusterBindings.length],
+    ['Events', events.length],
+  ];
+
+  const pct = (value: number, total: number) =>
+    total > 0
+      ? Math.round((value / total) * 100)
+      : 0;
+
+  return (
+    <div className="k8s-control-overview">
+
+      {/* ======================================================
+          CONTROL HEADER
+          ====================================================== */}
+
+      <header className="k8s-control-header">
+
+        <div className="k8s-control-identity">
+          <div className="k8s-control-eyebrow">
+            INFRA / KUBERNETES / KUBEADM
+          </div>
+
+          <div className="k8s-control-name">
+            KUBERNETES CONTROL PLANE
+          </div>
+
+          <div className="k8s-control-version">
+            {version}
+            <span>·</span>
+            {context}
+          </div>
+        </div>
+
+        <div className="k8s-control-facts">
+
+          <div className="k8s-fact">
+            <span>CONNECTION</span>
+            <strong className="state-good">
+              LIVE
+            </strong>
+          </div>
+
+          <div className="k8s-fact">
+            <span>SERVER</span>
+            <strong>{version}</strong>
+          </div>
+
+          <div className="k8s-fact">
+            <span>CLIENT</span>
+            <strong>
+              {client.gitVersion ?? '—'}
+            </strong>
+          </div>
+
+          <div className="k8s-fact">
+            <span>NODES</span>
+            <strong>
+              {nodeHealth.ready}/{nodes.length}
+            </strong>
+          </div>
+
+          <div className="k8s-fact">
+            <span>API</span>
+            <strong title={apiServer}>
+              {apiServer}
+            </strong>
+          </div>
+
+        </div>
+
+      </header>
+
+      {/* ======================================================
+          CRITICAL SIGNAL BAND
+          ====================================================== */}
+
+      <section className="k8s-signal-band">
+
+        <div className="k8s-signal">
+          <span>NODES</span>
+          <strong>{nodes.length}</strong>
+          <small>
+            {nodeHealth.ready} READY
+          </small>
+        </div>
+
+        <div className="k8s-signal">
+          <span>PODS</span>
+          <strong>{pods.length.toLocaleString()}</strong>
+          <small>
+            {podHealth.running.toLocaleString()} RUNNING
+          </small>
+        </div>
+
+        <div className="k8s-signal">
+          <span>DEPLOYMENTS</span>
+          <strong>{deployments.length}</strong>
+          <small>
+            {deploymentHealth.ready}/
+            {deploymentHealth.desired} READY
+          </small>
+        </div>
+
+        <div className="k8s-signal">
+          <span>SERVICES</span>
+          <strong>{services.length}</strong>
+          <small>
+            {endpoints.length} ENDPOINTS
+          </small>
+        </div>
+
+        <div className="k8s-signal">
+          <span>STORAGE</span>
+          <strong>{pvcs.length}</strong>
+          <small>
+            {pvs.length} PV
+          </small>
+        </div>
+
+        <div className="k8s-signal signal-warning">
+          <span>FAILED PODS</span>
+          <strong>{podHealth.failed.toLocaleString()}</strong>
+          <small>
+            {podHealth.failed > 0 ? 'ATTENTION' : 'CLEAR'}
+          </small>
+        </div>
+
+        <div className="k8s-signal signal-warning">
+          <span>RESTARTS</span>
+          <strong>{restartCount.toLocaleString()}</strong>
+          <small>
+            CONTAINER RESTARTS
+          </small>
+        </div>
+
+        <div className="k8s-signal">
+          <span>EVENTS</span>
+          <strong>{events.length}</strong>
+          <small>
+            CURRENT WINDOW
+          </small>
+        </div>
+
+      </section>
+
+      {/* ======================================================
+          OPERATING GRID
+          ====================================================== */}
+
+      <section className="k8s-operating-grid">
+
+        {/* NODE CAPACITY */}
+
+        <div className="k8s-control-panel">
+
+          <div className="k8s-panel-title">
+            <span>NODE CAPACITY</span>
+            <small>{nodes.length} NODE</small>
+          </div>
+
+          <div className="k8s-capacity-rows">
+
+            <div className="k8s-capacity-row">
+              <div>
+                <span>CPU</span>
+                <strong>{cpuCapacity} CORES</strong>
+              </div>
+
+              <div className="k8s-capacity-bar">
+                <span
+                  style={{
+                    width: `${pct(
+                      cpuAllocatable,
+                      cpuCapacity
+                    )}%`,
+                  }}
+                />
+              </div>
+
+              <small>
+                {cpuAllocatable} ALLOCATABLE ·{' '}
+                {pct(cpuAllocatable, cpuCapacity)}%
+              </small>
+            </div>
+
+            <div className="k8s-capacity-row">
+              <div>
+                <span>MEMORY</span>
+                <strong>
+                  {memory(
+                    `${memoryCapacity}Ki`
+                  )}
+                </strong>
+              </div>
+
+              <div className="k8s-capacity-bar">
+                <span
+                  style={{
+                    width: `${pct(
+                      memoryAllocatable,
+                      memoryCapacity
+                    )}%`,
+                  }}
+                />
+              </div>
+
+              <small>
+                {memory(
+                  `${memoryAllocatable}Ki`
+                )}{' '}
+                ALLOCATABLE ·{' '}
+                {pct(
+                  memoryAllocatable,
+                  memoryCapacity
+                )}%
+              </small>
+            </div>
+
+            <div className="k8s-capacity-row">
+              <div>
+                <span>PODS</span>
+                <strong>{podCapacity}</strong>
+              </div>
+
+              <div className="k8s-capacity-bar">
+                <span
+                  style={{
+                    width: `${pct(
+                      podAllocatable,
+                      podCapacity
+                    )}%`,
+                  }}
+                />
+              </div>
+
+              <small>
+                {podAllocatable} ALLOCATABLE ·{' '}
+                {pct(
+                  podAllocatable,
+                  podCapacity
+                )}%
+              </small>
+            </div>
+
+          </div>
+        </div>
+
+        {/* WORKLOAD STATE */}
+
+        <div className="k8s-control-panel">
+
+          <div className="k8s-panel-title">
+            <span>WORKLOAD STATE</span>
+            <small>{pods.length.toLocaleString()} PODS</small>
+          </div>
+
+          <div className="k8s-workload-matrix">
+
+            <div>
+              <span>RUNNING</span>
+              <strong>{podHealth.running}</strong>
+            </div>
+
+            <div>
+              <span>PENDING</span>
+              <strong>{podHealth.pending}</strong>
+            </div>
+
+            <div className="critical">
+              <span>FAILED</span>
+              <strong>{podHealth.failed}</strong>
+            </div>
+
+            <div>
+              <span>SUCCEEDED</span>
+              <strong>{podHealth.succeeded}</strong>
+            </div>
+
+            <div>
+              <span>UNKNOWN</span>
+              <strong>{podHealth.unknown}</strong>
+            </div>
+
+            <div className="critical">
+              <span>RESTARTS</span>
+              <strong>
+                {restartCount.toLocaleString()}
+              </strong>
+            </div>
+
+          </div>
+
+          <div className="k8s-deployment-line">
+            <span>DEPLOYMENT READINESS</span>
+            <strong>
+              {deploymentHealth.ready}/
+              {deploymentHealth.desired}
+            </strong>
+            <small>
+              AVAILABLE {deploymentHealth.available}
+              {' · '}
+              UNREADY {deploymentHealth.unready}
+            </small>
+          </div>
+
+        </div>
+
+        {/* NODE CONDITIONS */}
+
+        <div className="k8s-control-panel k8s-node-panel">
+
+          <div className="k8s-panel-title">
+            <span>NODE CONDITIONS</span>
+            <small>
+              {nodeHealth.ready} READY
+            </small>
+          </div>
+
+          {nodes.map((node, index) => {
+            const conditions = arr(node?.conditions);
+
+            const state = (
+              type: string
+            ) => {
+              const condition = conditions.find(
+                (item: any) =>
+                  item?.type === type
+              );
+
+              if (!condition) return '—';
+
+              return condition.status === 'True'
+                ? 'TRUE'
+                : 'FALSE';
+            };
+
+            return (
+              <div
+                className="k8s-node-line"
+                key={
+                  node?.uid ??
+                  node?.name ??
+                  index
+                }
+              >
+                <div className="node-name">
+                  <strong>
+                    {node?.name ?? '—'}
+                  </strong>
+                  <small>
+                    {node?.addresses?.find?.(
+                      (address: any) =>
+                        address?.type === 'InternalIP'
+                    )?.address ?? '—'}
+                  </small>
+                </div>
+
+                <div>
+                  <span>READY</span>
+                  <strong
+                    className={
+                      state('Ready') === 'TRUE'
+                        ? 'state-good'
+                        : 'state-bad'
+                    }
+                  >
+                    {state('Ready')}
+                  </strong>
+                </div>
+
+                <div>
+                  <span>MEM</span>
+                  <strong>
+                    {state('MemoryPressure')}
+                  </strong>
+                </div>
+
+                <div>
+                  <span>DISK</span>
+                  <strong>
+                    {state('DiskPressure')}
+                  </strong>
+                </div>
+
+                <div>
+                  <span>PID</span>
+                  <strong>
+                    {state('PIDPressure')}
+                  </strong>
+                </div>
+
+                <div>
+                  <span>NET</span>
+                  <strong>
+                    {state('NetworkUnavailable')}
+                  </strong>
+                </div>
+
+                <div>
+                  <span>SCHED</span>
+                  <strong>
+                    {node?.unschedulable
+                      ? 'OFF'
+                      : 'ON'}
+                  </strong>
+                </div>
+              </div>
+            );
+          })}
+
+        </div>
+
+      </section>
+
+      {/* ======================================================
+          INVENTORY MATRIX
+          ====================================================== */}
+
+      <section className="k8s-control-panel">
+
+        <div className="k8s-panel-title">
+          <span>RESOURCE INVENTORY</span>
+          <small>LIVE OBJECT COUNTS</small>
+        </div>
+
+        <div className="k8s-inventory-grid">
+
+          {inventory.map(
+            ([label, value]) => (
+              <div
+                key={String(label)}
+                className="k8s-inventory-cell"
+              >
+                <span>{label}</span>
+                <strong>
+                  {Number(value).toLocaleString()}
+                </strong>
+              </div>
+            )
+          )}
+
+        </div>
+      </section>
+
+      {/* ======================================================
+          EVENT TAPE
+          ====================================================== */}
+
+      <section className="k8s-control-panel k8s-event-panel">
+
+        <div className="k8s-panel-title">
+          <span>EVENT / EXCEPTION TAPE</span>
+          <small>
+            {events.length} EVENTS
+          </small>
+        </div>
+
+        {eventRows.length > 0 ? (
+          <TablePanel
+            title=""
+            columns={[
+              {
+                key: 'namespace',
+                label: 'NS',
+              },
+              {
+                key: 'reason',
+                label: 'REASON',
+              },
+              {
+                key: 'message',
+                label: 'MESSAGE',
+              },
+              {
+                key: 'object',
+                label: 'OBJECT',
+              },
+              {
+                key: 'type',
+                label: 'TYPE',
+              },
+              {
+                key: 'age',
+                label: 'AGE',
+              },
+            ]}
+            data={eventRows}
+          />
+        ) : (
+          <div className="k8s-no-events">
+            NO CURRENT EVENTS
+          </div>
+        )}
+
+      </section>
+
+    </div>
+  );
+};
+
+export default KubernetesOverview;

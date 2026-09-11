@@ -1,0 +1,774 @@
+PART 1.2 — INFRASTRUCTURE ARCHITECTURE
+
+INFRA LAYER 0 — PRINCIPLES
+Infrastructure as Code. Every server, network rule, K8s resource, and configuration is defined in code. The entire infrastructure is reproducible from scratch in under 60 minutes. Nothing exists that is not in Git.
+Environment Parity. Dev, staging, and production run identical architecture — same Helm charts, same service topology, same event model. Only scale, resource allocation, and secret values differ.
+Easy to Deploy. Every service deploys via a single Helm command. Every environment deploys via ArgoCD GitOps sync. Rollback is one command to a previous Git commit.
+Easy to Switch. Every external dependency — broker, cloud provider, database — is behind an adapter interface. Switching a broker requires updating the connector config, not rewriting services. Moving from VMware to VPS requires updating Terraform variables and rerunning.
+Maximum Open Source. Every component listed is open source. No vendor lock-in on any critical path. Kafka, Kubernetes, PostgreSQL, TimescaleDB, Redis, Prometheus, Grafana, Loki, Jaeger, Vault, Keycloak, ArgoCD, Harbor, Terraform — all fully open source.
+Zero Single Points of Failure. Every critical component has at least one replica or failover path. The loss of any single node, service, or broker connection does not stop the trading platform.
+
+INFRA LAYER 1 — ENVIRONMENT PROGRESSION
+ STAGE 1: VMWARE (Current Development Environment)
+ ─────────────────────────────────────────────────
+ Purpose:    Full platform development + validation + paper trading
+ Host:       Local machine running VMware Workstation
+ Node:       core-node (192.168.1.3)
+             Ubuntu 22.04 LTS, 4 vCPU, 8GB RAM, 60GB SSD
+ Mode:       Single-node Kubernetes (control-plane, taint removed)
+ Limitation: No HA, no failover, paper trading only
+ Exit:       When platform is stable end-to-end on paper trading
+
+ STAGE 2: VPS STAGING (Cloud)
+ ─────────────────────────────────────────────────
+ Purpose:    Staging validation + broker demo account testing
+ Provider:   Hetzner / DigitalOcean / Vultr (low cost, Europe or US)
+ Node:       1x server, 8 vCPU, 32GB RAM, 200GB NVMe SSD
+ Approx cost: $80–150/month
+ Mode:       k3s (lightweight K8s, single server production)
+ Migration:  Terraform apply with vps provider config → same Helm deploys
+ Limitation: Single server, no co-location latency advantage
+ Exit:       When paper trading confirms system works, before live capital
+
+ STAGE 3: VPS PRODUCTION (Multi-node)
+ ─────────────────────────────────────────────────
+ Purpose:    Live trading with controlled capital, broker live accounts
+ Provider:   Hetzner Dedicated / OVH Dedicated / Contabo VPS
+             OR Equinix Metal (bare metal, closest to co-lo)
+ Topology:   3+ servers (see node topology below)
+ Approx cost: $500–1500/month
+ Mode:       Full Kubernetes cluster (kubeadm or k3s HA)
+ Limitation: Network latency vs co-location (~5–20ms to broker)
+ Exit:       When capital scale justifies co-location cost
+
+ STAGE 4: CO-LOCATION (Maximum Performance)
+ ─────────────────────────────────────────────────
+ Purpose:    High-frequency execution, institutional latency
+ Facility:   Equinix NY4 (US) + LD4 (London) — dual site HA
+ Topology:   Full cluster per facility (see production topology)
+ Approx cost: $3,000–8,000/month
+ Mode:       Full Kubernetes HA cluster, cross-DC replication
+ Benefit:    <1ms to broker, direct cross-connect available
+
+ MIGRATION BETWEEN STAGES:
+   Terraform variables.tf → change provider block
+   Helm values files already environment-aware
+   ArgoCD points to new cluster kubeconfig
+   Database: pg_dump → restore, or streaming replication setup
+   Zero application code changes required
+
+INFRA LAYER 2 — PRODUCTION NODE TOPOLOGY
+ MINIMUM PRODUCTION CONFIGURATION (Stage 3 — 3 nodes)
+
+ Node          vCPU  RAM    Disk      Role
+ ─────────────────────────────────────────────────────
+ trading-01    16    64GB   500GB     Trading services
+                            NVMe      Strategy, Risk, Decision,
+                                      Order, SOR, Fill
+ data-01       16    64GB   2TB       Data services
+                            NVMe      Databases (PG + TSDB + Redis),
+                                      Market data ingestion,
+                                      Portfolio service
+ infra-01       8    32GB   500GB     Platform infra
+                            SSD       Kafka, Monitoring, Logging,
+                                      Tracing, Registry, Vault,
+                                      Keycloak, ArgoCD
+
+ FULL PRODUCTION CONFIGURATION (Stage 4 — per DC)
+
+ Node              Qty  vCPU  RAM    Disk      Role
+ ─────────────────────────────────────────────────────────
+ control-plane     3    4     8GB    60GB      K8s control plane HA
+                                               etcd cluster (3 nodes)
+
+ trading-node      2    16    64GB   500GB     All trading pipeline services
+                                    NVMe       Strategy → Fill (Phases A+D)
+
+ data-node         2    16    64GB   2TB       TimescaleDB primary + replica
+                                    NVMe       PostgreSQL primary + replica
+                                               Redis Cluster nodes
+
+ kafka-node        3    16    32GB   1TB       Kafka broker+controller
+                                    NVMe       (KRaft, 3-node quorum)
+                                               Schema Registry
+
+ infra-node        2    8     32GB   500GB     Prometheus, Grafana, Loki
+                                    SSD        Jaeger, Vault, Keycloak
+                                               Harbor, ArgoCD, n8n
+
+ CROSS-DC SETUP (Stages 3-4):
+   Primary:  NY4 (US East) — execution-optimized
+   Secondary: LD4 (London) — London session execution
+   Replication lag target: < 50ms Kafka mirroring
+   Failover: auto on primary unreachable > 30 seconds
+
+INFRA LAYER 3 — FULL TECHNOLOGY STACK
+ LAYER            COMPONENT              VERSION   PURPOSE
+ ═══════════════════════════════════════════════════════════════════
+ OS               Ubuntu Server 22.04    LTS       Base system
+ Container RT     containerd             1.7.x     K8s runtime
+ Build            Docker Engine          29.x      Image builds
+ Orchestration    Kubernetes             1.29.x    Container orchestration
+ K8s Lightweight  k3s                    latest    VMware + VPS stages
+ K8s Full         kubeadm                1.29.x    Production stage
+ Packaging        Helm                   3.20.x    App deployment
+ GitOps           ArgoCD                 2.10.x    Deployment automation
+ IaC              Terraform              1.8.x     Server provisioning
+ CNI              Calico                 3.27.x    Pod networking
+ Load Balancer    MetalLB                0.14.x    Bare metal LB
+ Ingress          NGINX Ingress          1.10.x    HTTP routing
+ TLS              cert-manager           1.14.x    Auto TLS
+ Service Mesh     Istio                  1.21.x    mTLS + traffic mgmt
+ API Gateway      Kong                   3.7.x     Rate limit + auth
+ Registry         Harbor                 2.10.x    Container registry
+ Storage          Longhorn               1.6.x     Distributed K8s storage
+ Storage (scale)  Ceph                   18.x      Enterprise block storage
+ Backup           Velero                 1.13.x    Cluster + PV backup
+ VPN              WireGuard              1.0       Secure admin access
+
+ EVENT SYSTEM
+ Message Bus      Apache Kafka           3.7.x     Event backbone (KRaft)
+ Schema Reg       Confluent SR           7.6.x     Schema governance
+ Kafka UI         Kafka-UI               0.7.x     Ops visibility
+ Kafka Connect    Kafka Connect          3.7.x     DB sink/source
+
+ DATABASES
+ Time-Series      TimescaleDB            2.14-pg15 Market data, signals
+ Relational       PostgreSQL             15.x      State + orders + config
+ Connection Pool  PgBouncer              1.22.x    Connection management
+ Cache            Redis Cluster          7.2.x     Live cache (HA)
+ Analytics        ClickHouse             24.x      Optional fast analytics
+
+ OBSERVABILITY
+ Metrics          Prometheus             2.51.x    Metric collection
+ Dashboards       Grafana                10.4.x    Visualization
+ Log Aggregation  Loki                   3.0.x     Log storage
+ Log Shipping     Promtail               3.0.x     Pod log collection
+ Tracing          Jaeger                 1.56.x    Distributed tracing
+ Instrumentation  OpenTelemetry          0.98.x    Trace + metric export
+ Alerting         Alertmanager           0.27.x    Alert routing
+
+ SECURITY
+ Secrets          HashiCorp Vault        1.16.x    Secret management
+ Identity         Keycloak               24.x      OIDC + OAuth2 + RBAC
+ Scanning         Trivy                  0.50.x    Container vulnerability
+
+ CI/CD
+ Pipeline         GitHub Actions         —         Build + test + push
+ GitOps           ArgoCD                 2.10.x    Deploy + sync
+ Image Build      Kaniko / Buildah       —         Rootless builds
+
+ WORKFLOW
+ Automation       n8n                    1.x       Operational workflows
+
+ LANGUAGE STACK
+ Primary          Python                 3.11      Strategy, risk, services
+ Performance      Go                     1.22      High-throughput services
+ Execution Core   Rust                   1.77      Sub-ms execution path
+ Frontend         React.js               18.x      Trading dashboard
+ Charts           TradingView Library    4.x       Price visualization
+
+INFRA LAYER 4 — KUBERNETES NAMESPACE ARCHITECTURE
+ NAMESPACE           CONTENTS                         NETWORK POLICY
+ ─────────────────────────────────────────────────────────────────────
+ kafka               Kafka cluster, Schema Registry   from: platform, services
+ storage             PostgreSQL, TimescaleDB, Redis    from: platform, execution,
+                                                       portfolio, market-data
+ ingress-nginx       NGINX Ingress Controller          public ingress only
+ metallb-system      MetalLB load balancer             cluster-internal
+ cert-manager        TLS certificate automation        cluster-internal
+ istio-system        Istio service mesh control plane  cluster-internal
+ auth                Keycloak identity provider        from: platform
+ vault               HashiCorp Vault                   from: platform, all svc
+ monitoring          Prometheus, Grafana, Alertmanager from: all (metrics)
+ logging             Loki, Promtail                    from: all (logs)
+ tracing             Jaeger, OTEL Collector            from: all (traces)
+ registry            Harbor container registry         from: cicd
+ cicd                ArgoCD, GitHub Actions runner      from: registry, cluster
+ platform            API Gateway, Config, Identity,     from: ingress
+                     Audit, Alert, Failure-Handler
+ market-data         Ingestion, Normalizer, Features    from: kafka, storage
+ strategy            Strategy Engine, Signal Processor  from: kafka, market-data
+                     Decision Engine, Screening,
+                     Monitoring
+ execution           Execution Intent, Account Routing  from: strategy
+                     Risk, Policy, Position Sizer,      isolated: broker-only egress
+                     Order Engine, SOR, Fill Handler,   from trading-infra
+                     Reconciliation
+ trading-infra       OMS, EMS, Broker Adapter           from: execution
+                     Copy Trade Engine                  egress: broker IPs only
+ portfolio           Portfolio Service, Exposure,       from: execution, kafka
+                     Capital Partition, Snapshot,
+                     Replay Engine
+ n8n                 n8n workflow automation             from: platform
+
+ STRICT RULES:
+   execution namespace → ONLY receives from strategy namespace
+   trading-infra       → ONLY receives from execution namespace
+   trading-infra       → ONLY egress to whitelisted broker IPs
+   storage             → ONLY accessible from approved namespaces
+   vault               → every service has individual vault role/policy
+   No namespace may access storage directly without service intermediary
+
+INFRA LAYER 5 — NETWORK ARCHITECTURE
+ TRAFFIC FLOW — INBOUND
+
+ Internet / Admin (WireGuard VPN)
+         │
+         ▼
+ Firewall (UFW / iptables)
+   Allow: 80 (HTTP → redirect 443)
+   Allow: 443 (HTTPS + WSS)
+   Allow: 51820 (WireGuard admin)
+   Allow: broker FIX ports (whitelist broker IPs only)
+   Deny:  all other inbound
+         │
+         ▼
+ MetalLB External IP (192.168.1.240 VMware / public IP VPS)
+         │
+         ▼
+ NGINX Ingress Controller (TLS termination via cert-manager)
+   /api/v1/*      → Kong API Gateway → internal services
+   /dashboard     → trading-dashboard-frontend
+   /grafana       → Grafana
+   /argocd        → ArgoCD
+   /vault         → Vault UI
+   /keycloak      → Keycloak
+   /kafka-ui      → Kafka-UI
+         │
+         ▼
+ Kong API Gateway
+   JWT validation (Keycloak token)
+   Rate limiting per client
+   Request tracing header injection
+   mTLS to backend services (Istio)
+
+ INTERNAL SERVICE COMMUNICATION
+   All pod-to-pod: mTLS via Istio service mesh
+   Service discovery: Kubernetes DNS
+   Canonical format: <service>.<namespace>.svc.cluster.local
+   Kafka: kafka.kafka.svc.cluster.local:9092 (ONLY this endpoint)
+
+ OUTBOUND — BROKER CONNECTIVITY
+   Source namespace: trading-infra only
+   Egress policy: only to whitelisted broker IP ranges
+   Protocol: FIX 4.4 over TLS / REST HTTPS / WebSocket TLS
+   Monitoring: connection health tracked per broker, per account
+
+ VPN ADMIN ACCESS
+   WireGuard mesh between all nodes
+   Admin access: only via VPN tunnel
+   No management ports exposed publicly
+
+INFRA LAYER 6 — STORAGE ARCHITECTURE
+ DATA CLASSIFICATION AND STORAGE ASSIGNMENT
+
+ Type                  Store             Schema
+ ─────────────────────────────────────────────────────────────────────
+ Price ticks           TimescaleDB       ticks hypertable
+                                         (time, instrument, bid, ask,
+                                          vol, source, broker_id)
+ OHLCV bars            TimescaleDB       ohlcv_1m, ohlcv_5m, ohlcv_1h
+                                         hypertables partitioned by month
+ Signal history        TimescaleDB       signals hypertable
+ Fill history          TimescaleDB       fills hypertable
+ Indicator values      TimescaleDB       features hypertable (TTL: 7 days)
+
+ Orders                PostgreSQL        orders table
+ Positions             PostgreSQL        positions table
+ Accounts              PostgreSQL        accounts table
+ Account groups        PostgreSQL        account_groups table
+ Strategy versions     PostgreSQL        strategy_versions table
+ Config snapshots      PostgreSQL        config_snapshots table
+ Portfolio snapshots   PostgreSQL        portfolio_snapshots table
+ Reconciliation log    PostgreSQL        reconciliation_log table
+ Audit log             PostgreSQL        audit_log table (append-only)
+
+ Live price cache       Redis            price:{instrument}:{broker}
+ Live signal cache      Redis            signal:{strategy}:{instrument}
+ Account balance cache  Redis            account:{id}:balance
+ Position cache         Redis            account:{id}:positions
+ Daily PnL cache        Redis            risk:daily_pnl:{account_id}
+ Screened instruments   Redis            screened:{strategy} (TTL: 5min)
+ System status          Redis            system:status
+
+ Event log              Kafka            All streams (7-day retention)
+                                         Audit stream (permanent)
+ Config/IaC             Git (GitHub)     Terraform, Helm, ArgoCD apps
+ Container images       Harbor           All service images (versioned)
+ Cluster backups        S3/Wasabi        Velero snapshots (daily)
+ DB backups             S3/Wasabi        PG + TSDB WAL + daily dump
+
+ STORAGE RULES:
+   Kafka = single source of truth (event log authoritative)
+   PostgreSQL = materialized state derived from Kafka
+   TimescaleDB = time-series data + query-optimized reads
+   Redis = cache only, never authoritative, always derivable
+   All financial values = int64 fixed-point (no floats in DB either)
+   TimescaleDB price columns = BIGINT (not FLOAT, not NUMERIC)
+
+INFRA LAYER 7 — SECURITY ARCHITECTURE
+ LAYER 1 — IDENTITY (Keycloak)
+   Realm:   trading-platform
+   Clients: api-gateway (public), services (confidential)
+   Roles:   system / trader / risk-admin / ops / readonly / audit
+   Auth:    OIDC + OAuth2 client credentials for services
+   MFA:     Required for trader + risk-admin roles
+   Session: Access token TTL 15 min, refresh 1 hour
+
+ LAYER 2 — SECRETS (HashiCorp Vault)
+   Auth backend:       Kubernetes service account auth
+   Secret types:
+     DB credentials    → dynamic secrets (auto-rotated every 1 hour)
+     Broker API keys   → static secrets (manual rotation, versioned)
+     JWT signing key   → PKI engine (auto-rotate)
+     TLS certificates  → PKI engine (cert-manager integration)
+   Audit log:          all secret access logged
+   Policy model:       each service has its own Vault role
+                       accessing only its required secrets
+
+ LAYER 3 — SERVICE MESH (Istio)
+   mTLS:               enforced between all pods
+   Certificate source: Istio CA (or Vault PKI backend)
+   Policy:             AuthorizationPolicy per namespace
+                       (execution can only call trading-infra)
+   Traffic:            Envoy sidecar on every pod
+
+ LAYER 4 — CONTAINER SECURITY
+   All containers:     non-root user (runAsNonRoot: true)
+   Filesystem:         read-only root (readOnlyRootFilesystem: true)
+   Privileges:         no privileged containers, no hostNetwork
+   Images:             scanned by Trivy in CI (fail on CRITICAL)
+   Registry:           Harbor private registry only (no Docker Hub in prod)
+   Tags:               never latest — always git-sha pinned
+
+ LAYER 5 — NETWORK SECURITY
+   NetworkPolicy:      namespace isolation enforced
+   Ingress:            TLS only (cert-manager, auto-renew)
+   Admin access:       WireGuard VPN only
+   Broker connections: egress whitelist by broker IP range
+   Public exposure:    only 80/443 + WireGuard port
+
+ LAYER 6 — AUDIT
+   All API calls:      Kubernetes audit log
+   All trades:         audit_stream (Kafka, permanent retention)
+   All mode changes:   audit_stream
+   All kill switches:  audit_stream with user identity
+   All secret access:  Vault audit log
+   Lineage:            every fill traceable to signal via hash chain
+
+INFRA LAYER 8 — OBSERVABILITY ARCHITECTURE
+ METRICS (Prometheus + Grafana)
+
+ Prometheus scrape targets:
+   All pods:           /metrics endpoint, port 9090
+   Kafka:              JMX exporter → Prometheus
+   PostgreSQL:         postgres_exporter
+   TimescaleDB:        postgres_exporter + custom queries
+   Redis:              redis_exporter
+   Node level:         node_exporter on all hosts
+   Kubernetes:         kube-state-metrics + cadvisor
+
+ Critical metrics to track:
+   Trading pipeline:
+     signal_generation_rate (per strategy, per instrument)
+     decision_engine_latency_p50/p95/p99
+     risk_check_latency_p50/p95/p99
+     order_submission_latency_p99
+     fill_rate_pct (fills / orders placed)
+     rejection_rate_pct (by rejection reason)
+     copy_trade_latency_p99
+     kill_switch_events_total
+
+   Platform health:
+     kafka_consumer_lag_per_topic
+     dead_letter_queue_depth
+     broker_connection_status (per broker)
+     broker_reconnect_attempts_total
+     reconciliation_mismatch_count
+
+   Portfolio:
+     portfolio_daily_pnl_usd (per account)
+     portfolio_drawdown_current_pct (per account)
+     portfolio_open_positions_count
+     portfolio_total_exposure_usd
+     margin_utilization_pct (per account, per broker)
+
+   System:
+     pod_restart_count (alert if > 3 in 5 min)
+     disk_utilization_pct (alert at 80%)
+     kafka_disk_pct (alert at 70%)
+     timescaledb_disk_pct
+
+ Grafana Dashboards:
+   Platform Overview     → all service health at a glance
+   Kafka Health          → lag, throughput, partition status
+   Trading Pipeline      → signal → fill latency waterfall
+   Portfolio Live        → PnL, positions, exposure, drawdown
+   Risk Dashboard        → all risk metrics, kill switch status
+   Broker Connections    → per-broker health, latency, fill quality
+   Account Summary       → per-account overview
+   Reconciliation        → mismatch count, resolution status
+   Infrastructure        → node resources, disk, network
+
+ LOGGING (Loki + Promtail)
+   All pod stdout/stderr: Promtail DaemonSet → Loki
+   Structured logging:    JSON format, required fields:
+                          service, trace_id, account_id (where applicable),
+                          event_time, level, message
+   Retention:             30 days hot, 90 days cold
+   Access:                Grafana Loki datasource
+
+ TRACING (Jaeger + OpenTelemetry)
+   Instrumentation:       all FastAPI services (auto-instrumented)
+   Propagation:           trace-id from signal_id through to fill
+   Critical traces:       signal → decision → risk → order → fill
+   Backend:               Jaeger (or Grafana Tempo)
+   Retention:             7 days
+
+ ALERTING (Alertmanager)
+   Channels:
+     Telegram Bot         → immediate (all CRITICAL alerts)
+     Email                → CRITICAL + WARNING (backup channel)
+     PagerDuty            → CRITICAL only (on-call escalation)
+
+   Alert Rules (must define):
+     kill_switch_triggered         → CRITICAL, immediate all channels
+     broker_disconnect             → CRITICAL, immediate
+     kafka_consumer_lag > 10000    → WARNING
+     reconciliation_mismatch       → CRITICAL
+     daily_pnl < -threshold        → CRITICAL (risk breach)
+     pod_crashloop                 → WARNING
+     disk > 80%                    → WARNING
+     db_replication_lag > 30s      → CRITICAL
+
+INFRA LAYER 9 — CI/CD AND DEPLOYMENT PIPELINE
+ DEPLOYMENT FLOW
+
+ Developer pushes code
+         │
+         ▼
+ GitHub Actions Pipeline (triggered on PR + main push)
+   Step 1: Lint (flake8, eslint)
+   Step 2: Unit tests (pytest, jest)
+   Step 3: Docker build (Kaniko, rootless)
+   Step 4: Trivy scan (fail on CRITICAL CVEs)
+   Step 5: Push to Harbor (tag: git-sha, never latest)
+   Step 6: Update Helm values file (image.tag = git-sha)
+   Step 7: Commit values change to Git
+         │
+         ▼
+ ArgoCD detects Git change (GitOps sync)
+   DEV:     auto-sync (immediate)
+   STAGING: auto-sync after CI passes
+   PROD:    manual approval gate required
+         │
+         ▼
+ ArgoCD applies Helm release to Kubernetes
+         │
+         ▼
+ Kubernetes rolling deployment
+   Strategy: RollingUpdate (maxSurge: 1, maxUnavailable: 0)
+   Health check: readiness probe must pass before traffic routes
+   PodDisruptionBudget: minAvailable: 2 (production)
+         │
+         ▼
+ Smoke test (automated post-deploy)
+   Check: /health/ready endpoint on all new pods
+   Check: Kafka consumer group lag not increasing
+   Check: no new error logs in first 2 minutes
+         │
+         ▼
+ Notification: Telegram + Slack (deploy success or failure)
+
+ ROLLBACK:
+   ArgoCD: git revert → auto-sync on main
+   Helm:   helm rollback <release> <revision>
+   Target: < 3 minutes to complete rollback
+
+ ENVIRONMENT PROMOTION:
+   PR merge → DEV (automated)
+   DEV stable → STAGING (automated after smoke test)
+   STAGING stable 48h → PROD (manual approval)
+   PROD: only tagged releases (semantic versioning)
+
+ HELM CHART STRUCTURE (per service):
+   services/<name>/helm/<name>/
+     Chart.yaml
+     values.yaml          (defaults)
+     values-dev.yaml      (dev overrides)
+     values-staging.yaml  (staging overrides)
+     values-prod.yaml     (prod overrides)
+     templates/
+       deployment.yaml
+       service.yaml
+       hpa.yaml            (horizontal pod autoscaler)
+       pdb.yaml            (pod disruption budget)
+       configmap.yaml
+       serviceaccount.yaml
+       networkpolicy.yaml
+       servicemonitor.yaml (Prometheus scrape config)
+
+ ARGOCD APPLICATION STRUCTURE:
+   argocd/apps/
+     dev/
+       <service-name>-dev.yaml    (one Application per service)
+     staging/
+       <service-name>-staging.yaml
+     prod/
+       <service-name>-prod.yaml
+   argocd/app-of-apps.yaml        (root app managing all apps)
+
+INFRA LAYER 10 — DISASTER RECOVERY
+ RECOVERY OBJECTIVES
+   RPO (Recovery Point Objective): < 1 minute (Kafka replication)
+   RTO (Recovery Time Objective):  < 5 minutes (pod rescheduling)
+   Broker failover RTO:            < 10 seconds (SOR auto-route)
+   Full cluster rebuild:           < 60 minutes (from Terraform + ArgoCD)
+
+ FAILURE SCENARIOS AND RESPONSES
+
+ Single pod crash
+   Detection: Kubernetes liveness probe (< 30 sec)
+   Response:  Kubernetes auto-restart
+   RTO: < 30 seconds
+
+ Single node failure
+   Detection: Kubernetes node NotReady
+   Response:  Pod rescheduling to remaining nodes
+   RTO: < 5 minutes
+   Requirement: cluster must have node capacity for this
+
+ Kafka broker failure (1 of 3)
+   Detection: Prometheus Kafka metrics
+   Response:  KRaft auto leader election, ISR maintained
+   RTO: < 60 seconds, zero data loss (replication factor 3)
+
+ Database primary failure
+   Detection: PostgreSQL exporter + Patroni
+   Response:  Automatic failover to replica
+   RTO: < 120 seconds
+   RPO: < 5 seconds (streaming replication)
+
+ Broker connectivity loss
+   Detection: EMS heartbeat timeout (5 sec)
+   Response:  SOR immediate failover to secondary broker
+   RTO: < 10 seconds
+   Pending orders: held in OMS state, resubmitted on reconnect
+
+ Daily loss breach
+   Detection: risk-engine real-time check
+   Response:  kill_switch_stream → HALT_ALL on affected accounts
+   RTO: immediate (< 1 second response time)
+
+ Complete site failure
+   Detection: external health check ping failure
+   Response:  DNS failover to secondary DC
+   RTO: < 5 minutes (if secondary cluster is warm standby)
+
+ BACKUP STRATEGY
+   Kafka:       3x replication + S3 offsite archival (MirrorMaker2)
+   PostgreSQL:  Continuous WAL archival to S3 + daily pg_dump
+   TimescaleDB: Continuous WAL archival to S3 + daily pg_dump
+   Redis:       RDB snapshots hourly to S3 (non-authoritative)
+   K8s cluster: Velero daily backup → S3 (PVs + etcd)
+   Config/IaC:  Git (all infra is code, Git IS the backup)
+   Images:      Harbor with replication to secondary registry
+   Secrets:     Vault with S3 snapshot + secondary Vault instance
+
+ BACKUP TESTING:
+   Monthly: restore PostgreSQL from S3 to staging, verify integrity
+   Quarterly: full cluster rebuild from Terraform + ArgoCD
+   Continuous: Kafka consumer from beginning-of-log (replay test)
+
+INFRA LAYER 11 — FOLDER STRUCTURE
+ trading-platform/
+ ├── infrastructure/
+ │   ├── terraform/                   ← IaC for all environments
+ │   │   ├── environments/
+ │   │   │   ├── vmware/              ← VMware-specific vars
+ │   │   │   ├── vps-staging/         ← VPS staging vars
+ │   │   │   └── production/          ← Production vars
+ │   │   └── modules/
+ │   │       ├── k8s-cluster/
+ │   │       ├── networking/
+ │   │       └── storage/
+ │   │
+ │   ├── kubernetes/
+ │   │   ├── namespaces/              ← All namespace definitions
+ │   │   ├── helm-values/             ← Per-component Helm values
+ │   │   │   ├── kafka-values.yaml
+ │   │   │   ├── timescaledb-values.yaml
+ │   │   │   ├── postgresql-values.yaml
+ │   │   │   ├── redis-values.yaml
+ │   │   │   ├── vault-values.yaml
+ │   │   │   ├── keycloak-values.yaml
+ │   │   │   ├── istio-values.yaml
+ │   │   │   ├── kong-values.yaml
+ │   │   │   ├── argocd-values.yaml
+ │   │   │   ├── prometheus-values.yaml
+ │   │   │   ├── loki-values.yaml
+ │   │   │   ├── jaeger-values.yaml
+ │   │   │   ├── harbor-values.yaml
+ │   │   │   ├── longhorn-values.yaml
+ │   │   │   └── velero-values.yaml
+ │   │   └── network-policies/        ← Per-namespace policies
+ │   │
+ │   └── argocd/
+ │       ├── app-of-apps.yaml
+ │       └── apps/
+ │           ├── dev/
+ │           ├── staging/
+ │           └── prod/
+ │
+ ├── services/
+ │   ├── <service-name>/
+ │   │   ├── app/                     ← Service source code
+ │   │   │   └── main.py
+ │   │   ├── Dockerfile
+ │   │   ├── requirements.txt
+ │   │   └── helm/<service-name>/
+ │   │       ├── Chart.yaml
+ │   │       ├── values.yaml
+ │   │       ├── values-dev.yaml
+ │   │       ├── values-staging.yaml
+ │   │       ├── values-prod.yaml
+ │   │       └── templates/
+ │   │           ├── deployment.yaml
+ │   │           ├── service.yaml
+ │   │           ├── hpa.yaml
+ │   │           ├── pdb.yaml
+ │   │           ├── configmap.yaml
+ │   │           ├── serviceaccount.yaml
+ │   │           ├── networkpolicy.yaml
+ │   │           └── servicemonitor.yaml
+ │
+ ├── frontend/
+ │   └── dashboard/                   ← React.js trading dashboard
+ │       └── helm/dashboard/
+ │
+ ├── database/
+ │   ├── migrations/                  ← Flyway/Liquibase DB migrations
+ │   │   ├── postgres/
+ │   │   └── timescaledb/
+ │   └── schemas/                     ← Schema definitions
+ │
+ ├── schemas/                         ← Avro schemas (Kafka events)
+ │   ├── signal_v1.avsc
+ │   ├── trade_intent_v1.avsc
+ │   ├── execution_order_v1.avsc
+ │   └── fill_v1.avsc
+ │
+ ├── docs/
+ │   ├── architecture/
+ │   │   ├── trading-platform.md
+ │   │   └── infra.md
+ │   ├── runbooks/
+ │   │   ├── kill-switch.md
+ │   │   ├── broker-failover.md
+ │   │   └── db-recovery.md
+ │   └── adr/                         ← Architecture Decision Records
+ │
+ └── tests/
+     ├── unit/
+     ├── integration/
+     └── e2e/
+
+INFRA LAYER 12 — DEPLOYMENT SEQUENCE (ORDERED)
+ MUST DEPLOY IN THIS EXACT ORDER — each phase depends on previous
+
+ PHASE 1: CLUSTER FOUNDATION
+   01. cert-manager                   (TLS automation)
+   02. MetalLB                        (LoadBalancer IP allocation)
+   03. NGINX Ingress                  (HTTP routing)
+   04. Calico / CNI                   (already installed at cluster init)
+   05. Longhorn                       (distributed storage)
+   06. WireGuard                      (VPN — admin access secured)
+
+ PHASE 2: SECURITY LAYER
+   07. Vault                          (secrets management)
+   08. Keycloak                       (identity + RBAC)
+   09. Istio                          (service mesh + mTLS)
+   10. Kong API Gateway               (rate limit + JWT)
+   11. Harbor Registry                (private image registry)
+
+ PHASE 3: EVENT BACKBONE
+   12. Kafka (3 brokers, KRaft)       (event source of truth)
+   13. Schema Registry                (schema governance)
+   14. Kafka-UI                       (operational visibility)
+
+ PHASE 4: STORAGE LAYER
+   15. PostgreSQL + PgBouncer         (state + business data)
+   16. TimescaleDB                    (time-series data)
+   17. Redis Cluster                  (cache layer)
+
+ PHASE 5: OBSERVABILITY
+   18. Prometheus + Alertmanager      (metrics)
+   19. Grafana                        (dashboards)
+   20. Loki + Promtail                (logs)
+   21. Jaeger                         (tracing)
+
+ PHASE 6: CI/CD
+   22. ArgoCD                         (GitOps deployment engine)
+
+ PHASE 7: CORE PLATFORM SERVICES
+   23. config-service
+   24. config-snapshot-service
+   25. identity-service
+   26. audit-service
+   27. event-ingestion-service
+   28. event-validation-service
+   29. event-ordering-service
+   30. orchestration-service
+   31. snapshot-service
+   32. replay-engine-service
+
+ PHASE 8: MARKET DATA + PORTFOLIO
+   33. portfolio-service              (state authority — deploy before trading)
+   34. exposure-service
+   35. market-data-ingestion-service
+   36. market-data-normalizer-service
+   37. feature-store-service
+   38. historical-data-service
+
+ PHASE 9: TRADING PIPELINE (PAPER MODE FIRST)
+   39. instrument-screening-service
+   40. instrument-monitoring-service
+   41. strategy-engine-service
+   42. signal-processor-service
+   43. decision-engine-service
+
+ PHASE 10: EXECUTION PIPELINE (PAPER MODE FIRST)
+   44. execution-intent-service
+   45. account-routing-service
+   46. risk-engine-service
+   47. policy-engine-service
+   48. position-sizer-service
+   49. order-engine-service
+   50. smart-order-router
+   51. oms-service
+   52. ems-service
+   53. broker-adapter-service
+   54. fill-handler-service
+   55. reconciliation-service
+   56. copy-trade-engine
+
+ PHASE 11: PAPER TRADING VALIDATION (GATE — DO NOT SKIP)
+   Validate end-to-end loop in PAPER mode:
+   ✔ Signal generated for screened instrument
+   ✔ Decision engine produces TradeIntent
+   ✔ Risk engine checks all accounts
+   ✔ Order engine produces ExecutionOrder
+   ✔ OMS/EMS routes to mock broker
+   ✔ Fill received, portfolio updated
+   ✔ Lineage hash chain intact
+   ✔ Replay produces identical result
+   ✔ Reconciliation passes
+   ONLY AFTER ALL PASS → enable LIVE_AUTO on first account
+
+ PHASE 12: UI AND WORKFLOW
+   57. trading-dashboard-frontend
+   58. n8n-workflow-service
+   59. alert-service
+   60. failure-handling-service
+   61. backtest-engine-service

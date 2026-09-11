@@ -1,0 +1,290 @@
+import React, { useMemo, useState } from 'react';
+import { toast } from 'sonner';
+
+import { brokerIntelligenceService } from '../../../../services/brokerIntelligenceService';
+import { useBrokerIntelligenceStore } from '../../../../store/brokerIntelligenceStore';
+
+export const BrokerProvisioningPanel: React.FC = () => {
+  const providers = useBrokerIntelligenceStore((state) => state.providers);
+  const accounts = useBrokerIntelligenceStore((state) => state.accounts);
+
+  const [broker, setBroker] = useState('');
+  const [accountId, setAccountId] = useState('');
+  const [displayName, setDisplayName] = useState('');
+  const [environment, setEnvironment] = useState('PAPER');
+
+  const [credentialJson, setCredentialJson] = useState(
+    '{\n  "client_id": "",\n  "client_secret": ""\n}'
+  );
+
+  const [selectedAccountId, setSelectedAccountId] = useState('');
+  const [selectedCredentialJson, setSelectedCredentialJson] = useState(
+    '{\n  "client_id": "",\n  "client_secret": ""\n}'
+  );
+
+  const availableProviders = useMemo(
+    () => providers.filter((provider) => provider.enabled !== false),
+    [providers]
+  );
+
+  const submitAccount = async () => {
+    if (!broker || !accountId || !displayName) {
+      toast.error(
+        'Broker, account ID and display name are required.'
+      );
+      return;
+    }
+
+    try {
+      JSON.parse(credentialJson);
+    } catch {
+      toast.error('Credential JSON is invalid.');
+      return;
+    }
+
+    try {
+      await brokerIntelligenceService.registerAccount({
+        accountId,
+        broker,
+        displayName,
+        environment,
+        enabled: true,
+      });
+
+      throw new Error(
+        "Credential write backend capability is not currently exposed by Broker Adapter"
+      );
+
+      await brokerIntelligenceService.fetchAll();
+
+      toast.success(
+        `Broker account ${accountId} provisioned.`
+      );
+
+      setAccountId('');
+      setDisplayName('');
+    } catch (error: any) {
+      toast.error(
+        `Account provisioning failed: ${
+          error?.message ?? 'Unknown error'
+        }`
+      );
+    }
+  };
+
+  const attachCredential = async () => {
+    if (!selectedAccountId) {
+      toast.error('Select an account.');
+      return;
+    }
+    try {
+      const credentials: Record<string, unknown> =
+        JSON.parse(selectedCredentialJson);
+
+      await brokerIntelligenceService.setAccountCredentials(
+        selectedAccountId,
+        credentials
+      );
+
+      await brokerIntelligenceService.fetchAll();
+
+      toast.success(
+        `Credential attached to ${selectedAccountId}.`
+      );
+    } catch (error: any) {
+      toast.error(
+        `Credential update failed: ${
+          error?.message ?? 'Unknown error'
+        }`
+      );
+    }
+  };
+
+  return (
+    <section className="bi-provisioning-panel">
+      <div className="bi-provisioning-header">
+        <div>
+          <span className="bi-eyebrow">
+            BROKER / ACCOUNT PROVISIONING
+          </span>
+
+          <h3>Register Broker Account</h3>
+
+          <p>
+            Register an execution account and attach its
+            credential material through the authorized broker
+            adapter boundary.
+          </p>
+        </div>
+      </div>
+
+      <div className="bi-provisioning-grid">
+
+        <div className="bi-provisioning-section">
+          <div className="bi-provisioning-section-title">
+            NEW ACCOUNT
+          </div>
+
+          <div className="bi-provisioning-fields">
+
+            <label>
+              <span>BROKER</span>
+
+              <select
+                value={broker}
+                onChange={(event) =>
+                  setBroker(event.target.value)
+                }
+              >
+                <option value="">
+                  SELECT BROKER
+                </option>
+
+                {availableProviders.map((provider) => (
+                  <option
+                    key={provider.id}
+                    value={provider.id}
+                  >
+                    {provider.name ??
+                      provider.id}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label>
+              <span>ACCOUNT ID</span>
+
+              <input
+                value={accountId}
+                onChange={(event) =>
+                  setAccountId(event.target.value)
+                }
+                placeholder="COREI-LIVE-001"
+                autoComplete="off"
+              />
+            </label>
+
+            <label>
+              <span>DISPLAY NAME</span>
+
+              <input
+                value={displayName}
+                onChange={(event) =>
+                  setDisplayName(event.target.value)
+                }
+                placeholder="Core Trading Account"
+                autoComplete="off"
+              />
+            </label>
+
+            <label>
+              <span>ENVIRONMENT</span>
+
+              <select
+                value={environment}
+                onChange={(event) =>
+                  setEnvironment(event.target.value)
+                }
+              >
+                <option value="LIVE">LIVE</option>
+                <option value="PAPER">PAPER</option>
+                <option value="SIMULATION">
+                  SIMULATION
+                </option>
+                <option value="RESEARCH">
+                  RESEARCH
+                </option>
+                <option value="TEST">TEST</option>
+                <option value="SANDBOX">
+                  SANDBOX
+                </option>
+              </select>
+            </label>
+
+          </div>
+
+          <label className="bi-provisioning-json">
+            <span>CREDENTIAL MATERIAL</span>
+
+            <textarea
+              value={credentialJson}
+              onChange={(event) =>
+                setCredentialJson(event.target.value)
+              }
+              spellCheck={false}
+            />
+          </label>
+
+          <button
+            type="button"
+            className="bi-provisioning-primary"
+            onClick={() => void submitAccount()}
+          >
+            REGISTER ACCOUNT + CREDENTIAL
+          </button>
+        </div>
+
+        <div className="bi-provisioning-section">
+          <div className="bi-provisioning-section-title">
+            EXISTING ACCOUNT
+          </div>
+
+          <div className="bi-provisioning-fields">
+            <label>
+              <span>ACCOUNT</span>
+
+              <select
+                value={selectedAccountId}
+                onChange={(event) =>
+                  setSelectedAccountId(
+                    event.target.value
+                  )
+                }
+              >
+                <option value="">
+                  SELECT ACCOUNT
+                </option>
+
+                {accounts.map((account) => (
+                  <option
+                    key={account.id}
+                    value={account.id}
+                  >
+                    {account.displayName ??
+                      account.id}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+
+          <label className="bi-provisioning-json">
+            <span>CREDENTIAL MATERIAL</span>
+
+            <textarea
+              value={selectedCredentialJson}
+              onChange={(event) =>
+                setSelectedCredentialJson(
+                  event.target.value
+                )
+              }
+              spellCheck={false}
+            />
+          </label>
+
+          <button
+            type="button"
+            className="bi-provisioning-secondary"
+            onClick={() => void attachCredential()}
+          >
+            ATTACH / REPLACE CREDENTIAL
+          </button>
+        </div>
+
+      </div>
+    </section>
+  );
+};
+
+export default BrokerProvisioningPanel;

@@ -1,0 +1,755 @@
+PHASE C — STEP 6: EXECUTION ENGINE
+
+	Reference ID: CORE-TRADING-SYSTEM-PHASE-C-STEP6-EXECUTION-ENGINE-V1-2026-04-09
+	Continuity: Step 1–5 LOCKED (Architecture → Infra → Event → State → Orchestration)
+	Position: FINAL INFRA LAYER BEFORE PHASE D
+
+1. PHASE IDENTITY LAYER
+	1.1 Phase Name
+
+		Phase C — Step 6: Execution Engine
+
+	1.2 Phase Role
+
+		Defines the deterministic execution runtime layer that:
+
+			consumes execution_plan (Step 5)
+			executes ExecutionTask deterministically
+			triggers State Transitions (Step 4)
+			operates strictly on Event Stream (Step 3)
+			runs inside Physical Infra constraints (Step 2)
+
+		This is the actual compute engine of Phase C.
+
+	1.3 Phase Objective
+
+		Construct a deterministic, replay-safe execution runtime such that:
+
+			ExecutionPlan
+				→ Execution Engine
+					→ Deterministic Task Execution
+						→ State Transition (Step 4)
+							→ Snapshot
+								→ Execution Ready Output
+
+		Guarantees:
+
+			identical input → identical execution → identical state → identical output
+			zero runtime ambiguity
+			full replay equivalence
+
+	1.4 Why This Phase Exists
+
+		Without Execution Engine:
+
+			orchestration exists but no actual execution
+			state model cannot be triggered
+			event system becomes passive
+			system cannot transition to Phase D
+
+		Failure modes:
+
+			(F1) Non-deterministic task execution
+			(F2) State divergence due to unordered execution
+			(F3) Replay mismatch
+			(F4) Hidden runtime state contamination
+			(F5) Cross-partition inconsistency
+
+		Aligned with Phase C Macro execution requirement
+
+2. PHASE SCOPE CONTROL
+	2.1 INCLUDED (STRICT)
+		execution runtime engine
+		task execution lifecycle
+		execution scheduling (from orchestrator plan)
+		deterministic compute model
+		execution → state transition binding
+		execution idempotency model
+		execution lineage propagation
+		execution failure handling
+		replay execution model
+
+	2.2 EXCLUDED (STRICT)
+		strategy / signal / decision logic (Phase A)
+		constraint definition (Phase B)
+		constraint enforcement (Phase D)
+		orchestration logic (Step 5 already owns)
+		event schema (Step 3)
+		state logic internals (Step 4)
+
+	2.3 Boundary Rule
+
+		Execution Engine MUST:
+
+		execute tasks ONLY
+		follow ExecutionPlan EXACTLY
+		trigger state transitions ONLY via Step 4
+
+		Execution Engine MUST NOT:
+
+		modify ExecutionPlan
+		alter events
+		enforce constraints
+		introduce new logic
+
+		Violation → SYSTEM INVALID
+
+3. ARCHITECTURAL INTENT LAYER
+	3.1 Core Principles (MANDATORY)
+		P1 — Deterministic Execution
+
+			Same:
+
+				ExecutionPlan + EventStream
+
+			→ identical execution results
+
+		P2 — ExecutionPlan Authority
+
+			Execution Engine MUST:
+
+				NOT decide execution order
+				strictly follow Step 5 plan
+
+		P3 — Stateless Execution
+
+			Execution Engine:
+
+				holds NO persistent state
+				state lives ONLY in Step 4
+
+		P4 — Event-Driven Execution
+
+			Execution is triggered ONLY by:
+
+				ExecutionTask (derived from Event)
+
+		P5 — Idempotent Execution
+
+			If task already executed:
+
+				skip + verify output hash
+
+		P6 — Replay Fidelity
+
+			Replay(EventLog):
+
+				→ identical execution sequence
+				→ identical outputs
+
+		P7 — No Hidden State
+
+			NO:
+
+				cache dependency
+				runtime mutation
+				memory-based shortcuts
+
+		P8 — Execution-State Coupling (STRICT)
+
+			Execution MUST:
+
+				trigger StateTransition(event, service_output)
+
+			ONLY via Step 4 rules
+
+		Execution Time Rule:
+
+			execution_time = event_time
+
+			System clock MUST NOT be used
+
+			Violation → determinism failure
+
+	3.2 Architectural Model
+		Execution Function
+			Execution_Output = F(
+				execution_plan,
+				event_stream,
+				configuration_snapshot
+			)
+
+		Expanded
+			for task in execution_plan.ordered_tasks:
+				output = execute(task)  // defined in Section 5.1 R5.1
+				trigger_state_transition(output)
+
+	3.3 System Positioning
+		Event Model (Step 3)
+				↓
+		Service Graph (Step 5)
+				↓
+		Execution Engine (THIS)
+				↓
+		State Model (Step 4)
+				↓
+		Execution Ready State → Phase D
+
+4. DOMAIN MODEL DEFINITION
+	4.1 Core Entities
+		E1 — ExecutionEngine
+			execution_engine = {
+				engine_id
+				execution_mode
+				deterministic_flag = TRUE
+			}
+
+		E2 — ExecutionTask (from Step 5)
+			execution_task = {
+				task_id
+				event_id
+				service_id
+				partition_id
+				dependency_set
+				lineage_hash
+			}
+
+		E3 — TaskExecutionResult
+			task_execution_result = {
+				task_id
+				event_id
+				service_id
+				output_payload
+				output_hash
+				execution_status
+				lineage_hash
+			}
+
+		E4 — ExecutionContext
+			execution_context = {
+				execution_plan_hash
+				event_stream_reference
+				configuration_snapshot
+				version_identifiers
+			}
+
+		E5 — ExecutionLog (Derived)
+			execution_log = {
+				executed_tasks[]
+				execution_order_trace
+			}
+
+			Constraint:
+
+			derived ONLY from execution_plan + results
+			NOT persistent source of truth
+
+		E6 — ExecutionHash
+
+			execution_hash = HASH_v1(
+				previous_execution_hash +
+				task_id +
+				output_hash
+			)
+
+	4.2 Relationships
+			ExecutionPlan → produces → ExecutionTask
+			ExecutionTask → executed_by → ExecutionEngine
+			ExecutionEngine → emits → TaskExecutionResult
+			TaskExecutionResult → triggers → StateTransition
+
+	4.3 Ownership
+
+		All execution entities → Phase C
+
+5. LOGIC / RULE ENGINE
+	5.1 Rule Set
+		R1 — Execution Order Rule
+
+			Execution MUST follow:
+
+				execution_plan.ordered_tasks
+
+			NO deviation allowed
+
+		R2 — Dependency Enforcement Rule
+
+			Task executes ONLY IF:
+
+			∀ dependency_task ∈ dependency_set:
+				dependency_task.status = COMPLETED
+
+		R3 — Partition Ordering Rule
+
+			Within same partition:
+
+				strict sequential execution
+
+		R4 — Idempotency Rule
+
+			If task already executed:
+
+				skip execution
+				verify output_hash matches
+
+			Mismatch → HARD FAIL
+
+		R5 — Deterministic Function Rule
+
+			Each service execution:
+
+				output = deterministic_function(input)
+
+			Constraints:
+
+				pure function
+				no external input
+				fixed-point numeric
+
+				R5.1 — Execution Function Definition Rule
+
+					execute(task):
+
+						input = canonical_event_payload(task.event_id)
+
+						deterministic_function =
+							deterministic_function_reference(task.service_id)
+
+						output = deterministic_function(input)
+
+						Constraints:
+
+							- MUST be pure function
+							- MUST use ONLY canonical input
+							- MUST NOT access external state
+							- MUST produce schema-bound output
+							- MUST be deterministic (same input → same output)
+
+						return output
+
+		R6 — State Transition Trigger Rule
+
+			After execution:
+
+				State(t+1) = Apply(Event, Output)
+
+			ONLY via Step 4 engine
+
+		R7 — Replay Rule
+
+			Replay MUST reconstruct:
+
+				identical execution_plan
+				identical task sequence
+				identical outputs
+
+		RULE PRECEDENCE (STRICT)
+			Dependency (R2)
+			Partition Ordering (R3)
+			Execution Order (R1)
+			Idempotency (R4)
+			Execution (R5)
+			State Trigger (R6)
+
+		R8 — Execution Isolation Rule
+
+			For each task_id:
+
+				execution MUST satisfy:
+
+					exactly-once execution guarantee
+
+			Implementation:
+
+				execution_lock = HASH_v1(task_id)
+
+				Only one execution instance allowed per task_id
+
+			Violation → HARD FAIL
+
+		R9 — Output-State Contract Rule
+
+			TaskExecutionResult.output_payload MUST:
+
+				match state_transition_schema
+
+			Validation required BEFORE state transition
+
+			Mismatch → REJECT
+
+		Execution Resolution Matrix (STRICT):
+
+			IF dependency NOT satisfied:
+				BLOCK
+
+			ELSE IF partition order violated:
+				BLOCK
+
+			ELSE IF task already executed:
+
+				VERIFY idempotency
+
+				IF output_hash mismatch:
+					HARD FAIL
+
+				ELSE:
+					SKIP
+
+			ELSE:
+				EXECUTE
+
+	5.2 Execution Conditions:
+
+		- task MUST be valid
+		- dependencies MUST be satisfied
+		- partition ordering MUST be satisfied
+		- execution_plan MUST be complete
+
+	5.3 Decision Logic (Unified):
+
+			IF dependency NOT satisfied: 		BLOCK
+
+			ELSE IF partition order violated: 	BLOCK
+
+			ELSE IF task already executed:
+					VERIFY idempotency
+						IF mismatch: 	HARD FAIL
+						ELSE:  			SKIP
+
+				ELSE: 	EXECUTE
+
+	5.4 Execution Constraints:
+
+		- no external input allowed
+		- no floating-point arithmetic
+		- no hidden state
+		- no runtime mutation
+
+6. FLOW ARCHITECTURE
+
+	6.0 Canonical Input
+		canonical_input_set_C = {
+			execution_plan
+			event_stream
+			configuration_snapshot
+			version_identifiers
+		}
+
+	6.1 Processing Flow
+		ExecutionPlan
+			→ Task Fetch
+			→ Dependency Check
+			→ Execute Task
+			→ Generate Output
+			→ Trigger State Transition
+			→ Record Execution Trace
+
+	6.2 Output
+		execution_output = {
+			task_execution_results
+			execution_order_trace
+			state_transition_triggers
+		}
+
+	6.3 Flow Canonicalization
+		no runtime decisions
+		no dynamic branching
+		deterministic iteration
+
+7. PIPELINE STRUCTURE
+
+	Stage 1 — Task Intake
+	Stage 2 — Dependency Validation
+	Stage 3 — Scheduling (from plan ONLY)
+	Stage 4 — Execution
+	Stage 5 — State Trigger
+	Stage 6 — Trace Recording
+
+	Strict sequential, no skipping
+
+8. CONTROL & CONSTRAINTS
+
+	8.1 Hard Rules
+		execution order immutable
+		no duplicate execution
+		no out-of-order execution
+		no external input
+		no randomness
+
+	8.2 Guardrails
+		reject invalid task
+		reject dependency violation
+		reject hash mismatch
+
+	8.3 Invariants
+		I1: Execution follows plan exactly
+		I2: Execution is idempotent
+		I3: Output deterministic
+		I4: Replay identical
+		I5: State triggered only via execution
+
+		Numeric Boundary Rule:
+
+			All numeric fields MUST define:
+
+			- min_value
+			- max_value
+			- overflow → HARD FAIL
+			- underflow → zero
+
+9. STATE & DATA MODEL
+	9.1 Execution State
+
+		NONE (stateless)
+
+	9.2 Transition Binding
+
+		Execution → State:
+
+			ExecutionResult → StateTransition(Event)
+
+	9.3 Source of Truth
+		EventLog (Step 2)
+		State (Step 4)
+
+		Execution Engine is NOT a source of truth
+
+10. FAILURE MODEL
+	10.1 Failure Scenarios
+		dependency not satisfied
+		duplicate execution mismatch
+		deterministic function violation
+		state transition failure
+
+	10.2 Impact
+		state divergence
+		replay failure
+		audit inconsistency
+
+	10.3 Mitigation
+		abort execution
+		replay from last checkpoint
+		rebuild state
+
+	10.4 Detection
+		hash mismatch
+		ordering violation
+		invariant breach
+
+		Failure: Duplicate execution mismatch
+
+			Trigger:
+				same task_id produces different output_hash
+
+			Detection:
+				output_hash comparison
+
+			Response:
+				HARD FAIL + abort execution
+
+11. ASSUMPTION REGISTER
+	ExecutionPlan is valid (Step 5 locked)
+	EventStream valid (Step 3 locked)
+	State model correct (Step 4 locked)
+
+	Status: VALIDATED
+
+12. VALIDATION FRAMEWORK
+
+	12.1 Completeness Checklist
+
+		The phase MUST satisfy ALL of the following conditions:
+
+		- All 21 sections are present and fully defined
+		- No undefined variables exist in any section
+		- All logic is explicitly defined (no implicit execution)
+		- Rule execution order and precedence are fully specified
+		- Canonical input set is complete, immutable, and hash-identifiable
+		- Output structure is fully defined and schema-bound
+		- State transition binding is explicitly defined
+		- Traceability chain is complete and continuous
+		- Failure scenarios include trigger, detection, and response
+		- No cross-section duplication of concepts
+
+		Violation of ANY condition → Phase INVALID
+
+
+	12.2 Validation Method
+
+		Validation MUST be performed using deterministic evaluation of:
+
+			canonical_input_set = {
+				input_data_snapshot
+				configuration_snapshot
+				version_identifiers
+			}
+
+		Validation execution requirements:
+
+		- MUST use identical canonical_input_set across runs
+		- MUST produce identical outputs (bit-level)
+		- MUST verify:
+			- execution order correctness
+			- dependency resolution correctness
+			- state transition correctness
+			- hash consistency
+			- output determinism
+
+		Validation MUST NOT:
+
+		- use system clock
+		- depend on runtime state
+		- introduce external inputs
+
+		All validation MUST be reproducible and environment-independent
+
+
+	12.3 Acceptance Criteria
+
+		The phase is considered VALID only if ALL conditions are satisfied:
+
+		- Deterministic execution:
+			identical input → identical execution → identical output
+
+		- Replay equivalence:
+			replay(canonical_input_set) → identical output (bit-level)
+
+		- No rule violations:
+			all defined rules execute without conflict
+
+		- No invariant violations:
+			all constraints and invariants hold across execution
+
+		- No ambiguity:
+			each rule produces a single deterministic outcome
+
+		If ANY condition fails → Phase REJECTED
+
+
+	12.4 Validation Coverage Rule
+
+		Validation MUST ensure that:
+
+		- Every rule in Section 5 is exercised by at least one validation scenario
+		- Every constraint in Section 8 is verified under boundary conditions
+		- Every state transition in Section 9 is validated
+		- Every failure scenario in Section 10 is triggered and detected
+
+		Coverage requirements:
+
+		- boundary conditions (min, max, edge cases)
+		- dependency edge cases
+		- ordering edge cases
+		- idempotency scenarios
+
+		If ANY rule, constraint, or transition is not tested → VALIDATION INCOMPLETE
+
+	12.5 Ambiguity Check
+
+		For EACH rule, definition, and process:
+
+		- Evaluate multiple possible interpretations
+		- Execute each interpretation using identical canonical_input_set
+		- Compare outputs across interpretations
+
+		Requirement:
+
+		- ALL interpretations MUST produce identical outputs
+
+		If multiple interpretations produce different outputs:
+
+		→ rule is ambiguous
+		→ rule MUST be rewritten
+
+		Presence of ANY ambiguity → Phase INVALID
+
+13. OUTPUT
+
+	execution_output = {
+			task_execution_results: [
+				{
+					task_id
+					event_id
+					service_id
+					output_payload
+					output_hash
+					execution_status
+					lineage_hash
+				}
+			]
+			execution_order_trace: ordered list of task_id
+			state_transition_triggers: [
+				{
+					event_id
+					state_transition_reference
+				}
+			]
+		}
+
+14. TRACEABILITY
+	Event
+		→ ExecutionTask
+		→ ExecutionResult
+		→ ExecutionHash
+		→ State
+		→ Snapshot
+		→ Output
+
+15. CROSS-PHASE CONSISTENCY
+
+	Consumes:
+
+	Step 3 Event Model
+	Step 4 State Model
+	Step 5 ExecutionPlan
+
+	Aligned with Phase C macro
+
+16. SCALABILITY MODEL
+	partition-parallel execution
+	deterministic merge
+	horizontal scaling
+
+17. GOVERNANCE
+	version-controlled execution engine
+	deterministic upgrade path
+	hash-based validation
+
+18. AUDITABILITY & OBSERVABILITY
+	full execution trace
+	deterministic replay
+	lineage tracking
+
+	Execution Trace Chain:
+
+	Event → ExecutionTask → ExecutionResult → ExecutionHash → State → Snapshot → Output
+
+19. RISK CONSIDERATIONS
+
+	Execution error = system-wide risk
+
+	Mitigated by:
+
+	determinism
+	idempotency
+	replay
+
+20. FAILURE CONDITION (PHASE LEVEL)
+
+	Phase FAILS if:
+
+	execution order deviates
+	replay mismatch
+	hidden state detected
+	non-determinism observed
+
+	Failure: Dependency not satisfied
+
+		Trigger:
+			dependency_task.status != COMPLETED
+
+		Detection:
+			dependency validation check
+
+		Response:
+			BLOCK execution
+
+21. PHASE LOCK CRITERIA
+
+	LOCK ONLY IF:
+
+	all sections complete
+	Red Team passed
+	Blue Team validated
+	replay equivalence proven
+	zero ambiguity

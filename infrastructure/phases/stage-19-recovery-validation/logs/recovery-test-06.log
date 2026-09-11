@@ -1,0 +1,67 @@
+==================================================
+STAGE-19 RECOVERY TEST 06 — FAILOVER VALIDATION
+==================================================
+[STEP-1] VALIDATE FAILOVER HEALTH
+=========================================
+VALIDATE FAILOVER HEALTH
+=========================================
+[Failover] Checking EMS rollout
+deployment "ems" successfully rolled out
+[Failover] Checking OMS rollout
+deployment "oms" successfully rolled out
+[Failover] Checking smart-order-router rollout
+deployment "smart-order-router" successfully rolled out
+[PASS] Failover health validation successful
+=========================================
+[STEP-2] DISABLE PRIMARY BROKER
+=========================================
+DISABLE PRIMARY BROKER
+=========================================
+[Failover-Test] Scaling broker-adapter-service to 0
+deployment.apps/broker-adapter-service scaled
+[Failover-Test] Waiting for broker adapter shutdown
+[Failover-Test] Primary broker disabled
+=========================================
+[STEP-3] VALIDATE SMART ORDER ROUTER CONTINUITY
+=========================================
+VALIDATE SMART ORDER ROUTER CONTINUITY
+=========================================
+[SOR] Checking smart-order-router rollout
+deployment "smart-order-router" successfully rolled out
+[SOR] Checking smart-order-router pod state
+smart-order-router-64cb79f555-8fr6k   1/1     Running   0          20h
+[PASS] Smart-order-router continuity validation successful
+=========================================
+[STEP-4] RESTORE PRIMARY BROKER
+=========================================
+RESTORE PRIMARY BROKER
+=========================================
+[Failover-Test] Restoring broker-adapter-service
+deployment.apps/broker-adapter-service scaled
+[Failover-Test] Waiting for broker adapter rollout
+Waiting for deployment "broker-adapter-service" rollout to finish: 0 of 1 updated replicas are available...
+deployment "broker-adapter-service" successfully rolled out
+[Failover-Test] Primary broker restored
+=========================================
+[STEP-5] VALIDATE FAILOVER HEALTH
+=========================================
+VALIDATE FAILOVER HEALTH
+=========================================
+[Failover] Checking EMS rollout
+deployment "ems" successfully rolled out
+[Failover] Checking OMS rollout
+deployment "oms" successfully rolled out
+[Failover] Checking smart-order-router rollout
+deployment "smart-order-router" successfully rolled out
+[PASS] Failover health validation successful
+=========================================
+[STEP-6] MEASURE FAILOVER TIME
+=========================================
+FAILOVER TIME MEASUREMENT
+=========================================
+[Failover] Recovery Time (seconds): 13
+[WARN] Failover exceeded target
+=========================================
+==================================================
+RECOVERY TEST 06 COMPLETE
+==================================================

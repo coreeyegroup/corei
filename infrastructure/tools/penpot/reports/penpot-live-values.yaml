@@ -1,0 +1,402 @@
+COMPUTED VALUES:
+backend:
+  affinity: {}
+  autoscaling:
+    hpa:
+      enabled: false
+      maxReplicas: 5
+      metrics:
+      - resource:
+          name: cpu
+          target:
+            averageUtilization: 70
+            type: Utilization
+        type: Resource
+      - resource:
+          name: memory
+          target:
+            averageUtilization: 80
+            type: Utilization
+        type: Resource
+      minReplicas: 1
+    vpa:
+      enabled: false
+      resourcePolicy: {}
+      updateMode: Auto
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - all
+    readOnlyRootFilesystem: false
+    runAsNonRoot: true
+    runAsUser: 1001
+  deploymentAnnotations: {}
+  extraEnvs: []
+  image:
+    pullPolicy: IfNotPresent
+    repository: penpotapp/backend
+    tag: 2.15.3
+  nodeSelector: {}
+  pdb:
+    enabled: false
+    maxUnavailable: null
+    minAvailable: null
+  podAnnotations: {}
+  podLabels: {}
+  podSecurityContext:
+    fsGroup: 1001
+  replicaCount: 1
+  resources:
+    limits: {}
+    requests: {}
+  service:
+    annotations: {}
+    port: 6060
+    type: ClusterIP
+  startupProbe:
+    failureThreshold: 30
+    httpGet:
+      path: /readyz
+      port: http
+    periodSeconds: 10
+  tolerations: []
+  updateStrategy:
+    type: RollingUpdate
+  volumeMounts: []
+  volumes: []
+config:
+  apiSecretKey: kmZ96pAxhTgk3HZvvBkPeVTspGBneKVLEpO_3ecORs_gwACENZ77z05zCe7skvPsQ3jI3QgkULQOWCuLjmjQsg
+  autoFileSnapshot:
+    every: 5
+    timeout: 3h
+  existingSecret: ""
+  extraEnvs: []
+  fileDataBackend: legacy-db
+  flags: enable-registration enable-login-with-password disable-email-verification
+    enable-smtp enable-mcp
+  httpServerMaxBodySize: "367001600"
+  internalResolver: ""
+  objectsStorage:
+    filesystem:
+      directory: /opt/data/assets
+    s3:
+      accessKeyID: ""
+      bucket: ""
+      endpointURI: ""
+      existingSecret: ""
+      region: ""
+      secretAccessKey: ""
+      secretKeys:
+        accessKeyIDKey: ""
+        endpointURIKey: ""
+        secretAccessKey: ""
+    storageBackend: fs
+  postgresql:
+    database: penpot
+    existingSecret: ""
+    host: penpot-postgres.tools.svc.cluster.local
+    password: penpot-postgres-password
+    port: 5432
+    secretKeys:
+      passwordKey: ""
+      postgresqlUriKey: ""
+      usernameKey: ""
+    username: penpot
+  privacyPolicyUri: ""
+  providers:
+    existingSecret: ""
+    github:
+      clientID: ""
+      clientSecret: ""
+      enabled: false
+    gitlab:
+      baseURI: https://gitlab.com
+      clientID: ""
+      clientSecret: ""
+      enabled: false
+    google:
+      clientID: ""
+      clientSecret: ""
+      enabled: false
+    ldap:
+      attributesEmail: mail
+      attributesFullname: cn
+      attributesPhoto: jpegPhoto
+      attributesUsername: uid
+      baseDN: ou=people,dc=planetexpress,dc=com
+      bindDN: uid=admin,ou=people,dc=planetexpress,dc=com
+      bindPassword: GoodNewsEveryone
+      enabled: false
+      host: ldap
+      port: 10389
+      ssl: false
+      startTLS: false
+      userQuery: (&(|(uid=:username)(mail=:username))(memberOf=cn=penpot,ou=groups,dc=my-domain,dc=com))
+    oidc:
+      authURI: ""
+      baseURI: ""
+      clientID: ""
+      clientSecret: ""
+      emailAttribute: ""
+      enabled: false
+      nameAttribute: ""
+      roles: designer developer
+      rolesAttribute: ""
+      scopes: scope1 scope2
+      tokenURI: ""
+      userURI: ""
+    secretKeys:
+      githubClientIDKey: ""
+      githubClientSecretKey: ""
+      gitlabClientIDKey: ""
+      gitlabClientSecretKey: ""
+      googleClientIDKey: ""
+      googleClientSecretKey: ""
+      ldapBindPasswordKey: ""
+      oidcClientIDKey: ""
+      oidcClientSecretKey: ""
+  publicUri: http://192.168.1.10:30822
+  redis:
+    database: "0"
+    existingSecret: ""
+    host: penpot-redis.tools.svc.cluster.local
+    port: 6379
+    secretKeys:
+      redisUriKey: ""
+  registrationDomainWhitelist: ""
+  secretKeys:
+    apiSecretKey: ""
+  smtp:
+    defaultFrom: ""
+    defaultReplyTo: ""
+    enabled: false
+    existingSecret: ""
+    host: ""
+    password: ""
+    port: ""
+    secretKeys:
+      passwordKey: ""
+      usernameKey: ""
+    ssl: false
+    tls: true
+    username: ""
+  telemetryEnabled: true
+  termsOfServicesUri: ""
+exporter:
+  affinity: {}
+  autoscaling:
+    hpa:
+      enabled: false
+      maxReplicas: 5
+      metrics:
+      - resource:
+          name: cpu
+          target:
+            averageUtilization: 70
+            type: Utilization
+        type: Resource
+      - resource:
+          name: memory
+          target:
+            averageUtilization: 80
+            type: Utilization
+        type: Resource
+      minReplicas: 1
+    vpa:
+      enabled: false
+      resourcePolicy: {}
+      updateMode: Auto
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - all
+    readOnlyRootFilesystem: false
+    runAsNonRoot: true
+    runAsUser: 1001
+  deploymentAnnotations: {}
+  extraEnvs: []
+  image:
+    imagePullPolicy: IfNotPresent
+    repository: penpotapp/exporter
+    tag: 2.15.3
+  nodeSelector: {}
+  pdb:
+    enabled: false
+    maxUnavailable: null
+    minAvailable: null
+  podAnnotations: {}
+  podLabels: {}
+  podSecurityContext:
+    fsGroup: 1001
+  replicaCount: 1
+  resources:
+    limits: {}
+    requests: {}
+  service:
+    annotations: {}
+    port: 6061
+    type: ClusterIP
+  tolerations: []
+  updateStrategy:
+    type: RollingUpdate
+  volumeMounts: []
+  volumes: []
+frontend:
+  affinity: {}
+  autoscaling:
+    hpa:
+      enabled: false
+      maxReplicas: 5
+      metrics:
+      - resource:
+          name: cpu
+          target:
+            averageUtilization: 70
+            type: Utilization
+        type: Resource
+      - resource:
+          name: memory
+          target:
+            averageUtilization: 80
+            type: Utilization
+        type: Resource
+      minReplicas: 1
+    vpa:
+      enabled: false
+      resourcePolicy: {}
+      updateMode: Auto
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - all
+    readOnlyRootFilesystem: false
+    runAsNonRoot: true
+    runAsUser: 1001
+  deploymentAnnotations: {}
+  extraEnvs: []
+  image:
+    pullPolicy: IfNotPresent
+    repository: penpotapp/frontend
+    tag: 2.15.3
+  nodeSelector: {}
+  pdb:
+    enabled: false
+    maxUnavailable: null
+    minAvailable: null
+  podAnnotations: {}
+  podLabels: {}
+  podSecurityContext:
+    fsGroup: 1001
+  replicaCount: 1
+  resources:
+    limits: {}
+    requests: {}
+  service:
+    annotations: {}
+    port: 8080
+    type: NodePort
+  tolerations: []
+  updateStrategy:
+    type: RollingUpdate
+  volumeMounts: []
+  volumes: []
+fullnameOverride: ""
+global:
+  compatibility:
+    openshift:
+      adaptSecurityContext: auto
+  imagePullSecrets: []
+  storageClass: longhorn
+ingress:
+  annotations: {}
+  className: ""
+  enabled: false
+  hosts:
+  - penpot.example.com
+  path: /
+  tls: []
+mcp:
+  affinity: {}
+  autoscaling:
+    hpa:
+      enabled: false
+      maxReplicas: 1
+      metrics:
+      - resource:
+          name: cpu
+          target:
+            averageUtilization: 70
+            type: Utilization
+        type: Resource
+      - resource:
+          name: memory
+          target:
+            averageUtilization: 80
+            type: Utilization
+        type: Resource
+      minReplicas: 1
+    vpa:
+      enabled: false
+      resourcePolicy: {}
+      updateMode: Auto
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - all
+    readOnlyRootFilesystem: false
+    runAsNonRoot: true
+    runAsUser: 1001
+  deploymentAnnotations: {}
+  extraEnvs: []
+  image:
+    imagePullPolicy: IfNotPresent
+    repository: penpotapp/mcp
+    tag: 2.15.3
+  nodeSelector: {}
+  pdb:
+    enabled: false
+    maxUnavailable: null
+    minAvailable: null
+  podAnnotations: {}
+  podLabels: {}
+  podSecurityContext:
+    fsGroup: 1001
+  replicaCount: 1
+  resources:
+    limits: {}
+    requests: {}
+  service:
+    annotations: {}
+    httpPort: 4401
+    type: ClusterIP
+    wsPort: 4402
+  tolerations: []
+  updateStrategy:
+    type: RollingUpdate
+  volumeMounts: []
+  volumes: []
+nameOverride: ""
+persistence:
+  assets:
+    accessModes:
+    - ReadWriteOnce
+    annotations: {}
+    enabled: true
+    existingClaim: ""
+    size: 20Gi
+    storageClass: longhorn
+route:
+  annotations: {}
+  enabled: false
+  host: penpot.example.com
+  path: null
+  tls: {}
+  wildcardPolicy: None
+serviceAccount:
+  annotations: {}
+  enabled: true
+  name: penpot

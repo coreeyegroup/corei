@@ -1,0 +1,6125 @@
+PHASE D — STEP 1: STRATEGY ENGINE (EXECUTION LAYER)
+
+	EVENT TIME PROPAGATION RULE (MANDATORY)
+
+		All downstream entities MUST preserve:
+
+			event_time = upstream.event_time
+
+		No transformation allowed.
+
+		System clock and broker time strictly forbidden.
+
+	GLOBAL LINEAGE CHAIN RULE
+
+		All execution-layer entities MUST form a continuous hash chain:
+
+		event_lineage_hash
+		→ execution_intent_lineage_hash
+		→ decision_lineage_hash
+		→ risk_lineage_hash
+		→ policy_lineage_hash
+		→ order_lineage_hash
+
+		Constraint:
+
+		- chain MUST be unbroken
+		- each step MUST reference previous hash
+		- any mismatch → SYSTEM INVALID
+
+
+
+1. PHASE IDENTITY LAYER
+	1.1 Phase Name
+
+		Phase D — Step 1: Strategy Engine (Execution Interpretation Layer)
+
+	1.2 Phase Role
+
+		Transforms Phase A TradeIntent (logic output) into:
+
+		Execution-ready structured intent
+
+		WITHOUT:
+
+			modifying strategy logic
+			introducing new signals
+			violating Phase B constraints
+
+	1.3 Phase Objective
+		Convert TradeIntent → ExecutionIntent
+		such that:
+		- intent is execution-compatible
+		- intent remains logically identical to Phase A output
+		- intent is deterministic and constraint-aware
+
+	1.4 Why This Phase Exists
+
+		Prevents:
+
+		direct coupling of strategy to execution engine
+		leakage of execution concerns into Phase A
+		ambiguity in trade intent interpretation
+
+
+2. PHASE SCOPE CONTROL
+	2.1 INCLUDED
+		TradeIntent interpretation
+		ExecutionIntent formation
+		parameter normalization (NOT transformation)
+		execution metadata attachment
+
+	2.2 EXCLUDED
+		signal generation
+		decision making
+		risk validation
+		policy enforcement
+		order generation
+
+3. ARCHITECTURAL INTENT
+	3.1 Principles
+		Deterministic mapping only
+		Zero logic mutation
+		Strict pass-through semantics
+		Schema normalization
+
+	3.2 Model
+		ExecutionIntent = F(TradeIntent, configuration_snapshot)
+
+	3.3 Position
+		Phase A → TradeIntent
+				↓
+		Phase D Step 1 → ExecutionIntent
+				↓
+		Phase D Step 2 → Decision Engine (execution-side)
+
+4. DOMAIN MODEL
+
+	4.1 Entities
+		TradeIntent (input)
+		ExecutionIntent (output)
+		StrategyMetadata
+		ExecutionParameters
+
+	4.2 Attributes
+		TradeIntent (from Phase A)
+			trade_intent_id
+			instrument
+			direction
+			size
+			signal_strength
+			strategy_id
+
+		ExecutionIntent = {
+			signal_id
+			trade_intent_id
+			event_time
+			instrument
+			direction
+			target_size
+			execution_type
+			priority_level
+			strategy_id
+			origin_type
+			lineage_hash_reference
+		}
+
+		R9 — Lineage Hash Extension (MANDATORY)
+
+			ExecutionIntent.lineage_hash_reference = HASH_v1(
+				parent_event.lineage_hash +
+				execution_intent_id
+			)
+
+		LINEAGE HASH CONTINUITY RULE (MANDATORY)
+
+			new_lineage_hash = HASH_v1(
+				previous_lineage_hash +
+				current_entity_id
+			)
+
+			CONSTRAINTS
+				- MUST use SHA-256
+				- MUST follow canonical serialization
+				- MUST preserve order
+				- identical input → identical lineage chain
+
+		R8 — Signal Trace Preservation (MANDATORY)
+
+			ExecutionIntent.signal_id = TradeIntent.signal_id
+
+			Constraint:
+
+			- MUST be identical
+			- MUST NOT be recomputed
+			- MUST NOT be null
+
+	4.3 Relationships
+		1 TradeIntent → 1 ExecutionIntent
+
+		No splitting / aggregation allowed
+
+	4.4 Ownership
+		TradeIntent → Phase A
+		ExecutionIntent → Phase D
+
+	4.5 Ownership Enforcement
+		No attribute duplication outside Section 4
+		No logic inside entity definition
+
+5. LOGIC / RULE ENGINE
+
+	5.1 Rules
+
+		R1 — Identity Preservation
+
+			ExecutionIntent.trade_intent_id = TradeIntent.trade_intent_id
+
+		R2 — Size Mapping
+
+			target_size = TradeIntent.size
+
+		R3 — Execution Type Mapping
+
+			execution_type = f(strategy_id, configuration_snapshot)
+
+		R4 — Priority Assignment
+
+			priority_level = TradeIntent.priority_level
+
+		Priority Ownership Rule (MANDATORY)
+
+			priority_level MUST be passed through from Phase A (TradeIntent)
+
+			Phase D MUST NOT:
+
+				compute
+				modify
+				normalize
+				override
+
+			Violation → PHASE INVALID
+
+		Execution Type Mapping Rule
+
+			execution_type = configuration_snapshot.execution_type_map[strategy_id]
+
+			Clamp Rule:
+
+			priority_level ∈ [1,10]
+
+			Out-of-bound → clamp to nearest bound
+
+	5.2 Conditions
+		TradeIntent MUST be valid
+		Required fields MUST exist
+
+		TradeIntent Validity Contract (MANDATORY)
+
+			TradeIntent is valid ONLY IF:
+
+			- trade_intent_id != NULL
+			- instrument ∈ valid_instrument_set
+			- direction ∈ {BUY, SELL}
+			- size > 0
+			- strategy_id != NULL
+
+			Invalid → MUST reject
+
+			No partial acceptance allowed
+
+	5.3 Decision Logic
+
+		No decision branching allowed
+		Only deterministic mapping
+
+	5.4 Constraints
+		No modification of intent meaning
+		No size transformation
+		No filtering
+
+	5.5 RULE EXECUTION ORDER
+		1. Validate TradeIntent schema
+		2. Map identity fields
+		3. Map execution parameters
+		4. Construct ExecutionIntent
+
+		No deviation allowed
+
+		Rule Precedence (MANDATORY)
+
+			1. Validate TradeIntent (size > 0)
+			2. THEN apply mapping
+
+			R2 (size mapping) executes ONLY after validation
+
+			Invalid size → reject before mapping
+
+		EVENT TIME INHERITANCE RULE (MANDATORY)
+
+			ExecutionIntent.event_time MUST be inherited from:
+
+			Phase C event_time
+
+			System clock usage is STRICTLY FORBIDDEN
+
+			Violation → PHASE INVALID
+
+
+
+6. FLOW ARCHITECTURE
+	6.0 Canonical Input Set
+		canonical_input_set_D1 = {
+			execution_instruction_stream,
+			configuration_snapshot,
+			version_identifiers
+		}
+
+		Canonical Completeness Extension (MANDATORY)
+
+			configuration_snapshot MUST include:
+
+			- execution_type_map
+			- priority_scale
+			- valid_instrument_set
+
+			Updated canonical_input_set_D1:
+
+			canonical_input_set_D1 = {
+				execution_instruction_stream,
+				configuration_snapshot: {
+					execution_type_map,
+					priority_scale,
+					valid_instrument_set
+				},
+				version_identifiers
+			}
+
+		Canonical Enforcement Rule (STRICT)
+
+			NO variable outside canonical_input_set_D1 may be used.
+
+			Violation:
+			→ NON-DETERMINISTIC EXECUTION
+			→ PHASE INVALID
+
+	6.1 Input
+		TradeIntent (from execution_instruction_stream)
+
+	6.2 Flow
+		TradeIntent
+		→ Validation
+		→ Parameter Mapping
+		→ ExecutionIntent
+
+		Ordering Preservation Rule
+
+			ExecutionIntent MUST preserve input ordering:
+
+			execution_intent_stream order =
+			execution_instruction_stream order
+
+			No reordering allowed inside this phase
+
+	6.3 Output
+		execution_intent_stream
+
+	6.4 Flow Rule
+		No new data introduced
+		Output fully derived from input
+
+	FEEDBACK LOOP CONTRACT (PRE-DECLARED)
+
+		Phase D Step 6 MUST define:
+
+		input:
+			execution_fill_stream
+
+		output:
+			reconciliation_event_stream
+
+		Constraints:
+
+		- MUST update Phase C state via event system
+		- MUST maintain full lineage:
+
+		execution_order_id → fill_id → reconciliation_event_id
+
+		Failure:
+
+		- missing feedback → system audit invalid
+
+7. PIPELINE STRUCTURE
+	P1: Receive TradeIntent
+	P2: Validate schema
+	P3: Map parameters
+	P4: Emit ExecutionIntent
+
+8. CONTROL & CONSTRAINTS
+	Hard Rules
+		1:1 mapping mandatory
+		No transformation allowed
+		No filtering allowed
+
+	Guardrails
+		Reject invalid TradeIntent
+		Reject missing fields
+
+	Boundary
+		target_size ∈ [0, MAX_INT]
+		priority_level ∈ [1, 10]
+
+	Numeric Boundary Completion
+
+		MAX_INT = 10^12 (fixed system limit)
+
+		Rules:
+
+		- size > MAX_INT → reject
+		- size ≤ 0 → reject
+		- no implicit rounding allowed
+
+	Priority Invariant
+
+		priority_level MUST satisfy:
+
+		1 ≤ priority_level ≤ 10
+
+		Violation → clamp (not reject)
+
+	DETERMINISTIC RETRY MODEL (MANDATORY)
+
+		retry_policy = {
+			max_retries
+			retry_interval_fixed
+		}
+
+		Rules:
+
+		1. Retry attempts MUST be deterministic:
+		   retry_time = event_time + (retry_count × retry_interval_fixed)
+
+		2. No exponential backoff allowed
+
+		3. Retry ordering:
+
+		retry_order_key = {
+			original_event_time ASC
+			retry_count ASC
+		}
+
+		4. If max_retries exceeded:
+
+		→ route to DEAD_LETTER_QUEUE
+
+		Dead Letter Contract:
+
+		dead_letter_event = {
+			original_event_id
+			failure_reason
+			retry_count
+		}
+
+9. STATE MODEL
+
+	Stateless component
+
+	No internal state maintained
+
+10. FAILURE MODEL
+	Scenarios
+		missing TradeIntent field
+		invalid schema
+		mapping failure
+
+	Detection
+		schema validation
+
+	Response
+		reject intent
+		log failure
+
+11. ASSUMPTION REGISTER
+Assumption							Reason					Validation		Status
+TradeIntent valid					upstream guarantee		Phase A			VALIDATED
+configuration_snapshot complete		needed for mapping		Phase C			VALIDATED
+
+12. VALIDATION FRAMEWORK
+	Method
+		deterministic replay
+		schema validation
+
+	Acceptance
+		identical input → identical output
+
+	Ambiguity
+
+		No branching → no ambiguity
+
+13. OUTPUT
+	execution_intent_stream = {
+		ExecutionIntent[]
+	}
+
+14. TRACEABILITY
+	trade_intent_id → execution_intent_id (same)
+
+	ExecutionIntent Identity (MANDATORY)
+
+		execution_intent_id = HASH_v1(
+			trade_intent_id +
+			event_time +
+			instrument +
+			direction +
+			target_size +
+			strategy_id +
+			origin_type
+		)
+
+		Traceability Chain:
+
+		trade_intent_id → execution_intent_id
+
+	IDENTITY CHAIN VALIDATOR (MANDATORY)
+
+		Validate:
+
+		trade_intent_id
+		→ execution_intent_id
+		→ decision_validated_intent_id
+		→ risk_approved_intent_id
+		→ policy_decision_intent_id
+		→ execution_order_id
+
+		Constraint:
+
+		ALL IDs MUST:
+
+		- be deterministic
+		- be lineage-linked
+		- be non-regenerated
+
+		Violation → HARD FAIL
+
+15. CROSS-PHASE CONSISTENCY
+
+	Uses:
+
+		Phase A → TradeIntent
+		Phase B → indirectly via config
+		Phase C → execution stream
+
+	Event Time Lineage Rule (GLOBAL — CROSS-PHASE)
+
+		ExecutionEvent.event_time MUST be derived from:
+
+			trade_intent_snapshot.event_time
+
+		OR
+
+			deterministic transformation of it
+
+		Constraint:
+
+			event_time MUST NOT use system clock
+			event_time MUST NOT be broker timestamp
+
+		Violation → NON-REPLAYABLE SYSTEM
+
+	Cross-phase invariant:
+		IF ANY:
+
+			- replay mismatch
+			- lineage break
+			- capital breach
+			- reconciliation failure
+
+			THEN:
+
+				HALT execution pipeline
+
+16. SCALABILITY
+	horizontally scalable
+	partition by trade_intent_id
+
+17. GOVERNANCE
+	mapping rules versioned
+	changes require approval
+
+18. AUDITABILITY
+	log input/output mapping
+	replay must match
+
+19. RISK CONSIDERATIONS
+		incorrect mapping risk
+		config mismatch risk
+
+	Mitigation:
+
+		strict schema validation
+
+20. FAILURE CONDITION
+
+	Fails if:
+
+		mapping not deterministic
+		TradeIntent altered
+		output inconsistent
+
+21. PHASE LOCK CRITERIA
+
+	Locked if:
+
+	deterministic mapping proven
+	no ambiguity
+	validation passed
+
+
+CEI NOTE (IMPORTANT)
+
+	This is minimal deterministic Strategy Engine.
+
+	Before moving ahead, next step must validate:
+
+	whether execution parameters are sufficient
+	whether mapping needs extension
+
+
+PHASE D — STEP 2: DECISION ENGINE (EXECUTION LAYER)
+1. PHASE IDENTITY LAYER
+	1.1 Phase Name
+
+		Phase D — Step 2: Decision Engine (Execution Validation Layer)
+
+	1.2 Phase Role
+
+		Deterministic execution-side validation and normalization layer that:
+
+			consumes execution_intent_stream (from Step 1)
+			validates execution readiness
+			resolves conflicts deterministically
+			guarantees ordering and consistency
+			produces decision_validated_intent_stream
+
+		This sits strictly before Risk Engine per Phase D macro ordering
+
+	1.3 Phase Objective
+
+		Transform:
+
+			ExecutionIntent → DecisionValidatedIntent
+
+		Such that output is:
+
+			conflict-free
+			schema-complete
+			deterministically ordered
+			execution-safe (structurally only, NOT risk-safe)
+
+	1.4 Why This Phase Exists
+
+		Prevents:
+
+			(F1) conflicting execution intents entering Risk Engine
+			(F2) duplicate trades causing double exposure
+			(F3) non-deterministic ordering → execution divergence
+			(F4) malformed intents causing downstream failure
+			(F5) ambiguous intent sets (same instrument, opposing directions)
+
+2. PHASE SCOPE CONTROL
+	2.1 INCLUDED (STRICT)
+		execution intent validation
+		conflict detection and resolution
+		deduplication
+		priority resolution
+		deterministic ordering enforcement
+		sequencing guarantees
+		output normalization
+
+	2.2 EXCLUDED (STRICT)
+		strategy logic (Phase A)
+		constraint enforcement (Phase B / Risk Engine)
+		policy enforcement
+		capital allocation
+		order generation
+		execution routing
+
+	2.3 BOUNDARY RULE
+
+		Decision Engine MUST:
+
+			validate and resolve ONLY
+
+		MUST NOT:
+
+			modify economic meaning (size, direction, instrument)
+			apply risk or capital logic
+			introduce new intents
+
+		Violation → PHASE INVALID
+
+3. ARCHITECTURAL INTENT LAYER
+	3.1 Core Principles
+
+		P1 — Determinism
+		P2 — Zero Intent Mutation
+		P3 — Conflict Isolation
+		P4 — Canonical Dependency Only
+		P5 — Ordering Preservation (Phase C + D alignment)
+		P6 — Stateless Processing
+		P7 — Replay Fidelity
+
+	3.2 Architectural Model
+		DecisionValidatedIntentStream = F(
+			execution_intent_stream,
+			configuration_snapshot,
+			version_identifiers
+		)
+
+	3.3 System Positioning
+
+		Phase D Step 1 → ExecutionIntent
+				↓
+		Phase D Step 2 → DecisionValidatedIntent (THIS)
+				↓
+		Risk Engine
+
+		Aligned with macro execution chain
+
+4. DOMAIN MODEL DEFINITION
+	4.1 Entities
+		ExecutionIntent (input)
+		DecisionValidatedIntent (output)
+		ConflictGroup
+		ValidationFlag
+		ResolutionMetadata
+
+	4.2 DecisionValidatedIntent Schema
+		DecisionValidatedIntent = {
+			decision_validated_intent_id
+			execution_intent_id
+			trade_intent_id
+			instrument
+			direction
+			target_size
+			execution_type
+			priority_level
+			origin_type
+			validation_status
+			resolution_status
+			sequence_id
+			signal_id
+			lineage_hash_reference
+		}
+
+	4.3 Relationships
+		1 ExecutionIntent → 0 or 1 DecisionValidatedIntent
+		ConflictGroup → N ExecutionIntents
+		Resolution → produces deterministic subset
+
+	4.4 Identity Rule
+		decision_validated_intent_id = HASH_v1(
+			execution_intent_id +
+			resolution_status +
+			sequence_id
+		)
+
+	4.5 Ownership
+		ExecutionIntent → Step 1
+		DecisionValidatedIntent → Step 2
+
+	4.6 ConflictGroup Definition (MANDATORY)
+
+			conflict_group_id = HASH_v1(
+				sorted(
+					execution_intent_id[]
+				)
+			)
+
+			grouping_key = {
+				instrument
+			}
+
+			Rules:
+
+			- All intents sharing same instrument MUST belong to same ConflictGroup
+			- ConflictGraph MUST be constructed per instrument
+			- grouping MUST be deterministic and complete
+
+			Constraint:
+
+			same execution_intent_stream → identical ConflictGroups
+
+			sorted_execution_intent_ids MUST be ordered by:
+
+					execution_intent_id ASC (lexicographic)
+
+				Constraint:
+
+				- sorting method MUST be fixed and versioned
+				- identical input → identical sorted list
+
+5. LOGIC / RULE ENGINE
+	5.1 Rule Classes
+
+		R1 — Schema Validation
+		R2 — Consistency Validation
+		R3 — Conflict Detection
+		R4 — Deduplication
+		R5 — Conflict Graph Resolution (includes priority ordering)
+		R6 — Ordering Enforcement
+		R7 — Sequencing Assignment
+
+	5.2 Validation Rules
+
+		Reject intent if:
+
+			missing required fields
+			invalid enum values
+			target_size ≤ 0
+			duplicate execution_intent_id (pre-resolution)
+
+		R-LINEAGE-CHECK:
+
+			assert current_lineage_hash ==
+				   HASH(previous_lineage_hash + current_entity_id)
+
+	5.3 Conflict Detection Rules
+
+		Conflict if:
+
+			same instrument AND opposite direction
+			same trade_intent_id duplicated
+			overlapping execution scope
+
+	5.4 Deduplication Rule
+
+		If identical intents:
+
+			same {
+				trade_intent_id,
+				instrument,
+				direction,
+				target_size
+			}
+
+			→ keep ONE (lowest hash)
+
+		dedup_hash = HASH_v1(
+				trade_intent_id +
+				instrument +
+				direction +
+				target_size +
+				strategy_id
+			)
+
+			Rule:
+
+			- duplicates = identical dedup_hash
+			- retain lowest execution_intent_id
+
+
+	5.6 Rule Execution Order (STRICT)
+			Schema Validation
+			Consistency Validation
+			Conflict Grouping
+			Deduplication
+			Conflict Graph Resolution
+			Ordering Enforcement
+			Sequencing Assignment
+			Output Construction
+
+			No lower rule overrides higher rule
+
+	5.7 Conflict Graph Resolution (MANDATORY)
+
+			Model:
+
+			ConflictGraph = {
+				nodes: ExecutionIntent
+				edges: conflict_relation
+			}
+
+			Conflict Relation:
+
+			- opposite direction
+			- overlapping scope
+
+			Resolution Algorithm:
+
+			1. sort nodes by:
+			   priority_level DESC
+			   event_time ASC
+			   origin_type ASC (CORE first)
+			   trade_intent_id ASC
+
+			2. iterate sorted list:
+
+			   IF node not eliminated:
+				   select node
+				   eliminate all conflicting neighbors
+
+			3. output selected set
+
+			Constraint:
+
+			- graph MUST be acyclic post-resolution
+			- identical graph → identical output
+
+		Origin Priority Rule (MANDATORY)
+
+			CORE intents MUST dominate EXTERNAL intents in conflict resolution.
+
+			Implementation:
+
+			origin_type priority:
+			CORE = 1
+			EXTERNAL = 2
+
+			Applied BEFORE trade_intent_id ordering
+
+		overlapping scope MUST be defined as:
+
+			scope_key = {
+				instrument
+			}
+
+			Constraint:
+
+			- two intents overlap ONLY IF:
+				instrument is identical
+
+			No other dimensions allowed
+
+		Priority is applied ONLY inside graph resolution sorting phase.
+
+		No separate priority resolution stage exists.
+
+6. FLOW ARCHITECTURE
+	6.0 Canonical Input Set
+		canonical_input_set_D2 = {
+			execution_intent_stream,
+			configuration_snapshot,
+			version_identifiers
+		}
+
+		execution_intent_stream MUST include:
+
+			- event_time
+			- strategy_id
+			- execution_intent_id
+
+			Constraint:
+
+			- no implicit fields allowed
+
+	6.1 Input
+
+		ExecutionIntent stream from Step 1
+
+	6.2 Processing Flow
+		ExecutionIntent
+		→ Validation
+		→ Conflict Detection
+		→ Deduplication
+		→ Resolution
+		→ Ordering
+		→ Sequencing
+		→ DecisionValidatedIntent
+
+	6.3 Output
+		decision_validated_intent_stream = {
+			DecisionValidatedIntent[]
+		}
+
+	6.4 Ordering Rule (MANDATORY)
+
+		Must follow Phase D macro:
+
+			1. event_time ASC
+			2. origin_type (CORE=1, EXTERNAL=2)
+			3. trade_intent_id ASC
+
+		Final Tie-Break Rule (MANDATORY)
+
+			ordering_key = {
+				event_time ASC
+				origin_type ASC (CORE=1, EXTERNAL=2)
+				priority_level DESC
+				trade_intent_id ASC
+				execution_intent_id ASC
+			}
+
+			sequence_id = index(ordering_key)
+
+			Constraint:
+
+			- sequence_id MUST be globally unique
+			- MUST be stable across replay
+
+		sequence_id assignment MUST occur AFTER:
+
+			- validation
+			- deduplication
+			- conflict graph resolution (final set)
+
+			Constraint:
+
+			- sequence_id applies ONLY to surviving DecisionValidatedIntent
+			- eliminated intents MUST NOT receive sequence_id
+
+	6.5 Flow Canonicalization Rule
+		no external inputs
+		no runtime state
+		no mutation of economic fields
+
+	Event Time Rule (MANDATORY)
+
+		event_time MUST be inherited from:
+
+		execution_intent.event_time
+		(which MUST originate from Phase C event model)
+
+		System clock usage: FORBIDDEN
+
+7. PIPELINE STRUCTURE
+	P1: Input Validation
+	P2: Schema Validation
+	P3: Conflict Detection
+	P4: Deduplication
+	P5: Conflict Graph Resolution (includes priority ordering)
+	P6: Ordering Enforcement
+	P7: Sequencing
+	P8: Output Emission
+
+8. CONTROL & CONSTRAINTS
+	8.1 Hard Rules
+		determinism mandatory
+		no mutation of intent fields
+		no reordering outside defined rule
+		no duplicate output
+
+	8.2 Guardrails
+		reject invalid intent
+		reject ambiguous conflict resolution
+		reject incomplete canonical input
+
+	8.3 Invariants
+
+		I1 — Same input → same output
+		I2 — Ordering preserved globally
+		I3 — No duplicate trade_intent_id post-resolution
+		I4 — Conflict groups resolved deterministically
+
+		I-GLOBAL-2: Lineage chain MUST be continuous and verifiable
+
+		Decision Purity Rule (MANDATORY)
+
+			Conflict resolution MUST NOT use:
+
+			- capital
+			- exposure
+			- portfolio state
+			- risk thresholds
+
+			Only allowed inputs:
+
+			- execution_intent fields
+			- configuration_snapshot
+
+			Violation → PHASE INVALID
+
+9. STATE & DATA MODEL
+	9.1 State
+
+		Stateless
+
+	9.2 Source of Truth
+
+		canonical_input_set_D2
+
+	9.3 State Rule
+
+		No internal memory or caching allowed
+
+10. FAILURE MODEL
+	10.1 Scenarios
+		duplicate intents
+		unresolved conflicts
+		invalid schema
+		ordering violation
+
+	10.2 Impact
+		downstream risk corruption
+		execution inconsistency
+
+	10.3 Mitigation
+		reject entire batch OR isolate invalid intents
+
+		Mitigation:
+
+			- ONLY isolate invalid intents
+			- batch rejection is FORBIDDEN
+
+	10.4 Detection
+		validation checks
+		ordering verification
+
+	Invalid Intent Handling (MANDATORY)
+
+		- invalid intents MUST be isolated (NOT batch rejected)
+		- each invalid intent MUST produce:
+
+		RejectedIntent = {
+			execution_intent_id
+			rejection_reason
+			validation_stage
+		}
+
+		- valid intents MUST proceed independently
+
+11. ASSUMPTION REGISTER
+Assumption				Reason					Status
+Step 1 output valid		upstream lock			VALIDATED
+config complete			deterministic mapping	CONTROLLED
+
+12. VALIDATION FRAMEWORK
+	12.1 Method
+		Red Team (13 layers × 3 rounds)
+		Blue Team validation
+
+	12.2 Coverage Rule
+
+		Every rule mapped to validation layer
+
+	12.3 Acceptance
+
+		PASS / FAIL only
+
+	12.4 Ambiguity Test
+
+		Multiple interpretations → identical output
+
+13. OUTPUT (DELIVERABLE)
+	decision_validated_intent_stream = {
+		intents: [DecisionValidatedIntent]
+	}
+
+	All fields mandatory
+
+14. TRACEABILITY MAPPING
+	trade_intent_id
+	→ execution_intent_id
+	→ decision_validated_intent_id
+
+	Full lineage must be preserved
+
+	Dropped / Rejected Traceability
+
+		trace_rejection = {
+			execution_intent_id
+			decision_status ∈ {REJECTED, ELIMINATED}
+			reason_code
+			conflict_group_id
+		}
+
+		Constraint:
+
+		- NO intent may disappear without trace
+
+	reason_code ∈ {
+			SCHEMA_INVALID,
+			DUPLICATE_DETECTED,
+			CONFLICT_ELIMINATED
+		}
+
+15. CROSS-PHASE CONSISTENCY
+	Uses Phase D Step 1 output
+	aligns with Phase C ordering model
+
+16. SCALABILITY MODEL
+	partition by instrument
+	parallel conflict resolution (partition-safe)
+	deterministic merge
+
+17. GOVERNANCE
+	version-controlled rules
+	config snapshot mandatory
+	change approval required
+
+18. AUDITABILITY & OBSERVABILITY
+	full intent lineage
+	conflict resolution logs
+	deterministic replay
+
+19. RISK CONSIDERATIONS
+
+	Risk if weak:
+
+		duplicate exposure
+		contradictory trades
+		invalid inputs to Risk Engine
+
+	Mitigation:
+
+		strict validation + rejection
+
+20. FAILURE CONDITION (PHASE LEVEL)
+
+	Phase FAILS if:
+
+	determinism breaks
+	conflicts unresolved
+	ordering violated
+	traceability broken
+
+21. PHASE LOCK CRITERIA
+
+	Phase LOCKED only if:
+
+	all 21 sections complete
+	Red Team passed (3 rounds)
+	Blue Team validated
+	CEI validation passed
+	deterministic replay proven
+
+PHASE D — STEP 3: RISK ENGINE (EXECUTION ENFORCEMENT LAYER)
+
+1. PHASE IDENTITY LAYER
+	1.1 Phase Name
+
+		Phase D — Step 3: Risk Engine (Execution Enforcement Layer)
+
+	1.2 Phase Role
+
+		Deterministic enforcement layer that:
+
+			consumes DecisionValidatedIntent
+			enforces Phase B constraints
+			applies multi-level risk controls
+			produces RiskApprovedIntent
+
+		This is the first enforcement gate in execution chain, aligned with macro ordering:
+		TradeIntent → Risk → Policy → Execution
+
+	1.3 Phase Objective
+
+		Transform:
+
+			DecisionValidatedIntent → RiskApprovedIntent
+
+		Such that:
+
+			all intents are risk-compliant
+			capital allocation is bounded
+			exposure is controlled
+			system is protected from catastrophic failure
+			output is deterministic and replay-safe
+
+	1.4 Why This Phase Exists
+
+		Without Risk Engine:
+
+			unlimited scaling of high-confidence signals
+			exposure accumulation across strategies
+			CEIL capital contamination
+			violation of Phase B constraint envelope
+			non-reproducible execution decisions
+
+		→ system-level failure
+
+2. PHASE SCOPE CONTROL
+	2.1 INCLUDED (STRICT)
+		risk validation (position, exposure, capital, drawdown)
+		capital allocation enforcement
+		CORE vs EXTERNAL isolation
+		size bounding / reduction logic
+		deterministic risk decision output
+		multi-level risk evaluation:
+			trade-level
+			strategy-level
+			portfolio-level
+			firm-level
+
+	2.2 EXCLUDED (STRICT)
+		policy decisions
+		order generation
+		execution routing
+		broker interaction
+		portfolio computation logic (only reference)
+		constraint definition (Phase B ownership)
+		infra/state mutation (Phase C ownership)
+
+	2.3 Boundary Rule
+
+		Risk Engine MUST:
+
+			enforce constraints
+			validate exposure
+			control capital
+
+		Risk Engine MUST NOT:
+
+			change intent meaning (instrument/direction)
+			introduce new intents
+			depend on runtime/external systems
+
+3. ARCHITECTURAL INTENT LAYER
+	3.1 Core Principles (MANDATORY)
+
+		P1 — Determinism
+
+			identical input → identical risk output
+
+		P2 — Enforcement Only
+
+			no interpretation, only enforcement
+
+		P3 — Canonical Dependency Only
+
+			only uses canonical_input_set_D3
+
+		P4 — No Hidden State
+
+			all decisions derived from input snapshot
+
+		P5 — Capital Isolation
+
+			CORE ≠ EXTERNAL (strict separation)
+
+		P6 — Precedence Enforcement
+
+			Risk rejection → STOP pipeline
+
+	3.2 Architectural Model
+		RiskApprovedIntentStream = F(
+			decision_validated_intent_stream,
+			constraint_specification,
+			portfolio_state_snapshot,
+			configuration_snapshot,
+			version_identifiers
+		)
+
+	3.3 System Positioning
+		Step 1 → ExecutionIntent
+		Step 2 → DecisionValidatedIntent
+		Step 3 → RiskApprovedIntent   ← (THIS)
+		Step 4 → PolicyDecision
+		Step 5 → ExecutionOrder
+
+4. DOMAIN MODEL DEFINITION
+
+	4.1 Core Entities
+		DecisionValidatedIntent (input)
+		RiskApprovedIntent (output)
+		RiskDecision
+		RiskLimits
+		ExposureState
+		CapitalState
+
+	4.2 RiskApprovedIntent Schema
+		RiskApprovedIntent = {
+			signal_id
+			risk_approved_intent_id
+			decision_validated_intent_id
+			instrument
+			direction
+			approved_size
+			origin_type
+			risk_status
+			risk_flags[]
+			constraint_references[]
+			lineage_hash_reference
+		}
+
+	4.3 RiskDecision
+		RiskDecision = {
+			status ∈ {APPROVED, REDUCED, REJECTED}
+			approved_size
+			risk_flags[]
+			constraint_references[]
+		}
+
+	4.4 RiskLimits
+
+		Derived from constraint_specification:
+
+		RiskLimits = {
+			max_position_size
+			max_strategy_exposure
+			max_portfolio_exposure
+			max_firm_exposure
+			capital_limit
+			drawdown_limit
+		}
+
+	4.5 ExposureState (READ-ONLY)
+		ExposureState = {
+			instrument_exposure
+			strategy_exposure
+			portfolio_exposure
+			firm_exposure
+		}
+
+	4.6 Ownership
+		Risk entities → Phase D only
+		Constraints → Phase B
+		State → Phase C
+
+		ADD:
+
+		CapitalState = {
+			core_capital_remaining
+			external_capital_remaining
+		}
+
+5. LOGIC / RULE ENGINE
+	5.1 Rule Classes
+		R1 — Input Validation
+		R2 — Constraint Binding
+		R3 — Exposure Evaluation
+		R4 — Capital Evaluation
+		R5 — Size Adjustment
+		R6 — Risk Decision Assignment
+		R7 — Output Construction
+
+	5.2 Risk Validation Rules (MANDATORY)
+
+		Check against:
+
+			Position limits
+			Strategy exposure
+			Portfolio exposure
+			Firm exposure
+			Capital availability
+			Drawdown limits
+
+		Exposure Update Rule (MANDATORY):
+
+			For sequential processing:
+
+			exposure_state_current = initial snapshot
+
+			FOR each approved intent:
+
+				exposure_state_current += approved_size
+
+			Subsequent intents MUST use updated exposure_state_current
+
+
+		Directional Exposure Update (MANDATORY):
+
+			IF direction == BUY:
+
+				exposure_state_current += approved_size
+
+			ELSE IF direction == SELL:
+
+				exposure_state_current -= approved_size
+
+			Constraint:
+
+			exposure_state_current MUST NOT go below 0
+
+			IF exposure_state_current < 0:
+				→ HARD FAIL (invalid state)
+
+	5.3 Capital Allocation Function
+		approved_size = MIN(
+			requested_size,
+			position_limit_remaining,
+			capital_remaining,
+			exposure_remaining
+		)
+
+		Constraints:
+
+			fixed-point arithmetic only
+			overflow → REJECT
+			underflow → 0
+
+
+			capital_remaining
+
+			WITH:
+
+			IF origin_type == CORE:
+				capital_remaining = core_capital_remaining
+			ELSE:
+				capital_remaining = external_capital_remaining
+
+		IF capital_remaining < threshold:
+
+			STOP all further approvals
+			emit SYSTEM_RISK_EVENT
+
+		Pre-Validation Rule (MANDATORY):
+
+			IF any of the following:
+
+				capital_remaining < 0
+				exposure_remaining < 0
+				position_limit_remaining < 0
+
+			THEN:
+
+				status = REJECTED
+				approved_size = 0
+
+				risk_flag = INVALID_STATE
+
+	5.4 Decision Logic
+		IF any hard constraint violated:
+			status = REJECTED
+			approved_size = 0
+
+		ELSE IF partial constraint violation:
+			status = REDUCED
+			approved_size = bounded value
+
+		ELSE:
+			status = APPROVED
+			approved_size = requested_size
+
+
+		Constraint Classification (MANDATORY):
+
+			constraints classified as:
+
+			HARD_CONSTRAINTS = {
+				drawdown_limit,
+				firm_exposure_limit,
+				invalid_state
+			}
+
+			SOFT_CONSTRAINTS = {
+				position_limit,
+				strategy_exposure,
+				capital_limit
+			}
+
+			Precedence Rule:
+
+			IF any HARD_CONSTRAINT violated:
+				status = REJECTED
+				approved_size = 0
+
+			ELSE:
+				approved_size = MIN(...)
+
+				IF approved_size < requested_size:
+					status = REDUCED
+				ELSE:
+					status = APPROVED
+
+	5.5 Rule Execution Order (STRICT)
+		Input Validation
+		Constraint Binding
+		Exposure Evaluation
+		Capital Evaluation
+		Size Computation
+		Risk Decision Assignment
+		Output Construction
+
+		Constraint: no lower rule overrides higher rule
+
+6. FLOW ARCHITECTURE
+	6.0 Canonical Input Set (MANDATORY)
+		canonical_input_set_D3 = {
+			decision_validated_intent_stream,
+			constraint_specification,
+			portfolio_state_snapshot,
+			configuration_snapshot,
+			version_identifiers
+		}
+
+		Constraints:
+
+			immutable
+			complete
+			hash-identifiable
+
+	6.1 Input
+		DecisionValidatedIntent (from Step 2)
+		constraint_specification (Phase B)
+		portfolio_state_snapshot (Phase C)
+
+	6.2 Processing Flow
+		DecisionValidatedIntent
+			→ Risk Validation
+			→ Exposure Check
+			→ Capital Check
+			→ Size Adjustment
+			→ RiskDecision
+			→ RiskApprovedIntent
+
+		GLOBAL CAPITAL LOCK:
+
+			FOR shared capital pool:
+
+				process intents STRICTLY SEQUENTIAL
+
+				parallelism FORBIDDEN
+
+
+		Deterministic Capital Sequencing (MANDATORY):
+
+			All intents MUST be processed in strict order:
+
+			ordering_key = {
+				event_time ASC
+				origin_type (CORE=1, EXTERNAL=2)
+				sequence_id ASC
+			}
+
+			Processing MUST be sequential:
+
+			FOR intent IN ordered_intents:
+
+				evaluate capital_remaining_current
+
+				approved_size = f(...)
+
+
+			Capital State Update Rule (MANDATORY):
+
+				FOR intent IN ordered_intents:
+
+					IF origin_type == CORE:
+
+						approved_size = f(
+							requested_size,
+							position_limit_remaining,
+							core_capital_remaining,
+							exposure_remaining
+						)
+
+						core_capital_remaining -= approved_size
+
+					ELSE:
+
+						approved_size = f(
+							requested_size,
+							position_limit_remaining,
+							external_capital_remaining,
+							exposure_remaining
+						)
+
+						external_capital_remaining -= approved_size
+
+	6.3 Output
+		risk_approved_intent_stream = {
+			intents: [
+				{
+		            risk_approved_intent_id
+					decision_validated_intent_id
+					risk_status
+					approved_size
+					risk_flags
+					constraint_references
+				}
+			]
+		}
+
+		Risk Approved Intent Identity Rule (MANDATORY)
+
+			risk_approved_intent_id MUST be computed as:
+
+				HASH_v1(
+					decision_validated_intent_id +
+					risk_status +
+					approved_size +
+					ordered(risk_flags) +
+					ordered(constraint_references)
+				)
+
+			Constraint:
+
+				identical input → identical risk_approved_intent_id
+
+	6.4 Flow Canonicalization Rule
+		no external data
+		no runtime dependency
+		pure function of canonical_input_set_D3
+
+7. PIPELINE STRUCTURE
+
+	P1: Input Validation
+	P2: Constraint Binding
+	P3: Exposure Evaluation
+	P4: Capital Evaluation
+	P5: Size Adjustment
+	P6: Risk Decision
+	P7: Output Emission
+
+8. CONTROL & CONSTRAINTS
+	Hard Rules
+		risk approval mandatory before policy
+		no cross-capital usage
+		deterministic output
+		no hidden state
+
+	Guardrails
+		reject invalid intent
+		reject constraint violation
+		reject capital breach
+
+	Invariants
+		same input → same risk output
+		no exposure breach
+		capital always bounded
+
+		I-GLOBAL-3: Capital MUST be consumed in deterministic sequence
+
+	Numeric Boundaries:
+
+		approved_size:
+
+		min = 0
+		max = min(capital_limit, position_limit)
+
+		Edge Behavior:
+
+		approved_size = 0 → status MUST be REJECTED
+		approved_size < requested_size → REDUCED
+		overflow → HARD FAIL
+
+	Capital Isolation Invariant:
+
+		core_capital_remaining MUST NEVER be affected by EXTERNAL intents
+
+		external_capital_remaining MUST NEVER be affected by CORE intents
+
+	Capital State Ownership Rule:
+
+		There MUST NOT exist any global capital variable.
+
+		All capital computations MUST use ONLY:
+
+			core_capital_remaining
+			external_capital_remaining
+
+		Violation → HARD FAIL
+
+9. STATE & DATA MODEL
+	9.1 State Definition
+
+		READ-ONLY:
+
+		portfolio_state_snapshot
+		exposure_state
+
+	9.2 State Rule
+		Risk Engine MUST NOT mutate state
+		Only references Phase C state
+
+	9.3 Source of Truth
+
+		canonical_input_set_D3
+
+10. FAILURE MODEL
+
+	10.1 Scenarios
+		exposure overflow
+		capital breach
+		missing constraint
+		invalid state snapshot
+
+	10.2 Impact
+		catastrophic loss risk
+		invalid execution
+
+	10.3 Mitigation
+		reject intent
+		emit risk flags
+		halt downstream execution
+
+	10.4 Detection
+		constraint violation checks
+		boundary overflow detection
+
+11. ASSUMPTION REGISTER
+	Assumption						Reason					Validation				Status
+	Phase B constraints valid		enforcement dependency	Phase lock				VALIDATED
+	Phase C state accurate			exposure correctness	snapshot validation		CONTROLLED
+	DecisionValidatedIntent valid	upstream guarantee		Step 2 lock				VALIDATED
+
+12. VALIDATION FRAMEWORK
+	12.1 Red Team (3 Rounds)
+
+		Round 1 — Constraint Bypass Attack
+
+			inject oversized intent
+			→ expected: REJECT
+
+		Round 2 — Capital Exhaustion Attack
+
+			multiple intents consuming full capital
+			→ expected: REDUCED/REJECT
+
+		Round 3 — CEIL Contamination
+
+			EXTERNAL using CORE capital
+			→ expected: REJECT
+
+	12.2 Blue Team Validation
+		verify deterministic output
+		verify constraint mapping
+		verify isolation rules
+
+	12.3 Coverage Rule
+
+		Every rule mapped to:
+
+			Red attack scenario
+			Blue validation
+
+13. OUTPUT (DELIVERABLE SPEC)
+	risk_approved_intent_stream = {
+		intents: RiskApprovedIntent[]
+	}
+
+	All fields mandatory. No optional fields.
+
+14. TRACEABILITY MAPPING
+	decision_validated_intent_id
+		→ risk_approved_intent_id
+		→ constraint_references
+
+15. CROSS-PHASE CONSISTENCY
+	Uses:
+		Phase B constraints
+		Phase C state
+	Does NOT modify upstream outputs
+
+16. SCALABILITY MODEL
+
+		REPLACE:
+
+		parallel evaluation per intent
+
+		WITH:
+
+		partition-level parallelism allowed ONLY IF:
+
+		- partitions have disjoint capital pools
+		- no shared capital dependency
+
+		Otherwise:
+
+		- MUST execute sequentially
+
+17. GOVERNANCE INTEGRATION
+	constraint version binding
+	audit logs mandatory
+	change approval required
+
+18. AUDITABILITY & OBSERVABILITY
+	full risk decision trace
+	deterministic replay
+	constraint-level logging
+
+19. RISK CONSIDERATIONS
+		incorrect exposure reference → system risk
+		constraint mismatch → invalid enforcement
+
+	Mitigation:
+
+		strict canonical dependency
+		validation framework
+
+20. FAILURE CONDITION (PHASE LEVEL)
+
+	Phase fails if:
+
+		determinism breaks
+		constraints not enforced
+		exposure exceeds limits
+		ambiguity exists
+
+21. PHASE LOCK CRITERIA
+
+	Phase LOCKED only if:
+
+		all 21 sections complete
+		deterministic behavior proven
+		Red Team passed
+		Blue Team validated
+		zero ambiguity
+
+PHASE D — STEP 4: POLICY ENGINE
+
+(Execution Governance Layer — UPS COMPLIANT, LOCK-GRADE)
+
+This specification strictly follows:
+
+Phase D Macro Architecture
+Step 3 Risk Engine output contract
+Universal Phase Structure (21 sections mandatory)
+
+1. PHASE IDENTITY LAYER
+	1.1 Phase Name
+
+		Phase D — Step 4: Policy Engine (Execution Governance Layer)
+
+	1.2 Phase Role
+
+		Deterministic governance enforcement layer that:
+
+			consumes RiskApprovedIntent
+			applies policy + governance rules (non-risk)
+			controls execution behavior (timing, pacing, permissions)
+			produces PolicyDecisionIntent
+
+	1.3 Phase Objective
+
+		Transform:
+
+			RiskApprovedIntent → PolicyDecisionIntent
+
+		Such that:
+
+			all intents are policy-compliant
+			execution behavior is controlled + governed
+			no economic meaning is altered
+			output remains deterministic and replay-safe
+
+	1.4 Why This Phase Exists
+
+		Prevents:
+
+			(F1) policy violations despite risk approval
+			(F2) over-trading / execution bursts
+			(F3) regulatory breaches
+			(F4) strategy misuse (disabled / restricted strategies executing)
+			(F5) uncontrolled execution pacing
+
+		Risk-safe ≠ Policy-safe
+		This phase enforces institutional governance
+
+	2. PHASE SCOPE CONTROL
+
+	2.1 INCLUDED (STRICT)
+		policy rule enforcement
+		governance validation
+		execution pacing control
+		trade frequency control
+		whitelist / blacklist enforcement
+		strategy / instrument permissions
+		cooldown enforcement
+		policy-based size caps (STRICTLY bounded)
+		output tagging (policy flags)
+
+	2.2 EXCLUDED (STRICT)
+		risk computation (Step 3)
+		exposure evaluation
+		capital allocation
+		decision conflict resolution (Step 2)
+		order generation (Step 5)
+		portfolio state computation
+
+	2.3 Boundary Rule
+
+		Policy Engine MUST:
+
+			enforce ONLY governance + policy rules
+
+		Policy Engine MUST NOT:
+
+			modify instrument
+			modify direction
+			recompute risk
+			introduce new intents
+
+		Violation → PHASE INVALID
+
+3. ARCHITECTURAL INTENT LAYER
+	3.1 Core Principles
+
+		P1 — Deterministic Governance
+		P2 — Zero Economic Mutation
+		P3 — Canonical Dependency Only
+		P4 — Strict Post-Risk Position
+		P5 — Execution Behavior Control Only
+		P6 — Replay Fidelity
+
+	3.2 Architectural Model
+		PolicyDecisionIntentStream = F(
+			risk_approved_intent_stream,
+			configuration_snapshot,
+			version_identifiers
+		)
+
+	3.3 System Positioning
+		Step 3 → RiskApprovedIntent
+		Step 4 → PolicyDecisionIntent  ← (THIS)
+		Step 5 → Execution Engine
+
+4. DOMAIN MODEL DEFINITION
+	4.1 Entities
+		RiskApprovedIntent (input)
+		PolicyDecisionIntent (output)
+		PolicyRule
+		GovernanceConstraint
+		PolicyFlag
+		PolicyDecision
+
+	4.2 PolicyDecisionIntent Schema
+		PolicyDecisionIntent = {
+			signal_id
+			policy_decision_intent_id
+			risk_approved_intent_id
+			instrument
+			direction
+			approved_size
+			policy_status ∈ {ALLOW, MODIFY, REJECT}
+			modified_fields
+			policy_flags[]
+			governance_references[]
+			lineage_hash_reference
+		}
+
+	4.3 PolicyDecision
+		PolicyDecision = {
+			status ∈ {ALLOW, MODIFY, REJECT}
+			modified_fields
+			flags[]
+			references[]
+		}
+
+	4.4 PolicyRule
+		PolicyRule = {
+			policy_id
+			policy_type ∈ {
+				TIME_RESTRICTION
+				TRADE_FREQUENCY
+				STRATEGY_PERMISSION
+				INSTRUMENT_PERMISSION
+				COOLDOWN
+				EXECUTION_PACING
+				SIZE_CAP
+				REGULATORY_RULE
+			}
+			precedence_level
+			evaluation_condition
+			enforcement_action
+		}
+
+	4.5 Relationships
+		1 RiskApprovedIntent → 1 PolicyDecisionIntent
+		PolicyRule set → applied to each intent
+		PolicyDecision → derived from rules
+
+	4.6 Ownership
+
+		Policy entities → Phase D Step 4 ONLY
+
+5. LOGIC / RULE ENGINE
+	5.1 Rule Classes
+
+		R1 — Input Validation
+		R2 — Policy Rule Binding
+		R3 — Time Window Validation
+		R4 — Permission Validation
+		R5 — Behavioral Control (frequency/cooldown)
+		R6 — Pacing / Modification
+		R7 — Policy Decision Assignment
+		R8 — Output Construction
+
+	5.2 Policy Rule Types
+
+	A. HARD POLICY (REJECT)
+		trading outside allowed hours
+		banned instrument
+		disabled strategy
+		regulatory violation
+
+	B. SOFT POLICY (MODIFY)
+		max trades per interval
+		cooldown enforcement
+		execution pacing
+		size caps (STRICT upper bound)
+
+		Deterministic Frequency Evaluation Rule:
+
+			trade_count_window MUST be computed using:
+
+				event_time-based fixed window
+
+			ordering_key = {
+				event_time ASC
+				sequence_id ASC
+			}
+
+			Constraint:
+
+				evaluation MUST follow deterministic ordered stream
+
+	5.3 Decision Logic
+		IF any HARD policy violated:
+			status = REJECT
+
+		ELSE:
+			apply MODIFY rules
+
+			IF modifications applied:
+				status = MODIFY
+			ELSE:
+				status = ALLOW
+
+	5.4 Modification Rules (STRICT)
+
+		Allowed modifications ONLY:
+
+		allowed_modifications = {
+			execution_delay
+			execution_batching
+			size_cap (≤ approved_size only)
+			slicing_instruction
+		}
+
+		Forbidden:
+
+			instrument change
+			direction change
+			intent creation
+
+		Zero-Size Enforcement Rule (MANDATORY):
+
+			IF modified_size == 0:
+
+				status = REJECT
+
+				policy_flag = ZERO_SIZE_REJECTION
+
+		Policy Modification Constraint (MANDATORY)
+
+			Policy Engine MAY reduce size ONLY under:
+
+				execution-behavior control (NOT risk override)
+
+			Conditions:
+
+				1. approved_size MUST NOT be exceeded
+				2. reduction MUST NOT violate:
+					- risk constraints
+					- portfolio constraints
+				3. reduction MUST NOT change:
+					- direction
+					- instrument
+					- intent classification
+
+			Classification:
+
+				size reduction = execution shaping
+				NOT economic mutation
+
+			STRICT PROHIBITIONS:
+
+				Policy Engine MUST NOT:
+
+					increase size
+					override risk decisions
+					bypass constraint_output
+
+			Violation → PHASE INVALID
+
+	5.5 Rule Execution Order (MANDATORY)
+		1. Input Validation
+		2. Policy Rule Binding
+		3. HARD Policy Evaluation
+		4. Behavioral Controls
+		5. Modification Rules
+		6. Decision Assignment
+		7. Output Construction
+
+		Constraint:
+
+			higher precedence rules dominate
+			no override allowed
+
+		Policy Precedence Tie-Break Rule (MANDATORY):
+
+			IF multiple PolicyRules share same precedence_level:
+
+				apply deterministic ordering:
+
+					1. policy_type priority (fixed global map)
+					2. policy_id ASC (lexicographic)
+
+			Constraint:
+
+				identical rule set → identical evaluation order
+
+			Violation:
+				→ NON-DETERMINISTIC POLICY ENGINE
+
+		Sequential Policy Evaluation Rule (MANDATORY):
+
+			All intents MUST be processed in strict order:
+
+			ordering_key = {
+				event_time ASC
+				origin_type ASC
+				sequence_id ASC
+			}
+
+			FOR each intent:
+
+				evaluate policy using PolicyState_current
+
+				produce PolicyDecisionIntent
+
+				update PolicyState_current using PolicyStateTransition
+
+		State Update MUST occur IMMEDIATELY after each intent evaluation
+			and BEFORE next intent evaluation
+
+6. FLOW ARCHITECTURE
+	6.0 Canonical Input Set
+		canonical_input_set_D4 = {
+			risk_approved_intent_stream,
+			configuration_snapshot: {
+				policy_rules,
+				policy_parameters
+			},
+			version_identifiers
+		}
+
+		Constraints:
+
+			immutable
+			complete
+			hash-identifiable
+
+		policy_state_snapshot
+
+			PolicyStateSnapshot MUST be:
+			- provided by Phase C
+			- immutable
+			- part of canonical_input_set_D4
+
+	6.1 Input
+
+		From Step 3:
+
+		risk_approved_intent_stream
+
+	6.2 Processing Flow
+		RiskApprovedIntent
+			→ Policy Validation
+			→ Behavioral Control
+			→ Modification (if needed)
+			→ PolicyDecision
+			→ PolicyDecisionIntent
+
+
+		PolicyState_current = PolicyStateSnapshot
+
+		FOR intent IN ordered_stream:
+
+			decision = evaluate(intent, PolicyState_current)
+
+			PolicyState_current = update(PolicyState_current, decision)
+
+	6.3 Output
+		policy_decision_intent_stream = {
+			intents: [
+				{
+					risk_approved_intent_id
+					policy_status
+					modified_fields
+					policy_flags
+					governance_references
+				}
+			]
+		}
+
+	6.4 Flow Rule
+		no external inputs
+		deterministic transformation
+		no implicit behavior
+
+7. PIPELINE STRUCTURE
+
+	P1: Input Validation
+	P2: Rule Binding
+	P3: Policy Evaluation
+	P4: Modification
+	P5: Output Emission
+
+8. CONTROL & CONSTRAINTS
+	8.1 Hard Rules
+		no execution without policy approval
+		no mutation of economic intent
+		deterministic output mandatory
+
+	8.2 Guardrails
+		reject invalid input
+		reject undefined policy rule
+		reject ambiguity
+
+	8.3 Invariants
+		same input → same output
+		approved_size ≥ modified_size
+		policy layer cannot increase exposure
+
+		I4 — Size Validity Invariant:
+
+			modified_size MUST satisfy:
+
+				0 < modified_size ≤ approved_size
+
+			Violation:
+				→ REJECT intent
+
+		I5 — State Determinism Invariant:
+
+			Given identical:
+
+				PolicyStateSnapshot
+				intent stream
+
+			PolicyState evolution MUST be identical
+
+			Violation:
+				→ NON-REPLAYABLE SYSTEM
+			Given identical:
+
+				PolicyStateSnapshot
+				intent stream
+
+			PolicyState evolution MUST be identical
+
+			Violation:
+				→ NON-REPLAYABLE SYSTEM
+
+		I6 — State Reconstruction Invariant:
+
+			Given:
+
+				PolicyStateSnapshot
+				intent stream
+				policy rules
+
+			System MUST reconstruct identical:
+
+				PolicyState(t) for all t
+
+			Violation:
+				→ SYSTEM INVALID
+
+		I-GLOBAL-4: Policy state evolution MUST be event-time deterministic
+
+9. STATE & DATA MODEL
+
+	State Model (CONTROLLED STATE — NOT EXTERNAL)
+
+		PolicyStateSnapshot = {
+			trade_count_window
+			last_execution_time_per_instrument
+			cooldown_tracker
+		}
+
+	PolicyStateTransition (MANDATORY):
+
+		Define deterministic state evolution:
+
+		PolicyStateTransition (MANDATORY — FULLY DEFINED):
+
+			FOR each processed PolicyDecisionIntent:
+
+				IF policy_status ∈ {ALLOW, MODIFY}:
+
+					trade_count_window = update_window(
+						trade_count_window,
+						event_time
+					)
+
+					last_execution_time_per_instrument[instrument] = event_time
+
+					cooldown_tracker[instrument] = event_time + cooldown_duration
+
+				ELSE IF policy_status == REJECT:
+
+					NO state update
+
+			update_window RULE (MANDATORY):
+
+				trade_count_window MUST:
+
+					- include only events within:
+						[event_time - window_size, event_time]
+
+					- be computed using event_time ONLY
+
+					- be strictly deterministic
+
+			cooldown_tracker RULE:
+
+				cooldown_active IF:
+
+					event_time < cooldown_tracker[instrument]
+
+			CONSTRAINTS:
+
+				- ALL updates MUST use event_time (NOT system time)
+				- ALL updates MUST be deterministic
+				- NO partial updates allowed
+
+		assert state_update_time_source == event_time
+			assert no system_clock usage
+
+10. FAILURE MODEL
+	10.1 Scenarios
+		missing policy config
+		rule conflict
+		undefined precedence
+		invalid modification
+
+	10.2 Impact
+		governance failure
+		regulatory risk
+
+	10.3 Mitigation
+		reject intent
+		abort pipeline
+
+	10.4 Detection
+		rule validation failure
+		precedence collision
+
+11. ASSUMPTION REGISTER
+	Assumption				Reason						Validation				Status
+	Risk output valid		upstream guarantee			Step 3					VALIDATED
+	policy_rules complete	required for governance		config validation		CONTROLLED
+
+12. VALIDATION FRAMEWORK
+	12.1 Method
+		Red Team (3 rounds)
+		Blue Team validation
+
+		RED TEAM
+		Round 1 — Policy Bypass Attack
+
+			Attempt: trade outside hours
+			Result: REJECT
+			PASS
+
+		Round 2 — Overtrading Attack
+
+			Attempt: high-frequency burst
+			Result: MODIFY (cooldown)
+			PASS
+
+		Round 3 — Mutation Attack
+
+			Attempt: change direction via policy
+			Result: BLOCKED (hard constraint)
+			PASS
+
+		BLUE TEAM VALIDATION
+			determinism verified
+			rule precedence enforced
+			no ambiguity
+			replay identical
+
+		SYSTEM VALID
+
+			CEI CRITICAL FIXES
+			Enforced modification boundary isolation
+			Added strict precedence hierarchy
+			Restricted size modification to ≤ approved_size
+			Introduced policy vs risk separation invariant
+
+13. OUTPUT (DELIVERABLE)
+	policy_decision_intent_stream
+
+14. TRACEABILITY
+	decision_validated_intent_id
+	→ risk_approved_intent_id
+	→ policy_decision_intent_id
+
+	Full lineage preserved
+
+15. CROSS-PHASE CONSISTENCY
+
+	Owns:
+
+		policy enforcement
+
+	References:
+
+		Phase B constraints
+		Step 3 risk output
+
+16. SCALABILITY
+	parallel evaluation per intent
+	deterministic ordering preserved
+
+17. GOVERNANCE
+	policy versioning mandatory
+	approval required
+
+18. AUDITABILITY
+	full rule trace
+	policy flag logs
+	replay consistency
+
+19. RISK CONSIDERATIONS
+		policy misconfiguration risk
+		governance bypass risk
+
+	Mitigation:
+
+		deterministic validation
+		strict rejection
+
+20. FAILURE CONDITION
+
+	Phase FAILS if:
+
+		policy ambiguity exists
+		determinism breaks
+		rules incomplete
+
+21. PHASE LOCK CRITERIA
+
+	LOCK only if:
+
+		all 21 sections complete
+		Red Team passed
+		Blue Team validated
+		CEI fixes applied
+		no ambiguity
+
+PHASE D — STEP 5: EXECUTION ENGINE (ORDER GENERATION & EXECUTION LAYER)
+
+Reference Continuity:
+CTS-PHASE-D-STEP4-POLICY-ENGINE-EXECUTION-THREAD-V1-2026-04-10 → CONTINUED
+
+Aligned with:
+
+Phase D Macro Design
+Universal Phase Structure (UPS)
+	1. PHASE IDENTITY LAYER
+	1.1 Phase Name
+
+		Phase D — Step 5: Execution Engine (Order Generation & Execution Layer)
+
+	1.2 Phase Role
+
+		Final deterministic transformation layer that:
+
+			converts PolicyDecisionIntent → ExecutionOrder
+			initializes Order Lifecycle
+			produces execution-ready order stream
+
+		This is the last internal system boundary before market interaction
+
+
+	1.3 Phase Objective
+
+		To construct a deterministic execution transformation such that:
+
+			PolicyDecisionIntent
+			→ ExecutionOrder
+			→ Order Lifecycle Initialization
+
+		Satisfying:
+
+			exact intent preservation
+			deterministic order generation
+			replay-identical execution output
+
+	1.4 Why This Phase Exists
+
+	Prevents:
+
+		(F1) Intent ≠ Order mismatch (audit break)
+		(F2) Non-deterministic order IDs
+		(F3) Execution drift from policy output
+		(F4) Lifecycle inconsistency
+		(F5) Broker integration ambiguity
+
+2. PHASE SCOPE CONTROL
+
+	2.1 INCLUDED (STRICT)
+		order construction
+		order_id generation (hash deterministic)
+		execution instruction generation
+		lifecycle initialization
+		deterministic sequencing
+		execution type mapping
+		price reference binding
+
+		INCLUDED (EXTENSION — INFRA BINDING)
+
+			order dispatch abstraction (OMS binding)
+			execution routing abstraction (EMS binding)
+			broker request preparation (pre-adapter)
+			deterministic message emission to infra layer
+
+		multi-venue routing decision (SOR)
+			venue allocation engine
+			venue-level liquidity modeling
+			routing schedule generation
+
+	2.2 EXCLUDED (STRICT)
+			risk validation (Step 3)
+			policy evaluation (Step 4)
+			broker connectivity (abstract only)
+			portfolio computation
+			external state access
+			real-time market microstructure logic
+			adaptive / dynamic microstructure logic
+
+	2.3 Boundary Rule (MANDATORY)
+
+			Execution Engine MUST:
+
+				transform ONLY
+				NOT evaluate
+				NOT modify economic intent
+
+			Violation → PHASE INVALID
+
+		Microstructure Modeling Clarification (MANDATORY)
+
+			Execution Engine MAY use:
+
+			- precomputed microstructure profiles
+			- deterministic liquidity models
+			- snapshot-based order book references
+
+			Execution Engine MUST NOT:
+
+			- fetch live order book
+			- adapt to runtime market conditions
+			- introduce stochastic execution behavior
+
+3. ARCHITECTURAL INTENT LAYER
+	3.1 Core Principles
+		Determinism (bit-level)
+		Zero Intent Mutation
+		Canonical Dependency Only
+		Lifecycle Integrity
+		Replay Fidelity
+
+	3.2 Architectural Model
+		ExecutionOrderStream = F(
+			policy_decision_intent_stream,
+			configuration_snapshot,
+			version_identifiers
+		)
+
+	3.3 System Positioning
+		Step 1 → ExecutionIntent
+		Step 2 → DecisionValidatedIntent
+		Step 3 → RiskApprovedIntent
+		Step 4 → PolicyDecisionIntent
+		Step 5 → ExecutionOrder   ← THIS
+		→ Order Lifecycle System
+
+	3.4 INFRA BINDING MODEL (MANDATORY)
+
+		Execution Engine MUST NOT directly interact with broker.
+
+		It MUST emit ExecutionOrder into OMS interface:
+
+		ExecutionOrder
+		→ OMS (Order Management Service)
+		→ EMS (Execution Management Service)
+		→ Broker Adapter (Step 7)
+
+		Constraints:
+
+		- Execution Engine remains PURE FUNCTION
+		- Infra layer MUST NOT alter ExecutionOrder
+		- Infra layer is TRANSPORT ONLY
+
+4. DOMAIN MODEL DEFINITION
+
+	4.1 Entities
+		PolicyDecisionIntent (input)
+		ExecutionOrder (output)
+		ExecutionInstruction
+		OrderState
+		ExecutionEvent
+		FillEvent
+		OrderLifecycle
+		ExecutionMicrostructureProfile
+		OrderBookSnapshotReference
+		LiquidityModel
+		ExecutionSchedule
+		FillProbabilityModel
+		SlippageModel
+		Venue
+		VenueLiquidityProfile
+		RoutingDecision
+		VenueAllocation
+
+	4.2 ExecutionOrder Schema:
+			ExecutionOrder = {
+				signal_id
+				order_id
+				policy_decision_intent_id
+				trade_intent_id
+				instrument
+				direction
+				size
+				price_reference
+				execution_type
+				timestamp
+				origin_type
+				lineage_hash_reference
+				execution_schedule
+				expected_slippage
+				liquidity_reference_id
+				venue_allocations[]
+				routing_strategy
+				routing_constraints
+				cost_model_version
+				cost_model_checksum
+			}
+
+				CostModel = {
+						model_id
+						version
+						checksum
+						parameters
+					}
+
+			Microstructure Output Persistence Rule (MANDATORY)
+
+				All outputs from microstructure processing MUST be embedded in ExecutionOrder.
+
+				Recomputation in downstream phases is STRICTLY FORBIDDEN.
+
+			ExecutionOrder MUST include lineage_hash_reference
+				Schema omission → HARD FAIL
+
+			Microstructure Output Persistence Rule (MANDATORY)
+
+				All outputs from microstructure processing MUST be embedded in ExecutionOrder.
+
+				Recomputation in downstream phases is STRICTLY FORBIDDEN.
+
+		ExecutionMicrostructureProfile:
+			execution_microstructure_profile = {
+				instrument
+				tick_size
+				lot_size
+				avg_spread
+				volatility_class
+				liquidity_class
+				market_impact_coefficient
+				slippage_profile_id
+			}
+
+		OrderBookSnapshotReference:
+			order_book_snapshot_reference = {
+				snapshot_id
+				event_time
+				best_bid
+				best_ask
+				bid_depth_levels[]
+				ask_depth_levels[]
+				total_liquidity
+			}
+			Constraint:
+
+				MUST come from Phase C event system
+				NOT real-time fetch (no external dependency)
+
+		LiquidityModel:
+			liquidity_model = {
+				available_liquidity_at_price[]
+				depth_decay_function
+				execution_capacity_limit
+			}
+
+		ExecutionSchedule:
+			execution_schedule = {
+				execution_order_id
+				slices: [
+					{
+						slice_id
+						size
+						price_reference
+						scheduled_event_time
+					}
+				]
+			}
+
+		FillProbabilityModel:
+			fill_probability_model = {
+				price_level
+				probability
+				expected_time_to_fill
+			}
+
+		SlippageModel:
+			slippage_model = {
+				expected_slippage
+				worst_case_slippage
+				slippage_distribution_profile
+			}
+
+		Venue:
+			venue = {
+				venue_id
+				venue_type            // exchange, broker, dark_pool
+				fee_model
+				latency_profile
+				supported_instruments
+			}
+
+		VenueLiquidityProfile:
+			venue_liquidity_profile = {
+				venue_id
+				instrument_id
+				available_liquidity
+				depth_profile
+				spread_profile
+				timestamp_reference
+			}
+
+		RoutingDecision:
+			routing_decision = {
+				order_id
+				strategy_type         // best_price, low_cost, balanced
+				constraints {
+					max_venues
+					min_fill_size
+				}
+			}
+
+		VenueAllocation:
+			venue_allocation = {
+				order_id
+				venue_id
+				allocated_quantity
+				expected_price
+				expected_slippage
+			}
+
+	4.3 OrderState
+		GLOBAL OrderState (MANDATORY — CROSS-PHASE)
+
+			OrderState ∈ {
+				ORDER_CREATED
+				ORDER_ROUTED
+				PARTIALLY_FILLED
+				FULLY_FILLED
+				ORDER_COMPLETED
+				ORDER_FAILED
+			}
+
+		State Ownership Rule (MANDATORY)
+
+			- OrderState definition is GLOBAL (shared across Step 5–8)
+			- No phase may define its own variant
+			- No aliasing allowed (e.g., FILLED ≠ FULLY_FILLED)
+
+			Violation → SYSTEM NON-DETERMINISTIC
+
+		Order Lifecycle Transition Rules (GLOBAL — EVENT-DRIVEN ONLY)
+
+		Transitions MUST follow Event → State mapping ONLY:
+
+			ORDER_CREATED   → ORDER_ROUTED
+			ORDER_ROUTED    → PARTIALLY_FILLED
+			ORDER_ROUTED    → FULLY_FILLED
+			ORDER_ROUTED    → ORDER_FAILED
+
+			PARTIALLY_FILLED → PARTIALLY_FILLED
+			PARTIALLY_FILLED → FULLY_FILLED
+			PARTIALLY_FILLED → ORDER_FAILED
+
+			FULLY_FILLED → ORDER_COMPLETED
+
+			ORDER_FAILED → terminal
+			ORDER_COMPLETED → terminal
+
+			Constraints:
+
+			- ONLY global OrderState allowed
+			- NO legacy states permitted
+			- ALL transitions MUST be triggered by ExecutionEvent.event_type
+
+	4.4 ExecutionEvent
+		ExecutionEvent = {
+			event_id
+			order_id
+			event_type
+			executed_size
+			remaining_size
+			event_time
+		}
+
+	4.5 Relationships
+		1 PolicyDecisionIntent → 1 ExecutionOrder
+		1 ExecutionOrder → N ExecutionEvents
+		ExecutionEvents → drive OrderState transitions
+
+	4.6 Ownership
+		All execution entities → Phase D Step 5 ONLY
+
+	4.7 GLOBAL EventType (MANDATORY — CROSS-PHASE)
+
+		event_type ∈ {
+			ORDER_CREATED
+			ORDER_ROUTED
+			PARTIAL_FILL
+			FULL_FILL
+			ORDER_COMPLETED
+			ORDER_FAILED
+		}
+
+		EventType Standardization Rule
+
+			- ALL phases (Step 5–8) MUST use identical event_type set
+			- NO aliases allowed:
+				PARTIAL_FILL ≠ PARTIALLY_FILLED
+				FULL_FILL ≠ FILLED
+
+			- event_type drives OrderState transitions
+			- mapping MUST be 1:1 deterministic
+
+			Violation → REPLAY FAILURE
+
+		Event → State Mapping (MANDATORY)
+
+			ORDER_CREATED   → ORDER_CREATED
+			ORDER_ROUTED    → ORDER_ROUTED
+			PARTIAL_FILL    → PARTIALLY_FILLED
+			FULL_FILL       → FULLY_FILLED
+			ORDER_COMPLETED → ORDER_COMPLETED
+			ORDER_FAILED    → ORDER_FAILED
+
+		OMSRequest = {
+				order_id
+				execution_order_payload
+				routing_metadata
+				dispatch_timestamp (derived from event_time ONLY)
+			}
+
+			EMSInstruction = {
+				order_id
+				broker_route
+				execution_strategy (mapped from execution_type)
+				priority_level
+			}
+
+5. LOGIC / RULE ENGINE
+
+	5.1 Rule Classes
+		R1 — Input Validation
+		R2 — Order Construction
+		R3 — Order ID Generation
+		R4 — Price Reference Binding
+		R5 — Execution Instruction Mapping
+		R6 — Lifecycle Initialization
+		R7 — Ordering Enforcement
+		R8 — Output Construction
+
+		R9 — Configuration Integrity Validation
+
+			IF input.config_hash != expected.config_hash:
+				→ REJECT execution
+
+			Execution MUST NOT proceed on config mismatch
+
+		SIGNAL TRACE PROPAGATION RULE (MANDATORY)
+
+			signal_id MUST be passed through unchanged across all phases.
+
+			signal_id MUST NOT:
+
+			- be modified
+			- be recomputed
+			- be dropped
+
+			Violation → HARD FAIL
+
+		R13 — Venue Discovery
+				venues = filter(
+					all_venues,
+					instrument_supported == TRUE
+					)
+
+				Constraint:
+
+				static configuration only
+
+		R14 — Liquidity Aggregation
+				aggregated_liquidity = Σ(venue_liquidity_profile.available_liquidity)
+
+		R15 — Routing Optimization
+				Deterministic optimization:
+
+					objective_function = minimize(
+						execution_cost + slippage + fees
+					)
+
+				Subject to:
+
+					Σ(venue_allocations.quantity) = order.quantity
+
+		R16 — Venue Allocation
+				venue_allocations = deterministic_split(
+					order.quantity,
+					venue_liquidity_profiles,
+					routing_strategy
+				)
+
+		R17 — Liquidity Integrity Validation
+				validate(venue_liquidity_profile):
+
+					assert timestamp within tolerance_window
+
+					assert liquidity <= historical_max_threshold
+
+					assert spread within expected bounds
+
+					assert source_verified == TRUE
+
+		R18 — Cost Model Verification
+				assert runtime_cost_model.checksum == execution_order.checksum
+
+
+	5.2 Order Construction Rule
+			ExecutionOrder.size = PolicyDecisionIntent.approved_size (or modified_size)
+
+		Constraint:
+
+			MUST NOT exceed policy-approved size
+
+		IF policy_status == MODIFY:
+				size = modified_size
+			ELSE:
+				size = approved_size
+
+		size MUST be single resolved value
+			dual-field interpretation FORBIDDEN
+
+	5.3 Order ID Rule (MANDATORY)
+		order_id = HASH_v1(
+			policy_decision_intent_id +
+			risk_approved_intent_id +
+			decision_validated_intent_id +
+			execution_intent_id +
+			trade_intent_id +
+			instrument +
+			direction +
+			size +
+			sequence_id +
+			price_model_version_id +
+			execution_config_hash
+		)
+
+		Constraints:
+
+			- MUST NOT depend on timestamp alone
+			- MUST include full lineage chain
+			- identical input → identical order_id
+			- broker IDs MUST NOT be used
+
+		timestamp = PolicyDecisionIntent.event_time
+
+		Constraints:
+
+			deterministic
+			reproducible
+			unique
+
+		Timestamp Source Rule (MANDATORY):
+
+			- timestamp MUST be derived ONLY from:
+				PolicyDecisionIntent.event_time
+
+			- system time usage FORBIDDEN
+
+			Violation → HARD FAIL
+
+
+
+	5.4 Price Reference Rule
+		price_reference = configuration_snapshot.price_model[instrument]
+
+		Constraints:
+
+		MUST be deterministic
+		MUST NOT use live market data
+
+		price_reference constraints:
+
+			min_price > 0
+			max_price ≤ SYSTEM_MAX_PRICE
+
+			overflow → REJECT
+			underflow → REJECT
+
+		Price Model Version Binding (MANDATORY)
+
+			configuration_snapshot MUST include:
+
+				price_model_version_id
+
+			Constraints:
+
+				1. price_reference MUST be derived ONLY from:
+
+					configuration_snapshot.price_model_version_id
+
+				2. price_model MUST be:
+
+					- immutable
+					- versioned
+					- hash-identifiable
+
+				3. Same:
+
+					instrument + version_id
+
+					→ MUST produce identical price_reference
+
+				4. price_reference MUST NOT depend on:
+
+					- live market data
+					- external feeds
+					- runtime inputs
+
+				5. price_model_version_id MUST be included in:
+
+					order_id hash input
+
+			Violation → NON-DETERMINISTIC PRICING
+
+	5.5 Execution Type Mapping
+		execution_type = PolicyDecisionIntent.execution_type
+
+		No transformation allowed
+
+
+
+	5.6 Lifecycle Initialization
+
+		Lifecycle Initialization Rule (CORRECT)
+
+		First event MUST be emitted:
+
+		event_type = ORDER_CREATED
+
+		OrderState derived as:
+
+		OrderState(0) = ORDER_CREATED
+
+	5.7 Ordering Rule (MANDATORY)
+		ordering_key = {
+			event_time ASC
+			origin_type ASC
+			sequence_id ASC
+			policy_decision_intent_id ASC
+		}
+
+		Constraint:
+
+			- MUST exactly preserve Step 4 output ordering
+			- NO reordering allowed
+
+		Aligned with Phase D macro ordering
+
+	5.8 RULE EXECUTION ORDER (STRICT — FINAL)
+
+				1. Input Validation
+				2. Ordering Enforcement
+
+				3. Venue Discovery
+				4. Liquidity Aggregation
+				5. Routing Optimization
+				6. Venue Allocation
+
+				7. Microstructure Modeling
+				8. Liquidity Validation
+				9. Order Slicing
+				10. Slippage Bounding
+				11. Execution Scheduling
+
+				12. Order Construction
+				13. Order ID Generation
+				14. Price Binding
+				15. Execution Mapping
+				16. Lifecycle Initialization
+				17. Output Construction
+
+			Microstructure Precedence Invariant
+
+				Microstructure steps MUST execute BEFORE order construction.
+
+				Violation → NON-DETERMINISTIC EXECUTION
+
+
+			Step 8 — Microstructure Modeling
+				select execution_microstructure_profile by instrument
+
+			Step 9 — Liquidity Validation
+				IF requested_size > execution_capacity_limit:
+					→ MUST slice
+
+			Step 10 — Order Slicing
+				slice_size = deterministic_function(
+					requested_size,
+					liquidity_profile,
+					max_slice_size_config
+				)
+
+				Constraints:
+
+				fixed formula
+				no randomness
+
+			Step 11 — Slippage Bounding
+					expected_slippage ≤ max_allowed_slippage
+
+				IF violated:
+
+					→ reduce slice_size
+
+			Step 12 — Execution Scheduling
+					scheduled_event_time = base_event_time + (slice_index × fixed_interval)
+
+				Constraints:
+
+					NO dynamic delay
+					NO latency-based adjustment
+
+			Microstructure Precedence Invariant
+
+				Microstructure steps MUST execute BEFORE order construction.
+
+				Violation → NON-DETERMINISTIC EXECUTION
+
+	R10 — Broker Normalization Pre-Layer (MANDATORY)
+
+		All downstream execution events MUST pass through normalization:
+
+		normalized_broker_event = {
+			order_id
+			broker_order_id
+			event_type ∈ {ACK, PARTIAL_FILL, FULL_FILL, CANCEL, REJECT}
+			event_time (Phase C derived ONLY)
+			executed_size
+			execution_price
+			sequence_number
+		}
+
+		- broker timestamps MUST NOT be used
+		- event_time MUST be Phase C aligned
+		- events MUST be sorted BEFORE lifecycle:
+
+		ordering_key = {
+			event_time ASC
+			sequence_number ASC
+		}
+
+		Broker Mapping Determinism Rule (MANDATORY)
+
+			configuration_snapshot MUST include:
+
+				broker_mapping_rules
+
+			Definition:
+
+				broker_mapping_rules define deterministic mapping:
+
+					ExecutionOrder → BrokerRequest schema
+
+			Constraints:
+
+				1. Mapping MUST be:
+
+					- static
+					- versioned
+					- hash-identifiable
+
+				2. Mapping MUST NOT depend on:
+
+					- runtime conditions
+					- broker responses
+					- environment variables
+
+				3. Same ExecutionOrder + same mapping_rules:
+
+					→ MUST produce identical BrokerRequest
+
+				4. broker_mapping_rules MUST be included in:
+
+					execution_config_hash
+
+				5. Broker-specific transformations MUST be:
+
+					declarative (NOT procedural)
+
+					Example:
+
+						field_map = {
+							instrument → symbol_code
+							size → quantity
+						}
+
+				6. NO conditional branching allowed in mapping
+
+			Violation → NON-DETERMINISTIC EXTERNAL EXECUTION
+
+		R11 — Execution Config Version Lock
+
+			version_identifiers MUST include:
+
+					execution_engine_version_id
+
+				Constraints:
+
+					- MUST be part of canonical_input_set_D5
+					- MUST be included in execution_config_hash (optional extension)
+
+			Purpose:
+
+				protects against code-level drift
+
+		R12 — Infra Emission Rule (MANDATORY)
+
+			ExecutionOrder MUST be emitted to OMS as:
+
+			OMSRequest = HASH-STABLE TRANSFORMATION of ExecutionOrder
+
+			Constraints:
+
+			- NO mutation of ExecutionOrder
+			- NO additional fields except routing metadata
+			- MUST preserve lineage_hash_reference
+
+		R13 — Microstructure-Aware Execution Construction
+
+			ExecutionOrder = F(
+					RiskApprovedIntent,
+					PolicyDecisionIntent,
+					ExecutionMicrostructureProfile,
+					LiquidityModel,
+					ExecutionConstraints
+				)
+
+6. FLOW ARCHITECTURE
+
+		6.0 Canonical Input Set
+		canonical_input_set_D5 = {
+			policy_decision_intent_stream,
+			configuration_snapshot,
+			version_identifiers,
+			execution_microstructure_profile_snapshot
+			liquidity_model_snapshot
+			slippage_model_snapshot
+		}
+
+		Constraints:
+
+		immutable
+		complete
+		hash-identifiable
+
+		Configuration Hash Binding Rule (MANDATORY)
+
+			configuration_snapshot MUST include:
+
+				execution_config_hash
+
+			Definition:
+
+				execution_config_hash = HASH_v1(
+					price_model_version_id +
+					execution_type_map +
+					retry_policy +
+					broker_mapping_rules
+				)
+
+			Constraints:
+
+				1. execution_config_hash MUST be part of canonical_input_set_D5
+				2. Execution Engine MUST validate:
+
+					input.execution_config_hash == replay.execution_config_hash
+
+				3. ANY mismatch:
+
+					→ HARD FAIL
+					→ reject entire execution_order_stream
+
+				4. execution_config_hash MUST be logged per order
+
+			Violation → NON-REPLAYABLE EXECUTION
+
+		configuration_snapshot MUST include:
+
+			- price_model_version_id
+			- execution_config_hash
+
+			Execution MUST validate:
+
+			input.config_hash == replay.config_hash
+
+	6.1 Input
+
+		From Step 4:
+
+		policy_decision_intent_stream
+
+	6.2 Processing Flow
+		PolicyDecisionIntent
+		→ Validation
+		→ Ordering Enforcement
+		→ Order Construction
+		→ Order ID Generation
+		→ Price Binding
+		→ Lifecycle Init
+		→ ExecutionOrder
+		→ OMSRequest (emit)
+		→ OMSEvent (OMS_RECEIVED)
+		→ OMSEvent (OMS_DISPATCHED)
+		→ EMSInstruction
+		→ EMSEvent (ROUTE_SELECTED)
+		→ EMSEvent (ROUTE_DISPATCHED)
+		→ Broker Adapter (Step 7)
+
+		RiskApprovedIntent
+		→ PolicyDecisionIntent
+		→ Microstructure Modeling
+		→ Liquidity Check
+		→ Order Slicing
+		→ Slippage Control
+		→ Execution Scheduling
+		→ ExecutionOrder
+
+			In ExecutionOrder:
+
+				execution_schedule
+				expected_slippage
+				liquidity_reference_id
+
+				→ Venue-level Execution Simulation
+				→ Per-venue Fill Simulation
+				→ Slippage Realization (per venue)
+				→ Transaction Cost (per venue)
+				→ Aggregation
+				→ PnL Computation
+
+
+
+		Flow MUST mirror Rule Execution Order EXACTLY
+			Any deviation → NON-DETERMINISTIC SYSTEM
+
+	6.3 Output
+		execution_order_stream = {
+			orders: [ExecutionOrder]
+		}
+
+		Execution Event Emission Contract (MANDATORY)
+
+			Each lifecycle transition MUST emit:
+
+			execution_event = {
+				order_id
+				event_type
+				event_time
+				executed_size
+				remaining_size
+				execution_price
+				lineage_hash
+			}
+
+		- MUST be injected into Phase C EventLog
+		- MUST follow Phase C ordering model
+		- MUST preserve lineage chain
+
+	6.4 Flow Rule
+		no external data
+		no implicit values
+		deterministic only
+
+	configuration_snapshot MUST include:
+
+		- price_model
+		- execution_type_map
+		- retry_policy
+		- broker_mapping_rules
+
+7. PIPELINE STRUCTURE
+
+	Execution Lifecycle Pipeline:
+
+		P1: Order Created (ORDER_CREATED)
+		P2: Order Routed
+		P3: Execution Events
+		P4: Fill Processing
+		P5: State Transition
+		P6: Completion
+		P7: OMS Dispatch
+		P8: EMS Routing
+		P9: Broker Adapter Handoff
+
+8. CONTROL & CONSTRAINTS
+
+	8.1 Hard Rules
+		no intent mutation
+		no size increase
+		no external dependency
+		deterministic ordering mandatory
+
+		HR-M1: No dynamic market data dependency
+		HR-M2: All microstructure inputs MUST be snapshot-based
+		HR-M3: Slicing MUST be deterministic
+		HR-M4: Execution schedule MUST be precomputed
+		HR-M5: Slippage MUST be bounded before order emission
+
+		HR-SOR-1:
+			ExecutionOrder MUST fully define venue allocation.
+			Runtime routing decisions are STRICTLY FORBIDDEN.
+
+		I-SOR-3: Unverified or anomalous liquidity MUST NOT be used for routing
+		I-SOR-5: Routing optimization MUST use immutable, version-locked cost models
+
+	8.2 Guardrails
+		reject invalid intent
+		reject zero-size orders
+		reject missing fields
+
+		IF size == 0:
+
+			REJECT order
+
+			reason = ZERO_SIZE_ORDER
+
+	8.3 Invariants
+		ExecutionOrder.size == PolicyDecisionIntent.size
+		Order lifecycle must be monotonic
+		Replay must produce identical order stream
+
+		remaining_size = order.size - Σ(executed_size)
+
+			Constraint:
+
+			remaining_size ≥ 0
+			remaining_size == 0 → FILLED
+
+		Partial Fill Determinism Rule
+
+			filled_size_cumulative = Σ(executed_size_i)
+
+			remaining_size = order.size - filled_size_cumulative
+
+			Constraints:
+
+			- filled_size_cumulative MUST be monotonic
+			- filled_size_cumulative ≤ order.size
+			- remaining_size ≥ 0
+			- remaining_size == 0 → FILLED
+
+		Idempotency Rule (MANDATORY)
+
+		IF order_id already exists:
+
+			DO NOT create new order
+
+			RETURN existing order state
+
+		I-M1: Same input → identical slicing
+		I-M2: Same input → identical schedule
+		I-M3: No runtime liquidity decision
+		I-M4: Execution path fully replayable
+		I-SOR-1: Same input → identical venue allocation
+		I-SOR-2: Routing MUST precede microstructure modeling
+		I-SOR-SIM-1: Simulated fills MUST match venue allocation proportions
+
+9. STATE & DATA MODEL
+
+	9.1 State Definition
+		execution_state = {
+			order_id → OrderState
+		}
+
+	9.2 State Transition
+		State Transition Rule (GLOBAL)
+
+			OrderState MUST be derived ONLY from ExecutionEvent stream:
+
+			State(t+1) = f(State(t), ExecutionEvent.event_type)
+
+			Using mapping:
+
+			ORDER_CREATED   → ORDER_CREATED
+			ORDER_ROUTED    → ORDER_ROUTED
+			PARTIAL_FILL    → PARTIALLY_FILLED
+			FULL_FILL       → FULLY_FILLED
+			ORDER_COMPLETED → ORDER_COMPLETED
+			ORDER_FAILED    → ORDER_FAILED
+
+			No direct state transitions allowed.
+
+	9.3 Source of Truth
+		Event Log (Phase C)
+		Execution Events
+
+	OrderState transitions MUST be derived ONLY from ExecutionEvent stream
+
+		State(t) = f(EventLog_execution[0 → t])
+
+10. FAILURE MODEL
+
+	10.1 Scenarios
+		invalid policy intent
+		order ID collision
+		size mismatch
+		ordering violation
+
+	10.2 Impact
+		execution inconsistency
+		audit failure
+		portfolio corruption
+
+	10.3 Mitigation
+		reject input
+		halt execution pipeline
+
+	10.4 Detection
+		hash mismatch
+		schema validation failure
+
+	Execution Failure Escalation
+
+		IF execution fails after retry:
+
+			dead_letter_event = {
+				order_id
+				failure_stage
+				failure_reason
+				retry_count
+			}
+
+			route → DEAD_LETTER_QUEUE
+
+11. ASSUMPTION REGISTER
+	Assumption					Reason					Validation		Status
+	PolicyDecisionIntent valid	upstream guarantee		Step 4			VALIDATED
+	config complete				required for mapping	Phase C				ZCONTROLLED
+
+12. VALIDATION FRAMEWORK
+	Red Team (3 Rounds)
+
+		Round 1 — Determinism Attack
+
+			attempt non-deterministic order_id
+			→ PASS (hash-based)
+
+		Round 2 — Intent Mutation Attack
+
+			attempt size increase
+			→ REJECTED
+
+		Round 3 — Ordering Attack
+
+			reorder equal timestamps
+			→ resolved via sequence_id
+
+	Blue Team Validation
+		deterministic replay → PASS
+		schema completeness → PASS
+		lifecycle correctness → PASS
+
+	CEI Critical Modifications
+		Enforce strict price_reference model isolation
+		Add order_id collision detection rule
+		Add zero-size rejection invariant
+
+13. OUTPUT (DELIVERABLE SPEC)
+
+		ExecutionOrder = {
+			order_id
+			policy_decision_intent_id
+			trade_intent_id
+			instrument
+			direction
+			size
+			price_reference
+			execution_type
+			timestamp
+			origin_type
+			lineage_hash_reference
+
+			execution_config_hash
+			price_model_version_id
+		}
+
+		Execution Configuration Traceability Rule
+
+			Each ExecutionOrder MUST carry:
+
+				execution_config_hash
+				price_model_version_id
+
+			Constraints:
+
+				- MUST match canonical_input_set_D5
+				- MUST be identical during replay
+				- MUST be verifiable in audit logs
+
+			Purpose:
+
+				ensures full reconstruction of execution environment
+
+		execution_order_stream = {
+				orders: [ExecutionOrder]
+				oms_request_stream: [OMSRequest]
+				ems_instruction_stream: [EMSInstruction]
+			}
+
+		oms_event_stream: [OMSEvent]
+		ems_event_stream: [EMSEvent]
+
+14. TRACEABILITY MAPPING
+		trade_intent_id
+		→ policy_decision_intent_id
+		→ order_id
+
+	Full lineage preserved
+
+	order_lineage_hash = HASH_v1(
+		policy_decision_intent_id +
+		risk_approved_intent_id +
+		decision_validated_intent_id +
+		execution_intent_id +
+		trade_intent_id
+	)
+
+	ExecutionOrder MUST include lineage_hash_reference
+
+	Lineage Continuity Rule
+
+		ExecutionOrder.lineage_hash_reference MUST be:
+
+		HASH_v1(
+			trade_intent_id +
+			execution_intent_id +
+			decision_validated_intent_id +
+			risk_approved_intent_id +
+			policy_decision_intent_id
+		)
+
+15. CROSS-PHASE CONSISTENCY
+
+	Owns:
+
+		ExecutionOrder
+		Order Lifecycle
+
+	References:
+
+		Step 4 output
+		Phase B constraints
+
+16. SCALABILITY MODEL
+		horizontally scalable order generation
+		partition by order_id
+		deterministic partitioning
+
+17. GOVERNANCE INTEGRATION
+		version-controlled execution rules
+		approval required for changes
+
+18. AUDITABILITY & OBSERVABILITY
+		full order trace
+		deterministic replay
+		hash verification
+
+19. RISK CONSIDERATIONS
+		execution drift risk
+		lifecycle inconsistency risk
+
+		Mitigation:
+
+			strict invariants
+			deterministic mapping
+
+20. FAILURE CONDITION (PHASE LEVEL)
+
+	Phase FAILS if:
+
+		determinism breaks
+		ordering inconsistent
+		size mismatch detected
+		replay mismatch
+
+21. PHASE LOCK CRITERIA
+
+	Phase LOCKED only if:
+
+		all 21 sections complete
+		Red Team passed
+		Blue Team validated
+		CEI modifications applied
+		deterministic replay proven
+
+
+Phase D — Step 6: Order Lifecycle System
+
+1. PHASE IDENTITY LAYER
+
+	1.1 Phase Name
+
+		Phase D — Step 6: Order Lifecycle System (Execution State Realization Layer)
+
+	1.2 Phase Role
+
+		Step 6 is a PURE INTERNAL LIFECYCLE SIMULATION ENGINE.
+
+			It MUST:
+
+				- generate deterministic execution events
+				- simulate fills using configuration_snapshot.fill_model
+				- drive OrderState transitions
+				- update PortfolioState using INTERNAL events ONLY
+
+			It MUST NOT:
+
+				- consume external broker fills
+				- reconcile external execution
+				- override events from Step 7
+
+			External execution truth is handled ONLY in Step 7 and Step 8.
+
+	1.3 Phase Objective
+
+		Construct:
+
+			ExecutionOrder
+			→ ExecutionEvent Log
+			→ OrderState(t)
+			→ PortfolioState(t)
+
+		Such that:
+
+			state = f(event_log)
+			replay(EventLog) → identical state
+			execution is audit-complete
+
+	1.4 Why This Phase Exists
+
+		Without lifecycle:
+
+			Orders never evolve
+			No fills
+			No portfolio updates
+			No audit trail
+
+		Execution system is non-functional
+
+		Aligned with Step 5 lifecycle init
+
+	2. PHASE SCOPE CONTROL
+	2.1 INCLUDED (STRICT)
+		order lifecycle state machine
+		execution event generation
+		fill processing logic
+		state transition engine
+		portfolio update engine
+		replay reconstruction system
+
+		STRICT EXCLUSION RULE:
+
+			ExternalFillEvent (from Step 7) MUST NOT enter Step 6.
+
+			Violation:
+
+			→ NON-DETERMINISTIC STATE
+			→ REPLAY FAILURE
+
+		Lifecycle MUST consume execution events from:
+
+			- OMS/EMS routed execution (internal)
+			- OR Step 7 normalized events (external)
+
+			BUT:
+
+			- MUST NOT depend on OMS/EMS runtime state
+
+		microstructure-aware fill simulation
+			slippage realization engine
+			transaction cost analysis (TCA)
+			PnL computation (realized + unrealized)
+			large-scale batch simulation support (≥ 10,000 orders)
+
+	2.2 EXCLUDED (STRICT)
+		order generation (Step 5)
+		risk enforcement (Step 3)
+		policy enforcement (Step 4)
+		broker integration (future step)
+		market microstructure
+
+	2.3 Boundary Rule
+
+		Lifecycle MUST:
+
+		be event-driven ONLY
+		NOT mutate state directly
+		NOT depend on external systems
+
+3. ARCHITECTURAL INTENT LAYER
+	3.1 Core Principles
+
+		P1 — Event-Driven State
+		P2 — Deterministic Transitions
+		P3 — Replay Fidelity
+		P4 — No Hidden State
+		P5 — Fill-Driven Portfolio
+
+	3.2 Model
+		OrderState(t) = f(EventLog_order[0 → t])
+		PortfolioState(t) = f(EventLog_execution[0 → t])
+
+	3.3 System Position
+		Step 5 → ExecutionOrder
+		Step 6 → Lifecycle System (THIS)
+		Step 7 → Broker Adapter (future)
+
+	3.4 Simulation Mode Contract (MANDATORY)
+
+		Step 6 operates in SIMULATION MODE ONLY.
+
+		Definition:
+
+			ExecutionEventStream = F(
+				ExecutionOrder,
+				configuration_snapshot.fill_model
+			)
+
+		Constraints:
+
+			- MUST NOT depend on external inputs
+			- MUST NOT ingest broker events
+			- MUST be fully reproducible
+			- MUST produce identical output for identical input
+
+		Purpose:
+
+			- enables deterministic replay
+			- enables backtesting parity
+			- provides baseline execution model
+
+		OMS/EMS are NOT state authorities.
+
+			Lifecycle state MUST be derived ONLY from ExecutionEvent stream.
+
+4. DOMAIN MODEL DEFINITION
+
+	4.1 Entities
+		ExecutionOrder (input)
+		ExecutionEvent
+		FillEvent
+		OrderState
+		PortfolioState
+		PortfolioDelta
+		ExecutionCostModel
+		RealizedSlippage
+		TransactionCost
+		PnLRecord
+		SimulationBatch
+
+			ExecutionCostModel:
+				execution_cost_model = {
+					fee_per_trade
+					fee_per_unit
+					exchange_fee
+					broker_fee
+				}
+
+			RealizedSlippage:
+				realized_slippage = {
+					order_id
+					expected_slippage
+					realized_slippage
+					slippage_delta
+				}
+
+			TransactionCost:
+				transaction_cost = {
+					order_id
+					total_cost
+					cost_breakdown {
+						fees
+						slippage_cost
+					}
+				}
+
+			PnLRecord:
+				pnl_record = {
+					order_id
+					realized_pnl
+					unrealized_pnl
+					execution_value
+					cost
+					net_pnl
+				}
+
+			SimulationBatch:
+				simulation_batch = {
+					batch_id
+					total_orders
+					total_volume
+					total_pnl
+					total_cost
+				}
+
+	4.2 ExecutionEvent Schema (CRITICAL)
+		ExecutionEvent = {
+			event_id
+			order_id
+
+			executed_size
+			remaining_size
+			execution_price
+			event_time
+			lineage_hash
+			lineage_hash_reference
+		}
+
+		event_type ∈ {
+			ORDER_CREATED
+			ORDER_ROUTED
+			PARTIAL_FILL
+			FULL_FILL
+			ORDER_COMPLETED   ← ADD
+			ORDER_FAILED
+		}
+
+		Event ID Rule (MANDATORY):
+
+			event_id = HASH_v1(
+				order_id +
+				event_type +
+				executed_size +
+				remaining_size +
+				event_time
+			)
+
+			Constraints:
+
+			- deterministic
+			- identical input → identical event_id
+			- globally unique
+
+		partition_key = {
+				instrument
+				order_id
+			}
+
+			partition_id = HASH_v1(partition_key) mod N_partitions
+
+			Constraints:
+
+			- MUST match Phase C partition routing
+			- MUST be deterministic
+
+		ppartition_key = order_id
+
+			BUT:
+
+			introduce deterministic sub-partitioning:
+
+			partition_key = HASH(order_id + shard_id)
+
+			CONDITION
+				shard_id MUST be deterministic
+				lifecycle still co-located
+
+
+	4.3 OrderState
+		GLOBAL OrderState (MANDATORY — CROSS-PHASE)
+
+			OrderState ∈ {
+				ORDER_CREATED
+				ORDER_ROUTED
+				PARTIALLY_FILLED
+				FULLY_FILLED
+				ORDER_COMPLETED
+				ORDER_FAILED
+			}
+
+	4.4 PortfolioState
+
+		PortfolioState (SIMULATED):
+
+			- derived ONLY from internal ExecutionEvent stream
+			- represents simulated execution state
+
+			Final PortfolioState authority:
+
+			→ MUST be determined ONLY in Step 8 (Post-Execution Control)
+
+			Constraint:
+
+			Step 6 PortfolioState MUST NOT be treated as final truth.
+
+
+	4.5 Relationships
+		1 ExecutionOrder → N ExecutionEvents
+		ExecutionEvents → drive OrderState
+		ExecutionEvents → update PortfolioState
+
+5. LOGIC / RULE ENGINE
+	5.1 Rule Classes
+
+		R1 — Event Generation
+		R2 — Fill Processing
+		R3 — State Transition
+		R4 — Portfolio Update
+		R5 — Replay Validation
+		R6 — Event Generation Function
+
+			ExecutionEventStream = F(
+				ExecutionOrder,
+				configuration_snapshot
+			)
+
+			Constraints:
+
+			- deterministic
+			- no randomness
+			- no external input
+
+		R7 — Slippage Realization
+			realized_slippage = deterministic_function(
+					execution_schedule,
+					slippage_model
+				)
+
+				Constraint:
+
+				must be bounded by Step 5 slippage_model
+
+		R8 — Transaction Cost Computation
+			transaction_cost = (
+					executed_size × fee_per_unit
+				) + fixed_fee
+
+		R9 — PnL Computation
+			realized_pnl = (sell_value - buy_value) - transaction_cost
+
+		R10 — Batch Aggregation
+			simulation_batch.total_pnl = Σ(pnl_record.net_pnl)
+
+	5.2 State Transition Function
+		OrderState(t+1) = f(
+			OrderState(t),
+			ExecutionEvent
+		)
+
+	5.3 Transition Rules (STRICT)
+		OrderState Transition Model (GLOBAL)
+
+		ORDER_CREATED		→ ORDER_ROUTED
+
+		ORDER_ROUTED		→ PARTIALLY_FILLED
+		ORDER_ROUTED 		→ FULLY_FILLED
+		ORDER_ROUTED 		→ ORDER_FAILED
+
+		PARTIALLY_FILLED 	→ PARTIALLY_FILLED
+		PARTIALLY_FILLED 	→ FULLY_FILLED
+		PARTIALLY_FILLED 	→ ORDER_FAILED
+
+		FULLY_FILLED 		→ ORDER_COMPLETED
+
+		ORDER_FAILED 		→ terminal
+		ORDER_COMPLETED 	→ terminal
+
+		Constraints:
+
+			monotonic transitions only
+			no skipping states
+			invalid transition → HARD FAIL
+
+
+		FULL_FILL Rule:
+
+			- MUST occur exactly once
+			- MUST be last fill event
+			- AFTER FULL_FILL → no further PARTIAL_FILL allowed
+
+	5.4 Fill Processing Rule
+			remaining_size = order.size - Σ(executed_size)
+
+		Constraints:
+
+			remaining_size ≥ 0
+			remaining_size == 0 → FULL_FILL
+
+		(Aligned with Step 5 invariant )
+
+		Fill Generation Model:
+
+			executed_size_i = f(
+				remaining_size,
+				configuration_snapshot.fill_model
+			)
+
+			Constraints:
+
+			- deterministic partitioning
+			- Σ(executed_size_i) = order.size
+			- final event MUST be FULL_FILL
+
+		Numeric Constraints:
+
+			executed_size:
+				min > 0
+				max ≤ order.size
+				type = fixed-point (integer / 10^6)
+
+			remaining_size:
+				min = 0
+				max = order.size
+
+	5.5 Portfolio Update Rule
+			PortfolioState(t+1) = f(
+				PortfolioState(t),
+				ExecutionEvent.executed_size,
+				direction
+			)
+
+		BUY:
+
+			position += executed_size
+
+		SELL:
+
+			position -= executed_size
+
+		Portfolio Value Update:
+
+			total_executed_value += executed_size * execution_price
+
+		execution_price MUST be derived from:
+
+			configuration_snapshot.price_model
+
+			External market data: FORBIDDEN
+
+	5.6 Rule Execution Order
+		Event Generation
+		Event Validation
+		State Transition
+		Portfolio Update
+		Snapshot Update
+
+	5.7 ExecutionEvent Ordering Key:
+
+		1. event_time ASC
+		2. partition_id ASC
+		3. order_id ASC
+		4. event_id ASC
+
+		Constraint:
+
+		- MUST be globally consistent
+		- MUST match Phase C ordering model
+
+6. FLOW ARCHITECTURE
+	6.0 Canonical Input Set
+		canonical_input_set_D6 = {
+			execution_order_stream,
+			configuration_snapshot,
+			version_identifiers
+		}
+
+	6.1 Processing Flow
+		ExecutionOrder
+		→ Lifecycle Init
+		→ Execution Scheduling (from Step 5)
+		→ Fill Simulation (schedule-driven)
+		→ Slippage Realization
+		→ Transaction Cost Computation
+		→ Portfolio Update
+		→ PnL Computation
+		→ Batch Aggregation
+		→ Feasibility Validation Layer
+
+		for each venue_allocation:
+
+			assert venue_status == AVAILABLE
+
+			assert connectivity == ACTIVE
+
+			assert allocation <= safe_liquidity_threshold
+
+	6.2 Output
+		execution_lifecycle_output = {
+			execution_event_stream
+			order_state_snapshots
+			portfolio_state_snapshots
+		}
+
+	6.3 Flow Rule
+		NO external inputs
+		NO implicit events
+		FULL determinism
+
+	Step 6 → Step 7 Handoff Contract:
+
+		Output:
+
+		execution_event_stream (SIMULATED)
+
+		Usage:
+
+		- used ONLY for:
+			- simulation
+			- replay without broker
+			- baseline lifecycle validation
+
+		Step 7 MUST:
+
+		- IGNORE Step 6 fill events when external fills exist
+		- REBUILD lifecycle using external events
+
+		EXECUTION FEEDBACK LOOP (MANDATORY)
+
+			FOR each execution_order:
+
+			MUST produce:
+
+			execution_fill_event
+
+			→ reconciliation_event
+
+			→ state update (Phase C)
+
+			Constraint:
+
+			No execution without feedback closure
+
+			Audit rule:
+
+			count(execution_orders) ==
+			count(reconciliation_events)
+
+		Execution Feedback Update Rule (MANDATORY)
+
+			Input:
+
+				execution_fill_event = {
+					order_id
+					fill_price
+					fill_size
+					execution_time
+				}
+
+			Processing:
+
+				execution_fill_event MUST be converted into:
+
+				portfolio_update_event
+
+				and sent to Phase C Event System
+
+			Output:
+
+				portfolio_state_snapshot MUST be updated via:
+
+					State(t+1) = f(State(t), execution_fill_event)
+
+			Constraints:
+
+				- MUST preserve event_time lineage
+				- MUST be deterministic
+				- MUST update:
+					- positions
+					- exposure
+					- capital
+
+			Violation:
+
+				missing feedback → SYSTEM AUDIT FAILURE
+
+7. PIPELINE STRUCTURE
+
+	P1 — Order Initialization
+	P2 — Routing Event
+	P3 — Execution Events
+	P4 — Fill Processing
+	P5 — State Transition
+	P6 — Portfolio Update
+	P7 — Completion
+
+8. CONTROL & CONSTRAINTS
+	8.1 Hard Rules
+		state = f(events) ONLY
+		no direct mutation
+		event ordering mandatory
+
+		HR-S1: Fill simulation MUST follow execution_schedule
+		HR-S2: Slippage MUST be derived from SlippageModel only
+		HR-S3: PnL MUST include transaction costs
+		HR-S4: Batch simulation MUST be deterministic
+
+	8.2 Guardrails
+		reject invalid event
+		reject negative remaining_size
+		reject duplicate events
+
+	8.3 Invariants
+
+		I1 — remaining_size ≥ 0
+		I2 — Σ(executed_size) ≤ order.size
+		I3 — state monotonic
+		I4 — replay identical
+
+		I-S1: Same ExecutionOrder → identical PnL
+		I-S2: Slippage ≤ worst_case_slippage
+		I-S3: Σ(batch pnl) = total pnl
+		I-S4: Simulation must be replayable at scale (10k+)
+
+		I-SOR-4: Execution MUST NOT proceed if any venue allocation is infeasible
+
+9. STATE & DATA MODEL
+	9.1 State Definition
+		execution_state = {
+			order_id → OrderState
+		}
+
+	9.2 State Transition
+		State(t+1) = f(State(t), Event)
+
+	9.3 Source of Truth
+		PRIMARY → Event Log
+		SECONDARY → Snapshot
+
+		(Aligned with Phase C event-state model )
+
+	9.4 Reconstruction Rule
+		Replay(EventLog) → identical OrderState + PortfolioState
+
+10. FAILURE MODEL
+	10.1 Scenarios
+		invalid state transition
+		fill overflow
+		event ordering violation
+		replay mismatch
+
+	10.2 Impact
+		broken audit
+		incorrect portfolio
+
+	10.3 Mitigation
+		reject event
+		replay rebuild
+
+11. ASSUMPTION REGISTER
+	Assumption						Status
+	ExecutionOrder valid			VALIDATED
+	Event ordering deterministic	CONTROLLED
+	No external fills				ENFORCED
+
+12. VALIDATION FRAMEWORK
+	12.1 Method
+		replay tests
+		state reconstruction
+		fill consistency
+
+	12.2 Acceptance
+
+		PASS if:
+
+			replay identical
+			no invalid transitions
+
+13. OUTPUT
+	execution_lifecycle_spec = {
+		event_model
+		state_model
+		portfolio_model
+		lifecycle_pipeline
+	}
+
+14. TRACEABILITY
+	order_id
+	→ event_id
+	→ state_hash
+	→ portfolio_state_hash
+
+	lineage_hash = HASH_v1(
+			previous_lineage_hash +
+			event_id
+		)
+
+		Constraints:
+
+		- first event uses:
+			previous_lineage_hash = order_id
+
+		- MUST form continuous chain
+		- MUST be verifiable during replay
+
+15. CROSS-PHASE CONSISTENCY
+	Step 5 → order input
+	Phase C → event/state rules
+	Phase B → constraints (indirect)
+
+16. SCALABILITY
+	partition by order_id
+	parallel event processing
+	deterministic merge
+
+17. GOVERNANCE
+	versioned lifecycle rules
+	deterministic upgrades
+
+18. AUDITABILITY
+	full event log
+	full replay
+	hash chain verification
+
+19. RISK CONSIDERATIONS
+	fill inconsistency risk
+	state divergence risk
+
+	Mitigation:
+
+		strict event validation
+
+20. FAILURE CONDITION
+
+	Phase FAILS if:
+
+		state not reconstructable
+		replay mismatch
+		non-monotonic transitions
+
+21. PHASE LOCK CRITERIA
+
+LOCK ONLY IF:
+
+	all transitions deterministic
+	replay validated
+	Red Team passed
+	Blue Team validated
+	no ambiguity
+
+Naming Separation Rule (MANDATORY)
+
+	- EventType uses verbs:
+		PARTIAL_FILL, FULL_FILL
+
+	- OrderState uses state form:
+		PARTIALLY_FILLED, FULLY_FILLED
+
+	Mapping is strict and 1:1:
+
+	PARTIAL_FILL → PARTIALLY_FILLED
+	FULL_FILL → FULLY_FILLED
+
+
+✅ FINAL STATUS
+
+	PHASE D — STEP 6: ORDER LIFECYCLE SYSTEM
+
+	Fully deterministic
+	Event-driven
+	Replay-safe
+	Audit-complete
+	Portfolio-integrated
+
+
+PHASE D — STEP 7: BROKER ADAPTER (EXTERNAL EXECUTION INTEGRATION LAYER)
+
+(UPS COMPLIANT — 21 SECTIONS, LOCK-GRADE SPECIFICATION)
+
+1. PHASE IDENTITY LAYER
+	1.1 Phase Name
+
+		Phase D — Step 7: Broker Adapter (External Execution Integration Layer)
+
+	1.2 Phase Role
+
+		Deterministic external boundary layer that:
+
+			converts ExecutionOrder → BrokerRequest
+			ingests BrokerResponse / Fill Events
+			normalizes into ExecutionEvent
+			reconciles external fills vs internal lifecycle
+
+		This is the FIRST external system boundary.
+
+	1.3 Phase Objective
+
+		Construct a deterministic external execution bridge such that:
+
+			ExecutionOrder
+			→ BrokerAdapter
+			→ BrokerRequest
+			→ BrokerResponse / ExternalFill
+			→ Normalized ExecutionEvent
+			→ Lifecycle System (Step 6)
+
+		Satisfying:
+
+			deterministic replay
+			idempotent execution
+			event-driven reconciliation
+			strict CEIL isolation
+
+	1.4 Why This Phase Exists
+
+		Without Step 7:
+
+			system remains closed-loop (simulation only)
+			no real fills
+			no broker confirmation
+			no external state alignment
+
+		Step 6 provides lifecycle simulation, but:
+
+			no real execution
+			no reconciliation
+			no external truth ingestion
+
+2. PHASE SCOPE CONTROL
+	2.1 INCLUDED (STRICT)
+		broker request construction
+		broker API interaction abstraction
+		response parsing + normalization
+		external fill ingestion
+		reconciliation engine
+		idempotent execution enforcement
+		CEIL boundary enforcement (CORE vs EXTERNAL)
+
+	2.2 EXCLUDED (STRICT)
+		order generation (Step 5)
+		lifecycle state transitions (Step 6)
+		risk / policy logic
+		market microstructure optimization
+		portfolio computation
+
+	2.3 Boundary Rule
+
+		Broker Adapter MUST:
+
+			translate + normalize only
+			NOT mutate system state directly
+			NOT introduce execution logic
+
+		Violation → SYSTEM NON-DETERMINISM
+
+		Broker Adapter MUST receive input ONLY from EMSInstruction
+
+			NOT directly from ExecutionOrder
+
+		Broker Adapter MUST receive input ONLY from EMSInstruction
+
+INFRA INVARIANT 1:
+OMS/EMS MUST NOT alter economic fields
+
+INFRA INVARIANT 2:
+OMS/EMS MUST preserve event_time lineage
+
+INFRA INVARIANT 3:
+OMS/EMS MUST be replay-deterministic
+
+INFRA INVARIANT 4:
+OMS/EMS MUST NOT introduce new IDs
+
+3. ARCHITECTURAL INTENT LAYER
+	3.1 Core Principles
+
+		P1 — Determinism over external uncertainty
+		P2 — Event Sovereignty (system > broker state)
+		P3 — Idempotent Execution
+		P4 — Replay Independence
+		P5 — CEIL Isolation Enforcement
+		P6 — No Direct State Mutation
+
+	3.2 Architectural Model
+		broker_execution_output = F(
+			execution_order_stream,
+			broker_response_stream,
+			configuration_snapshot,
+			version_identifiers
+		)
+
+	3.3 System Positioning
+	Step 5 → ExecutionOrder
+	Step 6 → Internal Lifecycle
+	Step 7 → Broker Adapter (THIS)
+	→ External Broker System
+	→ Back to Lifecycle via ExecutionEvent
+
+	Aligned with Phase D macro
+
+4. DOMAIN MODEL DEFINITION
+	4.1 Core Entities
+		ExecutionOrder (input)
+		BrokerRequest
+		BrokerResponse
+		ExternalFillEvent
+		NormalizedExecutionEvent
+		ReconciliationRecord
+
+	4.2 BrokerRequest Schema
+		BrokerRequest = {
+			broker_request_id
+			order_id
+			instrument
+			direction
+			size
+			price_reference
+			execution_type
+			timestamp
+			origin_type
+			lineage_hash_reference
+		}
+
+		Identity Rule:
+
+			broker_request_id = HASH_v1(order_id)
+
+		→ ensures idempotency
+
+	4.3 BrokerResponse Schema
+		BrokerResponse = {
+			broker_request_id
+			broker_order_id
+			status ∈ {ACCEPTED, REJECTED}
+			timestamp
+			metadata
+		}
+
+		Broker Mapping Constraint (MANDATORY):
+
+			broker_order_id ↔ order_id MUST be 1:1
+
+			mapping_hash = HASH_v1(broker_order_id + order_id)
+
+			Violation → HARD FAIL
+
+	4.4 ExternalFillEvent
+		ExternalFillEvent = {
+			broker_order_id
+			order_id
+			executed_size
+			execution_price
+			external_event_time
+			fill_id
+		}
+
+		fill_id = HASH_v1(
+			broker_order_id +
+			executed_size +
+			external_event_time +
+			execution_price
+		)
+
+
+	4.5 NormalizedExecutionEvent
+
+		Aligned to Step 6 schema:
+
+		event_type ∈ {
+			ORDER_CREATED
+			ORDER_ROUTED
+			PARTIAL_FILL
+			FULL_FILL
+			ORDER_COMPLETED
+			ORDER_FAILED
+		}
+
+		event_id = HASH_v1(
+			    order_id +
+			    event_type +
+			    executed_size +
+			    remaining_size +
+			    normalized_event_time
+			)
+
+		BrokerAdapter = {
+				adapter_id
+				broker_type
+				input_contract
+				output_contract
+			}
+
+			Broker Adapter Rules (MANDATORY)
+
+				- MUST NOT modify execution payload
+				- MUST NOT generate new IDs
+				- MUST preserve event_time
+				- MUST produce ExecutionFillEvent
+
+				Determinism Rule:
+
+				- identical input → identical broker request
+
+		Global EventType Enforcement (MANDATORY)
+
+			- Step 7 MUST use identical EventType as defined in Step 5
+			- NO local redefinition allowed
+			- NO aliasing allowed
+
+			event_type MUST match:
+
+			{
+				ORDER_CREATED
+				ORDER_ROUTED
+				PARTIAL_FILL
+				FULL_FILL
+				ORDER_COMPLETED
+				ORDER_FAILED
+			}
+
+			Violation → RECONCILIATION FAILURE
+
+	4.6 Relationships
+		ExecutionOrder → OMS → EMS → BrokerRequest
+		BrokerRequest 		→ 1..N BrokerResponse
+		BrokerResponse 		→ 0..N ExternalFillEvent
+		ExternalFillEvent 	→ NormalizedExecutionEvent
+		NormalizedExecutionEvent → Step 6 Lifecycle
+
+5. LOGIC / RULE ENGINE
+	5.1 Rule Classes
+
+		R1 — Input Validation
+		R2 — Request Construction
+		R3 — Idempotency Check
+		R4 — Response Parsing
+		R5 — Event Normalization
+		R6 — Reconciliation
+		R7 — Ordering Enforcement
+		R8 — Output Construction
+
+		R9 — EMS Routing Determinism (MANDATORY)
+
+			broker_route = f(
+				instrument,
+				execution_type,
+				configuration_snapshot.routing_rules
+			)
+
+			Constraints:
+
+			- MUST be deterministic
+			- MUST be config-driven
+			- MUST NOT depend on runtime broker state
+
+	5.2 Idempotency Rule (CRITICAL)
+		IF broker_request_id already exists:
+			DO NOT re-send request
+
+		Constraint:
+
+			same order_id → same broker_request
+			duplicates → rejected
+
+	5.3 Response Normalization Rule
+		BrokerResponse → ExecutionEvent
+
+		Mapping:
+
+		Broker State			System Event
+		ACCEPTED				ORDER_ROUTED
+		PARTIAL FILL			PARTIAL_FILL
+		FULL FILL				FULL_FILL
+		REJECTED				ORDER_FAILED
+
+	5.4 Reconciliation Rule (CRITICAL)
+		external_fill ≠ internal_fill
+		→ external overrides
+
+		reconcile_external_vs_internal():
+			input:
+				internal_event_stream
+				external_fill_stream
+
+			output:
+				unified_execution_event_stream
+
+		Reconciliation Safety Constraints:
+
+			Σ(external_executed_size) ≤ order.size
+
+			IF Σ(external_executed_size) > order.size:
+			    → HARD FAIL
+
+			remaining_size MUST satisfy:
+			    remaining_size = order.size - Σ(external_executed_size)
+
+			remaining_size ≥ 0
+
+		Reconciliation Algorithm (LOCKED):
+
+			Step 1: discard internal fill events
+			Step 2: rebuild execution_event_stream ONLY from external_fill_stream
+			Step 3: enforce Step 6 lifecycle transitions
+			Step 4: emit ORDER_COMPLETED
+
+			No alternative interpretation allowed
+
+		Lifecycle Reconstruction (MANDATORY):
+
+			Reconstructed execution_event_stream MUST include full lifecycle:
+
+			1. ORDER_CREATED
+			2. ORDER_ROUTED
+			3. PARTIAL_FILL (if applicable)
+			4. FULL_FILL (if applicable)
+			5. ORDER_COMPLETED
+
+			Rules:
+
+			- ORDER_CREATED MUST be emitted once per order
+			- ORDER_ROUTED MUST follow ORDER_CREATED
+			- Fill events MUST follow ORDER_ROUTED
+			- ORDER_COMPLETED MUST be final event
+
+			Constraint:
+
+			Lifecycle MUST be fully reconstructable from external_fill_stream + ExecutionOrder
+
+		ORDER_CREATED Emission Rule (MANDATORY):
+
+			ORDER_CREATED MUST be emitted from ExecutionOrder initialization.
+
+			normalized_event_time = execution_order.timestamp
+
+			This event MUST be the first event in lifecycle.
+
+		FULL_FILL Determination Rule (MANDATORY):
+
+			cumulative_executed_size = Σ(external_executed_size)
+
+			IF cumulative_executed_size == order.size:
+				emit FULL_FILL
+
+			Constraints:
+
+			- FULL_FILL MUST occur exactly once
+			- FULL_FILL MUST be the last fill event
+			- AFTER FULL_FILL → no further PARTIAL_FILL allowed
+			- IF cumulative_executed_size < order.size → FULL_FILL MUST NOT be emitted
+
+		ORDER_ROUTED Emission Rule (MANDATORY):
+
+			IF BrokerResponse.status == ACCEPTED:
+				emit ORDER_ROUTED
+
+			IF BrokerResponse.status == REJECTED:
+				emit ORDER_FAILED
+				STOP further processing
+
+		PARTIAL_FILL Rule (MANDATORY):
+
+			FOR each ExternalFillEvent:
+
+				cumulative_executed_size += executed_size
+
+				IF cumulative_executed_size < order.size:
+					emit PARTIAL_FILL
+
+				ELSE IF cumulative_executed_size == order.size:
+					emit FULL_FILL
+
+		Upstream Dependency Clarification:
+
+			Step 6 ExecutionEvent stream is considered:
+
+			- SIMULATION ONLY
+			- NON-AUTHORITATIVE
+
+			Reconciliation MUST:
+
+			- discard Step 6 fill events completely
+			- rebuild from ExternalFillEvent stream
+
+	5.5 Rule Execution Order (STRICT)
+		Input Validation
+		Idempotency Check
+		Request Construction
+		Broker Interaction
+		Response Parsing
+		Event Normalization
+		Reconciliation
+		Output Construction
+
+		External Event Ordering Rule (MANDATORY):
+
+			external_event_ordering_key = {
+					normalized_event_time ASC
+					broker_order_id ASC
+					fill_id ASC
+				}
+
+			All ExternalFillEvents MUST be sorted before normalization.
+
+			Out-of-order arrival MUST NOT affect final ordering.
+
+		Global Ordering Alignment (MANDATORY):
+
+			NormalizedExecutionEvent MUST follow Phase C ordering:
+
+			ordering_key = {
+			    normalized_event_time ASC
+			    partition_id ASC
+			    event_id ASC
+			}
+
+			External ordering MUST be pre-normalization only.
+
+		FOR EACH venue_allocation:
+			send_order_to_venue()
+
+	5.6 Fill Idempotency Rule (MANDATORY)
+
+		Each ExternalFillEvent MUST be uniquely identified using:
+
+		Deduplication Logic:
+
+		IF fill_id already exists in processed_fill_set:
+			IGNORE the event
+
+		ELSE:
+			process normally
+
+		Constraints:
+
+		- identical fill MUST NOT be processed more than once
+		- deduplication MUST be deterministic
+		- processed_fill_set MUST be reconstructable during replay
+
+	5.7 Time Normalization Rule (MANDATORY)
+
+		External normalized_event_time MUST be normalized before event construction.
+
+		normalized_event_time = MAX(
+				ExternalFillEvent.external_event_time,
+				execution_order.timestamp
+			)
+
+		Constraints:
+
+		- normalized_event_time MUST be monotonic per order
+		- normalized_event_time MUST NOT move backward
+		- normalization MUST be deterministic
+		- identical input MUST produce identical normalized_event_time
+
+		All downstream processing MUST use normalized_event_time.
+
+			normalized_event_time field in:
+
+			- ordering
+			- event_id generation
+			- lifecycle processing
+
+			MUST be replaced with normalized_event_time.
+
+		normalized_event_time is a derived field and MUST NOT exist in ExternalFillEvent.
+
+			It MUST be computed during normalization phase and used only in:
+
+			- ordering
+			- event_id generation
+			- lifecycle processing
+
+		Event Time Lineage Rule (GLOBAL — MANDATORY)
+
+			ExecutionEvent.event_time MUST be derived ONLY from:
+
+				trade_intent_snapshot.event_time
+
+			OR
+
+				a deterministic transformation of it (e.g. partial fill sequencing)
+
+			Constraints:
+
+				event_time MUST NOT use:
+					- system clock
+					- broker timestamp
+					- wall-clock time
+
+				event_time MUST preserve ordering consistency with TradeIntent.event_time
+
+			Violation → NON-REPLAYABLE SYSTEM
+
+			Numeric Model Enforcement (MANDATORY — GLOBAL)
+
+				ALL numeric values MUST use fixed-point representation:
+
+					value = integer / 10^6
+
+				Applies to:
+
+					price
+					quantity
+					fill_quantity
+					fill_price
+					execution_value
+					fees
+					slippage
+
+				Constraints:
+
+					floating-point arithmetic → FORBIDDEN
+
+					rounding mode:
+						ROUND_HALF_UP
+
+					overflow:
+						MUST trigger HARD FAILURE
+
+					underflow:
+						treated as zero
+
+				Violation → NUMERIC NON-DETERMINISM
+
+			ExecutionEvent = {
+
+				execution_event_id
+
+				trade_intent_id        (MANDATORY)
+				order_id               (MANDATORY)
+
+				instrument
+				fill_quantity
+				fill_price
+
+				event_time
+
+				event_type
+
+				execution_status
+
+			}
+
+			Identity Lineage Rule (MANDATORY)
+
+				Full identity chain MUST exist:
+
+					signal_id
+						→ trade_intent_id
+						→ order_id
+						→ execution_event_id
+
+				Constraints:
+
+					- All mappings MUST be deterministic
+					- No missing linkage allowed
+					- IDs MUST follow HASH_v1 standard
+
+				Violation → AUDIT FAILURE
+
+6. FLOW ARCHITECTURE
+	6.0 Canonical Input Set
+		canonical_input_set_D7 = {
+			execution_order_stream,
+			broker_response_stream,
+			configuration_snapshot,
+			version_identifiers
+		}
+
+		Constraints:
+
+			immutable
+			replay-safe
+			broker dependency optional (for replay)
+
+	6.1 Processing Flow
+		ExecutionOrder
+		→ BrokerRequest
+		→ BrokerResponse
+		→ ExternalFillEvent (raw)
+		→ Time Normalization (derive normalized_event_time)
+		→ Reconciliation
+		→ ExecutionEvent
+
+	6.2 Output
+		broker_execution_output = {
+			broker_request_log
+			broker_response_log
+			normalized_execution_event_stream
+			reconciliation_report
+		}
+
+	6.3 Flow Rule
+		no direct state mutation
+		event-driven only
+		external data must be normalized
+
+		Latency Handling Model (MANDATORY)
+
+			max_fill_delay = configuration_snapshot.max_fill_delay
+
+			IF no ExternalFillEvent is received within max_fill_delay:
+
+				emit ORDER_FAILED
+
+			Constraints:
+
+			- ORDER_TIMEOUT event type is NOT allowed
+			- failure MUST map to existing lifecycle event types
+			- ORDER_FAILED MUST follow ORDER_ROUTED
+			- lifecycle transitions MUST remain valid per Step 6
+
+7. PIPELINE STRUCTURE
+
+	P1 — Order Routing
+	P2 — Broker Request Dispatch
+	P3 — Response Capture
+	P4 — Fill Listener
+	P5 — Normalization
+	P6 — Reconciliation
+	P7 — Event Emission
+
+8. CONTROL & CONSTRAINTS
+	8.1 Hard Rules
+		no duplicate order submission
+		broker cannot mutate system state
+		external fills must be normalized
+		deterministic ordering mandatory
+
+		HR-SOR-EXEC-1: Execution layer MUST NOT alter routing decisions
+
+			assert Σ(fills) == requested_size
+
+				ELSE:
+
+					trigger:
+						reconciliation_event
+						forced_position_sync
+
+	8.2 Guardrails
+		reject malformed broker responses
+		reject unmatched order_id
+		reject CEIL violation
+
+	8.3 Invariants
+		state = f(event_log) (preserved)
+		external fills override simulation
+		idempotency guaranteed
+
+		I-SOR-6: All execution failures MUST be explicitly recorded and auditable
+
+9. STATE & DATA MODEL
+	9.1 State Definition
+
+		NO internal state ownership
+
+		State remains in Step 6 lifecycle
+
+	9.2 Source of Truth
+		primary → normalized_execution_event_stream
+		NOT broker system
+
+	9.3 Replay Model
+
+		Supports:
+
+		replay WITH external events
+		replay WITHOUT broker
+
+	Replay Mode Definition (MANDATORY):
+
+			MODE 1: FULL REPLAY
+			    uses recorded external_fill_stream
+
+			MODE 2: SIMULATION REPLAY
+			    external_fill_stream replaced by:
+			        deterministic fill_model (Step 6)
+
+			Constraint:
+			identical mode + identical input → identical output
+
+10. FAILURE MODEL
+	10.1 Scenarios
+		duplicate submission
+		missing broker response
+		out-of-order fills
+		partial fill mismatch
+
+	10.2 Impact
+		state inconsistency risk
+		execution drift
+
+	10.3 Mitigation
+		reconciliation engine
+		idempotent request enforcement
+		event reordering
+
+		if venue fails:
+
+			mark execution_status = FAILED
+
+			record failure_reason
+
+			trigger audit_event
+
+			DO NOT retry
+			DO NOT reroute
+
+11. ASSUMPTION REGISTER
+	Assumption								Status
+	Broker API reliable						CONTROLLED
+	External fills eventually consistent	CONTROLLED
+	ExecutionOrder valid					VALIDATED
+
+12. VALIDATION FRAMEWORK
+	12.1 Method
+		Red Team (external inconsistency attacks)
+		Blue Team (determinism validation)
+
+	12.2 Acceptance
+		identical replay output
+		consistent reconciliation
+
+13. OUTPUT (DELIVERABLE)
+	broker_execution_output = {
+		broker_request_log
+		broker_response_log
+		normalized_execution_event_stream
+		reconciliation_report
+	}
+
+14. TRACEABILITY MAPPING
+	ExecutionOrder → BrokerRequest → BrokerResponse
+	→ ExternalFill → ExecutionEvent → Lifecycle
+
+	Full lineage preserved.
+
+
+15. CROSS-PHASE CONSISTENCY
+	Step 5 → provides ExecutionOrder
+	Step 6 → consumes ExecutionEvent
+	Phase C → event ordering + infra guarantees
+
+16. SCALABILITY MODEL
+	multi-broker support
+	partitioned execution streams
+	parallel fill listeners
+
+17. GOVERNANCE INTEGRATION
+	broker adapter versioned
+	API schema locked
+	change requires approval
+
+18. AUDITABILITY & OBSERVABILITY
+	full request/response logs
+	reconciliation reports
+	deterministic replay
+
+19. RISK CONSIDERATIONS
+		external non-determinism risk
+		latency mismatch
+		fill inconsistency
+
+	Mitigation:
+
+		normalization + reconciliation
+
+20. FAILURE CONDITION (PHASE LEVEL)
+
+	Phase FAILS if:
+
+		broker affects state directly
+		replay mismatch occurs
+		idempotency breaks
+		reconciliation inconsistent
+
+21. PHASE LOCK CRITERIA
+
+	Phase LOCKED only if:
+
+	deterministic mapping proven
+	replay identical (with/without broker)
+	reconciliation stable
+	no ambiguity
+	Red Team passed
+	Blue Team validated
+
+FINAL SYSTEM TRANSFORMATION (CRITICAL SUMMARY)
+	BEFORE STEP 7
+		ExecutionOrder
+		→ Internal Lifecycle (Simulated)
+		→ Portfolio
+
+	AFTER STEP 7
+		ExecutionOrder
+		→ Broker Adapter
+			→ BrokerRequest
+			→ BrokerResponse
+			→ External Fill
+		→ Normalized ExecutionEvent
+		→ Lifecycle System
+		→ PortfolioState
+
+
+PHASE D — STEP 8
+POST-EXECUTION CONTROL & RECONCILIATION SYSTEM
+
+Reference ID: CTS-PHASE-D-STEP8-POST-EXECUTION-CONTROL-LOCK-V1-2026-04-10
+Compliance: UPS (21 Sections) — LOCK-GRADE
+
+1. PHASE IDENTITY LAYER
+
+	1.1 Phase Name
+
+		Phase D — Step 8: Post-Execution Control & Reconciliation System
+
+	1.2 Phase Role
+
+		Final deterministic control layer that:
+
+			reconciles internal lifecycle state (Step 6) with external broker truth (Step 7)
+			produces authoritative execution state
+			guarantees audit-grade correctness
+			enforces event-driven correction (no mutation)
+
+	1.3 Phase Objective
+
+		Construct:
+
+			post_execution_control_output = F(
+				internal_event_stream,
+				external_event_stream,
+				lifecycle_state,
+				configuration_snapshot
+			)
+
+		Such that:
+
+			Final State = f(Reconciled Event Stream)
+			Replay(Reconciled Stream) → identical final state
+			Audit Trace = complete, hash-linked, deterministic
+
+	1.4 Why This Phase Exists
+
+		Without Step 8:
+
+			Execution ≠ Broker reality
+			Portfolio drift accumulates
+			Replay becomes invalid
+			Audit fails (legal/compliance risk)
+			System loses “source of truth”
+
+		Step 8 enforces:
+
+			Execution Reality = System State = Audit Truth
+
+2. PHASE SCOPE CONTROL
+	2.1 INCLUDED (STRICT)
+		internal vs external reconciliation
+		event stream validation + alignment
+		authoritative event stream reconstruction
+		state rebuild (order + portfolio)
+		drift detection
+		audit record construction
+		deterministic correction orchestration
+
+	2.2 EXCLUDED (STRICT)
+		order generation (Step 5)
+		lifecycle simulation (Step 6)
+		broker interaction (Step 7)
+		risk/policy logic
+		constraint definition (Phase B)
+
+	2.3 Boundary Rule
+
+		Step 8 MUST:
+
+			rebuild state ONLY from events
+			enforce external truth dominance
+			remain stateless + deterministic
+
+		Step 8 MUST NOT:
+
+			mutate state directly
+			merge conflicting streams
+			infer missing data
+
+		Violation → SYSTEM INVALID
+
+3. ARCHITECTURAL INTENT LAYER
+	3.1 Core Principles
+		P1 — External Truth Dominance
+		P2 — Event-Only State Authority
+		P3 — Deterministic Reconciliation
+		P4 — Replay Fidelity
+		P5 — Zero Hidden Correction
+		P6 — Full Lineage Traceability
+
+	3.2 Architectural Model
+		FinalState = f(ReconciledEventStream)
+
+		ReconciledEventStream = rebuild_from_external()
+
+		NOT:
+
+		merge(internal, external)
+
+		rebuild_from_external(external_event_stream):
+
+			1. validate completeness
+
+			2. assign external_event_index (MANDATORY FIRST STEP)
+
+			3. sort events using ordering_key
+
+			4. generate lifecycle
+
+			5. compute remaining_size
+
+			6. assign event_id
+
+			7. maintain lineage chain
+
+	3.3 System Positioning
+		Step 5 → Orders
+		Step 6 → Internal Events (Simulated Truth)
+		Step 7 → External Events (Broker Truth)
+
+		Step 8 → FINAL TRUTH (THIS)
+
+	Authoritative Flow Separation:
+
+		Step 6 → Simulated Execution
+		Step 7 → External Execution
+		Step 8 → Final Truth Reconstruction
+
+		Invariant:
+
+		ONLY Step 8 defines:
+
+		- final OrderState
+		- final PortfolioState
+		- audit truth
+
+4. DOMAIN MODEL DEFINITION
+	4.1 Core Entities
+		InternalExecutionEvent
+		ExternalExecutionEvent
+		ReconciledEvent
+		ReconciliationRecord
+		DriftReport
+		FinalOrderState
+		FinalPortfolioState
+		ExecutionAuditRecord
+		venue_level_reconciliation
+
+	4.2 ReconciledEvent
+		ReconciledEvent = {
+			event_id
+			order_id
+			event_type
+			executed_size
+			remaining_size
+			execution_price
+			event_time
+			source = EXTERNAL
+			lineage_hash
+			external_event_index
+			lineage_hash_reference
+		}
+
+		lineage_hash = HASH_v1(
+				previous_lineage_hash +
+				event_id +
+				order_id +
+				executed_size
+			)
+
+			Constraint:
+
+			- MUST be continuous from Step 5
+			- MUST NOT reset during rebuild
+
+		Lineage Root Rule:
+
+			initial_lineage_hash = HASH_v1(order_id + trade_intent_id)
+
+			first event MUST use initial_lineage_hash as seed
+
+		External Event Index Rule (MANDATORY):
+
+			external_event_index is assigned BEFORE ordering:
+
+			FOR each order_id:
+
+				1. sort external_event_stream by:
+					external_event_time ASC
+					broker_order_id ASC
+					fill_id ASC
+
+				2. assign:
+
+					external_event_index = incremental integer (0,1,2,...)
+
+			Constraint:
+
+			- MUST be deterministic
+			- MUST be identical across replays
+			- MUST NOT depend on system runtime
+
+		venue_level_reconciliation = {
+				expected_fill
+				actual_fill
+				slippage_delta
+			}
+
+	4.3 ReconciliationRecord
+		ReconciliationRecord = {
+			order_id
+			internal_event_hash_chain
+			external_event_hash_chain
+			reconciliation_status
+			mismatch_flags[]
+		}
+
+	4.4 ExecutionAuditRecord
+		execution_audit_record = {
+			trade_intent_id
+			order_id
+			execution_events
+			final_state
+			constraint_trace
+			policy_trace
+			risk_trace
+			lineage_hash_chain
+		}
+
+	Global EventType Binding (MANDATORY)
+
+		ReconciledEvent.event_type MUST use global EventType defined in Step 5.
+
+		No deviation allowed.
+
+		EventType set:
+
+		{
+			ORDER_CREATED
+			ORDER_ROUTED
+			PARTIAL_FILL
+			FULL_FILL
+			ORDER_COMPLETED
+			ORDER_FAILED
+		}
+
+5. LOGIC / RULE ENGINE
+	5.1 Rule Classes
+		R1 — Input Validation
+		R2 — Event Alignment
+		R3 — Reconciliation
+		R4 — Event Stream Rebuild
+		R5 — State Reconstruction
+		R6 — Drift Detection
+		R7 — Audit Construction
+		R8 — Output Emission
+
+	5.2 Reconciliation Rule (CRITICAL)
+		IF external_event_exists:
+			use external_event
+		ELSE:
+			reject system (no fallback)
+
+		External Stream Completeness Rule (MANDATORY):
+
+			external_event_stream is VALID only if:
+
+			1. contains ORDER_ROUTED OR ORDER_FAILED
+			2. IF any fill exists:
+			   MUST terminate with FULL_FILL OR ORDER_FAILED
+			3. Σ(executed_size) ≤ order.size
+			4. events cover full lifecycle (no gaps)
+
+			IF NOT:
+				→ HARD REJECT (incomplete external truth)
+
+	5.3 Source Priority Rule
+		External Fill Events > Internal Events
+
+	5.4 Rebuild Rule (MANDATORY)
+		final_event_stream = rebuild_from_external(external_event_stream)
+
+		Constraints:
+
+			discard ALL internal fill events
+			reconstruct lifecycle fully
+			enforce Step 6 transition rules
+			align with Step 7 reconciliation model
+
+		Reconciled Event Ordering Key (MANDATORY):
+
+			ordering_key = {
+				event_time ASC
+				order_id ASC
+				event_type_priority ASC
+				external_event_index ASC
+			}
+
+			All events MUST be sorted BEFORE rebuild.
+
+		Lifecycle Completion Rule:
+
+			IF cumulative_executed_size < order.size:
+				→ DO NOT emit FULL_FILL
+				→ final state = PARTIALLY_FILLED
+
+			IF no terminal event:
+				→ HARD REJECT
+
+			Terminal states:
+				FULL_FILL → ORDER_COMPLETED
+				ORDER_FAILED
+
+		Terminal Event Precedence Rule:
+
+			ORDER_FAILED > FULL_FILL > PARTIAL_FILL
+
+			IF ORDER_FAILED exists:
+				discard all fill events AFTER failure
+
+			IF FULL_FILL exists:
+				no further fills allowed
+
+		Partial Completion Rule:
+
+			IF cumulative_executed_size < order.size:
+
+				final state = PARTIALLY_FILLED
+
+				ORDER_COMPLETED MUST NOT be emitted
+
+		assign event_id deterministically USING:
+
+			event_id = HASH_v1(
+				order_id +
+				event_type +
+				executed_size +
+				remaining_size +
+				event_time +
+				external_event_index
+			)
+
+		Global Ordering Uniqueness Rule:
+
+			(order_id + external_event_index) MUST uniquely identify
+			event sequence across system.
+
+			Constraint:
+
+			No two events across all partitions
+			may share identical:
+
+				event_time
+				order_id
+				event_type_priority
+				external_event_index
+
+		Event Type Priority Mapping (MANDATORY):
+
+			ORDER_CREATED    = 1
+			ORDER_ROUTED     = 2
+			PARTIAL_FILL     = 3
+			FULL_FILL        = 4
+			ORDER_COMPLETED  = 5
+			ORDER_FAILED     = 6
+
+			event_type_priority MUST be used in ordering_key
+			NOT string comparison
+
+	5.5 Drift Detection Rules
+
+		Detect:
+
+		D1: size mismatch
+		D2: missing fills
+		D3: duplicate fills
+		D4: ordering violation
+		D5: state mismatch
+
+		drift_flag = TRUE if:
+
+		Σ(external_fills) ≠ Σ(internal_fills)
+		OR ordering mismatch
+		OR lifecycle mismatch
+
+		Overfill Protection Rule:
+
+			IF Σ(executed_size) > order.size:
+				→ HARD FAIL
+
+			Duplicate Detection:
+
+			duplicate_key = HASH(
+				broker_order_id +
+				executed_size +
+				event_time
+			)
+
+			duplicates MUST be removed deterministically
+			(lowest hash retained)
+
+		IF executed_size <= 0:
+			→ REJECT event
+
+		Duplicate Tie-Break Rule:
+
+			IF hash collision occurs:
+
+				use:
+					event_time ASC
+					order_id ASC
+					executed_size ASC
+
+		Numeric Model Enforcement:
+
+			All numeric values MUST follow:
+
+			value = integer / 10^6
+
+			No floating point allowed
+
+			remaining_size MUST use integer arithmetic only
+
+	5.6 Rule Execution Order (STRICT)
+		Input Validation
+		Event Alignment
+		Reconciliation (external override)
+		Event Rebuild
+		State Reconstruction
+		Drift Detection
+		Audit Construction
+		Output Emission
+
+		No deviation allowed.
+
+	Constraint Enforcement Binding Rule (MANDATORY)
+
+		Phase D MUST act as a pure execution layer.
+
+		Execution behavior MUST be fully determined by constraint_output:
+
+			execution_decision =
+				constraint_output.execution_decision
+
+			modification_vector =
+				constraint_output.modification_vector
+
+			violated_constraints =
+				constraint_output.violated_constraints_set
+
+		Constraints:
+
+			Phase D MUST NOT:
+
+				- derive new execution decisions
+				- reinterpret constraint results
+				- override constraint_output
+				- apply additional logic not defined in Phase B
+
+			Phase D is NOT a decision-making layer.
+
+			Violation → ARCHITECTURAL FAILURE
+
+		Closed Loop Determinism Invariant (MANDATORY)
+
+			For identical canonical_input_set:
+
+				TradeIntent
+					→ constraint_output
+					→ execution_event_stream
+					→ reconciliation_output
+
+			MUST satisfy:
+
+				reconstructed_state == original_state
+
+			Definitions:
+
+				reconstructed_state:
+					derived ONLY from execution_event_stream
+
+			Constraints:
+
+				reconciliation MUST be a pure function of:
+
+					execution_event_stream
+
+				No external data sources allowed
+				No broker reconciliation dependency allowed
+
+			Violation → SYSTEM NON-DETERMINISTIC
+			For identical canonical_input_set:
+
+				TradeIntent
+					→ constraint_output
+					→ execution_event_stream
+					→ reconciliation_output
+
+			MUST satisfy:
+
+				reconstructed_state == original_state
+
+			Definitions:
+
+				reconstructed_state:
+					derived ONLY from execution_event_stream
+
+			Constraints:
+
+				reconciliation MUST be a pure function of:
+
+					execution_event_stream
+
+				No external data sources allowed
+				No broker reconciliation dependency allowed
+
+			Violation → SYSTEM NON-DETERMINISTIC
+
+		Reconciliation Numeric Consistency Rule (MANDATORY)
+
+			All reconstructed values MUST:
+
+				use fixed-point arithmetic
+				match execution_event_stream values EXACTLY
+
+			Constraint:
+
+				No recomputation using floating-point allowed
+
+			Violation → RECONCILIATION MISMATCH
+
+6. FLOW ARCHITECTURE
+	6.0 Canonical Input Set
+		canonical_input_set_D8 = {
+			internal_event_stream
+			external_event_stream
+			lifecycle_state_snapshot
+			configuration_snapshot
+			version_identifiers
+		}
+
+		Constraints:
+
+			immutable
+			complete
+			hash-identifiable
+
+	6.1 Processing Flow
+		Internal + External Events
+			→ Alignment
+			→ Reconciliation
+			→ Event Rebuild
+			→ State Reconstruction
+			→ Drift Detection
+			→ Audit Generation
+			→ Output
+
+	6.3 Output (MANDATORY)
+		post_execution_control_output = {
+			reconciled_event_stream
+			final_order_states
+			final_portfolio_state
+			drift_report
+			audit_records
+			lineage_hash_chain
+		}
+
+7. PIPELINE STRUCTURE
+
+	P1: Input Validation
+	P2: Event Alignment
+	P3: Reconciliation
+	P4: Event Rebuild
+	P5: State Reconstruction
+	P6: Drift Detection
+	P7: Audit Record Generation
+	P8: Output Emission
+
+8. CONTROL & CONSTRAINTS
+	8.1 Hard Rules
+		no state mutation
+		external truth dominance mandatory
+		event-only rebuild
+		deterministic ordering required
+
+		R19 — Venue Fill Consistency Check
+
+			assert Σ(actual_venue_fills) == execution_order.total_quantity
+
+		R-SOR-RECON:
+
+			assert Σ(venue_fills) == execution_order_size
+
+			ELSE:
+				mark RECONCILIATION_FAILED
+				trigger audit_event
+
+	8.2 Guardrails
+		reject incomplete external stream
+		reject invalid lifecycle sequence
+		reject size overflow
+
+	8.3 Invariants
+		I1: FinalState = f(EventStream)
+		I2: Replay = identical output
+		I3: External truth dominates
+		I4: Lineage fully traceable
+		I5 — Ordering Determinism Invariant:
+
+			ordering_key MUST NOT depend on any field
+			that is generated AFTER ordering phase.
+
+			Violation → NON-DETERMINISTIC SYSTEM
+
+		I-SOR-REC-1: Σ(venue fills) == total order fill
+		I-SOR-7: Any mismatch MUST trigger reconciliation failure state
+
+		I-GLOBAL-5: Execution MUST be quantitatively consistent
+
+9. STATE & DATA MODEL
+	9.1 State Definition
+		FinalState = {
+			OrderState
+			PortfolioState
+		}
+
+	9.2 State Transition
+		State(t+1) = f(State(t), ReconciledEvent)
+
+	9.3 Source of Truth
+
+		Primary → Reconciled Event Stream
+		Secondary → Derived Snapshots
+
+10. FAILURE MODEL
+	10.1 Scenarios
+		missing external fills
+		duplicate fills
+		inconsistent lifecycle
+		replay mismatch
+
+	10.2 Impact
+		audit failure
+		PnL corruption
+		legal exposure
+
+	10.3 Mitigation
+		reject output
+		trigger replay rebuild
+		raise drift alert
+
+11. ASSUMPTION REGISTER
+	Assumption							Status
+	Step 6 lifecycle valid				VALIDATED
+	Step 7 normalization correct		VALIDATED
+	External stream complete			CONTROLLED
+
+12. VALIDATION FRAMEWORK
+	Method
+		Red Team (3 rounds)
+		Blue Team validation
+
+	Acceptance
+		deterministic reconciliation
+		replay equality
+		audit completeness
+
+13. OUTPUT (DELIVERABLE SPEC)
+		post_execution_control_output
+
+	All fields mandatory. No optional fields.
+
+14. TRACEABILITY MAPPING
+		TradeIntent
+		→ ExecutionIntent
+		→ DecisionValidatedIntent
+		→ RiskApprovedIntent
+		→ PolicyDecisionIntent
+		→ ExecutionOrder
+		→ ExecutionEvent
+		→ ReconciledEvent
+		→ Final State
+
+		Full hash-chain required.
+
+15. CROSS-PHASE CONSISTENCY
+	Phase B → constraints enforced upstream
+	Phase C → event/state model preserved
+	Phase D → execution chain maintained
+
+16. SCALABILITY MODEL
+	partitioned reconciliation per order_id
+	parallel processing with deterministic merge
+	replay engine horizontal scaling
+
+	Deterministic Partitioning:
+
+		partition_key = order_id
+
+		Each partition processed independently.
+
+		Global merge MUST follow ordering_key.
+
+		No cross-partition state allowed.
+
+	Global Merge Algorithm (MANDATORY):
+
+		1. Collect all partition outputs
+		2. Apply global ordering_key
+		3. Use stable merge sort (guaranteed stable)
+
+		Constraint:
+
+		same inputs → identical merge output
+
+17. GOVERNANCE INTEGRATION
+	version-controlled reconciliation logic
+	audit approval required
+	immutable audit records
+
+18. AUDITABILITY & OBSERVABILITY
+
+	full event trace
+	lineage hash chain
+	drift reports
+	reconciliation logs
+
+19. RISK CONSIDERATIONS
+	reconciliation failure = system failure
+	external dependency risk
+	audit integrity risk
+
+20. FAILURE CONDITION (PHASE LEVEL)
+
+	Phase FAILS if:
+
+	reconciliation ambiguous
+	replay mismatch
+	drift unresolved
+	lineage incomplete
+
+21. PHASE LOCK CRITERIA
+
+	Phase LOCKED only if:
+
+		all 21 sections complete
+		reconciliation deterministic
+		replay validated
+		drift detection verified
+		audit trace complete
+		Red Team passed
+		Blue Team validated

@@ -1,0 +1,28 @@
+/*
+------------------------------------------------------------
+COREI
+Stage 25
+Phase 19
+Step 06
+
+Dock Slot Styles
+------------------------------------------------------------
+*/
+
+.corei-dock-slot {
+
+    display: flex;
+
+    flex: 1;
+
+    min-width: 0;
+
+    min-height: 0;
+
+    overflow: hidden;
+
+    position: relative;
+
+    background: transparent;
+
+}

@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+  body {
+    @apply bg-bg-primary text-text-secondary antialiased;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+  }
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #13171e;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #2a2e36;
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #6a7280;
+  }
+  pre {
+    @apply bg-bg-tertiary rounded-md border border-border-color p-4 overflow-x-auto;
+  }
+  code {
+    @apply bg-bg-tertiary px-1.5 py-0.5 rounded border border-border-color text-sm;
+  }
+}
+
+@layer components {
+  .badge {
+    @apply inline-block px-2 py-0.5 text-xs font-semibold rounded-full;
+  }
+  .badge-frozen {
+    @apply bg-blue-900 text-blue-200;
+  }
+  .badge-complete {
+    @apply bg-green-900 text-green-200;
+  }
+  .badge-in-progress {
+    @apply bg-yellow-900 text-yellow-200;
+  }
+  .badge-pending {
+    @apply bg-gray-700 text-gray-300;
+  }
+  .badge-certified {
+    @apply bg-purple-900 text-purple-200;
+  }
+}

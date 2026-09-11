@@ -1,0 +1,36 @@
+Netid State  Recv-Q Send-Q                    Local Address:Port  Peer Address:PortProcess
+udp   UNCONN 0      0                               0.0.0.0:33928      0.0.0.0:*
+udp   UNCONN 0      0                               0.0.0.0:5353       0.0.0.0:*
+udp   UNCONN 0      0                         127.0.0.53%lo:53         0.0.0.0:*
+udp   UNCONN 0      0                             127.0.0.1:323        0.0.0.0:*
+udp   UNCONN 0      0                                  [::]:5353          [::]:*
+udp   UNCONN 0      0                                 [::1]:323           [::]:*
+udp   UNCONN 0      0                                  [::]:37283         [::]:*
+udp   UNCONN 0      0      [fe80::20c:29ff:fe06:d246]%ens33:546           [::]:*
+tcp   LISTEN 0      128                           127.0.0.1:38245      0.0.0.0:*    users:(("code-f6cfa2ea24",pid=3054284,fd=12))
+tcp   LISTEN 0      65535                           0.0.0.0:5000       0.0.0.0:*
+tcp   LISTEN 0      128                             0.0.0.0:22         0.0.0.0:*
+tcp   LISTEN 0      128                           127.0.0.1:42623      0.0.0.0:*    users:(("code-f6cfa2ea24",pid=213190,fd=10))
+tcp   LISTEN 0      4096                      127.0.0.53%lo:53         0.0.0.0:*
+tcp   LISTEN 0      65535                         127.0.0.1:9099       0.0.0.0:*
+tcp   LISTEN 0      128                           127.0.0.1:631        0.0.0.0:*
+tcp   LISTEN 0      65535                         127.0.0.1:44091      0.0.0.0:*
+tcp   LISTEN 0      65535                         127.0.0.1:2379       0.0.0.0:*
+tcp   LISTEN 0      65535                         127.0.0.1:2381       0.0.0.0:*
+tcp   LISTEN 0      65535                         127.0.0.1:10257      0.0.0.0:*
+tcp   LISTEN 0      65535                         127.0.0.1:10259      0.0.0.0:*
+tcp   LISTEN 0      65535                         127.0.0.1:10248      0.0.0.0:*
+tcp   LISTEN 0      65535                         127.0.0.1:10249      0.0.0.0:*
+tcp   LISTEN 0      5                               0.0.0.0:8084       0.0.0.0:*    users:(("python3",pid=2718900,fd=3))
+tcp   LISTEN 0      5                               0.0.0.0:8083       0.0.0.0:*    users:(("python3",pid=2718763,fd=3))
+tcp   LISTEN 0      5                               0.0.0.0:8082       0.0.0.0:*    users:(("python3",pid=2718620,fd=3))
+tcp   LISTEN 0      5                               0.0.0.0:8081       0.0.0.0:*    users:(("python3",pid=2718506,fd=3))
+tcp   LISTEN 0      5                               0.0.0.0:8080       0.0.0.0:*    users:(("python3",pid=2718389,fd=3))
+tcp   LISTEN 0      65535                      192.168.1.10:2379       0.0.0.0:*
+tcp   LISTEN 0      65535                      192.168.1.10:2380       0.0.0.0:*
+tcp   LISTEN 0      65535                              [::]:5000          [::]:*
+tcp   LISTEN 0      128                                [::]:22            [::]:*
+tcp   LISTEN 0      128                               [::1]:631           [::]:*
+tcp   LISTEN 0      65535                                 *:10250            *:*
+tcp   LISTEN 0      65535                                 *:10256            *:*
+tcp   LISTEN 0      65535                                 *:6443             *:*

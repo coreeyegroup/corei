@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <title>docs docs docs docs stage 24 Build Phase 02 BU 017.md.md.md.md</title>
+  <style>
+  body {
+    background: #0A0D12;
+    color: #E3E7EC;
+    font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px 40px;
+  }
+
+  h1 {
+    font-size: 26px;
+    font-weight: 600;
+    color: #C6A46A;
+    margin: 24px 0 12px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 8px;
+  }
+
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #D4B88A;
+    margin: 20px 0 10px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 6px;
+  }
+
+  h3 {
+    font-size: 17px;
+    font-weight: 500;
+    color: #E3E7EC;
+    margin: 16px 0 8px 0;
+  }
+
+  h4 {
+    font-size: 15px;
+    font-weight: 500;
+    color: #C5CED9;
+    margin: 12px 0 6px 0;
+  }
+
+  p {
+    margin-bottom: 8px;
+    color: #C5CED9;
+  }
+
+  ul,
+  ol {
+    padding-left: 24px;
+    margin-bottom: 8px;
+    color: #C5CED9;
+  }
+
+  li {
+    margin-bottom: 2px;
+  }
+
+  code {
+    font-family: 'JetBrains Mono', 'Cascadia Code', monospace;
+    font-size: 13px;
+    background: rgba(255,255,255,0.05);
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid #28303C;
+    color: #C5CED9;
+  }
+
+  pre {
+    background: #18202A;
+    border: 1px solid #28303C;
+    border-radius: 6px;
+    padding: 16px 20px;
+    overflow: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 12px 0 16px 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #C5CED9;
+  }
+
+  pre code {
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 16px 0;
+    font-size: 13px;
+    color: #C5CED9;
+  }
+
+  th {
+    background: #18202A;
+    color: #C5CED9;
+    font-weight: 600;
+    text-align: left;
+    padding: 6px 12px;
+    border: 1px solid #28303C;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  td {
+    padding: 4px 12px;
+    border: 1px solid #28303C;
+    background: #0E1219;
+  }
+
+  tr:nth-child(even) td {
+    background: #121821;
+  }
+
+  blockquote {
+    border-left: 3px solid #C6A46A;
+    padding-left: 16px;
+    margin: 8px 0 12px 0;
+    color: #6E7883;
+    font-style: italic;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #28303C;
+    margin: 24px 0;
+  }
+
+  a {
+    color: #8BB4F0;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  strong {
+    color: #E3E7EC;
+    font-weight: 600;
+  }
+
+  img {
+    max-width: 100%;
+    border-radius: 4px;
+    border: 1px solid #28303C;
+  }
+
+  .doc-footer {
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid #28303C;
+    font-size: 12px;
+    color: #6E7883;
+    font-family: monospace;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+</style>
+</head>
+
+<body>
+
+  <div
+    class="doc-header"
+    style="
+      background:#121821;
+      border:1px solid #28303C;
+      border-radius:8px;
+      padding:1.2rem 1.8rem;
+      margin-bottom:1.8rem;
+    "
+  >
+
+    <div
+      style="
+        color:#C6A46A;
+        font-weight:600;
+        font-size:13px;
+        text-transform:uppercase;
+        letter-spacing:0.05em;
+      "
+    >
+      COREI · Stage Documentation
+    </div>
+
+
+
+    <h1
+      style="
+        font-size:28px;
+        font-weight:600;
+        color:#E3E7EC;
+        margin:0.1rem 0;
+        border-bottom:none;
+        padding-bottom:0;
+      "
+    >
+      docs docs docs docs stage 24 Build Phase 02 BU 017.md.md.md.md
+    </h1>
+
+    <div
+      style="
+        font-size:16px;
+        color:#C5CED9;
+      "
+    >
+      Stage Documentation
+      ·
+      Operational
+    </div>
+
+    <div
+      style="
+        display:flex;
+        flex-wrap:wrap;
+        gap:0.6rem 1.8rem;
+        margin-top:0.6rem;
+        font-size:13px;
+      "
+    >
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Status
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          Approved
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Version
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          1.0
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Classification
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          Operational
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Owner
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          COREI
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Repository
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+            font-family:monospace;
+          "
+        >
+          docs/docs_docs_docs_docs_stage-24_Build_Phase-02_BU-017.md.md.md.md.md
+        </span>
+      </span>
+
+    </div>
+
+
+
+  </div>
+
+
+
+  <h1>BUILD UNIT-017</h1>
+<h2>Title</h2>
+<p>COREI OS Terminal SDK</p>
+<hr>
+<h2>Objective</h2>
+<p>Implement the COREI OS Terminal SDK that serves as the official integration layer between the COREI OS platform and every institutional terminal.</p>
+<p>The SDK establishes a stable, versioned contract that allows terminal implementations to interact with COREI OS without depending on internal platform frameworks. This ensures modularity, maintainability, and long-term compatibility.</p>
+<hr>
+<h2>Scope</h2>
+<p>This Build Unit establishes the Terminal SDK.</p>
+<p>Implemented:</p>
+<ul>
+<li>SDK Repository</li>
+<li>Terminal Contracts</li>
+<li>Workspace Contracts</li>
+<li>Module Contracts</li>
+<li>Terminal Models</li>
+<li>Workspace Models</li>
+<li>Module Models</li>
+<li>SDK Registry</li>
+<li>SDK Runtime</li>
+<li>SDK State</li>
+<li>SDK Lifecycle</li>
+<li>SDK Services</li>
+<li>SDK Provider</li>
+<li>SDK Hooks</li>
+<li>SDK Components</li>
+<li>Infrastructure SDK Adapter</li>
+<li>Public API</li>
+</ul>
+<hr>
+<h1>Terminal SDK Architecture</h1>
+<pre><code>Terminal SDK
+
+│
+
+├── Contracts
+
+├── Models
+
+├── Registry
+
+├── Runtime
+
+├── State
+
+├── Lifecycle
+
+├── Services
+
+├── Provider
+
+├── Hooks
+
+├── Components
+
+├── Adapters
+
+└── Public API
+</code></pre>
+<p>The Terminal SDK becomes the official API layer between COREI OS and every institutional terminal.</p>
+<hr>
+<h1>Repository Structure</h1>
+<p>Implemented</p>
+<pre><code>src/sdk/
+
+contracts/
+    terminal-contract.ts
+    workspace-contract.ts
+    module-contract.ts
+
+models/
+    terminal.ts
+    workspace.ts
+    module.ts
+
+registry/
+    sdk-registry.ts
+
+runtime/
+    sdk-runtime.ts
+
+state/
+    sdk-state.ts
+
+lifecycle/
+    sdk-lifecycle.ts
+
+services/
+    sdk-service.ts
+
+providers/
+    sdk-provider.tsx
+
+hooks/
+    use-sdk.ts
+
+adapters/
+    infrastructure-sdk.ts
+
+components/
+    SDKRoot.tsx
+    SDKTerminal.tsx
+    SDKWorkspace.tsx
+
+index.ts
+</code></pre>
+<hr>
+<h1>SDK Contracts</h1>
+<p>Implemented:</p>
+<ul>
+<li>Terminal Contract</li>
+<li>Workspace Contract</li>
+<li>Module Contract</li>
+</ul>
+<p>Current Terminal Contract:</p>
+<ul>
+<li>Identifier</li>
+<li>Name</li>
+<li>Version</li>
+</ul>
+<p>Current Workspace Contract:</p>
+<ul>
+<li>Identifier</li>
+<li>Name</li>
+</ul>
+<p>Current Module Contract:</p>
+<ul>
+<li>Identifier</li>
+<li>Name</li>
+</ul>
+<p>Future extensions:</p>
+<ul>
+<li>Terminal Metadata</li>
+<li>Workspace Configuration</li>
+<li>Module Dependencies</li>
+<li>SDK Capabilities</li>
+<li>Version Compatibility</li>
+<li>Extension Policies</li>
+</ul>
+<hr>
+<h1>SDK Models</h1>
+<p>Implemented runtime models for:</p>
+<ul>
+<li>Terminal</li>
+<li>Workspace</li>
+<li>Module</li>
+</ul>
+<p>Current runtime properties:</p>
+<p>Terminal</p>
+<ul>
+<li>Enabled</li>
+<li>Loaded</li>
+</ul>
+<p>Workspace</p>
+<ul>
+<li>Active</li>
+</ul>
+<p>Module</p>
+<ul>
+<li>Enabled</li>
+</ul>
+<p>Future runtime additions:</p>
+<ul>
+<li>Health Status</li>
+<li>Connection Status</li>
+<li>Startup State</li>
+<li>Runtime Metrics</li>
+<li>Diagnostics</li>
+</ul>
+<hr>
+<h1>SDK Registry</h1>
+<p>Implemented:</p>
+<pre><code>sdk-registry.ts
+</code></pre>
+<p>Current registered terminals:</p>
+<ul>
+<li>Infrastructure Terminal</li>
+<li>Trading Terminal</li>
+</ul>
+<p>The SDK Registry becomes the authoritative catalogue of terminal integrations available to COREI OS.</p>
+<p>Future registrations:</p>
+<ul>
+<li>Research Terminal</li>
+<li>Risk Terminal</li>
+<li>Executive Terminal</li>
+<li>Compliance Terminal</li>
+<li>AI Terminal</li>
+<li>Custom Enterprise Terminals</li>
+</ul>
+<hr>
+<h1>SDK Runtime</h1>
+<p>Implemented:</p>
+<pre><code>sdk-runtime.ts
+</code></pre>
+<p>Current runtime properties:</p>
+<ul>
+<li>Initialized</li>
+<li>Loaded</li>
+</ul>
+<p>Future responsibilities:</p>
+<ul>
+<li>SDK Bootstrap</li>
+<li>Runtime Coordination</li>
+<li>Version Management</li>
+<li>Capability Negotiation</li>
+<li>Compatibility Validation</li>
+</ul>
+<hr>
+<h1>SDK State</h1>
+<p>Implemented using Zustand.</p>
+<p>Current state:</p>
+<ul>
+<li>Terminal Collection</li>
+<li>Active Terminal</li>
+</ul>
+<p>Current actions:</p>
+<ul>
+<li>Activate Terminal</li>
+</ul>
+<p>Future state additions:</p>
+<ul>
+<li>Active Workspaces</li>
+<li>Loaded Modules</li>
+<li>Runtime Metrics</li>
+<li>Terminal Diagnostics</li>
+<li>SDK Configuration</li>
+</ul>
+<hr>
+<h1>SDK Lifecycle</h1>
+<p>Implemented:</p>
+<pre><code>sdk-lifecycle.ts
+</code></pre>
+<p>Current lifecycle operations:</p>
+<ul>
+<li>Initialize SDK</li>
+<li>Dispose SDK</li>
+</ul>
+<p>Future lifecycle stages:</p>
+<ul>
+<li>Bootstrap</li>
+<li>Register</li>
+<li>Validate</li>
+<li>Activate</li>
+<li>Suspend</li>
+<li>Resume</li>
+<li>Shutdown</li>
+</ul>
+<hr>
+<h1>SDK Services</h1>
+<p>Implemented:</p>
+<pre><code>sdk-service.ts
+</code></pre>
+<p>Current responsibilities:</p>
+<ul>
+<li>Retrieve registered terminals</li>
+</ul>
+<p>Future responsibilities:</p>
+<ul>
+<li>Terminal Discovery</li>
+<li>Capability Resolution</li>
+<li>SDK Version Management</li>
+<li>Compatibility Validation</li>
+<li>Dynamic Registration</li>
+</ul>
+<hr>
+<h1>Provider</h1>
+<p>Implemented:</p>
+<pre><code>sdk-provider.tsx
+</code></pre>
+<p>Provides the runtime boundary for SDK consumers.</p>
+<p>Future responsibilities:</p>
+<ul>
+<li>SDK Context</li>
+<li>Service Injection</li>
+<li>Runtime Coordination</li>
+<li>Terminal Composition</li>
+</ul>
+<hr>
+<h1>Hooks</h1>
+<p>Implemented:</p>
+<pre><code>useSDK()
+</code></pre>
+<p>Provides SDK runtime state access.</p>
+<p>Future capabilities:</p>
+<ul>
+<li>Terminal Discovery</li>
+<li>Workspace Management</li>
+<li>Module Access</li>
+<li>Runtime Monitoring</li>
+<li>SDK Diagnostics</li>
+</ul>
+<hr>
+<h1>Components</h1>
+<p>Implemented:</p>
+<ul>
+<li>SDKRoot</li>
+<li>SDKTerminal</li>
+<li>SDKWorkspace</li>
+</ul>
+<p>These components establish the structural composition of the Terminal SDK.</p>
+<p>Future implementations will support:</p>
+<ul>
+<li>Dynamic Terminal Mounting</li>
+<li>Workspace Composition</li>
+<li>Module Injection</li>
+<li>Cross-terminal Communication</li>
+<li>Terminal Lifecycle Management</li>
+</ul>
+<hr>
+<h1>Infrastructure Adapter</h1>
+<p>Implemented:</p>
+<pre><code>infrastructure-sdk.ts
+</code></pre>
+<p>Provides Infrastructure Terminal integration through the SDK.</p>
+<p>Future adapters:</p>
+<ul>
+<li>Trading SDK</li>
+<li>Research SDK</li>
+<li>Risk SDK</li>
+<li>Executive SDK</li>
+<li>Compliance SDK</li>
+</ul>
+<hr>
+<h1>Public API</h1>
+<p>Created:</p>
+<pre><code>src/sdk/index.ts
+</code></pre>
+<p>Exports:</p>
+<ul>
+<li>Components</li>
+<li>Provider</li>
+<li>Hooks</li>
+<li>SDK Services</li>
+<li>Contracts</li>
+</ul>
+<p>This becomes the official integration point for all terminal repositories.</p>
+<hr>
+<h1>Validation</h1>
+<p>Successfully validated:</p>
+<ul>
+<li>TypeScript Compilation</li>
+<li>Terminal Contracts</li>
+<li>Workspace Contracts</li>
+<li>Module Contracts</li>
+<li>SDK Models</li>
+<li>SDK Registry</li>
+<li>SDK Runtime</li>
+<li>SDK State</li>
+<li>SDK Lifecycle</li>
+<li>SDK Services</li>
+<li>Provider</li>
+<li>Hooks</li>
+<li>Components</li>
+<li>Infrastructure Adapter</li>
+<li>Public API</li>
+<li>Vite Production Build</li>
+</ul>
+<p>Validation Result</p>
+<pre><code>TypeScript Compilation     PASS
+
+Vite Production Build      PASS
+</code></pre>
+<hr>
+<h1>Deliverables</h1>
+<p>Completed:</p>
+<ul>
+<li>SDK Repository</li>
+<li>Contracts</li>
+<li>Models</li>
+<li>Registry</li>
+<li>Runtime</li>
+<li>State</li>
+<li>Lifecycle</li>
+<li>SDK Services</li>
+<li>Provider</li>
+<li>Hooks</li>
+<li>Components</li>
+<li>Infrastructure Adapter</li>
+<li>Public API</li>
+</ul>
+<hr>
+<h1>Repository Impact</h1>
+<p>Created the complete Terminal SDK under:</p>
+<pre><code>src/sdk/
+</code></pre>
+<p>The SDK now becomes the official integration layer between COREI OS and every institutional terminal implementation.</p>
+<hr>
+<h1>Result</h1>
+<p>COREI OS now provides a stable, versioned Terminal SDK that abstracts internal platform implementation details from terminal consumers.</p>
+<p>This Build Unit establishes the foundation for future:</p>
+<ul>
+<li>Multi-terminal Support</li>
+<li>Terminal Versioning</li>
+<li>Enterprise Extensions</li>
+<li>Dynamic Terminal Loading</li>
+<li>Cross-terminal Interoperability</li>
+<li>Long-term Platform Compatibility</li>
+</ul>
+<p>The Terminal SDK is now the authoritative contract through which all current and future terminals integrate with COREI OS.</p>
+<hr>
+<h1>Next Build Unit</h1>
+<p><strong>BU-018 – Infrastructure Terminal Integration</strong></p>
+<p>Implementation Order</p>
+<ul>
+<li>Infrastructure Terminal Registration</li>
+<li>SDK Integration</li>
+<li>Runtime Integration</li>
+<li>Shell Composition</li>
+<li>Workspace Integration</li>
+<li>Ribbon Integration</li>
+<li>Navigation Integration</li>
+<li>Runtime Validation</li>
+<li>End-to-End Testing</li>
+</ul>
+<hr>
+<h1>Status</h1>
+<p><strong>COMPLETED</strong></p>
+
+
+  <div class="doc-footer">
+
+    <span>DOCUMENT KEY: docs:docs_docs_docs_docs_stage-24_Build_Phase-02_BU-017.md.md.md.md.md</span>
+
+    <span>
+      DOCUMENT NAME: docs docs docs docs stage 24 Build Phase 02 BU 017.md.md.md.md
+    </span>
+
+    <span>
+      VERSION: 1.0
+    </span>
+
+  </div>
+
+</body>
+</html>

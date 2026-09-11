@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>COREI Stage‑25 – Phase‑06 Reference</title>
+    <style>
+        /* ============================================================
+           COREI INSTITUTIONAL DOCUMENTATION SYSTEM
+           ============================================================ */
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            background: #0A0D12;
+            color: #E3E7EC;
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+            font-size: 13px;
+            line-height: 1.5;
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .sidebar-wrapper {
+            display: flex;
+            flex-shrink: 0;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            overflow: hidden;
+        }
+        .sidebar {
+            width: 200px;
+            min-width: 140px;
+            max-width: 320px;
+            background: #0E1219;
+            border-right: 1px solid #28303C;
+            padding: 0.8rem 0.3rem 0.8rem 0.5rem;
+            overflow-y: auto;
+            overflow-x: hidden;
+            resize: horizontal;
+            height: 100vh;
+            flex-shrink: 0;
+        }
+        .sidebar::-webkit-scrollbar { width:4px; }
+        .sidebar::-webkit-scrollbar-thumb { background:#28303C; border-radius:2px; }
+        .sidebar::-webkit-scrollbar-track { background:transparent; }
+        .sidebar::-webkit-resizer { background:#28303C; border-radius:0 0 4px 0; }
+        .sidebar .brand {
+            font-size:13px; font-weight:600; color:#C6A46A; letter-spacing:0.04em;
+            padding:0 0.3rem 0.4rem 0.3rem; border-bottom:1px solid #28303C; margin-bottom:0.6rem;
+        }
+        .sidebar .brand span { color:#E3E7EC; font-weight:300; }
+        .sidebar-nav { display:flex; flex-direction:column; gap:0.1rem; }
+        .sidebar-nav a {
+            display:flex; align-items:center; padding:0.2rem 0.3rem;
+            color:#9AA5B1; text-decoration:none; font-size:12px; border-radius:3px;
+            transition:background 0.1s,color 0.1s; line-height:1.3; white-space:nowrap;
+        }
+        .sidebar-nav a:hover { background:#1E2834; color:#E3E7EC; }
+        .sidebar-nav a.active { background:#28303C; color:#E3E7EC; font-weight:500; }
+        .sidebar-nav .section-number { display:inline-block; width:22px; color:#6E7883; font-size:11px; flex-shrink:0; }
+        .main-content { flex:1; padding:2rem 2.5rem; max-width:1200px; min-width:0; overflow-x:auto; }
+        h1 { font-size:26px; font-weight:600; color:#E3E7EC; margin-bottom:0.25rem; }
+        h2 { font-size:18px; font-weight:600; color:#C6A46A; margin:1.8rem 0 0.8rem 0; border-bottom:1px solid #28303C; padding-bottom:0.3rem; }
+        h3 { font-size:15px; font-weight:500; color:#C6A46A; margin:1.2rem 0 0.5rem 0; }
+        h4 { font-size:13px; font-weight:500; color:#9AA5B1; margin:1rem 0 0.3rem 0; }
+        p { margin-bottom:0.4rem; }
+        a { color:#8BB4F0; text-decoration:none; }
+        a:hover { text-decoration:underline; }
+        code { font-family:'JetBrains Mono','Fira Code',monospace; font-size:12px; background:#121821; padding:0.1rem 0.4rem; border:1px solid #28303C; border-radius:3px; color:#E3E7EC; }
+        pre { background:#0E1219; border:1px solid #28303C; border-radius:6px; padding:0.8rem 1rem; overflow:auto; font-family:'JetBrains Mono',monospace; font-size:12px; line-height:1.5; color:#C5CED9; max-height:400px; overflow-y:auto; white-space:pre-wrap; word-break:break-all; }
+        hr { border:none; border-top:1px solid #28303C; margin:1.5rem 0; }
+        .document-header { background:#121821; border:1px solid #28303C; border-radius:6px; padding:1rem 1.5rem; margin-bottom:1.5rem; }
+        .document-header .org { font-size:14px; font-weight:600; color:#C6A46A; letter-spacing:0.05em; }
+        .document-header .title { font-size:26px; font-weight:600; color:#E3E7EC; margin:0.2rem 0; }
+        .document-header .subtitle { font-size:16px; color:#9AA5B1; }
+        .document-header .meta-line { display:flex; flex-wrap:wrap; gap:1.2rem; margin-top:0.6rem; font-size:13px; }
+        .document-header .meta-line .item { display:flex; align-items:baseline; gap:0.3rem; }
+        .document-header .meta-line .label { color:#6E7883; text-transform:uppercase; font-size:11px; letter-spacing:0.04em; }
+        .document-header .meta-line .value { color:#E3E7EC; font-weight:500; }
+        .badge { display:inline-block; background:#28303C; padding:0.1rem 0.6rem; border-radius:12px; font-size:11px; font-weight:600; color:#C6A46A; letter-spacing:0.02em; margin-left:0.3rem; }
+        .badge.success { background:#1F3A2A; color:#52A36B; }
+        .badge.warning { background:#3D3420; color:#D1A64A; }
+        .badge.danger { background:#3D2020; color:#B95A5A; }
+        .executive-summary { background:#121821; border:1px solid #28303C; border-radius:6px; padding:0.8rem 1.2rem; margin-bottom:1.5rem; display:grid; grid-template-columns:1fr 1fr; gap:0.3rem 2rem; }
+        .executive-summary .item { display:flex; flex-direction:column; }
+        .executive-summary .item .label { font-size:11px; text-transform:uppercase; color:#6E7883; letter-spacing:0.04em; }
+        .executive-summary .item .value { font-size:14px; font-weight:500; color:#E3E7EC; }
+        table { width:100%; border-collapse:collapse; font-size:12px; margin:0.6rem 0 1rem 0; }
+        th { background:#18202A; color:#9AA5B1; font-weight:600; text-align:left; padding:0.3rem 0.5rem; border:1px solid #28303C; font-size:11px; text-transform:uppercase; letter-spacing:0.04em; }
+        td { padding:0.25rem 0.5rem; border:1px solid #28303C; vertical-align:top; background:#0E1219; }
+        tr:nth-child(even) td { background:#121821; }
+        details { background:#0E1219; border:1px solid #28303C; border-radius:4px; margin:0.6rem 0; }
+        summary { padding:0.3rem 0.6rem; cursor:pointer; font-weight:500; color:#C5CED9; background:#18202A; border-radius:4px; user-select:none; font-size:13px; }
+        summary:hover { background:#1E2834; }
+        details[open] summary { border-bottom:1px solid #28303C; border-radius:4px 4px 0 0; }
+        details .content { padding:0.5rem 0.6rem; font-size:12px; font-family:'JetBrains Mono',monospace; white-space:pre-wrap; word-break:break-all; color:#C5CED9; overflow-x:auto; max-height:500px; overflow-y:auto; }
+        .metadata-table td { padding:0.15rem 0.5rem; }
+        .metadata-table .label { color:#6E7883; width:140px; font-weight:400; }
+        .text-muted { color:#6E7883; }
+        .text-success { color:#52A36B; }
+        .text-warning { color:#D1A64A; }
+        .text-danger { color:#B95A5A; }
+        @media (max-width:768px) {
+            body { flex-direction:column; }
+            .sidebar-wrapper { height:auto; position:static; overflow:visible; }
+            .sidebar { width:100% !important; height:auto; max-width:none !important; min-width:unset; resize:none; border-right:none; border-bottom:1px solid #28303C; padding:0.5rem; }
+            .sidebar-nav { flex-direction:row; flex-wrap:wrap; gap:0.1rem; }
+            .sidebar-nav a { padding:0.15rem 0.4rem; font-size:11px; white-space:nowrap; }
+            .sidebar-nav .section-number { width:auto; margin-right:0.1rem; }
+            .main-content { padding:1rem; }
+            .executive-summary { grid-template-columns:1fr; }
+            .document-header .meta-line { flex-direction:column; gap:0.3rem; }
+        }
+        @media print {
+            .sidebar-wrapper { display:none; }
+            body { background:white; color:black; font-size:11px; }
+            .main-content { padding:1rem; max-width:100%; }
+            .document-header, .executive-summary, table, pre, details { border-color:#ccc; background:#fafafa; }
+            .document-header .meta-line .label { color:#666; }
+            .document-header .meta-line .value { color:#000; }
+            .badge { border:1px solid #999; background:transparent; color:#000; }
+            .badge.success { border-color:#2a7a3a; color:#2a7a3a; }
+            .badge.warning { border-color:#b08a3a; color:#b08a3a; }
+            .badge.danger { border-color:#b05a5a; color:#b05a5a; }
+            th { background:#eee; color:#333; border-color:#999; }
+            td { background:white; border-color:#999; }
+            tr:nth-child(even) td { background:#f5f5f5; }
+            .text-muted { color:#666; }
+            .text-success { color:#2a7a3a; }
+            .text-warning { color:#b08a3a; }
+            .text-danger { color:#b05a5a; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar-wrapper">
+        <aside class="sidebar">
+            <div class="brand">COREI <span>·</span> DOC</div>
+            <nav class="sidebar-nav">
+                <a href="#sec-01"><span class="section-number">01</span> Executive Summary</a>
+                <a href="#sec-02"><span class="section-number">02</span> Scope</a>
+                <a href="#sec-03"><span class="section-number">03</span> Architecture</a>
+                <a href="#sec-04"><span class="section-number">04</span> Ownership</a>
+                <a href="#sec-05"><span class="section-number">05</span> Responsibilities</a>
+                <a href="#sec-06"><span class="section-number">06</span> Dependencies</a>
+                <a href="#sec-07"><span class="section-number">07</span> Contracts</a>
+                <a href="#sec-08"><span class="section-number">08</span> Interfaces</a>
+                <a href="#sec-09"><span class="section-number">09</span> Runtime</a>
+                <a href="#sec-10"><span class="section-number">10</span> Public API</a>
+                <a href="#sec-11"><span class="section-number">11</span> Components</a>
+                <a href="#sec-12"><span class="section-number">12</span> File Inventory</a>
+                <a href="#sec-13"><span class="section-number">13</span> Validation</a>
+                <a href="#sec-14"><span class="section-number">14</span> Browser Validation</a>
+                <a href="#sec-15"><span class="section-number">15</span> Repository Tree</a>
+                <a href="#sec-16"><span class="section-number">16</span> Build Output</a>
+                <a href="#sec-17"><span class="section-number">17</span> Certification</a>
+                <a href="#sec-18"><span class="section-number">18</span> References</a>
+                <a href="#sec-19"><span class="section-number">19</span> Appendix</a>
+            </nav>
+        </aside>
+    </div>
+
+    <main class="main-content">
+
+        <header class="document-header">
+            <div class="org">COREI · Institutional Operating Platform</div>
+            <div class="title">Stage 25 · Phase 06</div>
+            <div class="subtitle">Workspace Platform</div>
+            <div class="meta-line">
+                <span class="item"><span class="label">Status</span><span class="value"><span class="badge success">CERTIFIED</span></span></span>
+                <span class="item"><span class="label">Version</span><span class="value">25.06.0</span></span>
+                <span class="item"><span class="label">Repository</span><span class="value">corei</span></span>
+                <span class="item"><span class="label">Branch</span><span class="value">main</span></span>
+                <span class="item"><span class="label">Commit</span><span class="value">ac8e282</span></span>
+                <span class="item"><span class="label">Tag</span><span class="value">stage25-phase06-workspace-v1</span></span>
+                <span class="item"><span class="label">Generated</span><span class="value">2026-08-08</span></span>
+            </div>
+        </header>
+
+        <section class="executive-summary">
+            <div class="item"><span class="label">Purpose</span><span class="value">Establish the institutional Workspace Platform – composition, layout, docking, panels, persistence, runtime orchestration</span></div>
+            <div class="item"><span class="label">Ownership</span><span class="value">Workspace Platform Team</span></div>
+            <div class="item"><span class="label">Consumers</span><span class="value">Experience Platform, Application Platform, Service Platform</span></div>
+            <div class="item"><span class="label">Providers</span><span class="value">Phase‑01 Provider Platform, Phase‑02 Capability Platform, Phase‑03 Cognitive Platform, Phase‑04 Workspace Foundation</span></div>
+            <div class="item"><span class="label">Protected Boundaries</span><span class="value">src/workspaces/</span></div>
+            <div class="item"><span class="label">Repository Scope</span><span class="value">127 files, 55 directories</span></div>
+            <div class="item"><span class="label">Core Subsystems</span><span class="value">Composition, Panels, Layout, Docking, Persistence, Runtime, Switching, Recovery, Coordination, Diagnostics, Multiplicity, Shell Integration, Behavioral Validation, Certification</span></div>
+            <div class="item"><span class="label">Certification</span><span class="value"><span class="text-success">PASSED</span></span></div>
+            <div class="item"><span class="label">Validation</span><span class="value"><span class="text-success">PASSED</span></span></div>
+        </section>
+
+        <section id="sec-01" class="section">
+            <h2><span class="section-number">01</span> Executive Summary</h2>
+            <p>Phase‑06 implements the institutional Workspace Platform – the core infrastructure for workspace composition, layout management, panel orchestration, docking, persistence, recovery, switching, coordination, diagnostics, multiplicity, shell integration, and runtime orchestration. The platform consumes Capabilities and Providers to construct operational workspaces that can be persisted, restored, switched, and coordinated across multiple windows and monitors. This is the first platform that directly enables operator-facing workspace functionality.</p>
+            <table class="metadata-table">
+                <tr><td class="label">Purpose</td><td>Workspace composition, layout, docking, persistence, runtime orchestration</td></tr>
+                <tr><td class="label">Ownership</td><td>Workspace Platform Team</td></tr>
+                <tr><td class="label">Consumers</td><td>Experience, Application, Service Platforms</td></tr>
+                <tr><td class="label">Providers</td><td>Phase‑01 Provider, Phase‑02 Capability, Phase‑03 Cognitive, Phase‑04 Workspace Foundation</td></tr>
+                <tr><td class="label">Protected Boundaries</td><td>src/workspaces/</td></tr>
+                <tr><td class="label">Repository Scope</td><td>127 files, 55 directories</td></tr>
+                <tr><td class="label">Certification</td><td><span class="text-success">PASSED</span></td></tr>
+                <tr><td class="label">Validation</td><td><span class="text-success">PASSED</span></td></tr>
+            </table>
+        </section>
+
+        <section id="sec-02" class="section">
+            <h2><span class="section-number">02</span> Scope</h2>
+            <table>
+                <thead><tr><th>Category</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td>In Scope</td><td>Workspace contracts, models, registry, manager; Lifecycle, State, Composition, Panels, Layout, Docking, Persistence, Recovery, Switching, Coordination, Diagnostics, Multiplicity, Shell Integration, Behavioral Validation, Certification, Runtime Orchestration</td></tr>
+                    <tr><td>Out of Scope</td><td>UI rendering, Experience orchestration, Application logic, Trading logic, Infrastructure logic, Provider implementations</td></tr>
+                    <tr><td>Consumes</td><td>Phase‑01 Provider Platform, Phase‑02 Capability Platform, Phase‑03 Cognitive Platform, Phase‑04 Workspace Foundation</td></tr>
+                    <tr><td>Provides</td><td>Workspace Platform API, Panel API, Layout API, Docking API, Persistence API, Runtime API, Switching API, Recovery API, Shell Integration API</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="sec-03" class="section">
+            <h2><span class="section-number">03</span> Architecture</h2>
+            <p>The Workspace Platform is organized into multiple subsystems.</p>
+            <table>
+                <thead><tr><th>Subsystem</th><th>Responsibility</th></tr></thead>
+                <tbody>
+                    <tr><td>Foundation</td><td>Contract, Model, Registry, Manager</td></tr>
+                    <tr><td>Lifecycle</td><td>initialize(), activate(), deactivate(), dispose()</td></tr>
+                    <tr><td>State</td><td>Status, Health, Readiness, Availability</td></tr>
+                    <tr><td>Composition</td><td>Area, Region, Capability Binding</td></tr>
+                    <tr><td>Panels</td><td>Panel contract, registry, manager, runtime</td></tr>
+                    <tr><td>Layout</td><td>Layout contract, registry, manager, runtime</td></tr>
+                    <tr><td>Docking</td><td>Dock node, position, registry, manager, runtime</td></tr>
+                    <tr><td>Persistence</td><td>Workspace persistence contract, registry, manager, runtime, service</td></tr>
+                    <tr><td>Recovery</td><td>Workspace recovery service, validator, platform integration</td></tr>
+                    <tr><td>Switching</td><td>Workspace switching service, validator, platform integration</td></tr>
+                    <tr><td>Coordination</td><td>Workspace coordination service, validator, platform integration</td></tr>
+                    <tr><td>Diagnostics</td><td>Workspace diagnostics service, validator, platform integration</td></tr>
+                    <tr><td>Multiplicity</td><td>Workspace multiplicity service, validator, platform integration</td></tr>
+                    <tr><td>Shell Integration</td><td>Workspace shell integration service, validator, platform integration</td></tr>
+                    <tr><td>Behavioral Validation</td><td>Workspace behavioral validation service, validator</td></tr>
+                    <tr><td>Certification</td><td>Workspace certification service, validator, platform integration</td></tr>
+                    <tr><td>Runtime</td><td>Workspace runtime, orchestrator</td></tr>
+                </tbody>
+            </table>
+            <h3>Dependency Flow</h3>
+            <pre>Experience → Workspace → Capability → Provider → Foundation</pre>
+            <h3>Runtime Orchestration</h3>
+            <pre>Workspace Runtime Orchestrator → Workspace Runtime → Workspace → Panels → Layout → Docking</pre>
+        </section>
+
+        <section id="sec-04" class="section">
+            <h2><span class="section-number">04</span> Ownership</h2>
+            <table>
+                <thead><tr><th>Component</th><th>Owner</th><th>Repository Path</th></tr></thead>
+                <tbody>
+                    <tr><td>Workspace Foundation</td><td>Workspace Platform Team</td><td>src/workspaces/contracts/, models/, registry/, manager/</td></tr>
+                    <tr><td>Workspace Lifecycle</td><td>Workspace Platform Team</td><td>src/workspaces/lifecycle/</td></tr>
+                    <tr><td>Workspace State</td><td>Workspace Platform Team</td><td>src/workspaces/state/</td></tr>
+                    <tr><td>Workspace Composition</td><td>Workspace Platform Team</td><td>src/workspaces/composition/</td></tr>
+                    <tr><td>Panel Platform</td><td>Workspace Platform Team</td><td>src/workspaces/panels/</td></tr>
+                    <tr><td>Layout Platform</td><td>Workspace Platform Team</td><td>src/workspaces/layout/</td></tr>
+                    <tr><td>Docking Platform</td><td>Workspace Platform Team</td><td>src/workspaces/docking/</td></tr>
+                    <tr><td>Persistence Platform</td><td>Workspace Platform Team</td><td>src/workspaces/persistence/</td></tr>
+                    <tr><td>Recovery Platform</td><td>Workspace Platform Team</td><td>src/workspaces/recovery/</td></tr>
+                    <tr><td>Switching Platform</td><td>Workspace Platform Team</td><td>src/workspaces/switching/</td></tr>
+                    <tr><td>Coordination Platform</td><td>Workspace Platform Team</td><td>src/workspaces/coordination/</td></tr>
+                    <tr><td>Diagnostics Platform</td><td>Workspace Platform Team</td><td>src/workspaces/diagnostics/</td></tr>
+                    <tr><td>Multiplicity Platform</td><td>Workspace Platform Team</td><td>src/workspaces/multiplicity/</td></tr>
+                    <tr><td>Shell Integration</td><td>Workspace Platform Team</td><td>src/workspaces/shell-integration/</td></tr>
+                    <tr><td>Behavioral Validation</td><td>Workspace Platform Team</td><td>src/workspaces/behavioral-validation/</td></tr>
+                    <tr><td>Certification</td><td>Workspace Platform Team</td><td>src/workspaces/certification/</td></tr>
+                    <tr><td>Runtime</td><td>Workspace Platform Team</td><td>src/workspaces/runtime/</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="sec-05" class="section">
+            <h2><span class="section-number">05</span> Responsibilities</h2>
+            <table>
+                <thead><tr><th>Subsystem</th><th>Primary Responsibility</th></tr></thead>
+                <tbody>
+                    <tr><td>Foundation</td><td>Workspace identity, registration, discovery, management</td></tr>
+                    <tr><td>Lifecycle</td><td>Deterministic operational progression</td></tr>
+                    <tr><td>State</td><td>Operational status, health, readiness, availability</td></tr>
+                    <tr><td>Composition</td><td>Workspace area, region, capability binding</td></tr>
+                    <tr><td>Panels</td><td>Panel contract, registry, manager, runtime</td></tr>
+                    <tr><td>Layout</td><td>Layout contract, registry, manager, runtime</td></tr>
+                    <tr><td>Docking</td><td>Dock node, position, registry, manager, runtime</td></tr>
+                    <tr><td>Persistence</td><td>Workspace persistence contract, registry, manager, runtime, service</td></tr>
+                    <tr><td>Recovery</td><td>Workspace recovery service, validator, platform integration</td></tr>
+                    <tr><td>Switching</td><td>Workspace switching service, validator, platform integration</td></tr>
+                    <tr><td>Coordination</td><td>Workspace coordination service, validator, platform integration</td></tr>
+                    <tr><td>Diagnostics</td><td>Workspace diagnostics service, validator, platform integration</td></tr>
+                    <tr><td>Multiplicity</td><td>Workspace multiplicity service, validator, platform integration</td></tr>
+                    <tr><td>Shell Integration</td><td>Workspace shell integration service, validator, platform integration</td></tr>
+                    <tr><td>Behavioral Validation</td><td>Workspace behavioral validation service, validator</td></tr>
+                    <tr><td>Certification</td><td>Workspace certification service, validator, platform integration</td></tr>
+                    <tr><td>Runtime</td><td>Workspace runtime, orchestrator</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="sec-06" class="section">
+            <h2><span class="section-number">06</span> Dependencies</h2>
+            <table>
+                <thead><tr><th>Dependency</th><th>Type</th><th>Purpose</th></tr></thead>
+                <tbody>
+                    <tr><td>Phase‑01 Provider Platform</td><td>Internal</td><td>Provider contracts, runtime, lifecycle, state</td></tr>
+                    <tr><td>Phase‑02 Capability Platform</td><td>Internal</td><td>Capability contracts, registry, manager, runtime</td></tr>
+                    <tr><td>Phase‑03 Cognitive Platform</td><td>Internal</td><td>Cognitive workspace foundation</td></tr>
+                    <tr><td>Phase‑04 Workspace Foundation</td><td>Internal</td><td>Workspace foundation, runtime, infrastructure</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="sec-07" class="section">
+            <h2><span class="section-number">07</span> Contracts</h2>
+            <details>
+                <summary>WorkspaceContract</summary>
+                <div class="content">
+export interface WorkspaceContract {
+    id: string;
+    name: string;
+    enabled: boolean;
+}
+                </div>
+            </details>
+            <details>
+                <summary>PanelContract</summary>
+                <div class="content">
+export interface PanelContract {
+    id: string;
+    title: string;
+    capabilityId: string;
+    regionId: string;
+}
+                </div>
+            </details>
+            <details>
+                <summary>LayoutContract</summary>
+                <div class="content">
+export interface LayoutContract {
+    id: string;
+    workspaceId: string;
+    panels: PanelContract[];
+}
+                </div>
+            </details>
+            <details>
+                <summary>DockNodeContract</summary>
+                <div class="content">
+export interface DockNodeContract {
+    id: string;
+    panelId: string;
+    position: DockPosition;
+}
+                </div>
+            </details>
+            <details>
+                <summary>WorkspacePersistenceContract</summary>
+                <div class="content">
+export interface WorkspacePersistenceContract {
+    id: string;
+    workspaceId: string;
+    snapshot: unknown;
+    version: string;
+}
+                </div>
+            </details>
+        </section>
+
+        <section id="sec-08" class="section">
+            <h2><span class="section-number">08</span> Interfaces</h2>
+            <table>
+                <thead><tr><th>Interface</th><th>File</th><th>Purpose</th></tr></thead>
+                <tbody>
+                    <tr><td><code>WorkspaceManager</code></td><td>src/workspaces/manager/workspace-manager.ts</td><td>Workspace orchestration</td></tr>
+                    <tr><td><code>WorkspaceRegistry</code></td><td>src/workspaces/registry/workspace-registry.ts</td><td>Workspace storage</td></tr>
+                    <tr><td><code>WorkspaceRuntime</code></td><td>src/workspaces/runtime/workspace-runtime.ts</td><td>Workspace execution</td></tr>
+                    <tr><td><code>WorkspaceRuntimeOrchestrator</code></td><td>src/workspaces/runtime/workspace-runtime-orchestrator.ts</td><td>Runtime coordination</td></tr>
+                    <tr><td><code>PanelManager</code></td><td>src/workspaces/panels/panel-manager.ts</td><td>Panel orchestration</td></tr>
+                    <tr><td><code>PanelRegistry</code></td><td>src/workspaces/panels/panel-registry.ts</td><td>Panel storage</td></tr>
+                    <tr><td><code>LayoutManager</code></td><td>src/workspaces/layout/layout-manager.ts</td><td>Layout orchestration</td></tr>
+                    <tr><td><code>DockManager</code></td><td>src/workspaces/docking/dock-manager.ts</td><td>Docking orchestration</td></tr>
+                    <tr><td><code>WorkspacePersistenceManager</code></td><td>src/workspaces/persistence/workspace-persistence-manager.ts</td><td>Persistence orchestration</td></tr>
+                    <tr><td><code>WorkspaceSwitchingService</code></td><td>src/workspaces/switching/services/workspace-switching-service.ts</td><td>Workspace switching</td></tr>
+                    <tr><td><code>WorkspaceRecoveryService</code></td><td>src/workspaces/recovery/services/workspace-recovery-service.ts</td><td>Workspace recovery</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="sec-09" class="section">
+            <h2><span class="section-number">09</span> Runtime</h2>
+            <table>
+                <thead><tr><th>Runtime Component</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td>WorkspaceRuntime</td><td>Main workspace execution</td></tr>
+                    <tr><td>WorkspaceRuntimeOrchestrator</td><td>Runtime coordination</td></tr>
+                    <tr><td>PanelRuntime</td><td>Panel execution</td></tr>
+                    <tr><td>LayoutRuntime</td><td>Layout execution</td></tr>
+                    <tr><td>DockRuntime</td><td>Docking execution</td></tr>
+                    <tr><td>WorkspacePersistenceRuntime</td><td>Persistence execution</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="sec-10" class="section">
+            <h2><span class="section-number">10</span> Public API</h2>
+            <p>All exports from <code>src/workspaces/index.ts</code>:</p>
+            <pre>
+export * from "./contracts";
+export * from "./models";
+export * from "./registry";
+export * from "./manager";
+export * from "./runtime";
+export * from "./lifecycle";
+export * from "./state";
+export * from "./composition";
+export * from "./panels";
+export * from "./layout";
+export * from "./docking";
+export * from "./switching";
+export * from "./persistence";
+export * from "./recovery";
+export * from "./shell-integration";
+export * from "./coordination";
+export * from "./diagnostics";
+export * from "./multiplicity";
+export * from "./behavioral-validation";
+export * from "./final-validation";
+export * from "./certification";
+            </pre>
+        </section>
+
+        <section id="sec-11" class="section">
+            <h2><span class="section-number">11</span> Components</h2>
+            <p><em>Phase‑06 is a pure infrastructure layer; no UI components are provided. Workspaces, panels, layouts, and docking are consumed programmatically.</em></p>
+            <p>All subsystems are exposed through the public API.</p>
+        </section>
+
+        <section id="sec-12" class="section">
+            <h2><span class="section-number">12</span> File Inventory</h2>
+            <p><strong>Total:</strong> 127 files under <code>src/workspaces/</code></p>
+            <details>
+                <summary>Show / Hide full file list (127 files)</summary>
+                <div class="content">
+src/workspaces/behavioral-validation/index.ts
+src/workspaces/behavioral-validation/integration/index.ts
+src/workspaces/behavioral-validation/integration/workspace-behavioral-validation-platform.ts
+src/workspaces/behavioral-validation/services/index.ts
+src/workspaces/behavioral-validation/services/workspace-behavioral-validation-service.ts
+src/workspaces/behavioral-validation/validation/index.ts
+src/workspaces/behavioral-validation/validation/workspace-behavioral-validator.ts
+src/workspaces/certification/index.ts
+src/workspaces/certification/integration/index.ts
+src/workspaces/certification/integration/workspace-certification-platform.ts
+src/workspaces/certification/services/index.ts
+src/workspaces/certification/services/workspace-certification-service.ts
+src/workspaces/certification/validation/index.ts
+src/workspaces/certification/validation/workspace-certification-validator.ts
+src/workspaces/composition/index.ts
+src/workspaces/composition/workspace-area.ts
+src/workspaces/composition/workspace-capability-binding.ts
+src/workspaces/composition/workspace-composition.ts
+src/workspaces/composition/workspace-region.ts
+src/workspaces/contracts/index.ts
+src/workspaces/contracts/workspace-contract.ts
+src/workspaces/coordination/index.ts
+src/workspaces/coordination/integration/index.ts
+src/workspaces/coordination/integration/workspace-coordination-platform.ts
+src/workspaces/coordination/services/index.ts
+src/workspaces/coordination/services/workspace-coordination-service.ts
+src/workspaces/coordination/validation/index.ts
+src/workspaces/coordination/validation/workspace-coordination-validator.ts
+src/workspaces/diagnostics/index.ts
+src/workspaces/diagnostics/integration/index.ts
+src/workspaces/diagnostics/integration/workspace-diagnostics-platform.ts
+src/workspaces/diagnostics/services/index.ts
+src/workspaces/diagnostics/services/workspace-diagnostics-service.ts
+src/workspaces/diagnostics/validation/index.ts
+src/workspaces/diagnostics/validation/workspace-diagnostics-validator.ts
+src/workspaces/docking/dock-manager.ts
+src/workspaces/docking/dock-node-contract.ts
+src/workspaces/docking/dock-node.ts
+src/workspaces/docking/dock-position.ts
+src/workspaces/docking/dock-registry.ts
+src/workspaces/docking/dock-runtime.ts
+src/workspaces/docking/index.ts
+src/workspaces/final-validation/index.ts
+src/workspaces/final-validation/integration/index.ts
+src/workspaces/final-validation/integration/workspace-final-validation-platform.ts
+src/workspaces/final-validation/services/index.ts
+src/workspaces/final-validation/services/workspace-final-validation-service.ts
+src/workspaces/final-validation/validation/index.ts
+src/workspaces/final-validation/validation/workspace-final-validator.ts
+src/workspaces/layout/index.ts
+src/workspaces/layout/layout-contract.ts
+src/workspaces/layout/layout-manager.ts
+src/workspaces/layout/layout-registry.ts
+src/workspaces/layout/layout-runtime.ts
+src/workspaces/layout/layout.ts
+src/workspaces/lifecycle/default-workspace-lifecycle.ts
+src/workspaces/lifecycle/index.ts
+src/workspaces/lifecycle/workspace-lifecycle.ts
+src/workspaces/manager/index.ts
+src/workspaces/manager/workspace-manager.ts
+src/workspaces/models/index.ts
+src/workspaces/models/workspace.ts
+src/workspaces/multiplicity/index.ts
+src/workspaces/multiplicity/integration/index.ts
+src/workspaces/multiplicity/integration/workspace-multiplicity-platform.ts
+src/workspaces/multiplicity/services/index.ts
+src/workspaces/multiplicity/services/workspace-multiplicity-service.ts
+src/workspaces/multiplicity/validation/index.ts
+src/workspaces/multiplicity/validation/workspace-multiplicity-validator.ts
+src/workspaces/panels/index.ts
+src/workspaces/panels/panel-contract.ts
+src/workspaces/panels/panel-manager.ts
+src/workspaces/panels/panel-registry.ts
+src/workspaces/panels/panel-runtime.ts
+src/workspaces/panels/panel.ts
+src/workspaces/persistence/index.ts
+src/workspaces/persistence/integration/index.ts
+src/workspaces/persistence/integration/workspace-persistence-platform-integration.ts
+src/workspaces/persistence/orchestration/index.ts
+src/workspaces/persistence/orchestration/integration/index.ts
+src/workspaces/persistence/orchestration/integration/workspace-persistence-orchestration.ts
+src/workspaces/persistence/orchestration/services/index.ts
+src/workspaces/persistence/orchestration/services/workspace-persistence-orchestration-service.ts
+src/workspaces/persistence/orchestration/validation/index.ts
+src/workspaces/persistence/orchestration/validation/workspace-persistence-orchestration-validator.ts
+src/workspaces/persistence/services/index.ts
+src/workspaces/persistence/services/workspace-persistence-service.ts
+src/workspaces/persistence/validation/index.ts
+src/workspaces/persistence/validation/workspace-persistence-validator.ts
+src/workspaces/persistence/workspace-persistence-contract.ts
+src/workspaces/persistence/workspace-persistence-manager.ts
+src/workspaces/persistence/workspace-persistence-registry.ts
+src/workspaces/persistence/workspace-persistence-runtime.ts
+src/workspaces/persistence/workspace-persistence.ts
+src/workspaces/recovery/index.ts
+src/workspaces/recovery/integration/index.ts
+src/workspaces/recovery/integration/workspace-recovery-platform.ts
+src/workspaces/recovery/services/index.ts
+src/workspaces/recovery/services/workspace-recovery-service.ts
+src/workspaces/recovery/validation/index.ts
+src/workspaces/recovery/validation/workspace-recovery-validator.ts
+src/workspaces/registry/index.ts
+src/workspaces/registry/workspace-registry.ts
+src/workspaces/runtime/index.ts
+src/workspaces/runtime/workspace-runtime-orchestrator.ts
+src/workspaces/runtime/workspace-runtime.ts
+src/workspaces/shell-integration/index.ts
+src/workspaces/shell-integration/integration/index.ts
+src/workspaces/shell-integration/integration/workspace-shell-platform.ts
+src/workspaces/shell-integration/services/index.ts
+src/workspaces/shell-integration/services/workspace-shell-integration-service.ts
+src/workspaces/shell-integration/validation/index.ts
+src/workspaces/shell-integration/validation/workspace-shell-validator.ts
+src/workspaces/state/index.ts
+src/workspaces/state/workspace-availability.ts
+src/workspaces/state/workspace-health.ts
+src/workspaces/state/workspace-readiness.ts
+src/workspaces/state/workspace-state.ts
+src/workspaces/state/workspace-status.ts
+src/workspaces/switching/index.ts
+src/workspaces/switching/integration/index.ts
+src/workspaces/switching/integration/workspace-switching-platform-integration.ts
+src/workspaces/switching/services/index.ts
+src/workspaces/switching/services/workspace-switching-service.ts
+src/workspaces/switching/validation/index.ts
+src/workspaces/switching/validation/workspace-switching-validator.ts
+src/workspaces/index.ts
+                </div>
+            </details>
+        </section>
+
+        <section id="sec-13" class="section">
+            <h2><span class="section-number">13</span> Validation</h2>
+            <table>
+                <thead><tr><th>Validation Type</th><th>Status</th></tr></thead>
+                <tbody>
+                    <tr><td>TypeScript Compilation (tsc --noEmit)</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Production Build (pnpm build)</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Repository Structure</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Architecture Compliance</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Dependency Analysis (no circular)</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Workspace Foundation</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Workspace Lifecycle</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Workspace State</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Workspace Composition</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Panel Platform</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Layout Platform</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Docking Platform</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Persistence Platform</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Recovery Platform</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Switching Platform</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Coordination Platform</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Diagnostics Platform</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Multiplicity Platform</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Shell Integration</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Behavioral Validation</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Certification</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Runtime Orchestration</td><td><span class="text-success">PASS</span></td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="sec-14" class="section">
+            <h2><span class="section-number">14</span> Browser Validation</h2>
+            <p>Phase‑06 is a pure infrastructure layer; no visible UI changes are introduced. Workspace infrastructure is ready for consumption by Experience and Application layers.</p>
+            <table>
+                <thead><tr><th>Browser</th><th>Status</th></tr></thead>
+                <tbody>
+                    <tr><td>Chromium (latest)</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Firefox (latest)</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>WebKit (latest)</td><td><span class="text-success">PASS</span></td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="sec-15" class="section">
+            <h2><span class="section-number">15</span> Repository Tree</h2>
+            <details>
+                <summary>Show / Hide tree</summary>
+                <div class="content">
+src/workspaces
+├── behavioral-validation
+│   ├── integration
+│   │   ├── index.ts
+│   │   └── workspace-behavioral-validation-platform.ts
+│   ├── services
+│   │   ├── index.ts
+│   │   └── workspace-behavioral-validation-service.ts
+│   ├── validation
+│   │   ├── index.ts
+│   │   └── workspace-behavioral-validator.ts
+│   └── index.ts
+├── certification
+│   ├── integration
+│   │   ├── index.ts
+│   │   └── workspace-certification-platform.ts
+│   ├── services
+│   │   ├── index.ts
+│   │   └── workspace-certification-service.ts
+│   ├── validation
+│   │   ├── index.ts
+│   │   └── workspace-certification-validator.ts
+│   └── index.ts
+├── composition
+│   ├── index.ts
+│   ├── workspace-area.ts
+│   ├── workspace-capability-binding.ts
+│   ├── workspace-composition.ts
+│   └── workspace-region.ts
+├── contracts
+│   ├── index.ts
+│   └── workspace-contract.ts
+├── coordination
+│   ├── integration
+│   │   ├── index.ts
+│   │   └── workspace-coordination-platform.ts
+│   ├── services
+│   │   ├── index.ts
+│   │   └── workspace-coordination-service.ts
+│   ├── validation
+│   │   ├── index.ts
+│   │   └── workspace-coordination-validator.ts
+│   └── index.ts
+├── diagnostics
+│   ├── integration
+│   │   ├── index.ts
+│   │   └── workspace-diagnostics-platform.ts
+│   ├── services
+│   │   ├── index.ts
+│   │   └── workspace-diagnostics-service.ts
+│   ├── validation
+│   │   ├── index.ts
+│   │   └── workspace-diagnostics-validator.ts
+│   └── index.ts
+├── docking
+│   ├── dock-manager.ts
+│   ├── dock-node-contract.ts
+│   ├── dock-node.ts
+│   ├── dock-position.ts
+│   ├── dock-registry.ts
+│   ├── dock-runtime.ts
+│   └── index.ts
+├── final-validation
+│   ├── integration
+│   │   ├── index.ts
+│   │   └── workspace-final-validation-platform.ts
+│   ├── services
+│   │   ├── index.ts
+│   │   └── workspace-final-validation-service.ts
+│   ├── validation
+│   │   ├── index.ts
+│   │   └── workspace-final-validator.ts
+│   └── index.ts
+├── layout
+│   ├── index.ts
+│   ├── layout-contract.ts
+│   ├── layout-manager.ts
+│   ├── layout-registry.ts
+│   ├── layout-runtime.ts
+│   └── layout.ts
+├── lifecycle
+│   ├── default-workspace-lifecycle.ts
+│   ├── index.ts
+│   └── workspace-lifecycle.ts
+├── manager
+│   ├── index.ts
+│   └── workspace-manager.ts
+├── models
+│   ├── index.ts
+│   └── workspace.ts
+├── multiplicity
+│   ├── integration
+│   │   ├── index.ts
+│   │   └── workspace-multiplicity-platform.ts
+│   ├── services
+│   │   ├── index.ts
+│   │   └── workspace-multiplicity-service.ts
+│   ├── validation
+│   │   ├── index.ts
+│   │   └── workspace-multiplicity-validator.ts
+│   └── index.ts
+├── panels
+│   ├── index.ts
+│   ├── panel-contract.ts
+│   ├── panel-manager.ts
+│   ├── panel-registry.ts
+│   ├── panel-runtime.ts
+│   └── panel.ts
+├── persistence
+│   ├── integration
+│   │   ├── index.ts
+│   │   └── workspace-persistence-platform-integration.ts
+│   ├── orchestration
+│   │   ├── integration
+│   │   │   ├── index.ts
+│   │   │   └── workspace-persistence-orchestration.ts
+│   │   ├── services
+│   │   │   ├── index.ts
+│   │   │   └── workspace-persistence-orchestration-service.ts
+│   │   ├── validation
+│   │   │   ├── index.ts
+│   │   │   └── workspace-persistence-orchestration-validator.ts
+│   │   └── index.ts
+│   ├── services
+│   │   ├── index.ts
+│   │   └── workspace-persistence-service.ts
+│   ├── validation
+│   │   ├── index.ts
+│   │   └── workspace-persistence-validator.ts
+│   ├── index.ts
+│   ├── workspace-persistence-contract.ts
+│   ├── workspace-persistence-manager.ts
+│   ├── workspace-persistence-registry.ts
+│   ├── workspace-persistence-runtime.ts
+│   └── workspace-persistence.ts
+├── recovery
+│   ├── integration
+│   │   ├── index.ts
+│   │   └── workspace-recovery-platform.ts
+│   ├── services
+│   │   ├── index.ts
+│   │   └── workspace-recovery-service.ts
+│   ├── validation
+│   │   ├── index.ts
+│   │   └── workspace-recovery-validator.ts
+│   └── index.ts
+├── registry
+│   ├── index.ts
+│   └── workspace-registry.ts
+├── runtime
+│   ├── index.ts
+│   ├── workspace-runtime-orchestrator.ts
+│   └── workspace-runtime.ts
+├── shell-integration
+│   ├── integration
+│   │   ├── index.ts
+│   │   └── workspace-shell-platform.ts
+│   ├── services
+│   │   ├── index.ts
+│   │   └── workspace-shell-integration-service.ts
+│   ├── validation
+│   │   ├── index.ts
+│   │   └── workspace-shell-validator.ts
+│   └── index.ts
+├── state
+│   ├── index.ts
+│   ├── workspace-availability.ts
+│   ├── workspace-health.ts
+│   ├── workspace-readiness.ts
+│   ├── workspace-state.ts
+│   └── workspace-status.ts
+├── switching
+│   ├── integration
+│   │   ├── index.ts
+│   │   └── workspace-switching-platform-integration.ts
+│   ├── services
+│   │   ├── index.ts
+│   │   └── workspace-switching-service.ts
+│   ├── validation
+│   │   ├── index.ts
+│   │   └── workspace-switching-validator.ts
+│   └── index.ts
+└── index.ts
+                </div>
+            </details>
+        </section>
+
+        <section id="sec-16" class="section">
+            <h2><span class="section-number">16</span> Build Output</h2>
+            <pre>
+> @corei/corei-os@1.0.0 build
+> tsc -b && vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 2374 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                     0.43 kB │ gzip:   0.29 kB
+dist/assets/index-BSSyXHgG.css    134.51 kB │ gzip:  13.40 kB
+dist/assets/index-CHQ2bGpX.js   1,028.40 kB │ gzip: 257.58 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 4.08s
+            </pre>
+        </section>
+
+        <section id="sec-17" class="section">
+            <h2><span class="section-number">17</span> Certification</h2>
+            <table>
+                <thead><tr><th>Criteria</th><th>Status</th></tr></thead>
+                <tbody>
+                    <tr><td>Architecture Review</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Repository Audit</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Integration Test</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Browser Validation</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Documentation Completeness</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Workspace Platform Completeness</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Institutional Sign‑off</td><td><span class="text-success">PASS</span></td></tr>
+                </tbody>
+            </table>
+            <p><strong>Status:</strong> <span class="badge success">CERTIFIED</span></p>
+        </section>
+
+        <section id="sec-18" class="section">
+            <h2><span class="section-number">18</span> References</h2>
+            <ul>
+                <li><a href="#">DOC-11: COREI Execution Constitution</a></li>
+                <li><a href="#">DOC-10: Stage‑25 Phase‑05-06-07-08-09 Blueprint</a></li>
+                <li><a href="#">COREI_Phase06_Reference_Enhanced.html</a></li>
+                <li><a href="#">COREI_Continuity_Handover.md</a></li>
+            </ul>
+        </section>
+
+        <section id="sec-19" class="section">
+            <h2><span class="section-number">19</span> Appendix</h2>
+            <h3>A. Workspace Subsystem Counts</h3>
+            <table>
+                <thead><tr><th>Subsystem</th><th>Files</th></tr></thead>
+                <tbody>
+                    <tr><td>Behavioral Validation</td><td>7</td></tr>
+                    <tr><td>Certification</td><td>7</td></tr>
+                    <tr><td>Composition</td><td>5</td></tr>
+                    <tr><td>Coordination</td><td>7</td></tr>
+                    <tr><td>Diagnostics</td><td>7</td></tr>
+                    <tr><td>Docking</td><td>7</td></tr>
+                    <tr><td>Final Validation</td><td>7</td></tr>
+                    <tr><td>Layout</td><td>6</td></tr>
+                    <tr><td>Lifecycle</td><td>3</td></tr>
+                    <tr><td>Manager</td><td>2</td></tr>
+                    <tr><td>Models</td><td>2</td></tr>
+                    <tr><td>Multiplicity</td><td>7</td></tr>
+                    <tr><td>Panels</td><td>6</td></tr>
+                    <tr><td>Persistence</td><td>15</td></tr>
+                    <tr><td>Recovery</td><td>7</td></tr>
+                    <tr><td>Registry</td><td>2</td></tr>
+                    <tr><td>Runtime</td><td>3</td></tr>
+                    <tr><td>Shell Integration</td><td>7</td></tr>
+                    <tr><td>State</td><td>6</td></tr>
+                    <tr><td>Switching</td><td>7</td></tr>
+                    <tr><td>Contracts</td><td>2</td></tr>
+                </tbody>
+            </table>
+            <h3>B. Version History</h3>
+            <table>
+                <thead><tr><th>Version</th><th>Date</th><th>Changes</th></tr></thead>
+                <tbody>
+                    <tr><td>25.06.0</td><td>2026-08-04</td><td>Initial certification</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <div style="text-align:center;font-size:11px;color:#6E7883;border-top:1px solid #28303C;padding-top:1rem;margin-top:2rem;">
+            <p>COREI Stage‑25 Phase‑06 Reference &bull; Generated 2026-08-08 &bull; Authoritative</p>
+        </div>
+
+    </main>
+
+</body>
+</html>

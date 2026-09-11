@@ -1,0 +1,2012 @@
+/**
+ * =============================================================================
+ * COREI ORBIT
+ * =============================================================================
+ *
+ * Component : Broker Providers
+ * Domain    : Trading / Broker Intelligence
+ *
+ * Responsibility
+ * --------------
+ * Provider registry and provider metadata inspection.
+ *
+ * Boundary
+ * --------
+ * This component manages provider presentation and provider registration only.
+ *
+ * It does NOT own:
+ * - broker accounts
+ * - credentials
+ * - sessions
+ * - connectivity
+ * - execution
+ * - routing
+ * - market data
+ *
+ * Secrets are never entered or displayed here.
+ *
+ * =============================================================================
+ */
+
+import React, { useMemo, useState } from 'react';
+import { toast } from 'sonner';
+
+import { useBrokerIntelligenceStore } from '../../../../store/brokerIntelligenceStore';
+import { brokerIntelligenceService } from '../../../../services/brokerIntelligenceService';
+
+import './BrokerProviders.css';
+
+type ProviderType =
+  | 'BROKER'
+  | 'FEEDER'
+  | 'EXCHANGE';
+
+type ProviderEnvironment =
+  | 'LIVE'
+  | 'PAPER'
+  | 'SANDBOX'
+  | 'TEST';
+
+type ProviderStatusTone =
+  | 'operational'
+  | 'warning'
+  | 'critical'
+  | 'neutral';
+
+interface ProviderFormData {
+  id: string;
+  name: string;
+  adapterName: string;
+  adapterVersion: string;
+  type: ProviderType;
+  region: string;
+  environment: ProviderEnvironment;
+  enabled: boolean;
+}
+
+const INITIAL_FORM: ProviderFormData = {
+  id: '',
+  name: '',
+  adapterName: 'MockAdapter',
+  adapterVersion: '1.0.0',
+  type: 'BROKER',
+  region: 'IN',
+  environment: 'PAPER',
+  enabled: true,
+};
+
+const ADAPTER_OPTIONS = [
+  {
+    value: 'MockAdapter',
+    label: 'MockAdapter',
+  },
+  {
+    value: 'TestAdapter',
+    label: 'TestAdapter',
+  },
+  {
+    value: 'UpstoxAdapter',
+    label: 'UpstoxAdapter',
+  },
+  {
+    value: 'Mt5DataAdapter',
+    label: 'Mt5DataAdapter',
+  },
+];
+
+const TYPE_OPTIONS: ProviderType[] = [
+  'BROKER',
+  'FEEDER',
+  'EXCHANGE',
+];
+
+const ENVIRONMENT_OPTIONS: ProviderEnvironment[] = [
+  'LIVE',
+  'PAPER',
+  'SANDBOX',
+  'TEST',
+];
+
+const normalize = (value: unknown): string =>
+  String(value ?? '').trim();
+
+const upper = (value: unknown): string =>
+  normalize(value).toUpperCase();
+
+const displayValue = (
+  value: unknown,
+  fallback = 'UNKNOWN',
+): string => {
+  const normalized = normalize(value);
+
+  return normalized.length > 0
+    ? normalized
+    : fallback;
+};
+
+const statusTone = (
+  value: unknown,
+): ProviderStatusTone => {
+  const state = upper(value);
+
+  if (
+    [
+      'HEALTHY',
+      'READY',
+      'ACTIVE',
+      'CONNECTED',
+      'OPERATIONAL',
+      'ENABLED',
+    ].includes(state)
+  ) {
+    return 'operational';
+  }
+
+  if (
+    [
+      'DEGRADED',
+      'WARNING',
+      'ATTENTION',
+      'PENDING',
+    ].includes(state)
+  ) {
+    return 'warning';
+  }
+
+  if (
+    [
+      'ERROR',
+      'FAILED',
+      'CRITICAL',
+      'DISCONNECTED',
+      'DISABLED',
+    ].includes(state)
+  ) {
+    return 'critical';
+  }
+
+  return 'neutral';
+};
+
+export const BrokerProviders: React.FC = () => {
+  const providers = useBrokerIntelligenceStore(
+    (state) => state.providers,
+  );
+
+  const accounts = useBrokerIntelligenceStore(
+    (state) => state.accounts,
+  );
+
+  const loading = useBrokerIntelligenceStore(
+    (state) => state.loading,
+  );
+
+  const error = useBrokerIntelligenceStore(
+    (state) => state.error,
+  );
+
+  const [selectedProviderId, setSelectedProviderId] =
+    useState<string | null>(null);
+
+  const [isAddModalOpen, setIsAddModalOpen] =
+    useState(false);
+
+  const [isSubmitting, setIsSubmitting] =
+    useState(false);
+
+  const [query, setQuery] = useState('');
+
+  const [typeFilter, setTypeFilter] =
+    useState<'ALL' | ProviderType>('ALL');
+
+  const [environmentFilter, setEnvironmentFilter] =
+    useState<'ALL' | ProviderEnvironment>('ALL');
+
+  const [statusFilter, setStatusFilter] =
+    useState<'ALL' | 'ENABLED' | 'DISABLED'>('ALL');
+
+  const [formData, setFormData] =
+    useState<ProviderFormData>(INITIAL_FORM);
+
+  const [isInspectorEditing, setIsInspectorEditing] =
+    useState(false);
+
+  const [isInspectorSaving, setIsInspectorSaving] =
+    useState(false);
+
+  const [inspectorFormData, setInspectorFormData] =
+    useState<ProviderFormData>(INITIAL_FORM);
+
+  const [inspectorBaseline, setInspectorBaseline] =
+    useState<ProviderFormData>(INITIAL_FORM);
+
+  const normalizedProviders = useMemo(
+    () =>
+      Array.isArray(providers)
+        ? providers
+        : [],
+    [providers],
+  );
+
+  const normalizedAccounts = useMemo(
+    () =>
+      Array.isArray(accounts)
+        ? accounts
+        : [],
+    [accounts],
+  );
+
+  const providerAccountCount = (
+    provider: any,
+  ): number => {
+    const providerId = displayValue(
+      provider?.id,
+      '',
+    );
+
+    if (!providerId) {
+      return 0;
+    }
+
+    const explicitCount = Number(
+      provider?.accountCount,
+    );
+
+    if (
+      Number.isFinite(explicitCount) &&
+      explicitCount >= 0
+    ) {
+      return explicitCount;
+    }
+
+    return normalizedAccounts.filter(
+      (account: any) =>
+        displayValue(
+          account?.brokerId ??
+            account?.broker_id ??
+            account?.broker,
+          '',
+        ) === providerId,
+    ).length;
+  };
+
+  const filteredProviders = useMemo(() => {
+    const search = query
+      .trim()
+      .toLowerCase();
+
+    return normalizedProviders.filter(
+      (provider: any) => {
+        const providerType = upper(
+          provider?.type,
+        );
+
+        const providerEnvironment = upper(
+          provider?.environment,
+        );
+
+        const providerEnabled =
+          provider?.enabled !== false;
+
+        const searchableText = [
+          provider?.id,
+          provider?.name,
+          provider?.adapterName,
+          provider?.adapter_name,
+          provider?.type,
+          provider?.region,
+          provider?.environment,
+          provider?.status,
+          provider?.state,
+          provider?.health,
+        ]
+          .map(normalize)
+          .join(' ')
+          .toLowerCase();
+
+        const matchesSearch =
+          !search ||
+          searchableText.includes(search);
+
+        const matchesType =
+          typeFilter === 'ALL' ||
+          providerType === typeFilter;
+
+        const matchesEnvironment =
+          environmentFilter === 'ALL' ||
+          providerEnvironment ===
+            environmentFilter;
+
+        const matchesStatus =
+          statusFilter === 'ALL' ||
+          (statusFilter === 'ENABLED'
+            ? providerEnabled
+            : !providerEnabled);
+
+        return (
+          matchesSearch &&
+          matchesType &&
+          matchesEnvironment &&
+          matchesStatus
+        );
+      },
+    );
+  }, [
+    normalizedProviders,
+    query,
+    typeFilter,
+    environmentFilter,
+    statusFilter,
+  ]);
+
+  const selectedProvider = useMemo(
+    () =>
+      normalizedProviders.find(
+        (provider: any) =>
+          displayValue(provider?.id, '') ===
+          selectedProviderId,
+      ) ?? null,
+    [
+      normalizedProviders,
+      selectedProviderId,
+    ],
+  );
+
+  const enabledCount = useMemo(
+    () =>
+      normalizedProviders.filter(
+        (provider: any) =>
+          provider?.enabled !== false,
+      ).length,
+    [normalizedProviders],
+  );
+
+  const disabledCount =
+    normalizedProviders.length -
+    enabledCount;
+
+  const healthyCount = useMemo(
+    () =>
+      normalizedProviders.filter(
+        (provider: any) =>
+          [
+            'HEALTHY',
+            'READY',
+            'ACTIVE',
+            'OPERATIONAL',
+          ].includes(
+            upper(
+              provider?.health ??
+                provider?.status ??
+                provider?.state,
+            ),
+          ),
+      ).length,
+    [normalizedProviders],
+  );
+
+  const buildInspectorForm = (
+    provider: any,
+  ): ProviderFormData => ({
+    id: displayValue(provider?.id, ''),
+    name: displayValue(provider?.name, ''),
+    adapterName: displayValue(
+      provider?.adapterName ??
+        provider?.adapter_name,
+      INITIAL_FORM.adapterName,
+    ),
+    adapterVersion: displayValue(
+      provider?.adapterVersion ??
+        provider?.adapter_version,
+      INITIAL_FORM.adapterVersion,
+    ),
+    type:
+      (upper(provider?.type) as ProviderType) ||
+      INITIAL_FORM.type,
+    region: displayValue(
+      provider?.region,
+      INITIAL_FORM.region,
+    ),
+    environment:
+      (upper(provider?.environment) as ProviderEnvironment) ||
+      INITIAL_FORM.environment,
+    enabled: provider?.enabled !== false,
+  });
+
+  const handleRefresh = async () => {
+    try {
+      await brokerIntelligenceService.fetchAll();
+
+      toast.success(
+        'Provider registry refreshed',
+      );
+    } catch (refreshError: any) {
+      toast.error(
+        `Provider refresh failed: ${
+          refreshError?.message ??
+          'Unknown error'
+        }`,
+      );
+    }
+  };
+
+  const openAddProvider = () => {
+    setFormData({
+      ...INITIAL_FORM,
+    });
+
+    setIsAddModalOpen(true);
+  };
+
+  const closeAddProvider = () => {
+    if (isSubmitting) {
+      return;
+    }
+
+    setIsAddModalOpen(false);
+
+    setFormData({
+      ...INITIAL_FORM,
+    });
+  };
+
+  const handleInputChange = (
+    event: React.ChangeEvent<
+      HTMLInputElement |
+        HTMLSelectElement
+    >,
+  ) => {
+    const {
+      name,
+      value,
+    } = event.target;
+
+    setFormData(
+      (current) => ({
+        ...current,
+        [name]: value,
+      }),
+    );
+  };
+
+  const handleEnabledChange = (
+    event: React.ChangeEvent<
+      HTMLInputElement
+    >,
+  ) => {
+    setFormData(
+      (current) => ({
+        ...current,
+        enabled: event.target.checked,
+      }),
+    );
+  };
+
+  const handleAddProvider = async (
+    event: React.FormEvent,
+  ) => {
+    event.preventDefault();
+
+    const id =
+      formData.id.trim();
+
+    const name =
+      formData.name.trim();
+
+    const adapterVersion =
+      formData.adapterVersion.trim();
+
+    const region =
+      formData.region.trim();
+
+    if (!id) {
+      toast.error(
+        'Provider ID is required.',
+      );
+      return;
+    }
+
+    if (!name) {
+      toast.error(
+        'Provider name is required.',
+      );
+      return;
+    }
+
+    if (!adapterVersion) {
+      toast.error(
+        'Adapter version is required.',
+      );
+      return;
+    }
+
+    if (!region) {
+      toast.error(
+        'Provider region is required.',
+      );
+      return;
+    }
+
+    const duplicate = normalizedProviders.some(
+      (provider: any) =>
+        displayValue(
+          provider?.id,
+          '',
+        ).toLowerCase() ===
+        id.toLowerCase(),
+    );
+
+    if (duplicate) {
+      toast.error(
+        `Provider ID "${id}" already exists.`,
+      );
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      await brokerIntelligenceService.addProvider(
+        {
+          id,
+          name,
+          adapterName:
+            formData.adapterName,
+          adapterVersion,
+          type: formData.type,
+          region,
+          environment:
+            formData.environment,
+          enabled:
+            formData.enabled,
+
+          /*
+           * Provider registration remains
+           * metadata-only.
+           *
+           * No credentials are accepted here.
+           * No secrets are sent to the UI/backend
+           * through this form.
+           */
+          metadata: {},
+        },
+      );
+
+      await brokerIntelligenceService.fetchAll();
+
+      setIsAddModalOpen(false);
+
+      setFormData({
+        ...INITIAL_FORM,
+      });
+
+      setSelectedProviderId(id);
+
+      toast.success(
+        `Provider "${name}" registered.`,
+      );
+    } catch (addError: any) {
+      toast.error(
+        `Provider registration failed: ${
+          addError?.message ??
+          'Unknown error'
+        }`,
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleRowSelect = (
+    provider: any,
+  ) => {
+    const id = displayValue(
+      provider?.id,
+      '',
+    );
+
+    if (!id) {
+      return;
+    }
+
+    const nextForm = buildInspectorForm(provider);
+
+    setSelectedProviderId(id);
+    setInspectorFormData(nextForm);
+    setInspectorBaseline(nextForm);
+    setIsInspectorEditing(false);
+    setIsInspectorSaving(false);
+  };
+
+  const cancelInspectorEdit = () => {
+    if (isInspectorSaving) {
+      return;
+    }
+
+    setInspectorFormData(inspectorBaseline);
+    setIsInspectorEditing(false);
+  };
+
+  const inspectorDirty =
+    JSON.stringify(inspectorFormData) !==
+    JSON.stringify(inspectorBaseline);
+
+  const handleInspectorInputChange = (
+    event: React.ChangeEvent<
+      HTMLInputElement |
+        HTMLSelectElement
+    >,
+  ) => {
+    const { name, value } = event.target;
+
+    setInspectorFormData((current) => ({
+      ...current,
+      [name]: value,
+    }));
+  };
+
+  const handleInspectorEnabledChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setInspectorFormData((current) => ({
+      ...current,
+      enabled: event.target.checked,
+    }));
+  };
+
+  const saveInspector = async () => {
+    if (!selectedProvider || !inspectorDirty) {
+      return;
+    }
+
+    const id = displayValue(
+      selectedProvider?.id,
+      '',
+    );
+
+    const name =
+      inspectorFormData.name.trim();
+
+    const adapterVersion =
+      inspectorFormData.adapterVersion.trim();
+
+    const region =
+      inspectorFormData.region.trim();
+
+    if (!id) {
+      toast.error('Provider ID is missing.');
+      return;
+    }
+
+    if (!name) {
+      toast.error('Provider name is required.');
+      return;
+    }
+
+    if (!adapterVersion) {
+      toast.error('Adapter version is required.');
+      return;
+    }
+
+    if (!region) {
+      toast.error('Provider region is required.');
+      return;
+    }
+
+    setIsInspectorSaving(true);
+
+    try {
+      await brokerIntelligenceService.addProvider({
+        id,
+        name,
+        adapterName:
+          inspectorFormData.adapterName,
+        adapterVersion,
+        type: inspectorFormData.type,
+        region,
+        environment:
+          inspectorFormData.environment,
+        enabled:
+          inspectorFormData.enabled,
+      });
+
+      await brokerIntelligenceService.fetchAll();
+
+      const refreshedProviders =
+        useBrokerIntelligenceStore.getState()
+          .providers;
+
+      const refreshedProvider =
+        refreshedProviders.find(
+          (provider: any) =>
+            displayValue(
+              provider?.id,
+              '',
+            ) === id,
+        );
+
+      const nextForm =
+        buildInspectorForm(
+          refreshedProvider ?? {
+            ...selectedProvider,
+            ...inspectorFormData,
+          },
+        );
+
+      setInspectorFormData(nextForm);
+      setInspectorBaseline(nextForm);
+      setIsInspectorEditing(false);
+
+      toast.success(
+        `Provider "${name}" updated.`,
+      );
+    } catch (saveError: any) {
+      toast.error(
+        `Provider update failed: ${
+          saveError?.message ??
+          'Unknown error'
+        }`,
+      );
+    } finally {
+      setIsInspectorSaving(false);
+    }
+  };
+
+
+  const clearFilters = () => {
+    setQuery('');
+    setTypeFilter('ALL');
+    setEnvironmentFilter('ALL');
+    setStatusFilter('ALL');
+  };
+
+  const selectedEnabled =
+    selectedProvider?.enabled !== false;
+
+  const selectedState =
+    selectedProvider?.state ??
+    selectedProvider?.status ??
+    'UNKNOWN';
+
+  const selectedHealth =
+    selectedProvider?.health ??
+    'UNKNOWN';
+
+  const selectedAccountCount =
+    selectedProvider
+      ? providerAccountCount(
+          selectedProvider,
+        )
+      : 0;
+
+  return (
+    <div className="bi-providers">
+      <section className="bi-providers-shell">
+        <header className="bi-providers-header">
+          <div className="bi-providers-heading">
+            <span className="bi-providers-eyebrow">
+              PROVIDER REGISTRY
+            </span>
+
+            <h2>
+              Institutional Broker Providers
+            </h2>
+
+            <p>
+              Registered broker, feeder and
+              exchange provider definitions.
+            </p>
+          </div>
+
+          <div className="bi-providers-actions">
+            <button
+              type="button"
+              className="bi-provider-button"
+              onClick={() =>
+                void handleRefresh()
+              }
+              disabled={loading}
+            >
+              {loading
+                ? 'REFRESHING'
+                : 'REFRESH'}
+            </button>
+
+            <button
+              type="button"
+              className="bi-provider-button bi-provider-button-primary"
+              onClick={openAddProvider}
+              disabled={isSubmitting}
+            >
+              ADD PROVIDER
+            </button>
+          </div>
+        </header>
+
+        <div className="bi-providers-summary">
+          <div className="bi-provider-summary-item">
+            <span>PROVIDERS</span>
+            <strong>
+              {normalizedProviders.length}
+            </strong>
+          </div>
+
+          <div className="bi-provider-summary-item">
+            <span>ENABLED</span>
+            <strong>
+              {enabledCount}
+            </strong>
+          </div>
+
+          <div className="bi-provider-summary-item">
+            <span>DISABLED</span>
+            <strong>
+              {disabledCount}
+            </strong>
+          </div>
+
+          <div className="bi-provider-summary-item">
+            <span>HEALTHY</span>
+            <strong>
+              {healthyCount}
+            </strong>
+          </div>
+        </div>
+
+        <div className="bi-providers-toolbar">
+          <div className="bi-provider-search">
+            <input
+              type="search"
+              value={query}
+              onChange={(event) =>
+                setQuery(
+                  event.target.value,
+                )
+              }
+              placeholder="Search provider, ID, adapter, region..."
+              aria-label="Search providers"
+            />
+
+            {query && (
+              <button
+                type="button"
+                className="bi-provider-search-clear"
+                onClick={() =>
+                  setQuery('')
+                }
+                aria-label="Clear provider search"
+              >
+                ×
+              </button>
+            )}
+          </div>
+
+          <label className="bi-provider-filter">
+            <span>TYPE</span>
+
+            <select
+              value={typeFilter}
+              onChange={(event) =>
+                setTypeFilter(
+                  event.target.value as
+                    | 'ALL'
+                    | ProviderType,
+                )
+              }
+            >
+              <option value="ALL">
+                ALL
+              </option>
+
+              {TYPE_OPTIONS.map(
+                (type) => (
+                  <option
+                    key={type}
+                    value={type}
+                  >
+                    {type}
+                  </option>
+                ),
+              )}
+            </select>
+          </label>
+
+          <label className="bi-provider-filter">
+            <span>ENVIRONMENT</span>
+
+            <select
+              value={environmentFilter}
+              onChange={(event) =>
+                setEnvironmentFilter(
+                  event.target.value as
+                    | 'ALL'
+                    | ProviderEnvironment,
+                )
+              }
+            >
+              <option value="ALL">
+                ALL
+              </option>
+
+              {ENVIRONMENT_OPTIONS.map(
+                (environment) => (
+                  <option
+                    key={environment}
+                    value={environment}
+                  >
+                    {environment}
+                  </option>
+                ),
+              )}
+            </select>
+          </label>
+
+          <label className="bi-provider-filter">
+            <span>STATE</span>
+
+            <select
+              value={statusFilter}
+              onChange={(event) =>
+                setStatusFilter(
+                  event.target.value as
+                    | 'ALL'
+                    | 'ENABLED'
+                    | 'DISABLED',
+                )
+              }
+            >
+              <option value="ALL">
+                ALL
+              </option>
+
+              <option value="ENABLED">
+                ENABLED
+              </option>
+
+              <option value="DISABLED">
+                DISABLED
+              </option>
+            </select>
+          </label>
+
+          {(query ||
+            typeFilter !== 'ALL' ||
+            environmentFilter !==
+              'ALL' ||
+            statusFilter !==
+              'ALL') && (
+            <button
+              type="button"
+              className="bi-provider-clear-filters"
+              onClick={clearFilters}
+            >
+              CLEAR
+            </button>
+          )}
+        </div>
+
+        {error && (
+          <div className="bi-provider-error">
+            <span>REGISTRY ERROR</span>
+            <strong>
+              {displayValue(
+                error,
+                'Unable to load provider registry.',
+              )}
+            </strong>
+          </div>
+        )}
+
+        <div className="bi-providers-content">
+          <section className="bi-provider-registry">
+            <div className="bi-provider-registry-header">
+              <div>
+                <span>
+                  REGISTERED PROVIDERS
+                </span>
+
+                <strong>
+                  {filteredProviders.length}
+                  {' / '}
+                  {normalizedProviders.length}
+                </strong>
+              </div>
+            </div>
+
+            <div className="bi-provider-table-wrap">
+              <table className="bi-provider-table">
+                <thead>
+                  <tr>
+                    <th>PROVIDER</th>
+                    <th>TYPE</th>
+                    <th>ADAPTER</th>
+                    <th>VERSION</th>
+                    <th>REGION</th>
+                    <th>ENV</th>
+                    <th>STATE</th>
+                    <th>ACCOUNTS</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {filteredProviders.length ===
+                    0 && (
+                    <tr>
+                      <td
+                        colSpan={8}
+                        className="bi-provider-empty"
+                      >
+                        {normalizedProviders.length ===
+                        0
+                          ? 'No providers are registered.'
+                          : 'No providers match the current filters.'}
+                      </td>
+                    </tr>
+                  )}
+
+                  {filteredProviders.map(
+                    (provider: any) => {
+                      const id =
+                        displayValue(
+                          provider?.id,
+                          '',
+                        );
+
+                      const providerName =
+                        displayValue(
+                          provider?.name,
+                          id ||
+                            'UNKNOWN',
+                        );
+
+                      const adapter =
+                        displayValue(
+                          provider?.adapterName ??
+                            provider?.adapter_name,
+                        );
+
+                      const version =
+                        displayValue(
+                          provider?.adapterVersion ??
+                            provider?.adapter_version,
+                        );
+
+                      const state =
+                        provider?.enabled ===
+                        false
+                          ? 'DISABLED'
+                          : displayValue(
+                              provider?.state ??
+                                provider?.status,
+                              'UNKNOWN',
+                            );
+
+                      const health =
+                        displayValue(
+                          provider?.health,
+                          'UNKNOWN',
+                        );
+
+                      const accountCount =
+                        providerAccountCount(
+                          provider,
+                        );
+
+                      const isSelected =
+                        selectedProviderId ===
+                        id;
+
+                      return (
+                        <tr
+                          key={id}
+                          className={
+                            isSelected
+                              ? 'is-selected'
+                              : ''
+                          }
+                          onClick={() =>
+                            handleRowSelect(
+                              provider,
+                            )
+                          }
+                          aria-selected={
+                            isSelected
+                          }
+                        >
+                          <td>
+                            <div className="bi-provider-primary">
+                              {providerName}
+                            </div>
+
+                            <div className="bi-provider-secondary">
+                              {id}
+                            </div>
+                          </td>
+
+                          <td>
+                            <span className="bi-provider-text">
+                              {displayValue(
+                                provider?.type,
+                              )}
+                            </span>
+                          </td>
+
+                          <td>
+                            <span className="bi-provider-adapter">
+                              {adapter}
+                            </span>
+                          </td>
+
+                          <td>
+                            <span className="bi-provider-mono">
+                              {version}
+                            </span>
+                          </td>
+
+                          <td>
+                            <span className="bi-provider-mono">
+                              {displayValue(
+                                provider?.region,
+                              )}
+                            </span>
+                          </td>
+
+                          <td>
+                            <span className="bi-provider-env">
+                              {displayValue(
+                                provider?.environment,
+                              )}
+                            </span>
+                          </td>
+
+                          <td>
+                            <div className="bi-provider-state-stack">
+                              <span
+                                className="bi-provider-status"
+                                data-tone={
+                                  statusTone(
+                                    state,
+                                  )
+                                }
+                              >
+                                {state}
+                              </span>
+
+                              {health !==
+                                'UNKNOWN' && (
+                                <span className="bi-provider-health">
+                                  {health}
+                                </span>
+                              )}
+                            </div>
+                          </td>
+
+                          <td>
+                            <span className="bi-provider-account-count">
+                              {accountCount}
+                            </span>
+                          </td>
+                        </tr>
+                      );
+                    },
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          {selectedProvider && (
+            <aside
+              className={`bi-provider-inspector${
+                isInspectorEditing
+                  ? ' is-editing'
+                  : ''
+              }`}
+            >
+            {selectedProvider && (
+              <>
+                <header className="bi-inspector-header">
+                  <div className="bi-inspector-heading">
+                    <span className="bi-inspector-eyebrow">
+                      PROVIDER INSPECTOR
+                    </span>
+
+                    <h3>
+                      {displayValue(
+                        selectedProvider.name,
+                        selectedProvider.id,
+                      )}
+                    </h3>
+
+                    <code className="bi-inspector-id">
+                      {displayValue(
+                        selectedProvider.id,
+                      )}
+                    </code>
+                  </div>
+
+                  <button
+                    type="button"
+                    className="bi-inspector-close"
+                    onClick={() => {
+                      if (isInspectorSaving) {
+                        return;
+                      }
+
+                      setIsInspectorEditing(false);
+                      setSelectedProviderId(null);
+                    }}
+                    disabled={isInspectorSaving}
+                    aria-label="Close provider inspector"
+                  >
+                    ×
+                  </button>
+                </header>
+
+                <div className="bi-inspector-toolbar">
+                  {!isInspectorEditing ? (
+                    <button
+                      type="button"
+                      className="bi-inspector-action"
+                      onClick={() => {
+                        const nextForm =
+                          buildInspectorForm(
+                            selectedProvider,
+                          );
+
+                        setInspectorFormData(
+                          nextForm,
+                        );
+                        setInspectorBaseline(
+                          nextForm,
+                        );
+                        setIsInspectorEditing(
+                          true,
+                        );
+                      }}
+                    >
+                      EDIT
+                    </button>
+                  ) : (
+                    <>
+                      <button
+                        type="button"
+                        className="bi-inspector-action"
+                        onClick={() =>
+                          void saveInspector()
+                        }
+                        disabled={
+                          !inspectorDirty ||
+                          isInspectorSaving
+                        }
+                      >
+                        {isInspectorSaving
+                          ? 'SAVING'
+                          : 'SAVE CHANGES'}
+                      </button>
+
+                      <button
+                        type="button"
+                        className="bi-inspector-action"
+                        onClick={
+                          cancelInspectorEdit
+                        }
+                        disabled={
+                          isInspectorSaving
+                        }
+                      >
+                        CANCEL
+                      </button>
+                    </>
+                  )}
+
+                  <span className="bi-inspector-toolbar-state">
+                    {isInspectorEditing
+                      ? inspectorDirty
+                        ? 'UNSAVED CHANGES'
+                        : 'EDIT MODE'
+                      : 'READ ONLY'}
+                  </span>
+                </div>
+
+                <div className="bi-inspector-body">
+                  <section className="bi-inspector-section">
+                    <div className="bi-inspector-section-title">
+                      01 — PROVIDER IDENTITY
+                    </div>
+
+                    <div className="bi-inspector-grid">
+                      <div className="bi-inspector-field">
+                        <span>PROVIDER ID</span>
+                        <input
+                          name="id"
+                          value={
+                            inspectorFormData.id
+                          }
+                          readOnly
+                          disabled
+                          className="is-mono"
+                        />
+                      </div>
+
+                      <div className="bi-inspector-field">
+                        <span>PROVIDER NAME</span>
+                        {isInspectorEditing ? (
+                          <input
+                            name="name"
+                            value={
+                              inspectorFormData.name
+                            }
+                            onChange={
+                              handleInspectorInputChange
+                            }
+                            autoComplete="off"
+                          />
+                        ) : (
+                          <strong>
+                            {displayValue(
+                              selectedProvider.name,
+                            )}
+                          </strong>
+                        )}
+                      </div>
+
+                      <div className="bi-inspector-field">
+                        <span>TYPE</span>
+                        {isInspectorEditing ? (
+                          <select
+                            name="type"
+                            value={
+                              inspectorFormData.type
+                            }
+                            onChange={
+                              handleInspectorInputChange
+                            }
+                          >
+                            {TYPE_OPTIONS.map(
+                              (type) => (
+                                <option
+                                  key={type}
+                                  value={type}
+                                >
+                                  {type}
+                                </option>
+                              ),
+                            )}
+                          </select>
+                        ) : (
+                          <strong>
+                            {displayValue(
+                              selectedProvider.type,
+                            )}
+                          </strong>
+                        )}
+                      </div>
+
+                      <div className="bi-inspector-field">
+                        <span>REGION</span>
+                        {isInspectorEditing ? (
+                          <input
+                            name="region"
+                            value={
+                              inspectorFormData.region
+                            }
+                            onChange={
+                              handleInspectorInputChange
+                            }
+                            autoComplete="off"
+                            spellCheck={false}
+                          />
+                        ) : (
+                          <strong className="is-mono">
+                            {displayValue(
+                              selectedProvider.region,
+                            )}
+                          </strong>
+                        )}
+                      </div>
+                    </div>
+                  </section>
+
+                  <section className="bi-inspector-section">
+                    <div className="bi-inspector-section-title">
+                      02 — ADAPTER
+                    </div>
+
+                    <div className="bi-inspector-grid">
+                      <div className="bi-inspector-field">
+                        <span>ADAPTER</span>
+                        {isInspectorEditing ? (
+                          <select
+                            name="adapterName"
+                            value={
+                              inspectorFormData.adapterName
+                            }
+                            onChange={
+                              handleInspectorInputChange
+                            }
+                          >
+                            {ADAPTER_OPTIONS.map(
+                              (adapter) => (
+                                <option
+                                  key={
+                                    adapter.value
+                                  }
+                                  value={
+                                    adapter.value
+                                  }
+                                >
+                                  {
+                                    adapter.label
+                                  }
+                                </option>
+                              ),
+                            )}
+                          </select>
+                        ) : (
+                          <strong className="is-mono">
+                            {displayValue(
+                              selectedProvider.adapterName,
+                            )}
+                          </strong>
+                        )}
+                      </div>
+
+                      <div className="bi-inspector-field">
+                        <span>ADAPTER VERSION</span>
+                        {isInspectorEditing ? (
+                          <input
+                            name="adapterVersion"
+                            value={
+                              inspectorFormData.adapterVersion
+                            }
+                            onChange={
+                              handleInspectorInputChange
+                            }
+                            autoComplete="off"
+                            spellCheck={false}
+                          />
+                        ) : (
+                          <strong className="is-mono">
+                            {displayValue(
+                              selectedProvider.adapterVersion,
+                            )}
+                          </strong>
+                        )}
+                      </div>
+                    </div>
+                  </section>
+
+                  <section className="bi-inspector-section">
+                    <div className="bi-inspector-section-title">
+                      03 — DEPLOYMENT
+                    </div>
+
+                    <div className="bi-inspector-grid">
+                      <div className="bi-inspector-field">
+                        <span>ENVIRONMENT</span>
+                        {isInspectorEditing ? (
+                          <select
+                            name="environment"
+                            value={
+                              inspectorFormData.environment
+                            }
+                            onChange={
+                              handleInspectorInputChange
+                            }
+                          >
+                            {ENVIRONMENT_OPTIONS.map(
+                              (environment) => (
+                                <option
+                                  key={
+                                    environment
+                                  }
+                                  value={
+                                    environment
+                                  }
+                                >
+                                  {
+                                    environment
+                                  }
+                                </option>
+                              ),
+                            )}
+                          </select>
+                        ) : (
+                          <strong>
+                            {displayValue(
+                              selectedProvider.environment,
+                            )}
+                          </strong>
+                        )}
+                      </div>
+
+                      <div className="bi-inspector-field">
+                        <span>ENABLED</span>
+
+                        {isInspectorEditing ? (
+                          <label className="bi-inspector-toggle">
+                            <input
+                              type="checkbox"
+                              checked={
+                                inspectorFormData.enabled
+                              }
+                              onChange={
+                                handleInspectorEnabledChange
+                              }
+                            />
+                            <span>
+                              {inspectorFormData.enabled
+                                ? 'ENABLED'
+                                : 'DISABLED'}
+                            </span>
+                          </label>
+                        ) : (
+                          <strong>
+                            {selectedEnabled
+                              ? 'ENABLED'
+                              : 'DISABLED'}
+                          </strong>
+                        )}
+                      </div>
+                    </div>
+                  </section>
+
+                  <section className="bi-inspector-section">
+                    <div className="bi-inspector-section-title">
+                      PROVIDER STATE
+                    </div>
+
+                    <div className="bi-inspector-state-line">
+                      <span>STATE</span>
+                      <strong>
+                        {displayValue(
+                          selectedState,
+                        )}
+                      </strong>
+                    </div>
+
+                    <div className="bi-inspector-state-line">
+                      <span>HEALTH</span>
+                      <strong>
+                        {displayValue(
+                          selectedHealth,
+                        )}
+                      </strong>
+                    </div>
+
+                    <div className="bi-inspector-state-line">
+                      <span>LINKED ACCOUNTS</span>
+                      <strong>
+                        {selectedAccountCount}
+                      </strong>
+                    </div>
+                  </section>
+
+                  <div className="bi-inspector-note">
+                    Configuration fields and options
+                    mirror ADD PROVIDER. Runtime state
+                    is observed here and remains
+                    read-only.
+                  </div>
+                </div>
+              </>
+            )}
+          </aside>
+          )}
+        </div>
+      </section>
+
+      {isAddModalOpen && (
+        <div
+          className="bi-provider-modal-overlay"
+          role="presentation"
+          onMouseDown={(event) => {
+            if (
+              event.target ===
+              event.currentTarget
+            ) {
+              closeAddProvider();
+            }
+          }}
+        >
+          <section
+            className="bi-provider-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="add-provider-title"
+            onMouseDown={(event) =>
+              event.stopPropagation()
+            }
+          >
+            <header className="bi-provider-modal-header">
+              <div>
+                <span className="bi-providers-eyebrow">
+                  PROVIDER REGISTRATION
+                </span>
+
+                <h3 id="add-provider-title">
+                  Add Provider
+                </h3>
+
+                <p>
+                  Register provider metadata.
+                  Credentials are managed
+                  separately.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                className="bi-provider-modal-close"
+                onClick={
+                  closeAddProvider
+                }
+                disabled={isSubmitting}
+                aria-label="Close add provider dialog"
+              >
+                ×
+              </button>
+            </header>
+
+            <form
+              onSubmit={
+                handleAddProvider
+              }
+            >
+              <div className="bi-provider-modal-body">
+                <section className="bi-provider-form-section">
+                  <div className="bi-provider-form-section-header">
+                    <span>
+                      01
+                    </span>
+
+                    <div>
+                      <strong>
+                        Provider Identity
+                      </strong>
+
+                      <small>
+                        Canonical provider
+                        registration identity.
+                      </small>
+                    </div>
+                  </div>
+
+                  <div className="bi-provider-form-grid">
+                    <FormField
+                      label="PROVIDER ID"
+                      required
+                    >
+                      <input
+                        name="id"
+                        value={
+                          formData.id
+                        }
+                        onChange={
+                          handleInputChange
+                        }
+                        placeholder="e.g. mt5"
+                        autoComplete="off"
+                        spellCheck={false}
+                        disabled={
+                          isSubmitting
+                        }
+                      />
+                    </FormField>
+
+                    <FormField
+                      label="PROVIDER NAME"
+                      required
+                    >
+                      <input
+                        name="name"
+                        value={
+                          formData.name
+                        }
+                        onChange={
+                          handleInputChange
+                        }
+                        placeholder="e.g. MetaTrader 5"
+                        autoComplete="off"
+                        disabled={
+                          isSubmitting
+                        }
+                      />
+                    </FormField>
+
+                    <FormField label="TYPE">
+                      <select
+                        name="type"
+                        value={
+                          formData.type
+                        }
+                        onChange={
+                          handleInputChange
+                        }
+                        disabled={
+                          isSubmitting
+                        }
+                      >
+                        {TYPE_OPTIONS.map(
+                          (type) => (
+                            <option
+                              key={type}
+                              value={type}
+                            >
+                              {type}
+                            </option>
+                          ),
+                        )}
+                      </select>
+                    </FormField>
+
+                    <FormField label="REGION" required>
+                      <input
+                        name="region"
+                        value={
+                          formData.region
+                        }
+                        onChange={
+                          handleInputChange
+                        }
+                        placeholder="IN"
+                        autoComplete="off"
+                        disabled={
+                          isSubmitting
+                        }
+                      />
+                    </FormField>
+                  </div>
+                </section>
+
+                <section className="bi-provider-form-section">
+                  <div className="bi-provider-form-section-header">
+                    <span>
+                      02
+                    </span>
+
+                    <div>
+                      <strong>
+                        Adapter
+                      </strong>
+
+                      <small>
+                        Runtime adapter
+                        declaration.
+                      </small>
+                    </div>
+                  </div>
+
+                  <div className="bi-provider-form-grid">
+                    <FormField
+                      label="ADAPTER"
+                      required
+                    >
+                      <select
+                        name="adapterName"
+                        value={
+                          formData.adapterName
+                        }
+                        onChange={
+                          handleInputChange
+                        }
+                        disabled={
+                          isSubmitting
+                        }
+                      >
+                        {ADAPTER_OPTIONS.map(
+                          (adapter) => (
+                            <option
+                              key={
+                                adapter.value
+                              }
+                              value={
+                                adapter.value
+                              }
+                            >
+                              {
+                                adapter.label
+                              }
+                            </option>
+                          ),
+                        )}
+                      </select>
+                    </FormField>
+
+                    <FormField
+                      label="ADAPTER VERSION"
+                      required
+                    >
+                      <input
+                        name="adapterVersion"
+                        value={
+                          formData.adapterVersion
+                        }
+                        onChange={
+                          handleInputChange
+                        }
+                        placeholder="1.0.0"
+                        autoComplete="off"
+                        spellCheck={false}
+                        disabled={
+                          isSubmitting
+                        }
+                      />
+                    </FormField>
+                  </div>
+                </section>
+
+                <section className="bi-provider-form-section">
+                  <div className="bi-provider-form-section-header">
+                    <span>
+                      03
+                    </span>
+
+                    <div>
+                      <strong>
+                        Deployment
+                      </strong>
+
+                      <small>
+                        Provider deployment
+                        context and lifecycle
+                        state.
+                      </small>
+                    </div>
+                  </div>
+
+                  <div className="bi-provider-form-grid">
+                    <FormField label="ENVIRONMENT">
+                      <select
+                        name="environment"
+                        value={
+                          formData.environment
+                        }
+                        onChange={
+                          handleInputChange
+                        }
+                        disabled={
+                          isSubmitting
+                        }
+                      >
+                        {ENVIRONMENT_OPTIONS.map(
+                          (
+                            environment,
+                          ) => (
+                            <option
+                              key={
+                                environment
+                              }
+                              value={
+                                environment
+                              }
+                            >
+                              {
+                                environment
+                              }
+                            </option>
+                          ),
+                        )}
+                      </select>
+                    </FormField>
+
+                    <div className="bi-provider-enabled-field">
+                      <span>
+                        ENABLED
+                      </span>
+
+                      <label className="bi-provider-toggle">
+                        <input
+                          type="checkbox"
+                          checked={
+                            formData.enabled
+                          }
+                          onChange={
+                            handleEnabledChange
+                          }
+                          disabled={
+                            isSubmitting
+                          }
+                        />
+
+                        <span className="bi-provider-toggle-track">
+                          <span className="bi-provider-toggle-thumb" />
+                        </span>
+
+                        <strong>
+                          {formData.enabled
+                            ? 'ENABLED'
+                            : 'DISABLED'}
+                        </strong>
+                      </label>
+                    </div>
+                  </div>
+                </section>
+
+                <div className="bi-provider-security-note">
+                  <div className="bi-provider-security-mark">
+                    /
+                  </div>
+
+                  <div>
+                    <strong>
+                      Metadata-only registration
+                    </strong>
+
+                    <p>
+                      No API keys, passwords,
+                      tokens or other secret
+                      material are accepted by
+                      this form. Credentials
+                      remain under the dedicated
+                      credential / secret-store
+                      boundary.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <footer className="bi-provider-modal-footer">
+                <button
+                  type="button"
+                  className="bi-provider-button"
+                  onClick={
+                    closeAddProvider
+                  }
+                  disabled={
+                    isSubmitting
+                  }
+                >
+                  CANCEL
+                </button>
+
+                <button
+                  type="submit"
+                  className="bi-provider-button bi-provider-button-primary"
+                  disabled={
+                    isSubmitting
+                  }
+                >
+                  {isSubmitting
+                    ? 'REGISTERING...'
+                    : 'REGISTER PROVIDER'}
+                </button>
+              </footer>
+            </form>
+          </section>
+        </div>
+      )}
+    </div>
+  );
+};
+
+interface FormFieldProps {
+  label: string;
+  required?: boolean;
+  children: React.ReactNode;
+}
+
+const FormField: React.FC<
+  FormFieldProps
+> = ({
+  label,
+  required = false,
+  children,
+}) => (
+  <label className="bi-provider-form-field">
+    <span>
+      {label}
+
+      {required && (
+        <em aria-hidden="true">
+          *
+        </em>
+      )}
+    </span>
+
+    {children}
+  </label>
+);
+
+export default BrokerProviders;

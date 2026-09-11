@@ -9,14 +9,14 @@
      * These values may be overridden by runtime preferences.
      */
 
-    --corei-shell-width: 100vw;
+    --corei-shell-width: 100%;
     --corei-shell-height: 100dvh;
 
     /*
      * Command Surface
      */
 
-    --corei-shell-top-height-default: 44px;
+    --corei-shell-top-height-default: 52px;
     --corei-shell-top-height: var(--corei-shell-top-height-default);
 
     /*

@@ -1,108 +1,60 @@
 /******************************************************************************
+ * COREI OPERATING SYSTEM – INSTITUTIONAL VISUAL FOUNDATION
+ * Stage-25 / Phase-17 / Step-06
  *
- * COREI OPERATING SYSTEM
- *
- * STAGE-25
- * PHASE-17
- * STEP-06
- *
- * FILE:
- * index.css
- *
- * PURPOSE:
- * Institutional Global Visual Foundation
- *
- * RESPONSIBILITY:
- * Defines the global CSS variable contract consumed by the COREI
- * Operating System. This file establishes the visual language while
- * preserving ownership of Foundation token values.
- *
- * DESIGN REFERENCES:
- * • Visual Studio Code
- * • Bloomberg Terminal
- * • TradingView Desktop
- * • Binance Desktop
- *
+ * This file establishes the permanent visual language of COREI-OS.
+ * It is inspired by Bloomberg Terminal, VS Code, and institutional trading
+ * platforms.
  ******************************************************************************/
 
 :root {
+    /* ── Surface Hierarchy ── */
+    --corei-surface-workspace: #0A0C10;
+    --corei-surface-application: #0D0F14;
+    --corei-surface-panel: #12151C;
+    --corei-surface-elevated: #181C26;
+    --corei-surface-floating: #1E2330;
+    --corei-surface-highlight: #2A3040;
 
-    /* =========================================================================
-       SURFACE HIERARCHY
-       ========================================================================= */
+    /* ── Text ── */
+    --corei-text-primary: #F0F2F5;
+    --corei-text-secondary: #C8CDD6;
+    --corei-text-muted: #8E96A3;
+    --corei-text-disabled: #4E5566;
 
-    --corei-surface-workspace: #050505;
-    --corei-surface-application: #050505;
-    --corei-surface-panel: #111111;
-    --corei-surface-elevated: #171717;
-    --corei-surface-floating: #1D1D1D;
-
-    /* =========================================================================
-       TEXT
-       ========================================================================= */
-
-    --corei-text-primary: #FFFFFF;
-    --corei-text-secondary: #C4C4C4;
-    --corei-text-muted: #9A9A9A;
-    --corei-text-disabled: #5E5E5E;
-
-    /* =========================================================================
-       BRAND / ACCENT
-       ========================================================================= */
-
+    /* ── Accent ── */
     --corei-accent: #C8A53B;
     --corei-accent-hover: #D8B85A;
     --corei-accent-active: #AE8E33;
+    --corei-accent-glow: rgba(200, 165, 59, 0.2);
 
-    /* =========================================================================
-       STATUS
-       ========================================================================= */
+    /* ── Status ── */
+    --corei-success: #52A36B;
+    --corei-success-bg: rgba(82, 163, 107, 0.12);
+    --corei-warning: #D1A64A;
+    --corei-warning-bg: rgba(209, 166, 74, 0.12);
+    --corei-danger: #B95A5A;
+    --corei-danger-bg: rgba(185, 90, 90, 0.12);
+    --corei-info: #4A8BB5;
+    --corei-info-bg: rgba(74, 139, 181, 0.12);
 
-    --corei-success: #00E676;
-    --corei-warning: #FF9800;
-    --corei-danger: #FF1744;
-    --corei-information: #1E88E5;
+    /* ── Borders ── */
+    --corei-border-subtle: #1E2330;
+    --corei-border-divider: #2A3040;
+    --corei-border-default: #30384A;
+    --corei-border-strong: #4A556A;
 
-    /* =========================================================================
-       BORDERS
-       ========================================================================= */
-
-    --corei-border-subtle: #232323;
-    --corei-border-divider: #2A2A2A;
-    --corei-border-default: #2A2A2A;
-    --corei-border-strong: #444444;
-    --corei-border-focus: #C8A53B;
-
-    /* =========================================================================
-       TYPOGRAPHY
-       ========================================================================= */
-
-    --corei-font-family:
-        "Inter",
-        "Segoe UI",
-        Roboto,
-        Helvetica,
-        Arial,
-        sans-serif;
-
-    --corei-font-mono:
-        "JetBrains Mono",
-        "Cascadia Code",
-        Consolas,
-        monospace;
-
-    --corei-font-caption: 9px;
-    --corei-font-table: 11px;
+    /* ── Typography ── */
+    --corei-font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --corei-font-mono: "JetBrains Mono", "Cascadia Code", Consolas, monospace;
+    --corei-font-caption: 10px;
     --corei-font-ui: 11px;
     --corei-font-body: 12px;
     --corei-font-subtitle: 13px;
-    --corei-font-title: 16px;
+    --corei-font-title: 15px;
     --corei-font-page-title: 18px;
 
-    /* =========================================================================
-       SPACING
-       ========================================================================= */
-
+    /* ── Spacing ── */
     --corei-space-0: 0;
     --corei-space-1: 2px;
     --corei-space-2: 4px;
@@ -113,98 +65,31 @@
     --corei-space-7: 20px;
     --corei-space-8: 24px;
 
-    /* =========================================================================
-       DENSITY
-       ========================================================================= */
-
-    --corei-row-height: 24px;
-    --corei-tree-row-height: 22px;
-    --corei-table-row-height: 24px;
-    --corei-toolbar-height: 30px;
+    /* ── Sizing ── */
+    --corei-sidebar-width: 220px;
     --corei-ribbon-height: 42px;
+    --corei-status-height: 28px;
     --corei-tab-height: 32px;
-    --corei-status-height: 24px;
+    --corei-toolbar-height: 32px;
 
-    /* =========================================================================
-       LAYOUT
-       ========================================================================= */
+    /* ── Radius ── */
+    --corei-radius-sm: 3px;
+    --corei-radius-md: 6px;
+    --corei-radius-lg: 8px;
 
-    --corei-sidebar-width: 270px;
-    --corei-inspector-width: 340px;
-    --corei-timeline-height: 120px;
-
-    /* =========================================================================
-       GEOMETRY
-       ========================================================================= */
-
-    --corei-radius-none: 0;
-    --corei-radius-sm: 2px;
-    --corei-radius-md: 4px;
-
-    /* =========================================================================
-       ELEVATION
-       ========================================================================= */
-
-    --corei-shadow-flat: none;
-    --corei-shadow-low: 0 1px 2px rgba(0,0,0,.22);
-    --corei-shadow-medium: 0 3px 8px rgba(0,0,0,.28);
-    --corei-shadow-high: 0 8px 20px rgba(0,0,0,.36);
-    --corei-shadow-overlay: 0 12px 32px rgba(0,0,0,.42);
-
-        /*
-     * COREI CSS CONSUMER CONTRACT
-     *
-     * Runtime variables consumed by shell regions.
-     * Maps existing institutional surfaces.
-     */
-
-    --corei-color-background-primary:
-        var(--corei-surface-workspace);
-
-    --corei-color-surface-0:
-        var(--corei-surface-application);
-
-    --corei-color-surface-1:
-        var(--corei-surface-panel);
-
-    --corei-color-surface-2:
-        var(--corei-surface-elevated);
-
-    --corei-color-surface-3:
-        var(--corei-surface-floating);
-
-
-    --corei-color-text-primary:
-        var(--corei-text-primary);
-
-    --corei-color-text-secondary:
-        var(--corei-text-secondary);
-
-    --corei-color-text-muted:
-        var(--corei-text-muted);
-
-
-    --corei-color-border:
-        var(--corei-border-subtle);
-
-    --corei-color-accent:
-        var(--corei-accent);
-
-    --corei-color-accent-primary:
-        var(--corei-accent);
-
-    --corei-color-accent-subtle:
-        color-mix(
-            in srgb,
-            var(--corei-color-accent-primary) 55%,
-            var(--corei-color-border)
-        );
+    /* ── Shadows ── */
+    --corei-shadow-low: 0 1px 2px rgba(0,0,0,0.3);
+    --corei-shadow-medium: 0 4px 12px rgba(0,0,0,0.35);
+    --corei-shadow-high: 0 8px 24px rgba(0,0,0,0.4);
 }
 
+/* ── Reset ── */
 *,
 *::before,
 *::after {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 html,
@@ -212,118 +97,101 @@ body,
 #root {
     width: 100%;
     height: 100%;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-
     overflow: hidden;
-
     background: var(--corei-surface-workspace);
-
     color: var(--corei-text-primary);
-
     font-family: var(--corei-font-family);
-
     font-size: var(--corei-font-ui);
-
     line-height: 1.45;
-
-    text-rendering: optimizeLegibility;
-
     -webkit-font-smoothing: antialiased;
-
     -moz-osx-font-smoothing: grayscale;
 }
 
-/******************************************************************************
- *
- * COREI OPERATING SYSTEM
- *
- * STAGE-25
- * PHASE-17
- * STEP-08
- *
- * PURPOSE:
- * Institutional Status Bar Visual Polish
- *
- ******************************************************************************/
-
-.corei-operational-status-bar {
-
-    height: 
-        var(--corei-status-height);
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:flex-end;
-
-    gap:8px;
-
-    padding:0 8px;
-
-    border-top:
-        1px solid var(--corei-color-border);
-
-    background:
-        var(--corei-color-surface-1);
-
-    color:
-        var(--corei-color-text-secondary);
-
-    font-size:10px;
-
+/* ── Scrollbar ── */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: var(--corei-surface-application);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--corei-border-default);
+    border-radius: var(--corei-radius-sm);
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--corei-border-strong);
 }
 
-
-.corei-operational-status-item {
-
-    display:flex;
-
-    align-items:center;
-
-    gap:6px;
-
-    padding-left:10px;
-
-    border-left:
-        1px solid var(--corei-color-border);
-
-    white-space:nowrap;
-
+/* ── Status Dot Animations ── */
+.status-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+.status-dot.healthy {
+    background: var(--corei-success);
+    box-shadow: 0 0 8px var(--corei-success-bg);
+}
+.status-dot.warning {
+    background: var(--corei-warning);
+    animation: pulse-warning 1.5s infinite;
+}
+.status-dot.critical {
+    background: var(--corei-danger);
+    animation: pulse-critical 1s infinite;
+}
+.status-dot.offline {
+    background: var(--corei-text-disabled);
 }
 
-
-.corei-operational-status-item:first-child {
-
-    border-left:none;
-
+@keyframes pulse-warning {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.15); }
+}
+@keyframes pulse-critical {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.25); }
 }
 
-
-.corei-operational-status-indicator {
-
-    width:8px;
-
-    height:8px;
-
-    border-radius:50%;
-
-    flex-shrink:0;
-
+/* ── Cards ── */
+.corei-card {
+    background: var(--corei-surface-panel);
+    border: 1px solid var(--corei-border-subtle);
+    border-radius: var(--corei-radius-md);
+    padding: var(--corei-space-5);
+    transition: border-color 0.2s ease;
+}
+.corei-card:hover {
+    border-color: var(--corei-border-default);
 }
 
-
-.corei-operational-status-label {
-
-    font-size:10px;
-
-    font-weight:500;
-
-    letter-spacing:.04em;
-
+.corei-card-header {
+    font-size: var(--corei-font-subtitle);
+    font-weight: 600;
+    color: var(--corei-text-secondary);
+    margin-bottom: var(--corei-space-4);
 }
 
+/* ── Stats ── */
+.corei-stat {
+    display: flex;
+    flex-direction: column;
+}
+.corei-stat .value {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--corei-text-primary);
+}
+.corei-stat .label {
+    font-size: var(--corei-font-caption);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--corei-text-muted);
+}
+.corei-stat .sub {
+    font-size: var(--corei-font-caption);
+    color: var(--corei-text-muted);
+}

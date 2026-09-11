@@ -1,0 +1,645 @@
+PHASE D — STEP 4: POLICY ENGINE
+
+(Execution Governance Layer — UPS COMPLIANT, LOCK-GRADE)
+
+This specification strictly follows:
+
+Phase D Macro Architecture
+Step 3 Risk Engine output contract
+Universal Phase Structure (21 sections mandatory)
+
+1. PHASE IDENTITY LAYER
+	1.1 Phase Name
+
+		Phase D — Step 4: Policy Engine (Execution Governance Layer)
+
+	1.2 Phase Role
+
+		Deterministic governance enforcement layer that:
+
+			consumes RiskApprovedIntent
+			applies policy + governance rules (non-risk)
+			controls execution behavior (timing, pacing, permissions)
+			produces PolicyDecisionIntent
+
+	1.3 Phase Objective
+
+		Transform:
+
+			RiskApprovedIntent → PolicyDecisionIntent
+
+		Such that:
+
+			all intents are policy-compliant
+			execution behavior is controlled + governed
+			no economic meaning is altered
+			output remains deterministic and replay-safe
+
+	1.4 Why This Phase Exists
+
+		Prevents:
+
+			(F1) policy violations despite risk approval
+			(F2) over-trading / execution bursts
+			(F3) regulatory breaches
+			(F4) strategy misuse (disabled / restricted strategies executing)
+			(F5) uncontrolled execution pacing
+
+		Risk-safe ≠ Policy-safe
+		This phase enforces institutional governance
+
+	2. PHASE SCOPE CONTROL
+
+	2.1 INCLUDED (STRICT)
+		policy rule enforcement
+		governance validation
+		execution pacing control
+		trade frequency control
+		whitelist / blacklist enforcement
+		strategy / instrument permissions
+		cooldown enforcement
+		policy-based size caps (STRICTLY bounded)
+		output tagging (policy flags)
+
+	2.2 EXCLUDED (STRICT)
+		risk computation (Step 3)
+		exposure evaluation
+		capital allocation
+		decision conflict resolution (Step 2)
+		order generation (Step 5)
+		portfolio state computation
+
+	2.3 Boundary Rule
+
+		Policy Engine MUST:
+
+			enforce ONLY governance + policy rules
+
+		Policy Engine MUST NOT:
+
+			modify instrument
+			modify direction
+			recompute risk
+			introduce new intents
+
+		Violation → PHASE INVALID
+
+3. ARCHITECTURAL INTENT LAYER
+	3.1 Core Principles
+
+		P1 — Deterministic Governance
+		P2 — Zero Economic Mutation
+		P3 — Canonical Dependency Only
+		P4 — Strict Post-Risk Position
+		P5 — Execution Behavior Control Only
+		P6 — Replay Fidelity
+
+	3.2 Architectural Model
+		PolicyDecisionIntentStream = F(
+			risk_approved_intent_stream,
+			configuration_snapshot,
+			version_identifiers
+		)
+
+	3.3 System Positioning
+		Step 3 → RiskApprovedIntent
+		Step 4 → PolicyDecisionIntent  ← (THIS)
+		Step 5 → Execution Engine
+
+4. DOMAIN MODEL DEFINITION
+	4.1 Entities
+		RiskApprovedIntent (input)
+		PolicyDecisionIntent (output)
+		PolicyRule
+		GovernanceConstraint
+		PolicyFlag
+		PolicyDecision
+
+	4.2 PolicyDecisionIntent Schema
+		PolicyDecisionIntent = {
+			signal_id
+			policy_decision_intent_id
+			risk_approved_intent_id
+			instrument
+			direction
+			approved_size
+			policy_status ∈ {ALLOW, MODIFY, REJECT}
+			modified_fields
+			policy_flags[]
+			governance_references[]
+			lineage_hash_reference
+		}
+
+	4.3 PolicyDecision
+		PolicyDecision = {
+			status ∈ {ALLOW, MODIFY, REJECT}
+			modified_fields
+			flags[]
+			references[]
+		}
+
+	4.4 PolicyRule
+		PolicyRule = {
+			policy_id
+			policy_type ∈ {
+				TIME_RESTRICTION
+				TRADE_FREQUENCY
+				STRATEGY_PERMISSION
+				INSTRUMENT_PERMISSION
+				COOLDOWN
+				EXECUTION_PACING
+				SIZE_CAP
+				REGULATORY_RULE
+			}
+			precedence_level
+			evaluation_condition
+			enforcement_action
+		}
+
+	4.5 Relationships
+		1 RiskApprovedIntent → 1 PolicyDecisionIntent
+		PolicyRule set → applied to each intent
+		PolicyDecision → derived from rules
+
+	4.6 Ownership
+
+		Policy entities → Phase D Step 4 ONLY
+
+5. LOGIC / RULE ENGINE
+	5.1 Rule Classes
+
+		R1 — Input Validation
+		R2 — Policy Rule Binding
+		R3 — Time Window Validation
+		R4 — Permission Validation
+		R5 — Behavioral Control (frequency/cooldown)
+		R6 — Pacing / Modification
+		R7 — Policy Decision Assignment
+		R8 — Output Construction
+
+	5.2 Policy Rule Types
+
+	A. HARD POLICY (REJECT)
+		trading outside allowed hours
+		banned instrument
+		disabled strategy
+		regulatory violation
+
+	B. SOFT POLICY (MODIFY)
+		max trades per interval
+		cooldown enforcement
+		execution pacing
+		size caps (STRICT upper bound)
+
+		Deterministic Frequency Evaluation Rule:
+
+			trade_count_window MUST be computed using:
+
+				event_time-based fixed window
+
+			ordering_key = {
+				event_time ASC
+				sequence_id ASC
+			}
+
+			Constraint:
+
+				evaluation MUST follow deterministic ordered stream
+
+	5.3 Decision Logic
+		IF any HARD policy violated:
+			status = REJECT
+
+		ELSE:
+			apply MODIFY rules
+
+			IF modifications applied:
+				status = MODIFY
+			ELSE:
+				status = ALLOW
+
+	5.4 Modification Rules (STRICT)
+
+		Allowed modifications ONLY:
+
+		allowed_modifications = {
+			execution_delay
+			execution_batching
+			size_cap (≤ approved_size only)
+			slicing_instruction
+		}
+
+		Forbidden:
+
+			instrument change
+			direction change
+			intent creation
+
+		Zero-Size Enforcement Rule (MANDATORY):
+
+			IF modified_size == 0:
+
+				status = REJECT
+
+				policy_flag = ZERO_SIZE_REJECTION
+
+		Policy Modification Constraint (MANDATORY)
+
+			Policy Engine MAY reduce size ONLY under:
+
+				execution-behavior control (NOT risk override)
+
+			Conditions:
+
+				1. approved_size MUST NOT be exceeded
+				2. reduction MUST NOT violate:
+					- risk constraints
+					- portfolio constraints
+				3. reduction MUST NOT change:
+					- direction
+					- instrument
+					- intent classification
+
+			Classification:
+
+				size reduction = execution shaping
+				NOT economic mutation
+
+			STRICT PROHIBITIONS:
+
+				Policy Engine MUST NOT:
+
+					increase size
+					override risk decisions
+					bypass constraint_output
+
+			Violation → PHASE INVALID
+
+	5.5 Rule Execution Order (MANDATORY)
+		1. Input Validation
+		2. Policy Rule Binding
+		3. HARD Policy Evaluation
+		4. Behavioral Controls
+		5. Modification Rules
+		6. Decision Assignment
+		7. Output Construction
+
+		Constraint:
+
+			higher precedence rules dominate
+			no override allowed
+
+		Policy Precedence Tie-Break Rule (MANDATORY):
+
+			IF multiple PolicyRules share same precedence_level:
+
+				apply deterministic ordering:
+
+					1. policy_type priority (fixed global map)
+					2. policy_id ASC (lexicographic)
+
+			Constraint:
+
+				identical rule set → identical evaluation order
+
+			Violation:
+				→ NON-DETERMINISTIC POLICY ENGINE
+
+		Sequential Policy Evaluation Rule (MANDATORY):
+
+			All intents MUST be processed in strict order:
+
+			ordering_key = {
+				event_time ASC
+				origin_type ASC
+				sequence_id ASC
+			}
+
+			FOR each intent:
+
+				evaluate policy using PolicyState_current
+
+				produce PolicyDecisionIntent
+
+				update PolicyState_current using PolicyStateTransition
+
+		State Update MUST occur IMMEDIATELY after each intent evaluation
+			and BEFORE next intent evaluation
+
+6. FLOW ARCHITECTURE
+	6.0 Canonical Input Set
+		canonical_input_set_D4 = {
+			risk_approved_intent_stream,
+			configuration_snapshot: {
+				policy_rules,
+				policy_parameters
+			},
+			version_identifiers
+		}
+
+		Constraints:
+
+			immutable
+			complete
+			hash-identifiable
+
+		policy_state_snapshot
+
+			PolicyStateSnapshot MUST be:
+			- provided by Phase C
+			- immutable
+			- part of canonical_input_set_D4
+
+	6.1 Input
+
+		From Step 3:
+
+		risk_approved_intent_stream
+
+	6.2 Processing Flow
+		RiskApprovedIntent
+			→ Policy Validation
+			→ Behavioral Control
+			→ Modification (if needed)
+			→ PolicyDecision
+			→ PolicyDecisionIntent
+
+
+		PolicyState_current = PolicyStateSnapshot
+
+		FOR intent IN ordered_stream:
+
+			decision = evaluate(intent, PolicyState_current)
+
+			PolicyState_current = update(PolicyState_current, decision)
+
+	6.3 Output
+		policy_decision_intent_stream = {
+			intents: [
+				{
+					risk_approved_intent_id
+					policy_status
+					modified_fields
+					policy_flags
+					governance_references
+				}
+			]
+		}
+
+	6.4 Flow Rule
+		no external inputs
+		deterministic transformation
+		no implicit behavior
+
+7. PIPELINE STRUCTURE
+
+	P1: Input Validation
+	P2: Rule Binding
+	P3: Policy Evaluation
+	P4: Modification
+	P5: Output Emission
+
+8. CONTROL & CONSTRAINTS
+	8.1 Hard Rules
+		no execution without policy approval
+		no mutation of economic intent
+		deterministic output mandatory
+
+	8.2 Guardrails
+		reject invalid input
+		reject undefined policy rule
+		reject ambiguity
+
+	8.3 Invariants
+		same input → same output
+		approved_size ≥ modified_size
+		policy layer cannot increase exposure
+
+		I4 — Size Validity Invariant:
+
+			modified_size MUST satisfy:
+
+				0 < modified_size ≤ approved_size
+
+			Violation:
+				→ REJECT intent
+
+		I5 — State Determinism Invariant:
+
+			Given identical:
+
+				PolicyStateSnapshot
+				intent stream
+
+			PolicyState evolution MUST be identical
+
+			Violation:
+				→ NON-REPLAYABLE SYSTEM
+			Given identical:
+
+				PolicyStateSnapshot
+				intent stream
+
+			PolicyState evolution MUST be identical
+
+			Violation:
+				→ NON-REPLAYABLE SYSTEM
+
+		I6 — State Reconstruction Invariant:
+
+			Given:
+
+				PolicyStateSnapshot
+				intent stream
+				policy rules
+
+			System MUST reconstruct identical:
+
+				PolicyState(t) for all t
+
+			Violation:
+				→ SYSTEM INVALID
+
+		I-GLOBAL-4: Policy state evolution MUST be event-time deterministic
+
+9. STATE & DATA MODEL
+
+	State Model (CONTROLLED STATE — NOT EXTERNAL)
+
+		PolicyStateSnapshot = {
+			trade_count_window
+			last_execution_time_per_instrument
+			cooldown_tracker
+		}
+
+	PolicyStateTransition (MANDATORY):
+
+		Define deterministic state evolution:
+
+		PolicyStateTransition (MANDATORY — FULLY DEFINED):
+
+			FOR each processed PolicyDecisionIntent:
+
+				IF policy_status ∈ {ALLOW, MODIFY}:
+
+					trade_count_window = update_window(
+						trade_count_window,
+						event_time
+					)
+
+					last_execution_time_per_instrument[instrument] = event_time
+
+					cooldown_tracker[instrument] = event_time + cooldown_duration
+
+				ELSE IF policy_status == REJECT:
+
+					NO state update
+
+			update_window RULE (MANDATORY):
+
+				trade_count_window MUST:
+
+					- include only events within:
+						[event_time - window_size, event_time]
+
+					- be computed using event_time ONLY
+
+					- be strictly deterministic
+
+			cooldown_tracker RULE:
+
+				cooldown_active IF:
+
+					event_time < cooldown_tracker[instrument]
+
+			CONSTRAINTS:
+
+				- ALL updates MUST use event_time (NOT system time)
+				- ALL updates MUST be deterministic
+				- NO partial updates allowed
+
+		assert state_update_time_source == event_time
+			assert no system_clock usage
+
+10. FAILURE MODEL
+	10.1 Scenarios
+		missing policy config
+		rule conflict
+		undefined precedence
+		invalid modification
+
+	10.2 Impact
+		governance failure
+		regulatory risk
+
+	10.3 Mitigation
+		reject intent
+		abort pipeline
+
+	10.4 Detection
+		rule validation failure
+		precedence collision
+
+11. ASSUMPTION REGISTER
+	Assumption				Reason						Validation				Status
+	Risk output valid		upstream guarantee			Step 3					VALIDATED
+	policy_rules complete	required for governance		config validation		CONTROLLED
+
+12. VALIDATION FRAMEWORK
+	12.1 Method
+		Red Team (3 rounds)
+		Blue Team validation
+
+		RED TEAM
+		Round 1 — Policy Bypass Attack
+
+			Attempt: trade outside hours
+			Result: REJECT
+			PASS
+
+		Round 2 — Overtrading Attack
+
+			Attempt: high-frequency burst
+			Result: MODIFY (cooldown)
+			PASS
+
+		Round 3 — Mutation Attack
+
+			Attempt: change direction via policy
+			Result: BLOCKED (hard constraint)
+			PASS
+
+		BLUE TEAM VALIDATION
+			determinism verified
+			rule precedence enforced
+			no ambiguity
+			replay identical
+
+		SYSTEM VALID
+
+			CEI CRITICAL FIXES
+			Enforced modification boundary isolation
+			Added strict precedence hierarchy
+			Restricted size modification to ≤ approved_size
+			Introduced policy vs risk separation invariant
+
+13. OUTPUT (DELIVERABLE)
+	policy_decision_intent_stream
+
+14. TRACEABILITY
+	decision_validated_intent_id
+	→ risk_approved_intent_id
+	→ policy_decision_intent_id
+
+	Full lineage preserved
+
+15. CROSS-PHASE CONSISTENCY
+
+	Owns:
+
+		policy enforcement
+
+	References:
+
+		Phase B constraints
+		Step 3 risk output
+
+16. SCALABILITY
+	parallel evaluation per intent
+	deterministic ordering preserved
+
+17. GOVERNANCE
+	policy versioning mandatory
+	approval required
+
+18. AUDITABILITY
+	full rule trace
+	policy flag logs
+	replay consistency
+
+19. RISK CONSIDERATIONS
+		policy misconfiguration risk
+		governance bypass risk
+
+	Mitigation:
+
+		deterministic validation
+		strict rejection
+
+20. FAILURE CONDITION
+
+	Phase FAILS if:
+
+		policy ambiguity exists
+		determinism breaks
+		rules incomplete
+
+21. PHASE LOCK CRITERIA
+
+	LOCK only if:
+
+		all 21 sections complete
+		Red Team passed
+		Blue Team validated
+		CEI fixes applied
+		no ambiguity

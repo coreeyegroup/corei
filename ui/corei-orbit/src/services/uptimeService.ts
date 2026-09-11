@@ -14,7 +14,7 @@ export const useUptimeStore = create<UptimeState>((set) => ({
 }));
 
 // Start the timer (tick every second)
-let uptimeInterval: NodeJS.Timeout | null = null;
+let uptimeInterval: number | null = null;
 
 export function startUptimeTimer() {
   if (uptimeInterval) return;

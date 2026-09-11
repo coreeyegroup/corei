@@ -1,0 +1,244 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Namespace","metadata":{"annotations":{},"name":"database"}}
+    creationTimestamp: "2026-05-26T15:05:58Z"
+    labels:
+      kubernetes.io/metadata.name: database
+    name: database
+    resourceVersion: "128729"
+    uid: c92021a2-aa3c-4093-aab4-036a2190da27
+  spec:
+    finalizers:
+    - kubernetes
+  status:
+    phase: Active
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    creationTimestamp: "2026-05-25T06:56:03Z"
+    labels:
+      kubernetes.io/metadata.name: default
+    name: default
+    resourceVersion: "39"
+    uid: 1bfdd0d3-6964-46dd-be3b-8ead07674c35
+  spec:
+    finalizers:
+    - kubernetes
+  status:
+    phase: Active
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    annotations:
+      governance.core/purpose: execution-connectivity-runtime
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Namespace","metadata":{"annotations":{"governance.core/purpose":"execution-connectivity-runtime"},"labels":{"governance.core/domain":"execution","governance.core/runtime":"governed","governance.core/stage":"16","governance.core/type":"broker-connectivity"},"name":"execution"}}
+    creationTimestamp: "2026-05-27T16:27:35Z"
+    labels:
+      governance.core/domain: execution
+      governance.core/runtime: governed
+      governance.core/stage: "16"
+      governance.core/type: broker-connectivity
+      kubernetes.io/metadata.name: execution
+    name: execution
+    resourceVersion: "285401"
+    uid: 7565337c-6172-4a67-9ae1-5862d69d23db
+  spec:
+    finalizers:
+    - kubernetes
+  status:
+    phase: Active
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Namespace","metadata":{"annotations":{},"labels":{"platform.core/domain":"kafka","platform.core/governance":"authoritative","platform.core/replay-safe":"true"},"name":"kafka"}}
+    creationTimestamp: "2026-05-25T20:57:15Z"
+    labels:
+      kubernetes.io/metadata.name: kafka
+      platform.core/domain: kafka
+      platform.core/governance: authoritative
+      platform.core/replay-safe: "true"
+    name: kafka
+    resourceVersion: "66868"
+    uid: 0f437bd0-a4f8-4506-b1c1-cd8a61a83026
+  spec:
+    finalizers:
+    - kubernetes
+  status:
+    phase: Active
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    creationTimestamp: "2026-05-25T06:56:03Z"
+    labels:
+      kubernetes.io/metadata.name: kube-node-lease
+    name: kube-node-lease
+    resourceVersion: "36"
+    uid: b4a27f2f-6c0b-4802-9bc6-c8eead664e83
+  spec:
+    finalizers:
+    - kubernetes
+  status:
+    phase: Active
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    creationTimestamp: "2026-05-25T06:56:03Z"
+    labels:
+      kubernetes.io/metadata.name: kube-public
+    name: kube-public
+    resourceVersion: "32"
+    uid: af10aaac-ebb7-493f-bd1d-79e89053358f
+  spec:
+    finalizers:
+    - kubernetes
+  status:
+    phase: Active
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    creationTimestamp: "2026-05-25T06:56:03Z"
+    labels:
+      kubernetes.io/metadata.name: kube-system
+    name: kube-system
+    resourceVersion: "26"
+    uid: 8ebdea2b-5aed-4685-902d-1b544782f16e
+  spec:
+    finalizers:
+    - kubernetes
+  status:
+    phase: Active
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Namespace","metadata":{"annotations":{},"name":"longhorn-system"}}
+    creationTimestamp: "2026-05-25T07:23:19Z"
+    labels:
+      kubernetes.io/metadata.name: longhorn-system
+    name: longhorn-system
+    resourceVersion: "2703"
+    uid: defd908e-df66-4d1e-9c79-994ac7a06154
+  spec:
+    finalizers:
+    - kubernetes
+  status:
+    phase: Active
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Namespace","metadata":{"annotations":{},"name":"market-data"}}
+    creationTimestamp: "2026-05-25T20:47:28Z"
+    labels:
+      kubernetes.io/metadata.name: market-data
+    name: market-data
+    resourceVersion: "78915"
+    uid: fe1bfd6f-e325-41d7-80b6-88914cf05297
+  spec:
+    finalizers:
+    - kubernetes
+  status:
+    phase: Active
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    creationTimestamp: "2026-05-26T13:48:53Z"
+    labels:
+      kubernetes.io/metadata.name: monitoring
+    name: monitoring
+    resourceVersion: "125159"
+    uid: 72b2a5e8-de6e-40dd-9a05-99d4c9300471
+  spec:
+    finalizers:
+    - kubernetes
+  status:
+    phase: Active
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Namespace","metadata":{"annotations":{},"labels":{"governance.core/domain":"workflow-automation","governance.core/stage":"18","governance.core/type":"automation-runtime"},"name":"n8n"}}
+    creationTimestamp: "2026-05-27T23:09:27Z"
+    labels:
+      governance.core/domain: workflow-automation
+      governance.core/stage: "18"
+      governance.core/type: automation-runtime
+      kubernetes.io/metadata.name: n8n
+    name: n8n
+    resourceVersion: "349451"
+    uid: c42736a2-10f7-4698-a35a-03fb5f3e09df
+  spec:
+    finalizers:
+    - kubernetes
+  status:
+    phase: Active
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Namespace","metadata":{"annotations":{},"labels":{"governance.core/domain":"ui-operations","governance.core/stage":"18","governance.core/type":"platform-runtime"},"name":"platform"}}
+    creationTimestamp: "2026-05-25T12:44:21Z"
+    labels:
+      governance.core/domain: ui-operations
+      governance.core/stage: "18"
+      governance.core/type: platform-runtime
+      kubernetes.io/metadata.name: platform
+    name: platform
+    resourceVersion: "349450"
+    uid: aa7bec0b-c48a-4433-b507-74ad187ce175
+  spec:
+    finalizers:
+    - kubernetes
+  status:
+    phase: Active
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    creationTimestamp: "2026-05-26T15:39:25Z"
+    labels:
+      kubernetes.io/metadata.name: research
+    name: research
+    resourceVersion: "133203"
+    uid: 068c3a10-5891-4d62-996b-f9de37c80693
+  spec:
+    finalizers:
+    - kubernetes
+  status:
+    phase: Active
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    annotations:
+      governance.core/purpose: broker-transport-runtime
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Namespace","metadata":{"annotations":{"governance.core/purpose":"broker-transport-runtime"},"labels":{"governance.core/domain":"trading-infra","governance.core/runtime":"governed","governance.core/stage":"16","governance.core/type":"broker-connectivity"},"name":"trading-infra"}}
+    creationTimestamp: "2026-05-27T16:27:41Z"
+    labels:
+      governance.core/domain: trading-infra
+      governance.core/runtime: governed
+      governance.core/stage: "16"
+      governance.core/type: broker-connectivity
+      kubernetes.io/metadata.name: trading-infra
+    name: trading-infra
+    resourceVersion: "285421"
+    uid: 0c2b4c51-2d1e-4de1-a4f2-9f3971017756
+  spec:
+    finalizers:
+    - kubernetes
+  status:
+    phase: Active
+kind: List
+metadata:
+  resourceVersion: ""

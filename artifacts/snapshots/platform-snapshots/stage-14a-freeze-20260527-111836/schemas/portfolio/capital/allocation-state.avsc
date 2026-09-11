@@ -1,0 +1,13 @@
+{
+  "type": "record",
+  "name": "AllocationState",
+  "namespace": "core.portfolio.capital",
+  "fields": [
+    {"name": "account_group", "type": "string"},
+    {"name": "strategy_id", "type": "string"},
+    {"name": "allocated_capital", "type": "long"},
+    {"name": "used_capital", "type": "long"},
+    {"name": "available_capital", "type": "long"},
+    {"name": "allocation_timestamp", "type": "long"}
+  ]
+}

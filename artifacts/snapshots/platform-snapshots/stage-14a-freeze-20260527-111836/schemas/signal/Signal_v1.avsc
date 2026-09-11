@@ -1,0 +1,39 @@
+{
+  "type": "record",
+  "name": "Signal_v1",
+  "namespace": "core.trading.signal",
+  "fields": [
+    {
+      "name": "signal_id",
+      "type": "string"
+    },
+    {
+      "name": "strategy_id",
+      "type": "string"
+    },
+    {
+      "name": "instrument_id",
+      "type": "string"
+    },
+    {
+      "name": "direction",
+      "type": "string"
+    },
+    {
+      "name": "strength_bps",
+      "type": "long"
+    },
+    {
+      "name": "confidence_bps",
+      "type": "long"
+    },
+    {
+      "name": "timeframe",
+      "type": "string"
+    },
+    {
+      "name": "event_time",
+      "type": "string"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "type": "record",
+  "name": "TradeIntent_v1",
+  "namespace": "core.trading.tradeintent",
+  "fields": [
+    {
+      "name": "trade_intent_id",
+      "type": "string"
+    },
+    {
+      "name": "instrument_id",
+      "type": "string"
+    },
+    {
+      "name": "decision_action",
+      "type": "string"
+    },
+    {
+      "name": "strategy_set",
+      "type": {
+        "type": "array",
+        "items": "string"
+      }
+    },
+    {
+      "name": "aggregated_strength_bps",
+      "type": "long"
+    },
+    {
+      "name": "priority_score_bps",
+      "type": "long"
+    },
+    {
+      "name": "event_time",
+      "type": "string"
+    }
+  ]
+}

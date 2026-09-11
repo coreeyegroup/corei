@@ -1,0 +1,621 @@
+PHASE B — STEP 6: PARAMETER NUMERIC MODEL
+STATUS: FULL UPS (1–21) — INSTITUTIONAL / DETERMINISTIC / CEI-READY
+CHAT_REF_ID: CORE-TRADING-SYSTEM-PHASE-B-STEP6-PARAMETER-NUMERIC-MODEL-V1-2026-04-07
+
+1. PHASE IDENTITY LAYER
+	1.1 Phase Name
+
+		Phase B — Step 6: Parameter Numeric Model
+
+	1.2 Phase Role
+
+		Defines the complete numeric system for all parameters used in Phase B constraint system, ensuring:
+
+		fixed-point determinism
+		bounded numeric domains
+		cross-phase numeric consistency
+		CEI-testable reproducibility
+
+	1.3 Phase Objective
+
+		To construct a globally consistent, fixed-point numeric framework that:
+
+		converts all constraint parameters into deterministic numeric representations
+		enforces precision, bounds, rounding, overflow rules
+		guarantees bit-level reproducibility across all constraint evaluations
+
+	1.4 Why This Phase Exists
+
+		Without this layer:
+
+			constraint evaluation becomes numerically inconsistent
+			replay fails across environments
+			rounding differences create divergent decisions
+			CEI validation becomes impossible
+
+		This phase ensures:
+
+			numeric determinism = system determinism
+			all constraints defined in Step 2–5 become executable and stable
+
+2. PHASE SCOPE CONTROL
+	2.1 INCLUDED (STRICT)
+			Fixed-point numeric model definition
+			Parameter scaling rules
+			Rounding rules
+			Overflow / underflow handling
+			Numeric domain constraints (min/max)
+			Cross-layer numeric consistency (Phase A ↔ Phase B)
+			Deterministic arithmetic operations
+			Numeric invariant definitions
+
+	2.2 EXCLUDED (STRICT)
+			Constraint logic (Step 5)
+			Parameter meaning (Phase A ownership)
+			Execution behavior (Phase D)
+			Infrastructure / storage (Phase C)
+
+			Boundary Rule (MANDATORY)
+
+			This phase defines HOW numbers behave, NOT:
+
+				what constraints do
+				how decisions are made
+
+3. ARCHITECTURAL INTENT LAYER
+	3.1 Core Principles
+
+		P1 — Fixed-Point Only System
+		No floating-point anywhere in Phase B
+
+		P2 — Global Numeric Consistency
+		All phases MUST share same numeric representation
+
+		P3 — Deterministic Arithmetic
+		Same input → identical bit-level output
+
+		P4 — Bounded Computation
+		Every numeric variable MUST define bounds
+
+		P5 — Fail-Fast Numeric Safety
+		Invalid numeric operation → system rejection
+
+	3.2 Numeric Model Definition
+
+		Global representation:
+
+			value_fp = integer_value
+			real_value = integer_value / 10^6
+			scale = 10^6
+
+	3.3 System Positioning
+
+		Phase A → produces logical values
+		Phase B Step 6 → enforces numeric representation
+		Phase B Step 5 → uses numeric system
+		Phase D → enforces using same numeric model
+
+4. DOMAIN MODEL DEFINITION
+	4.1 Core Entities
+
+	E1: Numeric Parameter
+	E2: Numeric Domain
+	E3: Numeric Operation
+	E4: Numeric Constraint Binding
+	E5: Numeric Evaluation Unit
+	E6: Numeric Validation Result
+
+	4.2 Entity Definitions
+		E1: Numeric Parameter
+			numeric_parameter = {
+				parameter_id
+				parameter_type
+				value_fp
+				scale (fixed = 10^6)
+				version_id
+			}
+
+			Constraint:
+
+			value_fp MUST be integer
+			scale MUST be constant across system
+
+		E2: Numeric Domain
+			numeric_domain = {
+				domain_id
+				min_value_fp
+				max_value_fp
+				edge_behavior
+				invalid_condition
+			}
+
+			Constraints:
+
+			min ≤ max
+			both fixed-point
+			no NaN / infinity
+
+		E3: Numeric Operation
+			numeric_operation = {
+				operation_id
+				operation_type ∈ {ADD, SUB, MUL, DIV}
+				operand_set
+				result_fp
+			}
+
+		E4: Numeric Constraint Binding
+
+			Maps parameters → constraint system:
+
+			binding = {
+				parameter_id
+				constraint_id
+				domain_id
+			}
+
+		E5: Numeric Evaluation Unit
+			evaluation_unit = {
+				evaluation_unit_id
+				parameter_set
+				operation_sequence
+				result_set
+			}
+
+		E6: Numeric Validation Result
+			validation_result = {
+				parameter_id
+				validation_status ∈ {VALID, INVALID}
+				violation_type
+			}
+
+	4.3 Relationships
+		Parameter → belongs to → Domain
+		Parameter → used in → Constraint
+		Operation → consumes → Parameters
+		Evaluation Unit → produces → Result
+
+	4.4 Ownership
+		Numeric system → Phase B Step 6
+		Parameter semantics → Phase A
+		Enforcement → Phase D
+
+5. LOGIC / RULE ENGINE
+	5.1 Canonical Input Set
+			Use canonical_input_set defined in Phase B Step 1
+
+			Access ONLY:
+
+				canonical_input_set.constraint_parameter_set
+				canonical_input_set.configuration_snapshot
+				canonical_input_set.version_identifiers
+
+			Constraint:
+
+				Redefinition of canonical_input_set → FORBIDDEN
+
+	5.2 Fixed-Point Arithmetic Rules (MANDATORY)
+		Representation
+			value = integer / 10^6
+
+		Addition
+			C_fp = A_fp + B_fp
+
+		Multiplication
+			C_fp = (A_fp * B_fp) / scale
+
+		(using integer division with rounding)
+
+		Division
+			C_fp = (A_fp * scale) / B_fp
+
+		Constraint:
+
+			division by zero → HARD FAIL
+
+		MANDATORY EXECUTION STANDARD:
+
+			All arithmetic MUST follow EXACT sequence:
+
+			1. Perform operation in INT128 space
+			2. Apply scaling (if required)
+			3. Apply ROUND_HALF_UP
+			4. Cast to INT64
+
+			Constraint:
+
+			Intermediate representation MUST be INT128
+
+			Violation → HARD FAIL
+
+		INTEGER DIVISION STANDARD (MANDATORY):
+
+			All division MUST follow:
+
+			DIV_FP(A, B):
+
+			1. numerator = A * scale
+			2. quotient = numerator / B  (INT128 division)
+			3. remainder = numerator % B
+
+			4. IF |remainder * 2| ≥ |B|
+				  quotient = quotient + sign(A/B)
+
+			5. result_fp = quotient
+
+			Constraint:
+
+			- rounding MUST be symmetric around zero
+			- behavior MUST be identical across platforms
+
+		SIGN FUNCTION (MANDATORY):
+
+			sign(x) = {
+				+1 if x > 0
+				 0 if x == 0
+				-1 if x < 0
+			}
+
+			For division:
+
+			sign(A/B) MUST be computed as:
+
+			sign(A) * sign(B)
+
+			Constraint:
+
+			No direct division-based sign evaluation allowed
+
+	5.3 Rounding Standard (GLOBAL)
+
+		ROUND_HALF_UP (MANDATORY)
+
+			fraction ≥ 0.5 → round up
+			fraction < 0.5 → round down
+
+		Constraint:
+
+			truncation forbidden
+
+	5.4 Overflow / Underflow Rules
+		Overflow
+
+		If:
+
+			result_fp > MAX_INT64
+
+			→ HARD FAIL
+
+		UNDERFLOW DEFINITION:
+
+			IF |value_fp| < 1 (after scaling, before rounding)
+			→ value_fp = 0
+
+		PRE-OPERATION OVERFLOW CHECK (MANDATORY):
+
+			Before multiplication:
+
+			IF |A_fp| > MAX_INT64 / |B_fp|
+			→ HARD FAIL
+
+			No operation may execute without pre-check
+
+		SIGNED OVERFLOW (MANDATORY):
+
+			Overflow MUST be evaluated on absolute value:
+
+			|value_fp| > MAX_INT64 → HARD FAIL
+
+			Sign MUST be preserved until failure
+
+		OVERFLOW CHECK COVERAGE (MANDATORY):
+
+			Addition:
+			IF (A_fp > 0 AND B_fp > MAX - A_fp) → FAIL
+			IF (A_fp < 0 AND B_fp < MIN - A_fp) → FAIL
+
+			Division:
+			IF A_fp == MIN_INT64 AND B_fp == -1 → FAIL
+
+		NUMERIC LIMIT CONSTANTS (MANDATORY):
+
+			MAX_INT64 = 9223372036854775807
+			MIN_INT64 = -9223372036854775808
+
+			Constraint:
+
+			All systems MUST use these exact values
+
+			No platform-dependent limits allowed
+
+	5.5 Numeric Domain Enforcement
+
+		For each parameter:
+
+			IF value_fp < min_value_fp → apply edge_behavior
+			IF value_fp > max_value_fp → apply edge_behavior
+
+		Edge Behavior
+			CLAMP → set to boundary
+			REJECT → fail evaluation
+			SATURATE → hold max
+
+		EDGE BEHAVIOR PRECEDENCE (STRICT):
+
+			1. REJECT (highest priority)
+			2. CLAMP
+			3. SATURATE
+
+			Constraint:
+
+			If multiple behaviors applicable → select highest precedence
+
+			No ambiguity allowed
+
+	5.6 Deterministic Ordering Rule
+
+		All numeric operations MUST be executed in:
+
+			parameter_id ASC
+			operation_id ASC
+
+		Constraint:
+
+			no unordered computation allowed
+
+		OPERATION SEQUENCE ORDER (MANDATORY):
+
+			operation_sequence MUST be ordered by:
+
+			1. evaluation_unit_id ASC
+			2. parameter_id ASC
+			3. operation_id ASC
+
+			Constraint:
+
+			hashing MUST use this exact ordering
+
+	5.7 Numeric Consistency Rule
+
+		All parameters shared across:
+
+			Decision Engine
+			Execution Behavior
+			Risk Philosophy
+
+		MUST:
+
+			use same scale
+			use same rounding
+			use same bounds
+
+		NUMERIC CONTRACT (MANDATORY):
+
+			All phases MUST enforce:
+
+			scale = 10^6
+			rounding = ROUND_HALF_UP
+			overflow_behavior = HARD_FAIL
+			execution_order = identical
+
+			Violation → SYSTEM INVALID
+
+		NUMERIC CONTRACT VALIDATION (MANDATORY):
+
+			At Phase Boundary:
+
+			hash_numeric_config_A == hash_numeric_config_B == hash_numeric_config_D
+
+			Where:
+
+			hash_numeric_config = HASH_v1(
+				scale + rounding + overflow_rules + execution_order
+			)
+
+			Violation → SYSTEM FAIL
+
+	5.8 Determinism Constraints
+		No floating-point
+		No platform-dependent math
+		No implicit casting
+		No runtime precision changes
+
+	5.9 RULE EXECUTION ORDER (STRICT)
+		Input Validation
+		Domain Validation
+		Operation Execution
+		Rounding
+		Overflow Check
+		Domain Enforcement
+		Output Generation
+
+		DOMAIN VALIDATION ORDER (MANDATORY):
+
+			1. Operation execution
+			2. Step invariant validation (per operation)
+			3. Final domain enforcement
+
+			Constraint:
+
+			Step invariant MUST execute BEFORE final domain enforcement
+
+6. FLOW ARCHITECTURE
+	6.1 Input
+		constraint_parameter_set
+		configuration_snapshot
+
+	6.2 Processing
+
+		Parameter → Validate → Compute → Bound → Output
+
+	6.3 Output
+		This step contributes to:
+
+			constraint_output.evaluation_layer.numeric_evaluation_output
+
+			Standalone outputs → FORBIDDEN
+
+	6.4 Flow Model
+
+		Input → Numeric Processing → Output
+
+7. PIPELINE STRUCTURE
+
+	Stages:
+
+		pending
+		validated
+		computed
+		bounded
+		finalized
+
+8. CONTROL & CONSTRAINTS
+	8.1 Hard Rules
+		fixed-point only
+		deterministic arithmetic
+		bounded domains
+		no overflow allowed
+
+	8.2 Soft Rules
+		prefer stable rounding
+		avoid precision loss
+
+	8.3 Guardrails
+		reject invalid parameters
+		reject division by zero
+		reject overflow
+
+9. STATE & DATA MODEL
+	Stateless System
+
+	No memory
+	No caching
+	No history dependency
+
+10. FAILURE MODEL
+	10.1 Failure Scenarios
+		overflow
+		division by zero
+		domain violation
+		invalid parameter
+
+	10.2 Failure Impact
+		constraint evaluation invalid
+		system unsafe
+
+	10.3 Mitigation
+		hard fail
+		reject evaluation
+
+11. ASSUMPTION REGISTER
+	Assumption			Reason					Status
+	scale = 10^6		precision standard		LOCKED
+	int64 safe range	hardware consistency	VALIDATED
+
+12. VALIDATION FRAMEWORK
+	Checks
+		deterministic replay
+		boundary validation
+		arithmetic correctness
+
+13. INVARIANTS
+	same input → same numeric output
+	all values bounded
+	no floating-point usage
+
+	STEP INVARIANT:
+
+		After EVERY operation:
+
+		result_fp MUST satisfy domain constraints
+
+		Violation → immediate failure
+
+14. EDGE CASE HANDLING
+	zero division → reject
+	zero normalization → safe fallback
+	min/max boundary → clamp/reject
+
+15. DETERMINISM GUARANTEES
+	bit-level identical output
+	order-independent inputs (after sorting)
+
+16. REPLAYABILITY
+
+	Replay(canonical_input_set) → identical numeric output
+
+17. AUDITABILITY
+
+	Each value traceable to:
+
+	parameter_id
+	operation_id
+	input snapshot
+
+	NUMERIC TRACE HASH (MANDATORY):
+
+		numeric_trace_hash = HASH_v1(
+			ordered(operation_sequence) +
+			ordered(parameter_values_fp)
+		)
+
+		Constraint:
+
+		Every evaluation_unit MUST produce numeric_trace_hash
+
+	CANONICAL HASH SERIALIZATION (MANDATORY):
+
+		All hash inputs MUST follow:
+
+		1. All integers encoded as base-10 strings
+		2. No leading zeros
+		3. Fields separated by "|"
+		4. Lists enclosed in "[" "]"
+		5. No whitespace allowed
+
+		Example:
+
+		operation_sequence = [op1,op2]
+		parameter_values_fp = [1000000,-500000]
+
+		Serialized:
+
+		"[op1|op2]|[1000000|-500000]"
+
+		Constraint:
+
+		ANY deviation → INVALID HASH
+
+18. TRACEABILITY
+
+	parameter → operation → constraint → decision
+
+19. VERSIONING
+
+	Each parameter MUST include:
+
+		parameter_version
+		config_version
+		numeric_model_version
+
+20. CEI TESTABILITY (CRITICAL)
+	Red Team Targets
+		overflow injection
+		rounding inconsistency
+		division edge cases
+		boundary violations
+
+	Blue Team Requirements
+		prove deterministic rounding
+		prove no precision drift
+		prove cross-phase consistency
+
+21. FINAL ACCEPTANCE CRITERIA
+
+	Phase is VALID ONLY IF:
+
+		ALL numbers use fixed-point
+		ALL operations deterministic
+		ALL domains bounded
+		ALL failures handled deterministically
+		CEI passes all adversarial tests
+		FINAL STATUS

@@ -1,0 +1,828 @@
+PHASE D — STEP 7: BROKER ADAPTER (EXTERNAL EXECUTION INTEGRATION LAYER)
+
+(UPS COMPLIANT — 21 SECTIONS, LOCK-GRADE SPECIFICATION)
+
+1. PHASE IDENTITY LAYER
+	1.1 Phase Name
+
+		Phase D — Step 7: Broker Adapter (External Execution Integration Layer)
+
+	1.2 Phase Role
+
+		Deterministic external boundary layer that:
+
+			converts ExecutionOrder → BrokerRequest
+			ingests BrokerResponse / Fill Events
+			normalizes into ExecutionEvent
+			reconciles external fills vs internal lifecycle
+
+		This is the FIRST external system boundary.
+
+	1.3 Phase Objective
+
+		Construct a deterministic external execution bridge such that:
+
+			ExecutionOrder
+			→ BrokerAdapter
+			→ BrokerRequest
+			→ BrokerResponse / ExternalFill
+			→ Normalized ExecutionEvent
+			→ Lifecycle System (Step 6)
+
+		Satisfying:
+
+			deterministic replay
+			idempotent execution
+			event-driven reconciliation
+			strict CEIL isolation
+
+	1.4 Why This Phase Exists
+
+		Without Step 7:
+
+			system remains closed-loop (simulation only)
+			no real fills
+			no broker confirmation
+			no external state alignment
+
+		Step 6 provides lifecycle simulation, but:
+
+			no real execution
+			no reconciliation
+			no external truth ingestion
+
+2. PHASE SCOPE CONTROL
+	2.1 INCLUDED (STRICT)
+		broker request construction
+		broker API interaction abstraction
+		response parsing + normalization
+		external fill ingestion
+		reconciliation engine
+		idempotent execution enforcement
+		CEIL boundary enforcement (CORE vs EXTERNAL)
+
+	2.2 EXCLUDED (STRICT)
+		order generation (Step 5)
+		lifecycle state transitions (Step 6)
+		risk / policy logic
+		market microstructure optimization
+		portfolio computation
+
+	2.3 Boundary Rule
+
+		Broker Adapter MUST:
+
+			translate + normalize only
+			NOT mutate system state directly
+			NOT introduce execution logic
+
+		Violation → SYSTEM NON-DETERMINISM
+
+		Broker Adapter MUST receive input ONLY from EMSInstruction
+
+			NOT directly from ExecutionOrder
+
+		Broker Adapter MUST receive input ONLY from EMSInstruction
+
+INFRA INVARIANT 1:
+OMS/EMS MUST NOT alter economic fields
+
+INFRA INVARIANT 2:
+OMS/EMS MUST preserve event_time lineage
+
+INFRA INVARIANT 3:
+OMS/EMS MUST be replay-deterministic
+
+INFRA INVARIANT 4:
+OMS/EMS MUST NOT introduce new IDs
+
+3. ARCHITECTURAL INTENT LAYER
+	3.1 Core Principles
+
+		P1 — Determinism over external uncertainty
+		P2 — Event Sovereignty (system > broker state)
+		P3 — Idempotent Execution
+		P4 — Replay Independence
+		P5 — CEIL Isolation Enforcement
+		P6 — No Direct State Mutation
+
+	3.2 Architectural Model
+		broker_execution_output = F(
+			execution_order_stream,
+			broker_response_stream,
+			configuration_snapshot,
+			version_identifiers
+		)
+
+	3.3 System Positioning
+	Step 5 → ExecutionOrder
+	Step 6 → Internal Lifecycle
+	Step 7 → Broker Adapter (THIS)
+	→ External Broker System
+	→ Back to Lifecycle via ExecutionEvent
+
+	Aligned with Phase D macro
+
+4. DOMAIN MODEL DEFINITION
+	4.1 Core Entities
+		ExecutionOrder (input)
+		BrokerRequest
+		BrokerResponse
+		ExternalFillEvent
+		NormalizedExecutionEvent
+		ReconciliationRecord
+
+	4.2 BrokerRequest Schema
+		BrokerRequest = {
+			broker_request_id
+			order_id
+			instrument
+			direction
+			size
+			price_reference
+			execution_type
+			timestamp
+			origin_type
+			lineage_hash_reference
+		}
+
+		Identity Rule:
+
+			broker_request_id = HASH_v1(order_id)
+
+		→ ensures idempotency
+
+	4.3 BrokerResponse Schema
+		BrokerResponse = {
+			broker_request_id
+			broker_order_id
+			status ∈ {ACCEPTED, REJECTED}
+			timestamp
+			metadata
+		}
+
+		Broker Mapping Constraint (MANDATORY):
+
+			broker_order_id ↔ order_id MUST be 1:1
+
+			mapping_hash = HASH_v1(broker_order_id + order_id)
+
+			Violation → HARD FAIL
+
+	4.4 ExternalFillEvent
+		ExternalFillEvent = {
+			broker_order_id
+			order_id
+			executed_size
+			execution_price
+			external_event_time
+			fill_id
+		}
+
+		fill_id = HASH_v1(
+			broker_order_id +
+			executed_size +
+			external_event_time +
+			execution_price
+		)
+
+
+	4.5 NormalizedExecutionEvent
+
+		Aligned to Step 6 schema:
+
+		event_type ∈ {
+			ORDER_CREATED
+			ORDER_ROUTED
+			PARTIAL_FILL
+			FULL_FILL
+			ORDER_COMPLETED
+			ORDER_FAILED
+		}
+
+		event_id = HASH_v1(
+			    order_id +
+			    event_type +
+			    executed_size +
+			    remaining_size +
+			    normalized_event_time
+			)
+
+		BrokerAdapter = {
+				adapter_id
+				broker_type
+				input_contract
+				output_contract
+			}
+
+			Broker Adapter Rules (MANDATORY)
+
+				- MUST NOT modify execution payload
+				- MUST NOT generate new IDs
+				- MUST preserve event_time
+				- MUST produce ExecutionFillEvent
+
+				Determinism Rule:
+
+				- identical input → identical broker request
+
+		Global EventType Enforcement (MANDATORY)
+
+			- Step 7 MUST use identical EventType as defined in Step 5
+			- NO local redefinition allowed
+			- NO aliasing allowed
+
+			event_type MUST match:
+
+			{
+				ORDER_CREATED
+				ORDER_ROUTED
+				PARTIAL_FILL
+				FULL_FILL
+				ORDER_COMPLETED
+				ORDER_FAILED
+			}
+
+			Violation → RECONCILIATION FAILURE
+
+	4.6 Relationships
+		ExecutionOrder → OMS → EMS → BrokerRequest
+		BrokerRequest 		→ 1..N BrokerResponse
+		BrokerResponse 		→ 0..N ExternalFillEvent
+		ExternalFillEvent 	→ NormalizedExecutionEvent
+		NormalizedExecutionEvent → Step 6 Lifecycle
+
+5. LOGIC / RULE ENGINE
+	5.1 Rule Classes
+
+		R1 — Input Validation
+		R2 — Request Construction
+		R3 — Idempotency Check
+		R4 — Response Parsing
+		R5 — Event Normalization
+		R6 — Reconciliation
+		R7 — Ordering Enforcement
+		R8 — Output Construction
+
+		R9 — EMS Routing Determinism (MANDATORY)
+
+			broker_route = f(
+				instrument,
+				execution_type,
+				configuration_snapshot.routing_rules
+			)
+
+			Constraints:
+
+			- MUST be deterministic
+			- MUST be config-driven
+			- MUST NOT depend on runtime broker state
+
+	5.2 Idempotency Rule (CRITICAL)
+		IF broker_request_id already exists:
+			DO NOT re-send request
+
+		Constraint:
+
+			same order_id → same broker_request
+			duplicates → rejected
+
+	5.3 Response Normalization Rule
+		BrokerResponse → ExecutionEvent
+
+		Mapping:
+
+		Broker State			System Event
+		ACCEPTED				ORDER_ROUTED
+		PARTIAL FILL			PARTIAL_FILL
+		FULL FILL				FULL_FILL
+		REJECTED				ORDER_FAILED
+
+	5.4 Reconciliation Rule (CRITICAL)
+		external_fill ≠ internal_fill
+		→ external overrides
+
+		reconcile_external_vs_internal():
+			input:
+				internal_event_stream
+				external_fill_stream
+
+			output:
+				unified_execution_event_stream
+
+		Reconciliation Safety Constraints:
+
+			Σ(external_executed_size) ≤ order.size
+
+			IF Σ(external_executed_size) > order.size:
+			    → HARD FAIL
+
+			remaining_size MUST satisfy:
+			    remaining_size = order.size - Σ(external_executed_size)
+
+			remaining_size ≥ 0
+
+		Reconciliation Algorithm (LOCKED):
+
+			Step 1: discard internal fill events
+			Step 2: rebuild execution_event_stream ONLY from external_fill_stream
+			Step 3: enforce Step 6 lifecycle transitions
+			Step 4: emit ORDER_COMPLETED
+
+			No alternative interpretation allowed
+
+		Lifecycle Reconstruction (MANDATORY):
+
+			Reconstructed execution_event_stream MUST include full lifecycle:
+
+			1. ORDER_CREATED
+			2. ORDER_ROUTED
+			3. PARTIAL_FILL (if applicable)
+			4. FULL_FILL (if applicable)
+			5. ORDER_COMPLETED
+
+			Rules:
+
+			- ORDER_CREATED MUST be emitted once per order
+			- ORDER_ROUTED MUST follow ORDER_CREATED
+			- Fill events MUST follow ORDER_ROUTED
+			- ORDER_COMPLETED MUST be final event
+
+			Constraint:
+
+			Lifecycle MUST be fully reconstructable from external_fill_stream + ExecutionOrder
+
+		ORDER_CREATED Emission Rule (MANDATORY):
+
+			ORDER_CREATED MUST be emitted from ExecutionOrder initialization.
+
+			normalized_event_time = execution_order.timestamp
+
+			This event MUST be the first event in lifecycle.
+
+		FULL_FILL Determination Rule (MANDATORY):
+
+			cumulative_executed_size = Σ(external_executed_size)
+
+			IF cumulative_executed_size == order.size:
+				emit FULL_FILL
+
+			Constraints:
+
+			- FULL_FILL MUST occur exactly once
+			- FULL_FILL MUST be the last fill event
+			- AFTER FULL_FILL → no further PARTIAL_FILL allowed
+			- IF cumulative_executed_size < order.size → FULL_FILL MUST NOT be emitted
+
+		ORDER_ROUTED Emission Rule (MANDATORY):
+
+			IF BrokerResponse.status == ACCEPTED:
+				emit ORDER_ROUTED
+
+			IF BrokerResponse.status == REJECTED:
+				emit ORDER_FAILED
+				STOP further processing
+
+		PARTIAL_FILL Rule (MANDATORY):
+
+			FOR each ExternalFillEvent:
+
+				cumulative_executed_size += executed_size
+
+				IF cumulative_executed_size < order.size:
+					emit PARTIAL_FILL
+
+				ELSE IF cumulative_executed_size == order.size:
+					emit FULL_FILL
+
+		Upstream Dependency Clarification:
+
+			Step 6 ExecutionEvent stream is considered:
+
+			- SIMULATION ONLY
+			- NON-AUTHORITATIVE
+
+			Reconciliation MUST:
+
+			- discard Step 6 fill events completely
+			- rebuild from ExternalFillEvent stream
+
+	5.5 Rule Execution Order (STRICT)
+		Input Validation
+		Idempotency Check
+		Request Construction
+		Broker Interaction
+		Response Parsing
+		Event Normalization
+		Reconciliation
+		Output Construction
+
+		External Event Ordering Rule (MANDATORY):
+
+			external_event_ordering_key = {
+					normalized_event_time ASC
+					broker_order_id ASC
+					fill_id ASC
+				}
+
+			All ExternalFillEvents MUST be sorted before normalization.
+
+			Out-of-order arrival MUST NOT affect final ordering.
+
+		Global Ordering Alignment (MANDATORY):
+
+			NormalizedExecutionEvent MUST follow Phase C ordering:
+
+			ordering_key = {
+			    normalized_event_time ASC
+			    partition_id ASC
+			    event_id ASC
+			}
+
+			External ordering MUST be pre-normalization only.
+
+		FOR EACH venue_allocation:
+			send_order_to_venue()
+
+	5.6 Fill Idempotency Rule (MANDATORY)
+
+		Each ExternalFillEvent MUST be uniquely identified using:
+
+		Deduplication Logic:
+
+		IF fill_id already exists in processed_fill_set:
+			IGNORE the event
+
+		ELSE:
+			process normally
+
+		Constraints:
+
+		- identical fill MUST NOT be processed more than once
+		- deduplication MUST be deterministic
+		- processed_fill_set MUST be reconstructable during replay
+
+	5.7 Time Normalization Rule (MANDATORY)
+
+		External normalized_event_time MUST be normalized before event construction.
+
+		normalized_event_time = MAX(
+				ExternalFillEvent.external_event_time,
+				execution_order.timestamp
+			)
+
+		Constraints:
+
+		- normalized_event_time MUST be monotonic per order
+		- normalized_event_time MUST NOT move backward
+		- normalization MUST be deterministic
+		- identical input MUST produce identical normalized_event_time
+
+		All downstream processing MUST use normalized_event_time.
+
+			normalized_event_time field in:
+
+			- ordering
+			- event_id generation
+			- lifecycle processing
+
+			MUST be replaced with normalized_event_time.
+
+		normalized_event_time is a derived field and MUST NOT exist in ExternalFillEvent.
+
+			It MUST be computed during normalization phase and used only in:
+
+			- ordering
+			- event_id generation
+			- lifecycle processing
+
+		Event Time Lineage Rule (GLOBAL — MANDATORY)
+
+			ExecutionEvent.event_time MUST be derived ONLY from:
+
+				trade_intent_snapshot.event_time
+
+			OR
+
+				a deterministic transformation of it (e.g. partial fill sequencing)
+
+			Constraints:
+
+				event_time MUST NOT use:
+					- system clock
+					- broker timestamp
+					- wall-clock time
+
+				event_time MUST preserve ordering consistency with TradeIntent.event_time
+
+			Violation → NON-REPLAYABLE SYSTEM
+
+			Numeric Model Enforcement (MANDATORY — GLOBAL)
+
+				ALL numeric values MUST use fixed-point representation:
+
+					value = integer / 10^6
+
+				Applies to:
+
+					price
+					quantity
+					fill_quantity
+					fill_price
+					execution_value
+					fees
+					slippage
+
+				Constraints:
+
+					floating-point arithmetic → FORBIDDEN
+
+					rounding mode:
+						ROUND_HALF_UP
+
+					overflow:
+						MUST trigger HARD FAILURE
+
+					underflow:
+						treated as zero
+
+				Violation → NUMERIC NON-DETERMINISM
+
+			ExecutionEvent = {
+
+				execution_event_id
+
+				trade_intent_id        (MANDATORY)
+				order_id               (MANDATORY)
+
+				instrument
+				fill_quantity
+				fill_price
+
+				event_time
+
+				event_type
+
+				execution_status
+
+			}
+
+			Identity Lineage Rule (MANDATORY)
+
+				Full identity chain MUST exist:
+
+					signal_id
+						→ trade_intent_id
+						→ order_id
+						→ execution_event_id
+
+				Constraints:
+
+					- All mappings MUST be deterministic
+					- No missing linkage allowed
+					- IDs MUST follow HASH_v1 standard
+
+				Violation → AUDIT FAILURE
+
+6. FLOW ARCHITECTURE
+	6.0 Canonical Input Set
+		canonical_input_set_D7 = {
+			execution_order_stream,
+			broker_response_stream,
+			configuration_snapshot,
+			version_identifiers
+		}
+
+		Constraints:
+
+			immutable
+			replay-safe
+			broker dependency optional (for replay)
+
+	6.1 Processing Flow
+		ExecutionOrder
+		→ BrokerRequest
+		→ BrokerResponse
+		→ ExternalFillEvent (raw)
+		→ Time Normalization (derive normalized_event_time)
+		→ Reconciliation
+		→ ExecutionEvent
+
+	6.2 Output
+		broker_execution_output = {
+			broker_request_log
+			broker_response_log
+			normalized_execution_event_stream
+			reconciliation_report
+		}
+
+	6.3 Flow Rule
+		no direct state mutation
+		event-driven only
+		external data must be normalized
+
+		Latency Handling Model (MANDATORY)
+
+			max_fill_delay = configuration_snapshot.max_fill_delay
+
+			IF no ExternalFillEvent is received within max_fill_delay:
+
+				emit ORDER_FAILED
+
+			Constraints:
+
+			- ORDER_TIMEOUT event type is NOT allowed
+			- failure MUST map to existing lifecycle event types
+			- ORDER_FAILED MUST follow ORDER_ROUTED
+			- lifecycle transitions MUST remain valid per Step 6
+
+7. PIPELINE STRUCTURE
+
+	P1 — Order Routing
+	P2 — Broker Request Dispatch
+	P3 — Response Capture
+	P4 — Fill Listener
+	P5 — Normalization
+	P6 — Reconciliation
+	P7 — Event Emission
+
+8. CONTROL & CONSTRAINTS
+	8.1 Hard Rules
+		no duplicate order submission
+		broker cannot mutate system state
+		external fills must be normalized
+		deterministic ordering mandatory
+
+		HR-SOR-EXEC-1: Execution layer MUST NOT alter routing decisions
+
+			assert Σ(fills) == requested_size
+
+				ELSE:
+
+					trigger:
+						reconciliation_event
+						forced_position_sync
+
+	8.2 Guardrails
+		reject malformed broker responses
+		reject unmatched order_id
+		reject CEIL violation
+
+	8.3 Invariants
+		state = f(event_log) (preserved)
+		external fills override simulation
+		idempotency guaranteed
+
+		I-SOR-6: All execution failures MUST be explicitly recorded and auditable
+
+9. STATE & DATA MODEL
+	9.1 State Definition
+
+		NO internal state ownership
+
+		State remains in Step 6 lifecycle
+
+	9.2 Source of Truth
+		primary → normalized_execution_event_stream
+		NOT broker system
+
+	9.3 Replay Model
+
+		Supports:
+
+		replay WITH external events
+		replay WITHOUT broker
+
+	Replay Mode Definition (MANDATORY):
+
+			MODE 1: FULL REPLAY
+			    uses recorded external_fill_stream
+
+			MODE 2: SIMULATION REPLAY
+			    external_fill_stream replaced by:
+			        deterministic fill_model (Step 6)
+
+			Constraint:
+			identical mode + identical input → identical output
+
+10. FAILURE MODEL
+	10.1 Scenarios
+		duplicate submission
+		missing broker response
+		out-of-order fills
+		partial fill mismatch
+
+	10.2 Impact
+		state inconsistency risk
+		execution drift
+
+	10.3 Mitigation
+		reconciliation engine
+		idempotent request enforcement
+		event reordering
+
+		if venue fails:
+
+			mark execution_status = FAILED
+
+			record failure_reason
+
+			trigger audit_event
+
+			DO NOT retry
+			DO NOT reroute
+
+11. ASSUMPTION REGISTER
+	Assumption								Status
+	Broker API reliable						CONTROLLED
+	External fills eventually consistent	CONTROLLED
+	ExecutionOrder valid					VALIDATED
+
+12. VALIDATION FRAMEWORK
+	12.1 Method
+		Red Team (external inconsistency attacks)
+		Blue Team (determinism validation)
+
+	12.2 Acceptance
+		identical replay output
+		consistent reconciliation
+
+13. OUTPUT (DELIVERABLE)
+	broker_execution_output = {
+		broker_request_log
+		broker_response_log
+		normalized_execution_event_stream
+		reconciliation_report
+	}
+
+14. TRACEABILITY MAPPING
+	ExecutionOrder → BrokerRequest → BrokerResponse
+	→ ExternalFill → ExecutionEvent → Lifecycle
+
+	Full lineage preserved.
+
+
+15. CROSS-PHASE CONSISTENCY
+	Step 5 → provides ExecutionOrder
+	Step 6 → consumes ExecutionEvent
+	Phase C → event ordering + infra guarantees
+
+16. SCALABILITY MODEL
+	multi-broker support
+	partitioned execution streams
+	parallel fill listeners
+
+17. GOVERNANCE INTEGRATION
+	broker adapter versioned
+	API schema locked
+	change requires approval
+
+18. AUDITABILITY & OBSERVABILITY
+	full request/response logs
+	reconciliation reports
+	deterministic replay
+
+19. RISK CONSIDERATIONS
+		external non-determinism risk
+		latency mismatch
+		fill inconsistency
+
+	Mitigation:
+
+		normalization + reconciliation
+
+20. FAILURE CONDITION (PHASE LEVEL)
+
+	Phase FAILS if:
+
+		broker affects state directly
+		replay mismatch occurs
+		idempotency breaks
+		reconciliation inconsistent
+
+21. PHASE LOCK CRITERIA
+
+	Phase LOCKED only if:
+
+	deterministic mapping proven
+	replay identical (with/without broker)
+	reconciliation stable
+	no ambiguity
+	Red Team passed
+	Blue Team validated
+
+FINAL SYSTEM TRANSFORMATION (CRITICAL SUMMARY)
+	BEFORE STEP 7
+		ExecutionOrder
+		→ Internal Lifecycle (Simulated)
+		→ Portfolio
+
+	AFTER STEP 7
+		ExecutionOrder
+		→ Broker Adapter
+			→ BrokerRequest
+			→ BrokerResponse
+			→ External Fill
+		→ Normalized ExecutionEvent
+		→ Lifecycle System
+		→ PortfolioState

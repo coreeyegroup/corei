@@ -1,0 +1,386 @@
+🔵 PHASE 3 — CORE K8s INFRA (INGRESS + SECURITY)
+	1. PHASE IDENTITY
+		1.1 Name
+
+			PHASE 3 — CORE K8s INFRA (INGRESS + SECURITY)
+
+		1.2 Role
+
+			Establish external traffic entry, load balancing, and security baseline for Kubernetes cluster
+
+		1.3 Objective
+
+			Enable:
+
+				External access to services (Ingress)
+				Load-balanced IP allocation (MetalLB)
+				TLS automation (Cert Manager)
+				Network security foundation
+
+		1.4 Failure Prevented
+				No external access to services
+				No HTTP/HTTPS routing
+				No TLS (insecure system)
+				No production traffic handling capability
+
+				📌 Phase 3 transforms cluster from internal system → externally accessible platform
+
+	2. FINAL SYSTEM STATE (YOUR NODE)
+			Component				Value
+			Ingress Controller		NGINX
+			LoadBalancer			MetalLB
+			External IP				192.168.1.240
+			TLS Layer				Cert Manager
+			Network					Calico
+			Node					Ready
+			Cluster					Fully externally accessible
+
+	3. ARCHITECTURAL OWNERSHIP (CRITICAL)
+			LAYER MODEL
+			Layer	Component				Ownership				Responsibility
+			L3		Kubernetes				Core orchestrator		internal routing
+			L3.5	Ingress (NGINX)			Kubernetes				HTTP routing
+			L3.6	MetalLB					Network layer			external IP allocation
+			L3.7	Cert Manager			Security layer			TLS lifecycle
+
+			🔴 INGRESS OWNS
+				✔ HTTP/HTTPS routing
+				✔ Path-based routing
+				✔ Host-based routing
+				✔ Entry point to cluster
+
+			🔴 METALLB OWNS
+				✔ External IP assignment
+				✔ LoadBalancer implementation (bare metal)
+				✔ ARP advertisement on LAN
+
+			🔴 CERT-MANAGER OWNS
+				✔ TLS certificate issuance
+				✔ Certificate renewal
+				✔ Secret injection into pods
+
+			🔴 KUBERNETES OWNS
+				✔ Service abstraction
+				✔ Networking integration
+				✔ Pod exposure via services
+
+			🚨 DOES NOT OWN
+				✘ DNS (external)
+				✘ Firewall rules
+				✘ Internet exposure (router level)
+
+	4. CORE COMPONENTS INTRODUCED
+			Component					Role				Responsibility
+			ingress-nginx-controller	entry gateway		traffic routing
+			MetalLB controller			LB control			IP allocation
+			MetalLB speaker				network announcer	ARP broadcast
+			cert-manager				TLS controller		cert lifecycle
+			webhook/cainjector			validation			security enforcement
+
+	5. EXECUTION STEPS (DETAILED)
+		STEP 3.1 — INSTALL INGRESS CONTROLLER
+			kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml
+
+			Outcome
+
+				ingress-nginx namespace created
+				controller deployed
+				admission webhooks installed
+
+		STEP 3.2 — FIX SINGLE NODE SCHEDULING (CRITICAL)
+			Problem:
+
+				Pods stuck in Pending due to control-plane taint
+
+			Fix:
+				kubectl taint nodes core-node node-role.kubernetes.io/control-plane-
+
+			Outcome
+
+				Workloads allowed on control-plane
+				Required for single-node setup
+
+		STEP 3.3 — VERIFY INGRESS
+				kubectl get pods -n ingress-nginx
+
+			Outcome
+
+				Running (1/1)
+
+		STEP 3.4 — INSTALL METALLB
+				kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.14.5/config/manifests/metallb-native.yaml
+
+			Outcome
+
+				controller + speaker deployed
+				CRDs installed
+
+		STEP 3.5 — VERIFY METALLB PODS
+				kubectl get pods -n metallb-system
+
+			Outcome
+
+				Running
+
+		STEP 3.6 — DETECT NETWORK RANGE
+			ip a
+
+			Observed
+
+				192.168.1.3/24
+
+		STEP 3.7 — CONFIGURE IP POOL
+			nano metallb-config.yaml
+				apiVersion: metallb.io/v1beta1
+				kind: IPAddressPool
+				metadata:
+				  name: core-pool
+				  namespace: metallb-system
+				spec:
+				  addresses:
+				  - 192.168.1.240-192.168.1.250
+				---
+				apiVersion: metallb.io/v1beta1
+				kind: L2Advertisement
+				metadata:
+				  name: core-l2
+				  namespace: metallb-system
+
+			Apply:
+
+				kubectl apply -f metallb-config.yaml
+
+			Outcome
+
+				External IP pool created
+				ARP broadcast enabled
+
+		STEP 3.8 — VERIFY LOADBALANCER
+				kubectl get svc -A
+
+			Result
+
+				ingress-nginx-controller → EXTERNAL-IP = 192.168.1.240
+
+		STEP 3.9 — INSTALL CERT-MANAGER
+			kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.14.4/cert-manager.yaml
+
+		STEP 3.10 — VERIFY CERT-MANAGER
+				kubectl get pods -n cert-manager
+
+			Outcome
+
+				All pods → Running
+
+	6. INFRA FLOW (IMPORTANT)
+
+		User Request (HTTP)
+			↓
+		Ingress Controller (NGINX)
+			↓
+		Kubernetes Service
+			↓
+		Pod (Application)
+
+
+		External routing:
+
+		External Client
+			↓
+		192.168.1.240 (MetalLB)
+			↓
+		Ingress Controller
+			↓
+		Service → Pod
+
+	7. FINAL VALIDATION
+		Commands
+			kubectl get pods -A
+			kubectl get svc -A
+			kubectl get nodes
+
+		Expected Output
+
+		Check			Expected
+		All pods		Running
+		ingress			Running
+		metallb			Running
+		cert-manager	Running
+		node			Ready
+		external IP		Assigned
+
+	8. HARD CONSTRAINTS ENFORCED
+
+		✔ Single-node taint removed
+		✔ External IP pool defined correctly
+		✔ Same subnet used
+		✔ No NodePort exposure
+		✔ TLS layer installed
+		✔ Ingress mandatory
+
+	9. FAILURE MODEL (PHASE 3)
+		Failure					Impact
+		taint not removed		pods stuck Pending
+		no IP pool				EXTERNAL-IP pending
+		wrong subnet			unreachable services
+		no cert-manager			insecure system
+		ingress not running		no routing
+
+	10. OUTPUT (DELIVERABLE)
+		Production Entry Layer:
+
+			→ External traffic routing enabled
+			→ LoadBalancer working (bare metal)
+			→ Real IP exposure (LAN)
+			→ TLS automation layer ready
+			→ Secure networking baseline
+
+	11. TRACEABILITY
+			Phase 0 → OS baseline
+			Phase 1 → Docker runtime
+			Phase 2 → Kubernetes orchestration
+			Phase 3 → Entry + Security layer
+			Phase 4 → Helm (next)
+
+	12. PHASE LOCK CRITERIA
+
+			✔ Ingress running
+			✔ MetalLB configured
+			✔ External IP assigned
+			✔ Cert-manager running
+			✔ Node stable
+			✔ All pods healthy
+
+		🔒 FINAL STATUS
+		PHASE 3 = LOCKED
+
+	📋 13. COMMAND REFERENCE TABLE (PHASE 3)
+
+		Step				Command									Purpose	Expected		Output
+		Install Ingress		kubectl apply -f ingress.yaml			deploy ingress			resources created
+		Remove Taint		kubectl taint nodes core-node ...-		allow scheduling		node untainted
+		Check Ingress		kubectl get pods -n ingress-nginx		verify ingress			running
+		Install MetalLB		kubectl apply -f metallb.yaml			install LB				resources created
+		Check MetalLB		kubectl get pods -n metallb-system		verify pods				running
+		Network Check		ip a									detect subnet			192.168.1.x
+		Create Config		nano metallb-config.yaml				define pool				file created
+		Apply Config		kubectl apply -f metallb-config.yaml	activate LB				created
+		Verify Pool			kubectl get ipaddresspools				confirm pool			active
+		Verify L2			kubectl get l2advertisements			confirm ARP				active
+		Check Service		kubectl get svc -A						external IP				assigned
+		Install Cert		kubectl apply -f cert-manager.yaml		TLS layer				installed
+		Verify Cert			kubectl get pods -n cert-manager		check TLS				running
+		Final Check			kubectl get pods -A						full health				running
+
+	🧠 FINAL INSIGHT
+
+		You have now built:
+
+			ENTRY LAYER COMPLETE:
+
+			Internet/LAN → MetalLB → Ingress → Kubernetes → Pods
+
+		This is:
+
+			✔ Production-grade traffic entry
+			✔ Secure service exposure layer
+			✔ Mandatory foundation for all trading services
+
+
+Phase C3 — ENTRY / NETWORK LAYER
+
+	C3 — STEP 1: INGRESS CONTROLLER VALIDATION
+		kubectl get pods -A | grep -i ingress
+
+	C3 — STEP 2: INSTALL INGRESS CONTROLLER (NGINX)
+
+		kubectl create namespace ingress-nginx
+
+		kubectl apply -n ingress-nginx -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml
+
+		EXPECTED OUTPUT:
+			multiple resources created:
+			service
+			deployment
+			configmap
+			RBAC
+			pods
+
+	C3 — STEP 3: INGRESS CONTROLLER POD VALIDATION
+		kubectl get pods -n ingress-nginx
+
+		kubectl get validatingwebhookconfiguration
+
+	C3 — STEP 4: INGRESS SERVICE EXPOSURE (CRITICAL)
+		kubectl get svc -n ingress-nginx
+
+	C3 — STEP 5: INSTALL METALLB (LOAD BALANCER)
+
+		kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.14.5/config/manifests/metallb-native.yaml
+
+	C3 — STEP 6: METALLB POD VALIDATION
+
+		kubectl get pods -n metallb-system
+
+	C3 — STEP 7: METALLB IP POOL CONFIGURATION
+
+		ip a
+
+	C3 — STEP 7: CREATE IP POOL + L2 ADVERTISEMENT
+
+		nano metallb-config.yaml
+
+			apiVersion: metallb.io/v1beta1
+			kind: IPAddressPool
+			metadata:
+			  name: core-pool
+			  namespace: metallb-system
+			spec:
+			  addresses:
+			  - 192.168.1.240-192.168.1.250
+			---
+			apiVersion: metallb.io/v1beta1
+			kind: L2Advertisement
+			metadata:
+			  name: core-l2
+			  namespace: metallb-system
+
+		kubectl apply -f metallb-config.yaml
+
+		OUTPUT:
+			ipaddresspool.metallb.io/core-pool created
+			l2advertisement.metallb.io/core-l2 created
+
+	C3 — STEP 8: VERIFY EXTERNAL-IP ASSIGNMENT
+		kubectl get svc -n ingress-nginx
+
+	C3 — STEP 9: EXTERNAL ACCESS VALIDATION
+		curl http://192.168.1.240
+
+	🔷 C3 — ENTRY / NETWORK LAYER
+		🧠 MACRO ROLE
+			External → Internal traffic routing
+
+		✔ WHAT YOU DID
+		Networking
+			Validated Calico (CNI)
+			Verified pod-to-pod communication
+		DNS
+			Verified CoreDNS
+			Fixed DNS resolution (FQDN required)
+		Ingress
+			Installed NGINX Ingress Controller
+		Load Balancer
+			Installed MetalLB
+			Configured IP pool → assigned external IP
+
+		⚙ FINAL SETTINGS
+			Ingress Type     → NGINX
+			LoadBalancer     → MetalLB (Layer2)
+			External IP      → 192.168.1.240
+			DNS              → cluster.local
+
+		🧠 VALUE
+			External access to cluster services
+			Stable service routing
+			Production-ready networking layer

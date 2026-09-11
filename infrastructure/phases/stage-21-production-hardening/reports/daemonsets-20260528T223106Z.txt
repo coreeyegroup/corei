@@ -1,0 +1,7 @@
+NAMESPACE         NAME                       DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR            AGE
+kube-system       calico-node                1         1         1       1            1           kubernetes.io/os=linux   3d15h
+kube-system       kube-proxy                 1         1         1       1            1           kubernetes.io/os=linux   3d15h
+longhorn-system   engine-image-ei-c9fa6d45   1         1         1       1            1           <none>                   3d15h
+longhorn-system   longhorn-csi-plugin        1         1         1       1            1           <none>                   3d15h
+longhorn-system   longhorn-manager           1         1         1       1            1           <none>                   3d15h
+research          continuous-image-puller    1         1         1       1            1           <none>                   2d6h

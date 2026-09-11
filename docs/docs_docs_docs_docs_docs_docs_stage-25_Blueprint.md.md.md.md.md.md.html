@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <title>docs docs docs docs docs stage 25 Blueprint.md.md.md.md.md</title>
+  <style>
+  body {
+    background: #0A0D12;
+    color: #E3E7EC;
+    font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px 40px;
+  }
+
+  h1 {
+    font-size: 26px;
+    font-weight: 600;
+    color: #C6A46A;
+    margin: 24px 0 12px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 8px;
+  }
+
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #D4B88A;
+    margin: 20px 0 10px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 6px;
+  }
+
+  h3 {
+    font-size: 17px;
+    font-weight: 500;
+    color: #E3E7EC;
+    margin: 16px 0 8px 0;
+  }
+
+  h4 {
+    font-size: 15px;
+    font-weight: 500;
+    color: #C5CED9;
+    margin: 12px 0 6px 0;
+  }
+
+  p {
+    margin-bottom: 8px;
+    color: #C5CED9;
+  }
+
+  ul,
+  ol {
+    padding-left: 24px;
+    margin-bottom: 8px;
+    color: #C5CED9;
+  }
+
+  li {
+    margin-bottom: 2px;
+  }
+
+  code {
+    font-family: 'JetBrains Mono', 'Cascadia Code', monospace;
+    font-size: 13px;
+    background: rgba(255,255,255,0.05);
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid #28303C;
+    color: #C5CED9;
+  }
+
+  pre {
+    background: #18202A;
+    border: 1px solid #28303C;
+    border-radius: 6px;
+    padding: 16px 20px;
+    overflow: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 12px 0 16px 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #C5CED9;
+  }
+
+  pre code {
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 16px 0;
+    font-size: 13px;
+    color: #C5CED9;
+  }
+
+  th {
+    background: #18202A;
+    color: #C5CED9;
+    font-weight: 600;
+    text-align: left;
+    padding: 6px 12px;
+    border: 1px solid #28303C;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  td {
+    padding: 4px 12px;
+    border: 1px solid #28303C;
+    background: #0E1219;
+  }
+
+  tr:nth-child(even) td {
+    background: #121821;
+  }
+
+  blockquote {
+    border-left: 3px solid #C6A46A;
+    padding-left: 16px;
+    margin: 8px 0 12px 0;
+    color: #6E7883;
+    font-style: italic;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #28303C;
+    margin: 24px 0;
+  }
+
+  a {
+    color: #8BB4F0;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  strong {
+    color: #E3E7EC;
+    font-weight: 600;
+  }
+
+  img {
+    max-width: 100%;
+    border-radius: 4px;
+    border: 1px solid #28303C;
+  }
+
+  .doc-footer {
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid #28303C;
+    font-size: 12px;
+    color: #6E7883;
+    font-family: monospace;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+</style>
+</head>
+
+<body>
+
+  <div
+    class="doc-header"
+    style="
+      background:#121821;
+      border:1px solid #28303C;
+      border-radius:8px;
+      padding:1.2rem 1.8rem;
+      margin-bottom:1.8rem;
+    "
+  >
+
+    <div
+      style="
+        color:#C6A46A;
+        font-weight:600;
+        font-size:13px;
+        text-transform:uppercase;
+        letter-spacing:0.05em;
+      "
+    >
+      COREI · Stage Documentation
+    </div>
+
+
+
+    <h1
+      style="
+        font-size:28px;
+        font-weight:600;
+        color:#E3E7EC;
+        margin:0.1rem 0;
+        border-bottom:none;
+        padding-bottom:0;
+      "
+    >
+      docs docs docs docs docs stage 25 Blueprint.md.md.md.md.md
+    </h1>
+
+    <div
+      style="
+        font-size:16px;
+        color:#C5CED9;
+      "
+    >
+      Stage Documentation
+      ·
+      Operational
+    </div>
+
+    <div
+      style="
+        display:flex;
+        flex-wrap:wrap;
+        gap:0.6rem 1.8rem;
+        margin-top:0.6rem;
+        font-size:13px;
+      "
+    >
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Status
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          Approved
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Version
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          1.0
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Classification
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          Operational
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Owner
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          COREI
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Repository
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+            font-family:monospace;
+          "
+        >
+          docs/docs_docs_docs_docs_docs_stage-25_Blueprint.md.md.md.md.md.md
+        </span>
+      </span>
+
+    </div>
+
+
+
+  </div>
+
+
+
+  <p>Proposed Stage-25<br>
+STAGE-25</p>
+<p>COREI OS</p>
+<p>Composition &amp; Experience Assembly<br>
+Mission</p>
+<p>Transform</p>
+<p>Frameworks</p>
+<p>into</p>
+<p>Running Institutional Operating System<br>
+Scope</p>
+<p>Stage-25 owns:</p>
+<p>Startup composition<br>
+Provider composition<br>
+Runtime startup<br>
+Shell composition<br>
+Workspace composition<br>
+Experience mounting<br>
+Application lifecycle</p>
+<p>It does not own:</p>
+<p>Trading business logic<br>
+Infrastructure monitoring logic<br>
+Domain workflows</p>
+<p>Those remain inside the terminal repositories.</p>
+<p>Phase Structure</p>
+<p>I would freeze Stage-25 into six phases.</p>
+<p>PHASE-01<br>
+Application Composition</p>
+<p>Purpose</p>
+<p>Create the application root.</p>
+<p>Deliverables</p>
+<p>App</p>
+<p>↓</p>
+<p>Provider Tree</p>
+<p>↓</p>
+<p>Bootstrap</p>
+<p>↓</p>
+<p>Runtime</p>
+<p>↓</p>
+<p>Platform</p>
+<p>↓</p>
+<p>SDK<br>
+PHASE-02<br>
+Shell Composition</p>
+<p>Purpose</p>
+<p>Build the institutional workstation shell.</p>
+<p>Compose</p>
+<p>Top Ribbon</p>
+<p>Left Navigation</p>
+<p>Center Workspace</p>
+<p>Right Intelligence</p>
+<p>Bottom Timeline</p>
+<p>This stage uses the frameworks already built.</p>
+<p>Nothing new.</p>
+<p>PHASE-03<br>
+Workspace Composition</p>
+<p>Purpose</p>
+<p>Make workspaces actually function.</p>
+<p>Compose</p>
+<p>Window Manager</p>
+<p>Docking</p>
+<p>Layout Engine</p>
+<p>Workspace Manager</p>
+<p>Persistence<br>
+PHASE-04<br>
+Experience Composition</p>
+<p>Mount</p>
+<p>Infrastructure Terminal</p>
+<p>Trading Terminal</p>
+<p>inside the workspace.</p>
+<p>PHASE-05<br>
+Startup Lifecycle</p>
+<p>Freeze</p>
+<p>Startup</p>
+<p>↓</p>
+<p>Initialize</p>
+<p>↓</p>
+<p>Compose</p>
+<p>↓</p>
+<p>Mount</p>
+<p>↓</p>
+<p>Ready</p>
+<p>This becomes the institutional startup sequence.</p>
+<p>PHASE-06<br>
+Institutional Validation</p>
+<p>Validate</p>
+<p>Composition</p>
+<p>Lifecycle</p>
+<p>Providers</p>
+<p>Experiences</p>
+<p>Startup</p>
+<p>Shutdown</p>
+<p>Workspace</p>
+<p>Routing<br>
+Startup Order</p>
+<p>One document must become authoritative.</p>
+<p>Browser</p>
+<p>↓</p>
+<p>main.tsx</p>
+<p>↓</p>
+<p>AppProvider</p>
+<p>↓</p>
+<p>Bootstrap</p>
+<p>↓</p>
+<p>Foundation</p>
+<p>↓</p>
+<p>Runtime</p>
+<p>↓</p>
+<p>Platform</p>
+<p>↓</p>
+<p>SDK</p>
+<p>↓</p>
+<p>Shell</p>
+<p>↓</p>
+<p>Workspace</p>
+<p>↓</p>
+<p>Window Manager</p>
+<p>↓</p>
+<p>Docking</p>
+<p>↓</p>
+<p>Ribbon</p>
+<p>↓</p>
+<p>Navigation</p>
+<p>↓</p>
+<p>Command Center</p>
+<p>↓</p>
+<p>Rendering</p>
+<p>↓</p>
+<p>Visualization</p>
+<p>↓</p>
+<p>Infrastructure Terminal</p>
+<p>↓</p>
+<p>Trading Terminal</p>
+<p>↓</p>
+<p>Application Ready</p>
+<p>Nobody should change this order later without architecture review.</p>
+<p>Provider Hierarchy</p>
+<p>Likewise, the provider tree should be frozen before implementation.</p>
+<p>React</p>
+<p>↓</p>
+<p>AppProvider</p>
+<p>↓</p>
+<p>Theme Provider</p>
+<p>↓</p>
+<p>Runtime Provider</p>
+<p>↓</p>
+<p>Platform Provider</p>
+<p>↓</p>
+<p>SDK Provider</p>
+<p>↓</p>
+<p>Workspace Provider</p>
+<p>↓</p>
+<p>Shell Provider</p>
+<p>↓</p>
+<p>Infrastructure Provider</p>
+<p>↓</p>
+<p>Trading Provider</p>
+<p>↓</p>
+<p>Application</p>
+<p>This avoids provider drift as the platform grows.</p>
+<p>Repository Ownership</p>
+<p>Stage-25 should also formally define ownership boundaries.</p>
+<p>corei-os</p>
+<p>Owns</p>
+<p>• Composition<br>
+• Shell<br>
+• Startup<br>
+• Providers<br>
+• Workspace<br>
+• Runtime<br>
+• Platform</p>
+<p>Infrastructure Terminal</p>
+<p>Owns</p>
+<p>• Infrastructure pages<br>
+• Infrastructure domains<br>
+• Infrastructure widgets<br>
+• Infrastructure workflows</p>
+<p>Trading Terminal</p>
+<p>Owns</p>
+<p>• Trading pages<br>
+• Trading domains<br>
+• Charts<br>
+• Orders<br>
+• Positions<br>
+• Portfolio</p>
+<p>This keeps COREI OS independent of business logic.</p>
+<p>Deliverables of Stage-25</p>
+<p>By the end of the stage, the platform should provide:</p>
+<p>✓ Application Startup</p>
+<p>✓ Provider Tree</p>
+<p>✓ Institutional Shell</p>
+<p>✓ Workspace Composition</p>
+<p>✓ Docking</p>
+<p>✓ Window Management</p>
+<p>✓ Infrastructure Terminal Mounted</p>
+<p>✓ Trading Terminal Mounted</p>
+<p>✓ Runtime Lifecycle</p>
+<p>✓ Startup Lifecycle</p>
+<p>✓ Shutdown Lifecycle</p>
+<p>✓ Production Build<br>
+Recommendation Before Coding</p>
+<p>I recommend not writing Stage-25 implementation immediately.</p>
+<p>Instead, follow the same disciplined approach that worked for Stage-24:</p>
+<p>Produce a complete Stage-25 Blueprint.<br>
+Define every phase and Build Unit.<br>
+Freeze the startup lifecycle.<br>
+Freeze the provider hierarchy.<br>
+Freeze repository ownership.<br>
+Then implement Build Unit by Build Unit.</p>
+<p>Given the scale of COREI OS and the institutional architecture you’ve established, Stage-25 will likely become the most important stage so far because it transforms a collection of frameworks into the first operational version of the COREI workstation.</p>
+<p>STAGE-25<br>
+COREI Operating System</p>
+<p>Experience Composition</p>
+<p>Mission</p>
+<p>Convert the COREI OS Framework<br>
+into<br>
+a running institutional workstation.<br>
+Stage Philosophy</p>
+<p>Stage-24 answered</p>
+<p>What frameworks exist?</p>
+<p>Stage-25 answers</p>
+<p>How do they become a running operating system?</p>
+<p>This stage owns composition.</p>
+<p>It does NOT build new frameworks.</p>
+<p>Stage-25 Structure<br>
+PHASE-01</p>
+<p>Application Composition</p>
+<p>PHASE-02</p>
+<p>Shell Composition</p>
+<p>PHASE-03</p>
+<p>Workspace Composition</p>
+<p>PHASE-04</p>
+<p>Experience Composition</p>
+<p>PHASE-05</p>
+<p>Runtime Composition</p>
+<p>PHASE-06</p>
+<p>Institutional Validation<br>
+PHASE-01<br>
+Application Composition</p>
+<p>This becomes the composition root of COREI OS.</p>
+<p>Everything starts here.</p>
+<p>Mission</p>
+<p>Build the application startup pipeline.</p>
+<p>Current</p>
+<p>Browser</p>
+<p>↓</p>
+<p>main.tsx</p>
+<p>↓</p>
+<p>React</p>
+<p>After Phase-01</p>
+<p>Browser</p>
+<p>↓</p>
+<p>main.tsx</p>
+<p>↓</p>
+<p>Bootstrap</p>
+<p>↓</p>
+<p>Runtime</p>
+<p>↓</p>
+<p>Platform</p>
+<p>↓</p>
+<p>SDK</p>
+<p>↓</p>
+<p>Application</p>
+<p>↓</p>
+<p>Ready<br>
+Scope</p>
+<p>Phase-01 owns</p>
+<p>Application Root</p>
+<p>Provider Tree</p>
+<p>Bootstrap Sequence</p>
+<p>Runtime Initialization</p>
+<p>Platform Initialization</p>
+<p>SDK Initialization</p>
+<p>Composition Root</p>
+<p>Startup Lifecycle<br>
+It DOES NOT own<br>
+Ribbon</p>
+<p>Navigation</p>
+<p>Workspace</p>
+<p>Docking</p>
+<p>Windowing</p>
+<p>Terminal UI</p>
+<p>Those come later.</p>
+<p>Repository</p>
+<p>Everything happens inside</p>
+<p>src/app</p>
+<p>and</p>
+<p>src/bootstrap</p>
+<p>plus composition wiring.</p>
+<p>Phase-01 Architecture<br>
+Browser</p>
+<p>↓</p>
+<p>main.tsx</p>
+<p>↓</p>
+<p>AppProvider</p>
+<p>↓</p>
+<p>Bootstrap</p>
+<p>↓</p>
+<p>Runtime</p>
+<p>↓</p>
+<p>Platform</p>
+<p>↓</p>
+<p>SDK</p>
+<p>↓</p>
+<p>Application Root</p>
+<p>↓</p>
+<p>Ready</p>
+<p>This becomes the authoritative startup.</p>
+<p>Provider Hierarchy</p>
+<p>Freeze this now.</p>
+<p>React</p>
+<p>↓</p>
+<p>StrictMode</p>
+<p>↓</p>
+<p>AppProvider</p>
+<p>↓</p>
+<p>Theme Provider</p>
+<p>↓</p>
+<p>Runtime Provider</p>
+<p>↓</p>
+<p>Platform Provider</p>
+<p>↓</p>
+<p>SDK Provider</p>
+<p>↓</p>
+<p>Application</p>
+<p>Notice</p>
+<p>No</p>
+<p>Workspace Provider</p>
+<p>Shell Provider</p>
+<p>Ribbon Provider</p>
+<p>Navigation Provider</p>
+<p>yet.</p>
+<p>Those belong to Phase-02.</p>
+<p>Startup Sequence</p>
+<p>Freeze this.</p>
+<p>Browser</p>
+<p>↓</p>
+<p>main.tsx</p>
+<p>↓</p>
+<p>Create React Root</p>
+<p>↓</p>
+<p>AppProvider</p>
+<p>↓</p>
+<p>Bootstrap.initialize()</p>
+<p>↓</p>
+<p>Runtime.initialize()</p>
+<p>↓</p>
+<p>Platform.initialize()</p>
+<p>↓</p>
+<p>SDK.initialize()</p>
+<p>↓</p>
+<p>Mount App</p>
+<p>↓</p>
+<p>Ready</p>
+<p>Nobody changes this order later.</p>
+<p>PHASE-01 Build Units</p>
+<p>I recommend</p>
+<p>BU-001</p>
+<p>Application Root</p>
+<p>BU-002</p>
+<p>Provider Composition</p>
+<p>BU-003</p>
+<p>Bootstrap Composition</p>
+<p>BU-004</p>
+<p>Runtime Composition</p>
+<p>BU-005</p>
+<p>Platform Composition</p>
+<p>BU-006</p>
+<p>SDK Composition</p>
+<p>BU-007</p>
+<p>Startup Lifecycle</p>
+<p>BU-008</p>
+<p>Application Validation</p>
+<p>Exactly the same deterministic approach we used in Stage-24.</p>
+<p>Deliverables</p>
+<p>End of Phase-01</p>
+<p>✓ Browser</p>
+<p>↓</p>
+<p>✓ main.tsx</p>
+<p>↓</p>
+<p>✓ AppProvider</p>
+<p>↓</p>
+<p>✓ Bootstrap</p>
+<p>↓</p>
+<p>✓ Runtime</p>
+<p>↓</p>
+<p>✓ Platform</p>
+<p>↓</p>
+<p>✓ SDK</p>
+<p>↓</p>
+<p>✓ Application Root</p>
+<p>↓</p>
+<p>✓ Ready</p>
+<p>No UI yet.</p>
+<p>Only startup.</p>
+<p>Repository Impact</p>
+<p>Main repositories touched</p>
+<p>src/app</p>
+<p>src/bootstrap</p>
+<p>src/platform</p>
+<p>src/runtime</p>
+<p>src/sdk</p>
+<p>src/main.tsx</p>
+<p>No other framework should be modified unless a validation issue requires a targeted correction.</p>
+<p>Acceptance Criteria</p>
+<p>Phase-01 completes when</p>
+<p>✓ Application boots</p>
+<p>✓ Bootstrap initializes</p>
+<p>✓ Runtime initializes</p>
+<p>✓ Platform initializes</p>
+<p>✓ SDK initializes</p>
+<p>✓ Provider tree exists</p>
+<p>✓ TypeScript PASS</p>
+<p>✓ Production Build PASS<br>
+Stage-25 Progress<br>
+Stage-25</p>
+<p>PHASE-01</p>
+<p>Application Composition</p>
+<p>BU-001  Application Root                 ← NEXT<br>
+BU-002  Provider Composition<br>
+BU-003  Bootstrap Composition<br>
+BU-004  Runtime Composition<br>
+BU-005  Platform Composition<br>
+BU-006  SDK Composition<br>
+BU-007  Startup Lifecycle<br>
+BU-008  Application Validation</p>
+<p>────────────────────────────────</p>
+<p>PHASE-02</p>
+<p>Shell Composition</p>
+<p>PHASE-03</p>
+<p>Workspace Composition</p>
+<p>PHASE-04</p>
+<p>Experience Composition</p>
+<p>PHASE-05</p>
+<p>Runtime Composition</p>
+<p>PHASE-06</p>
+<p>Institutional Validation<br>
+Before implementation</p>
+<p>One architectural adjustment is worth making compared to Stage-24.</p>
+<p>During Stage-24, the initialization functions (initializeRuntime(), initializePlatformRuntime(), initializeSDK()) were placeholders. In Stage-25 Phase-01, rather than introducing parallel initialization APIs, we should promote those existing lifecycle functions into the authoritative startup sequence. That keeps the lifecycle deterministic and avoids duplicate startup paths. From BU-001 onward, we’ll wire the existing lifecycle implementations together instead of creating a second initialization mechanism. This keeps the architecture clean and consistent.</p>
+<p>Stage-25<br>
+COREI Operating System<br>
+Phase-02<br>
+Shell Composition<br>
+Phase Mission</p>
+<p>Stage-24 built the frameworks.</p>
+<p>Stage-25 Phase-01 built the application startup.</p>
+<p>Phase-02 builds the first institutional operating workstation.</p>
+<p>This is the first phase where COREI OS starts becoming visually operational.</p>
+<p>Institutional Goal</p>
+<p>At the end of Phase-02, COREI OS will own the complete workstation shell.</p>
+<p>Browser</p>
+<p>↓</p>
+<p>Application</p>
+<p>↓</p>
+<p>Shell</p>
+<pre><code>├── Top Ribbon
+├── Left Navigation
+├── Center Workspace
+├── Right Intelligence
+└── Bottom Timeline
+</code></pre>
+<p>↓</p>
+<p>Ready</p>
+<p>Notice:</p>
+<p>There are still no Infrastructure pages.</p>
+<p>There are still no Trading pages.</p>
+<p>Only the shell exists.</p>
+<p>Experiences will be mounted later.</p>
+<p>Ownership</p>
+<p>Phase-02 belongs entirely to</p>
+<p>corei-os</p>
+<p>Terminal repositories remain untouched.</p>
+<p>Phase Scope</p>
+<p>This phase owns</p>
+<p>Institutional Shell</p>
+<p>Shell Layout</p>
+<p>Five Cognitive Regions</p>
+<p>Layout Composition</p>
+<p>Shell Lifecycle</p>
+<p>Shell Contracts</p>
+<p>Shell Rendering</p>
+<p>Shell Validation</p>
+<p>This phase does NOT own</p>
+<p>Trading</p>
+<p>Infrastructure</p>
+<p>Charts</p>
+<p>Orders</p>
+<p>Portfolio</p>
+<p>Domains</p>
+<p>Widgets<br>
+Institutional Shell</p>
+<p>The shell consists of five permanent regions.</p>
+<p>┌──────────────────────────────────────────────────────────┐<br>
+│                  TOP RIBBON                              │<br>
+├─────────────┬───────────────────────────────┬────────────┤<br>
+│             │                               │            │<br>
+│             │                               │            │<br>
+│             │                               │            │<br>
+│ LEFT NAV    │       CENTER WORKSPACE        │ RIGHT      │<br>
+│             │                               │INTELLIGENCE│<br>
+│             │                               │            │<br>
+│             │                               │            │<br>
+├─────────────┴───────────────────────────────┴────────────┤<br>
+│                 BOTTOM TIMELINE                          │<br>
+└──────────────────────────────────────────────────────────┘</p>
+<p>This layout becomes permanent.</p>
+<p>Phase-02 Architecture<br>
+Application</p>
+<p>↓</p>
+<p>Shell</p>
+<p>↓</p>
+<p>Layout</p>
+<p>↓</p>
+<p>Regions</p>
+<p>↓</p>
+<p>Rendering</p>
+<p>↓</p>
+<p>Ready<br>
+Startup Extension</p>
+<p>Phase-01 finished with</p>
+<p>startupApplication()</p>
+<p>↓</p>
+<p>Bootstrap</p>
+<p>↓</p>
+<p>Runtime</p>
+<p>↓</p>
+<p>Platform</p>
+<p>↓</p>
+<p>SDK</p>
+<p>Phase-02 extends it.</p>
+<p>startupApplication()</p>
+<p>↓</p>
+<p>Bootstrap</p>
+<p>↓</p>
+<p>Runtime</p>
+<p>↓</p>
+<p>Platform</p>
+<p>↓</p>
+<p>SDK</p>
+<p>↓</p>
+<p>Shell</p>
+<p>↓</p>
+<p>Ready</p>
+<p>Later phases continue extending this same lifecycle.</p>
+<p>Phase-02 Build Units</p>
+<p>The phase is organized into eight deterministic Build Units.</p>
+<p>BU-001</p>
+<p>Shell Root</p>
+<p>────────────────────</p>
+<p>BU-002</p>
+<p>Shell Layout</p>
+<p>────────────────────</p>
+<p>BU-003</p>
+<p>Top Ribbon Composition</p>
+<p>────────────────────</p>
+<p>BU-004</p>
+<p>Left Navigation Composition</p>
+<p>────────────────────</p>
+<p>BU-005</p>
+<p>Center Workspace Composition</p>
+<p>────────────────────</p>
+<p>BU-006</p>
+<p>Right Intelligence Composition</p>
+<p>────────────────────</p>
+<p>BU-007</p>
+<p>Bottom Timeline Composition</p>
+<p>────────────────────</p>
+<p>BU-008</p>
+<p>Shell Validation</p>
+<p>This mirrors the disciplined execution model used in Stage-24 and Stage-25 Phase-01.</p>
+<p>Repository Impact</p>
+<p>Primary repositories</p>
+<p>src/shell</p>
+<p>src/app</p>
+<p>src/rendering</p>
+<p>No changes to:</p>
+<p>Infrastructure Terminal</p>
+<p>Trading Terminal<br>
+Deliverables</p>
+<p>At the end of Phase-02, COREI OS will provide:</p>
+<p>✓ Institutional Shell</p>
+<p>✓ Five Cognitive Regions</p>
+<p>✓ Layout Engine Composition</p>
+<p>✓ Shell Lifecycle</p>
+<p>✓ Rendering Integration</p>
+<p>✓ Startup Integration</p>
+<p>✓ Production Build<br>
+Phase Acceptance Criteria<br>
+Application Startup            ✓</p>
+<p>Shell Root                     ✓</p>
+<p>Shell Layout                   ✓</p>
+<p>Top Ribbon                     ✓</p>
+<p>Left Navigation                ✓</p>
+<p>Center Workspace               ✓</p>
+<p>Right Intelligence             ✓</p>
+<p>Bottom Timeline                ✓</p>
+<p>TypeScript                     ✓</p>
+<p>Production Build               ✓<br>
+Stage-25 Progress<br>
+Stage-25</p>
+<p>PHASE-01</p>
+<p>Application Composition        ✅</p>
+<p>────────────────────────────────</p>
+<p>PHASE-02</p>
+<p>BU-001  Shell Root                 ← NEXT<br>
+BU-002  Shell Layout<br>
+BU-003  Top Ribbon Composition<br>
+BU-004  Left Navigation Composition<br>
+BU-005  Center Workspace Composition<br>
+BU-006  Right Intelligence Composition<br>
+BU-007  Bottom Timeline Composition<br>
+BU-008  Shell Validation<br>
+Architectural Note Before BU-001</p>
+<p>One important refinement based on everything we’ve built so far:</p>
+<p>The Shell should become the only visual composition root. That means:</p>
+<p>ApplicationRoot<br>
+↓<br>
+startupApplication()<br>
+↓<br>
+Shell<br>
+↓<br>
+Top Ribbon<br>
+Left Navigation<br>
+Center Workspace<br>
+Right Intelligence<br>
+Bottom Timeline</p>
+<p>ApplicationRoot should remain responsible only for application lifecycle and startup orchestration. From Phase-02 onward, all UI composition belongs inside the Shell, preserving a clean separation between application infrastructure and the visual operating environment. This architectural boundary should remain fixed for future phases.</p>
+
+
+  <div class="doc-footer">
+
+    <span>DOCUMENT KEY: docs:docs_docs_docs_docs_docs_stage-25_Blueprint.md.md.md.md.md.md</span>
+
+    <span>
+      DOCUMENT NAME: docs docs docs docs docs stage 25 Blueprint.md.md.md.md.md
+    </span>
+
+    <span>
+      VERSION: 1.0
+    </span>
+
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,546 @@
+/******************************************************************************
+ *
+ * COREI OPERATING SYSTEM
+ *
+ * TOP RIBBON
+ * Institutional Search / Find Surface
+ *
+ * Consumes the existing search adapter.
+ *
+ ******************************************************************************/
+
+import {
+    useEffect,
+    useLayoutEffect,
+    useMemo,
+    useRef,
+    useState,
+    type ReactElement
+} from "react";
+
+import { createPortal } from "react-dom";
+
+import {
+    searchAdapter
+} from "../../workbench/panels/library/search-context/services/search-adapter";
+
+
+interface SearchRecord {
+    readonly [key: string]: unknown;
+}
+
+
+function resultLabel(result: unknown): string {
+
+    const record =
+        result as SearchRecord;
+
+    for (const key of [
+        "title",
+        "name",
+        "label",
+        "id",
+        "capabilityId",
+        "providerId"
+    ]) {
+
+        const value =
+            record[key];
+
+        if (
+            typeof value === "string" &&
+            value.trim()
+        ) {
+            return value;
+        }
+    }
+
+    return "Search result";
+}
+
+
+function resultType(result: unknown): string {
+
+    const value =
+        (result as SearchRecord).type;
+
+    return typeof value === "string"
+        ? value.toUpperCase()
+        : "RESULT";
+}
+
+
+export function RibbonSearch(): ReactElement {
+
+    const [open, setOpen] =
+        useState(false);
+
+    const [query, setQuery] =
+        useState("");
+
+    const rootRef =
+        useRef<HTMLDivElement>(null);
+
+    const triggerRef =
+        useRef<HTMLButtonElement>(null);
+
+    const panelRef =
+        useRef<HTMLDivElement>(null);
+
+    const inputRef =
+        useRef<HTMLInputElement>(null);
+
+    const [position, setPosition] =
+        useState({
+            top: 0,
+            left: 0,
+            width: 420
+        });
+
+
+    const results =
+        useMemo(() => {
+
+            const value =
+                query.trim();
+
+            if (!value) {
+                return [];
+            }
+
+            return searchAdapter
+                .search(value)
+                .slice(0, 8) as readonly unknown[];
+
+        }, [query]);
+
+
+    const updatePosition =
+        () => {
+
+            const trigger =
+                triggerRef.current;
+
+            if (!trigger) {
+                return;
+            }
+
+            const rect =
+                trigger.getBoundingClientRect();
+
+            const width =
+                Math.max(
+                    380,
+                    Math.min(
+                        520,
+                        window.innerWidth - 24
+                    )
+                );
+
+            const left =
+                Math.min(
+                    rect.left,
+                    Math.max(
+                        12,
+                        window.innerWidth -
+                        width -
+                        12
+                    )
+                );
+
+            setPosition({
+                top: rect.bottom + 4,
+                left,
+                width
+            });
+        };
+
+
+    useLayoutEffect(() => {
+
+        if (!open) {
+            return;
+        }
+
+        updatePosition();
+
+        inputRef.current?.focus();
+
+        const handleViewportChange =
+            () => updatePosition();
+
+        window.addEventListener(
+            "resize",
+            handleViewportChange
+        );
+
+        window.addEventListener(
+            "scroll",
+            handleViewportChange,
+            true
+        );
+
+        return () => {
+
+            window.removeEventListener(
+                "resize",
+                handleViewportChange
+            );
+
+            window.removeEventListener(
+                "scroll",
+                handleViewportChange,
+                true
+            );
+        };
+
+    }, [open]);
+
+
+    useEffect(() => {
+
+        const handlePointerDown =
+            (event: PointerEvent) => {
+
+                const target =
+                    event.target as Node;
+
+                if (
+                    rootRef.current?.contains(target) ||
+                    panelRef.current?.contains(target)
+                ) {
+                    return;
+                }
+
+                setOpen(false);
+            };
+
+
+        const handleKeyDown =
+            (event: KeyboardEvent) => {
+
+                const modifier =
+                    event.ctrlKey ||
+                    event.metaKey;
+
+                if (
+                    modifier &&
+                    event.key.toLowerCase() === "k" &&
+                    !event.shiftKey &&
+                    !event.altKey
+                ) {
+
+                    event.preventDefault();
+
+                    setOpen(true);
+
+                    return;
+                }
+
+                if (event.key === "Escape") {
+                    setOpen(false);
+                }
+            };
+
+
+        document.addEventListener(
+            "pointerdown",
+            handlePointerDown
+        );
+
+        window.addEventListener(
+            "keydown",
+            handleKeyDown
+        );
+
+
+        return () => {
+
+            document.removeEventListener(
+                "pointerdown",
+                handlePointerDown
+            );
+
+            window.removeEventListener(
+                "keydown",
+                handleKeyDown
+            );
+        };
+
+    }, []);
+
+
+    const openFind =
+        () => {
+
+            setOpen(false);
+
+            const queryText =
+                window.prompt(
+                    "Find in current surface",
+                    ""
+                );
+
+            if (!queryText) {
+                return;
+            }
+
+            const find =
+                (
+                    window as Window & {
+                        find?: (
+                            text: string
+                        ) => boolean;
+                    }
+                ).find;
+
+            find?.(queryText);
+        };
+
+
+    const openCommandPalette =
+        () => {
+
+            setOpen(false);
+
+            const isMac =
+                navigator.platform
+                    .toLowerCase()
+                    .includes("mac");
+
+            window.dispatchEvent(
+                new KeyboardEvent(
+                    "keydown",
+                    {
+                        key: "P",
+                        code: "KeyP",
+                        bubbles: true,
+                        cancelable: true,
+                        ctrlKey: !isMac,
+                        metaKey: isMac,
+                        shiftKey: true
+                    }
+                )
+            );
+        };
+
+
+    return (
+        <div
+            ref={rootRef}
+            className="corei-ribbon-search"
+            data-ribbon-block="search"
+        >
+
+            <button
+                ref={triggerRef}
+                type="button"
+                className="corei-ribbon-search-trigger"
+                aria-label="Search COREI OS"
+                aria-haspopup="dialog"
+                aria-expanded={open}
+                title="Search COREI OS (Ctrl+K)"
+                onClick={() =>
+                    setOpen(current => !current)
+                }
+            >
+
+                <span
+                    className="corei-ribbon-search-icon"
+                    aria-hidden="true"
+                >
+                    ⌕
+                </span>
+
+                <span className="corei-ribbon-search-label">
+                    SEARCH
+                </span>
+
+                <kbd>
+                    Ctrl+K
+                </kbd>
+
+            </button>
+
+
+            {open && createPortal(
+
+                <div
+                    ref={panelRef}
+                    className="corei-ribbon-search-panel"
+                    role="dialog"
+                    aria-label="COREI search"
+                    style={{
+                        top: position.top,
+                        left: position.left,
+                        width: position.width
+                    }}
+                >
+
+                    <div className="corei-ribbon-search-input-row">
+
+                        <span aria-hidden="true">
+                            ⌕
+                        </span>
+
+                        <input
+                            ref={inputRef}
+                            value={query}
+                            onChange={event =>
+                                setQuery(
+                                    event.target.value
+                                )
+                            }
+                            placeholder={
+                                "Search capabilities, providers, " +
+                                "bindings, diagnostics..."
+                            }
+                            aria-label="Search COREI OS"
+                        />
+
+                        <kbd>
+                            Ctrl+K
+                        </kbd>
+
+                    </div>
+
+
+                    <div className="corei-ribbon-search-actions">
+
+                        <button
+                            type="button"
+                            onClick={() =>
+                                inputRef.current?.focus()
+                            }
+                        >
+                            <span>
+                                SEARCH PLATFORM
+                            </span>
+
+                            <kbd>
+                                ENTER
+                            </kbd>
+                        </button>
+
+
+                        <button
+                            type="button"
+                            onClick={openFind}
+                        >
+                            <span>
+                                FIND CURRENT SURFACE
+                            </span>
+
+                            <kbd>
+                                Ctrl+F
+                            </kbd>
+                        </button>
+
+
+                        <button
+                            type="button"
+                            onClick={
+                                openCommandPalette
+                            }
+                        >
+                            <span>
+                                COMMAND PALETTE
+                            </span>
+
+                            <kbd>
+                                Ctrl+Shift+P
+                            </kbd>
+                        </button>
+
+                    </div>
+
+
+                    {query.trim() && (
+
+                        <div
+                            className="corei-ribbon-search-results"
+                        >
+
+                            <div
+                                className={
+                                    "corei-ribbon-search-results-heading"
+                                }
+                            >
+                                <span>
+                                    RESULTS
+                                </span>
+
+                                <span>
+                                    {results.length}
+                                </span>
+                            </div>
+
+
+                            {results.length === 0 ? (
+
+                                <div
+                                    className={
+                                        "corei-ribbon-search-empty"
+                                    }
+                                >
+                                    No matching platform capability.
+                                </div>
+
+                            ) : (
+
+                                results.map(
+                                    (result, index) => (
+
+                                        <div
+                                            className={
+                                                "corei-ribbon-search-result"
+                                            }
+                                            key={
+                                                `${resultLabel(result)}-${index}`
+                                            }
+                                        >
+
+                                            <span
+                                                className={
+                                                    "corei-ribbon-search-result-type"
+                                                }
+                                            >
+                                                {
+                                                    resultType(
+                                                        result
+                                                    )
+                                                }
+                                            </span>
+
+                                            <span
+                                                className={
+                                                    "corei-ribbon-search-result-name"
+                                                }
+                                            >
+                                                {
+                                                    resultLabel(
+                                                        result
+                                                    )
+                                                }
+                                            </span>
+
+                                        </div>
+
+                                    )
+                                )
+                            )}
+
+                        </div>
+                    )}
+
+                </div>,
+
+                document.body
+            )}
+
+        </div>
+    );
+}
+
+
+export default RibbonSearch;

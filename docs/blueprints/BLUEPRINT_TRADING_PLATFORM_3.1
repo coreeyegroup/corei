@@ -1,0 +1,799 @@
+INSTITUTIONAL TRADING PLATFORM
+FULL ARCHITECTURE & BLUEPRINT
+PART 1.1 — TRADING PLATFORM ARCHITECTURE
+
+LAYER 0 — GOVERNING PRINCIPLES
+Before any service is built, these rules govern every design decision across the entire platform. No exception, no override.
+Determinism. Identical input at identical event_time must always produce identical output. This is not a goal — it is a hard constraint. Any component that violates this is architecturally invalid.
+Event Sourcing. Kafka is the single source of truth. All state is derived from the event log. Nothing is authoritative except what is written to Kafka. Databases hold materialized views of Kafka, not independent truth.
+Lineage Continuity. Every entity in the system — signal, trade intent, execution intent, order, fill — carries an unbroken hash chain from its origin. You can trace any fill backwards to the exact market tick that caused it.
+Fixed-Point Arithmetic. No floating point anywhere in financial calculation. All prices, sizes, PnL, and risk values are int64 with defined precision. Two replays of identical input must produce bitwise-identical results.
+Event-Time Governance. All logic uses the event timestamp from the market data source, not the system clock. System clock is used only for operational logging, never for trading logic.
+Phase Ownership. Each layer owns exactly one responsibility. Strategy layer does not know about execution. Execution layer does not know about strategy logic. Risk layer overrides all. No cross-layer mutation.
+Replay Safety. The full system — including all strategies, all risk decisions, all order routing — must be replayable from the Kafka event log and produce identical state every time.
+
+LAYER 1 — PLATFORM PHASE MODEL
+ ┌─────────────────────────────────────────────────────────────────────┐
+ │  PHASE 0   GOVERNANCE                                               │
+ │  Decision authority, version control, change approval, audit rules  │
+ └────────────────────────────────┬────────────────────────────────────┘
+                                  │
+ ┌────────────────────────────────▼────────────────────────────────────┐
+ │  PHASE A   TRADING LOGIC                                            │
+ │  What to trade, when, how — strategy taxonomy, signal model,        │
+ │  instrument selection, instrument monitoring, trade intent          │
+ └────────────────────────────────┬────────────────────────────────────┘
+                                  │ TradeIntent
+ ┌────────────────────────────────▼────────────────────────────────────┐
+ │  PHASE B   CONSTRAINT LAYER                                         │
+ │  Quantified limits — per trade, per account, per strategy,          │
+ │  per instrument, firm-level — versions, approved, enforceable       │
+ └────────────────────────────────┬────────────────────────────────────┘
+                                  │ ConstraintSpec
+ ┌────────────────────────────────▼────────────────────────────────────┐
+ │  PHASE C   INFRASTRUCTURE                                           │
+ │  Event system, state model, orchestration, storage,                 │
+ │  replay engine, service mesh, deployment                            │
+ └────────────────────────────────┬────────────────────────────────────┘
+                                  │ ExecutionReadyState
+ ┌────────────────────────────────▼────────────────────────────────────┐
+ │  PHASE D   EXECUTION PIPELINE                                       │
+ │  ExecutionIntent → Risk → Policy → Order → OMS → EMS →              │
+ │  BrokerAdapter → Fill → Reconciliation → PortfolioState             │
+ └────────────────────────────────┬────────────────────────────────────┘
+                                  │
+                           LIVE BROKER NETWORK
+
+LAYER 2 — COMPLETE END-TO-END DATA FLOW
+ ═══════════════════════════════════════════════════════════════════════
+  EXTERNAL WORLD
+ ═══════════════════════════════════════════════════════════════════════
+
+  MT5 Brokers ──┐
+  IB / TWS ─────┤
+  cTrader ───────┤──→  BROKER CONNECTOR LAYER
+  FIX API ───────┤         (universal adapter interface)
+  REST/WS ───────┘
+
+ ═══════════════════════════════════════════════════════════════════════
+  MARKET DATA LAYER
+ ═══════════════════════════════════════════════════════════════════════
+
+  Broker Connector Layer
+          │
+          ▼
+  MARKET DATA INGESTION SERVICE
+  Receives: raw ticks, BBO, OHLCV, order book depth
+  Validates: timestamp completeness, price sanity, sequence gaps
+  Emits:     raw_market_data_stream → Kafka
+
+          │
+          ▼
+  MARKET DATA NORMALIZER SERVICE
+  Normalizes: symbol names across brokers (XAUUSD → GOLD.FX)
+  Stamps:     event_time (exchange timestamp preferred, ingestion fallback)
+  Deduplicates: same tick from multiple broker feeds
+  Emits:     normalized_market_data_stream → Kafka
+             TimescaleDB write (tick storage)
+
+          │
+          ├──────────────────────────┐
+          ▼                          ▼
+  FEATURE STORE                HISTORICAL DATA SERVICE
+  Computes live indicators:    Serves historical OHLCV, ticks
+  ATR, RSI, BB, EMA, VWAP,    for backtest and strategy warm-up
+  ADX, DXY correlation,
+  session state, volatility
+  regime classification
+
+ ═══════════════════════════════════════════════════════════════════════
+  PHASE A — TRADING LOGIC LAYER
+ ═══════════════════════════════════════════════════════════════════════
+
+  Feature Store + Normalized Market Data
+          │
+          ▼
+  ┌───────────────────────────────────────────────────────────────────┐
+  │  INSTRUMENT SCREENING SERVICE                                     │
+  │                                                                   │
+  │  Purpose: From the full tradeable universe, identify which        │
+  │           instruments are worth monitoring right now.             │
+  │                                                                   │
+  │  Universe: Forex pairs, Indices, Commodities, Stocks, Crypto      │
+  │                                                                   │
+  │  Screening Criteria:                                              │
+  │    Liquidity filter      → spread within acceptable band          │
+  │    Volatility filter     → ATR within strategy-required range     │
+  │    Session filter        → instrument active in current session   │
+  │    Trend filter          → ADX above threshold (directional)      │
+  │    Momentum filter       → RSI not in no-trade zone               │
+  │    Volume filter         → volume above N-period average          │
+  │    Correlation filter    → not over-correlated with existing pos  │
+  │    News filter           → no high-impact event within buffer     │
+  │    Ranking engine        → score 0-100, emit top N per cycle      │
+  │                                                                   │
+  │  Output: instrument_screened_event → Kafka                        │
+  │  Frequency: configurable per strategy (tick / 1min / 5min)        │
+  └───────────────────┬───────────────────────────────────────────────┘
+                      │
+                      ▼
+  ┌───────────────────────────────────────────────────────────────────┐
+  │  INSTRUMENT MONITORING SERVICE                                    │
+  │                                                                   │
+  │  Purpose: For each screened instrument, determine the optimal     │
+  │           entry window and exit window in real time.              │
+  │                                                                   │
+  │  Entry Timing Analysis:                                           │
+  │    Session window check  → London open / NY open / overlap        │
+  │    Volatility state      → regime: trending / ranging / spike     │
+  │    Orderbook analysis    → imbalance detection, sweep levels      │
+  │    Key level proximity   → near support/resistance/VWAP/pivot     │
+  │    Signal convergence    → multiple timeframe alignment           │
+  │    Macro state check     → DXY direction, yield direction, VIX    │
+  │                                                                   │
+  │  Exit Timing Analysis:                                            │
+  │    TP proximity          → price approaching ATR-based target     │
+  │    Reversal signals      → counter-trend pressure building        │
+  │    Time-based exit       → session close, news window, time stop  │
+  │    Trailing state        → trailing stop level tracking           │
+  │    Correlation shift     → correlated instrument reversing        │
+  │                                                                   │
+  │  Output: instrument_monitor_event → Kafka                         │
+  │          status: READY_FOR_ENTRY / IN_TRADE / APPROACHING_EXIT /  │
+  │                  NO_TRADE / BLOCKED                               │
+  └───────────────────┬───────────────────────────────────────────────┘
+                      │
+                      ▼
+  ┌───────────────────────────────────────────────────────────────────┐
+  │  STRATEGY ENGINE SERVICE                                          │
+  │                                                                   │
+  │  Strategy Taxonomy:                                               │
+  │    Time Horizon  → Scalp / Intraday / Swing / Positional          │
+  │    Signal Type   → Trend / MeanReversion / Momentum / Arb / ML    │
+  │    Data Type     → Price / Macro / Alternative                    │
+  │    Execution     → Aggressive (market) / Passive (limit)          │
+  │                                                                   │
+  │  Pluggable Strategy Modules (each is independent):                │
+  │    gold-timing-strategy       → XAUUSD, macro-correlated          │
+  │    forex-momentum-strategy    → major pairs, trend-following      │
+  │    mean-reversion-strategy    → range-bound instruments           │
+  │    stock-momentum-strategy    → equity universe, scored ranking   │
+  │    arbitrage-strategy         → cross-broker / cross-instrument   │
+  │    ml-signal-strategy         → ML-generated signals (plug-in)    │
+  │                                                                   │
+  │  Each strategy:                                                   │
+  │    Consumes instrument_monitor_event (READY_FOR_ENTRY only)       │
+  │    Applies its own internal logic                                 │
+  │    Emits Signal_v1 if conditions met                              │
+  │    Never emits signal if monitor_state ≠ READY_FOR_ENTRY          │
+  │                                                                   │
+  │  Signal_v1 Schema:                                                │
+  │    signal_id         = SHA256(instrument + direction +            │
+  │                               strength + event_time + strat_id)   │
+  │    strategy_id                                                    │
+  │    instrument        (normalized symbol)                          │
+  │    direction         +1 / 0 / -1 (LONG / NEUTRAL / SHORT)         │
+  │    signal_strength   0.0 to 1.0 (fixed-point, monotonic)          │
+  │    validity_window   TTL from event_time                          │
+  │    event_time        epoch nanoseconds UTC                        │
+  │                                                                   │
+  │  Output: signal_events → Kafka                                    │
+  └───────────────────┬───────────────────────────────────────────────┘
+                      │
+                      ▼
+  ┌───────────────────────────────────────────────────────────────────┐
+  │  DECISION ENGINE SERVICE (Strategy Side)                          │
+  │                                                                   │
+  │  Aggregates signals from multiple strategies for same instrument  │
+  │  Resolves conflicts using priority_level (from Phase A, immutable)│
+  │  Applies weighted voting + confidence threshold                   │
+  │  Checks signal validity window (expired signals rejected)         │
+  │  Checks signal deduplication (same signal_id = reject)            │
+  │                                                                   │
+  │  TradeIntent_v1 Schema:                                           │
+  │    trade_intent_id   = SHA256(instrument + direction + size +     │
+  │                               agg_score + signal_ids + event_time)│
+  │    instrument                                                     │
+  │    direction         BUY / SELL                                   │
+  │    size              int64 fixed-point (notional)                 │
+  │    aggregation_score weighted confidence                          │
+  │    signal_ids        sorted list of contributing signals          │
+  │    event_time        preserved from upstream, never mutated       │
+  │    encoding_version  1                                            │
+  │                                                                   │
+  │  Output: decision_events → Kafka                                  │
+  └───────────────────┬───────────────────────────────────────────────┘
+                      │
+                      │   [EXTERNAL INPUT MERGE — CEIL]
+                      │   External signals / manual overrides enter here
+                      │   origin_type = EXTERNAL (stricter risk rules apply)
+                      │
+                      ▼
+
+ ═══════════════════════════════════════════════════════════════════════
+  PHASE D — EXECUTION PIPELINE
+ ═══════════════════════════════════════════════════════════════════════
+
+  Decision Events (CORE + EXTERNAL)
+          │
+          ▼
+  ┌───────────────────────────────────────────────────────────────────┐
+  │  D1: EXECUTION INTENT SERVICE                                      │
+  │  TradeIntent → ExecutionIntent                                     │
+  │  Pure schema normalization — zero logic mutation                   │
+  │  Attaches: execution_type, account_routing_key, lineage_hash       │
+  │  Enforces: origin_type classification (CORE / EXTERNAL)            │
+  └───────────────────┬───────────────────────────────────────────────┘
+                      │ execution_intent_stream → Kafka
+                      ▼
+  ┌───────────────────────────────────────────────────────────────────┐
+  │  D2: ACCOUNT ROUTING SERVICE                                       │
+  │                                                                    │
+  │  Purpose: For each ExecutionIntent, determine which accounts       │
+  │           and account groups should receive this trade.            │
+  │                                                                    │
+  │  Operation Modes:                                                  │
+  │    LIVE_AUTO      → fully automated, no human gate                │
+  │    LIVE_SEMI      → human confirmation required per trade         │
+  │    PAPER          → paper trading (simulated fills)               │
+  │    BACKTEST       → historical replay mode                        │
+  │    DISABLED       → no orders on this strategy/account            │
+  │                                                                   │
+  │  Account Group Model:                                             │
+  │    group_id maps to → [account_id list]                           │
+  │    Each strategy has assigned_groups in configuration             │
+  │    Account override rules: account-level strategy block/allow     │
+  │                                                                    │
+  │  Multi-Account Dispatch:                                           │
+  │    For each eligible account → creates per-account ExecutionIntent │
+  │    Preserves parent trade_intent_id in all copies                 │
+  │    Account-level sizing: uses account equity + risk config        │
+  │                                                                    │
+  │  Output: per_account_intent → Kafka (one event per account)        │
+  └───────────────────┬───────────────────────────────────────────────┘
+                      │ per_account_intent_stream → Kafka
+                      ▼
+  ┌───────────────────────────────────────────────────────────────────┐
+  │  D3: RISK ENGINE SERVICE                                          │
+  │                                                                   │
+  │  Enforcement hierarchy (strict, no override):                     │
+  │    Firm-level → Portfolio-level → Strategy-level → Trade-level    │
+  │                                                                   │
+  │  Pre-Trade Checks:                                                │
+  │    max_risk_per_trade_pct     → against account equity            │
+  │    max_daily_loss_pct         → firm kill-switch trigger          │
+  │    max_drawdown_pct           → account-level halt                │
+  │    max_open_positions         → count across all accounts         │
+  │    max_position_per_instrument→ concentration limit               │
+  │    max_margin_utilization_pct → against account margin            │
+  │    max_correlated_exposure    → same-direction cross-pair limit   │
+  │    instrument_whitelist       → only approved instruments         │
+  │    EXTERNAL origin            → stricter thresholds apply         │
+  │                                                                   │
+  │  Kill Switch Triggers:                                            │
+  │    daily_loss > threshold     → halt all accounts affected        │
+  │    drawdown > threshold       → halt strategy                     │
+  │    VaR_breach                 → reduce all positions              │
+  │    manual_trigger             → immediate full halt               │
+  │                                                                   │
+  │  Output: risk_approved / risk_rejected → Kafka                    │
+  └───────────────────┬───────────────────────────────────────────────┘
+                      │ risk_approved_stream → Kafka
+                      ▼
+  ┌───────────────────────────────────────────────────────────────────┐
+  │  D4: POLICY ENGINE SERVICE                                        │
+  │  Operational rules — rate limits, session windows, throttling     │
+  │  Orders/sec per instrument limit                                  │
+  │  Session validity (no trading outside allowed windows)            │
+  │  Anti-gaming and wash trade detection                             │
+  │  Broker-specific policy rules                                     │
+  │  Output: policy_approved / policy_rejected → Kafka                │
+  └───────────────────┬───────────────────────────────────────────────┘
+                      │ policy_decision_stream → Kafka
+                      ▼
+  ┌───────────────────────────────────────────────────────────────────┐
+  │  D5: POSITION SIZER SERVICE                                       │
+  │                                                                   │
+  │  Calculates the exact lot size for each account based on:         │
+  │    Account equity at event_time                                   │
+  │    Risk percentage from constraint config                         │
+  │    ATR of instrument (volatility-adjusted sizing)                 │
+  │    Stop loss distance in pips                                     │
+  │    Formula: size = (equity × risk_pct) / (stop_pips × pip_value)  │
+  │    Applies broker minimum/maximum lot size constraints            │
+  │    Applies account group lot scaling (copy trade proportions)     │
+  │    All calculations in fixed-point int64, no floats               │
+  │                                                                   │
+  │  Output: sized_order_intent → Kafka                               │
+  └───────────────────┬───────────────────────────────────────────────┘
+                      │
+                      ▼
+  ┌───────────────────────────────────────────────────────────────────┐
+  │  D6: ORDER ENGINE SERVICE                                         │
+  │                                                                   │
+  │  Constructs the final ExecutionOrder for broker submission        │
+  │  Order lifecycle: NEW → VALIDATED → SUBMITTED → ACK →             │
+  │                   FILLED / PARTIAL / CANCELLED / REJECTED         │
+  │                                                                   │
+  │  ExecutionOrder Schema:                                           │
+  │    order_id         = SHA256(intent_id + risk_hash + policy_hash) │
+  │    trade_intent_id  (preserved from Phase A, never regenerated)   │
+  │    account_id                                                     │
+  │    broker_id                                                      │
+  │    instrument       (broker-native symbol format)                 │
+  │    direction        BUY / SELL                                    │
+  │    quantity         (lot size from Position Sizer)                │
+  │    order_type       MARKET / LIMIT / STOP / OCO                   │
+  │    limit_price      (if applicable)                               │
+  │    stop_price       (if applicable)                               │
+  │    stop_loss        (in pips or price, from strategy config)      │
+  │    take_profit      (in pips or price, from strategy config)      │
+  │    time_in_force    GTC / IOC / GTD                               │
+  │    event_time       (propagated, never mutated)                   │
+  │    lineage_hash     (extended from upstream)                      │
+  │                                                                   │
+  │  Output: execution_order_stream → Kafka                           │
+  └───────────────────┬───────────────────────────────────────────────┘
+                      │
+                      ▼
+  ┌───────────────────────────────────────────────────────────────────┐
+  │  D7: SMART ORDER ROUTER (SOR)                                      │
+  │                                                                    │
+  │  Multi-broker routing with intelligent selection:                  │
+  │    Spread comparison       → route to tightest spread broker      │
+  │    Latency history         → route to fastest executing broker    │
+  │    Fill quality            → route to best slippage broker        │
+  │    Margin availability     → skip broker if insufficient margin   │
+  │    Broker health           → skip broker on connectivity issues   │
+  │    Failover                → auto-route to secondary on failure   │
+  │                                                                   │
+  │  Account-broker binding:                                          │
+  │    Each account has primary + secondary broker assignments        │
+  │    SOR respects account-broker binding, optimizes within binding  │
+  │                                                                   │
+  │  Output: broker_dispatch_event → Kafka (per broker)               │
+  └───────────────────┬───────────────────────────────────────────────┘
+                      │
+                      ▼
+  ┌───────────────────────────────────────────────────────────────────┐
+  │  OMS — ORDER MANAGEMENT SYSTEM (Transport Only)                   │
+  │                                                                   │
+  │  Maintains order state machine for all live orders                │
+  │  Does NOT create IDs — inherits all IDs from ExecutionOrder       │
+  │  Protocol abstraction layer: FIX / REST / WebSocket               │
+  │  Session management: heartbeat, reconnect, sequence recovery      │
+  │  Order acknowledgment tracking                                    │
+  │  Timeout detection → retry_stream or dead_letter_stream           │
+  └───────────────────┬───────────────────────────────────────────────┘
+                      │
+                      ▼
+  ┌───────────────────────────────────────────────────────────────────┐
+  │  EMS — EXECUTION MANAGEMENT SYSTEM (Transport Only)               │
+  │                                                                   │
+  │  Direct broker connectivity layer                                 │
+  │  MT5Connector / IBConnector / CTraderConnector / FIXConnector     │
+  │  BaseBrokerConnector interface — all connectors identical API     │
+  │  Handles: connect, reconnect, place, cancel, get positions,       │
+  │           get account, subscribe prices, get historical           │
+  └───────────────────┬───────────────────────────────────────────────┘
+                      │
+                      ▼
+              LIVE BROKER NETWORK
+                      │
+                      ▼ (Fill Event returned)
+  ┌───────────────────────────────────────────────────────────────────┐
+  │  D8: FILL HANDLER SERVICE                                         │
+  │  Receives: Fill / Partial Fill / Rejection from broker            │
+  │  Links fill to originating order_id, trade_intent_id, signal_id   │
+  │  Extends lineage hash chain with fill event                       │
+  │  Emits: fill_stream → Kafka                                       │
+  └───────────────────┬───────────────────────────────────────────────┘
+                      │ fill_stream → Kafka
+                      ▼
+  ┌───────────────────────────────────────────────────────────────────┐
+  │  D9: RECONCILIATION SERVICE                                       │
+  │  Compares broker statement vs internal order state                │
+  │  Detects: missing fills, duplicate fills, price discrepancies     │
+  │  Frequency: real-time on each fill + batch end-of-day             │
+  │  On mismatch: halt new orders on affected account + alert         │
+  │  Emits: reconciliation_stream → Kafka                             │
+  └───────────────────┬───────────────────────────────────────────────┘
+                      │
+                      ▼
+  ┌───────────────────────────────────────────────────────────────────┐
+  │  PORTFOLIO SERVICE (STATE AUTHORITY)                              │
+  │                                                                   │
+  │  State(t) = f(EventLog[0 → t])   ← authoritative                  │
+  │  Snapshot  = derived(State(t))    ← stored in PostgreSQL          │
+  │                                                                   │
+  │  Tracks per account, per strategy, per instrument:                │
+  │    Open positions (qty, avg entry, direction, open_time)          │
+  │    Realized PnL (gross - fees - slippage, fixed-point)            │
+  │    Unrealized PnL (mark-to-market using live bid/ask)             │
+  │    Daily PnL (running accumulation from midnight)                 │
+  │    Exposure (notional per instrument, per currency, total USD)    │
+  │    Drawdown (current, peak equity, peak date, max pct)            │
+  │    Margin usage (used / available / total)                        │
+  │    Capital allocation (per strategy, per account)                 │
+  │                                                                   │
+  │  Copy Trade PnL Attribution:                                      │
+  │    Each copied order retains parent trade_intent_id               │
+  │    PnL attributed separately: master attribution + copy record    │
+  └───────────────────┬───────────────────────────────────────────────┘
+                      │
+                      ▼
+  ┌───────────────────────────────────────────────────────────────────┐
+  │  FEEDBACK LOOP (Learning Engine)                                  │
+  │  Collects: performance_snapshot per strategy per period           │
+  │  Evaluates: Sharpe, MaxDD, win_rate, profit_factor                │
+  │  Generates: parameter_update_set (bounded, versioned)             │
+  │  Gate: all updates require governance approval before deploy      │
+  │  Never: auto-deploys, no overfitting loops, no unbounded params   │
+  └───────────────────────────────────────────────────────────────────┘
+
+LAYER 3 — MULTI-ACCOUNT MODEL
+ ACCOUNT STRUCTURE
+
+ Master Account ──────────────────────────────────────────────────────┐
+   ACC_MASTER_001 (reference account for copy)                        │
+   Broker: IB / MT5                                                   │
+   Strategy assignment: gold-timing, forex-momentum                   │
+                                                                         │ COPY
+ Account Groups ──────────────────────────────────────────────────────┤
+   GROUP: gold_trading                                                 │
+     ACC_001  $50,000   →  lot scale = equity_ratio × master_lot      │
+     ACC_002  $25,000   →  lot scale = equity_ratio × master_lot      │
+     ACC_003  $10,000   →  lot scale = equity_ratio × master_lot      │
+                                                                       │
+   GROUP: forex_swing                                                  │
+     ACC_004  $100,000  →  strategy: forex-momentum                   │
+     ACC_005  $75,000   →  strategy: forex-momentum                   │
+                                                                       │
+   GROUP: stock_momentum                                               │
+     ACC_006  $200,000  →  strategy: stock-momentum-scanner            │
+                                                                       │
+   GROUP: paper_testing                                                │
+     ACC_SIM_001        →  all strategies, PAPER mode                 │
+
+ OPERATION MODES (per account, per strategy, independently set)
+
+   LIVE_AUTO    → system places orders without human gate
+   LIVE_SEMI    → system requests confirmation, human approves/rejects
+   PAPER        → all signals processed, orders simulated, no broker call
+   BACKTEST     → historical event replay, no live connections
+   DISABLED     → strategy ignored for this account entirely
+
+ COPY TRADE ENGINE
+
+   Trigger: master account fill confirmed
+   Scaling: follower_lot = master_lot × (follower_equity / master_equity)
+   Timing:  all follower orders dispatched in parallel (asyncio.gather)
+   Target latency: ≤ 50ms from master fill to all follower submissions
+   Pre-copy checks: each follower passes independent risk check
+   If follower fails risk check: that follower skipped, others proceed
+   PnL tracking: each copy order links parent trade_intent_id
+
+ ACCOUNT ISOLATION RULES
+
+   Per-account risk limits (not shared)
+   Per-account capital partition (not pooled)
+   Per-account kill switch (does not affect other accounts)
+   Per-account broker binding (account cannot route to unassigned broker)
+   Per-account operation mode (master LIVE_AUTO, follower PAPER allowed)
+
+LAYER 4 — MULTI-BROKER MODEL
+ BROKER CONNECTOR ABSTRACTION
+
+ All brokers implement BaseBrokerConnector interface:
+   connect / disconnect / reconnect
+   place_order / cancel_order / modify_order
+   get_positions / get_account_info / get_open_orders
+   subscribe_prices / unsubscribe_prices
+   get_historical_data
+   get_account_balance / get_margin_info
+
+ BROKER ADAPTERS
+
+   MT5Connector     → MetaTrader5 Python library + ZeroMQ bridge
+   IBConnector      → ib_insync Python (Interactive Brokers TWS API)
+   CTraderConnector → OpenAPI REST + WebSocket (cTrader)
+   FIXConnector     → QuickFIX/Python (any FIX-capable broker)
+   AlpacaConnector  → Alpaca REST API (stocks, crypto)
+   BinanceConnector → ccxt library (crypto)
+   CustomConnector  → plug-in interface for any new broker
+
+ BROKER ROUTING MODEL
+
+   Each account has:
+     primary_broker:   first choice for order placement
+     secondary_broker: automatic failover destination
+     tertiary_broker:  emergency fallback
+
+   SOR selection per order considers:
+     Spread at moment of order  → lowest spread wins
+     Recent fill quality        → lowest slippage wins
+     Connection health          → degraded broker deprioritized
+     Margin availability        → insufficient margin skips broker
+     Instrument availability    → not all brokers carry all symbols
+
+ BROKER HEALTH MONITOR
+
+   Heartbeat check per broker: every 5 seconds
+   Reconnect policy: exponential backoff (1s → 2s → 4s → max 30s)
+   On failure: route to secondary, emit broker_health_event alert
+   On recovery: gradually restore routing, validate fill quality
+   Circuit breaker: after 3 consecutive failures → mark degraded
+
+ MULTI-BROKER RISK AGGREGATION
+
+   Portfolio Service aggregates positions ACROSS all brokers
+   Total exposure = sum of all positions across all broker accounts
+   Risk engine sees the combined portfolio, not per-broker slices
+   Prevents inadvertent overexposure split across brokers
+
+LAYER 5 — INSTRUMENT SCREENING AND MONITORING DETAIL
+ INSTRUMENT SCREENING PIPELINE
+
+ UNIVERSE DEFINITION (configured, not hardcoded):
+   Forex:       28 major + minor pairs
+   Commodities: Gold, Silver, Oil (WTI + Brent)
+   Indices:     SPX, NDX, DAX, FTSE, NKY
+   Stocks:      configurable universe (100 → 5000)
+   Crypto:      BTC, ETH + configurable list
+
+ SCREENING CYCLE:
+   Configurable frequency per strategy type:
+     Tick strategies   → screen every 1 min
+     Intraday          → screen every 5 min
+     Swing             → screen every 1 hour
+   All screening uses feature store (pre-computed indicators)
+
+ SCREENING SCORE MODEL (0–100):
+
+   Liquidity Score (20% weight)
+     → Bid-ask spread within acceptable band = 20
+     → Spread at limit = 10, above limit = 0
+
+   Volatility Score (20% weight)
+     → ATR in required range = 20
+     → Too low (ranging/dead) = 5
+     → Too high (news/spike) = 0
+
+   Trend Score (20% weight)
+     → ADX > 25 + EMA alignment = 20
+     → Partial alignment = proportional
+     → Ranging/ADX < 20 = 0
+
+   Momentum Score (20% weight)
+     → RSI in strategy's valid zone = 20
+     → Oversold/overbought = varies by strategy
+
+   Session Score (10% weight)
+     → Primary session active = 10
+     → Secondary session = 5
+     → Off-hours = 0
+
+   Correlation Score (10% weight)
+     → Low correlation to existing positions = 10
+     → High correlation = reduced score
+
+   Total = sum of weighted scores
+   Threshold: configurable per strategy (default: 60/100 minimum)
+   Top N emitted to instrument_screened_event stream
+
+ INSTRUMENT MONITORING — ENTRY TIMING:
+
+   When instrument passes screening, monitoring begins.
+   Monitoring checks continuously against:
+     READY_FOR_ENTRY conditions:
+       All strategy entry conditions met
+       Session window open
+       No news event in next configurable buffer (e.g., 30 min)
+       No existing open position in this instrument
+       Monitor status from all timeframes aligned
+
+   BLOCKED conditions (overrides READY):
+     High-impact news event within buffer
+     Circuit breaker on broker for this instrument
+     Kill switch active on this account/strategy
+     Instrument on temporary block list (manual or auto)
+
+ INSTRUMENT MONITORING — EXIT TIMING:
+
+   While position is open, monitoring tracks:
+     APPROACHING_EXIT triggers:
+       Price within X% of take profit level
+       Trailing stop level crossed
+       Time stop threshold approaching (session close / time-in-trade)
+       Counter-signal from strategy (same instrument, opposite direction)
+       Correlated instrument showing strong reversal
+       Volatility spike exceeding threshold (consider early exit)
+     IN_TRADE status emitted continuously until exit or closure
+
+LAYER 6 — KAFKA EVENT STREAM MAP
+ PARTITION KEY: account_id + order_id (strict per-account ordering)
+
+ MARKET DATA STREAMS
+   raw_market_data              Tick + BBO + depth (all brokers)
+   normalized_market_data       Validated, deduped, event_time stamped
+   feature_store_updates        Indicator values per instrument
+
+ SCREENING / MONITORING STREAMS
+   instrument_screened          Ranked instrument list per cycle
+   instrument_monitor_events    Per-instrument state updates
+
+ TRADING LOGIC STREAMS
+   signal_events                Phase A signal output
+   decision_events              TradeIntent from Decision Engine
+
+ EXECUTION PIPELINE STREAMS
+   execution_intent_stream      D1 ExecutionIntent
+   per_account_intent_stream    D2 per-account dispatch
+   risk_approved_stream         D3 risk-cleared intents
+   policy_decision_stream       D4 policy-approved intents
+   sized_order_stream           D5 position-sized intents
+   execution_order_stream       D6 ExecutionOrder
+   broker_dispatch_stream       D7 SOR dispatch per broker
+   fill_stream                  D8 fills from broker
+   reconciliation_stream        D9 reconciled state deltas
+
+ PORTFOLIO / STATE STREAMS
+   portfolio_update_stream      Portfolio state changes
+   snapshot_stream              Periodic state snapshots
+
+ OPERATION / CONTROL STREAMS
+   operation_mode_events        Mode changes per account/strategy
+   kill_switch_stream           Emergency halt events
+   audit_stream                 Full immutable audit trail
+   alert_stream                 Alerts to notification layer
+   dead_letter_stream           Failed events all stages
+   retry_stream                 Retryable events with backoff
+   system_health_stream         Platform health events
+
+ SCHEMA GOVERNANCE:
+   All topics: schema-validated via Confluent Schema Registry
+   Schema evolution: backward-compatible only
+   Breaking changes: new topic version, migration plan required
+   Partition count: minimum 6 per trading-critical topic
+   Replication factor: 3 (production)
+   Retention: 7 days (trading streams), permanent (audit_stream)
+
+LAYER 7 — COMPLETE SERVICE CATALOGUE
+ MARKET DATA LAYER
+   market-data-ingestion-service    Raw feed intake from all brokers
+   market-data-normalizer-service   Validation, dedup, stamp
+   historical-data-service          OHLCV + tick history API
+   feature-store-service            Live indicator computation
+
+ TRADING LOGIC LAYER (Phase A)
+   instrument-screening-service     Universe filter + ranking
+   instrument-monitoring-service    Entry/exit timing analysis
+   strategy-engine-service          Pluggable strategy modules
+   signal-processor-service         Signal validation + lifecycle
+   decision-engine-service          Signal aggregation, TradeIntent
+
+ CONSTRAINT LAYER (Phase B)
+   constraint-engine-service        Constraint spec evaluation
+
+ INFRASTRUCTURE LAYER (Phase C)
+   event-ingestion-service          Kafka producer gateway
+   event-validation-service         Schema + content validation
+   event-ordering-service           Global order guarantee
+   identity-service                 Hash chain generation + lineage
+   orchestration-service            Pipeline stage routing
+   state-update-service             State delta application
+   snapshot-service                 Periodic state snapshots
+   replay-engine-service            Full deterministic replay
+
+ EXECUTION PIPELINE (Phase D)
+   execution-intent-service         D1 TradeIntent → ExecutionIntent
+   account-routing-service          D2 Multi-account dispatch + mode
+   risk-engine-service              D3 Risk enforcement
+   policy-engine-service            D4 Policy + throttle
+   position-sizer-service           D5 Volatility-adjusted lot sizing
+   order-engine-service             D6 ExecutionOrder construction
+   smart-order-router               D7 Multi-broker routing + SOR
+   fill-handler-service             D8 Fill processing
+   reconciliation-service           D9 Broker vs internal reconcile
+
+ TRADING INFRASTRUCTURE
+   oms-service                      Order state machine (transport only)
+   ems-service                      Broker connectivity (transport only)
+   broker-adapter-service           Connector factory + health
+
+ PORTFOLIO / RISK STATE
+   portfolio-service                State authority (all accounts)
+   exposure-service                 Real-time multi-account exposure
+   capital-partition-service        Account + strategy capital isolation
+   copy-trade-engine                Master-follower order scaling
+
+ PLATFORM SERVICES
+   api-gateway-service              Rate limit, JWT, routing
+   auth-service                     Keycloak OIDC integration
+   config-service                   Source of all configuration
+   config-snapshot-service          Immutable versioned snapshots
+   audit-service                    Append-only audit log
+   alert-service                    Telegram + PagerDuty + Email
+   failure-handling-service         DLQ + retry orchestration
+   backtest-engine-service          Historical replay + simulation
+   feedback-learning-service        Performance eval + param updates
+
+ FRONTEND / WORKFLOW
+   api-gateway-ui                   REST + WebSocket for dashboard
+   trading-dashboard-frontend       React.js operational interface
+   n8n-workflow-service             Operational automation
+
+LAYER 8 — LINEAGE HASH CHAIN
+ market_tick (event_time stamped)
+   │
+   ▼  SHA256(instrument + bid + ask + event_time + source)
+ tick_id
+   │
+   ▼  SHA256(tick_id + strategy_id + direction + strength + event_time)
+ signal_id
+   │
+   ▼  SHA256(signal_ids_sorted + instrument + direction + size + event_time)
+ trade_intent_id
+   │
+   ▼  SHA256(prev_hash + execution_intent_id)
+ execution_intent_lineage_hash
+   │
+   ▼  SHA256(prev_hash + account_routing_decision_id)
+ account_dispatch_lineage_hash
+   │
+   ▼  SHA256(prev_hash + risk_check_id)
+ risk_lineage_hash
+   │
+   ▼  SHA256(prev_hash + policy_decision_id)
+ policy_lineage_hash
+   │
+   ▼  SHA256(prev_hash + sized_order_id)
+ sizing_lineage_hash
+   │
+   ▼  SHA256(prev_hash + order_id)
+ order_lineage_hash
+   │
+   ▼  SHA256(prev_hash + fill_id)
+ fill_lineage_hash
+
+ RULE: Any chain break = SYSTEM INVALID = HALT + ALERT
+ RULE: SHA-256 only, canonical byte encoding, fixed field order
+ RULE: No floating point in any hashed field
+ RULE: identical input → identical hash → identical lineage
+
+LAYER 9 — OPERATION MODES AND GOVERNANCE
+ OPERATION MODE CONTROL (per account, per strategy)
+
+   LIVE_AUTO     → production, fully automated
+   LIVE_SEMI     → human confirmation gate via dashboard
+   PAPER         → full pipeline, simulated fills, no broker call
+   BACKTEST      → historical event replay only
+   DISABLED      → strategy/account combination inactive
+
+ MODE TRANSITIONS
+
+   Any mode change requires:
+     operator authentication (RBAC: trading-ops role minimum)
+     reason logged (audit_stream)
+     effective_time recorded
+   Mode changes are NOT retroactive
+
+ GOVERNANCE GATES
+
+   Strategy version deployment:
+     requires: research review + engineering review + risk review
+     requires: impact analysis document
+     requires: rollback plan
+     requires: staging validation passed
+     production deployment: manual approval only
+
+   Risk parameter changes:
+     requires: risk-admin role minimum
+     requires: reason + expected impact
+     automatically creates config_snapshot_v(n+1)
+     previous version remains in audit log permanently
+
+   Kill switch activation:
+     any operator can activate (immediate)
+     only risk-admin can deactivate
+     all activations logged with reason, timestamp, activating user

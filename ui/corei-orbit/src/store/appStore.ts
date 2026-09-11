@@ -2,7 +2,7 @@
 import { create } from 'zustand';
 import { usePreferencesStore } from './preferencesStore';
 
-export type View = 'dashboard' | 'workflows' | 'scanner' | 'positions' | 'logs' | 'depth' | 'request';
+export type View = string;
 
 export interface Tab {
   id: View;
@@ -11,20 +11,19 @@ export interface Tab {
 }
 
 interface AppState {
-  activeView: View; // kept for backward compatibility, but we use activeTabId
+  activeView: View;
   setActiveView: (view: View) => void;
   expandedFolders: Record<string, boolean>;
   toggleFolder: (folder: string) => void;
-  // Tabs
   tabs: Tab[];
   activeTabId: View | null;
-  openTab: (view: View) => void;
+  openTab: (view: View, label?: string, icon?: string) => void;
   closeTab: (view: View) => void;
   setActiveTab: (view: View) => void;
+  reorderTabs: (newTabs: Tab[]) => void; // NEW
 }
 
-// Map view to display info
-const viewInfo: Record<View, { label: string; icon: string }> = {
+const viewInfo: Record<string, { label: string; icon: string }> = {
   dashboard: { label: 'Dashboard', icon: '📊' },
   workflows: { label: 'Workflows', icon: '◈' },
   scanner: { label: 'Market Scanner', icon: '◉' },
@@ -32,9 +31,9 @@ const viewInfo: Record<View, { label: string; icon: string }> = {
   logs: { label: 'Execution Logs', icon: '⎚' },
   depth: { label: 'Depth Chart', icon: '📚' },
   request: { label: 'Request Builder', icon: '📨' },
+  files: { label: 'Documents', icon: '📁' },
 };
 
-// Load initial state from preferences
 const initialPrefs = usePreferencesStore.getState();
 
 export const useAppStore = create<AppState>((set, get) => ({
@@ -48,7 +47,6 @@ export const useAppStore = create<AppState>((set, get) => ({
         ...state.expandedFolders,
         [folder]: !state.expandedFolders[folder],
       };
-      // Sync with preferences
       usePreferencesStore.getState().setExpandedFolders(newExpanded);
       return { expandedFolders: newExpanded };
     });
@@ -57,18 +55,17 @@ export const useAppStore = create<AppState>((set, get) => ({
   tabs: initialPrefs.tabs,
   activeTabId: initialPrefs.activeTabId,
 
-  openTab: (view: View) => {
-    const { tabs, activeTabId } = get();
+  openTab: (view: View, label?: string, icon?: string) => {
+    const { tabs } = get();
     if (tabs.some((tab) => tab.id === view)) {
       set({ activeTabId: view });
       usePreferencesStore.getState().setActiveTabId(view);
       return;
     }
-    const newTab: Tab = {
-      id: view,
-      label: viewInfo[view].label,
-      icon: viewInfo[view].icon,
-    };
+    const defaultInfo = viewInfo[view];
+    const newLabel = label || defaultInfo?.label || view;
+    const newIcon = icon || defaultInfo?.icon || '🖥️';
+    const newTab: Tab = { id: view, label: newLabel, icon: newIcon };
     const newTabs = [...tabs, newTab];
     set({ tabs: newTabs, activeTabId: view });
     usePreferencesStore.getState().setTabs(newTabs);
@@ -77,7 +74,7 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   closeTab: (view: View) => {
     const { tabs, activeTabId } = get();
-    if (tabs.length === 1) return; // don't close last tab
+    if (tabs.length === 1) return;
     const newTabs = tabs.filter((tab) => tab.id !== view);
     let newActive = activeTabId;
     if (activeTabId === view) {
@@ -92,5 +89,11 @@ export const useAppStore = create<AppState>((set, get) => ({
   setActiveTab: (view: View) => {
     set({ activeTabId: view });
     usePreferencesStore.getState().setActiveTabId(view);
+  },
+
+  // ─── NEW: reorder tabs ──────────────────────────────────────────────
+  reorderTabs: (newTabs) => {
+    set({ tabs: newTabs });
+    usePreferencesStore.getState().setTabs(newTabs);
   },
 }));

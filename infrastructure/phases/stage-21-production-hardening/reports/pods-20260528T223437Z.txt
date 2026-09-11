@@ -1,0 +1,61 @@
+NAMESPACE         NAME                                                READY   STATUS             RESTARTS        AGE     IP                NODE        NOMINATED NODE   READINESS GATES
+database          timescaledb-6fc68ffd87-h98jx                        1/1     Running            0               9h      192.168.117.166   core-node   <none>           <none>
+default           net-test                                            0/1     Completed          0               3d15h   192.168.117.132   core-node   <none>           <none>
+execution         smart-order-router-64cb79f555-8fr6k                 1/1     Running            0               29h     192.168.117.159   core-node   <none>           <none>
+kafka             kafka-0                                             1/1     Running            0               2d9h    192.168.117.182   core-node   <none>           <none>
+kube-system       calico-kube-controllers-68cdf756d9-ddjcr            1/1     Running            3 (12h ago)     3d15h   192.168.117.130   core-node   <none>           <none>
+kube-system       calico-node-zfdbx                                   1/1     Running            0               2d10h   192.168.1.10      core-node   <none>           <none>
+kube-system       coredns-6cff99446f-hktsg                            1/1     Running            0               2d10h   192.168.117.173   core-node   <none>           <none>
+kube-system       coredns-6cff99446f-np4bd                            1/1     Running            0               2d10h   192.168.117.169   core-node   <none>           <none>
+kube-system       etcd-core-node                                      1/1     Running            28              3d15h   192.168.1.10      core-node   <none>           <none>
+kube-system       kube-apiserver-core-node                            1/1     Running            1 (12h ago)     3d15h   192.168.1.10      core-node   <none>           <none>
+kube-system       kube-controller-manager-core-node                   1/1     Running            2 (12h ago)     3d15h   192.168.1.10      core-node   <none>           <none>
+kube-system       kube-proxy-bnq6q                                    1/1     Running            0               3d15h   192.168.1.10      core-node   <none>           <none>
+kube-system       kube-scheduler-core-node                            1/1     Running            3 (12h ago)     3d15h   192.168.1.10      core-node   <none>           <none>
+kube-system       metrics-server-76466b47bd-9xqnv                     1/1     Running            0               2d8h    192.168.117.186   core-node   <none>           <none>
+longhorn-system   csi-attacher-777966c964-lhqw2                       1/1     Running            3 (9h ago)      3d15h   192.168.117.140   core-node   <none>           <none>
+longhorn-system   csi-attacher-777966c964-sj8qm                       1/1     Running            0               3d15h   192.168.117.141   core-node   <none>           <none>
+longhorn-system   csi-attacher-777966c964-xvdkf                       1/1     Running            2 (4h46m ago)   3d15h   192.168.117.142   core-node   <none>           <none>
+longhorn-system   csi-provisioner-66cf876fb7-f95jx                    1/1     Running            2 (9h ago)      3d15h   192.168.117.152   core-node   <none>           <none>
+longhorn-system   csi-provisioner-66cf876fb7-mktrp                    1/1     Running            8 (4h46m ago)   3d15h   192.168.117.145   core-node   <none>           <none>
+longhorn-system   csi-provisioner-66cf876fb7-tfwpd                    1/1     Running            1 (2d2h ago)    3d15h   192.168.117.146   core-node   <none>           <none>
+longhorn-system   csi-resizer-7684559497-58492                        1/1     Running            3 (38h ago)     3d15h   192.168.117.148   core-node   <none>           <none>
+longhorn-system   csi-resizer-7684559497-rdcj8                        1/1     Running            0               3d15h   192.168.117.143   core-node   <none>           <none>
+longhorn-system   csi-resizer-7684559497-srbrl                        1/1     Running            4 (9h ago)      3d15h   192.168.117.144   core-node   <none>           <none>
+longhorn-system   csi-snapshotter-7fbfd46694-cthtn                    1/1     Running            0               3d15h   192.168.117.151   core-node   <none>           <none>
+longhorn-system   csi-snapshotter-7fbfd46694-w7bs8                    1/1     Running            1 (12h ago)     3d15h   192.168.117.147   core-node   <none>           <none>
+longhorn-system   csi-snapshotter-7fbfd46694-xp67v                    1/1     Running            4 (38h ago)     3d15h   192.168.117.150   core-node   <none>           <none>
+longhorn-system   engine-image-ei-c9fa6d45-2pw55                      1/1     Running            0               3d15h   192.168.117.137   core-node   <none>           <none>
+longhorn-system   instance-manager-b5f2e48e13220065ab8d016faafc3eb7   1/1     Running            0               3d15h   192.168.117.138   core-node   <none>           <none>
+longhorn-system   longhorn-csi-plugin-f67z8                           3/3     Running            0               3d15h   192.168.117.149   core-node   <none>           <none>
+longhorn-system   longhorn-driver-deployer-6569f8bf9b-ww976           1/1     Running            0               3d15h   192.168.117.134   core-node   <none>           <none>
+longhorn-system   longhorn-manager-2zvhx                              2/2     Running            0               3d15h   192.168.117.133   core-node   <none>           <none>
+longhorn-system   longhorn-ui-589865df5b-79vdv                        1/1     Running            0               3d15h   192.168.117.136   core-node   <none>           <none>
+longhorn-system   longhorn-ui-589865df5b-fnfxn                        1/1     Running            0               3d15h   192.168.117.135   core-node   <none>           <none>
+market-data       feature-store-service-bbbf675bf-zkdds               1/1     Running            0               2d7h    192.168.117.191   core-node   <none>           <none>
+market-data       historical-data-service-5ff756c467-p4jmq            1/1     Running            0               2d7h    192.168.117.189   core-node   <none>           <none>
+market-data       market-data-ingestion-75ffbf9b7b-lpr84              1/1     Running            2 (38h ago)     2d8h    192.168.117.184   core-node   <none>           <none>
+market-data       market-data-normalizer-768bf464b8-jppt2             1/1     Running            0               2d7h    192.168.117.188   core-node   <none>           <none>
+market-data       market-data-persistence-74668b9b87-9lzvl            0/1     CrashLoopBackOff   106 (39s ago)   47h     192.168.117.162   core-node   <none>           <none>
+market-data       synthetic-market-generator-75466f5c57-7c8pm         1/1     Running            0               47h     192.168.117.164   core-node   <none>           <none>
+n8n               n8n-75964566c4-k54f6                                1/1     Running            0               15h     192.168.117.160   core-node   <none>           <none>
+platform          audit-service-dcc6fb984-ldkmh                       1/1     Running            0               3d3h    192.168.117.157   core-node   <none>           <none>
+platform          config-service-5685fc6959-l2vc7                     1/1     Running            0               3d3h    192.168.117.154   core-node   <none>           <none>
+platform          config-snapshot-service-758679549d-msf9k            1/1     Running            0               3d3h    192.168.117.155   core-node   <none>           <none>
+platform          event-ingestion-service-69d4b48d96-5ls8s            1/1     Running            0               3d3h    192.168.117.158   core-node   <none>           <none>
+platform          identity-service-795856fbc-ctg7d                    1/1     Running            0               3d3h    192.168.117.156   core-node   <none>           <none>
+platform          operational-api-54dd4498c7-7htt5                    1/1     Running            0               15h     192.168.117.139   core-node   <none>           <none>
+platform          trading-dashboard-54b6d46fcc-nsd6d                  1/1     Running            0               15h     192.168.117.132   core-node   <none>           <none>
+platform          websocket-gateway-b75986689-7zh6r                   1/1     Running            0               15h     192.168.117.185   core-node   <none>           <none>
+research          continuous-image-puller-lvtjb                       1/1     Running            0               2d5h    192.168.117.131   core-node   <none>           <none>
+research          hub-6764fd7685-l5hxl                                1/1     Running            0               2d5h    192.168.117.171   core-node   <none>           <none>
+research          mlflow-86b889789c-q4649                             1/1     Running            0               46h     192.168.117.129   core-node   <none>           <none>
+research          proxy-756d67bc7d-fqxlm                              1/1     Running            0               2d5h    192.168.117.175   core-node   <none>           <none>
+research          user-scheduler-6cd99c76cf-9l7dr                     1/1     Running            1 (39h ago)     2d5h    192.168.117.168   core-node   <none>           <none>
+research          user-scheduler-6cd99c76cf-zd7q4                     1/1     Running            2 (12h ago)     2d5h    192.168.117.172   core-node   <none>           <none>
+trading-infra     broker-adapter-service-59cb578658-z5hv5             1/1     Running            0               8h      192.168.117.165   core-node   <none>           <none>
+trading-infra     copy-trade-engine-5b9666dff5-9qvmh                  1/1     Running            0               28h     192.168.117.176   core-node   <none>           <none>
+trading-infra     ems-7bb8447547-s9l5r                                1/1     Running            0               9h      192.168.117.179   core-node   <none>           <none>
+trading-infra     fill-handler-service-747f5cd564-2bsc9               1/1     Running            0               28h     192.168.117.178   core-node   <none>           <none>
+trading-infra     oms-59586b895d-q9p27                                1/1     Running            0               29h     192.168.117.163   core-node   <none>           <none>
+trading-infra     reconciliation-service-c4dcd8d66-mf2kh              1/1     Running            0               28h     192.168.117.177   core-node   <none>           <none>

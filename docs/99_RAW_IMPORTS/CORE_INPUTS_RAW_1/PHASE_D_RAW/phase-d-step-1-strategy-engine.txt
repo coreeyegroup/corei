@@ -1,0 +1,585 @@
+PHASE D — STEP 1: STRATEGY ENGINE (EXECUTION LAYER)
+
+	EVENT TIME PROPAGATION RULE (MANDATORY)
+
+		All downstream entities MUST preserve:
+
+			event_time = upstream.event_time
+
+		No transformation allowed.
+
+		System clock and broker time strictly forbidden.
+
+	GLOBAL LINEAGE CHAIN RULE
+
+		All execution-layer entities MUST form a continuous hash chain:
+
+		event_lineage_hash
+		→ execution_intent_lineage_hash
+		→ decision_lineage_hash
+		→ risk_lineage_hash
+		→ policy_lineage_hash
+		→ order_lineage_hash
+
+		Constraint:
+
+		- chain MUST be unbroken
+		- each step MUST reference previous hash
+		- any mismatch → SYSTEM INVALID
+
+
+
+1. PHASE IDENTITY LAYER
+	1.1 Phase Name
+
+		Phase D — Step 1: Strategy Engine (Execution Interpretation Layer)
+
+	1.2 Phase Role
+
+		Transforms Phase A TradeIntent (logic output) into:
+
+		Execution-ready structured intent
+
+		WITHOUT:
+
+			modifying strategy logic
+			introducing new signals
+			violating Phase B constraints
+
+	1.3 Phase Objective
+		Convert TradeIntent → ExecutionIntent
+		such that:
+		- intent is execution-compatible
+		- intent remains logically identical to Phase A output
+		- intent is deterministic and constraint-aware
+
+	1.4 Why This Phase Exists
+
+		Prevents:
+
+		direct coupling of strategy to execution engine
+		leakage of execution concerns into Phase A
+		ambiguity in trade intent interpretation
+
+
+2. PHASE SCOPE CONTROL
+	2.1 INCLUDED
+		TradeIntent interpretation
+		ExecutionIntent formation
+		parameter normalization (NOT transformation)
+		execution metadata attachment
+
+	2.2 EXCLUDED
+		signal generation
+		decision making
+		risk validation
+		policy enforcement
+		order generation
+
+3. ARCHITECTURAL INTENT
+	3.1 Principles
+		Deterministic mapping only
+		Zero logic mutation
+		Strict pass-through semantics
+		Schema normalization
+
+	3.2 Model
+		ExecutionIntent = F(TradeIntent, configuration_snapshot)
+
+	3.3 Position
+		Phase A → TradeIntent
+				↓
+		Phase D Step 1 → ExecutionIntent
+				↓
+		Phase D Step 2 → Decision Engine (execution-side)
+
+4. DOMAIN MODEL
+
+	4.1 Entities
+		TradeIntent (input)
+		ExecutionIntent (output)
+		StrategyMetadata
+		ExecutionParameters
+
+	4.2 Attributes
+		TradeIntent (from Phase A)
+			trade_intent_id
+			instrument
+			direction
+			size
+			signal_strength
+			strategy_id
+
+		ExecutionIntent = {
+			signal_id
+			trade_intent_id
+			event_time
+			instrument
+			direction
+			target_size
+			execution_type
+			priority_level
+			strategy_id
+			origin_type
+			lineage_hash_reference
+		}
+
+		R9 — Lineage Hash Extension (MANDATORY)
+
+			ExecutionIntent.lineage_hash_reference = HASH_v1(
+				parent_event.lineage_hash +
+				execution_intent_id
+			)
+
+		LINEAGE HASH CONTINUITY RULE (MANDATORY)
+
+			new_lineage_hash = HASH_v1(
+				previous_lineage_hash +
+				current_entity_id
+			)
+
+			CONSTRAINTS
+				- MUST use SHA-256
+				- MUST follow canonical serialization
+				- MUST preserve order
+				- identical input → identical lineage chain
+
+		R8 — Signal Trace Preservation (MANDATORY)
+
+			ExecutionIntent.signal_id = TradeIntent.signal_id
+
+			Constraint:
+
+			- MUST be identical
+			- MUST NOT be recomputed
+			- MUST NOT be null
+
+	4.3 Relationships
+		1 TradeIntent → 1 ExecutionIntent
+
+		No splitting / aggregation allowed
+
+	4.4 Ownership
+		TradeIntent → Phase A
+		ExecutionIntent → Phase D
+
+	4.5 Ownership Enforcement
+		No attribute duplication outside Section 4
+		No logic inside entity definition
+
+5. LOGIC / RULE ENGINE
+
+	5.1 Rules
+
+		R1 — Identity Preservation
+
+			ExecutionIntent.trade_intent_id = TradeIntent.trade_intent_id
+
+		R2 — Size Mapping
+
+			target_size = TradeIntent.size
+
+		R3 — Execution Type Mapping
+
+			execution_type = f(strategy_id, configuration_snapshot)
+
+		R4 — Priority Assignment
+
+			priority_level = TradeIntent.priority_level
+
+		Priority Ownership Rule (MANDATORY)
+
+			priority_level MUST be passed through from Phase A (TradeIntent)
+
+			Phase D MUST NOT:
+
+				compute
+				modify
+				normalize
+				override
+
+			Violation → PHASE INVALID
+
+		Execution Type Mapping Rule
+
+			execution_type = configuration_snapshot.execution_type_map[strategy_id]
+
+			Clamp Rule:
+
+			priority_level ∈ [1,10]
+
+			Out-of-bound → clamp to nearest bound
+
+	5.2 Conditions
+		TradeIntent MUST be valid
+		Required fields MUST exist
+
+		TradeIntent Validity Contract (MANDATORY)
+
+			TradeIntent is valid ONLY IF:
+
+			- trade_intent_id != NULL
+			- instrument ∈ valid_instrument_set
+			- direction ∈ {BUY, SELL}
+			- size > 0
+			- strategy_id != NULL
+
+			Invalid → MUST reject
+
+			No partial acceptance allowed
+
+	5.3 Decision Logic
+
+		No decision branching allowed
+		Only deterministic mapping
+
+	5.4 Constraints
+		No modification of intent meaning
+		No size transformation
+		No filtering
+
+	5.5 RULE EXECUTION ORDER
+		1. Validate TradeIntent schema
+		2. Map identity fields
+		3. Map execution parameters
+		4. Construct ExecutionIntent
+
+		No deviation allowed
+
+		Rule Precedence (MANDATORY)
+
+			1. Validate TradeIntent (size > 0)
+			2. THEN apply mapping
+
+			R2 (size mapping) executes ONLY after validation
+
+			Invalid size → reject before mapping
+
+		EVENT TIME INHERITANCE RULE (MANDATORY)
+
+			ExecutionIntent.event_time MUST be inherited from:
+
+			Phase C event_time
+
+			System clock usage is STRICTLY FORBIDDEN
+
+			Violation → PHASE INVALID
+
+
+
+6. FLOW ARCHITECTURE
+	6.0 Canonical Input Set
+		canonical_input_set_D1 = {
+			execution_instruction_stream,
+			configuration_snapshot,
+			version_identifiers
+		}
+
+		Canonical Completeness Extension (MANDATORY)
+
+			configuration_snapshot MUST include:
+
+			- execution_type_map
+			- priority_scale
+			- valid_instrument_set
+
+			Updated canonical_input_set_D1:
+
+			canonical_input_set_D1 = {
+				execution_instruction_stream,
+				configuration_snapshot: {
+					execution_type_map,
+					priority_scale,
+					valid_instrument_set
+				},
+				version_identifiers
+			}
+
+		Canonical Enforcement Rule (STRICT)
+
+			NO variable outside canonical_input_set_D1 may be used.
+
+			Violation:
+			→ NON-DETERMINISTIC EXECUTION
+			→ PHASE INVALID
+
+	6.1 Input
+		TradeIntent (from execution_instruction_stream)
+
+	6.2 Flow
+		TradeIntent
+		→ Validation
+		→ Parameter Mapping
+		→ ExecutionIntent
+
+		Ordering Preservation Rule
+
+			ExecutionIntent MUST preserve input ordering:
+
+			execution_intent_stream order =
+			execution_instruction_stream order
+
+			No reordering allowed inside this phase
+
+	6.3 Output
+		execution_intent_stream
+
+	6.4 Flow Rule
+		No new data introduced
+		Output fully derived from input
+
+	FEEDBACK LOOP CONTRACT (PRE-DECLARED)
+
+		Phase D Step 6 MUST define:
+
+		input:
+			execution_fill_stream
+
+		output:
+			reconciliation_event_stream
+
+		Constraints:
+
+		- MUST update Phase C state via event system
+		- MUST maintain full lineage:
+
+		execution_order_id → fill_id → reconciliation_event_id
+
+		Failure:
+
+		- missing feedback → system audit invalid
+
+7. PIPELINE STRUCTURE
+	P1: Receive TradeIntent
+	P2: Validate schema
+	P3: Map parameters
+	P4: Emit ExecutionIntent
+
+8. CONTROL & CONSTRAINTS
+	Hard Rules
+		1:1 mapping mandatory
+		No transformation allowed
+		No filtering allowed
+
+	Guardrails
+		Reject invalid TradeIntent
+		Reject missing fields
+
+	Boundary
+		target_size ∈ [0, MAX_INT]
+		priority_level ∈ [1, 10]
+
+	Numeric Boundary Completion
+
+		MAX_INT = 10^12 (fixed system limit)
+
+		Rules:
+
+		- size > MAX_INT → reject
+		- size ≤ 0 → reject
+		- no implicit rounding allowed
+
+	Priority Invariant
+
+		priority_level MUST satisfy:
+
+		1 ≤ priority_level ≤ 10
+
+		Violation → clamp (not reject)
+
+	DETERMINISTIC RETRY MODEL (MANDATORY)
+
+		retry_policy = {
+			max_retries
+			retry_interval_fixed
+		}
+
+		Rules:
+
+		1. Retry attempts MUST be deterministic:
+		   retry_time = event_time + (retry_count × retry_interval_fixed)
+
+		2. No exponential backoff allowed
+
+		3. Retry ordering:
+
+		retry_order_key = {
+			original_event_time ASC
+			retry_count ASC
+		}
+
+		4. If max_retries exceeded:
+
+		→ route to DEAD_LETTER_QUEUE
+
+		Dead Letter Contract:
+
+		dead_letter_event = {
+			original_event_id
+			failure_reason
+			retry_count
+		}
+
+9. STATE MODEL
+
+	Stateless component
+
+	No internal state maintained
+
+10. FAILURE MODEL
+	Scenarios
+		missing TradeIntent field
+		invalid schema
+		mapping failure
+
+	Detection
+		schema validation
+
+	Response
+		reject intent
+		log failure
+
+11. ASSUMPTION REGISTER
+Assumption							Reason					Validation		Status
+TradeIntent valid					upstream guarantee		Phase A			VALIDATED
+configuration_snapshot complete		needed for mapping		Phase C			VALIDATED
+
+12. VALIDATION FRAMEWORK
+	Method
+		deterministic replay
+		schema validation
+
+	Acceptance
+		identical input → identical output
+
+	Ambiguity
+
+		No branching → no ambiguity
+
+13. OUTPUT
+	execution_intent_stream = {
+		ExecutionIntent[]
+	}
+
+14. TRACEABILITY
+	trade_intent_id → execution_intent_id (same)
+
+	ExecutionIntent Identity (MANDATORY)
+
+		execution_intent_id = HASH_v1(
+			trade_intent_id +
+			event_time +
+			instrument +
+			direction +
+			target_size +
+			strategy_id +
+			origin_type
+		)
+
+		Traceability Chain:
+
+		trade_intent_id → execution_intent_id
+
+	IDENTITY CHAIN VALIDATOR (MANDATORY)
+
+		Validate:
+
+		trade_intent_id
+		→ execution_intent_id
+		→ decision_validated_intent_id
+		→ risk_approved_intent_id
+		→ policy_decision_intent_id
+		→ execution_order_id
+
+		Constraint:
+
+		ALL IDs MUST:
+
+		- be deterministic
+		- be lineage-linked
+		- be non-regenerated
+
+		Violation → HARD FAIL
+
+15. CROSS-PHASE CONSISTENCY
+
+	Uses:
+
+		Phase A → TradeIntent
+		Phase B → indirectly via config
+		Phase C → execution stream
+
+	Event Time Lineage Rule (GLOBAL — CROSS-PHASE)
+
+		ExecutionEvent.event_time MUST be derived from:
+
+			trade_intent_snapshot.event_time
+
+		OR
+
+			deterministic transformation of it
+
+		Constraint:
+
+			event_time MUST NOT use system clock
+			event_time MUST NOT be broker timestamp
+
+		Violation → NON-REPLAYABLE SYSTEM
+
+	Cross-phase invariant:
+		IF ANY:
+
+			- replay mismatch
+			- lineage break
+			- capital breach
+			- reconciliation failure
+
+			THEN:
+
+				HALT execution pipeline
+
+16. SCALABILITY
+	horizontally scalable
+	partition by trade_intent_id
+
+17. GOVERNANCE
+	mapping rules versioned
+	changes require approval
+
+18. AUDITABILITY
+	log input/output mapping
+	replay must match
+
+19. RISK CONSIDERATIONS
+		incorrect mapping risk
+		config mismatch risk
+
+	Mitigation:
+
+		strict schema validation
+
+20. FAILURE CONDITION
+
+	Fails if:
+
+		mapping not deterministic
+		TradeIntent altered
+		output inconsistent
+
+21. PHASE LOCK CRITERIA
+
+	Locked if:
+
+	deterministic mapping proven
+	no ambiguity
+	validation passed
+
+
+CEI NOTE (IMPORTANT)
+
+	This is minimal deterministic Strategy Engine.
+
+	Before moving ahead, next step must validate:
+
+	whether execution parameters are sufficient
+	whether mapping needs extension

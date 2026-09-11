@@ -1,0 +1,95 @@
+/**
+ * COREI – Institutional Workspace Foundation
+ * Stage-25 / Phase-19 / UX-01
+ *
+ * Design tokens for the workspace surface.
+ * All values are institutional, not ad‑hoc.
+ */
+:root {
+  --workspace-bg: #0b0e11;
+  --workspace-surface: #11151b;
+  --workspace-border: #242a33;
+  --workspace-text-primary: #d7dce2;
+  --workspace-text-secondary: #8e96a3;
+  --workspace-radius: 6px;
+  --workspace-padding: 24px;
+  --workspace-gap: 16px;
+}
+
+.corei-workspace-root {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background: var(--workspace-bg);
+  color: var(--workspace-text-primary);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.corei-workspace-canvas {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: var(--workspace-padding);
+  background: var(--workspace-surface);
+  border-radius: var(--workspace-radius);
+  margin: 12px;
+  border: 1px solid var(--workspace-border);
+  overflow: hidden;
+}
+
+.corei-workspace-surface {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background: var(--workspace-bg);
+  border-radius: calc(var(--workspace-radius) - 1px);
+  overflow: hidden;
+}
+
+.corei-empty-workspace {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--workspace-text-secondary);
+  text-align: center;
+  padding: 40px;
+  user-select: none;
+}
+
+.corei-empty-workspace-icon {
+  font-size: 48px;
+  opacity: 0.3;
+  margin-bottom: 16px;
+}
+
+.corei-empty-workspace-title {
+  font-size: 20px;
+  font-weight: 300;
+  letter-spacing: 0.3px;
+  color: var(--workspace-text-primary);
+}
+
+.corei-empty-workspace-subtitle {
+  font-size: 14px;
+  color: var(--workspace-text-secondary);
+  margin-top: 8px;
+  max-width: 400px;
+}
+
+.corei-dock-surface {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--workspace-bg);
+  border: 1px dashed var(--workspace-border);
+  border-radius: calc(var(--workspace-radius) - 2px);
+  margin: 4px;
+  color: var(--workspace-text-secondary);
+  font-size: 13px;
+  letter-spacing: 0.2px;
+}

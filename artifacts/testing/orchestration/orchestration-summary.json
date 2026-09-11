@@ -1,0 +1,30 @@
+[
+  {
+    "scope": "schemas",
+    "returncode": 0
+  },
+  {
+    "scope": "contracts",
+    "returncode": 0
+  },
+  {
+    "scope": "simulation",
+    "returncode": 0
+  },
+  {
+    "scope": "replay-validation",
+    "returncode": 0
+  },
+  {
+    "scope": "chaos-validation",
+    "returncode": 0
+  },
+  {
+    "scope": "performance",
+    "returncode": 0
+  },
+  {
+    "scope": "load",
+    "returncode": 0
+  }
+]

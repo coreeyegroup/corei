@@ -1,0 +1,13 @@
+{
+  "type": "record",
+  "name": "PositionState",
+  "namespace": "core.portfolio",
+  "fields": [
+    {"name": "account_id", "type": "string"},
+    {"name": "instrument", "type": "string"},
+    {"name": "direction", "type": "string"},
+    {"name": "quantity", "type": "long"},
+    {"name": "avg_entry_price", "type": "long"},
+    {"name": "open_timestamp", "type": "long"}
+  ]
+}

@@ -1,0 +1,1090 @@
+
+SYSTEM SETUP DESIGN (MACRO → IMPLEMENTATION BLUEPRINT)
+
+	Now we convert requirements → deployable system setup
+
+	This is NOT infra code yet
+	This is the deterministic system topology + environment design
+
+1.1 ENVIRONMENT STRATEGY (CRITICAL FOUNDATION)
+
+		We define 3-layer environment model:
+
+	ENVIRONMENT TIERS
+		1. DEV (Local Deterministic Sandbox)
+			single-node
+			docker-compose
+			full system (all services, reduced scale)
+			replay testing enabled
+
+		2. STAGING (Pre-Production Replica)
+			multi-node
+			Kubernetes cluster
+			production-like configs
+			full replay + simulation
+
+		3. PRODUCTION (Live Trading Infra)
+			distributed cluster
+			high availability
+			strict isolation
+			real broker connectivity
+
+	ENVIRONMENT INVARIANT
+
+		Across all environments:
+
+			Same code
+			Same event model
+			Same ordering logic
+			Same determinism guarantees
+
+		Only difference = scale + infra topology
+
+1.2 GLOBAL SYSTEM TOPOLOGY
+
+	We now define macro deployment architecture
+
+	CORE ARCHITECTURE MODEL
+
+					┌──────────────────────────────┐
+					│        API GATEWAY           │
+					└─────────────┬────────────────┘
+								  │
+			┌─────────────────────┼─────────────────────┐
+			│                     │                     │
+			▼                     ▼                     ▼
+	 ┌──────────────┐    ┌────────────────┐    ┌────────────────┐
+	 │ Strategy     │    │ Constraint     │    │ Market Data    │
+	 │ Layer (A)    │    │ Layer (B)      │    │ System         │
+	 └──────┬───────┘    └──────┬─────────┘    └──────┬─────────┘
+			│                   │                     │
+			└──────────────┬────┴──────────────┬──────┘
+						   ▼                   ▼
+					┌──────────────────────────────┐
+					│        EVENT BUS (Kafka)     │
+					└─────────────┬────────────────┘
+								  │
+			┌─────────────────────┼─────────────────────┐
+			▼                     ▼                     ▼
+	 ┌──────────────┐    ┌────────────────┐    ┌────────────────┐
+	 │ Phase C      │    │ Portfolio      │    │ Replay Engine  │
+	 │ Services     │    │ Service        │    │                │
+	 └──────┬───────┘    └──────┬─────────┘    └──────┬─────────┘
+			│                   │                     │
+			└──────────────┬────┴──────────────┬──────┘
+						   ▼                   ▼
+					┌──────────────────────────────┐
+					│     EXECUTION PIPELINE       │
+					│   (Phase D Step 1 → 7)       │
+					└─────────────┬────────────────┘
+								  │
+								  ▼
+					┌──────────────────────────────┐
+					│ OMS → EMS → Broker Adapter   │
+					└─────────────┬────────────────┘
+								  ▼
+
+						   External Brokers
+
+	Deterministic time model (event_time governance)
+
+1.3 INFRASTRUCTURE STACK (STANDARDIZED)
+
+	This is your base stack (LOCK THIS)
+
+	CORE TECHNOLOGY CHOICES
+		Compute
+			Docker (containerization)
+			Kubernetes (orchestration)
+			service discovery (Kubernetes-native)
+
+		Messaging (CRITICAL)
+			Kafka (event bus)
+			Schema Registry (central schema authority)
+			consumer lag monitoring
+			backpressure handling
+
+	Storage
+		Event Store
+			Kafka (primary log)
+
+		Snapshot Store
+			PostgreSQL / ScyllaDB
+
+		Time-Series (Market Data)
+			ClickHouse / TimescaleDB
+
+		Data Retention:
+			historical data storage (long-term)
+			event retention policy
+			snapshot retention policy
+
+	API Layer
+		FastAPI / Node.js (gateway)
+		gRPC for internal communication
+
+	Observability
+		Prometheus (metrics)
+		Grafana (dashboards)
+		OpenTelemetry (tracing)
+		distributed tracing
+		centralized logging
+
+	Workflow / Automation
+		n8n (for operational workflows)
+
+
+
+1.4 SERVICE ARCHITECTURE (MICROSERVICES BREAKDOWN)
+
+	Now we map L1–L22 → actual services
+
+	CORE SERVICES
+
+		Phase A Services
+			strategy-engine-service
+			signal-processor
+			strategy isolation per account_id
+
+		Phase B Services
+			constraint-engine-service
+
+		Phase C Services (CRITICAL CORE)
+			event-ingestion-service
+			event-validation-service
+			event-ordering-service
+			orchestration-service
+			state-update-service
+			snapshot-service
+			replay-engine
+			identity-service (deterministic ID + lineage enforcement)
+
+			📌 Must strictly follow
+
+		Phase D Services
+			execution-intent-service (Step 1)
+			decision-engine-service (Step 2)
+			risk-engine-service (Step 3)
+			policy-engine-service (Step 4) → execution throttling control
+			order-engine-service (Step 5)
+			execution-router (SOR)
+			fill-handler (Step 6)
+			reconciliation-service
+
+			📌 Must strictly follow
+
+		Trading Infra Services
+			OMS (transport-only)
+			EMS (transport-only)
+			broker-adapter-service
+			broker-routing layer (multi-broker selection)
+			broker failover handling
+
+		Portfolio & Risk State
+			portfolio-service (STATE AUTHORITY)
+			exposure-service
+			capital partitioning per account + per strategy
+
+		Account & Resource Isolation:
+			account-isolation layer
+
+		Market Data
+			market-data-ingestion
+			market-data-normalizer
+
+		Platform Services
+			api-gateway
+				rate limiting
+				request validation
+			auth-service
+			config-service  			→ source of configuration
+			audit-service
+			monitoring-service
+			config-snapshot-service  	→ immutable snapshot generator
+			failure-handling-service
+			historical-data-service
+			backtest-engine
+			feature-store
+
+
+		Security Layer:
+			authorization (RBAC)
+			service-to-service authentication
+			secrets management
+
+1.5 EVENT STREAM DESIGN (HIGH LEVEL)
+
+	All streams MUST be schema-validated via Schema Registry
+
+	CORE TOPICS
+		signal_events
+		decision_events
+		execution_events
+		constraint_events
+		system_events
+
+	EXECUTION STREAMS
+		execution_intent_stream
+		decision_validated_stream
+		risk_approved_stream
+		policy_decision_stream
+		execution_order_stream
+		fill_stream
+		reconciliation_stream
+
+	FAILURE STREAMS:
+		dead_letter_stream
+		retry_stream
+
+	CRITICAL RULE
+		partition_key = account_id + order_id
+		strict ordering maintained
+
+		📌 enforced in Phase C
+
+	Event versioning (schema evolution support)
+
+1.6 DATA FLOW (END-TO-END)
+		PIPELINE
+
+	Market Data
+	   ↓
+	Phase A (Strategy)
+	   ↓
+	TradeIntent
+	   ↓
+	configuration_snapshot binding
+	   ↓
+	Phase C (Event System)
+	   ↓
+	Execution Instruction Stream
+		↓
+	Phase D:
+	   Step 1 → ExecutionIntent
+	   Step 2 → DecisionValidated
+	   Step 3 → RiskApproved
+	   Step 4 → PolicyDecision
+	   Step 5 → ExecutionOrder
+	   ↓
+	OMS → EMS → Broker
+	   ↓
+	Fill Stream
+	   ↓
+	Reconciliation → Portfolio Update
+
+	Execution pipeline is account-scoped (isolated per account_id)
+
+1.7 DEPLOYMENT MODEL
+
+	BASE CLUSTER DESIGN
+		Minimum Production Cluster
+		Kafka cluster (KRaft mode — minimum 3 brokers)
+		replicated databases
+		per-account partitioning strategy
+
+		node role segmentation:
+		- compute nodes
+		- messaging nodes
+		- database nodes
+		- critical services nodes
+
+	SCALING DIMENSIONS
+		partition scaling (Kafka)
+		service horizontal scaling
+		multi-region deployment (future)
+		multi-region replication strategy (future)
+		service scaling unit = per-service horizontal scaling
+
+
+1.8 NON-NEGOTIABLE SYSTEM GUARANTEES
+
+	These must be enforced at infra level:
+
+		Determinism
+			identical input → identical output
+
+		Replayability
+			full system replay from event log
+
+		No Hidden State
+			state ONLY from event log
+
+		Ordering Integrity
+			global + partition ordering preserved
+
+		Identity Preservation
+			no ID regeneration in OMS/EMS
+
+		Lineage continuity enforcement (global)
+
+		event_time-only execution (no system clock)
+
+1.9 SYSTEM SOFTWARE STACK
+
+	LAYER 1 — BASE SYSTEM (OS)
+		Software		: Ubuntu Server 22.04 LTS
+		Ownership		: Host machine / VM layer
+		Responsibility	: kernel, networking, filesystem, process management
+		Why				: Stable, widely supported, K8s native
+		Replaceable		: Yes (Debian, RHEL)
+
+	LAYER 2 — CONTAINER RUNTIME
+		Software		: 	Docker Engine
+		Ownership		: 	Container runtime (ONLY)
+		Responsibility	:	build images, run containers, local dev execution
+		Why				:	Build + local runtime
+		Replaceable		:	Yes (containerd)
+
+			RULE: 	Docker DOES NOT orchestrate production
+			Note:	Production uses containerd via Kubernetes internally
+
+	LAYER 3 — CONTAINER ORCHESTRATION
+		Software		: 	Kubernetes (K8s)
+		Ownership		:	Cluster orchestration layer
+		Responsibility	:	deploy services, scale services, service discovery, health checks, networking
+		Why				: 	Scaling, orchestration, service control
+		Replaceable		:	No (at your scale)
+
+			CRITICAL RULE:
+			Kubernetes OWNS runtime orchestration
+			Docker ONLY runs containers
+
+		Software		:	Network Policy (Kubernetes-native)
+		Ownership		:	service-to-service traffic control,
+		Why				:	internal security boundaries
+		Replaceable		:	No
+
+	LAYER 4 — PACKAGE MANAGEMENT (K8s)
+		Software		: 	Helm
+		Ownership		:	Kubernetes package manager
+		Responsibility	:	install Kafka, Prometheus, etc., manage deployments as charts
+		Why				:	Standard K8s deployment
+		Replaceable		: 	Yes (Kustomize)
+
+			RULE:
+			Helm ≠ runtime
+			Helm = deployment tool ONLY
+
+	LAYER 5 — CORE INFRA SERVICES
+
+		This is where confusion usually happens — we fix ownership.
+
+		Messaging System
+			Software	:	Kafka (KRaft mode)
+			Ownership	:	Event backbone (single source of truth)
+			Why			:	Event sourcing + ordering + replay
+			Replaceable	: 	No
+
+		Schema Management
+			Software	:	Schema Registry
+			Ownership	:	Kafka schema authority
+			Why			:	Schema evolution + validation
+			Replaceable	:	Partial
+
+		Database (Transactional)
+			Software	:	PostgreSQL
+			Ownership	:	config storage, snapshots, metadata
+			Why			:	Config + snapshots
+			Replaceable	: 	Yes
+
+			Backup & Restore System (Postgres + Kafka snapshots)
+
+		Time-Series DB
+			Software	:	ClickHouse (preferred) / TimescaleDB
+			Ownership	:	market data storage
+
+		Cache (OPTIONAL)
+			Software	:	Redis
+			Ownership	:	non-authoritative caching only
+
+	LAYER 6 — PLATFORM CONTROL SERVICES
+		Authentication / Identity
+			Software	:	Keycloak
+			Ownership	:
+				- user auth
+				- service auth (OIDC)
+
+		Secrets Management
+			Software	:	Vault (HashiCorp Vault)
+			Ownership	:
+				- secrets
+				- API keys
+				- broker credentials
+
+		API Gateway
+			Software	:	Kong / NGINX / Envoy
+			Ownership	:
+				- external traffic
+				- routing
+				- rate limiting
+
+			External Load Balancer
+				↓
+			Ingress Controller (K8s entry)
+				↓
+			API Gateway (Kong / NGINX / Envoy)
+
+		Config Management
+			Software	:	Custom config-service + config-snapshot-service
+			Ownership	:	system configuration authority
+
+		External Load Balancer (Cloud LB / MetalLB)
+
+		Cert Manager (TLS automation)
+
+	LAYER 7 — OBSERVABILITY
+		Metrics			:	Prometheus
+		Visualization	:	Grafana
+		Logging			:	ELK Stack (Elasticsearch + Logstash + Kibana) or Loki (simpler)
+		Tracing			:	OpenTelemetry
+
+	LAYER 8 — CI/CD & OPERATIONS
+		CI/CD					:	GitHub Actions / GitLab CI
+
+	LAYER 9 - IMAGE REGISTRY
+		Container Registry	:	Docker Hub / AWS ECR / GCR / Harbor
+		Ownership			:	stores versioned container images
+
+	LAYER 10 — USER INTERFACE (UI)
+		PURPOSE
+			trading control
+			monitoring
+			admin operations
+			strategy control
+
+		RECOMMENDED STACK
+			Frontend		:	React (Next.js)
+			UI Components	:	Tailwind / ShadCN
+			Charts			:	TradingView Charting Library / Lightweight Charts
+			Data			:	WebSocket (real-time) / REST (control plane)
+
+			OWNERSHIP
+				UI Layer	:	consumes API Gateway / does NOT contain logic ( presentation layer only)
+
+	LAYER 11  - DOCUMENTATION SYSTEM
+		PURPOSE
+			system docs
+			API docs
+			architecture reference
+			internal knowledge base
+
+			Docs Platform	:	Docusaurus / MkDocs
+			API Docs		:	OpenAPI (Swagger)
+			Architecture	:	Markdown + diagrams (Mermaid)
+
+			OWNERSHIP
+			Documentation Layer	:	source of truth for system design
+
+	LAYER 12 — WORKFLOW / OPERATIONS SYSTEM
+		PURPOSE
+			automation
+			ops workflows
+			alert actions
+			scheduled tasks
+
+		Workflow Engine		:	n8n  (automation engine)
+
+			Use Cases:
+				- alert → action
+				- broker failure → fallback trigger
+				- report generation
+				- system maintenance automation
+
+
+	OWNERSHIP SUMMARY (THIS IS WHAT YOU WERE MISSING)
+
+	DOCKER vs KUBERNETES
+		Docker		:	builds + runs containers
+		Kubernetes	:	controls containers
+
+	HELM vs KUBERNETES
+		Helm		:	installs apps
+		Kubernetes	:	runs apps
+
+	GRAFANA vs PROMETHEUS
+		Prometheus	:	collects metrics
+		Grafana		:	shows metrics
+
+	POSTGRES vs KAFKA
+		Kafka		:	event log (truth)
+		Postgres	:	state + config
+
+	VAULT vs KEYCLOAK
+		Keycloak	:	identity (who)
+		Vault		:	secrets (what they can access securely)
+
+	FINAL STACK (CLEAN VIEW)
+	L1  OS                → Ubuntu
+	L2  Runtime           → Docker
+	L3  Orchestration     → Kubernetes (+ Network Policy)
+	L4  Deployment        → Helm
+	L5  Core Infra        → Kafka, Postgres, ClickHouse
+	L6  Platform Control  → Keycloak, Vault, API Gateway, Ingress
+	L7  Observability     → Prometheus, Grafana, Loki
+	L8  CI/CD             → GitHub Actions
+	L9  Registry          → ECR / Docker Hub
+	L10 UI               → React (Next.js)
+	L11 Docs             → Docusaurus + OpenAPI
+	L12 Workflow         → n8n
+
+2.0 FULL SYSTEM SOFTWARE REQUIREMENT TABLE
+
+	CORE INFRA LAYERS
+	Layer		Component		Purpose						Ownership					Open Source
+	L1			Ubuntu Server	Base OS						Host/VM						✅ Yes
+	L2			Docker			Container runtime			Build & run containers		✅ Yes
+	L3			Kubernetes		Orchestration				Deploy, scale, networking	✅ Yes
+	L3			Network Policy	Internal traffic control	K8s security				✅ Yes
+	L4			Helm			K8s package manager			Deploy apps					✅ Yes
+
+	MESSAGING & EVENT SYSTEM
+	Component					Purpose					Ownership				Open Source
+	Kafka (KRaft)				Event backbone			Source of truth			✅ Yes
+	Schema Registry				Event schema control	Kafka schema authority	⚠️ Mixed (Confluent OSS / others)
+	Consumer Lag Monitoring		Backpressure control	Kafka ops				✅ Yes
+
+	STORAGE LAYER
+	Component				Purpose						Ownership				Open Source
+	PostgreSQL				Config + snapshots	S		tate storage			✅ Yes
+	ClickHouse				Market data (time-series)	Analytics storage		✅ Yes
+	TimescaleDB (alt)		Time-series alt				Market data				⚠️ Hybrid
+	Kafka (Event Store)		Event log					Primary truth			✅ Yes
+	Backup System			Data recovery				DB/Kafka				⚠️ Depends (Velero etc.)
+	Redis (optional)		Cache						Non-authoritative		✅ Yes
+
+	PLATFORM CONTROL
+	Component							Purpose					Ownership				Open Source
+	Keycloak							Auth / Identity			Users & services		✅ Yes
+	Vault								Secrets management		Credentials				⚠️ OSS + Enterprise
+	API Gateway (Kong/NGINX/Envoy)		External routing		Traffic control			✅ Yes
+	Ingress Controller					K8s entry point			Traffic entry			✅ Yes
+	Load Balancer						External access			Traffic distribution	⚠️ Depends
+	Cert Manager						TLS automation			Security				✅ Yes
+	Config Service						Config source			System control			❌ Custom
+	Config Snapshot Service				Immutable configs		Determinism				❌ Custom
+
+	OBSERVABILITY
+	Component			Purpose					Ownership				Open Source
+	Prometheus			Metrics collection		System monitoring		✅ Yes
+	Grafana				Visualization			Dashboards				✅ Yes
+	Loki / ELK			Logging					Logs					✅ Yes
+	OpenTelemetry		Tracing					Distributed tracing		✅ Yes
+
+	CI/CD & OPERATIONS
+	Component				Purpose					Ownership			Open Source
+	GitHub Actions			CI/CD					Build + deploy		❌ (SaaS)
+	GitLab CI (alt)			CI/CD					Build + deploy		⚠️ OSS + SaaS
+	n8n						Workflow automation		Ops workflows		✅ Yes
+
+	IMAGE MANAGEMENT
+	Component				Purpose					Ownership		Open Source
+	Docker Hub				Image registry			Store images	❌
+	AWS ECR / GCR			Registry				Store images	❌
+	Harbor (alt)			Self-hosted registry	Image control	✅ Yes
+
+	USER INTERFACE
+	Component				Purpose			Ownership			Open Source
+	React (Next.js)			UI framework	Frontend			✅ Yes
+	Tailwind / ShadCN		UI components	UI layer			✅ Yes
+	TradingView Charts		Charting		Visualization		❌
+	Lightweight Charts		Charting alt	Visualization		✅ Yes
+
+	DOCUMENTATION
+	Component				Purpose			Ownership			Open Source
+	Docusaurus				Docs platform	Knowledge base		✅ Yes
+	MkDocs					Docs alt		Documentation		✅ Yes
+	OpenAPI (Swagger)		API docs		Interface contract	✅ Yes
+	Mermaid					Diagrams		Architecture docs	✅ Yes
+
+	WORKFLOW / AUTOMATION
+	Component			Purpose				Ownership		Open Source
+	n8n					Workflow engine		Automation		✅ Yes
+
+2.1 LAYER-BY-LAYER SYSTEM LOCK (FINAL)
+
+	LAYER		Discription 		Component				Decision
+	LAYER 1  	OS 					Ubuntu Server			LOCK
+	LAYER 2		CONTAINER RUNTIME	Docker					LOCK (dev)
+	LAYER 3		ORCHESTRATION		Kubernetes				LOCK
+									Network Policy			LOCK
+	LAYER 4 	DEPLOYMENT			Helm					LOCK
+	LAYER 5		EVENT BACKBONE		Kafka (KRaft)			HARD LOCK
+									Schema Registry			LOCK
+	LAYER 6		STORAGE				PostgreSQL				LOCK
+									ClickHouse				LOCK
+									Kafka (event store)		HARD LOCK
+									Backup System			LOCK
+									Redis					OPTIONAL
+	LAYER 7		PLATFORM CONTROL	Keycloak				LOCK
+									Vault					LOCK
+									API Gateway				LOCK
+									Ingress Controller		LOCK
+									Load Balancer			LOCK
+									Cert Manager			LOCK
+									Config Service			LOCK
+									Config Snapshot Service	HARD LOCK
+	LAYER 8		OBSERVABILITY		Prometheus				LOCK
+									Grafana					LOCK
+									Logging (Loki/ELK)		LOCK
+									OpenTelemetry			LOCK
+	LAYER 9		CI/CD				GitHub / GitLab			LOCK
+									n8n						LOCK
+	LAYER 10	IMAGE REGISTRY		Container Registry		LOCK
+									Harbor (self-hosted)	RECOMMENDED
+	LAYER 11	UI					React (Next.js)			LOCK
+									WebSocket				LOCK
+									Charting Library		LOCK
+	LAYER 12	DOCUMENTATION		Docusaurus / MkDocs		LOCK
+									OpenAPI					LOCK
+									Mermaid					LOCK
+	LAYER 13	WORKFLOW / OPS		n8n						RECOMMENDED
+
+2.2 SYSTEM SETUP EXECUTION ORDER (PRODUCTION-GRADE)
+	PRINCIPLE
+		Build from bottom → up
+		Infra → Control → Data → Observability → Platform → UI
+
+	🔵PHASE 0 — MACHINE PREPARATION
+		Objective
+
+			Prepare clean, deterministic base
+
+		Steps
+			1. Install Ubuntu Server 22.04 LTS
+			2. Configure:
+			   - static IP
+			   - hostname
+			   - SSH access
+			3. System tuning:
+			   - ulimit (file descriptors)
+			   - swap (disable for K8s)
+			   - time sync (chrony)
+
+	🔵 PHASE 1 — CONTAINER FOUNDATION
+		Objective
+
+			Enable container runtime
+
+		Steps
+			1. Install Docker
+			2. Enable Docker service
+			3. Verify:
+			   docker run hello-world
+
+	🔵 PHASE 2 — KUBERNETES CLUSTER
+		Objective
+
+			Create orchestration layer
+
+		Steps
+			1. Install Kubernetes (kubeadm OR k3s for dev)
+			2. Initialize cluster
+			3. Configure kubectl
+			4. Install CNI (network plugin)
+			   - Calico (recommended)
+
+		OUTPUT	: 	Working Kubernetes cluster
+
+	🔵 PHASE 3 — CORE K8s INFRA (ENTRY + SECURITY)
+		Objective
+
+			Enable traffic + security boundaries
+
+		Steps
+			1. Install Ingress Controller
+			   - NGINX Ingress
+
+			2. Install Load Balancer
+			   - MetalLB (if bare metal)
+
+			3. Install Cert Manager
+			   - TLS automation
+
+			4. Enable Network Policies
+
+		OUTPUT	: 	Cluster can accept external traffic securely
+
+	🔵 PHASE 4 — PACKAGE MANAGEMENT
+		Objective
+
+			Standardize deployments
+
+		Steps
+			1. Install Helm
+			2. Add repos:
+			   - bitnami
+			   - prometheus
+			   - elastic / grafana
+
+	🔵 PHASE 5 — EVENT BACKBONE (CRITICAL FIRST CORE)
+
+		MOST IMPORTANT PHASE
+
+		Steps
+			1. Deploy Kafka (KRaft mode) via Helm
+			   - 3 brokers minimum
+
+			2. Deploy Schema Registry
+
+			3. Configure:
+			   - topics
+			   - partitions
+			   - retention policies
+
+			4. Enable:
+			   - consumer lag monitoring
+			   - backpressure config
+
+		OUTPUT	: 	Event system operational (core spine ready)
+
+	🔵 PHASE 6 — STORAGE LAYER
+		Objective
+
+			Persistent data systems
+
+		Steps
+			1. Deploy PostgreSQL
+			2. Configure:
+			   - backups
+			   - replication (if prod)
+
+			3. Deploy ClickHouse
+			4. Configure:
+			   - market data tables
+
+		OUTPUT	:	All data systems available
+
+	🔵 PHASE 7 — PLATFORM CONTROL
+		Objective
+
+			Security + access + config
+
+		Steps
+			1. Deploy Keycloak (Auth)
+			2. Deploy Vault (Secrets)
+
+			3. Deploy API Gateway (Kong / NGINX / Envoy)
+
+			4. Deploy:
+			   - config-service
+			   - config-snapshot-service
+
+			5. Configure:
+			   - RBAC
+			   - service auth
+
+		OUTPUT	:	Secure, controlled platform
+
+	🔵 PHASE 8 — OBSERVABILITY
+		Objective
+
+			Full system visibility
+
+		Steps
+			1. Deploy Prometheus
+			2. Deploy Grafana
+
+			3. Deploy logging:
+			   - Loki (recommended initially)
+
+			4. Deploy OpenTelemetry
+
+		OUTPUT	:	Monitoring + logging + tracing active
+
+	🔵 PHASE 9 — CI/CD + REGISTRY
+		Objective
+
+		Deployment automation
+
+		Steps
+			1. Setup Container Registry
+			   - Docker Hub / ECR / Harbor
+
+			2. Setup CI/CD:
+			   - GitHub Actions / GitLab CI
+
+			3. Build pipeline:
+			   - build → push image → deploy via Helm
+
+		OUTPUT	:	Automated deployment pipeline
+
+	🔵 PHASE 10 — CORE PLATFORM SERVICES
+		Objective
+
+			Bring your system to life
+
+		Steps
+			Deploy in order:
+
+			1. identity-service
+			2. event-ingestion-service
+			3. event-validation-service
+			4. event-ordering-service
+
+			5. portfolio-service (STATE AUTHORITY)
+			6. snapshot-service
+			7. replay-engine
+
+		OUTPUT	:	Core system backbone running
+
+	🔵 PHASE 11 — EXECUTION PIPELINE
+		Objective
+
+			Trading engine activation
+
+			Steps
+				Deploy:
+
+				Phase A:
+					strategy-engine
+					signal-processor
+
+				Phase B:
+					constraint-engine
+
+				Phase D:
+					execution-intent
+					decision-engine
+					risk-engine
+					policy-engine
+					order-engine
+					execution-router
+					fill-handler
+					reconciliation
+
+		OUTPUT	:	Full trading pipeline operational
+
+	🔵 PHASE 12 — TRADING INFRA
+		Objective
+
+			External connectivity
+
+		Steps
+			1. Deploy OMS (transport only)
+			2. Deploy EMS (transport only)
+
+			3. Deploy broker-adapter-service
+			4. Configure:
+			   - broker routing
+			   - failover
+
+		OUTPUT	:	Live execution capability
+
+	🔵 PHASE 13 — UI + DOCS + WORKFLOW
+		Objective
+
+			Human interaction layer
+
+		Steps
+			1. Deploy UI (React + WebSocket)
+			2. Deploy Documentation (Docusaurus)
+			3. Deploy n8n (workflow automation)
+
+		OUTPUT	:	Complete platform (user + ops ready)
+
+	🧠 FINAL EXECUTION FLOW
+		Machine → Docker → Kubernetes
+		→ Ingress + Security
+		→ Kafka (CORE)
+		→ Databases
+		→ Platform Control
+		→ Observability
+		→ CI/CD
+		→ Core Services
+		→ Execution Engine
+		→ Broker Layer
+		→ UI / Docs / Workflow
+
+	🚨 CRITICAL ORDER RULES
+		🔴 NEVER DO THIS
+			❌ Build services before Kafka
+			❌ Deploy UI before API Gateway
+			❌ Skip observability
+			❌ Connect broker before risk engine
+
+		🟢 ALWAYS DO THIS
+			Kafka → Portfolio → Execution → Broker
+
+🔵 PRE PHASE 10 → 12 EXECUTION FLOW (LOCKED ENGINEERING STRATEGY)
+
+		This section is to be added to system documentation as a control rule
+		to prevent over-engineering and enforce deterministic system evolution.
+
+	🧠 1. PURPOSE OF THIS FLOW
+
+		Define how Phase 10 → 12 must be executed together, not in isolation.
+
+		Objective:
+			Build a closed-loop, end-to-end deterministic trading system (minimal skeleton) before deep engineering.
+
+	🔴 2. CORE RULE (NON-NEGOTIABLE)
+
+		❌ DO NOT fully engineer any single phase independently
+		✅ ALWAYS build cross-phase minimal skeleton → validate → then harden
+
+	🔷 3. PHASE EXECUTION MODEL
+			MODEL NAME
+
+		Closed-Loop Progressive Hardening Model
+
+		🔁 EXECUTION FLOW
+			PHASE 10 (Core Event System - Skeleton)
+					↓
+			PHASE 11 (Execution Pipeline - Skeleton)
+					↓
+			PHASE 12 (Trading Infra - Skeleton)
+					↓
+			END-TO-END LOOP VALIDATION
+					↓
+			RETURN → HARDEN PHASE 10
+					↓
+			RETURN → HARDEN PHASE 11
+					↓
+			RETURN → HARDEN PHASE 12
+
+	🔷 4. PHASE-BY-PHASE RESPONSIBILITY (SKELETON MODE)
+
+		🔵 PHASE 10 — CORE PLATFORM SERVICES (SKELETON)
+			Responsibility:
+				Establish deterministic event processing backbone
+
+			Must include:
+				event ingestion
+				event validation (basic)
+				event ordering (single partition acceptable)
+				identity (basic hash)
+				orchestration (basic routing)
+				state update (basic portfolio)
+				snapshot (simple)
+				replay (limited scope)
+
+			Output:
+				Events can flow → state can update → system can replay (basic)
+
+		🔵 PHASE 11 — EXECUTION PIPELINE (SKELETON)
+			Responsibility:
+				Convert trade intent → executable order
+
+			Must include:
+				strategy → signal → decision (minimal logic)
+				execution-intent generation
+				decision validation (basic)
+				risk check (simple rules)
+				policy check (pass-through or basic)
+				order generation
+
+			Output:
+				Valid execution orders produced deterministically
+
+		🔵 PHASE 12 — TRADING INFRA (SKELETON)
+			Responsibility:
+				Simulate real-world execution environment
+
+			Must include:
+				OMS (pass-through)
+				EMS (pass-through)
+				broker adapter (mock or simulated)
+				fill generation (deterministic mock fills)
+
+			Output:
+				Orders → fills → feedback into system
+
+	🔁 5. CLOSED LOOP (MANDATORY SYSTEM STATE)
+
+			After Phase 12 skeleton:
+
+			Market Data (or Mock Input)
+					↓
+			Strategy Engine (Phase 11)
+					↓
+			Trade Intent
+					↓
+			Phase 10 (Event System)
+					↓
+			Execution Pipeline (Phase 11)
+					↓
+			OMS / EMS (Phase 12)
+					↓
+			Broker Adapter (Mock)
+					↓
+			Fill Event
+					↓
+			Phase 10 (State Update)
+					↓
+			Portfolio Updated
+
+	🧠 6. VALIDATION REQUIREMENT (PHASE GATE)
+
+		The loop is considered VALID only if ALL conditions pass:
+
+		✔ Determinism
+			Same input → same output (repeatable)
+
+		✔ Replayability
+			Full loop can be replayed from Kafka
+
+		✔ State Consistency
+			Portfolio state matches expected output
+
+		✔ Event Integrity
+			No missing / duplicated / unordered events
+
+		✔ Traceability
+			Every output linked to input via ID
+
+	🔴 7. FAILURE CONDITIONS (LOOP LEVEL)
+
+		Loop is INVALID if:
+
+			❌ Any event bypasses validation
+			❌ State differs between runs
+			❌ Replay produces different result
+			❌ Missing lineage (IDs broken)
+			❌ Execution feedback not integrated
+			❌ Manual intervention required
+
+	🔷 8. HARDENING PHASE (AFTER LOOP SUCCESS)
+
+		Only after loop is stable:
+
+		🔧 PHASE 10 HARDENING
+			strict ordering (multi-partition)
+			schema governance
+			idempotency guarantees
+			failure handling + retry
+			distributed orchestration
+
+		🔧 PHASE 11 HARDENING
+			advanced risk engine
+			policy engine enforcement
+			decision conflict resolution
+			execution throttling
+
+		🔧 PHASE 12 HARDENING
+			real broker integration
+			failover routing
+			latency handling
+			reconciliation engine
+
+	🧠 9. ENGINEERING PRINCIPLE (TO REMEMBER)
+		BUILD FLOW FIRST
+		THEN ENFORCE CORRECTNESS
+		THEN SCALE
+
+	🔒 10. FINAL RULE (DOCUMENT LOCK)
+
+		Phase 10–12 MUST be executed as a single closed-loop system build,
+		NOT as independent engineering phases.
+
+
+	🧭 11. SYSTEM STATE AFTER THIS FLOW
+
+		After successful execution:
+
+			System becomes alive (first functional trading loop)
+			All future work = refinement, not creation
+			Architecture becomes validated, not theoretical
+
+		🔥 FINAL ONE-LINE SUMMARY
+
+		Phase 10–12 = Build → Validate → Close Loop → Then Harden

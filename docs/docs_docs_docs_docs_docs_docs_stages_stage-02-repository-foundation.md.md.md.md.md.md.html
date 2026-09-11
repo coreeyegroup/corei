@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <title>docs docs docs docs docs stages stage 02 repository foundation.md.md.md.md.md</title>
+  <style>
+  body {
+    background: #0A0D12;
+    color: #E3E7EC;
+    font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px 40px;
+  }
+
+  h1 {
+    font-size: 26px;
+    font-weight: 600;
+    color: #C6A46A;
+    margin: 24px 0 12px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 8px;
+  }
+
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #D4B88A;
+    margin: 20px 0 10px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 6px;
+  }
+
+  h3 {
+    font-size: 17px;
+    font-weight: 500;
+    color: #E3E7EC;
+    margin: 16px 0 8px 0;
+  }
+
+  h4 {
+    font-size: 15px;
+    font-weight: 500;
+    color: #C5CED9;
+    margin: 12px 0 6px 0;
+  }
+
+  p {
+    margin-bottom: 8px;
+    color: #C5CED9;
+  }
+
+  ul,
+  ol {
+    padding-left: 24px;
+    margin-bottom: 8px;
+    color: #C5CED9;
+  }
+
+  li {
+    margin-bottom: 2px;
+  }
+
+  code {
+    font-family: 'JetBrains Mono', 'Cascadia Code', monospace;
+    font-size: 13px;
+    background: rgba(255,255,255,0.05);
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid #28303C;
+    color: #C5CED9;
+  }
+
+  pre {
+    background: #18202A;
+    border: 1px solid #28303C;
+    border-radius: 6px;
+    padding: 16px 20px;
+    overflow: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 12px 0 16px 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #C5CED9;
+  }
+
+  pre code {
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 16px 0;
+    font-size: 13px;
+    color: #C5CED9;
+  }
+
+  th {
+    background: #18202A;
+    color: #C5CED9;
+    font-weight: 600;
+    text-align: left;
+    padding: 6px 12px;
+    border: 1px solid #28303C;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  td {
+    padding: 4px 12px;
+    border: 1px solid #28303C;
+    background: #0E1219;
+  }
+
+  tr:nth-child(even) td {
+    background: #121821;
+  }
+
+  blockquote {
+    border-left: 3px solid #C6A46A;
+    padding-left: 16px;
+    margin: 8px 0 12px 0;
+    color: #6E7883;
+    font-style: italic;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #28303C;
+    margin: 24px 0;
+  }
+
+  a {
+    color: #8BB4F0;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  strong {
+    color: #E3E7EC;
+    font-weight: 600;
+  }
+
+  img {
+    max-width: 100%;
+    border-radius: 4px;
+    border: 1px solid #28303C;
+  }
+
+  .doc-footer {
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid #28303C;
+    font-size: 12px;
+    color: #6E7883;
+    font-family: monospace;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+</style>
+</head>
+
+<body>
+
+  <div
+    class="doc-header"
+    style="
+      background:#121821;
+      border:1px solid #28303C;
+      border-radius:8px;
+      padding:1.2rem 1.8rem;
+      margin-bottom:1.8rem;
+    "
+  >
+
+    <div
+      style="
+        color:#C6A46A;
+        font-weight:600;
+        font-size:13px;
+        text-transform:uppercase;
+        letter-spacing:0.05em;
+      "
+    >
+      COREI · Stage Documentation
+    </div>
+
+
+
+    <h1
+      style="
+        font-size:28px;
+        font-weight:600;
+        color:#E3E7EC;
+        margin:0.1rem 0;
+        border-bottom:none;
+        padding-bottom:0;
+      "
+    >
+      docs docs docs docs docs stages stage 02 repository foundation.md.md.md.md.md
+    </h1>
+
+    <div
+      style="
+        font-size:16px;
+        color:#C5CED9;
+      "
+    >
+      Stage Documentation
+      ·
+      Operational
+    </div>
+
+    <div
+      style="
+        display:flex;
+        flex-wrap:wrap;
+        gap:0.6rem 1.8rem;
+        margin-top:0.6rem;
+        font-size:13px;
+      "
+    >
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Status
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          Approved
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Version
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          1.0
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Classification
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          Operational
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Owner
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          COREI
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Repository
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+            font-family:monospace;
+          "
+        >
+          docs/docs_docs_docs_docs_docs_stages_stage-02-repository-foundation.md.md.md.md.md.md
+        </span>
+      </span>
+
+    </div>
+
+
+
+  </div>
+
+
+
+  <h1>COREI — STAGE 2 AUTHORITATIVE RECORD</h1>
+<h1>STAGE 2 — REPOSITORY FOUNDATION</h1>
+<hr>
+<h1>STATUS</h1>
+<p>Stage 2 is COMPLETE.</p>
+<p>This document represents the authoritative institutional record for Stage 2 of the Corei platform build lifecycle.</p>
+<hr>
+<h1>PURPOSE OF STAGE 2</h1>
+<p>Stage 2 establishes the institutional repository foundation of the Corei platform.</p>
+<p>This stage transforms the platform from:</p>
+<ul>
+<li>machine-level preparation</li>
+<li>isolated bootstrap scripts</li>
+<li>unmanaged repository layout</li>
+</ul>
+<p>into:</p>
+<ul>
+<li>governed repository topology</li>
+<li>deterministic execution structure</li>
+<li>reusable engineering substrate</li>
+<li>institutional documentation architecture</li>
+<li>bounded ownership architecture</li>
+<li>machine-enforced governance</li>
+</ul>
+<p>Stage 2 must complete BEFORE runtime infrastructure implementation begins.</p>
+<hr>
+<h1>AUTHORITATIVE OBJECTIVES</h1>
+<p>Stage 2 was responsible for establishing:</p>
+<h2>1. Canonical Filesystem Topology</h2>
+<p>Deterministic platform root structure.</p>
+<hr>
+<h2>2. Repository Governance</h2>
+<p>Bounded repository ownership and repository topology governance.</p>
+<hr>
+<h2>3. Lifecycle Execution Governance</h2>
+<p>Deterministic platform stage execution structure.</p>
+<hr>
+<h2>4. Shared Engineering Substrate</h2>
+<p>Reusable operational libraries and execution primitives.</p>
+<hr>
+<h2>5. Service Provisioning Governance</h2>
+<p>Canonical bounded-context service templates and service generation automation.</p>
+<hr>
+<h2>6. Architectural Memory Governance</h2>
+<p>Architecture Decision Record (ADR) framework.</p>
+<hr>
+<h2>7. Validation Governance</h2>
+<p>Machine-enforced governance validation.</p>
+<hr>
+<h2>8. Documentation Governance</h2>
+<p>Institutional documentation topology and operational knowledge structure.</p>
+<hr>
+<h1>AUTHORITATIVE ROOT STRUCTURE</h1>
+<p>The following root structure became authoritative platform topology:</p>
+<pre><code class="language-text">~/corei/
+├── artifacts/
+├── backups/
+├── brokers/
+├── chaos/
+├── cicd/
+├── compliance/
+├── contracts/
+├── datasets/
+├── deployments/
+├── docs/
+├── environments/
+├── feature-store/
+├── generated/
+├── governance/
+├── infrastructure/
+├── libraries/
+├── lineage/
+├── logs/
+├── observability/
+├── operations/
+├── orchestration/
+├── policies/
+├── replay/
+├── repos/
+├── research/
+├── runbooks/
+├── runtime/
+├── schemas/
+├── scratch/
+├── scripts/
+├── security/
+├── services/
+├── simulation/
+├── state/
+├── strategies/
+├── system/
+├── tests/
+├── tools/
+├── ui/
+└── workflows/
+</code></pre>
+<hr>
+<h1>ROOT GOVERNANCE PRINCIPLE</h1>
+<p>The root platform directory:</p>
+<pre><code class="language-text">~/corei
+</code></pre>
+<p>is authoritative platform governance authority.</p>
+<p>The root is NOT merely a code repository.</p>
+<p>The root owns:</p>
+<ul>
+<li>governance</li>
+<li>orchestration</li>
+<li>lifecycle execution</li>
+<li>documentation authority</li>
+<li>operational structure</li>
+<li>platform topology</li>
+<li>validation governance</li>
+</ul>
+<hr>
+<h1>REPOSITORY TOPOLOGY</h1>
+<p>Stage 2 established the authoritative multi-repository topology:</p>
+<pre><code class="language-text">repos/
+├── corei-core
+├── corei-infrastructure
+├── corei-sdk
+├── corei-schemas
+└── corei-services
+</code></pre>
+<hr>
+<h1>REPOSITORY GOVERNANCE</h1>
+<h2>corei-core</h2>
+<p>Owns:</p>
+<ul>
+<li>orchestration runtime</li>
+<li>replay coordination</li>
+<li>lineage coordination</li>
+<li>runtime backbone systems</li>
+</ul>
+<hr>
+<h2>corei-infrastructure</h2>
+<p>Owns:</p>
+<ul>
+<li>Terraform</li>
+<li>Kubernetes</li>
+<li>deployment substrate</li>
+<li>infrastructure lifecycle</li>
+</ul>
+<hr>
+<h2>corei-sdk</h2>
+<p>Owns:</p>
+<ul>
+<li>reusable runtime primitives</li>
+<li>shared libraries</li>
+<li>resilience primitives</li>
+</ul>
+<hr>
+<h2>corei-services</h2>
+<p>Owns:</p>
+<ul>
+<li>bounded business services</li>
+<li>execution services</li>
+<li>risk services</li>
+<li>market-data services</li>
+</ul>
+<hr>
+<h2>corei-schemas</h2>
+<p>Owns:</p>
+<ul>
+<li>schema governance</li>
+<li>serialization governance</li>
+<li>compatibility governance</li>
+</ul>
+<hr>
+<h1>IMPORTANT REPOSITORY DECISION</h1>
+<p>Stage 2 intentionally preserved:</p>
+<pre><code class="language-text">multi-repository topology
+</code></pre>
+<p>Premature repository flattening was prohibited.</p>
+<p>Repository convergence remains future governance work.</p>
+<hr>
+<h1>LIFECYCLE EXECUTION GOVERNANCE</h1>
+<p>Stage 2 established deterministic lifecycle execution governance.</p>
+<p>Authoritative structure:</p>
+<pre><code class="language-text">infrastructure/phases/
+├── stage-01-machine-foundation/
+├── stage-02-repository-foundation/
+└── stage-03-platform-governance-foundation/
+</code></pre>
+<p>Each stage contains:</p>
+<pre><code class="language-text">setup.sh
+validate.sh
+rollback.sh
+state.sh
+README.md
+</code></pre>
+<hr>
+<h1>LIFECYCLE GOVERNANCE PRINCIPLES</h1>
+<p>All stages must remain:</p>
+<ul>
+<li>deterministic</li>
+<li>resumable</li>
+<li>validation-aware</li>
+<li>rollback-aware</li>
+<li>state-aware</li>
+<li>governance-aware</li>
+</ul>
+<hr>
+<h1>SHARED ENGINEERING SUBSTRATE</h1>
+<p>Stage 2 established reusable operational primitives.</p>
+<p>Authoritative structure:</p>
+<pre><code class="language-text">infrastructure/scripts/lib/
+├── docker.sh
+├── env.sh
+├── filesystem.sh
+├── github.sh
+├── governance.sh
+├── helm.sh
+├── kubernetes.sh
+├── log.sh
+├── report.sh
+├── retry.sh
+├── state.sh
+└── validate.sh
+</code></pre>
+<hr>
+<h1>SHARED SUBSTRATE PURPOSE</h1>
+<p>This substrate prevents:</p>
+<ul>
+<li>duplicated operational logic</li>
+<li>inconsistent validation</li>
+<li>inconsistent retry behavior</li>
+<li>inconsistent reporting</li>
+<li>inconsistent state handling</li>
+</ul>
+<p>All future platform scripts must consume shared libraries.</p>
+<hr>
+<h1>SERVICE GOVERNANCE FOUNDATION</h1>
+<p>Stage 2 established canonical bounded-context service governance.</p>
+<p>Authoritative structure:</p>
+<pre><code class="language-text">services/_template/
+├── app/
+├── config/
+├── contracts/
+├── scripts/
+├── tests/
+├── helm/
+├── Dockerfile
+├── Makefile
+├── README.md
+└── service.yaml
+</code></pre>
+<hr>
+<h1>SERVICE GOVERNANCE PRINCIPLES</h1>
+<p>Every service must support:</p>
+<ul>
+<li>bounded ownership</li>
+<li>observability</li>
+<li>replay safety</li>
+<li>deterministic configuration</li>
+<li>operational surfaces</li>
+</ul>
+<hr>
+<h1>REQUIRED SERVICE SURFACES</h1>
+<p>Every service must expose:</p>
+<pre><code class="language-text">/health
+/metrics
+/version
+/config
+</code></pre>
+<p>Mandatory.</p>
+<hr>
+<h1>SERVICE PROVISIONING AUTOMATION</h1>
+<p>Stage 2 established:</p>
+<pre><code class="language-text">scripts/foundation/new-service.sh
+</code></pre>
+<p>This became the authoritative bounded-context provisioning mechanism.</p>
+<p>All future services must derive from canonical service templates.</p>
+<p>Manual ad-hoc service creation is prohibited.</p>
+<hr>
+<h1>ARCHITECTURAL MEMORY GOVERNANCE</h1>
+<p>Stage 2 established Architecture Decision Record governance.</p>
+<p>Authoritative structure:</p>
+<pre><code class="language-text">docs/adr/
+</code></pre>
+<hr>
+<h1>ADR PURPOSE</h1>
+<p>ADRs preserve:</p>
+<ul>
+<li>architectural reasoning</li>
+<li>governance rationale</li>
+<li>accepted tradeoffs</li>
+<li>rejected alternatives</li>
+<li>institutional memory</li>
+</ul>
+<hr>
+<h1>AUTHORITATIVE ADRS</h1>
+<p>Stage 2 established:</p>
+<ul>
+<li><a href="http://ADR-001-kafka-authority.md">ADR-001-kafka-authority.md</a></li>
+<li><a href="http://ADR-002-replay-first-governance.md">ADR-002-replay-first-governance.md</a></li>
+<li><a href="http://ADR-003-bounded-context-services.md">ADR-003-bounded-context-services.md</a></li>
+<li><a href="http://ADR-004-governance-before-scale.md">ADR-004-governance-before-scale.md</a></li>
+<li><a href="http://ADR-005-multi-repo-topology.md">ADR-005-multi-repo-topology.md</a></li>
+</ul>
+<hr>
+<h1>VALIDATION GOVERNANCE</h1>
+<p>Stage 2 established machine-enforced governance validation.</p>
+<p>Authoritative structure:</p>
+<pre><code class="language-text">infrastructure/validation/
+├── filesystem/
+├── governance/
+├── repository/
+├── scripts/
+├── services/
+└── stages/
+</code></pre>
+<hr>
+<h1>VALIDATION PURPOSE</h1>
+<p>Validation became:</p>
+<pre><code class="language-text">platform law enforcement
+</code></pre>
+<p>Validation is NOT optional.</p>
+<p>Validation must remain:</p>
+<ul>
+<li>deterministic</li>
+<li>executable</li>
+<li>reproducible</li>
+<li>governance-aware</li>
+</ul>
+<hr>
+<h1>DOCUMENTATION GOVERNANCE</h1>
+<p>Stage 2 established institutional documentation topology.</p>
+<p>Authoritative structure:</p>
+<pre><code class="language-text">docs/
+├── adr/
+├── architecture/
+├── governance/
+├── infrastructure/
+├── operations/
+├── runbooks/
+├── schemas/
+├── services/
+├── stages/
+└── standards/
+</code></pre>
+<hr>
+<h1>DOCUMENTATION GOVERNANCE PRINCIPLES</h1>
+<p>Documentation must remain:</p>
+<ul>
+<li>bounded</li>
+<li>authoritative</li>
+<li>discoverable</li>
+<li>deterministic</li>
+<li>operationally relevant</li>
+</ul>
+<hr>
+<h1>AUTHORITATIVE GOVERNANCE FILES</h1>
+<p>Stage 2 established:</p>
+<pre><code class="language-text">docs/governance/
+├── build-state-governance.md
+├── filesystem-governance.md
+├── installer-governance.md
+├── repository-boundaries.md
+├── repository-topology.md
+├── scripting-governance.md
+├── service-ownership-governance.md
+└── validation-governance.md
+</code></pre>
+<hr>
+<h1>CRITICAL INSTITUTIONAL PRINCIPLES ESTABLISHED</h1>
+<p>Stage 2 formally established the following platform laws:</p>
+<h2>Governance Before Scale</h2>
+<p>Governance must precede runtime expansion.</p>
+<hr>
+<h2>Deterministic Structure</h2>
+<p>Filesystem layout must remain governed and reproducible.</p>
+<hr>
+<h2>Bounded Ownership</h2>
+<p>Every directory, service, and repository owns one bounded responsibility.</p>
+<hr>
+<h2>Replay-First Architecture</h2>
+<p>Replay capability is mandatory architectural law.</p>
+<hr>
+<h2>Validation As Law Enforcement</h2>
+<p>Validation became enforceable operational governance.</p>
+<hr>
+<h2>Institutional Documentation</h2>
+<p>Documentation became authoritative operational infrastructure.</p>
+<hr>
+<h1>WHAT STAGE 2 EXPLICITLY DID NOT IMPLEMENT</h1>
+<p>Stage 2 intentionally did NOT implement:</p>
+<ul>
+<li>Kafka runtime</li>
+<li>PostgreSQL runtime</li>
+<li>Redis runtime</li>
+<li>Kubernetes runtime orchestration</li>
+<li>trading execution</li>
+<li>broker integration</li>
+<li>observability runtime</li>
+<li>orchestration runtime</li>
+<li>replay engine implementation</li>
+</ul>
+<p>Those belong to future stages.</p>
+<p>This separation is intentional and mandatory.</p>
+<hr>
+<h1>IMPORTANT ENGINEERING CORRECTION</h1>
+<p>During repository topology optimization, architecture discussion temporarily drifted into future runtime stages.</p>
+<p>This drift was corrected.</p>
+<p>Stage 2 was intentionally re-aligned to:</p>
+<pre><code class="language-text">repository foundation only
+</code></pre>
+<p>This correction restored authoritative master-flow sequencing.</p>
+<hr>
+<h1>AUTHORITATIVE STAGE 2 RESULT</h1>
+<p>Stage 2 transformed Corei from:</p>
+<pre><code class="language-text">bootstrap repository
+</code></pre>
+<p>into:</p>
+<pre><code class="language-text">institutional platform engineering environment
+</code></pre>
+<p>This is the first major architectural stabilization milestone of the platform.</p>
+<hr>
+<h1>FINAL STAGE 2 STATUS</h1>
+<pre><code class="language-text">STAGE 2 — COMPLETE
+</code></pre>
+<p>Repository foundation is now:</p>
+<ul>
+<li>institutionally governed</li>
+<li>operationally scalable</li>
+<li>deterministically structured</li>
+<li>governance-enforced</li>
+<li>validation-aware</li>
+</ul>
+<hr>
+<h1>AUTHORITATIVE NEXT STAGE</h1>
+<p>After Stage 2:</p>
+<pre><code class="language-text">STAGE 3 — PLATFORM GOVERNANCE FOUNDATION
+</code></pre>
+<p>becomes the next authoritative lifecycle phase.</p>
+<p>Stage 3 will establish:</p>
+<ul>
+<li>event governance</li>
+<li>replay governance</li>
+<li>orchestration governance</li>
+<li>deployment governance</li>
+<li>policy governance</li>
+<li>naming governance</li>
+</ul>
+<p>on top of the fully governed repository substrate established by Stage 2.</p>
+
+
+  <div class="doc-footer">
+
+    <span>DOCUMENT KEY: docs:docs_docs_docs_docs_docs_stages_stage-02-repository-foundation.md.md.md.md.md.md</span>
+
+    <span>
+      DOCUMENT NAME: docs docs docs docs docs stages stage 02 repository foundation.md.md.md.md.md
+    </span>
+
+    <span>
+      VERSION: 1.0
+    </span>
+
+  </div>
+
+</body>
+</html>

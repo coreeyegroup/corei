@@ -1,0 +1,244 @@
+import React, { useState } from 'react';
+import { useBrokerIntelligenceStore } from '../../../../store/brokerIntelligenceStore';
+import { brokerIntelligenceService } from '../../../../services/brokerIntelligenceService';
+import { toast } from 'sonner';
+
+export const BrokerProviders: React.FC = () => {
+  const providers = useBrokerIntelligenceStore((state) => state.providers);
+  const [selectedProvider, setSelectedProvider] = useState<any | null>(null);
+
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // State for the extended institutional form
+  const [formData, setFormData] = useState({
+    id: '',
+    name: '',
+    adapterName: 'MockAdapter', // Default to MockAdapter
+    adapterVersion: '1.0.0',
+    type: 'BROKER',
+    region: 'IN',
+    environment: 'PAPER',
+    // Environment / Endpoints
+    apiBaseUrl: '',
+    websocketUrl: '',
+    // Credential Schema (Fields, NOT values)
+    credentialFields: 'client_id\nclient_secret\napi_key'
+  });
+
+  const handleRefresh = async () => {
+    await brokerIntelligenceService.fetchAll();
+    toast.success('Providers refreshed');
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleAddProvider = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!formData.id || !formData.name) {
+      toast.error('Provider ID and Name are required.');
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      // Send only metadata. Secrets and Endpoints are backend responsibility.
+      await brokerIntelligenceService.addProvider({
+        id: formData.id,
+        name: formData.name,
+        adapterName: formData.adapterName,
+        adapterVersion: formData.adapterVersion,
+        type: formData.type,
+        region: formData.region,
+        environment: formData.environment,
+        metadata: {
+          apiBaseUrl: formData.apiBaseUrl,
+          websocketUrl: formData.websocketUrl,
+          credentialSchema: formData.credentialFields.split('\n').map(s => s.trim()).filter(Boolean)
+        }
+      });
+
+      toast.success(`Provider ${formData.name} registered. Backend Adapter required to connect.`);
+      await brokerIntelligenceService.fetchAll();
+      setIsAddModalOpen(false);
+
+      // Reset form
+      setFormData({
+        id: '', name: '', adapterName: 'MockAdapter', adapterVersion: '1.0.0',
+        type: 'BROKER', region: 'IN', environment: 'PAPER',
+        apiBaseUrl: '', websocketUrl: '', credentialFields: 'client_id\nclient_secret\napi_key'
+      });
+    } catch (error: any) {
+      toast.error(`Failed to add provider: ${error.message}`);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="bi-view">
+      {/* Provider Registry Panel */}
+      <section className="bi-panel">
+        <div className="bi-panel-header">
+          <div>
+            <span className="bi-eyebrow">PROVIDER REGISTRY</span>
+            <h3>Institutional Broker Providers</h3>
+          </div>
+          <div className="bi-registry-actions">
+            <button className="bi-btn" onClick={handleRefresh}>REFRESH</button>
+            <button className="bi-btn bi-btn-primary" onClick={() => setIsAddModalOpen(true)}>
+              + ADD PROVIDER
+            </button>
+          </div>
+        </div>
+
+        <div className="bi-table-wrap">
+          <table className="bi-table">
+            <thead>
+              <tr>
+                <th>NAME</th>
+                <th>ADAPTER</th>
+                <th>ENV</th>
+                <th>STATUS</th>
+                <th>ACCOUNTS</th>
+                <th>ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody>
+              {providers.length === 0 && (
+                <tr><td colSpan={6} className="bi-empty">No providers registered.</td></tr>
+              )}
+              {providers.map((provider) => (
+                <tr key={provider.id} onClick={() => setSelectedProvider(provider)} style={{ cursor: 'pointer' }}>
+                  <td className="bi-primary-cell">{provider.name}</td>
+                  <td>{provider.adapterName}</td>
+                  <td>{provider.environment}</td>
+                  <td><span className="bi-state-badge" data-tone={provider.health === 'HEALTHY' ? 'operational' : 'warning'}>{provider.health || 'UNKNOWN'}</span></td>
+                  <td>{provider.accountCount}</td>
+                  <td>
+                    <button
+                      className="bi-btn"
+                      onClick={(e) => { e.stopPropagation(); toast.info(`Running diagnostics for ${provider.name}...`); }}
+                    >
+                      TEST
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {/* Inspector */}
+      {selectedProvider && (
+        <aside className="bi-inspector">
+          <div className="bi-inspector-header">
+            <div>
+              <span className="bi-eyebrow">PROVIDER DETAIL</span>
+              <h3>{selectedProvider.name}</h3>
+            </div>
+            <button className="bi-icon-button" onClick={() => setSelectedProvider(null)}>×</button>
+          </div>
+          <div className="bi-inspector-body">
+            <div className="bi-inspector-row"><span>IDENTITY</span><strong>{selectedProvider.id}</strong></div>
+            <div className="bi-inspector-row"><span>ADAPTER</span><strong>{selectedProvider.adapterName} v{selectedProvider.adapterVersion}</strong></div>
+            <div className="bi-inspector-row"><span>REGION</span><strong>{selectedProvider.region}</strong></div>
+            <div className="bi-inspector-row"><span>STATUS</span><strong>{selectedProvider.health || selectedProvider.status}</strong></div>
+            <div className="bi-inspector-row"><span>LINKED ACCOUNTS</span><strong>{selectedProvider.accountCount}</strong></div>
+          </div>
+        </aside>
+      )}
+
+      {/* Add Provider Modal - Institutional 3-Section Form */}
+      {isAddModalOpen && (
+        <div className="bi-modal-overlay">
+          <div className="bi-modal bi-modal-lg">
+            <div className="bi-modal-header">
+              <h3>Add Provider (Metadata Only)</h3>
+              <button className="bi-icon-button" onClick={() => setIsAddModalOpen(false)}>×</button>
+            </div>
+            <form onSubmit={handleAddProvider}>
+              <div className="bi-modal-body">
+
+                {/* SECTION 1: Identity */}
+                <div className="bi-form-section">
+                  <h4>1. Provider Identity</h4>
+                  <div className="bi-form-grid">
+                    <label>Provider ID <input name="id" value={formData.id} onChange={handleInputChange} placeholder="e.g., upstox" /></label>
+                    <label>Provider Name <input name="name" value={formData.name} onChange={handleInputChange} placeholder="e.g., Upstox" /></label>
+
+                    {/* CHANGE 1: ADAPTER NAME DROPDOWN */}
+                    <label>Adapter Name
+                      <select name="adapterName" value={formData.adapterName} onChange={handleInputChange}>
+                        <option value="MockAdapter">MockAdapter</option>
+                        <option value="UpstoxAdapter">UpstoxAdapter</option>
+                        <option value="Mt5DataAdapter">Mt5DataAdapter</option>
+                      </select>
+                    </label>
+
+                    <label>Type
+                      <select name="type" value={formData.type} onChange={handleInputChange}>
+                        <option value="BROKER">BROKER</option>
+                        <option value="FEEDER">FEEDER</option>
+                        <option value="EXCHANGE">EXCHANGE</option>
+                      </select>
+                    </label>
+                    <label>Region <input name="region" value={formData.region} onChange={handleInputChange} /></label>
+                    <label>Environment
+                      <select name="environment" value={formData.environment} onChange={handleInputChange}>
+                        <option value="LIVE">LIVE</option>
+                        <option value="PAPER">PAPER</option>
+                        <option value="SANDBOX">SANDBOX</option>
+                        <option value="TEST">TEST</option>
+                      </select>
+                    </label>
+                  </div>
+                </div>
+
+                {/* SECTION 2: Environment Configuration */}
+                <div className="bi-form-section">
+                  <h4>2. Environment / Endpoints (Backend Config)</h4>
+                  <div className="bi-form-grid">
+                    <label>REST API Base URL <input name="apiBaseUrl" value={formData.apiBaseUrl} onChange={handleInputChange} placeholder="https://api.upstox.com/v2" /></label>
+                    <label>WebSocket URL <input name="websocketUrl" value={formData.websocketUrl} onChange={handleInputChange} placeholder="wss://ws.upstox.com" /></label>
+                  </div>
+                </div>
+
+                {/* CHANGE 2: VAULT LINK */}
+                <div className="bi-form-section">
+                  <h4>Vault / Secret Store</h4>
+                  <p className="bi-form-note">
+                    Need to save your actual credentials? Open Vault, navigate to <code>secret/upstox/core-account-001</code> and add your API keys.
+                  </p>
+                  <a href="http://192.168.1.10:31168/" target="_blank" rel="noopener noreferrer" className="bi-btn bi-btn-primary">
+                    Open Vault UI
+                  </a>
+                </div>
+
+                {/* SECTION 3: Credential Schema */}
+                <div className="bi-form-section">
+                  <h4>3. Credential Schema (Field Names Only - No Secrets)</h4>
+                  <p className="bi-form-note">Defines required field names. Actual secrets are stored in Vault/Secret Store, never in the UI.</p>
+                  <label>Required Fields (one per line)
+                    <textarea name="credentialFields" value={formData.credentialFields} onChange={handleInputChange} rows={3} />
+                  </label>
+                </div>
+
+              </div>
+              <div className="bi-modal-footer">
+                <button type="button" className="bi-btn" onClick={() => setIsAddModalOpen(false)}>CANCEL</button>
+                <button type="submit" className="bi-btn bi-btn-primary" disabled={isSubmitting}>
+                  {isSubmitting ? 'SAVING...' : 'SAVE PROVIDER'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};

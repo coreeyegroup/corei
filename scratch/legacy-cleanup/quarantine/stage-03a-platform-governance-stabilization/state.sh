@@ -1,0 +1,3 @@
+#!/bin/bash
+
+echo "Stage 03A state authority."

@@ -1,0 +1,65 @@
+/* src/components/Workspace/views/trading/BrokerAccounts.css */
+
+/* Main Layout */
+.ba-institutional-container {
+  height: 100%;
+  padding: 1.5rem;
+  background: #0d1117;
+  color: #c9d1d9;
+  overflow: auto;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Top Bar & Actions */
+.ba-topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+.ba-topbar h2 { margin: 0; color: #58a6ff; }
+.ba-actions { display: flex; gap: 1rem; }
+
+/* Buttons */
+.ba-btn { padding: 0.6rem 1.2rem; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; }
+.ba-btn.primary { background: #1f6feb; color: white; }
+.ba-btn.small { padding: 0.2rem 0.6rem; font-size: 0.75rem; background: #21262d; color: #c9d1d9; border: 1px solid #30363d; margin-top: 0.5rem; }
+
+/* Grid Layout */
+.ba-institutional-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+.ba-pane { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 1rem; }
+.ba-pane h3 { margin: 0 0 1rem 0; border-bottom: 1px solid #30363d; padding-bottom: 0.5rem; font-size: 1rem; }
+.ba-pane-content { display: flex; flex-direction: column; gap: 0.8rem; max-height: 500px; overflow-y: auto; }
+
+/* List Items */
+.ba-card-item { background: #21262d; padding: 0.8rem; border-radius: 6px; border: 1px solid transparent; cursor: pointer; transition: all 0.2s; }
+.ba-card-item:hover { border-color: #58a6ff; }
+.ba-card-item.selected { border-color: #58a6ff; background: #1c2128; }
+.ba-card-item.disabled { opacity: 0.5; }
+.ba-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+.ba-card-meta { font-size: 0.8rem; color: #8b949e; margin-bottom: 0.3rem; }
+.ba-routing { display: flex; gap: 1rem; font-size: 0.75rem; color: #c9d1d9; margin-top: 0.4rem; }
+
+/* Tags */
+.ba-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.5rem; }
+.tag { padding: 0.1rem 0.4rem; background: #30363d; border-radius: 4px; font-size: 0.65rem; border: 1px solid #484f58; }
+.tag.locked { color: #d29922; border-color: #d29922; background: transparent; }
+
+/* Detail Inspector */
+.ba-inspector { margin-top: 1rem; background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 1rem; }
+.ba-inspector h3 { margin-top: 0; }
+.ba-inspector-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+
+/* Badges (Consolidated) */
+.badge { padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 0.7rem; font-weight: bold; }
+.badge.broker { background: #1f6feb22; color: #1f6feb; }
+.badge.feeder { background: #8957e522; color: #8957e5; }
+.badge.live { background: #00ff8822; color: #00ff88; }
+.badge.paper { background: #d2992222; color: #d29922; }
+.badge.active { background: #00ff8822; color: #00ff88; }
+.badge.rotating { background: #d2992222; color: #d29922; }
+.badge.error { background: #ff555522; color: #ff5555; }
+.badge.connected { background: #00ff8822; color: #00ff88; }
+.badge.disconnected { background: #8b949e22; color: #8b949e; }
+.badge.exec { background: #d2992222; color: #d29922; }
+.badge.data { background: #58a6ff22; color: #58a6ff; }
+
+/* Utility */
+.error-text { color: #ff5555; font-size: 0.8rem; margin-top: 0.3rem; }
+.code { font-family: 'Courier New', monospace; color: #79c0ff; }
+.muted { color: #8b949e; }

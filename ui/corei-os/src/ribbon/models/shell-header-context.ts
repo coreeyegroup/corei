@@ -1,0 +1,196 @@
+/******************************************************************************
+ *
+ * COREI OPERATING SYSTEM
+ *
+ * TOP RIBBON — LIVE PLATFORM CONTEXT
+ *
+ * Purpose:
+ * Compose the existing authoritative platform capabilities into the
+ * existing ShellHeaderContextContract.
+ *
+ * This module does not own identity, runtime, workspace, or notification
+ * state. It consumes those existing capabilities.
+ *
+ ******************************************************************************/
+
+import type {
+    ShellHeaderContextContract
+} from "../contracts/shell-header-context-contract";
+
+import {
+    identityService
+} from "../../identity-platform";
+
+import {
+    RuntimeRegistry
+} from "../../runtime/registry/runtime-registry";
+
+import {
+    workspaceRuntime
+} from "../../workbench/workspace/runtime/workspace-runtime";
+
+import {
+    notificationService
+} from "../../foundation/services/notifications/notification-service";
+
+import {
+    DEFAULT_SHELL_HEADER_CONTEXT
+} from "./default-shell-header-context";
+
+
+export function getShellHeaderContext(): ShellHeaderContextContract {
+
+    /*
+     * -------------------------------------------------------------------------
+     * IDENTITY
+     * -------------------------------------------------------------------------
+     */
+
+    const organization =
+        identityService.getCurrentOrganization();
+
+    const environment =
+        identityService.getCurrentEnvironment();
+
+
+    /*
+     * -------------------------------------------------------------------------
+     * RUNTIME
+     * -------------------------------------------------------------------------
+     */
+
+    const runtime =
+        RuntimeRegistry[0];
+
+
+    /*
+     * -------------------------------------------------------------------------
+     * WORKSPACE
+     * -------------------------------------------------------------------------
+     */
+
+    const workspaceId =
+        workspaceRuntime.current();
+
+    const workspace =
+        workspaceId
+            ? workspaceRuntime.get(workspaceId)
+            : undefined;
+
+
+    /*
+     * -------------------------------------------------------------------------
+     * NOTIFICATIONS
+     * -------------------------------------------------------------------------
+     */
+
+    const notifications =
+        notificationService.list();
+
+    const total =
+        notifications.length;
+
+    // critical and unread are not provided by the current notification service.
+    // Set to 0 rather than fabricating misleading values.
+    const critical = 0;
+    const unread = 0;
+
+
+    /*
+     * -------------------------------------------------------------------------
+     * COMPOSE EXISTING CONTRACT
+     * -------------------------------------------------------------------------
+     */
+
+    return {
+
+        institution: {
+
+            name:
+                organization?.name ??
+                DEFAULT_SHELL_HEADER_CONTEXT.institution.name,
+
+            product:
+                DEFAULT_SHELL_HEADER_CONTEXT.institution.product
+
+        },
+
+        environment: {
+
+            environment:
+                environment?.name ??
+                DEFAULT_SHELL_HEADER_CONTEXT.environment.environment,
+
+            region:
+                environment?.type ??
+                DEFAULT_SHELL_HEADER_CONTEXT.environment.region
+
+        },
+
+        runtime: {
+
+            runtimeId:
+                runtime?.id ??
+                DEFAULT_SHELL_HEADER_CONTEXT.runtime.runtimeId,
+
+            state:
+                runtime?.initialized
+                    ? "ready"
+                    : "initializing",
+
+            health:
+                runtime?.healthy
+                    ? "healthy"
+                    : "degraded"
+
+        },
+
+        session:
+            DEFAULT_SHELL_HEADER_CONTEXT.session,
+
+        operatingContext: {
+
+            workspace:
+                workspace?.name ??
+                DEFAULT_SHELL_HEADER_CONTEXT.operatingContext.workspace,
+
+            mode:
+                DEFAULT_SHELL_HEADER_CONTEXT.operatingContext.mode,
+
+            runtimeHealth:
+                runtime?.healthy
+                    ? "healthy"
+                    : "degraded"
+
+        },
+
+        workspace: {
+
+            workspaceId:
+                workspace?.id ??
+                DEFAULT_SHELL_HEADER_CONTEXT.workspace.workspaceId,
+
+            workspaceName:
+                workspace?.name ??
+                DEFAULT_SHELL_HEADER_CONTEXT.workspace.workspaceName,
+
+            workspaceState:
+                workspace
+                    ? "ready"
+                    : "unloaded"
+
+        },
+
+        notifications: {
+
+            total,
+
+            critical,
+
+            unread
+
+        }
+
+    };
+
+}

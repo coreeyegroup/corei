@@ -1,0 +1,1101 @@
+/**
+ * COREI — MARKET INTELLIGENCE WORKSTATION
+ *
+ * PURPOSE
+ * -------
+ * Presents the Market Intelligence domain as an institutional
+ * intelligence workstation rather than a conventional market dashboard.
+ *
+ * ARCHITECTURAL POSITION
+ * ----------------------
+ * Market Intelligence UI
+ *   ↓
+ * governed market observations
+ *   ↓
+ * observable state
+ *   ↓
+ * backend-authoritative intelligence
+ *
+ * CURRENT AUTHORITY
+ * -----------------
+ * Live instrument observations are sourced from the existing
+ * useMarketStore market-data integration.
+ *
+ * IMPORTANT BOUNDARY
+ * ------------------
+ * This component MUST NOT fabricate:
+ * - technical indicators
+ * - market regime values
+ * - liquidity measurements
+ * - volatility measurements
+ * - opportunity scores
+ * - screening rankings
+ * - monitoring states
+ * - signals
+ * - decisions
+ * - TradeIntent
+ *
+ * Unsupported intelligence is explicitly presented as NOT EXPOSED.
+ *
+ * EXECUTION BOUNDARY
+ * ------------------
+ * This UI is read-only / analytical.
+ * It has NO order-routing authority.
+ * It has NO broker authority.
+ * It has NO live execution authority.
+ */
+
+import React, { useMemo, useState } from 'react';
+import {
+  Activity,
+  ArrowDownRight,
+  ArrowUpRight,
+  BarChart3,
+  ChevronRight,
+  Database,
+  Eye,
+  GitBranch,
+  History,
+  RefreshCw,
+  Search,
+  ShieldCheck,
+  Target,
+  Waves,
+  X,
+} from 'lucide-react';
+
+import { useMarketStore } from '../../../../services/marketDataService';
+import './MarketIntelligence.css';
+
+export type MarketIntelligenceSection =
+  | 'overview'
+  | 'market-data'
+  | 'market-health'
+  | 'technical'
+  | 'structure'
+  | 'trend'
+  | 'volatility'
+  | 'momentum'
+  | 'regime';
+
+interface MarketIntelligenceProps {
+  section?: MarketIntelligenceSection;
+}
+
+interface Instrument {
+  price: number;
+  change: number;
+  history: number[];
+}
+
+interface Observation {
+  symbol: string;
+  price: number;
+  change: number;
+  historyLength: number;
+  direction: 'UP' | 'DOWN' | 'FLAT';
+}
+
+const SECTION_META: Record<
+  MarketIntelligenceSection,
+  {
+    title: string;
+    subtitle: string;
+    layer: string;
+  }
+> = {
+  overview: {
+    title: 'Market Intelligence',
+    subtitle:
+      'From market observation toward explainable market understanding',
+    layer: 'INTELLIGENCE WORKSTATION',
+  },
+  'market-data': {
+    title: 'Market Data',
+    subtitle:
+      'Observed market reality entering the COREI intelligence boundary',
+    layer: 'OBSERVATION',
+  },
+  'market-health': {
+    title: 'Market Health',
+    subtitle:
+      'Observable integrity and availability of the market-data boundary',
+    layer: 'STATE',
+  },
+  technical: {
+    title: 'Technical Indicators',
+    subtitle:
+      'Technical interpretation requires backend-authoritative analytical state',
+    layer: 'INTERPRETATION',
+  },
+  structure: {
+    title: 'Market Structure',
+    subtitle:
+      'Structural interpretation of price, liquidity and market relationships',
+    layer: 'STRUCTURE',
+  },
+  trend: {
+    title:
+      'Trend Analysis',
+    subtitle:
+      'Directional interpretation across governed analytical timeframes',
+    layer: 'BEHAVIOUR',
+  },
+  volatility: {
+    title:
+      'Volatility Analysis',
+    subtitle:
+      'Volatility state and transitions from authoritative analytical services',
+    layer: 'BEHAVIOUR',
+  },
+  momentum: {
+    title:
+      'Momentum Analysis',
+    subtitle:
+      'Directional pressure and momentum interpretation',
+    layer: 'BEHAVIOUR',
+  },
+  regime: {
+    title: 'Market Regime',
+    subtitle:
+      'Authoritative regime state derived from governed market context',
+    layer: 'REGIME',
+  },
+};
+
+const ANALYTICAL_SECTIONS: MarketIntelligenceSection[] = [
+  'technical',
+  'structure',
+  'trend',
+  'volatility',
+  'momentum',
+  'regime',
+];
+
+function formatPrice(value: number): string {
+  return value.toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+}
+
+function formatChange(value: number): string {
+  return `${value >= 0 ? '+' : ''}${value.toFixed(2)}%`;
+}
+
+function directionForChange(
+  change: number,
+): Observation['direction'] {
+  if (change > 0) return 'UP';
+  if (change < 0) return 'DOWN';
+  return 'FLAT';
+}
+
+const AuthorityBadge: React.FC<{
+  children: React.ReactNode;
+  live?: boolean;
+}> = ({ children, live = false }) => (
+  <span
+    className={`mi-authority-badge ${
+      live ? 'mi-authority-badge-live' : ''
+    }`}
+  >
+    {children}
+  </span>
+);
+
+const NotExposed: React.FC<{
+  title: string;
+  description: string;
+  dependency?: string;
+}> = ({ title, description, dependency }) => (
+  <section className="mi-card mi-not-exposed">
+    <div className="mi-card-header">
+      <div>
+        <span className="mi-eyebrow">CAPABILITY BOUNDARY</span>
+        <h3>{title}</h3>
+      </div>
+
+      <AuthorityBadge>NOT EXPOSED</AuthorityBadge>
+    </div>
+
+    <div className="mi-not-exposed-body">
+      <div className="mi-not-exposed-icon">
+        <ShieldCheck size={16} />
+      </div>
+
+      <div>
+        <strong>Backend authority required</strong>
+        <p>{description}</p>
+
+        {dependency && (
+          <div className="mi-dependency">
+            <span>Required authority</span>
+            <code>{dependency}</code>
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
+);
+
+const MarketObservationRow: React.FC<{
+  observation: Observation;
+  selected: boolean;
+  onSelect: () => void;
+}> = ({ observation, selected, onSelect }) => {
+  const directionClass =
+    observation.direction === 'UP'
+      ? 'mi-positive'
+      : observation.direction === 'DOWN'
+        ? 'mi-negative'
+        : 'mi-neutral';
+
+  return (
+    <button
+      type="button"
+      className={`mi-observation-row ${
+        selected ? 'mi-observation-row-selected' : ''
+      }`}
+      onClick={onSelect}
+    >
+      <span className="mi-observation-symbol">
+        {observation.symbol}
+      </span>
+
+      <span className="mi-observation-price">
+        {formatPrice(observation.price)}
+      </span>
+
+      <span className={`mi-observation-change ${directionClass}`}>
+        {observation.direction === 'UP' && (
+          <ArrowUpRight size={12} />
+        )}
+
+        {observation.direction === 'DOWN' && (
+          <ArrowDownRight size={12} />
+        )}
+
+        {formatChange(observation.change)}
+      </span>
+
+      <span className="mi-observation-history">
+        {observation.historyLength > 0
+          ? `${observation.historyLength} observations`
+          : 'No history'}
+      </span>
+
+      <ChevronRight size={13} className="mi-row-chevron" />
+    </button>
+  );
+};
+
+const RealityColumn: React.FC<{
+  observations: Observation[];
+  selectedSymbol: string;
+  onSelect: (symbol: string) => void;
+}> = ({ observations, selectedSymbol, onSelect }) => (
+  <section className="mi-card mi-reality-card">
+    <div className="mi-card-header">
+      <div>
+        <span className="mi-eyebrow">01 / REALITY</span>
+        <h3>Market Observation</h3>
+      </div>
+
+      <AuthorityBadge live>
+        <Activity size={10} />
+        BACKEND
+      </AuthorityBadge>
+    </div>
+
+    <div className="mi-card-description">
+      What the system can currently observe.
+    </div>
+
+    <div className="mi-observation-list">
+      {observations.length === 0 ? (
+        <div className="mi-empty">
+          No governed market observations available.
+        </div>
+      ) : (
+        observations.map((observation) => (
+          <MarketObservationRow
+            key={observation.symbol}
+            observation={observation}
+            selected={selectedSymbol === observation.symbol}
+            onSelect={() => onSelect(observation.symbol)}
+          />
+        ))
+      )}
+    </div>
+  </section>
+);
+
+const StateColumn: React.FC<{
+  observations: Observation[];
+  selectedSymbol: string;
+}> = ({ observations, selectedSymbol }) => {
+  const selected = observations.find(
+    (item) => item.symbol === selectedSymbol,
+  );
+
+  const positive = observations.filter(
+    (item) => item.change > 0,
+  ).length;
+
+  const negative = observations.filter(
+    (item) => item.change < 0,
+  ).length;
+
+  const flat = observations.length - positive - negative;
+
+  return (
+    <section className="mi-card">
+      <div className="mi-card-header">
+        <div>
+          <span className="mi-eyebrow">02 / STATE</span>
+          <h3>Observable State</h3>
+        </div>
+
+        <AuthorityBadge>DERIVED</AuthorityBadge>
+      </div>
+
+      <div className="mi-card-description">
+        State derived only from currently available observations.
+      </div>
+
+      <div className="mi-state-focus">
+        <span className="mi-state-focus-label">
+          Selected observation
+        </span>
+
+        <strong>
+          {selected?.symbol ?? 'NO SELECTION'}
+        </strong>
+
+        <span
+          className={`mi-state-focus-value ${
+            selected && selected.change > 0
+              ? 'mi-positive'
+              : selected && selected.change < 0
+                ? 'mi-negative'
+                : 'mi-neutral'
+          }`}
+        >
+          {selected
+            ? formatChange(selected.change)
+            : '—'}
+        </span>
+      </div>
+
+      <div className="mi-state-grid">
+        <div>
+          <span>Observed</span>
+          <strong>{observations.length}</strong>
+        </div>
+
+        <div>
+          <span>Positive</span>
+          <strong className="mi-positive">{positive}</strong>
+        </div>
+
+        <div>
+          <span>Negative</span>
+          <strong className="mi-negative">{negative}</strong>
+        </div>
+
+        <div>
+          <span>Flat</span>
+          <strong>{flat}</strong>
+        </div>
+      </div>
+
+      <div className="mi-state-rule">
+        <span>STATE AUTHORITY</span>
+        <strong>
+          Observation-derived only
+        </strong>
+      </div>
+    </section>
+  );
+};
+
+const DiscoveryColumn: React.FC<{
+  observations: Observation[];
+}> = ({ observations }) => {
+  const movers = useMemo(
+    () =>
+      [...observations]
+        .sort(
+          (a, b) =>
+            Math.abs(b.change) - Math.abs(a.change),
+        )
+        .slice(0, 5),
+    [observations],
+  );
+
+  return (
+    <section className="mi-card mi-discovery-card">
+      <div className="mi-card-header">
+        <div>
+          <span className="mi-eyebrow">03 / DISCOVERY</span>
+          <h3>What Changed</h3>
+        </div>
+
+        <AuthorityBadge>OBSERVATION</AuthorityBadge>
+      </div>
+
+      <div className="mi-card-description">
+        Visible change is surfaced without pretending it is
+        yet an intelligence conclusion.
+      </div>
+
+      <div className="mi-discovery-list">
+        {movers.length === 0 ? (
+          <div className="mi-empty">
+            Discovery requires available observations.
+          </div>
+        ) : (
+          movers.map((item) => (
+            <div
+              className="mi-discovery-row"
+              key={item.symbol}
+            >
+              <span>{item.symbol}</span>
+
+              <span
+                className={
+                  item.change > 0
+                    ? 'mi-positive'
+                    : item.change < 0
+                      ? 'mi-negative'
+                      : 'mi-neutral'
+                }
+              >
+                {formatChange(item.change)}
+              </span>
+            </div>
+          ))
+        )}
+      </div>
+
+      <div className="mi-discovery-boundary">
+        <Eye size={13} />
+        <span>
+          Discovery is observation-level until backend
+          analytical authority is exposed.
+        </span>
+      </div>
+    </section>
+  );
+};
+
+const IntelligenceFlow: React.FC = () => (
+  <section className="mi-card mi-flow-card">
+    <div className="mi-card-header">
+      <div>
+        <span className="mi-eyebrow">INTELLIGENCE PATH</span>
+        <h3>From Reality to Understanding</h3>
+      </div>
+
+      <AuthorityBadge>COREI MODEL</AuthorityBadge>
+    </div>
+
+    <div className="mi-flow">
+      <div className="mi-flow-node mi-flow-node-active">
+        <Database size={15} />
+        <span>MARKET</span>
+        <strong>REALITY</strong>
+      </div>
+
+      <ChevronRight className="mi-flow-arrow" size={15} />
+
+      <div className="mi-flow-node">
+        <Eye size={15} />
+        <span>OBSERVE</span>
+        <strong>WHAT IS</strong>
+      </div>
+
+      <ChevronRight className="mi-flow-arrow" size={15} />
+
+      <div className="mi-flow-node">
+        <Waves size={15} />
+        <span>UNDERSTAND</span>
+        <strong>WHAT CHANGED</strong>
+      </div>
+
+      <ChevronRight className="mi-flow-arrow" size={15} />
+
+      <div className="mi-flow-node mi-flow-node-future">
+        <Target size={15} />
+        <span>INTELLIGENCE</span>
+        <strong>WHY / WHAT NEXT</strong>
+      </div>
+    </div>
+  </section>
+);
+
+const TracePanel: React.FC = () => (
+  <section className="mi-card mi-trace-card">
+    <div className="mi-card-header">
+      <div>
+        <span className="mi-eyebrow">INTELLIGENCE TRACE</span>
+        <h3>Evidence → Interpretation → Decision</h3>
+      </div>
+
+      <AuthorityBadge>LINEAGE</AuthorityBadge>
+    </div>
+
+    <div className="mi-trace">
+      <div className="mi-trace-node">
+        <span className="mi-trace-index">01</span>
+        <div>
+          <strong>MARKET OBSERVATION</strong>
+          <span>Governed market-data observation</span>
+        </div>
+      </div>
+
+      <div className="mi-trace-line" />
+
+      <div className="mi-trace-node">
+        <span className="mi-trace-index">02</span>
+        <div>
+          <strong>MARKET STATE</strong>
+          <span>
+            Requires authoritative state derivation
+          </span>
+        </div>
+      </div>
+
+      <div className="mi-trace-line" />
+
+      <div className="mi-trace-node">
+        <span className="mi-trace-index">03</span>
+        <div>
+          <strong>STRUCTURAL INTERPRETATION</strong>
+          <span>
+            Requires structure / behaviour intelligence
+          </span>
+        </div>
+      </div>
+
+      <div className="mi-trace-line" />
+
+      <div className="mi-trace-node">
+        <span className="mi-trace-index">04</span>
+        <div>
+          <strong>OPPORTUNITY / THREAT</strong>
+          <span>
+            Requires screening and monitoring authority
+          </span>
+        </div>
+      </div>
+
+      <div className="mi-trace-line" />
+
+      <div className="mi-trace-node">
+        <span className="mi-trace-index">05</span>
+        <div>
+          <strong>TRADE INTENT</strong>
+          <span>
+            Downstream intelligence output — not owned by this UI
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div className="mi-trace-footer">
+      <GitBranch size={13} />
+      <span>
+        Full lineage must remain reconstructable from governed
+        event authority.
+      </span>
+    </div>
+  </section>
+);
+
+const EvidencePanel: React.FC<{
+  instrumentCount: number;
+  error: string | null;
+}> = ({ instrumentCount, error }) => (
+  <section className="mi-card">
+    <div className="mi-card-header">
+      <div>
+        <span className="mi-eyebrow">EVIDENCE</span>
+        <h3>Evidence Boundary</h3>
+      </div>
+
+      <AuthorityBadge live>
+        {error ? 'DEGRADED' : 'AVAILABLE'}
+      </AuthorityBadge>
+    </div>
+
+    <div className="mi-evidence-grid">
+      <div>
+        <span>Observation source</span>
+        <strong>MARKET STORE</strong>
+      </div>
+
+      <div>
+        <span>Observed instruments</span>
+        <strong>{instrumentCount}</strong>
+      </div>
+
+      <div>
+        <span>Transport authority</span>
+        <strong>KAFKA</strong>
+      </div>
+
+      <div>
+        <span>Analytical persistence</span>
+        <strong>TIMESCALEDB</strong>
+      </div>
+    </div>
+
+    <div
+      className={`mi-evidence-warning ${
+        error ? 'mi-evidence-warning-error' : ''
+      }`}
+    >
+      <ShieldCheck size={13} />
+
+      <span>
+        {error
+          ? `Market-data request error: ${error}`
+          : 'UI does not promote observations into unsupported intelligence.'}
+      </span>
+    </div>
+  </section>
+);
+
+const OverviewSection: React.FC<{
+  observations: Observation[];
+  selectedSymbol: string;
+  onSelect: (symbol: string) => void;
+  error: string | null;
+}> = ({
+  observations,
+  selectedSymbol,
+  onSelect,
+  error,
+}) => (
+  <div className="mi-overview">
+    <div className="mi-reality-grid">
+      <RealityColumn
+        observations={observations}
+        selectedSymbol={selectedSymbol}
+        onSelect={onSelect}
+      />
+
+      <StateColumn
+        observations={observations}
+        selectedSymbol={selectedSymbol}
+      />
+
+      <DiscoveryColumn observations={observations} />
+    </div>
+
+    <IntelligenceFlow />
+
+    <div className="mi-lower-grid">
+      <EvidencePanel
+        instrumentCount={observations.length}
+        error={error}
+      />
+
+      <section className="mi-card mi-future-card">
+        <div className="mi-card-header">
+          <div>
+            <span className="mi-eyebrow">
+              INTELLIGENCE SURFACE
+            </span>
+            <h3>Unseen Market Layer</h3>
+          </div>
+
+          <AuthorityBadge>BUILDING</AuthorityBadge>
+        </div>
+
+        <p>
+          COREI should expose the relationships beneath visible
+          price: structure, behaviour, regime transition,
+          opportunity formation, threat formation and evidence
+          lineage.
+        </p>
+
+        <div className="mi-future-list">
+          <span>RELATIONSHIPS</span>
+          <span>STRUCTURE</span>
+          <span>REGIME</span>
+          <span>OPPORTUNITY</span>
+          <span>MONITORING</span>
+          <span>LINEAGE</span>
+        </div>
+      </section>
+    </div>
+
+    <TracePanel />
+  </div>
+);
+
+const MarketDataSection: React.FC<{
+  observations: Observation[];
+  selectedSymbol: string;
+  onSelect: (symbol: string) => void;
+}> = ({
+  observations,
+  selectedSymbol,
+  onSelect,
+}) => (
+  <div className="mi-section-content">
+    <RealityColumn
+      observations={observations}
+      selectedSymbol={selectedSymbol}
+      onSelect={onSelect}
+    />
+
+    <EvidencePanel
+      instrumentCount={observations.length}
+      error={null}
+    />
+  </div>
+);
+
+const MarketHealthSection: React.FC<{
+  observations: Observation[];
+  loading: boolean;
+  error: string | null;
+}> = ({ observations, loading, error }) => {
+  const availability = error
+    ? 'ERROR'
+    : observations.length > 0
+      ? 'AVAILABLE'
+      : loading
+        ? 'LOADING'
+        : 'NO DATA';
+
+  return (
+    <div className="mi-health">
+      <div className="mi-health-summary">
+        <div className="mi-health-primary">
+          <span>MARKET DATA BOUNDARY</span>
+          <strong>{availability}</strong>
+        </div>
+
+        <div>
+          <span>OBSERVATIONS</span>
+          <strong>{observations.length}</strong>
+        </div>
+
+        <div>
+          <span>REQUEST</span>
+          <strong>{loading ? 'ACTIVE' : 'IDLE'}</strong>
+        </div>
+
+        <div>
+          <span>ERROR</span>
+          <strong>{error ? 'PRESENT' : 'NONE'}</strong>
+        </div>
+      </div>
+
+      <section className="mi-card">
+        <div className="mi-card-header">
+          <div>
+            <span className="mi-eyebrow">
+              AUTHORITY MODEL
+            </span>
+            <h3>What Market Health Means</h3>
+          </div>
+
+          <AuthorityBadge>
+            NO INFERENCE
+          </AuthorityBadge>
+        </div>
+
+        <div className="mi-health-rules">
+          <div>
+            <strong>OBSERVATION</strong>
+            <span>
+              Instruments currently returned by the existing
+              market-data integration.
+            </span>
+          </div>
+
+          <div>
+            <strong>AVAILABILITY</strong>
+            <span>
+              Derived from the store request and available
+              observation set.
+            </span>
+          </div>
+
+          <div>
+            <strong>FEED HEALTH</strong>
+            <span>
+              Requires backend feed-health authority.
+            </span>
+          </div>
+
+          <div>
+            <strong>FRESHNESS</strong>
+            <span>
+              Requires authoritative market-feed clock state.
+            </span>
+          </div>
+
+          <div>
+            <strong>TRUST</strong>
+            <span>
+              Requires authoritative snapshot/context state.
+            </span>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+const MarketIntelligence: React.FC<
+  MarketIntelligenceProps
+> = ({ section = 'overview' }) => {
+  const instruments = useMarketStore(
+    (state) => state.instruments,
+  ) as Record<string, Instrument>;
+
+  const loading = useMarketStore(
+    (state) => state.loading,
+  );
+
+  const error = useMarketStore(
+    (state) => state.error,
+  );
+
+  const fetchData = useMarketStore(
+    (state) => state.fetchData,
+  );
+
+  const [selectedSymbol, setSelectedSymbol] =
+    useState('');
+
+  const [search, setSearch] = useState('');
+
+  const observations = useMemo<Observation[]>(() => {
+    return Object.entries(instruments)
+      .map(([symbol, data]) => ({
+        symbol,
+        price: data?.price ?? 0,
+        change: data?.change ?? 0,
+        historyLength: data?.history?.length ?? 0,
+        direction: directionForChange(data?.change ?? 0),
+      }))
+      .sort((a, b) =>
+        a.symbol.localeCompare(b.symbol),
+      );
+  }, [instruments]);
+
+  const filteredObservations = useMemo(() => {
+    const query = search.trim().toLowerCase();
+
+    if (!query) return observations;
+
+    return observations.filter((item) =>
+      item.symbol.toLowerCase().includes(query),
+    );
+  }, [observations, search]);
+
+  const effectiveSelectedSymbol =
+    selectedSymbol &&
+    observations.some(
+      (item) => item.symbol === selectedSymbol,
+    )
+      ? selectedSymbol
+      : observations[0]?.symbol ?? '';
+
+  const meta = SECTION_META[section];
+
+  const handleRefresh = () => {
+    void fetchData();
+  };
+
+  const renderSection = () => {
+    if (section === 'overview') {
+      return (
+        <OverviewSection
+          observations={filteredObservations}
+          selectedSymbol={effectiveSelectedSymbol}
+          onSelect={setSelectedSymbol}
+          error={error}
+        />
+      );
+    }
+
+    if (section === 'market-data') {
+      return (
+        <MarketDataSection
+          observations={filteredObservations}
+          selectedSymbol={effectiveSelectedSymbol}
+          onSelect={setSelectedSymbol}
+        />
+      );
+    }
+
+    if (section === 'market-health') {
+      return (
+        <MarketHealthSection
+          observations={filteredObservations}
+          loading={loading}
+          error={error}
+        />
+      );
+    }
+
+    if (ANALYTICAL_SECTIONS.includes(section)) {
+      const descriptions: Record<
+        MarketIntelligenceSection,
+        string
+      > = {
+        overview: '',
+        'market-data': '',
+        'market-health': '',
+        technical:
+          'Technical measurements must be supplied by authoritative analytical state rather than reconstructed inside the UI.',
+        structure:
+          'Market structure requires governed structural analytics including price, liquidity and relationship state.',
+        trend:
+          'Trend interpretation requires authoritative directional and timeframe state.',
+        volatility:
+          'Volatility interpretation requires authoritative volatility measurements and transition state.',
+        momentum:
+          'Momentum interpretation requires authoritative momentum measurements and directional state.',
+        regime:
+          'Regime state must originate from the governed market-context / regime authority.',
+      };
+
+      return (
+        <NotExposed
+          title={meta.title}
+          description={descriptions[section]}
+          dependency={
+            section === 'regime'
+              ? 'market-regime / market-context authority'
+              : `${meta.title.toLowerCase()} analytical authority`
+          }
+        />
+      );
+    }
+
+    return null;
+  };
+
+  return (
+    <div className="market-intelligence-root">
+      <header className="mi-workspace-header">
+        <div className="mi-title-block">
+          <div className="mi-title-line">
+            <span className="mi-system-mark">
+              COREI
+            </span>
+
+            <span className="mi-title-separator">
+              /
+            </span>
+
+            <span className="mi-layer">
+              {meta.layer}
+            </span>
+          </div>
+
+          <h2>{meta.title}</h2>
+
+          <p>{meta.subtitle}</p>
+        </div>
+
+        <div className="mi-header-controls">
+          <div className="mi-authority-state">
+            <span>AUTHORITY</span>
+            <strong>
+              {error ? 'DEGRADED' : 'OBSERVATION'}
+            </strong>
+          </div>
+
+          <button
+            type="button"
+            className="mi-icon-button"
+            onClick={handleRefresh}
+            title="Refresh market observations"
+          >
+            <RefreshCw
+              size={14}
+              className={
+                loading
+                  ? 'mi-refresh-spinning'
+                  : undefined
+              }
+            />
+          </button>
+        </div>
+      </header>
+
+      <div className="mi-toolbar">
+        <div className="mi-search">
+          <Search size={13} />
+
+          <input
+            value={search}
+            onChange={(event) =>
+              setSearch(event.target.value)
+            }
+            placeholder="Search observed instruments"
+            aria-label="Search observed instruments"
+          />
+
+          {search && (
+            <button
+              type="button"
+              onClick={() => setSearch('')}
+              aria-label="Clear search"
+            >
+              <X size={12} />
+            </button>
+          )}
+        </div>
+
+        <div className="mi-toolbar-context">
+          <span>
+            {filteredObservations.length} observed
+          </span>
+
+          <span className="mi-toolbar-divider" />
+
+          <span>
+            {effectiveSelectedSymbol || 'NO SELECTION'}
+          </span>
+        </div>
+      </div>
+
+      {renderSection()}
+
+      <footer className="mi-workspace-footer">
+        <div>
+          <ShieldCheck size={12} />
+          <span>
+            READ-ONLY INTELLIGENCE SURFACE
+          </span>
+        </div>
+
+        <div>
+          <History size={12} />
+          <span>REPLAY AUTHORITY: GOVERNED</span>
+        </div>
+
+        <div>
+          <BarChart3 size={12} />
+          <span>
+            ANALYTICS AUTHORITY: BACKEND
+          </span>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+export default MarketIntelligence;

@@ -11,3 +11,5 @@ data:
   RAW_MARKET_TOPIC: "raw_market_data_stream"
 
   ENVIRONMENT: "development"
+  MARKET_DATA_PROVIDER: "upstox"
+  UPSTOX_INSTRUMENT_KEYS: "NSE_INDEX|Nifty 50"

@@ -1,0 +1,759 @@
+PHASE A — STEP 8: FEEDBACK / LEARNING MODEL
+
+	(Strict DSS | Institutional-Grade | No Cross-Phase Leakage)
+
+	Reference compliance:
+
+
+	1. PHASE IDENTITY LAYER
+		1.1 Phase Name
+
+			Phase A — Step 8: Feedback / Learning Model
+
+		1.2 Phase Role
+
+			Defines deterministic, non-adaptive-at-runtime learning logic that evaluates historical performance and produces versioned parameter updates for upstream components (Strategy, Signal, Decision, Portfolio).
+
+		1.3 Objective
+
+			Produce a deterministic, auditable, version-controlled learning output that improves trading model performance without introducing runtime non-determinism.
+
+		1.4 Why This Exists
+
+			Prevents:
+
+				uncontrolled adaptive behavior
+				hidden drift in strategy logic
+				non-reproducible system evolution
+
+			Ensures:
+
+				learning is offline, explicit, versioned
+				full traceability from performance → parameter change
+
+	2. PHASE SCOPE CONTROL
+		2.1 INCLUDED (STRICT)
+			performance evaluation logic (logical)
+			parameter adjustment rules (deterministic)
+			learning dataset definition
+			model update rules (non-ML / deterministic ML allowed)
+			version generation rules
+			feedback loop structure (logical only)
+
+		2.2 EXCLUDED (STRICT)
+			real-time adaptive learning
+			online learning / reinforcement learning execution
+			infrastructure pipelines
+			training frameworks / ML infra
+			execution feedback loops (Phase D)
+			latency / scheduling
+
+	3. ARCHITECTURAL INTENT LAYER
+		3.1 Core Principles
+			Deterministic learning output
+			No runtime adaptation
+			Full replayability
+			Version-controlled evolution
+			Strict separation from execution
+
+		3.2 Architectural Model
+
+			Logical Evaluation + Deterministic Update Model
+
+		3.3 System Positioning
+			Signal → Decision → Trade → Portfolio → Performance
+												  ↓
+										   Learning Model
+												  ↓
+									 Updated Config Versions (Step 1–7)
+
+			This is a closed-loop logical system, not runtime adaptation.
+
+	4. DOMAIN MODEL DEFINITION
+		4.1 Core Entities
+
+			Performance Snapshot
+			Deterministic aggregation of historical outcomes
+
+			Learning Dataset
+			Canonical dataset used for evaluation
+
+			Learning Cycle
+			One complete evaluation + update process
+
+			Parameter Update Set
+			Collection of parameter changes
+
+			Model Version
+			New version of strategy/config/decision parameters
+
+			Outcome Record
+			realized result of a trade intent
+
+			Feedback Signal
+			normalized evaluation output
+
+			Parameter Update Instruction
+			deterministic modification instruction
+
+			Strategy Scorecard
+			performance metrics container
+
+			Performance Snapshot MUST be defined exactly once and reused across all references
+				Duplicate definitions are strictly forbidden
+
+		4.2 Attributes
+
+			Performance Snapshot
+
+				strategy_id
+				time_window
+				return_series
+				drawdown_series
+				trade_outcomes
+				risk_metrics
+				evaluation_metrics
+
+			Learning Dataset
+
+				dataset_id
+				time_range
+				included_strategies
+				data_hash
+
+			Learning Cycle
+
+				cycle_id
+				dataset_id
+				evaluation_timestamp
+				version_input_set
+				version_output_set
+
+			Parameter Update Set
+
+				parameter_id
+				old_value
+				new_value
+				update_reason
+				update_magnitude
+
+			Model Version
+
+				version_id
+				parent_version_id
+				change_set_hash
+				approval_status
+
+		4.3 Relationships
+			Portfolio Output → produces → Performance Snapshot
+			Performance Snapshot → feeds → Learning Dataset
+			Learning Dataset → processed by → Learning Cycle
+			Learning Cycle → generates → Parameter Update Set
+			Parameter Update Set → produces → Model Version
+
+		4.4 Ownership
+			Learning logic → Phase A
+			Performance input → derived within Step 8 from Step 7 outputs
+			Version control → Phase 0 governance
+
+	5. LOGIC / RULE ENGINE
+		5.1 Canonical Input Set (MANDATORY)
+			canonical_input_set = {
+				performance_snapshot_set
+				configuration_snapshot
+				version_identifiers
+			}
+
+			Constraints:
+
+			immutable
+			complete
+			hash-identifiable
+			no external inputs allowed
+
+		learning_dataset MUST NOT be part of canonical_input_set
+
+			learning_dataset MUST be derived strictly after canonical_input_set resolution as:
+
+			learning_dataset = f(performance_snapshot_set, configuration_snapshot)
+
+			Constraints:
+
+			no independent dataset construction allowed
+			no external data sources permitted
+			derivation function MUST be deterministic and fully specified
+
+		External Feedback Exclusion (MANDATORY)
+
+			Learning Model MUST use ONLY:
+
+				CORE performance data
+
+			External trade outcomes (CEIL):
+
+				MUST NOT be included in:
+					performance_snapshot_set
+					learning_dataset
+					parameter updates
+
+			Constraint:
+
+				External trades MUST NOT influence model evolution
+
+		5.2 Evaluation Rules
+			R1: Deterministic Metric Computation
+
+				All metrics MUST be computed using:
+
+				fixed formulas
+				fixed time windows
+				fixed-point arithmetic
+
+				Examples:
+
+				Sharpe
+				max drawdown
+				win-rate
+				return variance
+
+			R2: Dataset Selection Rule
+
+				Learning dataset MUST satisfy:
+
+				fixed time window
+				no missing data
+				deterministic inclusion criteria
+
+				If violation:
+				→ learning cycle MUST NOT execute
+
+				Deterministic Inclusion Definition (MANDATORY)
+
+					learning_dataset MUST be constructed using:
+
+					fixed time_window
+					fixed strategy set
+					fixed completeness requirement
+
+					Inclusion Rule:
+
+					include ALL performance_snapshot entries WHERE:
+
+					timestamp ∈ time_window
+					strategy_id ∈ predefined strategy_set
+					data completeness = TRUE
+
+					No conditional or adaptive filtering allowed
+
+				data completeness = TRUE IF AND ONLY IF:
+
+						all required fields present
+						AND no null values
+						AND timestamps fully aligned within time_window
+
+						Else:
+						data completeness = FALSE
+
+			R3: Parameter Sensitivity Evaluation
+
+				Each parameter MUST be evaluated independently:
+
+				Δperformance = f(parameter_variation)
+
+				Constraints:
+
+				variation steps predefined
+				evaluation grid fixed
+				no stochastic search
+
+				Parameter Evaluation Grid (MANDATORY)
+
+					Each parameter MUST define:
+
+					min_value
+					max_value
+					step_size
+
+					Evaluation Set:
+
+					parameter_values = {min_value + k * step_size}
+
+					Constraints:
+
+					k MUST be integer
+					range MUST be finite
+					evaluation order MUST be ascending
+
+					No stochastic variation allowed
+
+				IF (max_value - min_value) is not divisible by step_size:
+
+					parameter_values MUST include only values ≤ max_value
+
+					No extension beyond max_value allowed
+
+
+				All parameter updates MUST be:
+
+					computed independently
+					AND applied simultaneously
+
+					No sequential dependency allowed
+
+
+			R4: Update Eligibility Rule
+
+				Parameter update allowed ONLY IF:
+
+				improvement_metric ≥ threshold_min
+				AND
+				risk_metric ≤ threshold_max
+
+				Else:
+				→ parameter remains unchanged
+
+				Precedence Rule (MANDATORY)
+
+					Evaluation order MUST be:
+
+					1 risk_metric validation
+					2 improvement_metric validation
+
+					Constraint:
+
+					IF risk_metric > threshold_max
+					→ update MUST be rejected
+
+					improvement condition MUST NOT override risk constraint
+
+			R5: Update Magnitude Constraint
+				|new_value - old_value| ≤ delta_max
+
+				Edge:
+
+				if exceeded → clamp to delta_max
+				if undefined → reject update
+
+			R6: Version Generation Rule
+
+				New version MUST be created ONLY IF:
+
+				at least one parameter updated
+				all updates validated
+
+				Else:
+				→ no new version
+
+				version_id MUST be computed from:
+
+					ordered parameter_update_set (by parameter_id)
+					performance_snapshot_set hash
+					configuration_snapshot hash
+					version_identifiers
+					learning_dataset hash
+
+					Ordering MUST be deterministic
+
+			All inputs to version_id MUST be serialized in deterministic order:
+
+					1 parameter_update_set (sorted by parameter_id)
+					2 performance_snapshot_set hash
+					3 configuration_snapshot hash
+					4 learning_dataset hash
+					5 version_identifiers
+
+					No permutation allowed
+
+			R7: Deterministic Ordering
+
+				All updates MUST be ordered by:
+
+				parameter_id (lexicographic)
+				magnitude (descending)
+
+				Precondition (MANDATORY)
+
+					update_magnitude MUST be computed BEFORE ordering
+
+					Constraint:
+
+					ordering MUST depend only on:
+
+					parameter_id
+					update_magnitude (deterministically computed)
+
+					No runtime-dependent values allowed
+
+		5.3 RULE EXECUTION ORDER (STRICT)
+			Input validation
+			Dataset validation
+			Metric computation
+			Parameter sensitivity evaluation
+			Update eligibility check
+			Update magnitude enforcement
+			Version generation
+			Hash computation
+
+			No deviation allowed.
+
+	6. FLOW ARCHITECTURE
+
+		learning_dataset.time_window MUST be identical to performance_snapshot_set.time_window
+
+		Partial overlap is invalid
+
+		6.0 Canonical Contract
+
+			All outputs derived ONLY from canonical_input_set
+
+		6.1 Input
+
+			Performance Snapshot Construction Rule (MANDATORY)
+
+				performance_snapshot_set MUST be derived as:
+
+				performance_snapshot_set = f(
+					portfolio_state_snapshot,
+					outcome_record_set,
+					configuration_snapshot
+				)
+
+				Where:
+
+				outcome_record_set MUST include:
+
+					trade_intent_id
+					execution_result (filled / partial / rejected)
+					realized_pnl
+					execution_timestamp
+
+				Constraints:
+
+					ALL inputs MUST be:
+						deterministic
+						time-aligned
+						complete
+
+					Aggregation MUST produce:
+
+						return_series
+						drawdown_series
+						trade_outcomes
+						risk_metrics
+
+					Same inputs → identical performance_snapshot_set
+
+					No external data sources allowed
+					No implicit computation allowed
+
+			performance_snapshot_set (Step 7)
+			configuration_snapshot (Steps 1–7)
+			version identifiers
+
+		6.2 Processing
+			Performance → Evaluation → Parameter Testing → Update Filtering → Version Creation
+
+		6.3 Output
+			parameter_update_set
+			model_version_object
+
+		6.4 Flow Model
+			Input → Transform → Output
+
+		Performance Snapshot → Learning Logic → Model Version
+
+	7. PIPELINE STRUCTURE
+
+		Learning Lifecycle:
+
+		Collect → Validate → Evaluate → Update → Version → Approve → Deploy
+
+		State Transitions:
+
+		Pending → Validated
+		Validated → Evaluated
+		Evaluated → Updated
+		Updated → Versioned
+
+		Pending → Validated ONLY IF dataset completeness = TRUE
+
+			Validated → Evaluated ONLY IF metric computation successful
+
+			Evaluated → Updated ONLY IF valid updates exist
+
+			Updated → Versioned ONLY IF all updates validated
+
+	8. CONTROL & CONSTRAINTS
+		8.1 Hard Rules
+			No runtime adaptation
+			Deterministic outputs only
+			Fixed evaluation logic
+
+		8.2 Soft Rules
+			Prefer stability over aggressiveness
+			Prefer smaller updates
+
+		8.3 Guardrails
+			no overfitting loops
+			no parameter oscillation
+
+		8.4 Boundary Definitions
+
+			For each parameter:
+
+			min_value
+			max_value
+			delta_max
+			invalid range
+
+			Violation:
+			→ update rejected
+
+		Edge Behavior Definition (MANDATORY)
+
+			|new_value - old_value| = delta_max → allowed
+			|new_value - old_value| > delta_max → clamp to delta_max
+			|new_value - old_value| = 0 → no update generated
+
+			All boundary conditions MUST produce deterministic output
+
+	9. STATE & DATA MODEL
+		9.1 State Types
+			Learning Pending
+			Learning Completed
+			Version Generated
+
+		9.2 State Transitions
+			Pending → Completed (valid dataset)
+			Completed → Version Generated (valid updates)
+
+		9.3 Source of Truth
+			Model Version Object
+
+		Reconstruction Rule (MANDATORY)
+
+			model_version_object MUST be computable as:
+
+				f(
+				canonical_input_set,
+				learning_dataset,
+				parameter_update_set
+				)
+
+			Constraint:
+
+			All inputs used in version generation MUST be included in canonical_input_set
+			No hidden state allowed
+
+	10. FAILURE MODEL
+		10.1 Scenarios
+			incomplete dataset
+			metric inconsistency
+			conflicting updates
+			non-deterministic output
+		10.2 Detection
+
+			Each failure MUST define:
+
+			Scenario	Trigger	Detection	Response
+			Missing data	dataset incomplete	validation fail	abort cycle
+			Metric inconsistency	mismatch across runs	replay check	reject
+			update overflow	delta > max	bounds check	clamp/reject
+			ambiguity	multiple outputs	replay mismatch	invalidate
+
+	11. ASSUMPTION REGISTER
+	Assumption	Reason	Validate In	Status
+	performance data accurate	required for learning	Phase B	open
+	parameter space bounded	required for determinism	Step 7	open
+	evaluation metrics sufficient	decision quality	Step 9	open
+
+	12. VALIDATION FRAMEWORK
+		12.1 Checklist
+			deterministic outputs
+			bounded parameters
+			version traceability
+
+		12.2 Validation Method
+			replay identical dataset
+			verify identical version output
+
+		12.3 Acceptance Criteria
+			zero ambiguity
+			identical replay output
+
+		12.4 Coverage Rule
+			every rule stress-tested via:
+			parameter extremes
+			empty dataset
+			conflicting updates
+
+		12.5 Ambiguity Check
+			simulate multiple update orders
+			→ must produce identical version
+
+	13. OUTPUT (DELIVERABLE SPEC)
+
+		Feedback / Learning Model Specification
+
+		Includes:
+
+		evaluation logic
+		update rules
+		versioning model
+		constraints
+
+	14. TRACEABILITY MAPPING
+		Input:
+			portfolio_state_snapshot (Step 7)
+			outcome_record_set (derived from Step 7 + execution outcomes)
+		Output: Updated configurations for:
+		Step 1 (Strategy)
+		Step 2 (Signal)
+		Step 3 (Decision)
+		Step 7 (Portfolio)
+
+		Full lineage required.
+
+		Mandatory Lineage Mapping
+
+			Each parameter_update_set entry MUST include:
+
+			origin_performance_snapshot_id
+			origin_dataset_id
+
+			Constraint:
+
+			Every update MUST be traceable to exact input data used
+
+	15. CROSS-PHASE CONSISTENCY
+
+		OWNED:
+
+		learning logic
+		update rules
+
+		REFERENCED:
+
+		strategy config
+		signal config
+		decision config
+
+		No duplication allowed.
+
+	16. SCALABILITY MODEL
+
+		Supports:
+
+		1000+ strategies
+		multi-asset evaluation
+		long-horizon datasets
+
+		Scaling:
+
+		per-strategy isolation
+		batch deterministic processing
+
+	17. GOVERNANCE INTEGRATION
+		every version MUST be approved
+		change requires:
+		reason
+		impact analysis
+		rollback plan
+
+		No auto-deployment allowed.
+
+	18. AUDITABILITY & OBSERVABILITY
+
+		Must support:
+
+		full replay of learning cycle
+		parameter change traceability
+		version lineage graph
+
+		Logs:
+
+		dataset used
+		metrics computed
+		updates applied
+
+	19. RISK CONSIDERATIONS
+
+		Risks:
+
+		overfitting
+		parameter instability
+		hidden drift
+
+		Controls:
+
+		bounded updates
+		validation thresholds
+		version gating
+
+	20. FAILURE CONDITION
+
+		Phase fails if:
+
+		learning is non-deterministic
+		version not reproducible
+		parameters unbounded
+		traceability missing
+
+	21. PHASE LOCK CRITERIA
+		all sections complete
+		deterministic replay verified
+		no ambiguity
+		governance approval obtained
+
+	FINAL STATE
+
+		Phase A — Step 8 is now:
+
+		Fully deterministic
+		Fully bounded
+		Replay-safe
+		Governance-controlled
+
+Phase A → Output Contract (TradeIntent Definition)
+
+	TradeIntent_v1:
+
+	Fields (STRICT ORDER):
+
+	1. trade_intent_id: bytes32
+	2. instrument: string
+	3. direction: enum {BUY, SELL}
+	4. size: int64
+	5. aggregation_score: int64 (fixed-point)
+	6. signal_ids: List<bytes32> (SORTED)
+	7. event_time: int64 (epoch ns)
+	8. encoding_version: int = 1
+
+HASH DEFINITION
+	trade_intent_id = HASH_v1(
+		CBE_encode([
+			instrument,
+			direction,
+			size,
+			aggregation_score,
+			signal_ids_sorted,
+			event_time
+		])
+	)
+
+HARD RULE
+	NO JSON
+	NO dynamic fields
+	NO optional ordering
+
+Step 8 Determinism Validation:
+	Validate:
+
+	1. Same input signals → same TradeIntent_id
+	2. Hash reproducibility = TRUE
+	3. No floating point used
+	4. signal_ids fully linked
+	5. event_time consistent
+
+	IF ANY FAIL:
+		REJECT PIPELINE OUTPUT

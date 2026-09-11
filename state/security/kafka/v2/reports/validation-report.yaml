@@ -1,0 +1,9 @@
+status: PASS
+checks:
+  kafka_container_found: true
+  tls_volume_defined: true
+  jaas_volume_defined: true
+  tls_mount_defined: true
+  jaas_mount_defined: true
+  env_var_defined: true
+  listener_defined: true

@@ -1,0 +1,133 @@
+/******************************************************************************
+ *
+ * COREI OPERATING SYSTEM
+ *
+ * STAGE-25
+ * PHASE-17
+ * STEP-05-E
+ *
+ * FILE:
+ * top-ribbon.css
+ *
+ * PURPOSE:
+ * Institutional Ribbon Information Hierarchy
+ *
+ ******************************************************************************/
+
+.corei-top-ribbon {
+
+    width:100%;
+
+    height:var(--corei-shell-top-height);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:8px;
+
+    padding:0 8px;
+
+    box-sizing:border-box;
+
+    overflow:hidden;
+
+    background:
+        var(--corei-color-surface-1);
+
+    border-bottom:
+        1px solid var(--corei-color-border);
+
+    color:
+        var(--corei-color-text-primary);
+
+    font-size:11px;
+
+}
+
+
+.corei-top-ribbon > * {
+
+    display:flex;
+
+    align-items:center;
+
+    min-height:22px;
+
+    padding:0 6px;
+
+    gap:4px;
+
+    white-space:nowrap;
+
+    border-right:
+        1px solid var(--corei-color-border);
+
+}
+
+
+.corei-ribbon-institution {
+
+    font-size:12px;
+
+    font-weight:600;
+
+    letter-spacing:.03em;
+
+    text-transform:uppercase;
+
+}
+
+
+.corei-ribbon-runtime {
+
+    color:
+        var(--corei-color-text-secondary);
+
+}
+
+
+.corei-ribbon-workspace {
+
+    flex:1;
+
+    min-width:0;
+
+    color:
+        var(--corei-color-text-secondary);
+
+}
+
+
+.corei-ribbon-notifications {
+
+    margin-left:auto;
+
+    padding-left:6px;
+
+    border-left:
+        1px solid var(--corei-color-border);
+
+}
+
+
+.corei-top-ribbon span {
+
+    line-height:1;
+
+    letter-spacing:0;
+
+}
+
+
+/*
+ * Remove visual noise from empty shell
+ */
+
+.corei-top-ribbon > *:last-child {
+
+    border-right:none;
+
+}

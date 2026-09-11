@@ -1,0 +1,495 @@
+/home/coreeye/corei/core_platform
+├── config-control
+│   └── __init__.py
+├── config_governance
+│   ├── audit
+│   │   ├── config_audit_log.py
+│   │   └── __init__.py
+│   ├── __init__.py
+│   ├── lineage
+│   │   ├── config_lineage.py
+│   │   └── __init__.py
+│   ├── restoration
+│   │   ├── config_restoration.py
+│   │   └── __init__.py
+│   ├── runtime
+│   │   ├── __init__.py
+│   │   └── test_config_governance.py
+│   ├── schemas
+│   │   ├── __init__.py
+│   │   └── platform-config-schema.json
+│   ├── snapshots
+│   │   ├── __init__.py
+│   │   └── snapshot_engine.py
+│   ├── validate-config-governance.sh
+│   └── validation
+│       ├── config_validator.py
+│       └── __init__.py
+├── contracts
+│   ├── health
+│   │   ├── health-contract.md
+│   │   └── __init__.py
+│   ├── __init__.py
+│   └── metadata
+│       ├── __init__.py
+│       └── service-metadata-contract.md
+├── deployment-governance
+│   ├── health
+│   │   └── health-gate.py
+│   ├── helm
+│   │   ├── templates
+│   │   │   ├── deployment.yaml
+│   │   │   └── service.yaml
+│   │   └── values.yaml
+│   ├── policies
+│   ├── rollbacks
+│   │   └── rollback-policy.md
+│   ├── sequencing
+│   │   └── platform-deployment-order.json
+│   └── validate-deployment-governance.sh
+├── determinism
+│   └── __init__.py
+├── deterministic_replay
+│   ├── consistency
+│   │   ├── __init__.py
+│   │   └── state_consistency_validator.py
+│   ├── engine
+│   │   ├── __init__.py
+│   │   └── replay_engine.py
+│   ├── __init__.py
+│   ├── lineage
+│   │   ├── __init__.py
+│   │   └── replay_lineage.py
+│   ├── runtime
+│   │   ├── __init__.py
+│   │   └── test_deterministic_replay.py
+│   ├── validate-deterministic-replay.sh
+│   └── validation
+│       ├── __init__.py
+│       └── replay_validator.py
+├── event_bus
+│   ├── contracts
+│   │   └── __init__.py
+│   ├── gateway.py
+│   ├── __init__.py
+│   ├── ordering_coordinator.py
+│   ├── runtime
+│   │   └── __init__.py
+│   └── tests
+│       └── __init__.py
+├── event_governance
+│   ├── audit
+│   │   ├── event_audit_log.py
+│   │   └── __init__.py
+│   ├── dead_letter
+│   │   ├── dead_letter_router.py
+│   │   └── __init__.py
+│   ├── __init__.py
+│   ├── lineage
+│   │   ├── event_lineage.py
+│   │   └── __init__.py
+│   ├── replay
+│   │   ├── event_replay.py
+│   │   └── __init__.py
+│   ├── runtime
+│   │   ├── event_ingestion_gateway.py
+│   │   ├── __init__.py
+│   │   └── test_event_governance.py
+│   ├── schemas
+│   │   ├── __init__.py
+│   │   └── platform-event-schema.json
+│   ├── validate-event-governance.sh
+│   └── validation
+│       ├── event_validator.py
+│       └── __init__.py
+├── flow_control
+│   ├── __init__.py
+│   ├── lag_monitor.py
+│   ├── monitoring
+│   │   └── __init__.py
+│   ├── rate_limiter.py
+│   ├── runtime
+│   │   └── __init__.py
+│   └── tests
+│       └── __init__.py
+├── governance
+│   └── __init__.py
+├── __init__.py
+├── lineage
+│   ├── hasher.py
+│   ├── __init__.py
+│   ├── runtime
+│   │   └── __init__.py
+│   ├── tests
+│   │   └── __init__.py
+│   ├── trace_propagation.py
+│   └── tracking
+│       └── __init__.py
+├── mode-governance
+│   └── __init__.py
+├── policy-runtime
+│   └── __init__.py
+├── portfolio
+│   ├── engine
+│   │   ├── __init__.py
+│   │   └── portfolio_state_engine.py
+│   ├── __init__.py
+│   ├── lineage
+│   │   ├── __init__.py
+│   │   └── portfolio_lineage.py
+│   ├── replay
+│   │   ├── __init__.py
+│   │   └── portfolio_replay.py
+│   ├── runtime
+│   │   ├── __init__.py
+│   │   └── test_portfolio_foundation.py
+│   ├── snapshots
+│   │   ├── __init__.py
+│   │   └── snapshot_engine.py
+│   ├── state
+│   │   └── __init__.py
+│   ├── validate-portfolio-foundation.sh
+│   └── validation
+│       ├── __init__.py
+│       └── portfolio_validator.py
+├── README.md
+├── replay
+│   ├── consistency
+│   │   └── __init__.py
+│   ├── __init__.py
+│   ├── replay_controller.py
+│   ├── runtime
+│   │   └── __init__.py
+│   ├── snapshot_consistency_guard.py
+│   └── tests
+│       └── __init__.py
+├── resilience
+│   ├── circuit_breaker.py
+│   ├── circuit_breaker_runtime
+│   │   └── __init__.py
+│   ├── fallback_manager.py
+│   ├── __init__.py
+│   ├── runtime
+│   │   └── __init__.py
+│   └── tests
+│       └── __init__.py
+├── runtime
+│   └── __init__.py
+├── runtime_governance
+│   ├── health
+│   │   └── __init__.py
+│   ├── ingress
+│   │   └── __init__.py
+│   ├── __init__.py
+│   ├── namespace
+│   │   ├── __init__.py
+│   │   └── platform-namespace.yaml
+│   ├── network
+│   │   ├── __init__.py
+│   │   └── platform-network-policy.yaml
+│   ├── policies
+│   │   └── __init__.py
+│   ├── rbac
+│   │   ├── __init__.py
+│   │   ├── platform-role-binding.yaml
+│   │   ├── platform-role.yaml
+│   │   └── platform-service-account.yaml
+│   └── validate-runtime-governance.sh
+├── sdk
+│   ├── artifacts
+│   │   └── __init__.py
+│   ├── dist
+│   │   ├── __init__.py
+│   │   ├── trading_platform_sdk-0.1.0-py3-none-any.whl
+│   │   └── trading_platform_sdk-0.1.0.tar.gz
+│   ├── __init__.py
+│   ├── pyproject.toml
+│   ├── README.md
+│   ├── registry
+│   │   ├── harbor-pypi.conf
+│   │   ├── __init__.py
+│   │   └── validate-registry.sh
+│   ├── requirements.txt
+│   ├── sdk
+│   │   ├── bootstrap
+│   │   │   ├── __init__.py
+│   │   │   └── validator.py
+│   │   ├── config
+│   │   │   ├── client.py
+│   │   │   └── __init__.py
+│   │   ├── context
+│   │   │   ├── execution_context.py
+│   │   │   ├── __init__.py
+│   │   │   └── trace_context.py
+│   │   ├── event
+│   │   │   ├── client.py
+│   │   │   ├── governance.py
+│   │   │   ├── __init__.py
+│   │   │   └── interceptor.py
+│   │   ├── flow_control
+│   │   │   ├── client.py
+│   │   │   └── __init__.py
+│   │   ├── __init__.py
+│   │   ├── lineage
+│   │   │   ├── client.py
+│   │   │   └── __init__.py
+│   │   ├── resilience
+│   │   │   ├── client.py
+│   │   │   └── __init__.py
+│   │   └── workflow
+│   │       ├── client.py
+│   │       └── __init__.py
+│   ├── setup.py
+│   ├── tests
+│   │   ├── __init__.py
+│   │   └── test_sdk.py
+│   ├── trading_platform_sdk.egg-info
+│   │   ├── dependency_links.txt
+│   │   ├── __init__.py
+│   │   ├── PKG-INFO
+│   │   ├── requires.txt
+│   │   ├── SOURCES.txt
+│   │   └── top_level.txt
+│   ├── validate-version.py
+│   └── VERSION
+├── security
+│   └── __init__.py
+├── service-template
+│   ├── config
+│   │   └── __init__.py
+│   ├── Dockerfile
+│   ├── helm
+│   │   ├── Chart.yaml
+│   │   ├── templates
+│   │   │   └── deployment.yaml
+│   │   └── values.yaml
+│   ├── __init__.py
+│   ├── requirements.txt
+│   ├── scripts
+│   │   ├── __init__.py
+│   │   └── validate-service-template.sh
+│   ├── src
+│   │   ├── app.py
+│   │   └── __init__.py
+│   └── tests
+│       ├── __init__.py
+│       └── test_health_contracts.py
+├── shared
+│   └── __init__.py
+├── system
+│   ├── deployment_order_enforcer.py
+│   ├── governance
+│   │   └── __init__.py
+│   ├── health
+│   │   ├── health_aggregator.py
+│   │   └── __init__.py
+│   ├── __init__.py
+│   ├── kill_switch
+│   │   ├── __init__.py
+│   │   └── kill_switch_controller.py
+│   └── tests
+│       ├── __init__.py
+│       └── test_platform_subsystems.py
+├── system_registry
+│   ├── execution_registry.py
+│   ├── __init__.py
+│   ├── README.md
+│   ├── runtime
+│   │   └── __init__.py
+│   └── tests
+│       └── __init__.py
+├── system-state
+│   └── __init__.py
+└── workflow_engine
+    ├── __init__.py
+    ├── runtime
+    │   └── __init__.py
+    ├── saga
+    │   ├── __init__.py
+    │   └── saga_orchestrator.py
+    ├── state_machine
+    │   ├── __init__.py
+    │   └── workflow_state_machine.py
+    └── tests
+        └── __init__.py
+/home/coreeye/corei/services
+├── alert-service
+│   ├── config
+│   ├── helm
+│   │   └── templates
+│   ├── src
+│   └── tests
+├── audit-service
+│   ├── config
+│   ├── Dockerfile
+│   ├── helm
+│   │   ├── Chart.yaml
+│   │   ├── templates
+│   │   │   ├── deployment.yaml
+│   │   │   └── service.yaml
+│   │   ├── tests
+│   │   └── values.yaml
+│   ├── requirements.txt
+│   ├── scripts
+│   ├── src
+│   │   └── app.py
+│   └── tests
+├── config-service
+│   ├── config
+│   ├── Dockerfile
+│   ├── helm
+│   │   ├── Chart.yaml
+│   │   ├── templates
+│   │   │   ├── deployment.yaml
+│   │   │   └── service.yaml
+│   │   ├── tests
+│   │   └── values.yaml
+│   ├── requirements.txt
+│   ├── scripts
+│   ├── src
+│   │   └── app.py
+│   └── tests
+├── config-snapshot-service
+│   ├── config
+│   ├── Dockerfile
+│   ├── helm
+│   │   ├── Chart.yaml
+│   │   ├── templates
+│   │   │   ├── deployment.yaml
+│   │   │   └── service.yaml
+│   │   ├── tests
+│   │   └── values.yaml
+│   ├── requirements.txt
+│   ├── scripts
+│   ├── src
+│   │   └── app.py
+│   └── tests
+├── event-ingestion-service
+│   ├── config
+│   ├── Dockerfile
+│   ├── helm
+│   │   ├── Chart.yaml
+│   │   ├── templates
+│   │   │   ├── deployment.yaml
+│   │   │   └── service.yaml
+│   │   ├── tests
+│   │   └── values.yaml
+│   ├── requirements.txt
+│   ├── scripts
+│   ├── src
+│   │   └── app.py
+│   └── tests
+├── event-ordering-service
+│   ├── config
+│   ├── helm
+│   │   └── templates
+│   ├── src
+│   └── tests
+├── event-validation-service
+│   ├── config
+│   ├── helm
+│   │   └── templates
+│   ├── src
+│   └── tests
+├── failure-handling-service
+│   ├── config
+│   ├── helm
+│   │   └── templates
+│   ├── src
+│   └── tests
+├── identity-service
+│   ├── config
+│   ├── Dockerfile
+│   ├── helm
+│   │   ├── Chart.yaml
+│   │   ├── templates
+│   │   │   ├── deployment.yaml
+│   │   │   └── service.yaml
+│   │   ├── tests
+│   │   └── values.yaml
+│   ├── requirements.txt
+│   ├── scripts
+│   ├── src
+│   │   └── app.py
+│   └── tests
+├── market-data-service
+│   ├── app
+│   │   └── main.py
+│   ├── config
+│   │   └── service.yaml
+│   ├── contracts
+│   │   └── events.yaml
+│   ├── Dockerfile
+│   ├── helm
+│   │   ├── Chart.yaml
+│   │   ├── templates
+│   │   │   ├── deployment.yaml
+│   │   │   └── service.yaml
+│   │   └── values.yaml
+│   ├── Makefile
+│   ├── README.md
+│   ├── scripts
+│   │   └── start.sh
+│   ├── service-metadata.yaml
+│   ├── service.yaml
+│   ├── src
+│   └── tests
+│       └── test_health.py
+├── orchestration-service
+│   ├── config
+│   ├── helm
+│   │   └── templates
+│   ├── src
+│   └── tests
+├── platform
+│   ├── audit-service
+│   ├── config
+│   ├── config-service
+│   ├── config-snapshot-service
+│   ├── helm
+│   │   └── templates
+│   ├── src
+│   └── tests
+├── portfolio-service
+│   ├── config
+│   ├── helm
+│   │   └── templates
+│   ├── src
+│   └── tests
+├── README.md
+├── replay-engine-service
+│   ├── config
+│   ├── helm
+│   │   └── templates
+│   ├── src
+│   └── tests
+├── snapshot-service
+│   ├── config
+│   ├── helm
+│   │   └── templates
+│   ├── src
+│   └── tests
+└── _template
+    ├── app
+    │   └── main.py
+    ├── config
+    │   └── service.yaml
+    ├── contracts
+    │   └── events.yaml
+    ├── Dockerfile
+    ├── helm
+    │   ├── Chart.yaml
+    │   ├── templates
+    │   │   ├── deployment.yaml
+    │   │   └── service.yaml
+    │   └── values.yaml
+    ├── Makefile
+    ├── README.md
+    ├── scripts
+    │   └── start.sh
+    ├── service.yaml
+    ├── src
+    └── tests
+        └── test_health.py
+
+115 directories, 63 files

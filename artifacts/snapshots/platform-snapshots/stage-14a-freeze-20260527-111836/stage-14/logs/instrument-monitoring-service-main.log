@@ -1,0 +1,451 @@
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111004994484.json
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111004994644.json
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111004994859.json
+[
+  {
+    "instrument_id": "BANKNIFTY",
+    "monitor_state": "READY_FOR_ENTRY",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:10:04.994429+00:00"
+  },
+  {
+    "instrument_id": "NIFTY50",
+    "monitor_state": "NO_TRADE",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:10:04.994611+00:00"
+  },
+  {
+    "instrument_id": "XAUUSD",
+    "monitor_state": "APPROACHING_EXIT",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:10:04.994829+00:00"
+  }
+]
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111035020329.json
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111035020538.json
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111035020639.json
+[
+  {
+    "instrument_id": "BANKNIFTY",
+    "monitor_state": "BLOCKED",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:10:35.020238+00:00"
+  },
+  {
+    "instrument_id": "NIFTY50",
+    "monitor_state": "READY_FOR_ENTRY",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:10:35.020510+00:00"
+  },
+  {
+    "instrument_id": "XAUUSD",
+    "monitor_state": "NO_TRADE",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:10:35.020614+00:00"
+  }
+]
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111105046396.json
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111105046607.json
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111105046698.json
+[
+  {
+    "instrument_id": "BANKNIFTY",
+    "monitor_state": "APPROACHING_EXIT",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:11:05.046271+00:00"
+  },
+  {
+    "instrument_id": "NIFTY50",
+    "monitor_state": "BLOCKED",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:11:05.046579+00:00"
+  },
+  {
+    "instrument_id": "XAUUSD",
+    "monitor_state": "READY_FOR_ENTRY",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:11:05.046675+00:00"
+  }
+]
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111135075842.json
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111135076241.json
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111135076395.json
+[
+  {
+    "instrument_id": "BANKNIFTY",
+    "monitor_state": "NO_TRADE",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:11:35.075716+00:00"
+  },
+  {
+    "instrument_id": "NIFTY50",
+    "monitor_state": "APPROACHING_EXIT",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:11:35.076060+00:00"
+  },
+  {
+    "instrument_id": "XAUUSD",
+    "monitor_state": "BLOCKED",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:11:35.076362+00:00"
+  }
+]
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111205104329.json
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111205104553.json
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111205104681.json
+[
+  {
+    "instrument_id": "BANKNIFTY",
+    "monitor_state": "READY_FOR_ENTRY",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:12:05.104231+00:00"
+  },
+  {
+    "instrument_id": "NIFTY50",
+    "monitor_state": "NO_TRADE",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:12:05.104518+00:00"
+  },
+  {
+    "instrument_id": "XAUUSD",
+    "monitor_state": "APPROACHING_EXIT",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:12:05.104651+00:00"
+  }
+]
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111235130470.json
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111235131185.json
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111235131636.json
+[
+  {
+    "instrument_id": "BANKNIFTY",
+    "monitor_state": "BLOCKED",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:12:35.130203+00:00"
+  },
+  {
+    "instrument_id": "NIFTY50",
+    "monitor_state": "READY_FOR_ENTRY",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:12:35.131050+00:00"
+  },
+  {
+    "instrument_id": "XAUUSD",
+    "monitor_state": "NO_TRADE",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:12:35.131530+00:00"
+  }
+]
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111305160322.json
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111305160610.json
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111305160732.json
+[
+  {
+    "instrument_id": "BANKNIFTY",
+    "monitor_state": "APPROACHING_EXIT",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:13:05.160223+00:00"
+  },
+  {
+    "instrument_id": "NIFTY50",
+    "monitor_state": "BLOCKED",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:13:05.160575+00:00"
+  },
+  {
+    "instrument_id": "XAUUSD",
+    "monitor_state": "READY_FOR_ENTRY",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:13:05.160702+00:00"
+  }
+]
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111335190198.json
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111335190396.json
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111335190505.json
+[
+  {
+    "instrument_id": "BANKNIFTY",
+    "monitor_state": "NO_TRADE",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:13:35.190105+00:00"
+  },
+  {
+    "instrument_id": "NIFTY50",
+    "monitor_state": "APPROACHING_EXIT",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:13:35.190364+00:00"
+  },
+  {
+    "instrument_id": "XAUUSD",
+    "monitor_state": "BLOCKED",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:13:35.190479+00:00"
+  }
+]
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111405219114.json
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111405219495.json
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111405219703.json
+[
+  {
+    "instrument_id": "BANKNIFTY",
+    "monitor_state": "READY_FOR_ENTRY",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:14:05.218949+00:00"
+  },
+  {
+    "instrument_id": "NIFTY50",
+    "monitor_state": "NO_TRADE",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:14:05.219432+00:00"
+  },
+  {
+    "instrument_id": "XAUUSD",
+    "monitor_state": "APPROACHING_EXIT",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:14:05.219651+00:00"
+  }
+]
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111435250118.json
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111435250289.json
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111435250370.json
+[
+  {
+    "instrument_id": "BANKNIFTY",
+    "monitor_state": "BLOCKED",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:14:35.250031+00:00"
+  },
+  {
+    "instrument_id": "NIFTY50",
+    "monitor_state": "READY_FOR_ENTRY",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:14:35.250264+00:00"
+  },
+  {
+    "instrument_id": "XAUUSD",
+    "monitor_state": "NO_TRADE",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:14:35.250350+00:00"
+  }
+]
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111505280050.json
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111505280275.json
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111505280379.json
+[
+  {
+    "instrument_id": "BANKNIFTY",
+    "monitor_state": "APPROACHING_EXIT",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:15:05.279959+00:00"
+  },
+  {
+    "instrument_id": "NIFTY50",
+    "monitor_state": "BLOCKED",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:15:05.280248+00:00"
+  },
+  {
+    "instrument_id": "XAUUSD",
+    "monitor_state": "READY_FOR_ENTRY",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:15:05.280340+00:00"
+  }
+]
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111535310336.json
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111535310579.json
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111535310709.json
+[
+  {
+    "instrument_id": "BANKNIFTY",
+    "monitor_state": "NO_TRADE",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:15:35.310196+00:00"
+  },
+  {
+    "instrument_id": "NIFTY50",
+    "monitor_state": "APPROACHING_EXIT",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:15:35.310542+00:00"
+  },
+  {
+    "instrument_id": "XAUUSD",
+    "monitor_state": "BLOCKED",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:15:35.310678+00:00"
+  }
+]
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111605340472.json
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111605340811.json
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111605340940.json
+[
+  {
+    "instrument_id": "BANKNIFTY",
+    "monitor_state": "READY_FOR_ENTRY",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:16:05.340369+00:00"
+  },
+  {
+    "instrument_id": "NIFTY50",
+    "monitor_state": "NO_TRADE",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:16:05.340772+00:00"
+  },
+  {
+    "instrument_id": "XAUUSD",
+    "monitor_state": "APPROACHING_EXIT",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:16:05.340909+00:00"
+  }
+]
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111635367015.json
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111635367250.json
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111635367395.json
+[
+  {
+    "instrument_id": "BANKNIFTY",
+    "monitor_state": "BLOCKED",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:16:35.366919+00:00"
+  },
+  {
+    "instrument_id": "NIFTY50",
+    "monitor_state": "READY_FOR_ENTRY",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:16:35.367211+00:00"
+  },
+  {
+    "instrument_id": "XAUUSD",
+    "monitor_state": "NO_TRADE",
+    "strategy_context": "multi_timeframe_alignment",
+    "session_state": "SESSION_OPEN",
+    "volatility_regime": "NORMAL",
+    "news_block_active": false,
+    "event_time": "2026-05-27T11:16:35.367360+00:00"
+  }
+]
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111705397031.json
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111705397299.json
+[EVENT EMITTED] topic=instrument_monitor_events file=20260527T111705397418.json

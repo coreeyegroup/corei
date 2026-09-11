@@ -1,0 +1,181 @@
+🧠 1. MACRO VIEW — PHASE A (TRADING MODEL DESIGN)
+🔷 What Phase A actually is
+
+	Phase A is the pure brain of the trading system.
+
+	It defines:
+
+	WHAT to trade + HOW to decide (logically)
+	NOT how to build it, NOT how to execute it.
+
+🔷 Mental Model (Very Important)
+
+	Think of Phase A like this:
+
+	MARKET DATA → SIGNALS → DECISION → TRADE INTENT
+
+	But:
+
+	No APIs
+	No brokers
+	No infra
+	No latency discussion
+
+	👉 Only logic, structure, and behavior
+
+🔷 What Phase A produces
+
+	Phase A outputs a Trading Model Specification, which includes:
+
+	Strategy definitions
+	Signal structure
+	Decision framework
+	Risk philosophy
+	Capital allocation logic
+	Portfolio structure
+
+	This becomes the single source of truth for everything downstream.
+
+🔷 Why Phase A is the most critical phase
+
+	If Phase A is wrong:
+
+	Phase B constraints become invalid
+	Phase C architecture becomes misaligned
+	Phase D execution becomes dangerous
+
+	👉 This is where most systems silently fail
+
+🔷 Internal Components of Phase A
+
+	Phase A is NOT one thing — it has internal layers:
+
+	1. Strategy Architecture (Step 1)
+	What types of strategies exist?
+	How are they structured?
+	2. Signal Model
+	What is a signal?
+	How is it standardized?
+	3. Decision Engine (Logical)
+	How signals combine
+	Conflict resolution
+	4. Risk Philosophy
+	Multi-layer risk logic
+	5. Capital Allocation Model
+	How capital is distributed
+	6. Portfolio Model
+	Structure of portfolio
+	7. Feedback / Learning Model
+	How system evolves
+
+🔷 Key Properties Phase A MUST satisfy
+
+	From blueprint + structure
+
+	Deterministic → same input = same output
+	Modular → strategies independent
+	Scalable → multi-strategy, multi-asset
+	Auditable → every decision traceable
+	Clean separation:
+	signal
+	decision
+	execution
+	risk
+
+🔷 What Phase A MUST NOT contain
+
+	Strictly prohibited:
+
+	Kafka / Redis / DB
+	APIs / brokers
+	latency engineering
+	infra decisions
+
+	👉 Violating this = architecture drift
+
+🔷	EXTERNAL INPUT ISOLATION (MANDATORY)
+
+		Phase A MUST operate exclusively on internally generated data:
+
+			Market Data
+			Strategy Logic
+			Signal Outputs
+			Decision Outputs
+
+		External inputs (from CEIL or any external system):
+
+			MUST NOT be used in:
+				signal generation
+				signal evaluation
+				decision logic
+				capital allocation
+				portfolio construction
+				feedback / learning
+
+		Constraint:
+
+			Phase A MUST remain fully deterministic and independent of any external trade source.
+
+🔷	GLOBAL EXTERNAL ISOLATION INVARIANT (MANDATORY)
+
+		This constraint applies to ALL steps within Phase A:
+
+			Step 1 → Strategy Architecture
+			Step 2 → Signal Model
+			Step 3 → Decision Engine
+			Step 4 → Execution Behavior
+			Step 5 → Risk Philosophy
+			Step 6 → Capital Allocation
+			Step 7 → Portfolio Model
+			Step 8 → Feedback / Learning
+
+		Rules:
+
+			Phase A MUST operate exclusively on internally generated data.
+
+			External inputs (including CEIL):
+
+				MUST NOT influence:
+					signal generation
+					signal evaluation
+					decision logic
+					execution behavior
+					risk interpretation
+					capital allocation
+					portfolio construction
+					feedback / learning
+
+		Violation:
+
+			Any external dependency in any step → Phase A INVALID
+
+
+🔷 One-line definition (institutional)
+
+Phase A = Formal mathematical + logical definition of trading behavior independent of system implementation
+
+TERMINOLOGY CANONICALIZATION (MANDATORY)
+
+    The following naming conventions MUST be used across all Phase A steps:
+
+        trade_intent
+            → canonical output of Decision Engine (Step 3)
+
+        trade_intent_snapshot
+            → immutable input representation used in downstream steps
+
+    Disallowed Terms (MUST NOT be used):
+
+        validated_decisions
+        decision output
+        decision set
+        decision result
+
+    Constraint:
+
+        Any non-canonical terminology → MUST be rejected during validation
+
+    Purpose:
+
+        ensure cross-phase consistency
+        eliminate semantic ambiguity

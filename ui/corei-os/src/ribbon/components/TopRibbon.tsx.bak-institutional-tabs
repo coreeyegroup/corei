@@ -1,0 +1,378 @@
+/******************************************************************************
+ *
+ * COREI OPERATING SYSTEM
+ *
+ * STAGE-25
+ * PHASE-17
+ *
+ * TOP RIBBON
+ *
+ * Institutional Operational Awareness Surface
+ *
+ * Ownership:
+ * Ribbon presentation / integration boundary.
+ *
+ * This component consumes existing authoritative context.
+ * It does not own runtime, state, command routing, workspace management,
+ * market connectivity, infrastructure health or persistence.
+ *
+ ******************************************************************************/
+
+import {
+    useState,
+    type ReactElement
+} from "react";
+
+import "../styles/top-ribbon.css";
+
+import {
+    getShellHeaderContext
+} from "../models/shell-header-context";
+
+
+type RibbonTab =
+    | "trading"
+    | "infrastructure";
+
+
+export function TopRibbon(): ReactElement {
+
+    const context =
+        getShellHeaderContext();
+
+    const [
+        activeTab,
+        setActiveTab
+    ] = useState<RibbonTab>("trading");
+
+
+    const runtimeReady =
+        context.runtime.state === "ready";
+
+    const runtimeHealthy =
+        context.runtime.health === "healthy";
+
+    const runtimeTone =
+        runtimeHealthy
+            ? "operational"
+            : "critical";
+
+
+    const workspaceReady =
+        context.workspace.workspaceState === "ready";
+
+
+    const workspaceTone =
+        workspaceReady
+            ? "operational"
+            : "attention";
+
+
+    const notificationTone =
+        context.notifications.critical > 0
+            ? "critical"
+            : context.notifications.unread > 0
+                ? "attention"
+                : "operational";
+
+
+    return (
+
+        <header
+            className="corei-top-ribbon"
+            data-ribbon-surface="institutional-operational"
+        >
+
+            {/* ================================================================
+             * PRIMARY INSTITUTIONAL IDENTITY / AWARENESS ROW
+             * ================================================================ */}
+
+            <div className="corei-ribbon-primary-row">
+
+                <section
+                    className="corei-ribbon-identity"
+                    data-ribbon-block="institution"
+                >
+                    <span className="corei-ribbon-brand">
+                        COREI
+                    </span>
+
+                    <span className="corei-ribbon-product">
+                        OS
+                    </span>
+
+                    <span className="corei-ribbon-organization">
+                        {context.institution.name}
+                    </span>
+                </section>
+
+
+                <section
+                    className="corei-ribbon-environment"
+                    data-ribbon-block="environment"
+                >
+                    <span className="corei-ribbon-label">
+                        ENV
+                    </span>
+
+                    <span className="corei-ribbon-value">
+                        {context.environment.environment}
+                    </span>
+
+                    <span className="corei-ribbon-region">
+                        {context.environment.region}
+                    </span>
+                </section>
+
+
+                <section
+                    className="corei-ribbon-session"
+                    data-ribbon-block="session"
+                >
+                    <span className="corei-ribbon-label">
+                        OPERATOR
+                    </span>
+
+                    <span className="corei-ribbon-value">
+                        {context.session.operatorLabel}
+                    </span>
+
+                    <span
+                        className="corei-ribbon-secondary"
+                        title={context.session.sessionId}
+                    >
+                        {context.session.sessionId}
+                    </span>
+                </section>
+
+
+                <section
+                    className={`corei-ribbon-workspace ${workspaceTone}`}
+                    data-ribbon-block="workspace"
+                >
+                    <span className="corei-ribbon-label">
+                        WORKSPACE
+                    </span>
+
+                    <span className="corei-ribbon-value">
+                        {context.workspace.workspaceName}
+                    </span>
+
+                    <span className="corei-ribbon-status">
+                        <i aria-hidden="true" />
+                        {context.workspace.workspaceState.toUpperCase()}
+                    </span>
+                </section>
+
+
+                <section
+                    className={`corei-ribbon-runtime ${runtimeTone}`}
+                    data-ribbon-block="runtime"
+                >
+                    <span className="corei-ribbon-label">
+                        RUNTIME
+                    </span>
+
+                    <span className="corei-ribbon-value">
+                        {context.runtime.state.toUpperCase()}
+                    </span>
+
+                    <span className="corei-ribbon-status">
+                        <i aria-hidden="true" />
+                        {context.runtime.health.toUpperCase()}
+                    </span>
+                </section>
+
+
+                <section
+                    className={`corei-ribbon-alerts ${notificationTone}`}
+                    data-ribbon-block="alerts"
+                >
+                    <span className="corei-ribbon-label">
+                        ALERTS
+                    </span>
+
+                    <strong>
+                        {context.notifications.total}
+                    </strong>
+
+                    {context.notifications.critical > 0 && (
+                        <span className="corei-ribbon-critical">
+                            {context.notifications.critical} CRIT
+                        </span>
+                    )}
+                </section>
+
+
+                <button
+                    type="button"
+                    className="corei-ribbon-command"
+                    aria-label="Open COREI command palette"
+                >
+                    <span>
+                        ⌘
+                    </span>
+
+                    <strong>
+                        Command
+                    </strong>
+
+                    <kbd>
+                        ⌘⇧P
+                    </kbd>
+                </button>
+
+
+                <section
+                    className="corei-ribbon-clock"
+                    data-ribbon-block="clock"
+                >
+                    <span className="corei-ribbon-clock-time">
+                        {new Date().toLocaleTimeString(
+                            undefined,
+                            {
+                                hour12: false,
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                second: "2-digit"
+                            }
+                        )}
+                    </span>
+
+                    <span className="corei-ribbon-clock-zone">
+                        IST
+                    </span>
+                </section>
+
+            </div>
+
+
+            {/* ================================================================
+             * SECONDARY INSTITUTIONAL OPERATIONS ROW
+             * ================================================================ */}
+
+            <div className="corei-ribbon-secondary-row">
+
+                <nav
+                    className="corei-ribbon-tabs"
+                    aria-label="Operational ribbon views"
+                >
+
+                    <button
+                        type="button"
+                        className={
+                            activeTab === "trading"
+                                ? "active"
+                                : ""
+                        }
+                        onClick={() => setActiveTab("trading")}
+                    >
+                        TRADING
+                    </button>
+
+                    <button
+                        type="button"
+                        className={
+                            activeTab === "infrastructure"
+                                ? "active"
+                                : ""
+                        }
+                        onClick={() => setActiveTab("infrastructure")}
+                    >
+                        INFRASTRUCTURE
+                    </button>
+
+                </nav>
+
+
+                {activeTab === "trading" ? (
+
+                    <div
+                        className="corei-ribbon-operational-strip"
+                        data-ribbon-view="trading"
+                    >
+
+                        <span>
+                            MARKET
+                            <strong>—</strong>
+                        </span>
+
+                        <span>
+                            SESSION
+                            <strong>—</strong>
+                        </span>
+
+                        <span>
+                            BROKER
+                            <strong>UNAVAILABLE</strong>
+                        </span>
+
+                        <span>
+                            DATA FEED
+                            <strong>UNAVAILABLE</strong>
+                        </span>
+
+                        <span>
+                            ORDER ROUTING
+                            <strong>UNAVAILABLE</strong>
+                        </span>
+
+                    </div>
+
+                ) : (
+
+                    <div
+                        className="corei-ribbon-operational-strip"
+                        data-ribbon-view="infrastructure"
+                    >
+
+                        <span>
+                            PLATFORM
+                            <strong>
+                                {runtimeReady
+                                    ? "READY"
+                                    : "STARTING"}
+                            </strong>
+                        </span>
+
+                        <span>
+                            RUNTIME
+                            <strong>
+                                {runtimeHealthy
+                                    ? "HEALTHY"
+                                    : "DEGRADED"}
+                            </strong>
+                        </span>
+
+                        <span>
+                            DATA
+                            <strong>UNAVAILABLE</strong>
+                        </span>
+
+                        <span>
+                            CACHE / REDIS
+                            <strong>UNAVAILABLE</strong>
+                        </span>
+
+                        <span>
+                            DATABASE
+                            <strong>UNAVAILABLE</strong>
+                        </span>
+
+                        <span>
+                            SERVICES
+                            <strong>UNAVAILABLE</strong>
+                        </span>
+
+                    </div>
+
+                )}
+
+            </div>
+
+        </header>
+    );
+}
+
+
+export default TopRibbon;

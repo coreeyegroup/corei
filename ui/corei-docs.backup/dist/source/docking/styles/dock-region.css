@@ -1,0 +1,45 @@
+/*
+------------------------------------------------------------
+COREI
+Stage 25
+Phase 19
+Step 06
+
+Dock Region Styles
+
+Presentation Layer Only
+------------------------------------------------------------
+*/
+
+.corei-dock-region {
+
+    position: relative;
+
+    display: flex;
+
+    flex: 1;
+
+    min-width: 0;
+
+    min-height: 0;
+
+    overflow: hidden;
+
+    background: transparent;
+
+}
+
+.corei-dock-region--center {
+
+    flex: 1;
+
+}
+
+.corei-dock-region--left,
+.corei-dock-region--right,
+.corei-dock-region--top,
+.corei-dock-region--bottom {
+
+    flex: 0 0 auto;
+
+}

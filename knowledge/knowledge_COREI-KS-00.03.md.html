@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COREI KS 00.03</title>
+  <style>
+  body {
+    background: #0A0D12;
+    color: #E3E7EC;
+    font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px 40px;
+  }
+  h1 {
+    font-size: 26px;
+    font-weight: 600;
+    color: #C6A46A;
+    margin: 24px 0 12px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 8px;
+  }
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #D4B88A;
+    margin: 20px 0 10px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 6px;
+  }
+  h3 {
+    font-size: 17px;
+    font-weight: 500;
+    color: #E3E7EC;
+    margin: 16px 0 8px 0;
+  }
+  h4 {
+    font-size: 15px;
+    font-weight: 500;
+    color: #C5CED9;
+    margin: 12px 0 6px 0;
+  }
+  p { margin-bottom: 8px; color: #C5CED9; }
+  ul, ol { padding-left: 24px; margin-bottom: 8px; color: #C5CED9; }
+  li { margin-bottom: 2px; }
+  code {
+    font-family: 'JetBrains Mono', 'Cascadia Code', monospace;
+    font-size: 13px;
+    background: rgba(255,255,255,0.05);
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid #28303C;
+    color: #C5CED9;
+  }
+  pre {
+    background: #18202A;
+    border: 1px solid #28303C;
+    border-radius: 6px;
+    padding: 16px 20px;
+    overflow: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 12px 0 16px 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #C5CED9;
+  }
+  pre code { background: transparent; border: none; padding: 0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 16px 0;
+    font-size: 13px;
+    color: #C5CED9;
+  }
+  th {
+    background: #18202A;
+    color: #C5CED9;
+    font-weight: 600;
+    text-align: left;
+    padding: 6px 12px;
+    border: 1px solid #28303C;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  td {
+    padding: 4px 12px;
+    border: 1px solid #28303C;
+    background: #0E1219;
+  }
+  tr:nth-child(even) td { background: #121821; }
+  blockquote {
+    border-left: 3px solid #C6A46A;
+    padding-left: 16px;
+    margin: 8px 0 12px 0;
+    color: #6E7883;
+    font-style: italic;
+  }
+  hr { border: none; border-top: 1px solid #28303C; margin: 24px 0; }
+  a { color: #8BB4F0; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  strong { color: #E3E7EC; font-weight: 600; }
+  img { max-width: 100%; border-radius: 4px; border: 1px solid #28303C; }
+  .doc-footer {
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid #28303C;
+    font-size: 12px;
+    color: #6E7883;
+    font-family: monospace;
+  }
+</style>
+</head>
+<body>
+  <div class="doc-header" style="background:#121821;border:1px solid #28303C;border-radius:8px;padding:1.2rem 1.8rem;margin-bottom:1.8rem;">
+    <div style="color:#C6A46A;font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:0.05em;">COREI · Knowledge System</div>
+    <div style="color:#6E7883;font-family:monospace;font-size:14px;margin-top:0.1rem;"></div>
+    <h1 style="font-size:28px;font-weight:600;color:#E3E7EC;margin:0.1rem 0;border-bottom:none;padding-bottom:0;">COREI KS 00.03</h1>
+    <div style="font-size:16px;color:#C5CED9;">00 · Constitutional</div>
+    <div style="display:flex;flex-wrap:wrap;gap:0.6rem 1.8rem;margin-top:0.6rem;font-size:13px;">
+      <span style="display:flex;align-items:baseline;gap:0.3rem;"><span style="color:#6E7883;text-transform:uppercase;font-size:10px;letter-spacing:0.04em;font-weight:600;">Status</span><span style="color:#E3E7EC;font-weight:500;">Approved</span></span>
+      <span style="display:flex;align-items:baseline;gap:0.3rem;"><span style="color:#6E7883;text-transform:uppercase;font-size:10px;letter-spacing:0.04em;font-weight:600;">Version</span><span style="color:#E3E7EC;font-weight:500;">1.0</span></span>
+      <span style="display:flex;align-items:baseline;gap:0.3rem;"><span style="color:#6E7883;text-transform:uppercase;font-size:10px;letter-spacing:0.04em;font-weight:600;">Classification</span><span style="color:#E3E7EC;font-weight:500;">Constitutional</span></span>
+      <span style="display:flex;align-items:baseline;gap:0.3rem;"><span style="color:#6E7883;text-transform:uppercase;font-size:10px;letter-spacing:0.04em;font-weight:600;">Owner</span><span style="color:#E3E7EC;font-weight:500;">COREI</span></span>
+      <span style="display:flex;align-items:baseline;gap:0.3rem;"><span style="color:#6E7883;text-transform:uppercase;font-size:10px;letter-spacing:0.04em;font-weight:600;">Repository</span><span style="color:#E3E7EC;font-weight:500;font-family:monospace;">knowledge/00-00/</span></span>
+    </div>
+
+  </div>
+
+
+
+  <h1>COREI KNOWLEDGE ARCHITECTURE</h1>
+<h1>DOCUMENT ID</h1>
+<h1>COREI-KS-00.03</h1>
+<h1>DOCUMENT NAME</h1>
+<h1>KNOWLEDGE ARCHITECTURE</h1>
+<h1>VERSION</h1>
+<h1>1.0</h1>
+<h1>STATUS</h1>
+<h1>APPROVED</h1>
+<h1>CLASSIFICATION</h1>
+<h1>CONSTITUTIONAL</h1>
+<h1>1. PURPOSE</h1>
+<p>The COREI Knowledge Architecture defines the structural<br>
+organization of institutional knowledge.</p>
+<p>Its purpose is to establish a deterministic architecture<br>
+through which Knowledge Assets are organized,<br>
+related, inherited, governed, navigated,<br>
+and continuously evolved.</p>
+<p>The Knowledge Architecture exists independently<br>
+of any implementation technology.</p>
+<p>The repository is one implementation.</p>
+<p>The architecture is permanent.</p>
+<h1>2. ARCHITECTURAL OBJECTIVES</h1>
+<p>The Knowledge Architecture exists to</p>
+<p>• organize institutional knowledge</p>
+<p>• define ownership</p>
+<p>• establish inheritance</p>
+<p>• eliminate ambiguity</p>
+<p>• support AI-native navigation</p>
+<p>• support deterministic retrieval</p>
+<p>• enable institutional scalability</p>
+<p>• preserve long-term continuity</p>
+<h1>3. ARCHITECTURAL PRINCIPLES</h1>
+<p>The COREI Knowledge Architecture follows these<br>
+constitutional principles.</p>
+<p>Knowledge has one authoritative owner.</p>
+<p>Knowledge has one authoritative location.</p>
+<p>Knowledge shall be organized by responsibility.</p>
+<p>Knowledge shall inherit from higher authority.</p>
+<p>Knowledge shall reference rather than duplicate.</p>
+<p>Knowledge shall remain deterministic.</p>
+<p>Knowledge shall remain machine-readable.</p>
+<p>Knowledge shall remain institutionally scalable.</p>
+<h1>4. KNOWLEDGE LAYERS</h1>
+<p>Institutional knowledge is organized into<br>
+four architectural layers.</p>
+<p>Knowledge Foundation</p>
+<p>↓</p>
+<p>Knowledge Domains</p>
+<p>↓</p>
+<p>Knowledge Assets</p>
+<p>↓</p>
+<p>Knowledge Content</p>
+<p>Each layer provides structure for the layer below.</p>
+<p>Authority flows downward.</p>
+<p>Dependencies may flow upward.</p>
+<p>Knowledge never bypasses architectural layers.</p>
+<h1>5. KNOWLEDGE FOUNDATION</h1>
+<p>The Knowledge Foundation governs the<br>
+entire Knowledge System.</p>
+<p>It defines</p>
+<p>Knowledge Model</p>
+<p>Knowledge System</p>
+<p>Knowledge Architecture</p>
+<p>Knowledge Governance</p>
+<p>Knowledge Lifecycle</p>
+<p>Knowledge Classification</p>
+<p>Knowledge Asset Standard</p>
+<p>Knowledge Naming Standard</p>
+<p>Knowledge Repository Standard</p>
+<p>Every Knowledge Domain inherits<br>
+from the Knowledge Foundation.</p>
+<h1>6. KNOWLEDGE DOMAINS</h1>
+<p>Knowledge Domains partition institutional knowledge<br>
+according to responsibility.</p>
+<p>Each domain owns exactly one institutional concern.</p>
+<p>Knowledge Domains shall not overlap.</p>
+<p>Knowledge Domains inherit from the<br>
+Knowledge Foundation.</p>
+<p>Knowledge Assets inherit from<br>
+their owning Knowledge Domain.</p>
+<h1>7. KNOWLEDGE ASSETS</h1>
+<p>Knowledge Assets represent the authoritative<br>
+units of institutional knowledge.</p>
+<p>Every Knowledge Asset shall</p>
+<p>have one identifier,</p>
+<p>have one owner,</p>
+<p>have one responsibility,</p>
+<p>have one authoritative location,</p>
+<p>define explicit dependencies,</p>
+<p>maintain version history,</p>
+<p>support institutional traceability.</p>
+<h1>8. KNOWLEDGE RELATIONSHIPS</h1>
+<p>Knowledge Assets interact through<br>
+explicit architectural relationships.</p>
+<p>Supported relationships include</p>
+<p>Inheritance</p>
+<p>Reference</p>
+<p>Dependency</p>
+<p>Extension</p>
+<p>Constraint</p>
+<p>Governance</p>
+<p>Support</p>
+<p>Relationships shall remain explicit.</p>
+<p>Hidden dependencies are prohibited.</p>
+<p>Knowledge duplication is prohibited.</p>
+<h1>9. ARCHITECTURAL INHERITANCE</h1>
+<p>Institutional authority follows one direction.</p>
+<p>Knowledge Foundation</p>
+<p>↓</p>
+<p>Knowledge Domain</p>
+<p>↓</p>
+<p>Knowledge Asset</p>
+<p>↓</p>
+<p>Knowledge Content</p>
+<p>Every lower layer inherits<br>
+the constitutional rules<br>
+defined above it.</p>
+<p>Lower layers may strengthen<br>
+higher-layer principles.</p>
+<p>They shall never contradict them.</p>
+<h1>10. KNOWLEDGE NAVIGATION</h1>
+<p>The Knowledge Architecture shall support<br>
+deterministic navigation.</p>
+<p>Knowledge shall be discoverable by</p>
+<p>Repository Path</p>
+<p>Knowledge Domain</p>
+<p>Knowledge Asset Identifier</p>
+<p>Classification</p>
+<p>Owner</p>
+<p>Relationships</p>
+<p>Dependencies</p>
+<p>Keywords</p>
+<p>Canonical Vocabulary</p>
+<p>Artificial intelligence and human users<br>
+shall navigate the same architecture.</p>
+<h1>11. ARCHITECTURAL SCALABILITY</h1>
+<p>The Knowledge Architecture is designed to<br>
+support institutional growth over decades.</p>
+<p>It shall support</p>
+<p>thousands of Knowledge Assets,</p>
+<p>multiple repositories,</p>
+<p>multiple engineering teams,</p>
+<p>multiple AI systems,</p>
+<p>multiple operational environments,</p>
+<p>future COREI platforms,</p>
+<p>and future institutional domains.</p>
+<p>Growth shall not require<br>
+architectural redesign.</p>
+<h1>12. AUTHORITY</h1>
+<p>The COREI Knowledge Architecture defines the<br>
+constitutional structure of institutional knowledge.</p>
+<p>Every Knowledge Foundation document,</p>
+<p>Knowledge Domain,</p>
+<p>Knowledge Asset,</p>
+<p>engineering standard,</p>
+<p>AI system,</p>
+<p>automation workflow,</p>
+<p>platform,</p>
+<p>and operational capability</p>
+<p>shall conform to this architecture.</p>
+<p>Changes to this architecture require<br>
+constitutional review.</p>
+<p>The architecture is expected to remain<br>
+stable throughout the lifetime of COREI.</p>
+<h1>END OF DOCUMENT</h1>
+<h1>DOCUMENT ID</h1>
+<h1>COREI-KS-00.03</h1>
+<h1>DOCUMENT NAME</h1>
+<h1>KNOWLEDGE ARCHITECTURE</h1>
+
+
+  <div class="doc-footer">
+    <span>DOCUMENT ID: </span>
+    <span>DOCUMENT NAME: COREI KS 00.03</span>
+    <span>VERSION: 1.0</span>
+  </div>
+</body>
+</html>

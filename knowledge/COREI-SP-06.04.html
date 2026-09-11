@@ -1,0 +1,2850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <title>Service Specifications</title>
+  <style>
+  body {
+    background: #0A0D12;
+    color: #E3E7EC;
+    font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px 40px;
+  }
+
+  h1 {
+    font-size: 26px;
+    font-weight: 600;
+    color: #C6A46A;
+    margin: 24px 0 12px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 8px;
+  }
+
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #D4B88A;
+    margin: 20px 0 10px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 6px;
+  }
+
+  h3 {
+    font-size: 17px;
+    font-weight: 500;
+    color: #E3E7EC;
+    margin: 16px 0 8px 0;
+  }
+
+  h4 {
+    font-size: 15px;
+    font-weight: 500;
+    color: #C5CED9;
+    margin: 12px 0 6px 0;
+  }
+
+  p {
+    margin-bottom: 8px;
+    color: #C5CED9;
+  }
+
+  ul,
+  ol {
+    padding-left: 24px;
+    margin-bottom: 8px;
+    color: #C5CED9;
+  }
+
+  li {
+    margin-bottom: 2px;
+  }
+
+  code {
+    font-family: 'JetBrains Mono', 'Cascadia Code', monospace;
+    font-size: 13px;
+    background: rgba(255,255,255,0.05);
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid #28303C;
+    color: #C5CED9;
+  }
+
+  pre {
+    background: #18202A;
+    border: 1px solid #28303C;
+    border-radius: 6px;
+    padding: 16px 20px;
+    overflow: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 12px 0 16px 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #C5CED9;
+  }
+
+  pre code {
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 16px 0;
+    font-size: 13px;
+    color: #C5CED9;
+  }
+
+  th {
+    background: #18202A;
+    color: #C5CED9;
+    font-weight: 600;
+    text-align: left;
+    padding: 6px 12px;
+    border: 1px solid #28303C;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  td {
+    padding: 4px 12px;
+    border: 1px solid #28303C;
+    background: #0E1219;
+  }
+
+  tr:nth-child(even) td {
+    background: #121821;
+  }
+
+  blockquote {
+    border-left: 3px solid #C6A46A;
+    padding-left: 16px;
+    margin: 8px 0 12px 0;
+    color: #6E7883;
+    font-style: italic;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #28303C;
+    margin: 24px 0;
+  }
+
+  a {
+    color: #8BB4F0;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  strong {
+    color: #E3E7EC;
+    font-weight: 600;
+  }
+
+  img {
+    max-width: 100%;
+    border-radius: 4px;
+    border: 1px solid #28303C;
+  }
+
+  .doc-footer {
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid #28303C;
+    font-size: 12px;
+    color: #6E7883;
+    font-family: monospace;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+</style>
+</head>
+
+<body>
+
+  <div
+    class="doc-header"
+    style="
+      background:#121821;
+      border:1px solid #28303C;
+      border-radius:8px;
+      padding:1.2rem 1.8rem;
+      margin-bottom:1.8rem;
+    "
+  >
+
+    <div
+      style="
+        color:#C6A46A;
+        font-weight:600;
+        font-size:13px;
+        text-transform:uppercase;
+        letter-spacing:0.05em;
+      "
+    >
+      COREI · Knowledge System
+    </div>
+
+
+    <div
+      style="
+        color:#6E7883;
+        font-family:monospace;
+        font-size:14px;
+        margin-top:0.1rem;
+      "
+    >
+      COREI-SP-06.04
+    </div>
+
+
+    <h1
+      style="
+        font-size:28px;
+        font-weight:600;
+        color:#E3E7EC;
+        margin:0.1rem 0;
+        border-bottom:none;
+        padding-bottom:0;
+      "
+    >
+      Service Specifications
+    </h1>
+
+    <div
+      style="
+        font-size:16px;
+        color:#C5CED9;
+      "
+    >
+      06 — Specifications
+      ·
+      Constitutional
+    </div>
+
+    <div
+      style="
+        display:flex;
+        flex-wrap:wrap;
+        gap:0.6rem 1.8rem;
+        margin-top:0.6rem;
+        font-size:13px;
+      "
+    >
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Status
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          Approved
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Version
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          1
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Classification
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          Constitutional
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Owner
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          COREI
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Repository
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+            font-family:monospace;
+          "
+        >
+          knowledge/06-specifications/
+        </span>
+      </span>
+
+    </div>
+
+
+    <div
+      style="
+        margin-top:0.8rem;
+        padding-top:0.6rem;
+        border-top:1px solid #28303C;
+        display:flex;
+        flex-wrap:wrap;
+        gap:0.3rem;
+        align-items:center;
+      "
+    >
+      <span
+        style="
+          font-size:11px;
+          text-transform:uppercase;
+          color:#6E7883;
+          letter-spacing:0.04em;
+          font-weight:600;
+          margin-right:0.4rem;
+        "
+      >
+        Depends On
+      </span>
+
+      <span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-KS-00.00</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-KS-00.01</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-KS-00.02</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-KS-00.03</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-KS-00.04</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ID-01.00</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ID-01.01</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ID-01.02</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ID-01.05</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-GV-02.00</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-GV-02.01</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-GV-02.02</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-GV-02.03</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-AR-03.00</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-AR-03.01</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-AR-03.02</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-AR-03.03</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-AR-03.04</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-AR-03.05</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-AR-03.06</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-AR-03.07</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-AR-03.08</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-AR-03.09</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-EN-04.00</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-EN-04.01</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-EN-04.02</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-EN-04.03</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-EN-04.04</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-EN-04.05</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-EN-04.06</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-EN-04.07</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-EN-04.08</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-EN-04.09</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ST-05.00</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ST-05.01</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ST-05.02</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ST-05.03</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ST-05.04</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ST-05.05</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ST-05.06</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ST-05.07</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ST-05.08</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ST-05.09</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-SP-06.00</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-SP-06.01</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-SP-06.02</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-SP-06.03</span>
+
+    </div>
+
+
+  </div>
+
+
+  <div
+    style="
+      background:#0E1219;
+      border:1px solid #28303C;
+      border-radius:6px;
+      padding:0.8rem 1.2rem;
+      margin:0.6rem 0 1.2rem 0;
+      font-family:monospace;
+      font-size:12px;
+      color:#C5CED9;
+      overflow-x:auto;
+      line-height:2;
+    "
+  >
+
+    <div
+      style="
+        font-weight:600;
+        color:#C6A46A;
+        margin-bottom:0.25rem;
+      "
+    >
+      Dependency Chain
+    </div>
+
+    <div
+      style="
+        display:flex;
+        flex-wrap:wrap;
+        align-items:center;
+        gap:4px;
+      "
+    >
+
+      <span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-KS-00.00</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-KS-00.01</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-KS-00.02</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-KS-00.03</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-KS-00.04</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ID-01.00</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ID-01.01</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ID-01.02</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ID-01.05</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-GV-02.00</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-GV-02.01</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-GV-02.02</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-GV-02.03</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-AR-03.00</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-AR-03.01</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-AR-03.02</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-AR-03.03</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-AR-03.04</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-AR-03.05</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-AR-03.06</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-AR-03.07</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-AR-03.08</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-AR-03.09</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-EN-04.00</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-EN-04.01</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-EN-04.02</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-EN-04.03</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-EN-04.04</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-EN-04.05</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-EN-04.06</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-EN-04.07</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-EN-04.08</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-EN-04.09</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ST-05.00</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ST-05.01</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ST-05.02</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ST-05.03</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ST-05.04</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ST-05.05</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ST-05.06</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ST-05.07</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ST-05.08</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ST-05.09</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-SP-06.00</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-SP-06.01</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-SP-06.02</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-SP-06.03</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span>
+
+
+      <span
+        style="
+          color:#C6A46A;
+          font-weight:600;
+          background:rgba(198,164,106,0.15);
+          padding:0 8px;
+          border-radius:3px;
+          white-space:nowrap;
+        "
+      >
+        COREI-SP-06.04
+      </span>
+
+
+    </div>
+
+  </div>
+
+
+  <h1>COREI SERVICE SPECIFICATIONS</h1>
+<h1>DOCUMENT ID</h1>
+<h1>COREI-SP-06.04</h1>
+<h1>DOCUMENT NAME</h1>
+<h1>SERVICE SPECIFICATIONS</h1>
+<h1>REPOSITORY FILE</h1>
+<h1>knowledge/06-specifications/COREI-SP-06.04-SERVICE-SPECIFICATIONS.md</h1>
+<h1>VERSION</h1>
+<h1>1.0</h1>
+<h1>STATUS</h1>
+<h1>APPROVED</h1>
+<h1>CLASSIFICATION</h1>
+<h1>CONSTITUTIONAL</h1>
+<h1>1. PURPOSE</h1>
+<p>The COREI Service Specifications define the<br>
+authoritative implementation requirements governing<br>
+every independently owned executable service within<br>
+the COREI Institution.</p>
+<p>Their purpose is to ensure that services remain</p>
+<p>architecturally bounded,</p>
+<p>capability-oriented,</p>
+<p>contract-governed,</p>
+<p>deterministic,</p>
+<p>secure,</p>
+<p>observable,</p>
+<p>resilient,</p>
+<p>deployable,</p>
+<p>operable,</p>
+<p>maintainable,</p>
+<p>and independently evolvable.</p>
+<p>A service is not merely a running process.</p>
+<p>A service is a governed institutional capability<br>
+with explicit ownership,<br>
+contracts,<br>
+runtime responsibilities,<br>
+and lifecycle obligations.</p>
+<h1>2. SCOPE</h1>
+<p>These specifications govern</p>
+<p>microservices,</p>
+<p>application services,</p>
+<p>domain services,</p>
+<p>platform services,</p>
+<p>infrastructure services,</p>
+<p>data services,</p>
+<p>security services,</p>
+<p>automation services,</p>
+<p>artificial intelligence services,</p>
+<p>trading services,</p>
+<p>risk services,</p>
+<p>portfolio services,</p>
+<p>execution services,</p>
+<p>position services,</p>
+<p>market data services,</p>
+<p>analytics services,</p>
+<p>and future independently operated service<br>
+capabilities.</p>
+<p>Technology-specific service specifications MAY<br>
+extend this document.</p>
+<p>No extension may weaken these requirements.</p>
+<h1>3. SERVICE DEFINITION</h1>
+<p>Within COREI,</p>
+<p>a service is an explicitly owned executable<br>
+capability that performs a defined institutional<br>
+responsibility through governed interfaces and<br>
+operates within an approved architectural boundary.</p>
+<p>A service SHALL define</p>
+<p>purpose,</p>
+<p>ownership,</p>
+<p>capability,</p>
+<p>boundary,</p>
+<p>contracts,</p>
+<p>dependencies,</p>
+<p>state responsibility,</p>
+<p>security boundary,</p>
+<p>runtime behaviour,</p>
+<p>failure behaviour,</p>
+<p>observability,</p>
+<p>operational responsibility,</p>
+<p>and lifecycle.</p>
+<h1>4. SERVICE CLASSIFICATION</h1>
+<p>Every service SHALL declare its primary<br>
+classification.</p>
+<p>Permitted classifications include</p>
+<p>Domain Service</p>
+<p>Application Service</p>
+<p>Platform Service</p>
+<p>Infrastructure Service</p>
+<p>Data Service</p>
+<p>Security Service</p>
+<p>Integration Service</p>
+<p>Automation Service</p>
+<p>Intelligence Service</p>
+<p>Control Service</p>
+<p>Gateway Service</p>
+<p>Worker Service</p>
+<p>Scheduler Service</p>
+<p>Other approved institutional classification</p>
+<p>Service classification SHALL describe the<br>
+service’s primary responsibility.</p>
+<p>Classification SHALL NOT replace architectural<br>
+ownership.</p>
+<h1>5. SERVICE IDENTITY</h1>
+<p>Every service SHALL possess a unique and stable<br>
+institutional identity.</p>
+<p>Service identity SHALL define</p>
+<p>service name,</p>
+<p>service identifier,</p>
+<p>institutional purpose,</p>
+<p>owned capability,</p>
+<p>architectural domain,</p>
+<p>service classification,</p>
+<p>accountable owner,</p>
+<p>engineering owner,</p>
+<p>runtime owner,</p>
+<p>criticality,</p>
+<p>and lifecycle status.</p>
+<p>Service identity SHALL remain stable across<br>
+deployments.</p>
+<p>Runtime instance identity SHALL be distinct from<br>
+logical service identity.</p>
+<h1>6. SERVICE OWNERSHIP</h1>
+<p>Every service SHALL have explicit ownership.</p>
+<p>Ownership SHALL define responsibility for</p>
+<p>architecture compliance,</p>
+<p>service behaviour,</p>
+<p>contracts,</p>
+<p>data ownership,</p>
+<p>security,</p>
+<p>dependencies,</p>
+<p>runtime operation,</p>
+<p>observability,</p>
+<p>incident response,</p>
+<p>release management,</p>
+<p>documentation,</p>
+<p>maintenance,</p>
+<p>and retirement.</p>
+<p>Shared contribution is permitted.</p>
+<p>Undefined service accountability is prohibited.</p>
+<h1>7. SINGLE RESPONSIBILITY</h1>
+<p>Every service SHALL own a coherent institutional<br>
+capability or closely related capability boundary.</p>
+<p>A service SHALL NOT become an uncontrolled<br>
+collection of unrelated responsibilities.</p>
+<p>Service boundaries SHALL follow approved<br>
+architecture and ownership.</p>
+<p>Technical convenience SHALL NOT override<br>
+institutional capability boundaries.</p>
+<h1>8. SERVICE BOUNDARY</h1>
+<p>Every service SHALL explicitly define</p>
+<p>what it owns,</p>
+<p>what it does not own,</p>
+<p>which operations it performs,</p>
+<p>which data it owns,</p>
+<p>which state it owns,</p>
+<p>which contracts it publishes,</p>
+<p>which contracts it consumes,</p>
+<p>which dependencies it requires,</p>
+<p>and which failure responsibilities it accepts.</p>
+<p>Service boundaries SHALL be explicit.</p>
+<p>Hidden cross-service ownership is prohibited.</p>
+<h1>9. CAPABILITY ORIENTATION</h1>
+<p>Services SHALL expose institutional capabilities.</p>
+<p>Services SHALL NOT expose internal implementation<br>
+structure as an accidental public interface.</p>
+<p>A service capability SHALL represent meaningful<br>
+institutional behaviour.</p>
+<p>Consumers SHALL depend upon capabilities and<br>
+contracts rather than internal code structure.</p>
+<h1>10. CONTRACT-FIRST SPECIFICATION</h1>
+<p>Every externally consumed service interface SHALL<br>
+be contract-defined.</p>
+<p>Contracts MAY include</p>
+<p>synchronous API contracts,</p>
+<p>asynchronous event contracts,</p>
+<p>command contracts,</p>
+<p>query contracts,</p>
+<p>data contracts,</p>
+<p>schema contracts,</p>
+<p>stream contracts,</p>
+<p>file exchange contracts,</p>
+<p>and operational contracts.</p>
+<p>Contracts SHALL be defined before consumers depend<br>
+upon them.</p>
+<p>Undocumented service contracts are prohibited.</p>
+<h1>11. CONTRACT OWNERSHIP</h1>
+<p>Every published contract SHALL have an explicit<br>
+owner.</p>
+<p>The service owning the contract SHALL be<br>
+responsible for</p>
+<p>semantic meaning,</p>
+<p>schema,</p>
+<p>versioning,</p>
+<p>compatibility,</p>
+<p>validation,</p>
+<p>documentation,</p>
+<p>deprecation,</p>
+<p>and retirement.</p>
+<p>Consumers SHALL NOT redefine provider-owned<br>
+contracts locally.</p>
+<h1>12. SYNCHRONOUS INTERFACE SPECIFICATION</h1>
+<p>Where synchronous communication is used,<br>
+the service SHALL define</p>
+<p>operation identity,</p>
+<p>request contract,</p>
+<p>response contract,</p>
+<p>authentication requirements,</p>
+<p>authorization requirements,</p>
+<p>validation rules,</p>
+<p>timeout behaviour,</p>
+<p>error contract,</p>
+<p>idempotency requirements,</p>
+<p>rate limits where applicable,</p>
+<p>and compatibility requirements.</p>
+<p>Synchronous interfaces SHALL NOT expose<br>
+undocumented behaviour.</p>
+<h1>13. ASYNCHRONOUS INTERFACE SPECIFICATION</h1>
+<p>Where asynchronous communication is used,<br>
+the service SHALL define</p>
+<p>event or message identity,</p>
+<p>producer ownership,</p>
+<p>consumer expectations,</p>
+<p>schema,</p>
+<p>version,</p>
+<p>partitioning requirements where applicable,</p>
+<p>ordering requirements,</p>
+<p>delivery semantics,</p>
+<p>duplicate handling,</p>
+<p>idempotency requirements,</p>
+<p>retry behaviour,</p>
+<p>dead-letter behaviour,</p>
+<p>retention expectations,</p>
+<p>and observability requirements.</p>
+<p>Asynchronous communication SHALL remain<br>
+contract-governed.</p>
+<h1>14. COMMAND SPECIFICATION</h1>
+<p>Commands SHALL represent explicit requests for<br>
+behaviour.</p>
+<p>Every command SHALL define</p>
+<p>command identity,</p>
+<p>issuer requirements,</p>
+<p>target capability,</p>
+<p>payload contract,</p>
+<p>authorization requirements,</p>
+<p>validation rules,</p>
+<p>idempotency requirements,</p>
+<p>expected outcome,</p>
+<p>failure conditions,</p>
+<p>and audit requirements</p>
+<p>where applicable.</p>
+<p>A command SHALL NOT imply successful execution<br>
+merely because it was accepted.</p>
+<h1>15. EVENT SPECIFICATION</h1>
+<p>Events SHALL represent facts that have occurred.</p>
+<p>Every event SHALL define</p>
+<p>event identity,</p>
+<p>producer,</p>
+<p>business or institutional meaning,</p>
+<p>schema,</p>
+<p>version,</p>
+<p>event time,</p>
+<p>publication time where applicable,</p>
+<p>correlation context,</p>
+<p>causation context,</p>
+<p>and compatibility requirements.</p>
+<p>Published events SHALL NOT be silently reinterpreted<br>
+after release.</p>
+<h1>16. QUERY SPECIFICATION</h1>
+<p>Queries SHALL represent requests for information<br>
+without hidden state-changing behaviour.</p>
+<p>Every query interface SHALL define</p>
+<p>query identity,</p>
+<p>input contract,</p>
+<p>output contract,</p>
+<p>authorization requirements,</p>
+<p>consistency expectations,</p>
+<p>pagination requirements where applicable,</p>
+<p>performance expectations where applicable,</p>
+<p>and failure behaviour.</p>
+<p>Queries SHALL NOT produce undocumented side<br>
+effects.</p>
+<h1>17. SERVICE COMMUNICATION</h1>
+<p>Service communication SHALL follow approved<br>
+architecture.</p>
+<p>Communication mechanisms SHALL be selected based on</p>
+<p>capability semantics,</p>
+<p>latency requirements,</p>
+<p>consistency requirements,</p>
+<p>delivery requirements,</p>
+<p>failure isolation,</p>
+<p>operational requirements,</p>
+<p>and institutional architecture.</p>
+<p>Communication technology SHALL NOT define service<br>
+ownership.</p>
+<p>Service boundaries SHALL remain valid if transport<br>
+technology changes.</p>
+<h1>18. DEPENDENCY SPECIFICATION</h1>
+<p>Every service SHALL explicitly declare its<br>
+dependencies.</p>
+<p>Dependencies MAY include</p>
+<p>other services,</p>
+<p>platform capabilities,</p>
+<p>databases,</p>
+<p>event infrastructure,</p>
+<p>identity systems,</p>
+<p>secret management,</p>
+<p>configuration systems,</p>
+<p>external providers,</p>
+<p>broker systems,</p>
+<p>market data providers,</p>
+<p>and infrastructure capabilities.</p>
+<p>Dependencies SHALL be</p>
+<p>necessary,</p>
+<p>owned,</p>
+<p>traceable,</p>
+<p>observable,</p>
+<p>version-aware where applicable,</p>
+<p>and architecturally permitted.</p>
+<p>Hidden runtime dependencies are prohibited.</p>
+<h1>19. DEPENDENCY DIRECTION</h1>
+<p>Service dependencies SHALL preserve approved<br>
+architectural direction.</p>
+<p>A foundational service SHALL NOT depend upon a<br>
+higher-level consumer solely for implementation<br>
+convenience.</p>
+<p>Circular service dependencies SHALL be avoided.</p>
+<p>Where circular dependency exists,<br>
+the ownership and capability boundaries SHALL be<br>
+reviewed.</p>
+<p>Patch mechanisms SHALL NOT conceal invalid<br>
+dependency architecture.</p>
+<h1>20. DEPENDENCY FAILURE</h1>
+<p>Every service SHALL define behaviour for critical<br>
+dependency failure.</p>
+<p>The service SHALL determine,<br>
+where applicable,</p>
+<p>timeout behaviour,</p>
+<p>retry behaviour,</p>
+<p>backoff strategy,</p>
+<p>circuit breaking,</p>
+<p>degraded mode,</p>
+<p>fallback behaviour,</p>
+<p>queueing behaviour,</p>
+<p>rejection behaviour,</p>
+<p>recovery behaviour,</p>
+<p>and operator notification.</p>
+<p>Dependency failure SHALL be treated as a designed<br>
+runtime condition.</p>
+<h1>21. STATE OWNERSHIP</h1>
+<p>Every stateful service SHALL explicitly define the<br>
+state it owns.</p>
+<p>A service SHALL be the authoritative owner of its<br>
+owned state unless architecture explicitly defines<br>
+another ownership model.</p>
+<p>Other services SHALL access owned state through<br>
+approved contracts.</p>
+<p>Direct cross-service database access SHOULD NOT be<br>
+permitted unless explicitly approved by<br>
+architecture.</p>
+<p>Shared persistence SHALL NOT create ambiguous state<br>
+ownership.</p>
+<h1>22. STATELESS SERVICES</h1>
+<p>A service MAY be stateless.</p>
+<p>Stateless services SHALL NOT depend upon hidden<br>
+local state for correctness.</p>
+<p>Ephemeral runtime state SHALL NOT become an<br>
+unmanaged institutional source of truth.</p>
+<p>Where state is externalized,<br>
+ownership and consistency responsibilities SHALL<br>
+remain explicit.</p>
+<h1>23. PERSISTENCE SPECIFICATION</h1>
+<p>Services owning persistent state SHALL define</p>
+<p>persistence technology,</p>
+<p>data ownership,</p>
+<p>schema ownership,</p>
+<p>transaction boundaries,</p>
+<p>consistency model,</p>
+<p>retention requirements,</p>
+<p>backup requirements,</p>
+<p>recovery requirements,</p>
+<p>migration requirements,</p>
+<p>and audit requirements</p>
+<p>where applicable.</p>
+<p>Persistence technology SHALL serve the service<br>
+capability.</p>
+<p>Persistence technology SHALL NOT redefine service<br>
+boundaries.</p>
+<h1>24. TRANSACTION SPECIFICATION</h1>
+<p>Every service SHALL define transaction boundaries<br>
+for operations requiring atomicity or consistency.</p>
+<p>Distributed transactions SHALL NOT be introduced<br>
+without explicit architectural justification.</p>
+<p>Where cross-service consistency is required,<br>
+the service design SHALL define</p>
+<p>coordination model,</p>
+<p>eventual consistency behaviour,</p>
+<p>compensation behaviour,</p>
+<p>failure handling,</p>
+<p>and reconciliation requirements.</p>
+<p>Consistency expectations SHALL be explicit.</p>
+<h1>25. IDEMPOTENCY SPECIFICATION</h1>
+<p>Operations exposed to retries,<br>
+duplicate delivery,<br>
+or repeated requests</p>
+<p>SHALL define idempotency behaviour.</p>
+<p>Idempotency requirements SHALL specify</p>
+<p>idempotency key or identity where applicable,</p>
+<p>deduplication scope,</p>
+<p>retention period where applicable,</p>
+<p>repeated request behaviour,</p>
+<p>and conflict behaviour.</p>
+<p>Duplicate processing SHALL NOT produce unintended<br>
+institutional state changes.</p>
+<h1>26. ORDERING SPECIFICATION</h1>
+<p>Where correctness depends upon ordering,<br>
+ordering requirements SHALL be explicit.</p>
+<p>The service SHALL define</p>
+<p>ordering scope,</p>
+<p>ordering key,</p>
+<p>sequence expectations,</p>
+<p>out-of-order handling,</p>
+<p>duplicate handling,</p>
+<p>and recovery behaviour.</p>
+<p>Global ordering SHALL NOT be assumed unless<br>
+explicitly guaranteed.</p>
+<h1>27. TIME SPECIFICATION</h1>
+<p>Services SHALL treat time as an explicit<br>
+institutional concern where behaviour depends upon<br>
+time.</p>
+<p>Time-sensitive services SHALL define</p>
+<p>authoritative time source,</p>
+<p>timezone convention,</p>
+<p>event time,</p>
+<p>processing time,</p>
+<p>effective time,</p>
+<p>expiration behaviour,</p>
+<p>clock tolerance,</p>
+<p>and timestamp precision</p>
+<p>where applicable.</p>
+<p>Institutional timestamps SHOULD use a canonical<br>
+time representation.</p>
+<p>Local timezone assumptions SHALL NOT become hidden<br>
+service behaviour.</p>
+<h1>28. IDENTIFIER SPECIFICATION</h1>
+<p>Institutional entities and operations SHALL use<br>
+stable identifiers appropriate to their scope.</p>
+<p>Identifiers SHALL be</p>
+<p>unambiguous,</p>
+<p>traceable,</p>
+<p>collision-resistant within required scope,</p>
+<p>and stable for the required lifecycle.</p>
+<p>Display names SHALL NOT be used as authoritative<br>
+identifiers where identity may change.</p>
+<p>Identifier ownership SHALL be explicit.</p>
+<h1>29. VALIDATION SPECIFICATION</h1>
+<p>Every service SHALL validate untrusted or<br>
+externally supplied inputs.</p>
+<p>Validation SHALL occur at the appropriate ownership<br>
+boundary.</p>
+<p>Validation MAY include</p>
+<p>schema validation,</p>
+<p>type validation,</p>
+<p>range validation,</p>
+<p>semantic validation,</p>
+<p>authorization validation,</p>
+<p>state validation,</p>
+<p>and contract validation.</p>
+<p>Invalid input SHALL fail explicitly.</p>
+<p>Silent coercion SHOULD NOT alter institutional<br>
+meaning.</p>
+<h1>30. ERROR SPECIFICATION</h1>
+<p>Every service SHALL define an explicit error model.</p>
+<p>Errors SHALL distinguish,<br>
+where applicable,</p>
+<p>validation errors,</p>
+<p>authentication errors,</p>
+<p>authorization errors,</p>
+<p>not-found conditions,</p>
+<p>conflict conditions,</p>
+<p>dependency failures,</p>
+<p>timeouts,</p>
+<p>capacity failures,</p>
+<p>internal failures,</p>
+<p>and temporary failures.</p>
+<p>Error responses SHALL NOT expose sensitive internal<br>
+information.</p>
+<p>Errors SHALL be observable and diagnosable.</p>
+<h1>31. FAILURE SPECIFICATION</h1>
+<p>Failure behaviour SHALL be designed.</p>
+<p>Every critical service SHALL define behaviour for</p>
+<p>invalid input,</p>
+<p>dependency failure,</p>
+<p>network interruption,</p>
+<p>message duplication,</p>
+<p>message loss where relevant,</p>
+<p>out-of-order processing,</p>
+<p>storage failure,</p>
+<p>partial execution,</p>
+<p>resource exhaustion,</p>
+<p>process termination,</p>
+<p>restart,</p>
+<p>and recovery.</p>
+<p>Undefined failure behaviour is an implementation<br>
+risk.</p>
+<h1>32. RETRY SPECIFICATION</h1>
+<p>Retries SHALL be explicitly governed.</p>
+<p>A retry policy SHALL define</p>
+<p>which failures are retryable,</p>
+<p>maximum attempts,</p>
+<p>backoff behaviour,</p>
+<p>jitter where applicable,</p>
+<p>timeout interaction,</p>
+<p>idempotency requirements,</p>
+<p>and terminal failure handling.</p>
+<p>Unlimited retries are prohibited.</p>
+<p>Retries SHALL NOT amplify system failure.</p>
+<h1>33. TIMEOUT SPECIFICATION</h1>
+<p>Remote calls SHALL define finite timeout behaviour.</p>
+<p>Timeouts SHALL reflect</p>
+<p>service expectations,</p>
+<p>dependency characteristics,</p>
+<p>user or workflow deadlines,</p>
+<p>and operational risk.</p>
+<p>Infinite waiting is prohibited for production<br>
+service dependencies.</p>
+<p>Timeout failure SHALL be observable.</p>
+<h1>34. DEAD-LETTER SPECIFICATION</h1>
+<p>Asynchronous processing requiring dead-letter<br>
+handling SHALL define</p>
+<p>dead-letter destination,</p>
+<p>failure metadata,</p>
+<p>original message preservation,</p>
+<p>security requirements,</p>
+<p>retention,</p>
+<p>replay procedure,</p>
+<p>ownership,</p>
+<p>and operational response.</p>
+<p>Dead-letter storage SHALL NOT become an unmanaged<br>
+permanent failure archive.</p>
+<h1>35. RECONCILIATION SPECIFICATION</h1>
+<p>Services participating in eventually consistent or<br>
+externally dependent workflows SHALL define<br>
+reconciliation where required.</p>
+<p>Reconciliation SHALL identify</p>
+<p>authoritative state,</p>
+<p>comparison logic,</p>
+<p>discrepancy classification,</p>
+<p>repair authority,</p>
+<p>audit evidence,</p>
+<p>and escalation behaviour.</p>
+<p>Critical institutional state SHALL NOT depend<br>
+solely upon assumed successful delivery.</p>
+<h1>36. SECURITY SPECIFICATION</h1>
+<p>Every service SHALL define its security boundary.</p>
+<p>Security requirements SHALL include,<br>
+where applicable,</p>
+<p>service identity,</p>
+<p>workload identity,</p>
+<p>authentication,</p>
+<p>authorization,</p>
+<p>least privilege,</p>
+<p>secret access,</p>
+<p>data protection,</p>
+<p>network trust,</p>
+<p>audit logging,</p>
+<p>security monitoring,</p>
+<p>and incident responsibilities.</p>
+<p>Security SHALL be implemented by design.</p>
+<h1>37. AUTHENTICATION SPECIFICATION</h1>
+<p>Every protected service interface SHALL define how<br>
+the caller’s identity is authenticated.</p>
+<p>Authentication SHALL use approved institutional<br>
+identity mechanisms.</p>
+<p>Anonymous access SHALL be explicitly permitted<br>
+rather than accidentally available.</p>
+<p>Authentication failure SHALL fail securely.</p>
+<h1>38. AUTHORIZATION SPECIFICATION</h1>
+<p>Authentication SHALL NOT imply authorization.</p>
+<p>Every protected capability SHALL define</p>
+<p>who may invoke it,</p>
+<p>under which role,</p>
+<p>permission,</p>
+<p>policy,</p>
+<p>scope,</p>
+<p>or institutional authority.</p>
+<p>Authorization SHALL be enforced at an appropriate<br>
+trusted boundary.</p>
+<p>Client-side authorization alone is insufficient.</p>
+<h1>39. LEAST PRIVILEGE</h1>
+<p>Services SHALL operate with the minimum privileges<br>
+required for their institutional responsibility.</p>
+<p>Least privilege applies to</p>
+<p>runtime identity,</p>
+<p>database access,</p>
+<p>message infrastructure,</p>
+<p>secret access,</p>
+<p>filesystem access,</p>
+<p>network access,</p>
+<p>cloud resources,</p>
+<p>and administrative operations.</p>
+<p>Broad privileges SHALL require explicit<br>
+justification.</p>
+<h1>40. SECRET MANAGEMENT</h1>
+<p>Services SHALL obtain secrets through approved<br>
+secret management mechanisms.</p>
+<p>Secrets SHALL NOT be</p>
+<p>hard-coded,</p>
+<p>committed to source control,</p>
+<p>embedded in container images,</p>
+<p>written to logs,</p>
+<p>or exposed through diagnostic interfaces.</p>
+<p>Secret rotation SHALL be supported where required.</p>
+<h1>41. DATA PROTECTION</h1>
+<p>Services SHALL protect institutional data according<br>
+to classification and risk.</p>
+<p>Protection requirements MAY include</p>
+<p>encryption in transit,</p>
+<p>encryption at rest,</p>
+<p>field-level protection,</p>
+<p>masking,</p>
+<p>tokenization,</p>
+<p>access restrictions,</p>
+<p>retention controls,</p>
+<p>and secure deletion.</p>
+<p>Sensitive data SHALL NOT be unnecessarily copied.</p>
+<h1>42. OBSERVABILITY SPECIFICATION</h1>
+<p>Every production service SHALL be observable.</p>
+<p>Observability SHALL include,<br>
+where applicable,</p>
+<p>structured logs,</p>
+<p>metrics,</p>
+<p>distributed traces,</p>
+<p>health status,</p>
+<p>readiness status,</p>
+<p>audit events,</p>
+<p>dependency status,</p>
+<p>failure diagnostics,</p>
+<p>and service-level indicators.</p>
+<p>Observability SHALL support both engineering and<br>
+operations.</p>
+<h1>43. LOGGING SPECIFICATION</h1>
+<p>Service logs SHALL be structured where practical.</p>
+<p>Logs SHOULD include,<br>
+where applicable,</p>
+<p>timestamp,</p>
+<p>service identity,</p>
+<p>service version,</p>
+<p>runtime instance identity,</p>
+<p>severity,</p>
+<p>event identity,</p>
+<p>correlation identifier,</p>
+<p>trace identifier,</p>
+<p>operation context,</p>
+<p>and failure context.</p>
+<p>Logs SHALL NOT contain secrets.</p>
+<p>Sensitive data SHALL be minimized or protected.</p>
+<p>Logging SHALL support diagnosis without becoming<br>
+an uncontrolled data store.</p>
+<h1>44. METRICS SPECIFICATION</h1>
+<p>Production services SHALL expose metrics sufficient<br>
+to understand</p>
+<p>availability,</p>
+<p>traffic,</p>
+<p>latency,</p>
+<p>errors,</p>
+<p>resource pressure,</p>
+<p>dependency health,</p>
+<p>and capability-specific operational behaviour.</p>
+<p>Metrics SHALL have stable semantic meaning.</p>
+<p>High-cardinality dimensions SHALL be controlled.</p>
+<p>Metrics SHALL support operational decisions.</p>
+<h1>45. TRACING SPECIFICATION</h1>
+<p>Distributed service interactions SHOULD propagate<br>
+trace context through approved mechanisms.</p>
+<p>Tracing SHALL support understanding of</p>
+<p>request flow,</p>
+<p>service boundaries,</p>
+<p>dependency latency,</p>
+<p>failure propagation,</p>
+<p>and distributed execution.</p>
+<p>Trace propagation SHALL NOT compromise security.</p>
+<h1>46. CORRELATION SPECIFICATION</h1>
+<p>Multi-step institutional workflows SHALL support<br>
+correlation where operational traceability requires<br>
+it.</p>
+<p>Correlation identifiers SHALL be propagated across<br>
+relevant service boundaries.</p>
+<p>Correlation SHALL support investigation without<br>
+becoming the authoritative identity of unrelated<br>
+entities.</p>
+<h1>47. AUDIT SPECIFICATION</h1>
+<p>Security-sensitive,<br>
+financially significant,<br>
+governance-relevant,<br>
+or institutionally critical operations</p>
+<p>SHALL produce audit evidence where required.</p>
+<p>Audit events SHOULD identify</p>
+<p>actor,</p>
+<p>action,</p>
+<p>target,</p>
+<p>time,</p>
+<p>result,</p>
+<p>authority,</p>
+<p>and relevant correlation context.</p>
+<p>Audit records SHALL be protected from unauthorized<br>
+modification.</p>
+<h1>48. HEALTH SPECIFICATION</h1>
+<p>Every production service SHALL define health<br>
+semantics.</p>
+<p>Health SHALL distinguish,<br>
+where applicable,</p>
+<p>process health,</p>
+<p>service health,</p>
+<p>dependency health,</p>
+<p>readiness,</p>
+<p>and degraded operation.</p>
+<p>A running process SHALL NOT automatically be<br>
+considered a healthy service.</p>
+<h1>49. LIVENESS SPECIFICATION</h1>
+<p>Liveness SHALL indicate whether the runtime process<br>
+is capable of continuing execution.</p>
+<p>Liveness checks SHALL NOT depend upon every remote<br>
+dependency unless failure of that dependency<br>
+requires process restart.</p>
+<p>Incorrect liveness checks SHALL NOT create restart<br>
+loops during dependency outages.</p>
+<h1>50. READINESS SPECIFICATION</h1>
+<p>Readiness SHALL indicate whether the service can<br>
+safely accept its intended workload.</p>
+<p>Readiness MAY depend upon</p>
+<p>required initialization,</p>
+<p>critical configuration,</p>
+<p>required credentials,</p>
+<p>critical dependencies,</p>
+<p>schema readiness,</p>
+<p>or runtime state.</p>
+<p>A service SHALL NOT receive production traffic<br>
+before it is ready.</p>
+<h1>51. STARTUP SPECIFICATION</h1>
+<p>Service startup SHALL be deterministic.</p>
+<p>Startup SHALL define</p>
+<p>configuration loading,</p>
+<p>configuration validation,</p>
+<p>secret acquisition,</p>
+<p>dependency initialization,</p>
+<p>schema or migration responsibilities,</p>
+<p>consumer registration,</p>
+<p>health state transition,</p>
+<p>and failure behaviour.</p>
+<p>A service SHALL fail clearly when mandatory startup<br>
+requirements are not satisfied.</p>
+<h1>52. SHUTDOWN SPECIFICATION</h1>
+<p>Production services SHALL support controlled<br>
+shutdown where required.</p>
+<p>Shutdown behaviour SHALL define</p>
+<p>new workload rejection,</p>
+<p>in-flight work completion,</p>
+<p>message acknowledgement behaviour,</p>
+<p>connection closure,</p>
+<p>state persistence,</p>
+<p>resource cleanup,</p>
+<p>and termination deadline.</p>
+<p>Shutdown SHALL minimize avoidable data loss and<br>
+duplicate processing.</p>
+<h1>53. CONFIGURATION SPECIFICATION</h1>
+<p>Service configuration SHALL be</p>
+<p>explicit,</p>
+<p>validated,</p>
+<p>documented,</p>
+<p>environment-aware,</p>
+<p>and separate from secrets.</p>
+<p>Configuration changes SHALL NOT silently redefine<br>
+architecture.</p>
+<p>Invalid mandatory configuration SHALL prevent<br>
+unsafe service startup.</p>
+<p>Configuration defaults SHALL be safe.</p>
+<h1>54. FEATURE CONTROL SPECIFICATION</h1>
+<p>Where runtime feature control is used,<br>
+feature state SHALL be governed.</p>
+<p>Feature controls SHALL define</p>
+<p>ownership,</p>
+<p>default state,</p>
+<p>scope,</p>
+<p>targeting rules where applicable,</p>
+<p>audit requirements,</p>
+<p>failure behaviour,</p>
+<p>and retirement.</p>
+<p>Temporary feature controls SHALL not become<br>
+permanent undocumented architecture.</p>
+<h1>55. RESOURCE SPECIFICATION</h1>
+<p>Production services SHALL define expected resource<br>
+requirements.</p>
+<p>Requirements MAY include</p>
+<p>CPU,</p>
+<p>memory,</p>
+<p>storage,</p>
+<p>network,</p>
+<p>connection limits,</p>
+<p>worker concurrency,</p>
+<p>queue capacity,</p>
+<p>and external quota usage.</p>
+<p>Resource limits and requests SHOULD reflect<br>
+measured service behaviour.</p>
+<p>Unbounded resource consumption is prohibited.</p>
+<h1>56. CAPACITY SPECIFICATION</h1>
+<p>Critical services SHALL define capacity assumptions.</p>
+<p>Capacity specifications SHOULD identify</p>
+<p>expected workload,</p>
+<p>peak workload,</p>
+<p>concurrency,</p>
+<p>throughput,</p>
+<p>latency objectives,</p>
+<p>dependency limits,</p>
+<p>and scaling constraints.</p>
+<p>Capacity SHALL be measured and reviewed through<br>
+operations.</p>
+<h1>57. SCALING SPECIFICATION</h1>
+<p>Services requiring scaling SHALL define the scaling<br>
+model.</p>
+<p>Scaling MAY be</p>
+<p>vertical,</p>
+<p>horizontal,</p>
+<p>partition-based,</p>
+<p>queue-based,</p>
+<p>scheduled,</p>
+<p>or manually governed.</p>
+<p>Scaling behaviour SHALL preserve</p>
+<p>state correctness,</p>
+<p>ordering requirements,</p>
+<p>idempotency,</p>
+<p>dependency capacity,</p>
+<p>and operational safety.</p>
+<p>Horizontal scalability SHALL NOT be assumed for<br>
+stateful behaviour without validation.</p>
+<h1>58. PERFORMANCE SPECIFICATION</h1>
+<p>Performance requirements SHALL be defined where<br>
+performance affects institutional capability.</p>
+<p>Requirements MAY include</p>
+<p>latency,</p>
+<p>throughput,</p>
+<p>processing deadlines,</p>
+<p>resource efficiency,</p>
+<p>queue delay,</p>
+<p>and recovery time.</p>
+<p>Performance objectives SHALL be measurable.</p>
+<p>Optimization SHALL NOT compromise correctness,<br>
+security,<br>
+or architectural integrity.</p>
+<h1>59. RESILIENCE SPECIFICATION</h1>
+<p>Critical services SHALL define resilience<br>
+requirements.</p>
+<p>Resilience MAY include</p>
+<p>redundancy,</p>
+<p>failure isolation,</p>
+<p>retry control,</p>
+<p>circuit breaking,</p>
+<p>queue buffering,</p>
+<p>graceful degradation,</p>
+<p>reconciliation,</p>
+<p>backup,</p>
+<p>restore,</p>
+<p>and disaster recovery.</p>
+<p>Resilience SHALL be validated.</p>
+<p>It SHALL NOT be assumed from infrastructure alone.</p>
+<h1>60. AVAILABILITY SPECIFICATION</h1>
+<p>Services with availability requirements SHALL<br>
+define</p>
+<p>availability objective,</p>
+<p>maintenance expectations,</p>
+<p>dependency assumptions,</p>
+<p>failure tolerance,</p>
+<p>recovery expectations,</p>
+<p>and measurement method.</p>
+<p>Availability requirements SHALL align with<br>
+institutional criticality.</p>
+<p>Not every service requires identical availability.</p>
+<h1>61. SERVICE-LEVEL INDICATORS</h1>
+<p>Critical services SHOULD define service-level<br>
+indicators representing actual service capability.</p>
+<p>Indicators MAY include</p>
+<p>successful request rate,</p>
+<p>processing completion rate,</p>
+<p>latency,</p>
+<p>freshness,</p>
+<p>correctness,</p>
+<p>availability,</p>
+<p>or domain-specific measures.</p>
+<p>Infrastructure uptime alone SHALL NOT be treated as<br>
+proof of institutional capability availability.</p>
+<h1>62. SERVICE-LEVEL OBJECTIVES</h1>
+<p>Where required,<br>
+services SHOULD define measurable service-level<br>
+objectives.</p>
+<p>Objectives SHALL be based upon institutional need.</p>
+<p>Objectives SHALL support</p>
+<p>reliability decisions,</p>
+<p>capacity decisions,</p>
+<p>incident prioritization,</p>
+<p>and engineering investment.</p>
+<p>Unmeasured reliability expectations SHALL NOT be<br>
+treated as operational commitments.</p>
+<h1>63. DEPLOYMENT SPECIFICATION</h1>
+<p>Every production service SHALL define a repeatable<br>
+deployment model.</p>
+<p>Deployment SHALL identify</p>
+<p>artifact,</p>
+<p>version,</p>
+<p>configuration,</p>
+<p>secret references,</p>
+<p>runtime identity,</p>
+<p>resource requirements,</p>
+<p>network requirements,</p>
+<p>health checks,</p>
+<p>observability integration,</p>
+<p>and rollback or recovery strategy.</p>
+<p>Production deployment SHALL use traceable<br>
+artifacts.</p>
+<h1>64. ARTIFACT SPECIFICATION</h1>
+<p>Every deployable service artifact SHALL be<br>
+traceable to</p>
+<p>source repository,</p>
+<p>source revision,</p>
+<p>service version,</p>
+<p>build process,</p>
+<p>dependency state,</p>
+<p>validation evidence,</p>
+<p>and publication location</p>
+<p>where applicable.</p>
+<p>Production artifacts SHOULD be immutable.</p>
+<p>A validated artifact SHALL NOT be modified in<br>
+place.</p>
+<h1>65. VERSION SPECIFICATION</h1>
+<p>Every independently releasable service SHALL have a<br>
+traceable version.</p>
+<p>Service versioning SHALL support</p>
+<p>release identification,</p>
+<p>incident investigation,</p>
+<p>compatibility analysis,</p>
+<p>rollback,</p>
+<p>and operational traceability.</p>
+<p>Runtime environments SHALL expose the deployed<br>
+service version through approved operational<br>
+mechanisms.</p>
+<h1>66. RELEASE SPECIFICATION</h1>
+<p>Service releases SHALL be governed.</p>
+<p>Release requirements SHALL include,<br>
+where applicable,</p>
+<p>build success,</p>
+<p>test success,</p>
+<p>contract validation,</p>
+<p>security validation,</p>
+<p>artifact publication,</p>
+<p>deployment eligibility,</p>
+<p>migration readiness,</p>
+<p>rollback readiness,</p>
+<p>and approval.</p>
+<p>A release SHALL correspond to a known validated<br>
+service state.</p>
+<h1>67. DEPLOYMENT SAFETY</h1>
+<p>Critical service deployments SHALL minimize<br>
+uncontrolled production risk.</p>
+<p>Deployment strategies MAY include</p>
+<p>rolling deployment,</p>
+<p>blue-green deployment,</p>
+<p>canary deployment,</p>
+<p>controlled activation,</p>
+<p>or other approved strategies.</p>
+<p>The strategy SHALL match service criticality and<br>
+failure risk.</p>
+<p>Deployment automation SHALL preserve rollback or<br>
+recovery capability where required.</p>
+<h1>68. DATABASE MIGRATION SPECIFICATION</h1>
+<p>Services owning persistent schemas SHALL govern<br>
+schema migration.</p>
+<p>Migrations SHALL be</p>
+<p>versioned,</p>
+<p>reviewed,</p>
+<p>repeatable,</p>
+<p>traceable,</p>
+<p>and compatible with deployment strategy.</p>
+<p>Destructive changes SHALL define</p>
+<p>data impact,</p>
+<p>backup requirements,</p>
+<p>migration path,</p>
+<p>rollback limitations,</p>
+<p>and approval.</p>
+<p>Production schema changes SHALL NOT depend upon<br>
+undocumented manual intervention.</p>
+<h1>69. EVENT MIGRATION SPECIFICATION</h1>
+<p>Changes to published event contracts SHALL define</p>
+<p>compatibility,</p>
+<p>producer transition,</p>
+<p>consumer transition,</p>
+<p>schema versioning,</p>
+<p>dual-publication requirements where applicable,</p>
+<p>and retirement conditions.</p>
+<p>Consumers SHALL receive sufficient migration<br>
+support for approved compatibility obligations.</p>
+<p>Silent event reinterpretation is prohibited.</p>
+<h1>70. API EVOLUTION SPECIFICATION</h1>
+<p>Published APIs SHALL evolve through governed<br>
+compatibility.</p>
+<p>Breaking changes SHALL define</p>
+<p>affected consumers,</p>
+<p>new contract,</p>
+<p>migration path,</p>
+<p>transition period,</p>
+<p>deprecation,</p>
+<p>and retirement.</p>
+<p>A new implementation SHALL NOT silently change the<br>
+meaning of an existing contract.</p>
+<h1>71. SERVICE DISCOVERY</h1>
+<p>Where dynamic service discovery is used,<br>
+service registration and resolution SHALL be<br>
+governed.</p>
+<p>Consumers SHALL resolve services through approved<br>
+platform mechanisms.</p>
+<p>Hard-coded environment-specific endpoints SHOULD<br>
+NOT become institutional integration contracts.</p>
+<h1>72. NETWORK SPECIFICATION</h1>
+<p>Every production service SHALL define required<br>
+network communication.</p>
+<p>Network access SHALL follow least privilege.</p>
+<p>Required inbound and outbound communication SHALL<br>
+be explicit.</p>
+<p>Unnecessary network exposure is prohibited.</p>
+<p>Internal network location SHALL NOT be treated as<br>
+sufficient proof of trust.</p>
+<h1>73. EXTERNAL INTEGRATION SPECIFICATION</h1>
+<p>Services integrating with external systems SHALL<br>
+define</p>
+<p>external owner,</p>
+<p>contract,</p>
+<p>authentication,</p>
+<p>rate limits,</p>
+<p>timeouts,</p>
+<p>retry policy,</p>
+<p>failure behaviour,</p>
+<p>data classification,</p>
+<p>reconciliation,</p>
+<p>observability,</p>
+<p>and operational escalation.</p>
+<p>External provider behaviour SHALL NOT be assumed to<br>
+match internal institutional guarantees.</p>
+<h1>74. PROVIDER ABSTRACTION</h1>
+<p>Where institutional architecture defines provider<br>
+abstraction,<br>
+services SHALL consume the approved abstraction<br>
+rather than directly couple to provider-specific<br>
+implementation.</p>
+<p>Provider-specific logic SHALL remain within its<br>
+approved ownership boundary.</p>
+<p>Existing provider platforms SHALL be consumed<br>
+rather than rebuilt.</p>
+<h1>75. MULTI-TENANCY SPECIFICATION</h1>
+<p>Services supporting multiple institutional<br>
+contexts SHALL explicitly define isolation.</p>
+<p>Contexts MAY include</p>
+<p>account,</p>
+<p>broker,</p>
+<p>portfolio,</p>
+<p>strategy,</p>
+<p>team,</p>
+<p>region,</p>
+<p>market,</p>
+<p>currency,</p>
+<p>custodian,</p>
+<p>exchange,</p>
+<p>jurisdiction,</p>
+<p>or other institutional dimensions.</p>
+<p>Isolation SHALL define</p>
+<p>identity,</p>
+<p>authorization,</p>
+<p>data separation,</p>
+<p>configuration,</p>
+<p>resource boundaries,</p>
+<p>and audit requirements</p>
+<p>where applicable.</p>
+<p>Context SHALL NOT be inferred from unsafe global<br>
+state.</p>
+<h1>76. FINANCIAL SERVICE SPECIFICATION</h1>
+<p>Services performing financially significant<br>
+operations SHALL preserve</p>
+<p>determinism,</p>
+<p>traceability,</p>
+<p>idempotency,</p>
+<p>auditability,</p>
+<p>reconciliation,</p>
+<p>and explicit state transitions.</p>
+<p>Financially significant operations SHALL NOT rely<br>
+upon best-effort execution without defined recovery<br>
+or reconciliation.</p>
+<p>Every critical financial decision and state change<br>
+SHOULD be attributable to</p>
+<p>input,</p>
+<p>authority,</p>
+<p>time,</p>
+<p>version,</p>
+<p>and outcome.</p>
+<h1>77. TRADING SERVICE SPECIFICATION</h1>
+<p>Trading services SHALL preserve explicit boundaries<br>
+between</p>
+<p>market intelligence,</p>
+<p>signal intelligence,</p>
+<p>decision intelligence,</p>
+<p>risk intelligence,</p>
+<p>portfolio intelligence,</p>
+<p>execution intelligence,</p>
+<p>position intelligence,</p>
+<p>performance intelligence,</p>
+<p>and system intelligence</p>
+<p>according to approved architecture.</p>
+<p>A lower or downstream service SHALL NOT silently<br>
+assume ownership of an upstream institutional<br>
+decision.</p>
+<p>Execution safety SHALL take precedence over<br>
+throughput or convenience.</p>
+<h1>78. ORDER EXECUTION SPECIFICATION</h1>
+<p>Services participating in order execution SHALL<br>
+define</p>
+<p>order identity,</p>
+<p>decision authority,</p>
+<p>risk approval,</p>
+<p>portfolio context,</p>
+<p>broker context,</p>
+<p>account context,</p>
+<p>instrument identity,</p>
+<p>execution intent,</p>
+<p>idempotency,</p>
+<p>submission state,</p>
+<p>broker acknowledgement,</p>
+<p>execution state,</p>
+<p>rejection state,</p>
+<p>cancellation state,</p>
+<p>reconciliation,</p>
+<p>and audit evidence.</p>
+<p>Order submission SHALL NOT be treated as execution<br>
+confirmation.</p>
+<h1>79. RISK CONTROL SPECIFICATION</h1>
+<p>Services subject to risk controls SHALL fail safely<br>
+when mandatory risk authority is unavailable.</p>
+<p>Risk controls SHALL be explicit,<br>
+traceable,<br>
+and enforceable.</p>
+<p>A downstream execution capability SHALL NOT bypass<br>
+mandatory risk decisions.</p>
+<p>Risk exceptions SHALL require explicit governed<br>
+authority.</p>
+<h1>80. ARTIFICIAL INTELLIGENCE SERVICE SPECIFICATION</h1>
+<p>Services using artificial intelligence or machine<br>
+learning SHALL explicitly define</p>
+<p>model identity,</p>
+<p>model version,</p>
+<p>input contract,</p>
+<p>output contract,</p>
+<p>confidence or uncertainty semantics where<br>
+applicable,</p>
+<p>decision authority,</p>
+<p>human or system oversight,</p>
+<p>fallback behaviour,</p>
+<p>audit requirements,</p>
+<p>and model lifecycle.</p>
+<p>Model output SHALL NOT silently acquire authority<br>
+beyond approved architecture.</p>
+<p>Probabilistic intelligence SHALL remain bounded by<br>
+deterministic institutional controls where<br>
+required.</p>
+<h1>81. AUTOMATION SERVICE SPECIFICATION</h1>
+<p>Automation services SHALL define</p>
+<p>trigger,</p>
+<p>input,</p>
+<p>workflow state,</p>
+<p>owned actions,</p>
+<p>external effects,</p>
+<p>retry behaviour,</p>
+<p>idempotency,</p>
+<p>failure handling,</p>
+<p>audit evidence,</p>
+<p>and recovery.</p>
+<p>Automation SHALL NOT obscure institutional<br>
+decision authority.</p>
+<p>Visual workflow implementation SHALL comply with<br>
+the same service contracts and operational<br>
+requirements as code-based automation.</p>
+<h1>82. SERVICE TESTING</h1>
+<p>Every service SHALL define tests appropriate to its<br>
+responsibility and risk.</p>
+<p>Testing MAY include</p>
+<p>unit testing,</p>
+<p>contract testing,</p>
+<p>integration testing,</p>
+<p>component testing,</p>
+<p>state transition testing,</p>
+<p>failure testing,</p>
+<p>security testing,</p>
+<p>performance testing,</p>
+<p>resilience testing,</p>
+<p>and acceptance testing.</p>
+<p>Critical service behaviour SHALL be tested under<br>
+both success and failure conditions.</p>
+<h1>83. CONTRACT TESTING</h1>
+<p>Published contracts SHALL be tested.</p>
+<p>Contract tests SHALL validate</p>
+<p>schema,</p>
+<p>required fields,</p>
+<p>semantic expectations where practical,</p>
+<p>compatibility,</p>
+<p>error behaviour,</p>
+<p>and version expectations.</p>
+<p>Provider and consumer contract validation SHOULD be<br>
+automated where appropriate.</p>
+<h1>84. INTEGRATION TESTING</h1>
+<p>Integration tests SHALL validate service behaviour<br>
+across real or representative dependency<br>
+boundaries.</p>
+<p>Integration testing SHALL NOT replace contract<br>
+definition.</p>
+<p>Test environments SHALL avoid hidden dependencies<br>
+that cannot be reproduced.</p>
+<h1>85. FAILURE TESTING</h1>
+<p>Critical services SHALL test important failure<br>
+conditions.</p>
+<p>Failure tests SHOULD include,<br>
+where applicable,</p>
+<p>dependency timeout,</p>
+<p>dependency unavailability,</p>
+<p>duplicate delivery,</p>
+<p>invalid input,</p>
+<p>partial execution,</p>
+<p>restart,</p>
+<p>resource pressure,</p>
+<p>and recovery.</p>
+<p>A service SHALL NOT be considered resilient solely<br>
+because its success path works.</p>
+<h1>86. SECURITY TESTING</h1>
+<p>Services SHALL undergo security testing appropriate<br>
+to risk.</p>
+<p>Testing MAY include</p>
+<p>authentication testing,</p>
+<p>authorization testing,</p>
+<p>input validation testing,</p>
+<p>dependency scanning,</p>
+<p>secret scanning,</p>
+<p>static analysis,</p>
+<p>container scanning,</p>
+<p>and penetration testing</p>
+<p>where required.</p>
+<p>Security validation SHALL produce evidence.</p>
+<h1>87. PERFORMANCE TESTING</h1>
+<p>Services with performance requirements SHALL be<br>
+validated against representative workloads.</p>
+<p>Performance testing SHALL measure relevant</p>
+<p>latency,</p>
+<p>throughput,</p>
+<p>resource consumption,</p>
+<p>queue behaviour,</p>
+<p>and dependency impact.</p>
+<p>Performance results SHALL be interpreted within<br>
+institutional correctness and safety constraints.</p>
+<h1>88. SERVICE DOCUMENTATION</h1>
+<p>Every active service SHALL maintain or reference<br>
+authoritative documentation defining</p>
+<p>purpose,</p>
+<p>ownership,</p>
+<p>architecture boundary,</p>
+<p>contracts,</p>
+<p>dependencies,</p>
+<p>configuration,</p>
+<p>state ownership,</p>
+<p>security,</p>
+<p>observability,</p>
+<p>build,</p>
+<p>test,</p>
+<p>deployment,</p>
+<p>operations,</p>
+<p>failure behaviour,</p>
+<p>recovery,</p>
+<p>and lifecycle.</p>
+<p>Service operation SHALL NOT depend upon individual<br>
+memory.</p>
+<h1>89. RUNBOOK REQUIREMENT</h1>
+<p>Critical production services SHALL maintain an<br>
+operational runbook.</p>
+<p>The runbook SHOULD define</p>
+<p>service identification,</p>
+<p>health interpretation,</p>
+<p>common failure modes,</p>
+<p>diagnostic procedure,</p>
+<p>safe restart procedure,</p>
+<p>dependency checks,</p>
+<p>recovery actions,</p>
+<p>escalation,</p>
+<p>rollback or recovery procedure,</p>
+<p>and post-incident evidence requirements.</p>
+<p>Runbooks SHALL remain aligned with actual service<br>
+behaviour.</p>
+<h1>90. INCIDENT RESPONSIBILITY</h1>
+<p>Every production service SHALL have defined<br>
+incident ownership.</p>
+<p>Incident response SHALL support</p>
+<p>detection,</p>
+<p>triage,</p>
+<p>containment,</p>
+<p>recovery,</p>
+<p>communication,</p>
+<p>evidence preservation,</p>
+<p>root cause analysis,</p>
+<p>and institutional learning.</p>
+<p>Incident resolution SHALL NOT end with symptom<br>
+suppression when root cause remains unresolved.</p>
+<h1>91. BACKUP AND RECOVERY</h1>
+<p>Services owning recoverable state SHALL define</p>
+<p>backup scope,</p>
+<p>backup frequency,</p>
+<p>retention,</p>
+<p>protection,</p>
+<p>restore procedure,</p>
+<p>restore validation,</p>
+<p>recovery point expectations,</p>
+<p>and recovery time expectations</p>
+<p>where applicable.</p>
+<p>A backup SHALL NOT be considered reliable until<br>
+restore capability has been validated.</p>
+<h1>92. DISASTER RECOVERY</h1>
+<p>Institutionally critical services SHALL define<br>
+disaster recovery requirements.</p>
+<p>Disaster recovery SHALL identify</p>
+<p>critical dependencies,</p>
+<p>recovery order,</p>
+<p>required data,</p>
+<p>required configuration,</p>
+<p>required secrets,</p>
+<p>recovery environment,</p>
+<p>validation procedure,</p>
+<p>and operational authority.</p>
+<p>Recovery procedures SHALL be tested at a frequency<br>
+appropriate to institutional risk.</p>
+<h1>93. SERVICE LIFECYCLE</h1>
+<p>Every service follows the institutional lifecycle.</p>
+<p>Need Identified</p>
+<p>↓</p>
+<p>Architecture Approved</p>
+<p>↓</p>
+<p>Capability Boundary Defined</p>
+<p>↓</p>
+<p>Ownership Assigned</p>
+<p>↓</p>
+<p>Contracts Defined</p>
+<p>↓</p>
+<p>Service Implemented</p>
+<p>↓</p>
+<p>Verified</p>
+<p>↓</p>
+<p>Validated</p>
+<p>↓</p>
+<p>Released</p>
+<p>↓</p>
+<p>Deployed</p>
+<p>↓</p>
+<p>Operated</p>
+<p>↓</p>
+<p>Observed</p>
+<p>↓</p>
+<p>Improved</p>
+<p>↓</p>
+<p>Deprecated</p>
+<p>↓</p>
+<p>Retired</p>
+<p>Service governance SHALL exist throughout the<br>
+complete lifecycle.</p>
+<h1>94. SERVICE STATES</h1>
+<p>Every service SHOULD possess an explicit lifecycle<br>
+state.</p>
+<p>Proposed</p>
+<p>Development</p>
+<p>Validation</p>
+<p>Active</p>
+<p>Maintenance</p>
+<p>Deprecated</p>
+<p>Retired</p>
+<p>The service state SHALL accurately represent its<br>
+institutional status.</p>
+<h1>95. SERVICE DEPRECATION</h1>
+<p>A service SHALL be deprecated before retirement<br>
+when active consumers require migration.</p>
+<p>Deprecation SHALL define</p>
+<p>reason,</p>
+<p>replacement,</p>
+<p>affected consumers,</p>
+<p>migration path,</p>
+<p>support period,</p>
+<p>contract retirement,</p>
+<p>and final retirement condition.</p>
+<p>New consumers SHOULD NOT adopt deprecated services.</p>
+<h1>96. SERVICE RETIREMENT</h1>
+<p>Service retirement SHALL be governed.</p>
+<p>Before retirement,<br>
+the owner SHALL confirm</p>
+<p>consumer migration,</p>
+<p>contract retirement,</p>
+<p>data disposition,</p>
+<p>credential revocation,</p>
+<p>resource removal,</p>
+<p>monitoring removal,</p>
+<p>documentation status,</p>
+<p>and preservation of required institutional history.</p>
+<p>A retired service SHALL NOT remain an unmanaged<br>
+production dependency.</p>
+<h1>97. MINIMUM SERVICE ACCEPTANCE GATE</h1>
+<p>Before a service is considered institutionally<br>
+active,<br>
+the following SHALL be established where applicable.</p>
+<p>Purpose Defined</p>
+<p>Ownership Defined</p>
+<p>Capability Boundary Defined</p>
+<p>Service Classification Defined</p>
+<p>Public Contracts Defined</p>
+<p>Dependencies Declared</p>
+<p>State Ownership Defined</p>
+<p>Security Boundary Defined</p>
+<p>Configuration Defined</p>
+<p>Failure Behaviour Defined</p>
+<p>Observability Defined</p>
+<p>Build Defined</p>
+<p>Tests Defined</p>
+<p>Validation Defined</p>
+<p>Documentation Available</p>
+<p>No Embedded Secrets</p>
+<p>No Unapproved Circular Dependencies</p>
+<p>Operational Responsibility Defined</p>
+<p>Services failing mandatory acceptance criteria<br>
+SHALL remain incomplete.</p>
+<h1>98. PRODUCTION READINESS GATE</h1>
+<p>Before a service enters production,<br>
+it SHALL demonstrate,<br>
+where applicable,</p>
+<p>successful build,</p>
+<p>successful automated tests,</p>
+<p>contract compliance,</p>
+<p>security validation,</p>
+<p>dependency validation,</p>
+<p>configuration validation,</p>
+<p>migration readiness,</p>
+<p>observability readiness,</p>
+<p>health and readiness behaviour,</p>
+<p>resource definition,</p>
+<p>deployment readiness,</p>
+<p>rollback or recovery readiness,</p>
+<p>incident ownership,</p>
+<p>operational documentation,</p>
+<p>and production approval.</p>
+<p>Production readiness SHALL be evidence-based.</p>
+<h1>99. SERVICE COMPLIANCE</h1>
+<p>A service is compliant only when applicable<br>
+requirements are demonstrated through evidence.</p>
+<p>Evidence MAY include</p>
+<p>architecture validation,</p>
+<p>contract validation,</p>
+<p>dependency analysis,</p>
+<p>build results,</p>
+<p>test results,</p>
+<p>security results,</p>
+<p>performance results,</p>
+<p>deployment validation,</p>
+<p>runtime observations,</p>
+<p>recovery validation,</p>
+<p>and documentation review.</p>
+<p>A running service does not automatically constitute<br>
+a compliant service.</p>
+<h1>100. SERVICE VALIDATION QUESTIONS</h1>
+<p>Every service shall answer the following<br>
+constitutional questions.</p>
+<p>Does the service have a clear institutional<br>
+purpose?</p>
+<p>Is ownership explicit?</p>
+<p>Is the capability boundary clear?</p>
+<p>Does it preserve approved architecture?</p>
+<p>Are public contracts explicit?</p>
+<p>Are dependencies declared?</p>
+<p>Do dependencies follow approved direction?</p>
+<p>Is state ownership explicit?</p>
+<p>Is data ownership explicit?</p>
+<p>Is configuration validated?</p>
+<p>Are secrets protected?</p>
+<p>Is authentication defined?</p>
+<p>Is authorization enforced?</p>
+<p>Is failure behaviour designed?</p>
+<p>Are retries bounded?</p>
+<p>Are timeouts finite?</p>
+<p>Is idempotency defined where required?</p>
+<p>Is ordering defined where required?</p>
+<p>Is reconciliation defined where required?</p>
+<p>Is observability complete?</p>
+<p>Can health be correctly interpreted?</p>
+<p>Can the service start and stop safely?</p>
+<p>Can it be deployed reproducibly?</p>
+<p>Can it be recovered?</p>
+<p>Can incidents be investigated?</p>
+<p>Can another engineering team operate and maintain<br>
+it without undocumented knowledge?</p>
+<p>Can the service evolve without architectural drift?</p>
+<p>If any mandatory answer is negative,</p>
+<p>service compliance remains incomplete.</p>
+<h1>101. SERVICE DECLARATION</h1>
+<p>COREI services exist to realize governed<br>
+institutional capabilities through explicit<br>
+ownership,<br>
+contracts,<br>
+runtime behaviour,<br>
+and operational responsibility.</p>
+<p>Every service SHALL strengthen</p>
+<p>architectural fidelity,</p>
+<p>capability ownership,</p>
+<p>contract integrity,</p>
+<p>implementation determinism,</p>
+<p>security,</p>
+<p>observability,</p>
+<p>resilience,</p>
+<p>operational reliability,</p>
+<p>knowledge preservation,</p>
+<p>and institutional continuity.</p>
+<p>Services SHALL remain independently understandable,<br>
+verifiable,<br>
+validatable,<br>
+deployable,<br>
+operable,<br>
+maintainable,<br>
+and evolvable.</p>
+<h1>102. CONSTITUTIONAL COMMITMENT</h1>
+<p>COREI Service Specifications shall remain</p>
+<p>identity-aligned,</p>
+<p>governance-driven,</p>
+<p>architecture-faithful,</p>
+<p>engineering-supported,</p>
+<p>standards-derived,</p>
+<p>capability-oriented,</p>
+<p>ownership-explicit,</p>
+<p>contract-first,</p>
+<p>dependency-controlled,</p>
+<p>state-aware,</p>
+<p>security-by-design,</p>
+<p>observable-by-default,</p>
+<p>failure-aware,</p>
+<p>validation-driven,</p>
+<p>production-ready,</p>
+<p>knowledge-preserving,</p>
+<p>and continuously evolvable.</p>
+<p>Services shall consume approved institutional<br>
+foundations.</p>
+<p>They shall not rebuild foundational capabilities<br>
+that already exist within their approved ownership<br>
+boundaries.</p>
+<h1>103. AUTHORITY</h1>
+<p>This document defines the authoritative<br>
+Service Specifications of COREI.</p>
+<p>Every domain service,</p>
+<p>application service,</p>
+<p>platform service,</p>
+<p>infrastructure service,</p>
+<p>data service,</p>
+<p>security service,</p>
+<p>integration service,</p>
+<p>automation service,</p>
+<p>artificial intelligence service,</p>
+<p>trading service,</p>
+<p>risk service,</p>
+<p>portfolio service,</p>
+<p>execution service,</p>
+<p>position service,</p>
+<p>analytics service,</p>
+<p>control service,</p>
+<p>worker,</p>
+<p>scheduler,</p>
+<p>gateway,</p>
+<p>and future institutional service</p>
+<p>shall comply with these specifications.</p>
+<p>Technology-specific service specifications MAY<br>
+extend these requirements.</p>
+<p>No extension may weaken constitutional,<br>
+governance,<br>
+architectural,<br>
+engineering,<br>
+standards,<br>
+security,<br>
+or operational requirements.</p>
+<p>Changes to this document require constitutional<br>
+review.</p>
+<h1>END OF DOCUMENT</h1>
+<h1>DOCUMENT ID</h1>
+<h1>COREI-SP-06.04</h1>
+<h1>DOCUMENT NAME</h1>
+<h1>SERVICE SPECIFICATIONS</h1>
+<h1>REPOSITORY FILE</h1>
+<h1>knowledge/06-specifications/COREI-SP-06.04-SERVICE-SPECIFICATIONS.md</h1>
+
+
+  <div class="doc-footer">
+
+    <span>DOCUMENT ID: COREI-SP-06.04</span>
+
+    <span>
+      DOCUMENT NAME: Service Specifications
+    </span>
+
+    <span>
+      VERSION: 1
+    </span>
+
+  </div>
+
+</body>
+</html>

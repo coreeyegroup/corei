@@ -1,0 +1,37 @@
+NAME                                   READY   STATUS    RESTARTS   AGE
+pod/penpot-backend-5b474bc787-k7q7j    1/1     Running   0          2m2s
+pod/penpot-exporter-54dc57b44d-27rhd   1/1     Running   0          8m11s
+pod/penpot-frontend-85b7c896f4-l9gnd   1/1     Running   0          8m11s
+pod/penpot-mcp-7b8cc5fcb4-ls94q        1/1     Running   0          22m
+pod/penpot-postgres-58cdd965ff-95bnf   1/1     Running   0          29m
+pod/penpot-redis-5786b9dcbc-9tjqw      1/1     Running   0          2m19s
+
+NAME                      TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)             AGE
+service/penpot            ClusterIP   10.111.229.116   <none>        8080/TCP            22m
+service/penpot-backend    ClusterIP   10.103.45.153    <none>        6060/TCP            22m
+service/penpot-exporter   ClusterIP   10.97.131.232    <none>        6061/TCP            22m
+service/penpot-mcp        ClusterIP   10.106.169.40    <none>        4401/TCP,4402/TCP   22m
+service/penpot-postgres   ClusterIP   10.99.242.81     <none>        5432/TCP            29m
+service/penpot-redis      ClusterIP   10.103.15.115    <none>        6379/TCP            29m
+
+NAME                              READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/penpot-backend    1/1     1            1           22m
+deployment.apps/penpot-exporter   1/1     1            1           22m
+deployment.apps/penpot-frontend   1/1     1            1           22m
+deployment.apps/penpot-mcp        1/1     1            1           22m
+deployment.apps/penpot-postgres   1/1     1            1           29m
+deployment.apps/penpot-redis      1/1     1            1           29m
+
+NAME                                         DESIRED   CURRENT   READY   AGE
+replicaset.apps/penpot-backend-5b474bc787    1         1         1       2m2s
+replicaset.apps/penpot-backend-5fc859f9cc    0         0         0       22m
+replicaset.apps/penpot-backend-6df86d6c56    0         0         0       8m12s
+replicaset.apps/penpot-exporter-54dc57b44d   1         1         1       8m12s
+replicaset.apps/penpot-exporter-5b7c6dddb4   0         0         0       22m
+replicaset.apps/penpot-frontend-69cb76984c   0         0         0       22m
+replicaset.apps/penpot-frontend-85b7c896f4   1         1         1       8m12s
+replicaset.apps/penpot-mcp-7b8cc5fcb4        1         1         1       22m
+replicaset.apps/penpot-postgres-58cdd965ff   1         1         1       29m
+replicaset.apps/penpot-redis-5786b9dcbc      1         1         1       2m19s
+replicaset.apps/penpot-redis-58949f98b8      0         0         0       29m
+replicaset.apps/penpot-redis-6f777ff7b8      0         0         0       2m24s

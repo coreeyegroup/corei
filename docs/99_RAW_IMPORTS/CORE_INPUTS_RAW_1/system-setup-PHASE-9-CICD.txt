@@ -1,0 +1,1869 @@
+🔵 PHASE 9 — CI/CD + REGISTRY
+	1. PHASE IDENTITY
+		1.1 Name
+
+			PHASE 9 — CI/CD + REGISTRY
+
+		1.2 Objective
+
+			Establish a deterministic delivery pipeline:
+
+			Source Code → Build → Image → Registry → Deploy → Runtime
+
+		1.3 Scope
+
+			This phase implements:
+
+			Container image build system
+			Registry integration (Docker Hub)
+			Kubernetes deployment pipeline
+			CI automation (GitHub Actions)
+			Controlled rollout mechanism
+
+		1.4 Out of Scope
+			Full GitOps (Phase 9.2 / future)
+			Multi-cluster deployment
+			Advanced release strategies (canary, blue-green)
+
+	2. ARCHITECTURAL ROLE
+
+			From system architecture :
+
+			Layer		Component
+			L8			CI/CD Pipeline
+			L9			Image Registry
+			L10			Deployment Runtime
+
+	3. OWNERSHIP MODEL
+
+		3.1 Component Ownership
+			Component				Owns				Responsibility
+			CI (GitHub Actions)		build pipeline		image creation
+			Registry (Docker Hub)	image storage		versioning
+			Kubernetes				runtime				execution
+
+		3.2 Ownership Rules
+			CI builds images
+			Registry stores images
+			Kubernetes runs images
+
+		3.3 Non-Ownership
+			Component	Does NOT Own
+			CI			runtime
+			Registry	deployment
+			Kubernetes	build
+
+	4. SYSTEM FLOW
+			Developer → Git Push
+					↓
+			GitHub Actions (CI)
+					↓
+			Docker Build
+					↓
+			Docker Hub
+					↓
+			Kubernetes Pull
+					↓
+			Running Pods
+
+	5. EXECUTION — FULL STEP-BY-STEP
+		STEP 9.1 — DOCKER REGISTRY SETUP
+			Login
+				docker login
+			Verify
+				docker info | grep Username
+
+		STEP 9.2 — CREATE SERVICE
+			Directory
+				mkdir -p ~/core-system/services/sample-service
+				cd ~/core-system/services/sample-service
+
+			app.py:
+				nano app.py
+
+					from fastapi import FastAPI
+					app = FastAPI()
+
+					@app.get("/")
+					def health():
+						return {"status": "ok", "service": "sample-service"}
+
+				requirements.txt
+					nano requirements.txt
+					fastapi
+					uvicorn
+
+		STEP 9.3 — DOCKERIZATION
+			Dockerfile
+				nano Dockerfile
+
+					FROM python:3.11-slim
+
+					WORKDIR /app
+
+					COPY requirements.txt .
+					RUN pip install --no-cache-dir -r requirements.txt
+
+					COPY . .
+
+					EXPOSE 8000
+
+					CMD ["uvicorn","app:app","--host","0.0.0.0","--port","8000"]
+
+				Build
+					docker build -t coreeyehub/sample-service:v1 .
+
+				Push
+					docker push coreeyehub/sample-service:v1
+
+				Tag latest
+					docker tag coreeyehub/sample-service:v1 coreeyehub/sample-service:latest
+					docker push coreeyehub/sample-service:latest
+
+		STEP 9.4 — KUBERNETES DEPLOYMENT
+			sample-deployment.yaml:
+
+			nano sample-deployment.yaml
+
+				apiVersion: apps/v1
+				kind: Deployment
+				metadata:
+				  name: sample-service
+				  namespace: platform
+				spec:
+				  replicas: 1
+				  selector:
+					matchLabels:
+					  app: sample-service
+				  template:
+					metadata:
+					  labels:
+						app: sample-service
+					spec:
+					  containers:
+						- name: sample-service
+						  image: coreeyehub/sample-service:latest
+						  imagePullPolicy: Always
+						  ports:
+							- containerPort: 8000
+						  resources:
+							requests:
+							  cpu: "100m"
+							  memory: "128Mi"
+			Apply
+				kubectl apply -f sample-deployment.yaml
+
+			Restart
+				kubectl rollout restart deployment sample-service -n platform
+
+			Verify
+				kubectl get pods -n platform
+
+			STEP 9.5 — SERVICE
+				sample-service.yaml:
+					nano sample-service.yaml
+
+						apiVersion: v1
+						kind: Service
+						metadata:
+						  name: sample-service
+						  namespace: platform
+						spec:
+						  selector:
+							app: sample-service
+						  ports:
+							- port: 80
+							  targetPort: 8000
+						  type: ClusterIP
+				Apply
+					kubectl apply -f sample-service.yaml
+
+		STEP 9.6 — ACCESS
+			Port Forward
+				kubectl port-forward svc/sample-service 8081:80 -n platform
+
+			SSH Tunnel (Windows)
+				ssh -L 8081:localhost:8081 coreeye@192.168.1.3
+
+			Access
+				http://localhost:8081
+
+		STEP 9.7 — GITHUB CI SETUP
+			Repo Init
+				git init
+				git add .
+				git commit -m "init"
+				git branch -M main
+				git remote add origin https://github.com/<user>/sample-service.git
+				git push -u origin main
+
+			Workflow
+				mkdir -p .github/workflows
+				nano .github/workflows/deploy.yaml
+
+				CI Pipeline
+					name: CI Pipeline
+
+					on:
+					  push:
+						branches:
+						  - main
+
+					jobs:
+					  build:
+						runs-on: ubuntu-latest
+
+						steps:
+						  - uses: actions/checkout@v3
+
+						  - name: Docker Login
+							run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+						  - name: Build
+							run: docker build -t ${{ secrets.DOCKER_USERNAME }}/sample-service:latest .
+
+						  - name: Push
+							run: docker push ${{ secrets.DOCKER_USERNAME }}/sample-service:latest
+
+			Secrets
+				DOCKER_USERNAME
+				DOCKER_PASSWORD
+
+		STEP 9.8 — DEPLOYMENT UPDATE
+			Restart
+				kubectl rollout restart deployment sample-service -n platform
+
+			Status
+				kubectl rollout status deployment sample-service -n platform
+
+			Rollback
+				kubectl rollout undo deployment sample-service -n platform
+
+	6. FAILURE MODEL
+			Failure				Cause			Fix
+			ImagePullBackOff	missing tag		push image
+			Access denied		not logged in	docker login
+			Pod crash			bad code		rebuild
+			Deployment stuck	resource		adjust
+
+	7. CRITICAL RULES
+		RULE 1 — IMMUTABLE IMAGES
+			Never overwrite version tags
+
+		RULE 2 — NO LATEST IN PROD
+			latest = dev only
+
+		RULE 3 — BUILD ONCE
+			same image everywhere
+
+		RULE 4 — TRACEABILITY
+			commit → image → deployment
+
+	8. VALIDATION CHECKLIST
+
+		✔ Image built
+		✔ Image pushed
+		✔ Pod running
+		✔ Service reachable
+		✔ CI pipeline working
+
+	9. FINAL OUTPUT
+		CI/CD PIPELINE ACTIVE
+		REGISTRY ACTIVE
+		DEPLOYMENT AUTOMATED (SEMI)
+		🔒 PHASE LOCK CRITERIA
+
+		✔ End-to-end pipeline working
+		✔ Deployment reproducible
+		✔ Rollback possible
+		✔ Image accessible globally
+
+		🧠 FINAL ENGINEERING INSIGHT
+		This phase converts infrastructure → delivery platform
+		🏁 FINAL STATUS
+		PHASE 9 = LOCKED
+
+🔵 PHASE 9.1 — CI/CD + DETERMINISTIC DEPLOYMENT SYSTEM (EXTENDED)
+	1. PHASE IDENTITY
+		1.1 Name
+
+			PHASE 9.1 — CI/CD + DETERMINISTIC DEPLOYMENT SYSTEM
+
+		1.2 Role
+
+			Establish fully controlled, in-cluster deployment system replacing manual kubectl operations
+
+		1.3 Objective
+
+			Build deterministic delivery pipeline:
+
+				Git → CI → Image → Registry → Desired State → Deploy Agent → Kubernetes
+
+			Including:
+
+				CI build pipeline
+				Registry integration
+				In-cluster deployment engine
+				SHA-based deterministic versioning
+				Safe rollout + rollback
+
+	2. FINAL SYSTEM STATE
+			Component			Type			Status		Role
+			GitHub Actions		CI				✅			Build images
+			Docker Hub			Registry		✅			Store images
+			ConfigMap			State			✅			Desired version
+			Deploy Agent		Runtime			✅			Execute deployment
+			CronJob				Scheduler		✅			Trigger deploy
+			Kubernetes			Orchestrator	✅			Run workloads
+			Rollback Logic		Safety			✅			Recover failures
+
+	3. ARCHITECTURAL OWNERSHIP
+			Layer	Component		Ownership
+			L8		CI				Build
+			L9		Registry		Storage
+			L10		Deploy Agent	Execution
+			L3		Kubernetes		Runtime
+
+		🔴 OWNERSHIP RULES
+			CI 			→ builds image
+			Registry 	→ stores image
+			ConfigMap 	→ defines desired state
+			Deploy Agent → applies state
+			Kubernetes	 → executes
+
+	4. WHAT WE BUILT (CRITICAL)
+			Git Push
+			   ↓
+			CI builds image (SHA)
+			   ↓
+			Docker Hub
+			   ↓
+			ConfigMap (IMAGE_TAG)
+			   ↓
+			CronJob (every 2 min)
+			   ↓
+			Deploy Agent (inside cluster)
+			   ↓
+			Safe Deployment + Rollback
+
+	5. EXECUTION STEPS (FULL)
+		🔹 STEP 9.1 — SERVICE CREATION
+				mkdir -p ~/core-system/services/sample-service
+				cd ~/core-system/services/sample-service
+
+				nano app.py:
+					from fastapi import FastAPI
+					app = FastAPI()
+
+					@app.get("/")
+					def health():
+						return {"status": "ok", "service": "sample-service"}
+
+				requirements.txt
+					fastapi
+					uvicorn
+
+		🔹 STEP 9.2 — DOCKERIZATION
+				Dockerfile
+					FROM python:3.11-slim
+
+					WORKDIR /app
+
+					COPY requirements.txt .
+					RUN pip install --no-cache-dir -r requirements.txt
+
+					COPY . .
+
+					EXPOSE 8000
+
+					CMD ["uvicorn","app:app","--host","0.0.0.0","--port","8000"]
+
+				Commands
+					docker build -t coreeyehub/sample-service:latest .
+					docker push coreeyehub/sample-service:latest
+
+		🔹 STEP 9.3 — KUBERNETES DEPLOYMENT
+				sample-deployment.yaml
+					apiVersion: apps/v1
+					kind: Deployment
+					metadata:
+					  name: sample-service
+					  namespace: platform
+					spec:
+					  replicas: 1
+					  selector:
+						matchLabels:
+						  app: sample-service
+					  template:
+						metadata:
+						  labels:
+							app: sample-service
+						spec:
+						  containers:
+							- name: sample-service
+							  image: coreeyehub/sample-service:latest
+							  imagePullPolicy: Always
+							  ports:
+								- containerPort: 8000
+
+				Deployment:
+					kubectl apply -f sample-deployment.yaml
+
+		🔹 STEP 9.4 — CI PIPELINE
+				nano .github/workflows/deploy.yaml
+					name: CI Pipeline
+
+					on:
+					  push:
+						branches:
+						  - main
+
+					jobs:
+					  build:
+						runs-on: ubuntu-latest
+
+						steps:
+						  - uses: actions/checkout@v3
+
+						  - name: Docker Login
+							run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+						  - name: Build
+							run: docker build -t ${{ secrets.DOCKER_USERNAME }}/sample-service:latest .
+
+						  - name: Push
+							run: docker push ${{ secrets.DOCKER_USERNAME }}/sample-service:latest
+
+		🔵 EXTENSION — DEPLOYMENT ENGINE (9.2–9.4 MERGED)
+
+		🔹 STEP 9.5 — DEPLOY AGENT STRUCTURE
+				mkdir -p k8s/deploy-agent
+				cd k8s/deploy-agent
+
+		🔹 STEP 9.6 — RBAC
+
+			rbac.yaml
+
+				apiVersion: v1
+				kind: ServiceAccount
+				metadata:
+				  name: deploy-agent
+				  namespace: platform
+
+				---
+				apiVersion: rbac.authorization.k8s.io/v1
+				kind: Role
+				metadata:
+				  name: deploy-agent-role
+				  namespace: platform
+				rules:
+				- apiGroups: ["apps"]
+				  resources: ["deployments"]
+				  verbs: ["get","list","watch","update","patch"]
+
+				- apiGroups: [""]
+				  resources: ["configmaps"]
+				  verbs: ["get","list","watch","patch","update"]
+
+				---
+				apiVersion: rbac.authorization.k8s.io/v1
+				kind: RoleBinding
+				metadata:
+				  name: deploy-agent-binding
+				  namespace: platform
+				subjects:
+				- kind: ServiceAccount
+				  name: deploy-agent
+				roleRef:
+				  kind: Role
+				  name: deploy-agent-role
+				  apiGroup: rbac.authorization.k8s.io
+
+			Deployment:
+				kubectl apply -f rbac.yaml
+
+		🔹 STEP 9.7 — IMAGE STATE CONFIG
+
+				image-tag.yaml
+
+					apiVersion: v1
+					kind: ConfigMap
+					metadata:
+					  name: sample-service-image
+					  namespace: platform
+					data:
+					  IMAGE_TAG: initial
+					  PREVIOUS_TAG: initial
+
+				Deployment:
+					kubectl apply -f image-tag.yaml
+
+		🔹 STEP 9.8 — DEPLOY SCRIPT (SAFE)
+				configmap.yaml
+					apiVersion: v1
+					kind: ConfigMap
+					metadata:
+					  name: deploy-agent-script
+					  namespace: platform
+					data:
+					  deploy.sh: |
+						#!/bin/sh
+
+						echo "Starting SAFE Deploy Agent..."
+
+						IMAGE_TAG=$(kubectl get configmap sample-service-image -n platform -o jsonpath="{.data.IMAGE_TAG}")
+						PREVIOUS_TAG=$(kubectl get configmap sample-service-image -n platform -o jsonpath="{.data.PREVIOUS_TAG}")
+
+						IMAGE="coreeyehub/sample-service:$IMAGE_TAG"
+
+						kubectl set image deployment/sample-service \
+						sample-service=$IMAGE \
+						-n platform
+
+						kubectl rollout status deployment/sample-service -n platform --timeout=60s
+
+						if [ $? -ne 0 ]; then
+						  echo "ROLLBACK TRIGGERED"
+
+						  kubectl set image deployment/sample-service \
+						  sample-service=coreeyehub/sample-service:$PREVIOUS_TAG \
+						  -n platform
+
+						  exit 1
+						fi
+
+						kubectl patch configmap sample-service-image \
+						-n platform \
+						-p "{\"data\":{\"PREVIOUS_TAG\":\"$IMAGE_TAG\"}}"
+
+						echo "SAFE DEPLOY COMPLETED"
+
+				Deployment:
+					kubectl apply -f configmap.yaml
+
+		🔹 STEP 9.9 — CRONJOB
+				cronjob.yaml
+					apiVersion: batch/v1
+					kind: CronJob
+					metadata:
+					  name: deploy-agent
+					  namespace: platform
+					spec:
+					  schedule: "*/2 * * * *"
+					  jobTemplate:
+						spec:
+						  template:
+							spec:
+							  serviceAccountName: deploy-agent
+							  containers:
+							  - name: deploy-agent
+								image: bitnami/kubectl:latest
+								command: ["/bin/sh"]
+								args: ["/scripts/deploy.sh"]
+								volumeMounts:
+								- name: script
+								  mountPath: /scripts
+							  restartPolicy: OnFailure
+							  volumes:
+							  - name: script
+								configMap:
+								  name: deploy-agent-script
+
+				Deployment:
+					kubectl apply -f cronjob.yaml
+
+		🔹 STEP 9.10 — VALIDATION
+				kubectl get cronjob -n platform
+				kubectl get jobs -n platform
+				kubectl get pods -n platform
+				kubectl logs <deploy-agent-pod> -n platform
+
+		🔹 STEP 9.11 — MANUAL TRIGGER
+				kubectl create job --from=cronjob/deploy-agent deploy-test -n platform
+
+		🔹 STEP 9.12 — UPDATE VERSION (DEPLOY TRIGGER)
+				kubectl patch configmap sample-service-image \
+				-n platform \
+				-p '{"data":{"IMAGE_TAG":"<SHA>"}}'
+
+	6. INFRA FLOW (FINAL)
+			CI → Image
+			   ↓
+			ConfigMap (desired state)
+			   ↓
+			CronJob trigger
+			   ↓
+			Deploy Agent
+			   ↓
+			kubectl set image
+			   ↓
+			rollout monitor
+			   ↓
+			success → update state
+			failure → rollback
+
+	7. HARD CONSTRAINTS
+
+		✔ No manual kubectl deployment
+		✔ No latest tag (use SHA)
+		✔ Deployment inside cluster
+		✔ RBAC enforced
+		✔ Rollback mandatory
+
+	8. FAILURE MODEL
+		Failure				Cause			Fix
+		InvalidImageName	empty tag		fix ConfigMap
+		Forbidden			RBAC			add permissions
+		rollout timeout		bad image		rollback
+		connection refused	kubeconfig		move inside cluster
+
+	9. OUTPUT (DELIVERABLE)
+
+		Deterministic Deployment System:
+
+		CI → Registry → Desired State → Deploy Engine → Safe Runtime
+
+	10. TRACEABILITY
+		Phase	Output
+		Phase 8	Observability
+		Phase 9.1	Deployment system
+		Phase 10	Services layer
+
+	11. PHASE LOCK CRITERIA
+
+		✔ CI builds image
+		✔ Image pushed
+		✔ ConfigMap controls version
+		✔ Deploy Agent working
+		✔ Rollout monitored
+		✔ Rollback working
+		✔ No manual deployment needed
+
+		🔒 FINAL STATUS
+		PHASE 9.1 (INCLUDING 9.2–9.4) = LOCKED
+
+	🔵 PHASE 9 — STEP 1: CONTAINER REGISTRY SETUP
+
+		(Fully aligned with system architecture, reproducibility, and CI/CD readiness)
+
+		1. PHASE IDENTITY LAYER
+			1.1 Phase Name
+				PHASE 9 — STEP 1: Container Registry Setup
+
+			1.2 Phase Role
+				Defines the artifact storage layer for all deployable services.
+
+			1.3 Objective
+				Create a deterministic, versioned, internal container registry that:
+					stores all service images
+					enables reproducible deployments
+					integrates with CI/CD and Kubernetes
+
+			1.4 Why This Phase Exists
+				Prevents:
+					non-reproducible deployments
+					dependency on external registries
+					version drift and image inconsistency
+					CI/CD pipeline failure
+
+		2. PHASE SCOPE CONTROL
+			2.1 INCLUDED
+				container registry deployment
+				storage configuration
+				network integration
+				image push/pull validation
+				versioning enforcement
+
+			2.2 EXCLUDED
+				image build logic (Step 2)
+				CI/CD automation (Step 4)
+				Kubernetes deployment (Step 5)
+
+		3. SYSTEM PATH STRUCTURE (MANDATORY)
+			~/core-system/platform/registry
+
+			Full System Context
+
+			~/core-system/
+			├── infrastructure/        # Phase C
+			├── observability/         # Phase 8
+			├── services/              # runtime services
+			├── platform/              # Phase 9
+			│   └── registry/          # Step 1
+
+		4. DIRECTORY CREATION
+			mkdir -p ~/core-system/platform/registry
+			cd ~/core-system/platform/registry
+
+		5. REGISTRY DEPLOYMENT CONFIGURATION
+			5.1 File Path
+				~/core-system/platform/registry/docker-compose.yml
+
+			5.2 Configuration File (FINAL — CLEAN, NO DEPRECATED FIELDS)
+
+				services:
+				  registry:
+					image: registry:2
+					container_name: core-registry
+
+					restart: always
+
+					ports:
+					  - "5000:5000"
+
+					environment:
+					  REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /var/lib/registry
+					  REGISTRY_STORAGE_DELETE_ENABLED: "true"
+
+					volumes:
+					  - registry_data:/var/lib/registry
+
+					networks:
+					  - core-net
+
+				volumes:
+				  registry_data:
+
+				networks:
+				  core-net:
+					external: true
+
+		6. NETWORK CONFIGURATION (PHASE C ALIGNMENT)
+			6.1 Check existing networks
+				docker network ls
+
+			6.2 Create deterministic network (if missing)
+				docker network create core-net
+
+			6.3 Network Logic
+				All platform services MUST use core-net
+				Ensures deterministic service communication
+				Aligns with event-driven infra model
+
+		7. REGISTRY DEPLOYMENT
+			cd ~/core-system/platform/registry
+			docker compose up -d
+
+			7.1 Verification
+			docker ps
+
+			Expected:
+				core-registry   Up   0.0.0.0:5000->5000/tcp
+
+		8. DOCKER CLIENT CONFIGURATION (CRITICAL)
+			8.1 File
+				sudo nano /etc/docker/daemon.json
+
+			8.2 Configuration
+				{
+				  "insecure-registries": ["localhost:5000"]
+				}
+
+			8.3 Apply
+				sudo systemctl restart docker
+
+			8.4 Logic
+				Enables HTTP registry access
+				Required for local/private registry
+				Prevents HTTPS enforcement failure
+
+		9. IMAGE NAMING STANDARD (MANDATORY)
+			<registry>/<domain>/<service>:<version>
+
+			Example
+				localhost:5000/core/signal-service:v1.0.0
+				localhost:5000/core/decision-engine:v1.0.0
+				localhost:5000/core/risk-engine:v1.0.0
+
+		10. VERSIONING RULE (STRICT)
+			v<MAJOR>.<MINOR>.<PATCH>
+			Type		Rule
+			MAJOR		breaking change
+			MINOR		feature
+			PATCH		fix
+
+			Forbidden:
+				latest
+				mutable tags
+
+		11. FUNCTIONAL VALIDATION (MANDATORY)
+			11.1 Pull test image
+				docker pull nginx
+
+			11.2 Tag image
+				docker tag nginx localhost:5000/core/test-nginx:v1.0.0
+
+			11.3 Push image
+				docker push localhost:5000/core/test-nginx:v1.0.0
+
+			11.4 Verify registry catalog
+				curl http://localhost:5000/v2/_catalog
+
+				Expected:
+				{"repositories":["core/test-nginx"]}
+
+		12. STORAGE MODEL
+			Volume
+				registry_data → /var/lib/registry
+
+			Properties:
+				persistent
+				append-only behavior
+				image layer storage
+
+		13. DETERMINISTIC LOGIC CONTRACT
+			Image = f(source_code, Dockerfile, config_snapshot)
+
+		Constraints:
+			identical input → identical digest
+			no runtime mutation
+			no implicit changes
+
+		14. CONNECTION MODEL
+			Developer / CI
+				  ↓
+			Docker Client
+				  ↓
+			localhost:5000 (Registry)
+				  ↓
+			Stored Images
+				  ↓
+			Kubernetes Pull (future)
+
+		15. FAILURE MODEL
+			Failure				Detection			Response
+			push failure		CLI error			retry
+			registry down		container status	restart
+			disk full			storage alert		block push
+			HTTPS mismatch		push error			configure daemon
+			tag overwrite		conflict			reject
+
+		16. SECURITY MODEL (BASELINE)
+			Optional (Recommended for production)
+				sudo apt install apache2-utils
+				mkdir auth
+				htpasswd -Bc auth/htpasswd admin
+
+			Add to compose:
+
+				environment:
+				  REGISTRY_AUTH: htpasswd
+				  REGISTRY_AUTH_HTPASSWD_REALM: "Registry Realm"
+				  REGISTRY_AUTH_HTPASSWD_PATH: /auth/htpasswd
+
+				volumes:
+				  - registry_data:/var/lib/registry
+				  - ./auth:/auth
+
+		17. GOVERNANCE RULES
+			all images MUST be versioned
+			no overwrite allowed
+			registry = single source of truth
+			images MUST map to system code
+
+		18. OUTPUT (DELIVERABLE)
+			Container Registry System:
+
+				Endpoint:
+					localhost:5000
+
+				Capabilities:
+					- image push/pull
+					- versioned storage
+					- deterministic artifacts
+					- CI/CD integration ready
+
+		19. TRACEABILITY
+			Source Code
+			   ↓
+			Dockerfile
+			   ↓
+			Image Build
+			   ↓
+			Registry (tag + digest)
+			   ↓
+			Deployment (future)
+
+		20. PHASE FAILURE CONDITION
+
+			Phase FAILS if:
+
+				registry not reachable
+				push/pull fails
+				versioning not enforced
+				non-deterministic tagging used
+				external registry dependency exists
+
+		21. PHASE LOCK CRITERIA
+
+			Phase is LOCKED only if:
+
+			registry running
+			push successful
+			catalog visible
+			naming standard enforced
+			no deprecated config
+			deterministic behavior validated
+		🔒 FINAL NOTE
+
+		This step establishes:
+
+			FOUNDATION OF PLATFORM AUTOMATION
+
+		If this is weak:
+			CI/CD breaks
+			deployments become non-reproducible
+			system loses institutional integrity
+
+	🔵 PHASE 9 — STEP 2: IMAGE BUILD PIPELINE
+		1. PHASE IDENTITY
+			1.1 Name
+
+				PHASE 9 — STEP 2: Image Build Pipeline
+
+			1.2 Role
+
+				Defines how services are converted into deterministic container images.
+
+			1.3 Objective
+
+				Create a standardized, reproducible build system such that:
+
+				Image = f(source_code, Dockerfile, config_snapshot)
+
+			1.4 Why This Phase Exists
+
+				Prevents:
+					inconsistent builds across environments
+					hidden dependencies
+					non-reproducible deployments
+					CI/CD pipeline instability
+
+		2. ARCHITECTURE ALIGNMENT
+
+			This step connects:
+
+				Source Code → Dockerfile → Image → Registry (Step 1) → Deployment
+
+			Must comply with:
+				Phase C deterministic infra model
+				No hidden state
+				Replay-safe build outputs
+
+		3. SERVICE BUILD STRUCTURE (MANDATORY)
+			3.1 Root Structure
+				~/core-system/services/
+
+			3.2 Standard Service Layout
+
+				Example:
+
+				~/core-system/services/signal-service/
+				├── app/
+				│   └── main.py
+				├── requirements.txt
+				├── Dockerfile
+
+			3.3 Create Base Service
+				mkdir -p ~/core-system/services/signal-service/app
+				cd ~/core-system/services/signal-service
+
+			3.4 Create Application File
+				nano app/main.py
+				print("Signal Service Running")
+
+			3.5 Create Requirements File
+				nano requirements.txt
+				fastapi==0.110.0
+				uvicorn==0.29.0
+
+		4. DOCKERFILE STANDARD (CRITICAL)
+			4.1 File Path
+				~/core-system/services/signal-service/Dockerfile
+
+			4.2 Dockerfile (DETERMINISTIC BASE)
+
+				FROM python:3.11-slim
+
+				# Prevent Python buffering
+				ENV PYTHONUNBUFFERED=1
+
+				WORKDIR /app
+
+				# Install dependencies (deterministic layer)
+				COPY requirements.txt .
+				RUN pip install --no-cache-dir -r requirements.txt
+
+				# Copy application
+				COPY app/ .
+
+				# Default command
+				CMD ["python", "main.py"]
+
+		5. BUILD RULES (MANDATORY)
+			5.1 Deterministic Constraints
+				base image MUST be fixed version
+				dependencies MUST be version-locked (next step improvement)
+				no runtime downloads
+				no environment-based branching
+
+		6. BUILD COMMAND
+			6.1 Navigate
+				cd ~/core-system/services/signal-service
+
+			6.2 Build Image
+				docker build -t localhost:5000/core/signal-service:v1.0.0 .
+
+			6.3 Verify Image
+				docker images
+
+				Expected:
+				localhost:5000/core/signal-service   v1.0.0
+
+		7. PUSH TO REGISTRY
+			docker push localhost:5000/core/signal-service:v1.0.0
+
+		8. MULTI-SERVICE STANDARDIZATION
+
+			You MUST replicate same structure for:
+				decision-engine
+				risk-engine
+				execution-engine (future)
+				portfolio-service
+
+			Example:
+				mkdir -p ~/core-system/services/decision-engine/app
+				mkdir -p ~/core-system/services/risk-engine/app
+
+		9. BUILD NAMING CONTRACT
+			localhost:5000/<domain>/<service>:<version>
+
+			Domain:
+				core
+
+		10. BUILD AUTOMATION SCRIPT (MANDATORY)
+
+			10.1 File Path
+				~/core-system/platform/build/build.sh
+
+			10.2 Create Directory
+				mkdir -p ~/core-system/platform/build
+				cd ~/core-system/platform/build
+				nano build.sh
+
+			10.3 Script Content
+				#!/bin/bash
+
+				set -e
+
+				REGISTRY="localhost:5000/core"
+				VERSION="v1.0.0"
+
+				SERVICES=(
+				  "signal-service"
+				)
+
+				for SERVICE in "${SERVICES[@]}"
+				do
+				  echo "Building $SERVICE..."
+
+				  docker build -t $REGISTRY/$SERVICE:$VERSION \
+					~/core-system/services/$SERVICE
+
+				  echo "Pushing $SERVICE..."
+
+				  docker push $REGISTRY/$SERVICE:$VERSION
+
+				done
+
+				echo "Build pipeline complete"
+
+			10.4 Make Executable
+				chmod +x build.sh
+				10.5 Run Pipeline
+				./build.sh
+
+		11. DETERMINISTIC BUILD LOGIC
+
+			Each build must guarantee:
+				Same code + same Dockerfile → same image digest
+
+		12. FAILURE MODEL
+		Failure				Cause					Fix
+		build fail			dependency error		fix Dockerfile
+		push fail			registry issue			restart registry
+		version conflict	tag reuse				bump version
+		inconsistent image	non-fixed dependency	lock versions
+
+		13. IMPORTANT RULES (STRICT)
+			Forbidden:
+				latest tag
+				dynamic versioning
+				environment-dependent builds
+				external downloads at runtime
+
+		14. TRACEABILITY
+			Service Code
+			   ↓
+			Dockerfile
+			   ↓
+			Build
+			   ↓
+			Image Tag (v1.0.0)
+			   ↓
+			Registry Digest
+
+		15. OUTPUT
+
+			After this step:
+
+			You have:
+			- service containerization
+			- reproducible image builds
+			- registry-integrated pipeline
+			- base CI/CD compatibility
+
+	🔵 PHASE 9 — STEP 3: IMAGE VERSIONING RULES
+
+		(Deterministic, enforceable, deployment-ready)
+
+		1. PHASE IDENTITY
+			1.1 Name
+
+				PHASE 9 — STEP 3: Image Versioning Rules
+
+			1.2 Role
+
+				Defines how container images are versioned, controlled, and made immutable.
+
+			1.3 Objective
+
+				Establish a system where:
+
+				Version → uniquely represents system state → maps to unique image digest
+
+		2. WHY THIS PHASE IS CRITICAL
+
+			Without strict versioning:
+				rollback becomes unreliable
+				CI/CD produces inconsistent deployments
+				audit traceability breaks
+				identical versions may point to different states
+
+		3. VERSIONING STANDARD
+			3.1 Format
+				v<MAJOR>.<MINOR>.<PATCH>
+
+				Examples
+					v1.0.0
+					v1.0.1
+					v1.1.0
+					v2.0.0
+
+			3.2 Version Semantics
+				Type	Meaning
+				MAJOR	breaking change
+				MINOR	feature addition
+				PATCH	bug fix
+
+		4. DIRECTORY STRUCTURE
+			4.1 Version Control Path
+				~/core-system/platform/versioning/
+
+			4.2 Create Directory
+				mkdir -p ~/core-system/platform/versioning
+
+		5. VERSION CONTROL FILE
+			5.1 File Path
+				~/core-system/platform/versioning/version.txt
+
+			5.2 Create File
+				nano ~/core-system/platform/versioning/version.txt
+
+			5.3 File Format
+				<service-name>=<version>
+
+			5.4 Example
+				signal-service=v1.0.2
+				decision-engine=v1.0.0
+				risk-engine=v1.0.0
+
+			5.5 Purpose
+				single source of truth for all versions
+				consumed by build pipeline
+				prevents manual tagging errors
+
+		6. BUILD PIPELINE INTEGRATION
+			6.1 File Path
+				~/core-system/platform/build/build.sh
+
+			6.2 Full Script (FINAL VERSION)
+				#!/bin/bash
+
+				set -e
+
+				REGISTRY="localhost:5000/core"
+				VERSION_FILE=~/core-system/platform/versioning/version.txt
+
+				get_version() {
+				  SERVICE=$1
+				  grep "^$SERVICE=" $VERSION_FILE | cut -d'=' -f2
+				}
+
+				SERVICES=(
+				  "signal-service"
+				)
+
+				for SERVICE in "${SERVICES[@]}"
+				do
+				  VERSION=$(get_version $SERVICE)
+
+				  if [ -z "$VERSION" ]; then
+					echo "ERROR: Version not found for $SERVICE"
+					exit 1
+				  fi
+
+				  echo "Checking existing versions..."
+
+				  if curl -s http://localhost:5000/v2/core/$SERVICE/tags/list | grep -q "$VERSION"; then
+					echo "ERROR: Version $VERSION already exists for $SERVICE"
+					exit 1
+				  fi
+
+				  echo "--------------------------------------"
+				  echo "Building $SERVICE:$VERSION"
+				  echo "--------------------------------------"
+
+				  docker build --no-cache -t $REGISTRY/$SERVICE:$VERSION \
+					~/core-system/services/$SERVICE
+
+				  echo "Pushing $SERVICE:$VERSION"
+
+				  docker push $REGISTRY/$SERVICE:$VERSION
+
+				done
+
+				echo "--------------------------------------"
+				echo "VERSIONED BUILD COMPLETE"
+				echo "--------------------------------------"
+
+		7. VERSIONING EXECUTION FLOW
+				version.txt
+				   ↓
+				build.sh reads version
+				   ↓
+				check registry for existing tag
+				   ↓
+				build image (no-cache)
+				   ↓
+				push to registry
+				   ↓
+				generate immutable digest
+
+		8. IMMUTABILITY RULE (CRITICAL)
+				Once pushed → image MUST NEVER change
+
+			Forbidden:
+				docker push localhost:5000/core/signal-service:v1.0.0   # overwrite ❌
+
+		9. VERSION INCREMENT RULE
+			Scenario				Action
+			no change				do NOT change version
+			code change				increment version
+			dependency change		increment version
+			Dockerfile change		increment version
+
+		10. DETERMINISTIC GUARANTEE
+
+			System must satisfy:
+				Same input → same digest
+				Different input → different digest
+
+		11. VALIDATION COMMANDS
+			11.1 Check available versions
+				curl http://localhost:5000/v2/core/signal-service/tags/list
+
+			11.2 Check image digest
+				docker inspect localhost:5000/core/signal-service:v1.0.2 | grep RepoDigests -A 1
+
+			11.3 Compare versions
+				docker inspect localhost:5000/core/signal-service:v1.0.0 | grep RepoDigests -A 1
+				docker inspect localhost:5000/core/signal-service:v1.0.2 | grep RepoDigests -A 1
+
+		12. EXPECTED RESULT
+				v1.0.0 → sha256:OLD
+				v1.0.2 → sha256:NEW
+
+		13. ROLLBACK CAPABILITY
+				Pull previous version
+					docker pull localhost:5000/core/signal-service:v1.0.0
+
+				Future deployment usage
+					kubectl set image deployment/signal \
+					signal=localhost:5000/core/signal-service:v1.0.0
+
+		14. FAILURE MODEL
+			Failure				Cause				Fix
+			version exists		duplicate tag		increment version
+			same digest			no real change		modify code
+			build cached		cache reuse			use --no-cache
+			wrong version		manual error		fix version.txt
+
+		15. GOVERNANCE RULES (STRICT)
+				NO latest tag
+				NO overwrite
+				NO version reuse
+				ALL builds MUST use version.txt
+				EVERY version MUST map to unique digest
+
+		16. IMPORTANT NOTES
+			16.1 Version must represent system state
+				Version ≠ label
+				Version = state identity
+
+			16.2 Cache can break determinism
+
+			Always use:
+				docker build --no-cache
+
+				(especially during development and validation)
+
+			16.3 Invalid Versions
+
+				If two versions share same digest:
+				Mark as INVALID (do NOT delete)
+
+		17. OUTPUT (DELIVERABLE)
+
+			After this phase:
+			- version-controlled container images
+			- immutable artifact system
+			- deterministic build outputs
+			- rollback-safe deployment artifacts
+			- CI/CD ready version governance
+
+		18. PHASE LOCK CRITERIA
+
+			Phase is complete only if:
+			version.txt exists and is used
+			build script enforces versioning
+			overwrite protection works
+			new version generates new digest
+			old versions remain accessible
+
+		🔒 FINAL STATEMENT
+
+			This phase establishes:
+				FOUNDATION OF SAFE DEPLOYMENT SYSTEM
+
+			Without this:
+				CI/CD becomes unsafe
+				rollback becomes unreliable
+				system loses determinism
+
+	🔵 PHASE 9 — STEP 4: CI/CD PIPELINE (GitHub Actions)
+		1. PHASE IDENTITY
+			1.1 Name
+
+				CI/CD Pipeline (GitHub Actions + Self-Hosted Runner)
+
+			1.2 Objective
+
+			Automate:
+				Code Push → Version Validation → Build → Push to Registry
+
+		2. ARCHITECTURE OVERVIEW
+				GitHub Repo (core-system)
+						↓ (push)
+				GitHub Actions
+						↓
+				Self-hosted Runner (core-node)
+						↓
+				Build Script (platform/build/build.sh)
+						↓
+				Docker Build
+						↓
+				Local Registry (localhost:5000)
+
+		3. PREREQUISITES
+				Component				Status
+				GitHub repo				required
+				Docker					installed
+				Local registry			running (port 5000)
+				Versioning (Step 3)		implemented
+				build.sh				working
+
+		4. REPOSITORY STRUCTURE (CI/CD RELEVANT)
+				~/core-system/
+				├── .github/
+				│   └── workflows/
+				│       └── build.yml
+				├── platform/
+				│   ├── build/
+				│   │   └── build.sh
+				│   └── versioning/
+				│       └── version.txt
+				├── services/
+				│   └── signal-service/
+
+		5. WORKFLOW CONFIGURATION
+			5.1 File Path
+				~/core-system/.github/workflows/build.yml
+
+			5.2 Workflow File (FINAL)
+
+				name: Core System CI/CD
+
+				on:
+				  push:
+					branches:
+					  - main
+
+				jobs:
+				  build:
+					runs-on: self-hosted
+
+					steps:
+					  - name: Checkout code
+						uses: actions/checkout@v3
+
+					  - name: Make build script executable
+						run: chmod +x platform/build/build.sh
+
+					  - name: Run build pipeline
+						run: |
+						  ./platform/build/build.sh
+
+		6. BUILD SCRIPT (CI/CD READY)
+			6.1 File Path
+				~/core-system/platform/build/build.sh
+
+			6.2 Script (FINAL)
+				#!/bin/bash
+
+				set -e
+
+				REGISTRY="localhost:5000/core"
+				VERSION_FILE=platform/versioning/version.txt
+
+				get_version() {
+				  SERVICE=$1
+				  grep "^$SERVICE=" $VERSION_FILE | cut -d'=' -f2
+				}
+
+				SERVICES=(
+				  "signal-service"
+				)
+
+				for SERVICE in "${SERVICES[@]}"
+				do
+				  VERSION=$(get_version $SERVICE)
+
+				  if [ -z "$VERSION" ]; then
+					echo "ERROR: Version not found for $SERVICE"
+					exit 1
+				  fi
+
+				  echo "Checking existing versions..."
+
+				  if curl -s http://localhost:5000/v2/core/$SERVICE/tags/list | grep -q "$VERSION"; then
+					echo "ERROR: Version $VERSION already exists for $SERVICE"
+					exit 1
+				  fi
+
+				  echo "Building $SERVICE:$VERSION"
+
+				  docker build --no-cache -t $REGISTRY/$SERVICE:$VERSION \
+					services/$SERVICE
+
+				  echo "Pushing $SERVICE:$VERSION"
+
+				  docker push $REGISTRY/$SERVICE:$VERSION
+
+				done
+
+				echo "CI/CD BUILD COMPLETE"
+
+		7. SELF-HOSTED RUNNER SETUP
+			7.1 Directory
+				~/actions-runner
+
+			7.2 Download
+				curl -L -o actions-runner.tar.gz \
+				https://github.com/actions/runner/releases/download/v2.317.0/actions-runner-linux-x64-2.317.0.tar.gz
+
+			7.3 Extract
+				tar xzf actions-runner.tar.gz
+
+			7.4 Configure
+				./config.sh --url https://github.com/coreeyegroup/core-system --token <RUNNER_TOKEN>
+
+				Inputs:
+					Prompt			Value
+					runner group	default
+					runner name		core-node
+					labels			default
+					work folder		_work
+
+			7.5 Install Service
+				sudo ./svc.sh install
+				sudo ./svc.sh start
+
+			7.6 Verify
+				sudo systemctl status actions.runner.*
+
+				GitHub UI:
+					Runner → core-node → Online
+
+		8. EXECUTION FLOW
+			8.1 Trigger
+				git push
+
+			8.2 Pipeline Execution
+				Push
+				 ↓
+				GitHub Actions Trigger
+				 ↓
+				Runner picks job
+				 ↓
+				Checkout repo
+				 ↓
+				Execute build.sh
+				 ↓
+				Read version.txt
+				 ↓
+				Validate version (no duplicates)
+				 ↓
+				Docker build
+				 ↓
+				Docker push → registry
+
+		9. VERSION ENFORCEMENT (CRITICAL)
+
+			Pipeline will fail if:
+				Version already exists
+
+			Example:
+				ERROR: Version v1.0.2 already exists
+
+			Required action:
+				nano platform/versioning/version.txt
+				# increment version
+
+		10. VALIDATION COMMANDS
+			Check workflow
+				GitHub → Actions tab
+
+			Check registry
+				curl http://localhost:5000/v2/core/signal-service/tags/list
+
+			Check image
+				docker pull localhost:5000/core/signal-service:v1.0.3
+
+		11. FAILURE MODEL
+			Failure						Cause						Fix
+			queued forever				no runner					install runner
+			permission denied docker	user not in docker group	add user
+			version exists				duplicate version			increment version
+			build fails					wrong path					use relative paths
+			push fails					registry down				restart registry
+
+		12. SECURITY CONSIDERATIONS
+			- Use SSH for Git authentication
+			- Do not expose tokens
+			- Runner has system-level access
+			- Limit repo access
+
+		13. SYSTEM GUARANTEES
+
+			After this phase:
+			✔ Automatic build on push
+			✔ Deterministic versioning
+			✔ Immutable artifacts
+			✔ Registry integration
+			✔ No manual Docker execution
+
+		14. OPERATIONAL WORKFLOW (REAL USE)
+			1. Change code
+			2. Update version.txt
+			3. git commit
+			4. git push
+			5. CI/CD runs automatically
+			6. New image available in registry
+
+		15. PHASE LOCK CRITERIA
+
+			✔ GitHub repo connected
+			✔ Workflow file created
+			✔ Runner online
+			✔ Pipeline executes automatically
+			✔ Image pushed successfully
+			✔ Version enforcement working
+
+		🔒 FINAL STATEMENT
+			This phase establishes:
+				FULL BUILD AUTOMATION LAYER
+
+			Without this:
+				deployment is manual
+				version control is unsafe
+				scaling is impossible
+
+	PHASE 9 — STEP 5 : HELM DEPLOYMENT AUTOMATION
+		🎯 OBJECTIVE
+			Convert deployment from manual kubectl → deterministic Helm-based automation
+			and integrate it with CI/CD for version-controlled rollouts.
+
+		🧱 ARCHITECTURE POSITION
+			CI/CD (GitHub Actions)
+					↓
+			Version (version.txt)
+					↓
+			Docker Image (registry:5000)
+					↓
+			Helm Chart (deployment template)
+					↓
+			Kubernetes Deployment (rolling update)
+
+		📁 DIRECTORY STRUCTURE
+			~/core-system/platform/helm/
+			└── signal-service/
+				├── Chart.yaml
+				├── values.yaml
+				├── templates/
+				│   ├── deployment.yaml
+				│   ├── service.yaml
+				│   ├── serviceaccount.yaml
+				│   ├── ingress.yaml
+				│   ├── hpa.yaml
+				│   └── _helpers.tpl
+
+		🔵 STEP 1 — CREATE HELM BASE
+			cd ~/core-system
+
+			mkdir -p ~/core-system/platform/helm
+			cd ~/core-system/platform/helm
+
+			helm create signal-service
+
+		🔵 STEP 2 — CONFIGURE CHART METADATA
+			FILE
+				nano ~/core-system/platform/helm/signal-service/Chart.yaml
+
+			CONTENT:
+				apiVersion: v2
+				name: signal-service
+				description: Signal Service Helm Chart
+				type: application
+				version: 1.0.0
+				appVersion: "1.0.0"
+
+		🔵 STEP 3 — CONFIGURE VALUES
+			FILE:
+				nano ~/core-system/platform/helm/signal-service/values.yaml
+
+			CRITICAL CONFIG:
+
+				replicaCount: 1
+
+				image:
+				  repository: localhost:5000/core/signal-service
+				  tag: "v1.0.0"
+				  pullPolicy: IfNotPresent
+
+				service:
+				  type: ClusterIP
+				  port: 8000
+
+		🔵 STEP 4 — UPDATE DEPLOYMENT TEMPLATE
+			FILE:
+				nano ~/core-system/platform/helm/signal-service/templates/deployment.yaml
+
+		✅ FINAL DEPLOYMENT LOGIC (IMPORTANT PARTS)
+			1. IMAGE CONTROL (CI/CD DRIVEN)
+				image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+
+			2. ROLLOUT TRIGGER
+				annotations:
+				  deploymentTimestamp: "{{ now | unixEpoch }}"
+
+			3. FIXED CONTAINER NAME
+				- name: signal-service
+
+			4. LONG-RUNNING EXPECTATION
+
+				Container must not exit:
+
+				while True:
+					time.sleep(10)
+
+		🔵 STEP 5 — INITIAL DEPLOYMENT (HELM INSTALL)
+			❌ WRONG (YOU DID THIS)
+				helm install signal-service platform/helm/signal-service
+
+			👉 Caused:
+				repo platform not found
+
+			✅ CORRECT COMMAND
+			Option 1 (from inside helm folder)
+				cd ~/core-system/platform/helm
+				helm install signal-service ./signal-service
+
+			Option 2 (absolute path — recommended)
+				helm install signal-service \
+				~/core-system/platform/helm/signal-service
+
+		🔵 STEP 6 — VERIFY INITIAL DEPLOYMENT
+				kubectl get pods
+
+			Expected:
+				signal-service-xxxxx   Running / Creating
+
+		🔵 STEP 7 — DEBUG FAILURE (IMPORTANT CASE)
+
+			You encountered:
+				CrashLoopBackOff
+
+			ROOT CAUSE
+				Application exited immediately
+
+			FIX
+			FILE
+				nano ~/core-system/services/signal-service/app/main.py
+
+			UPDATED CODE
+				import time
+
+				print("Signal Service Running...")
+
+				while True:
+					time.sleep(10)
+
+		🔵 STEP 8 — VERSION-CONTROLLED DEPLOYMENT
+			VERSION FILE:
+				nano ~/core-system/platform/versioning/version.txt
+				signal-service=v1.0.4
+
+		🔵 STEP 9 — HELM UPGRADE (CRITICAL STEP)
+			❗ THIS WAS THE MISSING LINK
+				Build does NOT update deployment automatically
+
+			✅ COMMAND
+				helm upgrade signal-service \
+				~/core-system/platform/helm/signal-service \
+				--set image.tag=v1.0.4
+
+		🔵 STEP 10 — VERIFY NEW DEPLOYMENT
+			kubectl get pods
+
+			CHECK IMAGE:
+				kubectl describe pod <pod-name> | grep Image
+
+			CHECK LOGS:
+				kubectl logs <pod-name>
+
+		🔵 STEP 11 — CI/CD INTEGRATION
+			FILE:
+				nano ~/core-system/.github/workflows/build.yml
+
+			FINAL PIPELINE:
+
+				name: Core System CI/CD
+
+				on:
+				  push:
+					branches:
+					  - main
+
+				jobs:
+				  build-deploy:
+					runs-on: self-hosted
+
+					steps:
+					  - name: Checkout code
+						uses: actions/checkout@v3
+
+					  - name: Make build script executable
+						run: chmod +x platform/build/build.sh
+
+					  - name: Build and push image
+						run: |
+						  ./platform/build/build.sh
+
+					  - name: Extract version
+						run: |
+						  VERSION=$(grep "signal-service=" platform/versioning/version.txt | cut -d'=' -f2)
+						  echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+					  - name: Deploy via Helm
+						run: |
+						  helm upgrade --install signal-service platform/helm/signal-service \
+						  --set image.tag=$VERSION
+
+		🔵 STEP 12 — FULL AUTOMATION TEST
+			1. Modify code
+				nano ~/core-system/services/signal-service/app/main.py
+
+			2. Update version
+				nano ~/core-system/platform/versioning/version.txt
+				signal-service=v1.0.5
+
+			3. Push
+				cd ~/core-system
+
+				git add .
+				git commit -m "Test automation"
+				git push
+
+			4. Observe rollout
+				kubectl get pods -w
+
+		🔁 ROLLOUT BEHAVIOR (OBSERVED)
+			Old Pod → Terminating
+			Intermediate Pod → CrashLoop (previous version)
+			New Pod → Running
+
+		🧠 DEPLOYMENT LOGIC (FINAL)
+			version.txt
+			   ↓
+			CI/CD extracts version
+			   ↓
+			build.sh builds image
+			   ↓
+			push to registry
+			   ↓
+			helm upgrade --set image.tag
+			   ↓
+			Kubernetes rolling update
+			   ↓
+			new pod running
+
+		⚠️ IMPORTANT NOTES
+			1. VERSION IS SOURCE OF TRUTH
+				Never use "latest"
+				Never reuse version
+
+			2. HELM DOES NOT AUTO-DEPLOY
+				helm install → initial only
+				helm upgrade → required for updates
+
+			3. LOCAL REGISTRY LIMITATION
+				localhost:5000 works only on single-node cluster
+
+			4. CONTAINER RULE
+				Container must run continuously
+
+			5. CI/CD ≠ DEPLOYMENT
+				Build layer ≠ Deployment layer
+				Helm bridges the gap
+
+		🔒 FINAL STATE
+			✔ Fully automated deployment pipeline
+			✔ Version-controlled releases
+			✔ Helm-based reproducibility
+			✔ Zero manual kubectl for deployment
+			✔ Deterministic rollout behavior
+
+		✅ PHASE RESULT
+			PHASE 9 — STEP 5 COMPLETE
+			Helm Deployment Automation → SUCCESSFULLY IMPLEMENTED

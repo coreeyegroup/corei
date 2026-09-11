@@ -1,0 +1,3632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <title>Implementation Completion, Handover and Continuity Model</title>
+  <style>
+  body {
+    background: #0A0D12;
+    color: #E3E7EC;
+    font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px 40px;
+  }
+
+  h1 {
+    font-size: 26px;
+    font-weight: 600;
+    color: #C6A46A;
+    margin: 24px 0 12px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 8px;
+  }
+
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #D4B88A;
+    margin: 20px 0 10px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 6px;
+  }
+
+  h3 {
+    font-size: 17px;
+    font-weight: 500;
+    color: #E3E7EC;
+    margin: 16px 0 8px 0;
+  }
+
+  h4 {
+    font-size: 15px;
+    font-weight: 500;
+    color: #C5CED9;
+    margin: 12px 0 6px 0;
+  }
+
+  p {
+    margin-bottom: 8px;
+    color: #C5CED9;
+  }
+
+  ul,
+  ol {
+    padding-left: 24px;
+    margin-bottom: 8px;
+    color: #C5CED9;
+  }
+
+  li {
+    margin-bottom: 2px;
+  }
+
+  code {
+    font-family: 'JetBrains Mono', 'Cascadia Code', monospace;
+    font-size: 13px;
+    background: rgba(255,255,255,0.05);
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid #28303C;
+    color: #C5CED9;
+  }
+
+  pre {
+    background: #18202A;
+    border: 1px solid #28303C;
+    border-radius: 6px;
+    padding: 16px 20px;
+    overflow: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 12px 0 16px 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #C5CED9;
+  }
+
+  pre code {
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 16px 0;
+    font-size: 13px;
+    color: #C5CED9;
+  }
+
+  th {
+    background: #18202A;
+    color: #C5CED9;
+    font-weight: 600;
+    text-align: left;
+    padding: 6px 12px;
+    border: 1px solid #28303C;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  td {
+    padding: 4px 12px;
+    border: 1px solid #28303C;
+    background: #0E1219;
+  }
+
+  tr:nth-child(even) td {
+    background: #121821;
+  }
+
+  blockquote {
+    border-left: 3px solid #C6A46A;
+    padding-left: 16px;
+    margin: 8px 0 12px 0;
+    color: #6E7883;
+    font-style: italic;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #28303C;
+    margin: 24px 0;
+  }
+
+  a {
+    color: #8BB4F0;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  strong {
+    color: #E3E7EC;
+    font-weight: 600;
+  }
+
+  img {
+    max-width: 100%;
+    border-radius: 4px;
+    border: 1px solid #28303C;
+  }
+
+  .doc-footer {
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid #28303C;
+    font-size: 12px;
+    color: #6E7883;
+    font-family: monospace;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+</style>
+</head>
+
+<body>
+
+  <div
+    class="doc-header"
+    style="
+      background:#121821;
+      border:1px solid #28303C;
+      border-radius:8px;
+      padding:1.2rem 1.8rem;
+      margin-bottom:1.8rem;
+    "
+  >
+
+    <div
+      style="
+        color:#C6A46A;
+        font-weight:600;
+        font-size:13px;
+        text-transform:uppercase;
+        letter-spacing:0.05em;
+      "
+    >
+      COREI · Knowledge System
+    </div>
+
+
+    <div
+      style="
+        color:#6E7883;
+        font-family:monospace;
+        font-size:14px;
+        margin-top:0.1rem;
+      "
+    >
+      COREI-IM-08.09
+    </div>
+
+
+    <h1
+      style="
+        font-size:28px;
+        font-weight:600;
+        color:#E3E7EC;
+        margin:0.1rem 0;
+        border-bottom:none;
+        padding-bottom:0;
+      "
+    >
+      Implementation Completion, Handover and Continuity Model
+    </h1>
+
+    <div
+      style="
+        font-size:16px;
+        color:#C5CED9;
+      "
+    >
+      08 — Implementation
+      ·
+      Constitutional
+    </div>
+
+    <div
+      style="
+        display:flex;
+        flex-wrap:wrap;
+        gap:0.6rem 1.8rem;
+        margin-top:0.6rem;
+        font-size:13px;
+      "
+    >
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Status
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          Approved
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Version
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          1
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Classification
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          Constitutional
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Owner
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          COREI
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Repository
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+            font-family:monospace;
+          "
+        >
+          knowledge/08-implementation/
+        </span>
+      </span>
+
+    </div>
+
+
+    <div
+      style="
+        margin-top:0.8rem;
+        padding-top:0.6rem;
+        border-top:1px solid #28303C;
+        display:flex;
+        flex-wrap:wrap;
+        gap:0.3rem;
+        align-items:center;
+      "
+    >
+      <span
+        style="
+          font-size:11px;
+          text-transform:uppercase;
+          color:#6E7883;
+          letter-spacing:0.04em;
+          font-weight:600;
+          margin-right:0.4rem;
+        "
+      >
+        Depends On
+      </span>
+
+      <span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-KS-00.00</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-KS-00.01</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-KS-00.02</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-KS-00.03</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-KS-00.04</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ID-01.00</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ID-01.01</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ID-01.02</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ID-01.05</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-GV-02.00</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-GV-02.01</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-GV-02.02</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-GV-02.03</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-AR-03.00</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-AR-03.01</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-AR-03.02</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-AR-03.03</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-AR-03.04</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-AR-03.05</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-AR-03.06</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-AR-03.07</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-AR-03.08</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-AR-03.09</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-EN-04.00</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-EN-04.01</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-EN-04.02</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-EN-04.03</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-EN-04.04</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-EN-04.05</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-EN-04.06</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-EN-04.07</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-EN-04.08</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-EN-04.09</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ST-05.00</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ST-05.01</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ST-05.02</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ST-05.03</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ST-05.04</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ST-05.05</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ST-05.06</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ST-05.07</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ST-05.08</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ST-05.09</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-SP-06.00</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-SP-06.01</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-SP-06.02</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-SP-06.03</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-SP-06.04</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-SP-06.05</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-SP-06.06</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-SP-06.07</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-SP-06.08</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-SP-06.09</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-OP-07.00</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-OP-07.01</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-OP-07.02</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-OP-07.03</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-OP-07.04</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-OP-07.05</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-OP-07.06</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-OP-07.07</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-OP-07.08</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-OP-07.09</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-IM-08.00</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-IM-08.01</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-IM-08.02</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-IM-08.03</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-IM-08.04</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-IM-08.05</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-IM-08.06</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-IM-08.07</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-IM-08.08</span>
+
+    </div>
+
+
+  </div>
+
+
+  <div
+    style="
+      background:#0E1219;
+      border:1px solid #28303C;
+      border-radius:6px;
+      padding:0.8rem 1.2rem;
+      margin:0.6rem 0 1.2rem 0;
+      font-family:monospace;
+      font-size:12px;
+      color:#C5CED9;
+      overflow-x:auto;
+      line-height:2;
+    "
+  >
+
+    <div
+      style="
+        font-weight:600;
+        color:#C6A46A;
+        margin-bottom:0.25rem;
+      "
+    >
+      Dependency Chain
+    </div>
+
+    <div
+      style="
+        display:flex;
+        flex-wrap:wrap;
+        align-items:center;
+        gap:4px;
+      "
+    >
+
+      <span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-KS-00.00</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-KS-00.01</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-KS-00.02</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-KS-00.03</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-KS-00.04</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ID-01.00</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ID-01.01</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ID-01.02</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ID-01.05</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-GV-02.00</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-GV-02.01</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-GV-02.02</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-GV-02.03</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-AR-03.00</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-AR-03.01</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-AR-03.02</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-AR-03.03</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-AR-03.04</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-AR-03.05</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-AR-03.06</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-AR-03.07</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-AR-03.08</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-AR-03.09</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-EN-04.00</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-EN-04.01</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-EN-04.02</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-EN-04.03</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-EN-04.04</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-EN-04.05</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-EN-04.06</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-EN-04.07</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-EN-04.08</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-EN-04.09</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ST-05.00</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ST-05.01</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ST-05.02</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ST-05.03</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ST-05.04</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ST-05.05</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ST-05.06</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ST-05.07</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ST-05.08</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ST-05.09</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-SP-06.00</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-SP-06.01</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-SP-06.02</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-SP-06.03</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-SP-06.04</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-SP-06.05</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-SP-06.06</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-SP-06.07</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-SP-06.08</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-SP-06.09</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-OP-07.00</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-OP-07.01</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-OP-07.02</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-OP-07.03</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-OP-07.04</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-OP-07.05</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-OP-07.06</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-OP-07.07</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-OP-07.08</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-OP-07.09</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-IM-08.00</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-IM-08.01</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-IM-08.02</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-IM-08.03</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-IM-08.04</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-IM-08.05</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-IM-08.06</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-IM-08.07</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-IM-08.08</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span>
+
+
+      <span
+        style="
+          color:#C6A46A;
+          font-weight:600;
+          background:rgba(198,164,106,0.15);
+          padding:0 8px;
+          border-radius:3px;
+          white-space:nowrap;
+        "
+      >
+        COREI-IM-08.09
+      </span>
+
+
+    </div>
+
+  </div>
+
+
+  <h1>COREI IMPLEMENTATION COMPLETION, HANDOVER AND CONTINUITY MODEL</h1>
+<h1>DOCUMENT ID</h1>
+<h1>COREI-IM-08.09</h1>
+<h1>DOCUMENT NAME</h1>
+<h1>IMPLEMENTATION COMPLETION, HANDOVER AND CONTINUITY MODEL</h1>
+<h1>REPOSITORY FILE</h1>
+<h1>knowledge/08-implementation/COREI-IM-08.09-IMPLEMENTATION-COMPLETION-HANDOVER-AND-CONTINUITY-MODEL.md</h1>
+<h1>VERSION</h1>
+<h1>1.0</h1>
+<h1>STATUS</h1>
+<h1>APPROVED</h1>
+<h1>CLASSIFICATION</h1>
+<h1>CONSTITUTIONAL</h1>
+<h1>1. PURPOSE</h1>
+<p>The COREI Implementation Completion, Handover and<br>
+Continuity Model defines the authoritative<br>
+institutional method for determining when<br>
+implementation is genuinely complete,<br>
+transferring responsibility from implementation<br>
+to sustained ownership,<br>
+and preserving enough state for another authorized<br>
+engineer,<br>
+operator,<br>
+team,<br>
+automation system,<br>
+or artificial intelligence system</p>
+<p>to continue the work safely and correctly.</p>
+<p>Its purpose is to prevent</p>
+<p>false completion,</p>
+<p>knowledge loss,</p>
+<p>chat-dependent continuity,</p>
+<p>undocumented implementation state,</p>
+<p>orphaned capability,</p>
+<p>unclear ownership,</p>
+<p>unresolved validation,</p>
+<p>hidden operational debt,</p>
+<p>and institutional amnesia.</p>
+<p>Implementation SHALL not be considered complete<br>
+merely because</p>
+<p>code exists,</p>
+<p>a command succeeded,</p>
+<p>a build passed,</p>
+<p>a service started,</p>
+<p>a deployment completed,</p>
+<p>or a screen rendered.</p>
+<p>Completion SHALL be proven.</p>
+<h1>2. SCOPE</h1>
+<p>This document governs</p>
+<p>implementation completion,</p>
+<p>Stage completion,</p>
+<p>Phase completion,</p>
+<p>Step completion,</p>
+<p>Subsystem completion,</p>
+<p>Artifact completion,</p>
+<p>validation completion,</p>
+<p>certification completion,</p>
+<p>release completion,</p>
+<p>deployment completion,</p>
+<p>migration completion,</p>
+<p>operational handover,</p>
+<p>ownership transfer,</p>
+<p>continuity state,</p>
+<p>session continuity,</p>
+<p>AI continuity,</p>
+<p>team continuity,</p>
+<p>repository continuity,</p>
+<p>documentation continuity,</p>
+<p>evidence preservation,</p>
+<p>pending-work preservation,</p>
+<p>and institutional implementation closure.</p>
+<p>It applies across</p>
+<p>repositories,</p>
+<p>platforms,</p>
+<p>services,</p>
+<p>modules,</p>
+<p>engines,</p>
+<p>domains,</p>
+<p>applications,</p>
+<p>workspaces,</p>
+<p>infrastructure,</p>
+<p>data,</p>
+<p>events,</p>
+<p>state,</p>
+<p>security,</p>
+<p>identity,</p>
+<p>automation,</p>
+<p>artificial intelligence systems,</p>
+<p>and trading systems.</p>
+<h1>3. CORE PRINCIPLE</h1>
+<p>COREI implementation SHALL end in a known state.</p>
+<p>Every material implementation boundary SHALL be<br>
+capable of answering</p>
+<p>what was intended,</p>
+<p>what was implemented,</p>
+<p>what changed,</p>
+<p>what was validated,</p>
+<p>what remains unresolved,</p>
+<p>who owns the result,</p>
+<p>where the evidence exists,</p>
+<p>and what the next safe action is.</p>
+<p>Completion without reconstructable truth is not<br>
+institutional completion.</p>
+<h1>4. COMPLETION DEFINITION</h1>
+<p>Completion is the validated state in which the<br>
+defined implementation objective has been satisfied<br>
+within its approved scope.</p>
+<p>Completion SHALL be evidence-based.</p>
+<h1>5. CLOSURE DEFINITION</h1>
+<p>Closure is the formal institutional recognition<br>
+that a defined implementation boundary has reached<br>
+its approved terminal state.</p>
+<p>Completion and closure MAY occur at different<br>
+times.</p>
+<h1>6. HANDOVER DEFINITION</h1>
+<p>Handover is the controlled transfer of</p>
+<p>knowledge,</p>
+<p>state,</p>
+<p>authority,</p>
+<p>responsibility,</p>
+<p>and ownership</p>
+<p>from one implementation owner to another<br>
+responsible party.</p>
+<h1>7. CONTINUITY DEFINITION</h1>
+<p>Continuity is the preservation of sufficient<br>
+authoritative state for work or operations to<br>
+continue correctly across</p>
+<p>sessions,</p>
+<p>people,</p>
+<p>teams,</p>
+<p>tools,</p>
+<p>systems,</p>
+<p>environments,</p>
+<p>and time.</p>
+<h1>8. COMPLETION BOUNDARY</h1>
+<p>Every completion decision SHALL apply to an explicit<br>
+boundary.</p>
+<p>Examples include</p>
+<p>Artifact,</p>
+<p>Subsystem,</p>
+<p>Step,</p>
+<p>Phase,</p>
+<p>Stage,</p>
+<p>Release,</p>
+<p>Deployment,</p>
+<p>Migration,</p>
+<p>Platform,</p>
+<p>Service,</p>
+<p>Domain,</p>
+<p>or Program.</p>
+<h1>9. COMPLETION OWNER</h1>
+<p>Every material completion boundary SHALL have an<br>
+owner responsible for proving completion.</p>
+<h1>10. ACCEPTANCE AUTHORITY</h1>
+<p>Where required,<br>
+completion SHALL be accepted by an authority<br>
+appropriate to the boundary and risk.</p>
+<p>Self-declaration SHALL not replace independent<br>
+acceptance where governance requires it.</p>
+<h1>11. COMPLETION CRITERIA</h1>
+<p>Completion criteria SHALL be defined before or<br>
+during implementation.</p>
+<p>Criteria SHALL be sufficiently explicit to<br>
+determine whether the objective has been met.</p>
+<h1>12. EXIT CRITERIA</h1>
+<p>Exit Criteria define the conditions required to<br>
+leave an implementation boundary.</p>
+<p>Exit criteria MAY include</p>
+<p>deliverables,</p>
+<p>validation,</p>
+<p>evidence,</p>
+<p>documentation,</p>
+<p>ownership,</p>
+<p>and unresolved-risk state.</p>
+<h1>13. ACCEPTANCE CRITERIA</h1>
+<p>Acceptance Criteria define the observable conditions<br>
+that prove the implementation satisfies its<br>
+required outcome.</p>
+<h1>14. DEFINITION OF DONE</h1>
+<p>A Definition of Done MAY standardize completion<br>
+requirements for recurring implementation classes.</p>
+<p>The Definition of Done SHALL not override<br>
+boundary-specific requirements.</p>
+<h1>15. COMPLETION BASELINE</h1>
+<p>Completion SHALL apply to a specific implementation<br>
+baseline.</p>
+<p>Material changes after completion SHALL create a<br>
+new implementation state requiring reassessment.</p>
+<h1>16. COMPLETION IDENTITY</h1>
+<p>Material completion events SHOULD have a unique<br>
+identity or traceable record.</p>
+<p>The identity SHALL support reconstruction of</p>
+<p>what completed,</p>
+<p>when,</p>
+<p>under what baseline,</p>
+<p>and with what evidence.</p>
+<h1>17. FALSE COMPLETION</h1>
+<p>False Completion occurs when implementation is<br>
+declared complete without satisfying required<br>
+criteria.</p>
+<p>Examples include</p>
+<p>code written but not validated,</p>
+<p>build passed but architecture failed,</p>
+<p>deployment completed but runtime unhealthy,</p>
+<p>migration copied data but reconciliation failed,</p>
+<p>UI rendered but workflow is non-functional,</p>
+<p>trading service running but execution state is<br>
+unknown.</p>
+<h1>18. PARTIAL COMPLETION</h1>
+<p>Partial completion SHALL be explicit.</p>
+<p>A partially completed boundary SHALL not be<br>
+represented as fully complete.</p>
+<h1>19. CONDITIONAL COMPLETION</h1>
+<p>Conditional completion MAY be permitted where</p>
+<p>remaining conditions are explicit,</p>
+<p>risk is understood,</p>
+<p>authority approves,</p>
+<p>and follow-up ownership is assigned.</p>
+<h1>20. BLOCKED COMPLETION</h1>
+<p>A boundary SHALL remain blocked when mandatory<br>
+completion criteria cannot be satisfied.</p>
+<p>Schedule pressure SHALL not convert blocked work<br>
+into completed work.</p>
+<h1>21. DEFERRED WORK</h1>
+<p>Deferred work SHALL be</p>
+<p>explicit,</p>
+<p>owned,</p>
+<p>prioritized,</p>
+<p>and traceable.</p>
+<p>Deferred work SHALL not disappear from institutional<br>
+memory.</p>
+<h1>22. KNOWN ISSUE</h1>
+<p>Known issues remaining at completion SHALL be<br>
+recorded.</p>
+<p>The issue record SHOULD identify</p>
+<p>impact,</p>
+<p>severity,</p>
+<p>workaround,</p>
+<p>owner,</p>
+<p>and disposition.</p>
+<h1>23. KNOWN UNKNOWN</h1>
+<p>Material known unknowns SHALL be preserved at<br>
+handover.</p>
+<p>Unknown state SHALL not be concealed by optimistic<br>
+language.</p>
+<h1>24. COMPLETION EVIDENCE</h1>
+<p>Completion evidence MAY include</p>
+<p>source state,</p>
+<p>repository state,</p>
+<p>build result,</p>
+<p>test result,</p>
+<p>architecture validation,</p>
+<p>security validation,</p>
+<p>data validation,</p>
+<p>operational validation,</p>
+<p>trading validation,</p>
+<p>release evidence,</p>
+<p>deployment evidence,</p>
+<p>migration evidence,</p>
+<p>and acceptance.</p>
+<h1>25. COMPLETION EVIDENCE PACKAGE</h1>
+<p>A material implementation boundary MAY maintain a<br>
+Completion Evidence Package.</p>
+<p>It MAY include</p>
+<p>Completion Identity</p>
+<p>Boundary Identity</p>
+<p>Objective</p>
+<p>Scope</p>
+<p>Deliverables</p>
+<p>Implementation Baseline</p>
+<p>Files Created</p>
+<p>Files Updated</p>
+<p>Artifacts Produced</p>
+<p>Validation Results</p>
+<p>Certification State</p>
+<p>Known Issues</p>
+<p>Deferred Work</p>
+<p>Known Unknowns</p>
+<p>Operational State</p>
+<p>Ownership State</p>
+<p>Continuity State</p>
+<p>Acceptance</p>
+<p>Next Safe Action</p>
+<h1>26. COMPLETION TRACEABILITY</h1>
+<p>Completion SHALL be traceable to</p>
+<p>objective,</p>
+<p>scope,</p>
+<p>implementation,</p>
+<p>validation,</p>
+<p>evidence,</p>
+<p>and acceptance</p>
+<p>where applicable.</p>
+<h1>27. COMPLETION VALIDATION</h1>
+<p>Completion validation SHALL prove that required<br>
+implementation outcomes exist in the actual system<br>
+state.</p>
+<p>Statements of intent are insufficient.</p>
+<h1>28. BUILD COMPLETION</h1>
+<p>Build completion SHALL prove that the intended<br>
+source state produces the required artifact<br>
+successfully.</p>
+<h1>29. REPOSITORY COMPLETION</h1>
+<p>Repository completion SHALL verify</p>
+<p>required files exist,</p>
+<p>ownership is correct,</p>
+<p>public APIs are correct,</p>
+<p>structure is correct,</p>
+<p>and no prohibited dependency condition remains.</p>
+<h1>30. ARCHITECTURE COMPLETION</h1>
+<p>Architecture completion SHALL verify that<br>
+implementation conforms to the approved<br>
+architecture.</p>
+<p>Working code that violates architecture SHALL not<br>
+be considered institutionally complete.</p>
+<h1>31. VALIDATION COMPLETION</h1>
+<p>Validation completion SHALL mean all mandatory<br>
+validation classes have reached explicit final<br>
+state.</p>
+<p>Missing validation SHALL remain visible.</p>
+<h1>32. CERTIFICATION COMPLETION</h1>
+<p>Certification completion SHALL mean required<br>
+certification has been granted against the exact<br>
+implementation baseline.</p>
+<h1>33. RELEASE COMPLETION</h1>
+<p>Release completion SHALL mean the release is</p>
+<p>identified,</p>
+<p>validated,</p>
+<p>authorized,</p>
+<p>published,</p>
+<p>and traceable.</p>
+<h1>34. DEPLOYMENT COMPLETION</h1>
+<p>Deployment completion SHALL mean the intended<br>
+release is</p>
+<p>deployed,</p>
+<p>validated,</p>
+<p>reconciled,</p>
+<p>and in a known operational state.</p>
+<h1>35. MIGRATION COMPLETION</h1>
+<p>Migration completion SHALL mean</p>
+<p>target state is operational,</p>
+<p>required data and state are reconciled,</p>
+<p>authority is transferred,</p>
+<p>and legacy disposition is known.</p>
+<h1>36. OPERATIONAL COMPLETION</h1>
+<p>Operational completion SHALL mean the implemented<br>
+capability can be operated within defined</p>
+<p>ownership,</p>
+<p>monitoring,</p>
+<p>support,</p>
+<p>recovery,</p>
+<p>and governance</p>
+<p>boundaries.</p>
+<h1>37. TRADING IMPLEMENTATION COMPLETION</h1>
+<p>Trading implementation SHALL not be complete until<br>
+applicable</p>
+<p>market data,</p>
+<p>signal,</p>
+<p>decision,</p>
+<p>risk,</p>
+<p>portfolio,</p>
+<p>execution,</p>
+<p>order,</p>
+<p>position,</p>
+<p>performance,</p>
+<p>and reconciliation</p>
+<p>behaviour has been validated.</p>
+<h1>38. LIVE TRADING COMPLETION</h1>
+<p>Live trading enablement SHALL not be considered<br>
+complete merely because an order can be submitted.</p>
+<p>Completion SHALL include applicable</p>
+<p>broker state,</p>
+<p>account state,</p>
+<p>capital state,</p>
+<p>risk state,</p>
+<p>execution safety,</p>
+<p>position truth,</p>
+<p>kill controls,</p>
+<p>observability,</p>
+<p>and operational authority.</p>
+<h1>39. DOCUMENTATION COMPLETION</h1>
+<p>Documentation SHALL be complete enough to preserve<br>
+institutional understanding of</p>
+<p>what exists,</p>
+<p>why it exists,</p>
+<p>how it is owned,</p>
+<p>how it is operated,</p>
+<p>and how it continues.</p>
+<h1>40. DOCUMENTATION IS NOT IMPLEMENTATION</h1>
+<p>Documentation completion SHALL not be used as proof<br>
+that implementation itself is complete.</p>
+<p>Implementation and documentation SHALL remain<br>
+distinct evidence classes.</p>
+<h1>41. IMPLEMENTATION IS NOT DOCUMENTATION</h1>
+<p>Working implementation SHALL not eliminate the need<br>
+for required institutional documentation.</p>
+<h1>42. HANDOVER PRINCIPLE</h1>
+<p>Handover SHALL transfer enough truth for the<br>
+receiving owner to continue without reconstructing<br>
+the project from fragments.</p>
+<h1>43. HANDOVER OWNER</h1>
+<p>The outgoing owner SHALL prepare the handover state.</p>
+<p>The receiving owner SHALL verify that the state is<br>
+usable where formal acceptance is required.</p>
+<h1>44. HANDOVER SCOPE</h1>
+<p>Handover SHALL define exactly what responsibility is<br>
+being transferred.</p>
+<h1>45. HANDOVER AUTHORITY</h1>
+<p>Transfer of operational or financial authority<br>
+SHALL be explicit.</p>
+<p>Knowledge transfer alone does not transfer<br>
+authority.</p>
+<h1>46. HANDOVER PACKAGE</h1>
+<p>A material handover SHOULD maintain a Handover<br>
+Package.</p>
+<p>It MAY include</p>
+<p>Handover Identity</p>
+<p>Scope</p>
+<p>Current State</p>
+<p>Completed Work</p>
+<p>Pending Work</p>
+<p>Repository State</p>
+<p>Deployment State</p>
+<p>Operational State</p>
+<p>Validation State</p>
+<p>Certification State</p>
+<p>Known Issues</p>
+<p>Known Unknowns</p>
+<p>Dependencies</p>
+<p>Credentials or Access References</p>
+<p>Runbooks</p>
+<p>Recovery Information</p>
+<p>Ownership</p>
+<p>Authority</p>
+<p>Evidence Locations</p>
+<p>Next Safe Action</p>
+<h1>47. CURRENT STATE SUMMARY</h1>
+<p>Every material handover SHALL identify the current<br>
+authoritative state.</p>
+<p>The summary SHALL reflect reality,<br>
+not intended future state.</p>
+<h1>48. COMPLETED WORK SUMMARY</h1>
+<p>Completed work SHALL identify</p>
+<p>what is complete,</p>
+<p>under which boundary,</p>
+<p>and with what evidence.</p>
+<h1>49. PENDING WORK SUMMARY</h1>
+<p>Pending work SHALL identify</p>
+<p>what remains,</p>
+<p>why,</p>
+<p>priority,</p>
+<p>owner,</p>
+<p>dependencies,</p>
+<p>and next action</p>
+<p>where applicable.</p>
+<h1>50. REPOSITORY STATE</h1>
+<p>Handover SHALL identify the authoritative repository<br>
+and relevant branch,<br>
+tag,<br>
+commit,<br>
+or baseline</p>
+<p>where applicable.</p>
+<h1>51. FILE STATE</h1>
+<p>Material handover SHOULD identify important</p>
+<p>files created,</p>
+<p>files updated,</p>
+<p>files deprecated,</p>
+<p>and files pending.</p>
+<h1>52. RUNTIME STATE</h1>
+<p>Handover SHALL identify the actual runtime state<br>
+where relevant.</p>
+<p>Repository state alone is insufficient for<br>
+operational continuity.</p>
+<h1>53. DEPLOYMENT STATE</h1>
+<p>Handover SHALL identify</p>
+<p>what version is deployed,</p>
+<p>where,</p>
+<p>and whether it is active.</p>
+<h1>54. CONFIGURATION STATE</h1>
+<p>Material configuration state SHALL be discoverable.</p>
+<p>Sensitive values SHALL remain protected.</p>
+<h1>55. DATA STATE</h1>
+<p>Handover SHALL identify material data state,<br>
+including</p>
+<p>migration,</p>
+<p>reconciliation,</p>
+<p>backfill,</p>
+<p>and known integrity issues</p>
+<p>where relevant.</p>
+<h1>56. EVENT STATE</h1>
+<p>Event-driven systems SHOULD identify</p>
+<p>active contracts,</p>
+<p>topics,</p>
+<p>consumer state,</p>
+<p>and replay considerations</p>
+<p>where relevant.</p>
+<h1>57. STATE STORE STATE</h1>
+<p>Persistent state ownership and version SHALL be<br>
+discoverable.</p>
+<h1>58. SECURITY STATE</h1>
+<p>Handover SHALL identify relevant</p>
+<p>identity,</p>
+<p>access,</p>
+<p>secret,</p>
+<p>policy,</p>
+<p>and security issue</p>
+<p>state without exposing protected secret material.</p>
+<h1>59. OBSERVABILITY STATE</h1>
+<p>Handover SHALL identify how the implemented<br>
+capability is observed.</p>
+<p>Critical monitoring gaps SHALL remain visible.</p>
+<h1>60. INCIDENT STATE</h1>
+<p>Open incidents affecting the implementation SHALL<br>
+be identified at handover.</p>
+<h1>61. RISK STATE</h1>
+<p>Known implementation and operational risks SHALL be<br>
+preserved.</p>
+<p>Risk SHALL not disappear because ownership changes.</p>
+<h1>62. TRADING STATE</h1>
+<p>Trading handover SHALL identify applicable</p>
+<p>market state,</p>
+<p>broker state,</p>
+<p>account state,</p>
+<p>open orders,</p>
+<p>fills,</p>
+<p>positions,</p>
+<p>portfolio state,</p>
+<p>risk state,</p>
+<p>strategy state,</p>
+<p>and execution authority.</p>
+<h1>63. OPEN ORDER CONTINUITY</h1>
+<p>Open orders SHALL remain attributable to their</p>
+<p>account,</p>
+<p>strategy,</p>
+<p>portfolio,</p>
+<p>and execution state</p>
+<p>across handover.</p>
+<h1>64. POSITION CONTINUITY</h1>
+<p>Positions SHALL remain reconciled and attributable<br>
+across ownership transfer.</p>
+<h1>65. CAPITAL CONTINUITY</h1>
+<p>Capital allocation and authority SHALL remain<br>
+explicit across handover.</p>
+<h1>66. STRATEGY CONTINUITY</h1>
+<p>Active strategy state SHALL remain discoverable,<br>
+including</p>
+<p>version,</p>
+<p>configuration,</p>
+<p>authority,</p>
+<p>and owned positions.</p>
+<h1>67. BROKER CONTINUITY</h1>
+<p>Broker-specific operational state SHALL remain<br>
+discoverable and isolated where required.</p>
+<h1>68. MULTI-ACCOUNT CONTINUITY</h1>
+<p>Account boundaries SHALL remain explicit across<br>
+handover.</p>
+<h1>69. MULTI-PORTFOLIO CONTINUITY</h1>
+<p>Portfolio ownership,<br>
+capital,<br>
+risk,<br>
+and positions</p>
+<p>SHALL remain explicit.</p>
+<h1>70. MULTI-REGION CONTINUITY</h1>
+<p>Region-specific deployment,<br>
+state,<br>
+and authority</p>
+<p>SHALL remain discoverable.</p>
+<h1>71. CONTINUITY SOURCE OF TRUTH</h1>
+<p>Continuity SHALL be grounded in authoritative<br>
+persistent sources.</p>
+<p>Chat history MAY provide context.</p>
+<p>It SHALL not be the sole source of truth.</p>
+<h1>72. REPOSITORY AS CONTINUITY SOURCE</h1>
+<p>The repository SHALL preserve implementation truth<br>
+where repository ownership applies.</p>
+<h1>73. KNOWLEDGE SYSTEM AS CONTINUITY SOURCE</h1>
+<p>The COREI Knowledge System SHALL preserve<br>
+institutional design,<br>
+governance,<br>
+standards,<br>
+specification,<br>
+operations,<br>
+implementation,<br>
+reference,<br>
+history,<br>
+and research</p>
+<p>context.</p>
+<h1>74. EVIDENCE AS CONTINUITY SOURCE</h1>
+<p>Evidence SHALL preserve proof of what was actually<br>
+validated and completed.</p>
+<h1>75. RUNTIME AS CONTINUITY SOURCE</h1>
+<p>Runtime inspection SHALL be used where actual<br>
+operational state may differ from repository<br>
+intent.</p>
+<h1>76. CONTINUITY PRECEDENCE</h1>
+<p>When continuity sources conflict,<br>
+the conflict SHALL be resolved explicitly.</p>
+<p>No single source SHALL be assumed correct merely<br>
+because it is newer or easier to access.</p>
+<h1>77. SESSION CONTINUITY</h1>
+<p>Work spanning multiple sessions SHALL preserve</p>
+<p>current objective,</p>
+<p>current boundary,</p>
+<p>completed work,</p>
+<p>pending work,</p>
+<p>validation state,</p>
+<p>known issues,</p>
+<p>and next safe action.</p>
+<h1>78. CHAT CONTINUITY</h1>
+<p>Chat SHALL support execution.</p>
+<p>Chat SHALL not become the only location where<br>
+critical project state exists.</p>
+<h1>79. AI CONTINUITY</h1>
+<p>Artificial intelligence systems SHALL receive<br>
+sufficient authoritative context to continue work<br>
+without redesigning or repeating completed work.</p>
+<h1>80. AI CONTEXT RESTORATION</h1>
+<p>AI context restoration SHOULD establish</p>
+<p>identity,</p>
+<p>authority,</p>
+<p>architecture,</p>
+<p>current implementation boundary,</p>
+<p>repository state,</p>
+<p>completed work,</p>
+<p>pending work,</p>
+<p>validation state,</p>
+<p>and next safe action.</p>
+<h1>81. AI SHALL NOT RECONSTRUCT BY GUESS</h1>
+<p>When authoritative continuity state is missing,<br>
+AI SHALL identify the gap.</p>
+<p>It SHALL not invent project history.</p>
+<h1>82. AI SHALL NOT REOPEN COMPLETED ARCHITECTURE</h1>
+<p>Completed and approved architecture SHALL not be<br>
+redesigned during continuity restoration unless<br>
+explicitly authorized.</p>
+<h1>83. AI SHALL NOT REBUILD COMPLETED FOUNDATIONS</h1>
+<p>Completed foundational implementation SHALL be<br>
+consumed and integrated.</p>
+<p>It SHALL not be rebuilt merely because a new<br>
+session begins.</p>
+<h1>84. AI SHALL VERIFY REPOSITORY REALITY</h1>
+<p>Where repository state is available,<br>
+AI SHALL prefer actual implementation state over<br>
+assumed historical narrative.</p>
+<h1>85. AI SHALL PRESERVE NEXT SAFE ACTION</h1>
+<p>Every material continuity handover SHOULD identify<br>
+the next safe implementation action.</p>
+<h1>86. TEAM CONTINUITY</h1>
+<p>Team changes SHALL not destroy implementation<br>
+knowledge.</p>
+<p>Ownership transfer SHALL preserve institutional<br>
+state.</p>
+<h1>87. PERSONNEL CONTINUITY</h1>
+<p>Critical capability SHALL not depend upon a single<br>
+person’s undocumented memory.</p>
+<h1>88. TOOL CONTINUITY</h1>
+<p>Changes in tools SHALL not destroy implementation<br>
+traceability or ownership.</p>
+<h1>89. VENDOR CONTINUITY</h1>
+<p>Vendor changes SHALL preserve enough information to<br>
+maintain or migrate the capability.</p>
+<h1>90. ENVIRONMENT CONTINUITY</h1>
+<p>Environment state SHALL remain discoverable across<br>
+deployment and ownership changes.</p>
+<h1>91. INCIDENT CONTINUITY</h1>
+<p>Implementation handover during an incident SHALL<br>
+preserve</p>
+<p>incident state,</p>
+<p>mitigation state,</p>
+<p>system state,</p>
+<p>and next safe action.</p>
+<h1>92. EMERGENCY HANDOVER</h1>
+<p>Emergency handover MAY use an accelerated format.</p>
+<p>It SHALL still preserve</p>
+<p>current state,</p>
+<p>risk,</p>
+<p>authority,</p>
+<p>and immediate next action.</p>
+<h1>93. CONTINUITY BLOCK</h1>
+<p>A Continuity Block is a compact authoritative<br>
+snapshot used to restore implementation context.</p>
+<p>It SHALL not replace the full source of truth.</p>
+<p>It SHALL point to it.</p>
+<h1>94. CONTINUITY BLOCK CONTENT</h1>
+<p>A material Continuity Block SHOULD contain</p>
+<p>Project Identity</p>
+<p>Current Stage</p>
+<p>Current Phase</p>
+<p>Current Step</p>
+<p>Current Subsystem</p>
+<p>Current Objective</p>
+<p>Architecture State</p>
+<p>Repository State</p>
+<p>Completed Work</p>
+<p>Current Work</p>
+<p>Pending Work</p>
+<p>Validation State</p>
+<p>Known Issues</p>
+<p>Known Unknowns</p>
+<p>Operational State</p>
+<p>Authority State</p>
+<p>Relevant Files</p>
+<p>Relevant Evidence</p>
+<p>Next Safe Action</p>
+<h1>95. CONTINUITY BLOCK FRESHNESS</h1>
+<p>A Continuity Block SHALL identify its baseline or<br>
+generation time where freshness matters.</p>
+<p>Stale continuity state SHALL not silently override<br>
+newer authoritative reality.</p>
+<h1>96. CONTINUITY BLOCK VALIDATION</h1>
+<p>Continuity restoration SHOULD validate the block<br>
+against</p>
+<p>repository,</p>
+<p>runtime,</p>
+<p>and authoritative documentation</p>
+<p>where practical.</p>
+<h1>97. CONTINUITY DRIFT</h1>
+<p>Continuity Drift occurs when recorded continuity<br>
+state differs from actual project state.</p>
+<p>Drift SHALL be reconciled.</p>
+<h1>98. HANDOVER ACCEPTANCE</h1>
+<p>Formal handover MAY require receiving-party<br>
+acceptance.</p>
+<p>Acceptance SHOULD confirm that</p>
+<p>scope,</p>
+<p>state,</p>
+<p>ownership,</p>
+<p>and next actions</p>
+<p>are understood.</p>
+<h1>99. HANDOVER REJECTION</h1>
+<p>Handover MAY be rejected when critical state is</p>
+<p>missing,</p>
+<p>contradictory,</p>
+<p>unvalidated,</p>
+<p>or unusable.</p>
+<h1>100. OWNERSHIP TRANSFER</h1>
+<p>Ownership transfer SHALL be explicit.</p>
+<p>The transfer SHALL identify</p>
+<p>previous owner,</p>
+<p>new owner,</p>
+<p>scope,</p>
+<p>effective state,</p>
+<p>and unresolved obligations.</p>
+<h1>101. AUTHORITY TRANSFER</h1>
+<p>Authority transfer SHALL be distinct from ownership<br>
+transfer where governance requires.</p>
+<p>A new owner SHALL not automatically inherit every<br>
+operational or financial permission.</p>
+<h1>102. SUPPORT TRANSFER</h1>
+<p>Operational support responsibility SHALL be<br>
+transferred explicitly where implementation enters<br>
+sustained operation.</p>
+<h1>103. RUNBOOK HANDOVER</h1>
+<p>Operational handover SHOULD include required<br>
+runbooks.</p>
+<p>Runbooks SHALL reflect actual system behaviour.</p>
+<h1>104. RECOVERY HANDOVER</h1>
+<p>Recovery procedures and restoration references<br>
+SHALL be discoverable before critical capability is<br>
+accepted into operation.</p>
+<h1>105. OBSERVABILITY HANDOVER</h1>
+<p>The receiving owner SHALL know</p>
+<p>where to observe health,</p>
+<p>where to find logs,</p>
+<p>where to find metrics,</p>
+<p>where to find traces,</p>
+<p>and what alerts matter.</p>
+<h1>106. SECURITY HANDOVER</h1>
+<p>Security ownership SHALL identify</p>
+<p>access model,</p>
+<p>secret ownership,</p>
+<p>policy ownership,</p>
+<p>known vulnerabilities,</p>
+<p>and pending remediation</p>
+<p>where applicable.</p>
+<h1>107. DATA HANDOVER</h1>
+<p>Data ownership SHALL identify</p>
+<p>authoritative stores,</p>
+<p>schemas,</p>
+<p>retention,</p>
+<p>quality,</p>
+<p>and unresolved integrity issues.</p>
+<h1>108. TRADING OPERATIONS HANDOVER</h1>
+<p>Trading operations handover SHALL identify</p>
+<p>active markets,</p>
+<p>active brokers,</p>
+<p>active accounts,</p>
+<p>active strategies,</p>
+<p>active portfolios,</p>
+<p>open orders,</p>
+<p>positions,</p>
+<p>capital state,</p>
+<p>risk state,</p>
+<p>execution controls,</p>
+<p>kill controls,</p>
+<p>and current authority.</p>
+<h1>109. KNOWLEDGE HANDOVER</h1>
+<p>Knowledge handover SHALL preserve</p>
+<p>design rationale,</p>
+<p>constraints,</p>
+<p>decisions,</p>
+<p>and operational implications</p>
+<p>where they are necessary for safe continuation.</p>
+<h1>110. DECISION CONTINUITY</h1>
+<p>Material implementation decisions SHALL remain<br>
+discoverable.</p>
+<p>Future maintainers SHALL not be forced to repeat<br>
+resolved decisions merely because rationale was<br>
+lost.</p>
+<h1>111. CONSTRAINT CONTINUITY</h1>
+<p>Critical constraints SHALL remain explicit across<br>
+handover.</p>
+<p>Examples include</p>
+<p>architecture frozen,</p>
+<p>platform kernel complete,</p>
+<p>specific migration pending,</p>
+<p>live trading disabled,</p>
+<p>or compatibility window active.</p>
+<h1>112. ASSUMPTION CONTINUITY</h1>
+<p>Material assumptions SHALL be recorded.</p>
+<p>Assumptions SHALL not silently become facts.</p>
+<h1>113. DEPENDENCY CONTINUITY</h1>
+<p>Critical dependencies SHALL remain discoverable,<br>
+including</p>
+<p>internal dependencies,</p>
+<p>external dependencies,</p>
+<p>vendor dependencies,</p>
+<p>and operational dependencies.</p>
+<h1>114. ACCESS CONTINUITY</h1>
+<p>Required access SHALL be transferred through<br>
+controlled identity and authorization mechanisms.</p>
+<p>Credentials SHALL not be copied into handover<br>
+documents.</p>
+<h1>115. SECRET CONTINUITY</h1>
+<p>Secret references MAY be transferred.</p>
+<p>Secret values SHALL remain protected.</p>
+<h1>116. EVIDENCE CONTINUITY</h1>
+<p>Evidence locations SHALL remain discoverable after<br>
+implementation completion.</p>
+<h1>117. HISTORY CONTINUITY</h1>
+<p>Material historical context SHALL be preserved when<br>
+it affects future</p>
+<p>operation,</p>
+<p>maintenance,</p>
+<p>migration,</p>
+<p>or governance.</p>
+<h1>118. RETIRED IMPLEMENTATION CONTINUITY</h1>
+<p>Retired capability MAY require historical<br>
+continuity through</p>
+<p>archive,</p>
+<p>tombstone,</p>
+<p>migration record,</p>
+<p>or replacement reference.</p>
+<h1>119. COMPLETION REVIEW</h1>
+<p>Material completion MAY require a formal review.</p>
+<p>The review SHALL evaluate</p>
+<p>objective,</p>
+<p>scope,</p>
+<p>deliverables,</p>
+<p>validation,</p>
+<p>evidence,</p>
+<p>risk,</p>
+<p>and ownership.</p>
+<h1>120. POST-IMPLEMENTATION REVIEW</h1>
+<p>A Post-Implementation Review MAY assess</p>
+<p>whether the intended outcome was achieved,</p>
+<p>whether unexpected effects occurred,</p>
+<p>and whether follow-up action is required.</p>
+<h1>121. LESSONS LEARNED</h1>
+<p>Lessons learned MAY be preserved where they improve<br>
+future institutional execution.</p>
+<p>Lessons SHALL not replace corrective action.</p>
+<h1>122. COMPLETION METRICS</h1>
+<p>Completion metrics MAY measure</p>
+<p>delivery,</p>
+<p>quality,</p>
+<p>validation,</p>
+<p>defects,</p>
+<p>rollback,</p>
+<p>rework,</p>
+<p>and operational stability.</p>
+<p>Metrics SHALL not incentivize false completion.</p>
+<h1>123. CLOSURE DEBT</h1>
+<p>Closure Debt exists when implementation is<br>
+functionally complete but required</p>
+<p>documentation,</p>
+<p>evidence,</p>
+<p>ownership,</p>
+<p>or follow-up</p>
+<p>remains unresolved.</p>
+<p>Closure debt SHALL be visible.</p>
+<h1>124. HANDOVER DEBT</h1>
+<p>Handover Debt exists when capability depends upon<br>
+undocumented knowledge or unclear ownership.</p>
+<p>Handover debt SHALL be reduced before critical<br>
+ownership transfer.</p>
+<h1>125. CONTINUITY DEBT</h1>
+<p>Continuity Debt exists when future work cannot be<br>
+resumed safely without rediscovery.</p>
+<p>Continuity debt SHALL not become normal operating<br>
+practice.</p>
+<h1>126. ORPHANED IMPLEMENTATION</h1>
+<p>Implementation without a defined owner is<br>
+Orphaned Implementation.</p>
+<p>Critical orphaned implementation is prohibited.</p>
+<h1>127. ABANDONED IMPLEMENTATION</h1>
+<p>Abandoned implementation SHALL be explicitly<br>
+classified.</p>
+<p>It SHALL not remain indistinguishable from active<br>
+work.</p>
+<h1>128. CANCELLED IMPLEMENTATION</h1>
+<p>Cancelled implementation SHALL preserve enough<br>
+state to explain</p>
+<p>what was attempted,</p>
+<p>why it stopped,</p>
+<p>and what remains.</p>
+<h1>129. SUPERSEDED IMPLEMENTATION</h1>
+<p>Superseded implementation SHALL identify its<br>
+replacement where applicable.</p>
+<h1>130. ARCHIVED IMPLEMENTATION</h1>
+<p>Archived implementation SHALL remain discoverable<br>
+when institutional history requires it.</p>
+<h1>131. COMPLETION STATE MODEL</h1>
+<p>Implementation boundaries MAY use explicit states<br>
+such as</p>
+<p>NOT_STARTED</p>
+<p>IN_PROGRESS</p>
+<p>BLOCKED</p>
+<p>VALIDATION_PENDING</p>
+<p>CERTIFICATION_PENDING</p>
+<p>CONDITIONAL_COMPLETE</p>
+<p>COMPLETE</p>
+<p>HANDED_OVER</p>
+<p>OPERATIONAL</p>
+<p>SUPERSEDED</p>
+<p>RETIRED</p>
+<p>CANCELLED</p>
+<p>ARCHIVED</p>
+<p>State meaning SHALL be consistent.</p>
+<h1>132. STATE TRANSITION CONTROL</h1>
+<p>Completion state transitions SHALL be controlled.</p>
+<p>A boundary SHALL not move directly to COMPLETE when<br>
+mandatory intermediate requirements remain<br>
+unsatisfied.</p>
+<h1>133. COMPLETE TO REOPENED</h1>
+<p>Completed implementation MAY be reopened when</p>
+<p>a defect is discovered,</p>
+<p>requirements change,</p>
+<p>certification is invalidated,</p>
+<p>or operational evidence proves incompleteness.</p>
+<p>Reopening SHALL be explicit.</p>
+<h1>134. COMPLETION REVOCATION</h1>
+<p>Completion status MAY be revoked when the evidence<br>
+supporting completion is invalidated.</p>
+<p>Revocation SHALL be traceable.</p>
+<h1>135. CERTIFICATION REVOCATION IMPACT</h1>
+<p>If certification is revoked,<br>
+completion state SHALL be reassessed where<br>
+certification was mandatory.</p>
+<h1>136. HANDOVER REVERSAL</h1>
+<p>Ownership transfer MAY be reversed or reassigned.</p>
+<p>The current owner SHALL always remain explicit.</p>
+<h1>137. CONTINUITY DURING REORGANIZATION</h1>
+<p>Repository,<br>
+team,<br>
+or organizational restructuring</p>
+<p>SHALL preserve implementation continuity.</p>
+<h1>138. CONTINUITY DURING TOOL CHANGE</h1>
+<p>Migration between tools SHALL preserve</p>
+<p>history,</p>
+<p>ownership,</p>
+<p>state,</p>
+<p>and evidence</p>
+<p>where required.</p>
+<h1>139. CONTINUITY DURING AI CHANGE</h1>
+<p>Changing AI systems,<br>
+models,<br>
+or sessions</p>
+<p>SHALL not reset project truth.</p>
+<p>Authoritative project state SHALL remain external<br>
+to any single AI context window.</p>
+<h1>140. CONTINUITY DURING PERSONNEL CHANGE</h1>
+<p>Personnel change SHALL not require architecture or<br>
+implementation rediscovery from first principles.</p>
+<h1>141. CONTINUITY DURING INCIDENT</h1>
+<p>Incident response SHALL preserve enough<br>
+implementation state to return safely to normal<br>
+engineering after stabilization.</p>
+<h1>142. CONTINUITY DURING RECOVERY</h1>
+<p>Recovery and restoration SHALL preserve</p>
+<p>what failed,</p>
+<p>what was restored,</p>
+<p>what remains uncertain,</p>
+<p>and what must be validated next.</p>
+<h1>143. CONTINUITY DURING MIGRATION</h1>
+<p>Migration continuity SHALL preserve</p>
+<p>current transition state,</p>
+<p>authority state,</p>
+<p>reconciliation state,</p>
+<p>and next safe action.</p>
+<h1>144. CONTINUITY DURING RELEASE</h1>
+<p>Release continuity SHALL preserve</p>
+<p>release identity,</p>
+<p>artifact identity,</p>
+<p>promotion state,</p>
+<p>deployment state,</p>
+<p>and activation state.</p>
+<h1>145. CONTINUITY DURING STAGE TRANSITION</h1>
+<p>Stage transition SHALL preserve</p>
+<p>completed Stage state,</p>
+<p>accepted deliverables,</p>
+<p>unresolved obligations,</p>
+<p>and next Stage entry conditions.</p>
+<h1>146. CONTINUITY DURING PHASE TRANSITION</h1>
+<p>Phase transition SHALL preserve</p>
+<p>completed Phase state,</p>
+<p>validation,</p>
+<p>dependencies,</p>
+<p>and next Phase prerequisites.</p>
+<h1>147. CONTINUITY DURING STEP TRANSITION</h1>
+<p>Step transition SHALL preserve</p>
+<p>completed work,</p>
+<p>artifacts,</p>
+<p>validation,</p>
+<p>and next executable Step.</p>
+<h1>148. STAGE COMPLETION</h1>
+<p>A Stage SHALL not be complete until</p>
+<p>required Phases are complete,</p>
+<p>Stage deliverables exist,</p>
+<p>Stage validation is complete,</p>
+<p>known issues are dispositioned,</p>
+<p>and exit criteria are satisfied.</p>
+<h1>149. PHASE COMPLETION</h1>
+<p>A Phase SHALL not be complete until</p>
+<p>required Steps are complete,</p>
+<p>Phase deliverables exist,</p>
+<p>validation is complete,</p>
+<p>and next-boundary prerequisites are known.</p>
+<h1>150. STEP COMPLETION</h1>
+<p>A Step SHALL not be complete until</p>
+<p>its objective is implemented,</p>
+<p>required artifacts exist,</p>
+<p>validation passes,</p>
+<p>and resulting state is recorded.</p>
+<h1>151. SUBSYSTEM COMPLETION</h1>
+<p>A Subsystem SHALL not be complete until</p>
+<p>ownership,</p>
+<p>contracts,</p>
+<p>implementation,</p>
+<p>validation,</p>
+<p>and integration state</p>
+<p>are known.</p>
+<h1>152. ARTIFACT COMPLETION</h1>
+<p>An Artifact SHALL not be complete until</p>
+<p>it exists,</p>
+<p>is correctly located,</p>
+<p>has valid content,</p>
+<p>satisfies its contract,</p>
+<p>and passes required validation.</p>
+<h1>153. COMPLETION HIERARCHY</h1>
+<p>Completion SHALL propagate upward only when required<br>
+lower boundaries are complete.</p>
+<p>Artifact Completion</p>
+<p>↓</p>
+<p>Subsystem Completion</p>
+<p>↓</p>
+<p>Step Completion</p>
+<p>↓</p>
+<p>Phase Completion</p>
+<p>↓</p>
+<p>Stage Completion</p>
+<p>↓</p>
+<p>Program or Platform Completion</p>
+<p>Higher-level completion SHALL not conceal<br>
+lower-level incompleteness.</p>
+<h1>154. COMPLETION DEPENDENCY</h1>
+<p>A boundary MAY remain incomplete because a required<br>
+dependency is incomplete.</p>
+<p>Dependency-blocked completion SHALL remain explicit.</p>
+<h1>155. COMPLETION RECONCILIATION</h1>
+<p>Before closure,<br>
+declared completion SHALL be reconciled with actual</p>
+<p>repository,</p>
+<p>artifact,</p>
+<p>runtime,</p>
+<p>and evidence</p>
+<p>state.</p>
+<h1>156. COMPLETION AUDIT</h1>
+<p>Material completion MAY be audited.</p>
+<p>The audit SHALL be able to reconstruct why the<br>
+boundary was declared complete.</p>
+<h1>157. HANDOVER AUDIT</h1>
+<p>Material handover MAY be audited.</p>
+<p>The audit SHALL be able to identify</p>
+<p>what transferred,</p>
+<p>to whom,</p>
+<p>when,</p>
+<p>and with what unresolved obligations.</p>
+<h1>158. CONTINUITY AUDIT</h1>
+<p>Continuity MAY be tested by asking another<br>
+authorized party to reconstruct the current state<br>
+without relying upon undocumented verbal memory.</p>
+<h1>159. CONTINUITY TEST</h1>
+<p>A Continuity Test MAY require a new engineer,<br>
+operator,<br>
+team,<br>
+or AI system</p>
+<p>to determine</p>
+<p>current objective,</p>
+<p>current state,</p>
+<p>completed work,</p>
+<p>pending work,</p>
+<p>known issues,</p>
+<p>and next safe action</p>
+<p>from authoritative sources.</p>
+<p>Failure indicates continuity debt.</p>
+<h1>160. AI COMPLETION RESPONSIBILITY</h1>
+<p>Artificial intelligence systems MAY assist with</p>
+<p>implementation,</p>
+<p>validation,</p>
+<p>completion analysis,</p>
+<p>handover preparation,</p>
+<p>continuity restoration,</p>
+<p>and documentation.</p>
+<p>AI SHALL remain within granted authority.</p>
+<h1>161. AI SHALL NOT DECLARE COMPLETION BY OUTPUT VOLUME</h1>
+<p>The amount of generated code or documentation SHALL<br>
+not be treated as proof of completion.</p>
+<h1>162. AI SHALL NOT DECLARE COMPLETION WITHOUT</h1>
+<h1>VALIDATION</h1>
+<p>AI SHALL not declare implementation complete while<br>
+mandatory validation remains unresolved.</p>
+<h1>163. AI SHALL NOT HIDE PENDING WORK</h1>
+<p>Pending work SHALL remain explicit.</p>
+<h1>164. AI SHALL NOT INVENT HANDOVER STATE</h1>
+<p>Handover SHALL reflect authoritative project<br>
+reality.</p>
+<h1>165. AI SHALL NOT DEPEND ON CHAT MEMORY</h1>
+<p>Critical continuity SHALL be externalized into<br>
+persistent authoritative sources.</p>
+<h1>166. AI SHALL NOT REPEAT COMPLETED WORK</h1>
+<p>When authoritative evidence proves work complete,<br>
+AI SHALL continue from the next approved boundary<br>
+rather than rebuilding completed implementation.</p>
+<h1>167. AI SHALL NOT REDESIGN DURING HANDOVER</h1>
+<p>Handover and continuity restoration SHALL preserve<br>
+approved architecture.</p>
+<p>They SHALL not become hidden architecture review.</p>
+<h1>168. AI SHALL IDENTIFY CONFLICTS</h1>
+<p>When repository,<br>
+documentation,<br>
+continuity records,<br>
+and runtime</p>
+<p>conflict,<br>
+AI SHALL identify the conflict rather than choosing<br>
+silently.</p>
+<h1>169. AI SHALL PRESERVE FILE NAMES</h1>
+<p>Material implementation handover SHALL identify<br>
+relevant repository file names and paths where<br>
+applicable.</p>
+<p>Unnamed artifacts weaken continuity.</p>
+<h1>170. AI SHALL PRESERVE VALIDATION COMMANDS</h1>
+<p>Where practical,<br>
+handover SHOULD preserve the commands or procedures<br>
+required to reproduce validation.</p>
+<h1>171. AI SHALL PRESERVE NEXT STEP</h1>
+<p>Every material implementation response ending a<br>
+boundary SHOULD identify the next approved<br>
+implementation boundary.</p>
+<h1>172. NO COMPLETION BY CLAIM</h1>
+<p>Completion SHALL require evidence.</p>
+<h1>173. NO COMPLETION WITH UNKNOWN SCOPE</h1>
+<p>A boundary cannot be complete if its scope is<br>
+undefined.</p>
+<h1>174. NO COMPLETION WITH MISSING MANDATORY ARTIFACT</h1>
+<p>Required artifacts SHALL exist before completion.</p>
+<h1>175. NO COMPLETION WITH FAILED MANDATORY VALIDATION</h1>
+<p>Failed mandatory validation SHALL block completion.</p>
+<h1>176. NO COMPLETION WITH HIDDEN CRITICAL ISSUE</h1>
+<p>Critical known issues SHALL not be concealed to<br>
+obtain completion status.</p>
+<h1>177. NO HANDOVER WITHOUT CURRENT STATE</h1>
+<p>Handover SHALL identify the actual current state.</p>
+<h1>178. NO HANDOVER WITHOUT OWNERSHIP</h1>
+<p>Responsibility SHALL not be transferred into an<br>
+ownership vacuum.</p>
+<h1>179. NO HANDOVER WITHOUT PENDING WORK</h1>
+<p>Unfinished work SHALL remain visible.</p>
+<h1>180. NO HANDOVER WITHOUT KNOWN RISKS</h1>
+<p>Known material risks SHALL remain visible.</p>
+<h1>181. NO CONTINUITY BY CHAT ALONE</h1>
+<p>Chat history SHALL not be the sole source of<br>
+critical implementation truth.</p>
+<h1>182. NO CONTINUITY BY HUMAN MEMORY ALONE</h1>
+<p>Critical capability SHALL not depend upon<br>
+undocumented personal memory.</p>
+<h1>183. NO CONTINUITY BY FILE NAME GUESSING</h1>
+<p>Authoritative files and paths SHALL be explicitly<br>
+identified where applicable.</p>
+<h1>184. NO OWNERSHIP TRANSFER BY ASSUMPTION</h1>
+<p>Ownership transfer SHALL be explicit.</p>
+<h1>185. NO AUTHORITY TRANSFER BY ASSUMPTION</h1>
+<p>Operational,<br>
+security,<br>
+or financial authority</p>
+<p>SHALL not transfer implicitly.</p>
+<h1>186. NO FALSE STAGE COMPLETION</h1>
+<p>A Stage SHALL not be marked complete merely because<br>
+work moved to a later Stage.</p>
+<h1>187. NO FALSE PHASE COMPLETION</h1>
+<p>A Phase SHALL not be marked complete while required<br>
+Steps remain unresolved.</p>
+<h1>188. NO FALSE STEP COMPLETION</h1>
+<p>A Step SHALL not be marked complete merely because<br>
+files were generated.</p>
+<h1>189. NO FALSE DEPLOYMENT COMPLETION</h1>
+<p>Deployment execution SHALL not equal validated<br>
+operational completion.</p>
+<h1>190. NO FALSE MIGRATION COMPLETION</h1>
+<p>Data movement SHALL not equal reconciled migration<br>
+completion.</p>
+<h1>191. NO FALSE TRADING COMPLETION</h1>
+<p>The ability to place an order SHALL not equal<br>
+institutional trading readiness.</p>
+<h1>192. NO ORPHANED CRITICAL CAPABILITY</h1>
+<p>Critical capability SHALL have explicit ownership.</p>
+<h1>193. NO LOST EVIDENCE</h1>
+<p>Completion evidence SHALL remain discoverable for<br>
+the required retention period.</p>
+<h1>194. NO LOST NEXT ACTION</h1>
+<p>Active implementation SHALL preserve the next safe<br>
+action across continuity boundaries.</p>
+<h1>195. IMPLEMENTATION COMPLETION LIFECYCLE</h1>
+<p>The authoritative COREI Implementation Completion<br>
+Lifecycle is</p>
+<p>Objective Defined</p>
+<p>↓</p>
+<p>Scope Defined</p>
+<p>↓</p>
+<p>Completion Criteria Defined</p>
+<p>↓</p>
+<p>Implementation Executed</p>
+<p>↓</p>
+<p>Artifacts Produced</p>
+<p>↓</p>
+<p>Validation Executed</p>
+<p>↓</p>
+<p>Failures Corrected</p>
+<p>↓</p>
+<p>Evidence Collected</p>
+<p>↓</p>
+<p>Completion Criteria Evaluated</p>
+<p>↓</p>
+<p>Known Issues Dispositioned</p>
+<p>↓</p>
+<p>Deferred Work Recorded</p>
+<p>↓</p>
+<p>Ownership Confirmed</p>
+<p>↓</p>
+<p>Completion Accepted</p>
+<p>↓</p>
+<p>Completion State Recorded</p>
+<h1>196. HANDOVER LIFECYCLE</h1>
+<p>The authoritative COREI Handover Lifecycle is</p>
+<p>Handover Need Identified</p>
+<p>↓</p>
+<p>Handover Boundary Defined</p>
+<p>↓</p>
+<p>Current State Established</p>
+<p>↓</p>
+<p>Completed Work Recorded</p>
+<p>↓</p>
+<p>Pending Work Recorded</p>
+<p>↓</p>
+<p>Known Issues Recorded</p>
+<p>↓</p>
+<p>Known Unknowns Recorded</p>
+<p>↓</p>
+<p>Repository State Recorded</p>
+<p>↓</p>
+<p>Runtime State Recorded</p>
+<p>↓</p>
+<p>Validation State Recorded</p>
+<p>↓</p>
+<p>Evidence Locations Recorded</p>
+<p>↓</p>
+<p>Ownership Transfer Defined</p>
+<p>↓</p>
+<p>Authority Transfer Defined</p>
+<p>↓</p>
+<p>Next Safe Action Defined</p>
+<p>↓</p>
+<p>Receiving Owner Reviews</p>
+<p>↓</p>
+<p>Handover Accepted</p>
+<p>↓</p>
+<p>Transfer State Recorded</p>
+<h1>197. CONTINUITY RESTORATION LIFECYCLE</h1>
+<p>The authoritative COREI Continuity Restoration<br>
+Lifecycle is</p>
+<p>Project Identity Established</p>
+<p>↓</p>
+<p>Authority Established</p>
+<p>↓</p>
+<p>Authoritative Sources Identified</p>
+<p>↓</p>
+<p>Current Stage Identified</p>
+<p>↓</p>
+<p>Current Phase Identified</p>
+<p>↓</p>
+<p>Current Step Identified</p>
+<p>↓</p>
+<p>Current Subsystem Identified</p>
+<p>↓</p>
+<p>Repository State Verified</p>
+<p>↓</p>
+<p>Runtime State Verified Where Required</p>
+<p>↓</p>
+<p>Completed Work Verified</p>
+<p>↓</p>
+<p>Pending Work Verified</p>
+<p>↓</p>
+<p>Validation State Verified</p>
+<p>↓</p>
+<p>Known Issues Verified</p>
+<p>↓</p>
+<p>Architecture Constraints Restored</p>
+<p>↓</p>
+<p>Next Safe Action Identified</p>
+<p>↓</p>
+<p>Implementation Resumed</p>
+<h1>198. STAGE COMPLETION LIFECYCLE</h1>
+<p>The authoritative COREI Stage Completion Lifecycle<br>
+is</p>
+<p>Stage Objective Reviewed</p>
+<p>↓</p>
+<p>Required Phases Verified</p>
+<p>↓</p>
+<p>Stage Deliverables Verified</p>
+<p>↓</p>
+<p>Stage Validation Executed</p>
+<p>↓</p>
+<p>Stage Evidence Collected</p>
+<p>↓</p>
+<p>Known Issues Dispositioned</p>
+<p>↓</p>
+<p>Exit Criteria Evaluated</p>
+<p>↓</p>
+<p>Stage Acceptance Granted</p>
+<p>↓</p>
+<p>Stage State Recorded</p>
+<p>↓</p>
+<p>Next Stage Entry Conditions Confirmed</p>
+<h1>199. PHASE COMPLETION LIFECYCLE</h1>
+<p>The authoritative COREI Phase Completion Lifecycle<br>
+is</p>
+<p>Phase Objective Reviewed</p>
+<p>↓</p>
+<p>Required Steps Verified</p>
+<p>↓</p>
+<p>Phase Deliverables Verified</p>
+<p>↓</p>
+<p>Phase Validation Executed</p>
+<p>↓</p>
+<p>Phase Evidence Collected</p>
+<p>↓</p>
+<p>Known Issues Dispositioned</p>
+<p>↓</p>
+<p>Exit Criteria Evaluated</p>
+<p>↓</p>
+<p>Phase State Recorded</p>
+<p>↓</p>
+<p>Next Phase Prerequisites Confirmed</p>
+<h1>200. STEP COMPLETION LIFECYCLE</h1>
+<p>The authoritative COREI Step Completion Lifecycle<br>
+is</p>
+<p>Step Objective Reviewed</p>
+<p>↓</p>
+<p>Required Implementation Executed</p>
+<p>↓</p>
+<p>Required Artifacts Verified</p>
+<p>↓</p>
+<p>Required Validation Executed</p>
+<p>↓</p>
+<p>Failures Corrected</p>
+<p>↓</p>
+<p>Resulting State Recorded</p>
+<p>↓</p>
+<p>Step Completion Confirmed</p>
+<p>↓</p>
+<p>Next Step Identified</p>
+<h1>201. OPERATIONAL HANDOVER LIFECYCLE</h1>
+<p>The authoritative COREI Operational Handover<br>
+Lifecycle is</p>
+<p>Implementation Completion Verified</p>
+<p>↓</p>
+<p>Production State Verified</p>
+<p>↓</p>
+<p>Operational Ownership Defined</p>
+<p>↓</p>
+<p>Support Ownership Defined</p>
+<p>↓</p>
+<p>Security Ownership Defined</p>
+<p>↓</p>
+<p>Data Ownership Defined</p>
+<p>↓</p>
+<p>Observability Verified</p>
+<p>↓</p>
+<p>Runbooks Verified</p>
+<p>↓</p>
+<p>Recovery Readiness Verified</p>
+<p>↓</p>
+<p>Known Risks Transferred</p>
+<p>↓</p>
+<p>Access Granted Through Controlled Authority</p>
+<p>↓</p>
+<p>Receiving Owner Accepts</p>
+<p>↓</p>
+<p>Operational Ownership Becomes Effective</p>
+<h1>202. TRADING HANDOVER LIFECYCLE</h1>
+<p>The authoritative COREI Trading Handover Lifecycle<br>
+is</p>
+<p>Trading Implementation State Verified</p>
+<p>↓</p>
+<p>Market Data State Verified</p>
+<p>↓</p>
+<p>Broker State Verified</p>
+<p>↓</p>
+<p>Account State Verified</p>
+<p>↓</p>
+<p>Strategy State Verified</p>
+<p>↓</p>
+<p>Portfolio State Verified</p>
+<p>↓</p>
+<p>Capital State Verified</p>
+<p>↓</p>
+<p>Risk State Verified</p>
+<p>↓</p>
+<p>Open Orders Reconciled</p>
+<p>↓</p>
+<p>Fills Reconciled</p>
+<p>↓</p>
+<p>Positions Reconciled</p>
+<p>↓</p>
+<p>Execution Controls Verified</p>
+<p>↓</p>
+<p>Kill Controls Verified</p>
+<p>↓</p>
+<p>Observability Verified</p>
+<p>↓</p>
+<p>Trading Authority Defined</p>
+<p>↓</p>
+<p>Receiving Owner Accepts</p>
+<p>↓</p>
+<p>Trading Ownership Transfer Recorded</p>
+<h1>203. FAILED HANDOVER LIFECYCLE</h1>
+<p>The Failed Handover Lifecycle is</p>
+<p>Handover Failure Detected</p>
+<p>↓</p>
+<p>Transfer Paused</p>
+<p>↓</p>
+<p>Missing or Conflicting State Identified</p>
+<p>↓</p>
+<p>Authoritative Sources Rechecked</p>
+<p>↓</p>
+<p>Gaps Corrected</p>
+<p>↓</p>
+<p>Ownership Remains With Existing Owner</p>
+<p>↓</p>
+<p>Handover Package Updated</p>
+<p>↓</p>
+<p>Receiving Review Repeated</p>
+<p>↓</p>
+<p>Transfer Accepted or Escalated</p>
+<h1>204. RELATIONSHIP TO IMPLEMENTATION OVERVIEW</h1>
+<p>COREI-IM-08.00 defines the overall institutional<br>
+implementation model.</p>
+<p>This document defines how implementation reaches<br>
+proven completion and survives responsibility<br>
+transfer.</p>
+<h1>205. RELATIONSHIP TO IMPLEMENTATION EXECUTION MODEL</h1>
+<p>COREI-IM-08.01 defines Stage,<br>
+Phase,<br>
+Step,<br>
+Subsystem,<br>
+Artifact,<br>
+and Validation execution.</p>
+<p>This document defines completion and continuity at<br>
+each of those boundaries.</p>
+<h1>206. RELATIONSHIP TO REPOSITORY IMPLEMENTATION MODEL</h1>
+<p>COREI-IM-08.02 defines repository structure and<br>
+ownership.</p>
+<p>Repository state is a primary source of<br>
+implementation continuity.</p>
+<h1>207. RELATIONSHIP TO CHANGE CONTROL</h1>
+<p>COREI-IM-08.03 defines controlled change.</p>
+<p>Completion SHALL reflect the final state of the<br>
+approved change.</p>
+<h1>208. RELATIONSHIP TO VALIDATION AND CERTIFICATION</h1>
+<p>COREI-IM-08.04 defines validation and<br>
+certification.</p>
+<p>Mandatory validation and certification SHALL be<br>
+complete before applicable completion status is<br>
+granted.</p>
+<h1>209. RELATIONSHIP TO TRACEABILITY AND EVIDENCE</h1>
+<p>COREI-IM-08.05 defines traceability and evidence.</p>
+<p>Completion and handover SHALL remain reconstructable<br>
+through evidence.</p>
+<h1>210. RELATIONSHIP TO ROLLBACK, RECOVERY AND</h1>
+<h1>RESTORATION</h1>
+<p>COREI-IM-08.06 defines rollback,<br>
+recovery,<br>
+and restoration.</p>
+<p>Operational handover SHALL preserve recovery<br>
+knowledge.</p>
+<h1>211. RELATIONSHIP TO RELEASE, DEPLOYMENT AND</h1>
+<h1>PROMOTION</h1>
+<p>COREI-IM-08.07 defines release,<br>
+deployment,<br>
+promotion,<br>
+and activation.</p>
+<p>Deployment completion SHALL reflect validated<br>
+operational state.</p>
+<h1>212. RELATIONSHIP TO MIGRATION, COMPATIBILITY AND</h1>
+<h1>EVOLUTION</h1>
+<p>COREI-IM-08.08 defines migration,<br>
+compatibility,<br>
+deprecation,<br>
+retirement,<br>
+and evolution.</p>
+<p>Migration completion and continuity SHALL preserve<br>
+the actual transition state.</p>
+<h1>213. RELATIONSHIP TO OPERATIONS</h1>
+<p>Implementation handover transfers capability into<br>
+sustained operation.</p>
+<p>Operations SHALL receive a known,<br>
+observable,<br>
+recoverable,<br>
+and owned system state.</p>
+<h1>214. RELATIONSHIP TO SECURITY</h1>
+<p>Handover SHALL preserve</p>
+<p>identity,</p>
+<p>access,</p>
+<p>secret protection,</p>
+<p>security ownership,</p>
+<p>and unresolved security risk.</p>
+<h1>215. RELATIONSHIP TO TRADING</h1>
+<p>Trading handover SHALL preserve</p>
+<p>financial truth,</p>
+<p>order truth,</p>
+<p>position truth,</p>
+<p>capital truth,</p>
+<p>risk authority,</p>
+<p>and execution control.</p>
+<h1>216. MINIMUM IMPLEMENTATION COMPLETION GATE</h1>
+<p>Before a material implementation boundary is<br>
+declared complete,<br>
+the following SHALL be established where<br>
+applicable.</p>
+<p>Objective Satisfied</p>
+<p>Scope Satisfied</p>
+<p>Required Deliverables Exist</p>
+<p>Required Files Exist</p>
+<p>Required Artifacts Exist</p>
+<p>Repository Structure Valid</p>
+<p>Ownership Valid</p>
+<p>Public Contracts Valid</p>
+<p>Dependencies Valid</p>
+<p>Build Validation Passed</p>
+<p>Architecture Validation Passed</p>
+<p>Required Functional Validation Passed</p>
+<p>Required Integration Validation Passed</p>
+<p>Required Security Validation Passed</p>
+<p>Required Data Validation Passed</p>
+<p>Required Operational Validation Passed</p>
+<p>Required Trading Validation Passed</p>
+<p>Required Certification Complete</p>
+<p>Known Issues Recorded</p>
+<p>Deferred Work Recorded</p>
+<p>Known Unknowns Recorded</p>
+<p>Evidence Preserved</p>
+<p>Owner Confirmed</p>
+<p>Next Boundary Known</p>
+<p>No Mandatory Completion Condition Is Unknown</p>
+<h1>217. MINIMUM HANDOVER READINESS GATE</h1>
+<p>Before a material handover,<br>
+the following SHALL be established where<br>
+applicable.</p>
+<p>Handover Scope Defined</p>
+<p>Current State Known</p>
+<p>Completed Work Known</p>
+<p>Pending Work Known</p>
+<p>Repository State Known</p>
+<p>Runtime State Known</p>
+<p>Deployment State Known</p>
+<p>Configuration State Known</p>
+<p>Validation State Known</p>
+<p>Certification State Known</p>
+<p>Known Issues Recorded</p>
+<p>Known Unknowns Recorded</p>
+<p>Dependencies Known</p>
+<p>Risks Known</p>
+<p>Evidence Locations Known</p>
+<p>Recovery Information Known</p>
+<p>Current Owner Known</p>
+<p>Receiving Owner Known</p>
+<p>Authority Transfer Defined</p>
+<p>Next Safe Action Defined</p>
+<p>No Critical Handover State Is Unknown</p>
+<h1>218. MINIMUM CONTINUITY RESTORATION GATE</h1>
+<p>Before implementation resumes after a continuity<br>
+boundary,<br>
+the following SHALL be established where<br>
+applicable.</p>
+<p>Project Identity Known</p>
+<p>Authority Known</p>
+<p>Architecture State Known</p>
+<p>Current Stage Known</p>
+<p>Current Phase Known</p>
+<p>Current Step Known</p>
+<p>Current Subsystem Known</p>
+<p>Current Objective Known</p>
+<p>Repository State Verified</p>
+<p>Completed Work Verified</p>
+<p>Pending Work Verified</p>
+<p>Validation State Verified</p>
+<p>Known Issues Verified</p>
+<p>Known Unknowns Identified</p>
+<p>Relevant Files Identified</p>
+<p>Relevant Evidence Identified</p>
+<p>Next Safe Action Identified</p>
+<p>No Critical Continuity Conflict Remains Unresolved</p>
+<h1>219. MINIMUM OPERATIONAL HANDOVER GATE</h1>
+<p>Before implementation transfers into sustained<br>
+operation,<br>
+the following SHALL be established where<br>
+applicable.</p>
+<p>Implementation Complete</p>
+<p>Production State Known</p>
+<p>Operational Owner Known</p>
+<p>Support Owner Known</p>
+<p>Security Owner Known</p>
+<p>Data Owner Known</p>
+<p>Observability Available</p>
+<p>Critical Alerts Available</p>
+<p>Runbooks Available</p>
+<p>Recovery Procedures Available</p>
+<p>Rollback or Safe Recovery Understood</p>
+<p>Known Risks Transferred</p>
+<p>Required Access Controlled</p>
+<p>Required Evidence Discoverable</p>
+<p>Receiving Owner Accepted</p>
+<p>No Critical Operational State Is Unknown</p>
+<h1>220. MINIMUM TRADING HANDOVER GATE</h1>
+<p>Before trading responsibility transfers,<br>
+the following SHALL be established where<br>
+applicable.</p>
+<p>Market Data State Known</p>
+<p>Broker State Known</p>
+<p>Account State Known</p>
+<p>Strategy State Known</p>
+<p>Portfolio State Known</p>
+<p>Capital State Known</p>
+<p>Risk State Known</p>
+<p>Open Orders Reconciled</p>
+<p>Fills Reconciled</p>
+<p>Positions Reconciled</p>
+<p>Execution Controls Known</p>
+<p>Kill Controls Available</p>
+<p>Observability Available</p>
+<p>Current Trading Authority Known</p>
+<p>Receiving Trading Authority Defined</p>
+<p>Known Trading Risks Transferred</p>
+<p>No Critical Financial State Is Unknown</p>
+<h1>221. MINIMUM STAGE COMPLETION GATE</h1>
+<p>Before a Stage is declared complete,<br>
+the following SHALL be established where<br>
+applicable.</p>
+<p>Stage Objective Satisfied</p>
+<p>Required Phases Complete</p>
+<p>Stage Deliverables Complete</p>
+<p>Stage Validation Passed</p>
+<p>Stage Evidence Preserved</p>
+<p>Known Issues Dispositioned</p>
+<p>Deferred Work Recorded</p>
+<p>Exit Criteria Satisfied</p>
+<p>Stage Owner Confirmed</p>
+<p>Stage Acceptance Granted</p>
+<p>Next Stage Entry Conditions Known</p>
+<h1>222. MINIMUM PHASE COMPLETION GATE</h1>
+<p>Before a Phase is declared complete,<br>
+the following SHALL be established where<br>
+applicable.</p>
+<p>Phase Objective Satisfied</p>
+<p>Required Steps Complete</p>
+<p>Phase Deliverables Complete</p>
+<p>Phase Validation Passed</p>
+<p>Phase Evidence Preserved</p>
+<p>Known Issues Dispositioned</p>
+<p>Deferred Work Recorded</p>
+<p>Exit Criteria Satisfied</p>
+<p>Next Phase Prerequisites Known</p>
+<h1>223. MINIMUM STEP COMPLETION GATE</h1>
+<p>Before a Step is declared complete,<br>
+the following SHALL be established where<br>
+applicable.</p>
+<p>Step Objective Satisfied</p>
+<p>Required Implementation Exists</p>
+<p>Required Files Exist</p>
+<p>Required Artifacts Exist</p>
+<p>Required Validation Passed</p>
+<p>Resulting State Recorded</p>
+<p>Known Issues Recorded</p>
+<p>Next Step Known</p>
+<h1>224. MINIMUM CONTINUITY BLOCK</h1>
+<p>Every material continuity block SHOULD contain at<br>
+minimum</p>
+<p>Project</p>
+<p>Authority</p>
+<p>Current Stage</p>
+<p>Current Phase</p>
+<p>Current Step</p>
+<p>Current Subsystem</p>
+<p>Current Objective</p>
+<p>Architecture State</p>
+<p>Repository State</p>
+<p>Completed Work</p>
+<p>Current Work</p>
+<p>Pending Work</p>
+<p>Validation State</p>
+<p>Known Issues</p>
+<p>Known Unknowns</p>
+<p>Relevant Files</p>
+<p>Relevant Evidence</p>
+<p>Next Safe Action</p>
+<p>The block SHALL point to authoritative sources<br>
+rather than attempting to replace them.</p>
+<h1>225. COMPLETION, HANDOVER AND CONTINUITY QUESTIONS</h1>
+<p>Every material implementation shall answer the<br>
+following institutional questions where applicable.</p>
+<p>What exactly is being declared complete?</p>
+<p>What is the completion boundary?</p>
+<p>What was the objective?</p>
+<p>What was the approved scope?</p>
+<p>What deliverables were required?</p>
+<p>What deliverables exist?</p>
+<p>What files were created?</p>
+<p>What files were updated?</p>
+<p>What artifacts were produced?</p>
+<p>What validation was required?</p>
+<p>What validation passed?</p>
+<p>What validation remains?</p>
+<p>What certification was required?</p>
+<p>What certification exists?</p>
+<p>What known issues remain?</p>
+<p>What work was deferred?</p>
+<p>What known unknowns remain?</p>
+<p>What is the actual repository state?</p>
+<p>What is the actual runtime state?</p>
+<p>What is deployed?</p>
+<p>What is active?</p>
+<p>Who owns the implementation?</p>
+<p>Who owns operation?</p>
+<p>Who owns support?</p>
+<p>Who owns security?</p>
+<p>Who owns data?</p>
+<p>Who has operational authority?</p>
+<p>Who has financial authority?</p>
+<p>Where is the evidence?</p>
+<p>Where are the runbooks?</p>
+<p>Where are the recovery procedures?</p>
+<p>What dependencies remain?</p>
+<p>What risks remain?</p>
+<p>What is the next safe action?</p>
+<p>Can another authorized engineer continue without<br>
+reconstructing the project from chat history?</p>
+<p>Can another authorized AI system continue without<br>
+redesigning completed architecture?</p>
+<p>Can the actual completion claim be independently<br>
+verified?</p>
+<p>If any mandatory answer is unknown,</p>
+<p>completion,<br>
+handover,<br>
+or continuity</p>
+<p>remains incomplete.</p>
+<h1>226. IMPLEMENTATION COMPLETION, HANDOVER AND</h1>
+<h1>CONTINUITY MODEL DECLARATION</h1>
+<p>COREI implementation SHALL end in institutional<br>
+truth.</p>
+<p>Completion SHALL be proven.</p>
+<p>Handover SHALL transfer responsibility explicitly.</p>
+<p>Continuity SHALL preserve enough authoritative<br>
+state for safe continuation.</p>
+<p>No completed architecture SHALL be reopened merely<br>
+because a session changes.</p>
+<p>No completed foundation SHALL be rebuilt merely<br>
+because an engineer or AI system changes.</p>
+<p>No pending work SHALL disappear.</p>
+<p>No critical issue SHALL be hidden.</p>
+<p>No ownership SHALL remain ambiguous.</p>
+<p>No financial authority SHALL transfer by<br>
+assumption.</p>
+<p>No implementation state SHALL depend solely upon<br>
+conversation memory.</p>
+<p>The final result of implementation SHALL be a<br>
+system that another authorized party can</p>
+<p>discover,</p>
+<p>understand,</p>
+<p>validate,</p>
+<p>operate,</p>
+<p>recover,</p>
+<p>maintain,</p>
+<p>extend,</p>
+<p>and continue</p>
+<p>without losing institutional control.</p>
+<h1>227. CONSTITUTIONAL COMMITMENT</h1>
+<p>COREI Implementation Completion,<br>
+Handover and Continuity</p>
+<p>shall remain</p>
+<p>identity-aligned,</p>
+<p>governance-driven,</p>
+<p>architecture-faithful,</p>
+<p>engineering-disciplined,</p>
+<p>standards-derived,</p>
+<p>specification-compliant,</p>
+<p>operations-aware,</p>
+<p>implementation-controlled,</p>
+<p>repository-grounded,</p>
+<p>scope-explicit,</p>
+<p>completion-evidenced,</p>
+<p>validation-linked,</p>
+<p>certification-aware,</p>
+<p>traceable,</p>
+<p>evidence-based,</p>
+<p>ownership-explicit,</p>
+<p>authority-controlled,</p>
+<p>handover-ready,</p>
+<p>continuity-preserving,</p>
+<p>session-independent,</p>
+<p>person-independent,</p>
+<p>team-resilient,</p>
+<p>AI-resilient,</p>
+<p>tool-resilient,</p>
+<p>repository-verifiable,</p>
+<p>runtime-aware,</p>
+<p>security-preserving,</p>
+<p>data-preserving,</p>
+<p>state-preserving,</p>
+<p>financially safe,</p>
+<p>trading-aware,</p>
+<p>recoverable,</p>
+<p>observable,</p>
+<p>reconcilable,</p>
+<p>institutionally memorable,</p>
+<p>and continuously evolvable.</p>
+<p>Completion,<br>
+handover,<br>
+and continuity</p>
+<p>shall preserve institutional truth across</p>
+<p>stages,</p>
+<p>phases,</p>
+<p>steps,</p>
+<p>subsystems,</p>
+<p>artifacts,</p>
+<p>repositories,</p>
+<p>platforms,</p>
+<p>services,</p>
+<p>modules,</p>
+<p>engines,</p>
+<p>domains,</p>
+<p>applications,</p>
+<p>workspaces,</p>
+<p>infrastructure,</p>
+<p>configuration,</p>
+<p>schemas,</p>
+<p>data,</p>
+<p>events,</p>
+<p>state,</p>
+<p>security,</p>
+<p>identity,</p>
+<p>trading,</p>
+<p>automation,</p>
+<p>artificial intelligence systems,</p>
+<p>accounts,</p>
+<p>brokers,</p>
+<p>strategies,</p>
+<p>portfolios,</p>
+<p>regions,</p>
+<p>currencies,</p>
+<p>markets,</p>
+<p>teams,</p>
+<p>people,</p>
+<p>tools,</p>
+<p>sessions,</p>
+<p>releases,</p>
+<p>deployments,</p>
+<p>migrations,</p>
+<p>incidents,</p>
+<p>recoveries,</p>
+<p>restorations,</p>
+<p>and generations of technology.</p>
+<h1>228. AUTHORITY</h1>
+<p>This document defines the authoritative<br>
+Implementation Completion,<br>
+Handover and Continuity Model of COREI.</p>
+<p>Every material</p>
+<p>Artifact completion,</p>
+<p>Subsystem completion,</p>
+<p>Step completion,</p>
+<p>Phase completion,</p>
+<p>Stage completion,</p>
+<p>implementation completion,</p>
+<p>validation completion,</p>
+<p>certification completion,</p>
+<p>release completion,</p>
+<p>deployment completion,</p>
+<p>migration completion,</p>
+<p>operational handover,</p>
+<p>trading handover,</p>
+<p>ownership transfer,</p>
+<p>authority transfer,</p>
+<p>session continuity,</p>
+<p>team continuity,</p>
+<p>AI continuity,</p>
+<p>repository continuity,</p>
+<p>runtime continuity,</p>
+<p>continuity restoration,</p>
+<p>implementation closure,</p>
+<p>and future institutional completion transition</p>
+<p>shall comply with this document.</p>
+<p>Completion-specific,<br>
+handover-specific,<br>
+continuity-specific,<br>
+and closure-specific documents</p>
+<p>MAY extend this model.</p>
+<p>No extension may weaken constitutional,<br>
+governance,<br>
+architectural,<br>
+engineering,<br>
+standards,<br>
+specification,<br>
+operations,<br>
+implementation,<br>
+repository,<br>
+change-control,<br>
+validation,<br>
+certification,<br>
+traceability,<br>
+evidence,<br>
+rollback,<br>
+recovery,<br>
+restoration,<br>
+release,<br>
+deployment,<br>
+promotion,<br>
+migration,<br>
+compatibility,<br>
+evolution,<br>
+security,<br>
+data,<br>
+state,<br>
+trading,<br>
+completion,<br>
+handover,<br>
+continuity,<br>
+ownership,<br>
+authority,<br>
+or institutional memory requirements.</p>
+<p>Changes to this document require constitutional<br>
+review.</p>
+<h1>END OF DOCUMENT</h1>
+<h1>DOCUMENT ID</h1>
+<h1>COREI-IM-08.09</h1>
+<h1>DOCUMENT NAME</h1>
+<h1>IMPLEMENTATION COMPLETION, HANDOVER AND CONTINUITY MODEL</h1>
+<h1>REPOSITORY FILE</h1>
+<h1>knowledge/08-implementation/COREI-IM-08.09-IMPLEMENTATION-COMPLETION-HANDOVER-AND-CONTINUITY-MODEL.md</h1>
+
+
+  <div class="doc-footer">
+
+    <span>DOCUMENT ID: COREI-IM-08.09</span>
+
+    <span>
+      DOCUMENT NAME: Implementation Completion, Handover and Continuity Model
+    </span>
+
+    <span>
+      VERSION: 1
+    </span>
+
+  </div>
+
+</body>
+</html>

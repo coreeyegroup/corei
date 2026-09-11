@@ -1,0 +1,125 @@
+🔵 MASTER EXECUTION PLAN (ALL STEPS LISTED)
+	We will not execute yet — only define the full step map across the 5 target layers:
+		Container → Orchestration → Entry/Network → Deployment → Event System
+
+	Each step later will follow:
+		WHAT → WHERE → WHY → HOW → VERIFY → LOCK
+
+1. CONTAINER LAYER (DOCKER + RUNTIME ALIGNMENT)
+	Phase C1 — Container Foundation Validation
+	Remove legacy Docker artifacts (sanity check)
+	Validate Docker installation source (official repo)
+	Verify Docker service status
+	Validate Docker version + runtime
+	Configure daemon.json (critical)
+	Restart Docker daemon
+	Validate storage driver (overlay2)
+	Validate cgroup driver (systemd)
+	Validate non-root Docker access
+	Run container lifecycle test (hello-world)
+	Validate image build capability
+	Validate image export (docker save)
+	Validate containerd import (ctr import)
+	Verify image inside containerd (critical bridge)
+
+2. ORCHESTRATION LAYER (KUBERNETES)
+	Phase C2 — Kubernetes Control Plane Validation
+	Verify swap disabled
+	Validate kernel modules (overlay, br_netfilter)
+	Validate sysctl networking config
+	Validate containerd config (SystemdCgroup=true)
+	Verify containerd service
+	Validate Kubernetes binaries (kubeadm, kubelet, kubectl)
+	Validate version lock
+	Validate cluster initialization state
+	Validate kubeconfig
+	Validate node status
+	Validate CNI (Calico)
+	Validate system pods health
+	Validate cluster DNS
+	Validate pod scheduling capability
+	Validate kubectl control plane access
+
+3. ENTRY / NETWORK LAYER
+	Phase C3 — Traffic + Security Layer
+	Validate Ingress Controller deployment
+	Fix control-plane taint (single node case)
+	Validate ingress pods running
+	Validate MetalLB deployment
+	Validate MetalLB pods
+	Validate IP pool configuration
+	Validate external IP assignment
+	Validate service exposure (LoadBalancer)
+	Validate Cert Manager deployment
+	Validate TLS controller pods
+	Validate network policy enforcement
+	Validate internal service routing
+	Validate external → ingress → service flow
+
+4. DEPLOYMENT LAYER (HELM + WORKFLOW CONTROL)
+	Phase C4 — Deployment Standardization
+	Install Helm
+	Add required Helm repositories
+	Validate Helm repo sync
+	Validate Helm chart installation capability
+	Define deployment standard (no manual kubectl)
+	Validate namespace isolation model
+	Validate image pull from registry
+	Validate deployment.yaml integrity rule
+	Validate rollout restart mechanism
+	Validate rollout status tracking
+	Validate rollback mechanism
+	Validate image version control (no drift)
+	Validate cluster deployment reproducibility
+
+5. EVENT SYSTEM (KAFKA BACKBONE)
+	Phase C5 — Kafka System Validation
+	Validate Kafka namespace
+	Validate Kafka deployment (Helm)
+	Validate broker pod status
+	Validate controller pod status
+	Validate Kafka service endpoint
+	Access Kafka container shell
+	Create topic
+	Describe topic
+	Produce test event
+	Validate event in partition
+	Validate offset progression
+	Validate consumer read
+	Validate streaming (producer ↔ consumer)
+	Validate topic isolation
+	Validate failure scenarios (no data / offset issues)
+
+🔴 CROSS-LAYER VALIDATION STEPS (CRITICAL)
+
+	These enforce determinism across layers:
+
+	Docker → containerd image consistency
+	Kubernetes → image resolution from containerd
+	Ingress → service routing validation
+	Deployment → rollout correctness
+	Kafka → end-to-end event visibility
+
+🔒 GLOBAL EXECUTION RULE (CONFIRMED)
+
+	We will enforce:
+
+	Single-step execution
+	No step skipping
+	Strict verification before next step
+	No config mutation during debugging
+	Layer-isolated debugging
+	Kafka = source of truth (for event system)
+
+	Exactly aligned with your GLOBAL RULE.
+
+🧠 ENGINEERING NOTE (IMPORTANT)
+
+	Your attached rule file is correct and production-grade.
+
+	Only minor refinement later will be:
+
+	reduce repetition in “WHAT/WHERE/WHY”
+	tighten “HOW” clarity for infra commands
+
+	But execution logic is fully valid and should be followed.

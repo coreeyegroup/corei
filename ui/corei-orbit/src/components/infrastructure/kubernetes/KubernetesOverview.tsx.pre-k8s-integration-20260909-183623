@@ -1,0 +1,75 @@
+// src/components/infrastructure/kubernetes/KubernetesOverview.tsx
+import React from 'react';
+import { StatPanel, StatusGridPanel, TablePanel } from '../../Workspace/views/panels';
+
+interface KubernetesOverviewProps {
+  data: any;
+}
+
+const KubernetesOverview: React.FC<KubernetesOverviewProps> = ({ data }) => {
+  const clusterInfo = data.cluster_info || {};
+  const clusterVersion =
+    clusterInfo.serverVersion?.gitVersion ||
+    clusterInfo.version ||
+    '—';
+  const clusterContext =
+    clusterInfo.context ||
+    clusterInfo.currentContext ||
+    'unknown';
+
+  // Resource summary
+  const totalCap = data.total_capacity || { cpu: 0, memory: 0 };
+  const totalAlloc = data.total_allocatable || { cpu: 0, memory: 0 };
+  const cpuUsage = data.cpu_usage || '—';
+  const memUsage = data.memory_usage || '—';
+
+  const metrics = [
+    { label: 'Nodes', value: data.node_count || data.nodes || 0 },
+    { label: 'Pods', value: data.pod_count ?? (Array.isArray(data.pods) ? data.pods.length : 0) },
+    { label: 'Services', value: data.service_count ?? (Array.isArray(data.services) ? data.services.length : 0) },
+    { label: 'Deployments', value: data.deployments?.length || 0 },
+    { label: 'CPU Usage', value: cpuUsage },
+    { label: 'Memory Usage', value: memUsage },
+  ];
+
+  return (
+    <div className="overview-tab">
+      <div className="cluster-info-bar" style={{ marginBottom: '12px', display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+        <span><strong>Context:</strong> {clusterContext}</span>
+        <span><strong>Version:</strong> {clusterVersion}</span>
+        <span><strong>API Server:</strong> {clusterInfo.server || '—'}</span>
+        <span><strong>Node Resources:</strong> CPU {totalCap.cpu || 0} cores (allocatable {totalAlloc.cpu || 0}) · Memory {Math.round((totalCap.memory || 0) / 1024 / 1024 / 1024)} GiB (allocatable {Math.round((totalAlloc.memory || 0) / 1024 / 1024 / 1024)} GiB)</span>
+      </div>
+
+      <div className="metrics-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '12px' }}>
+        {metrics.map((m, idx) => (
+          <StatPanel key={idx} label={m.label} value={m.value} unit="" color="default" />
+        ))}
+      </div>
+
+      {data.node_status && data.node_status.length > 0 && (
+        <div style={{ marginTop: '16px' }}>
+          <StatusGridPanel title="Node Health" services={data.node_status.map((n: any) => ({ name: n.name, status: n.status }))} />
+        </div>
+      )}
+
+      {data.events && data.events.length > 0 && (
+        <div style={{ marginTop: '16px' }}>
+          <TablePanel
+            title="Recent Events"
+            columns={[
+              { key: 'namespace', label: 'Namespace' },
+              { key: 'reason', label: 'Reason' },
+              { key: 'message', label: 'Message' },
+              { key: 'type', label: 'Type' },
+              { key: 'age', label: 'Age' },
+            ]}
+            data={data.events.slice(0, 10)}
+          />
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default KubernetesOverview;

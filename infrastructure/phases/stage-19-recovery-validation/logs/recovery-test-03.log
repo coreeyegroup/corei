@@ -1,0 +1,97 @@
+==================================================
+STAGE-19 RECOVERY TEST 03 — DATABASE RESTORE
+==================================================
+[STEP-1] VERIFY DATABASE BACKUP
+=========================================
+VERIFY POSTGRES BACKUP
+=========================================
+[PASS] PostgreSQL backup artifact located
+/home/coreeye/corei/infrastructure/phases/stage-19-recovery-validation/state/pre-recovery/postgres/postgres-20260528T122959Z.sql
+=========================================
+[STEP-2] STOP DATABASE
+=========================================
+STOP DATABASE
+=========================================
+[DB-Restore] Scaling TimescaleDB deployment to 0
+deployment.apps/timescaledb scaled
+[DB-Restore] Waiting for database shutdown
+[DB-Restore] Database shutdown complete
+=========================================
+[STEP-3] RESTORE DATABASE
+=========================================
+RESTORE DATABASE
+=========================================
+[DB-Restore] Restarting TimescaleDB deployment
+deployment.apps/timescaledb scaled
+[DB-Restore] Waiting for database readiness
+Waiting for deployment "timescaledb" rollout to finish: 0 of 1 updated replicas are available...
+deployment "timescaledb" successfully rolled out
+[DB-Restore] Database restore simulation complete
+=========================================
+[STEP-4] VALIDATE DATABASE RESTORE
+=========================================
+VALIDATE DATABASE RESTORE
+=========================================
+[Validate] Checking TimescaleDB deployment
+deployment "timescaledb" successfully rolled out
+[Validate] Checking database pod
+NAME                           READY   STATUS    RESTARTS   AGE
+timescaledb-6fc68ffd87-vnr4m   1/1     Running   0          1s
+[Validate] Executing PostgreSQL readiness probe
+/var/run/postgresql:5432 - no response
+command terminated with exit code 2
+==================================================
+STAGE-19 RECOVERY TEST 03 — DATABASE RESTORE
+==================================================
+[STEP-1] VERIFY DATABASE BACKUP
+=========================================
+VERIFY POSTGRES BACKUP
+=========================================
+[PASS] PostgreSQL backup artifact located
+/home/coreeye/corei/infrastructure/phases/stage-19-recovery-validation/state/pre-recovery/postgres/postgres-20260528T122959Z.sql
+=========================================
+[STEP-2] STOP DATABASE
+=========================================
+STOP DATABASE
+=========================================
+[DB-Restore] Scaling TimescaleDB deployment to 0
+deployment.apps/timescaledb scaled
+[DB-Restore] Waiting for database shutdown
+[DB-Restore] Database shutdown complete
+=========================================
+[STEP-3] RESTORE DATABASE
+=========================================
+RESTORE DATABASE
+=========================================
+[DB-Restore] Restarting TimescaleDB deployment
+deployment.apps/timescaledb scaled
+[DB-Restore] Waiting for database readiness
+Waiting for deployment "timescaledb" rollout to finish: 0 of 1 updated replicas are available...
+deployment "timescaledb" successfully rolled out
+[DB-Restore] Database restore simulation complete
+=========================================
+[STEP-4] VALIDATE DATABASE RESTORE
+=========================================
+VALIDATE DATABASE RESTORE
+=========================================
+[Validate] Checking TimescaleDB deployment
+deployment "timescaledb" successfully rolled out
+[Validate] Checking database pod
+NAME                           READY   STATUS    RESTARTS   AGE
+timescaledb-6fc68ffd87-h98jx   1/1     Running   0          1s
+[Validate] Waiting for PostgreSQL readiness
+[WAIT] PostgreSQL not ready yet (1/30)
+[PASS] PostgreSQL readiness probe succeeded
+[PASS] Database restore validation successful
+=========================================
+[STEP-5] MEASURE RPO
+=========================================
+RPO MEASUREMENT
+=========================================
+[RPO] Recovery Point (seconds): 21
+[RPO] Recovery Point (minutes): 0
+[PASS] RPO target satisfied (<1 minute)
+=========================================
+==================================================
+RECOVERY TEST 03 COMPLETE
+==================================================

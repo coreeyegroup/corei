@@ -1,0 +1,946 @@
+PHASE B — STEP 1: IDENTITY LAYER
+
+(Constraint System — Institutional Specification, Deterministic, Lock-Grade)
+
+1.1 Phase Name
+
+	Phase B — Constraint System
+
+1.2 Phase Role
+
+	Phase B defines the deterministic constraint layer that:
+
+		bounds all outputs from Phase A
+		converts logical constructs into numerically enforceable limits
+		establishes system-wide invariants and constraint rules
+
+	It acts as:
+
+		the formal constraint envelope between Phase A (logic) and Phase D (enforcement)
+
+	Role Mapping in System Lifecycle
+		Phase A → defines WHAT to do (logic)
+
+		Phase B → defines WHAT IS ALLOWED (constraints)
+
+		Phase D → enforces constraints during execution
+
+	Strict Role Constraint
+
+	Phase B MUST:
+
+		constrain Phase A outputs
+		define limits, thresholds, invariants
+		produce deterministic constraint specifications
+
+	Phase B MUST NOT:
+
+		modify or reinterpret Phase A logic
+		execute or enforce constraints
+		introduce new trading logic
+
+
+	Boundary Rule (STRICT)
+
+		Phase B defines constraints only.
+
+		Phase B MUST NOT:
+
+			enforce constraints
+			simulate execution outcomes
+
+		Constraint enforcement is owned by Phase D only.
+
+
+	CEIL Constraint Rule (MANDATORY)
+
+		Phase B defines constraints for:
+
+			CORE system
+			EXTERNAL (CEIL) system
+
+		Both use the same constraint framework
+		but operate under separate parameter sets.
+
+		No cross-contamination allowed.
+
+		Isolation Enforcement (MANDATORY)
+
+			constraint_domain ∈ {CORE, CEIL}
+
+			Constraint:
+
+			CORE constraints MUST NOT reference CEIL inputs
+			CEIL constraints MUST NOT affect CORE outputs
+
+			Evaluation MUST run in two isolated passes:
+
+				pass 1 → CORE
+				pass 2 → CEIL
+
+			No shared state allowed
+
+1.3 Phase Objective
+
+	To produce a fully deterministic, numerically bounded, and enforceable constraint specification that guarantees all Phase A outputs operate within safe, valid, and executable system limits
+
+	Determinism Input Definition (MANDATORY)
+
+		"input" in this phase refers strictly to:
+
+			canonical_input_set = {
+
+				input_data_snapshot {
+
+					trade_intent_snapshot
+					execution_instruction_snapshot
+					portfolio_state_snapshot
+					capital_allocation_snapshot
+
+				}
+
+					configuration_snapshot
+
+					constraint_definition_set
+					constraint_parameter_set
+
+					version_identifiers
+				}
+
+				Canonical Input Enforcement Rule (GLOBAL)
+
+					No step may redefine or extend canonical_input_set
+
+					Violation → PHASE INVALID
+
+			ALL steps (1–8) MUST use this EXACT structure
+
+				No variation allowed
+
+		No other interpretation of input is allowed.
+
+	Output Identity (MANDATORY)
+
+		Phase B produces a single canonical output:
+
+			constraint_output = {
+
+				definition_layer {
+					scope_control_spec
+					domain_model_spec
+				}
+
+				evaluation_layer {
+					constraint_decision_output
+					constraint_result_set
+					numeric_evaluation_output
+				}
+
+				portfolio_layer {
+					portfolio_constraint_output
+				}
+
+				feedback_layer {
+					constraint_feedback_output
+				}
+
+				constraint_hash
+			}
+
+			This step contributes ONLY to constraint_output.
+
+				Standalone output emission → FORBIDDEN
+
+				No step may emit standalone output
+
+
+			All Step outputs MUST be nested inside constraint_output
+
+				No standalone outputs allowed
+
+		This represents the complete constraint system.
+
+		Multiple output forms are not allowed.
+
+
+	Output Derivation Rule (MANDATORY)
+
+		constraint_specification MUST be derived ONLY from:
+
+			canonical_input_set
+
+		Constraint:
+
+			identical canonical_input_set
+				→ identical constraint_specification
+
+		constraint_specification is an INTERNAL construct
+
+			constraint_output is the ONLY external output
+
+		Constraint Specification Rule (MANDATORY)
+
+			constraint_specification:
+
+				internal intermediate construct ONLY
+
+				MUST NOT be emitted as output
+
+				MUST be fully contained within constraint_output
+
+		Any dependency outside canonical_input_set → INVALID SYSTEM
+
+	Objective Properties (MANDATORY)
+
+		The output of this phase MUST be:
+
+		Fully deterministic
+			Same canonical_input_set → identical constraint interpretation
+
+		Numerically bounded
+			Every constraint MUST define:
+				min
+				max
+				edge behavior
+				invalid condition
+		Execution-ready
+			Must be directly consumable by Phase D (Risk + Execution Engine)
+		Replay-safe
+			Constraints MUST NOT depend on runtime or external state
+
+
+	Invariant Ownership (MANDATORY)
+
+		Phase B defines system-level constraint invariants.
+
+		These invariants are enforced in Phase D
+		but defined only in Phase B.
+
+	Global Evaluation Time Rule (MANDATORY)
+
+		evaluation_time =
+
+			MAX(
+				trade_intent_snapshot.event_time,
+				execution_instruction_snapshot.event_time,
+				portfolio_state_snapshot.timestamp
+			)
+
+		System clock usage → FORBIDDEN
+
+	GLOBAL HASH STANDARD (PHASE D BINDING)
+
+		HASH_v1 MUST be identical to Phase A definition:
+
+			algorithm: SHA-256
+			encoding: CBE (Canonical Binary Encoding)
+			constraints:
+				- fixed field order
+				- no whitespace
+				- deterministic serialization
+				- integer encoding: base-10 or fixed binary (as per CBE)
+
+		All IDs in Phase D MUST use this standard.
+
+		Violation → PHASE INVALID
+
+1.4 Why This Phase Exists
+	Failure Modes Without Phase B
+
+	If this phase is absent or weak:
+
+	(F1) Unbounded Capital Deployment
+			Capital allocation (Step 6) can exceed safe limits
+			Portfolio (Step 7) may accumulate uncontrolled exposure
+
+		👉 Leads to:
+
+			capital loss
+			systemic instability
+
+	(F2) Risk Philosophy Non-Enforceable
+
+		Phase A Step 5 defines risk philosophy, not limits
+
+		Without Phase B:
+
+			no numeric thresholds (T1, T2, R1, R2, E_max)
+			no enforceable exposure boundaries
+
+		👉 Result:
+
+			risk becomes descriptive, not actionable
+
+	(F3) Exposure Accumulation & Correlation Risk
+
+		Portfolio Model aggregates exposure deterministically
+
+		Without constraints:
+
+			cluster exposure can silently exceed safe levels
+			directional bias can accumulate across strategies
+
+		👉 Result:
+
+			hidden systemic risk
+
+	(F4) Decision System Unsafe at Scale
+
+		Decision Engine produces trade intents deterministically
+
+		Without constraints:
+
+			high-confidence signals → unlimited scaling
+			no cap on signal density or impact
+
+		👉 Result:
+
+			unstable execution behavior
+
+	(F5) CEIL Contamination Risk
+
+		External inputs (CEIL) are isolated by design
+
+		Without Phase B constraints:
+
+		external trades can:
+			consume core capital
+			distort exposure
+			bypass risk thresholds
+
+		👉 Result:
+
+			violation of system isolation guarantees
+
+	(F6) Non-Executable System
+
+	Phase A is logical-only
+
+	Without Phase B:
+
+		no enforceable boundaries
+		no numeric thresholds
+		no constraint contracts for Phase D
+
+	👉 Result:
+
+		system cannot transition to execution layer
+
+	Institutional Summary
+
+		Phase B exists to convert a logically correct system into a physically safe, enforceable, and executable system
+
+
+This step contributes ONLY to constraint_output
+
+	No standalone outputs allowed
+
+		constraint_output = {
+
+		definition_layer {
+			scope_control_spec
+			domain_model_spec
+		}
+
+		evaluation_layer {
+			constraint_decision_output
+			constraint_result_set
+			numeric_evaluation_output
+		}
+
+		portfolio_layer {
+			portfolio_constraint_output
+		}
+
+		feedback_layer {
+			constraint_feedback_output
+		}
+
+		constraint_hash
+	}
+
+2. PHASE SCOPE CONTROL
+	2.1 Included Scope (STRICT)
+		constraint system definition
+		constraint_specification generation
+		capital constraints definition
+		exposure limits definition
+		risk threshold definition
+		invariant definition
+		CORE / CEIL constraint domains
+
+	2.2 Excluded Scope (STRICT)
+		strategy logic (Phase A)
+		signal generation
+		decision engine
+		execution logic (Phase D)
+		infrastructure systems (Phase C)
+		runtime state mutation
+		execution simulation
+
+3. ARCHITECTURAL INTENT LAYER
+	3.1 Core Design Principles
+		Determinism
+		Modularity
+		Auditability
+		Scalability
+
+	3.2 Architectural Model
+
+		Constraint Envelope Model
+
+	3.3 System Positioning
+
+		Phase A → Phase B → Phase D
+		Logic → Constraints → Execution
+
+	Runtime Binding (MANDATORY)
+
+		Phase B MUST be exposed as a stateless service:
+
+			Constraint Engine Service
+
+		Properties:
+
+			- stateless
+			- deterministic
+			- replay-safe
+			- idempotent
+
+		Invocation:
+
+			ConstraintEngine.evaluate(constraint_input) → constraint_evaluation_event
+
+4. DOMAIN MODEL DEFINITION
+	4.1 Entities
+
+		constraint_specification
+		constraint_rule
+		constraint_domain (CORE / CEIL)
+
+	4.2 Attributes
+
+		limit_value
+		threshold_value
+		boundary_definition
+		constraint_type
+
+	4.3 Relationships
+
+		constraint_specification aggregates constraint_rules
+		constraint_rules apply to Phase A outputs
+		constraint_domain partitions constraint sets
+
+	4.4 Ownership
+
+		All constraint entities are owned by Phase B
+
+				ConstraintResult = {
+				constraint_id
+				evaluation_status ∈ {PASS, FAIL}
+				constraint_type ∈ {HARD, SOFT}
+				violation_type ∈ {
+					NONE,
+					LIMIT_BREACH,
+					INVALID_STATE
+				}
+				affected_field
+				evaluated_value
+				constraint_limit
+			}
+
+5. LOGIC / RULE ENGINE
+	5.1 Rules
+		constraint validation rules
+		constraint completeness rules
+		constraint consistency rules
+
+	5.2 Conditions
+		canonical_input_set must be complete
+		configuration must be valid
+		no missing constraint definitions
+
+	5.3 Decision Logic
+
+		deterministic constraint evaluation
+
+	5.5 Rule Execution Order (STRICT PRECEDENCE)
+
+		1. canonical_input validation (highest priority)
+		2. constraint completeness validation
+		3. constraint consistency validation
+		4. constraint_specification construction (lowest priority)
+
+		Constraint:
+
+		No lower-precedence rule may execute if higher-precedence rule fails
+
+	CONSTRAINT COMPOSITION PRECEDENCE (MANDATORY)
+
+		All constraints MUST be evaluated using strict precedence order:
+
+		1. HARD_CONSTRAINTS
+		2. SOFT_CONSTRAINTS
+
+		Evaluation Model:
+
+		FOR each constraint IN ordered_constraints:
+
+			IF constraint ∈ HARD_CONSTRAINTS AND violated:
+				→ status = REJECT
+				→ STOP evaluation
+
+			ELSE IF constraint ∈ SOFT_CONSTRAINTS:
+				→ accumulate bounds
+
+		Final Resolution:
+
+		approved_value = MIN(
+			all_soft_constraint_limits
+		)
+
+		Constraint Ordering:
+
+		constraints MUST be sorted by:
+
+		constraint_priority ASC
+		constraint_id ASC
+
+		Constraint:
+
+		- identical constraint set → identical evaluation result
+
+		Violation → NON-DETERMINISTIC ENFORCEMENT
+
+		constraint_composition_rule:
+
+			evaluation_order:
+
+			1. HARD constraints (short-circuit)
+			2. SOFT constraints (min aggregation)
+
+			aggregation:
+
+			approved_size = MIN(all_applicable_constraints)
+
+6. FLOW ARCHITECTURE
+	6.0 Canonical Contract (MANDATORY)
+
+			canonical_input_set = {
+
+				input_data_snapshot {
+
+					trade_intent_snapshot
+					execution_instruction_snapshot
+					portfolio_state_snapshot
+					capital_allocation_snapshot
+
+				}
+
+				configuration_snapshot
+
+				constraint_definition_set
+				constraint_parameter_set
+
+				version_identifiers
+			}
+
+			Constraints:
+
+			immutable
+			complete
+			hash-identifiable
+
+		Canonical Input Completeness (MANDATORY)
+
+			configuration_snapshot MUST contain:
+
+				capital_constraints_config
+				exposure_constraints_config
+				risk_threshold_config
+
+			version_identifiers MUST contain:
+
+				constraint_system_version
+				config_version_id
+
+			Any missing field → INVALID INPUT
+
+	6.1 Input Definition
+
+		Input ← Phase A output snapshot
+
+	6.2 Processing Flow
+
+		Phase A Output → Constraint Evaluation → constraint_specification
+
+	6.3 Output Definition
+
+		constraint_specification
+
+		Phase D Consumption Contract
+
+			constraint_output MUST provide:
+
+				binary_decision
+				execution_decision
+				modification_vector
+				violated_constraints_set
+				dominant_constraint_id
+
+			Constraint:
+
+			Phase D MUST NOT derive or infer any missing fields
+
+		ConstraintResult = {
+				constraint_id
+				evaluation_status
+				constraint_type
+				violation_type
+				affected_field
+				evaluated_value
+				constraint_limit
+			}
+
+		constraint_evaluation_output = {
+				constraint_results[]
+			}
+
+		6.6 CONSTRAINT SERVING CONTRACT (MANDATORY)
+
+			Purpose:
+				Defines how Phase B constraint system is consumed by runtime services.
+
+			Input:
+
+				constraint_input = {
+					trade_intent_snapshot
+					execution_instruction_snapshot
+					portfolio_state_snapshot
+					capital_allocation_snapshot
+					configuration_snapshot
+					version_identifiers
+				}
+
+				(MUST be subset of canonical_input_set)
+
+			Output:
+
+				constraint_evaluation_event = {
+					trade_intent_id
+					constraint_decision ∈ {APPROVED, MODIFIED, REJECTED}
+					approved_bounds {
+						max_size
+						max_exposure
+					}
+					violated_constraints[]
+					dominant_constraint_id
+					constraint_hash
+				}
+
+			Constraints:
+
+				- MUST be deterministic
+				- MUST use only canonical_input_set
+				- MUST NOT mutate TradeIntent
+				- MUST NOT enforce execution (only evaluate)
+
+			Integration Rule:
+
+				This output MUST be consumed by:
+
+					Phase D Step 2 (Decision Engine - execution layer)
+					Phase D Step 3 (Risk Engine)
+
+			Violation:
+
+				Missing fields → Phase B INVALID
+
+	6.5 Flow Canonicalization Rule
+
+		constraint_specification MUST be derived ONLY from canonical_input_set
+
+		identical canonical_input_set → identical constraint_specification
+
+		No external dependency allowed
+
+	constraint_evaluation_output = {
+			constraint_results: ConstraintResult[]
+		}
+
+7. PIPELINE STRUCTURE
+
+	Input Validation → Constraint Validation → Constraint Construction → Output Emission
+
+8. CONTROL & CONSTRAINTS
+	8.1 Hard Rules
+		determinism mandatory
+		no external dependency
+		no runtime state
+		no ambiguity
+
+	8.2 Soft Rules
+		prefer minimal constraint overlap
+		prefer clear constraint hierarchy
+
+	8.3 Guardrails
+		reject invalid input
+		reject incomplete constraint configuration
+
+	8.4 Boundary Definition Rule
+
+		All constraints MUST define:
+
+		min
+		max
+		edge behavior
+		invalid condition
+
+	8.5 Invariants
+		constraint_specification must be complete
+		constraint_specification must be deterministic
+		no constraint conflict allowed
+
+9. STATE & DATA MODEL
+	9.1 State Definition
+
+		No internal state
+
+	9.2 State Transitions
+
+		No state transitions
+
+	9.3 Source of Truth
+
+		canonical_input_set
+
+10. FAILURE MODEL
+	10.1 Failure Scenarios
+		missing configuration
+		invalid canonical input
+		ambiguous constraint mapping
+		incomplete constraint definition
+
+		Multi-Failure Scenario (MANDATORY)
+
+		If multiple failures occur simultaneously:
+
+			system MUST evaluate based on rule precedence (Section 5.5)
+
+			highest-priority failure determines system response
+
+	10.2 Failure Impact
+		constraint system invalid
+		execution risk increases
+
+	10.3 Mitigation Logic
+		reject input
+		abort constraint generation
+
+	10.4 Failure Detection Rule
+
+		Each failure must have:
+
+		trigger → validation failure
+		detection → input validation
+		response → rejection
+
+11. ASSUMPTION REGISTER
+
+	Assumption 1: Phase A outputs are valid
+	Reason: Phase A is locked
+	Validation: Phase A lock verification
+	Status: VALIDATED
+
+	Assumption 2: configuration_snapshot is complete
+	Reason: required for constraints
+	Validation: input validation
+	Status: CONTROLLED
+
+		Constraint:
+
+		OPEN assumptions MUST be resolved before Phase Lock (Section 21)
+
+12. VALIDATION FRAMEWORK
+	12.1 Completeness Checklist
+		all sections present
+		no ambiguity
+		deterministic mapping
+
+	12.2 Validation Method
+		Red Team (attack layers 1–13)
+		Blue Team validation
+
+	12.3 Acceptance Criteria
+
+		PASS / FAIL
+
+	12.4 Validation Coverage
+
+		All rules tested across Red/Blue
+
+		Validation Coverage Rule (MANDATORY)
+
+			Each rule MUST map to at least one:
+
+				Red Team attack layer (1–13)
+				Blue Team validation layer (1–13)
+
+			Violation if any rule is not tested
+
+	12.5 Ambiguity Check
+
+		Multiple interpretations tested → identical outputs
+
+13. OUTPUT (DELIVERABLE SPEC)
+
+	constraint_specification (STRUCTURED OUTPUT)
+
+		constraint_specification = {
+			capital_constraints: {},
+			exposure_limits: {},
+			risk_thresholds: {},
+			invariants: {}
+		}
+
+		Constraint:
+
+		All fields MUST be present
+		No optional fields allowed
+
+		ExecutionIntent = {
+			trade_intent_id
+			instrument
+			direction
+			target_size
+			execution_type
+			priority_level
+			strategy_id
+			origin_type
+			event_time
+		}
+
+		event_time MUST be inherited from TradeIntent.event_time
+
+			No modification allowed
+
+14. TRACEABILITY MAPPING
+
+	Input ← Phase A
+	Output → Phase D
+
+15. CROSS-PHASE CONSISTENCY
+
+	Phase B owns:
+
+		constraints
+		invariants
+
+	Phase B references:
+
+		Phase A outputs
+
+16. SCALABILITY MODEL
+	supports multi-strategy
+	supports portfolio-level aggregation
+
+17. GOVERNANCE INTEGRATION
+	version-controlled
+	approval required
+	change impact tracked
+
+18. AUDITABILITY & OBSERVABILITY
+	full traceability
+	deterministic replay
+	constraint evaluation logs
+
+19. RISK CONSIDERATIONS
+	constraint failure = system-level risk
+	mitigated via deterministic validation
+
+20. FAILURE CONDITION (PHASE LEVEL)
+
+	Phase fails if:
+
+		ambiguity exists
+		determinism breaks
+		canonical_input_set incomplete
+		constraint_specification inconsistent
+
+21. PHASE LOCK CRITERIA
+
+	Phase locked only if:
+
+		all sections complete
+		Red Team passed
+		Blue Team validated
+		deterministic mapping confirmed
+		no ambiguity exists
+
+Hash Enforcement Rule (GLOBAL)
+
+	ALL hashes MUST use:
+
+		HASH_v1 ONLY
+
+	No step-specific hash format allowed
+
+NO ADDITIONAL FIELDS allowed in canonical_input_set
+
+	Examples of FORBIDDEN fields:
+
+		signal_snapshot_reference
+		system_state_snapshot
+		derived_state
+
+ALL step outputs MUST be nested inside:
+
+constraint_output
+
+	constraint_output = {
+
+			definition_layer {
+				scope_control_spec
+				domain_model_spec
+			}
+
+			evaluation_layer {
+				constraint_decision_output
+				constraint_result_set
+				numeric_evaluation_output
+			}
+
+			portfolio_layer {
+				portfolio_constraint_output
+			}
+
+			feedback_layer {
+				constraint_feedback_output
+			}
+
+			constraint_hash
+		}
+
+	Standalone outputs → FORBIDDEN
+
+		If any step emits independent output → PHASE INVALID
+
+	ALL hashing MUST follow:
+
+		HASH_v1 ONLY
+
+		No step-specific serialization rules allowed
+
+evaluation_time =
+
+    MAX(
+        trade_intent_snapshot.event_time,
+        execution_instruction_snapshot.event_time,
+        portfolio_state_snapshot.timestamp
+    )
+
+	evaluation_time MUST be defined ONLY in Step 1
+
+		All steps MUST reference it
+
+		Redefinition → PHASE INVALID

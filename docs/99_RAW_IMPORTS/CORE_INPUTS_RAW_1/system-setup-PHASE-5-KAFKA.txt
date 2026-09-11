@@ -1,0 +1,587 @@
+🔵 PHASE 5 — KAFKA (EVENT BACKBONE)
+	1. PHASE IDENTITY
+		1.1 Name
+
+			PHASE 5 — KAFKA (EVENT BACKBONE)
+
+		1.2 Role
+
+			Establish distributed event streaming backbone for the entire trading platform.
+
+		1.3 Objective
+
+			Create a deterministic Kafka cluster (KRaft mode) inside Kubernetes capable of:
+
+			✔ Event ingestion (market data, signals)
+			✔ Inter-service communication (async)
+			✔ Order/event pipelines
+			✔ Real-time streaming architecture
+			✔ Decoupled microservices interaction
+
+			WHAT WE BUILT
+				Kafka Cluster (KRaft Mode)
+				├── 1x Controller Node
+				├── 1x Broker Node
+				├── Internal DNS Service
+				└── Kubernetes-managed deployment (Helm)
+
+			ARCHITECTURE (PHASE 5 SCOPE)
+					[Microservices Layer]
+							↓
+				   Kafka Producers
+							↓
+				 ┌──────────────────────┐
+				 │   Kafka Broker       │
+				 │  (Message Storage)   │
+				 └──────────────────────┘
+							↓
+					Kafka Consumers
+							↓
+					[Downstream Systems]
+
+		1.4 Failure Prevented
+				No event backbone → tightly coupled services
+				No streaming → latency + scaling failure
+				No queueing → data loss under load
+				No decoupling → system fragility
+
+			📌 Phase 5 enables:
+
+				ALL downstream systems (OMS, strategies, analytics, storage)
+
+	2. FINAL SYSTEM STATE (YOUR NODE)
+		Component			Value
+		Deployment			Helm (bitnami/kafka)
+		Mode				KRaft (No ZooKeeper)
+		Broker				1
+		Controller			1
+		Persistence			Disabled (Phase scope)
+		Auth				Disabled (plaintext)
+		Networking			Kubernetes ClusterIP
+		Endpoint			kafka.kafka.svc.cluster.local:9092
+		Status				Running
+		Validation			Passed
+
+	3. ARCHITECTURAL OWNERSHIP (CRITICAL)
+			LAYER MODEL
+			Layer	Component	Ownership		Responsibility
+			L3		Kubernetes	Orchestrator	pod lifecycle
+			L4		Helm		Package manager	deployment
+			L5		Kafka		Event backbone	streaming
+
+		🔴 KAFKA OWNS
+			✔ Message storage (log-based)
+			✔ Event streaming
+			✔ Partitioning
+			✔ Offset tracking
+			✔ Producer/consumer coordination
+
+		🔴 KAFKA DOES NOT OWN
+			✘ Business logic
+			✘ Data validation
+			✘ Schema enforcement (future: schema registry)
+			✘ API logic
+
+		🔴 PRODUCER OWNERSHIP (Future Services)
+			✔ Send events
+			✔ Maintain schema integrity
+			✔ Retry logic
+
+		🔴 CONSUMER OWNERSHIP
+			✔ Consume events
+			✔ Handle idempotency
+			✔ Manage offsets
+
+	4. CORE COMPONENTS INTRODUCED
+		Component				Role		Responsibility
+		Kafka Broker			Data node	stores messages
+		Kafka Controller		Metadata	cluster coordination
+		StatefulSet				Pod mgmt	stable identity
+		Service (ClusterIP)		Networking	internal access
+		Helm Chart				Deployment	config management
+
+	5. EXECUTION STEPS (DETAILED)
+
+		STEP 5.1 — CREATE NAMESPACE
+
+			kubectl create namespace kafka
+
+		STEP 5.2 — INITIAL INSTALL (FAILED ITERATIONS)
+			Issues Encountered:
+			❌ Pods Pending → scheduling constraints
+			❌ ImagePullBackOff → registry/DNS issue
+			❌ PVC binding → storage not available
+			❌ Kafka metadata timeout → cluster not stable
+
+		STEP 5.3 — ROOT CAUSE ANALYSIS
+
+			1. Image Pull Failure
+					Docker Hub timeout / registry access issue
+
+				Fix	:
+				Switched to		:	public.ecr.aws/bitnami/kafka
+
+			2. Persistent Volume Blocking
+					StatefulSet required PVC → no storage provisioner
+
+				Fix:
+				Disabled persistence completely
+
+			3. Scheduling Constraints
+					Affinity / anti-affinity blocking scheduling
+
+				Fix:
+				Disabled pod anti-affinity
+
+		STEP 5.4 — FINAL HELM INSTALL (WORKING CONFIG)
+				helm install kafka bitnami/kafka \
+				-n kafka \
+				--version 26.6.2 \
+				--set kraft.enabled=true \
+				--set controller.replicaCount=1 \
+				--set broker.replicaCount=1 \
+				--set persistence.enabled=false \
+				--set broker.persistence.enabled=false \
+				--set controller.persistence.enabled=false \
+				--set volumePermissions.enabled=false \
+				--set auth.clientProtocol=plaintext \
+				--set listeners.client.protocol=PLAINTEXT \
+				--set listeners.controller.protocol=PLAINTEXT \
+				--set listeners.interbroker.protocol=PLAINTEXT \
+				--set controller.podAntiAffinityPreset=none \
+				--set broker.podAntiAffinityPreset=none \
+				--set controller.resources.requests.cpu=100m \
+				--set controller.resources.requests.memory=256Mi \
+				--set broker.resources.requests.cpu=100m \
+				--set broker.resources.requests.memory=256Mi \
+				--set image.registry=public.ecr.aws \
+				--set image.repository=bitnami/kafka \
+				--set image.tag=3.6.1
+
+		STEP 5.5 — VERIFY DEPLOYMENT
+				kubectl get pods -n kafka
+				kubectl get svc -n kafka
+
+			Expected:
+
+				broker → Running
+				controller → Running
+
+		STEP 5.6 — ACCESS KAFKA
+			kubectl exec -it kafka-broker-0 -n kafka -- bash
+
+		STEP 5.7 — TOPIC MANAGEMENT
+			Delete (reset)
+				kafka-topics.sh \
+				--delete \
+				--topic test-topic \
+				--bootstrap-server kafka.kafka.svc.cluster.local:9092
+
+			Create
+				kafka-topics.sh \
+				--create \
+				--topic test-topic \
+				--bootstrap-server kafka.kafka.svc.cluster.local:9092 \
+				--partitions 1 \
+				--replication-factor 1
+
+			Describe
+				kafka-topics.sh \
+				--describe \
+				--topic test-topic \
+				--bootstrap-server kafka.kafka.svc.cluster.local:9092
+
+		STEP 5.8 — OFFSET VALIDATION
+			kafka-run-class.sh kafka.tools.GetOffsetShell \
+			--broker-list kafka.kafka.svc.cluster.local:9092 \
+			--topic test-topic
+
+		STEP 5.9 — PRODUCER
+			kafka-console-producer.sh \
+			--topic test-topic \
+			--bootstrap-server kafka.kafka.svc.cluster.local:9092
+
+			Input:
+
+				MSG-1
+				MSG-2
+				MSG-3
+
+		STEP 5.10 — FORCED READ (CRITICAL)
+			kafka-console-consumer.sh \
+			--topic test-topic \
+			--bootstrap-server kafka.kafka.svc.cluster.local:9092 \
+			--partition 0 \
+			--offset 0 \
+			--max-messages 10
+
+		STEP 5.11 — STREAMING TEST
+
+			Consumer:
+
+				kafka-console-consumer.sh \
+				--topic test-topic \
+				--bootstrap-server kafka.kafka.svc.cluster.local:9092
+
+			Producer:
+
+				kafka-console-producer.sh \
+				--topic test-topic \
+				--bootstrap-server kafka.kafka.svc.cluster.local:9092
+
+	6. INFRA FLOW (IMPORTANT)
+		Producer
+		   ↓
+		Kafka Broker (log append)
+		   ↓
+		Partition
+		   ↓
+		Offset increment
+		   ↓
+		Consumer reads
+
+	7. FINAL VALIDATION
+		Check				Result
+		Topic creation		✔
+		Offset increment	✔
+		Log read			✔
+		Streaming			✔
+		Pod health			✔
+
+	8. HARD CONSTRAINTS ENFORCED
+		✔ Single endpoint usage enforced
+		✔ No persistence (phase constraint)
+		✔ No auth (controlled environment)
+		✔ KRaft mode only
+		✔ Helm-managed deployment
+		✔ Resource limits defined
+
+	9. FAILURE MODEL (PHASE 5)
+		Failure				Impact
+		Mixed endpoints		invisible messages
+		PVC required		pods stuck pending
+		image pull fail		cluster down
+		wrong listeners		producer failure
+		no offset check		false validation
+
+	10. OUTPUT (DELIVERABLE)
+		Deterministic Event Backbone:
+
+			→ Kafka cluster running
+			→ Topics manageable
+			→ Messages persisted
+			→ Offsets tracked
+			→ Streaming validated
+
+	11. TRACEABILITY
+		Phase 0 → OS
+		Phase 1 → Docker
+		Phase 2 → Kubernetes
+		Phase 3 → Networking
+		Phase 4 → Helm
+		Phase 5 → Kafka (Event Backbone)
+		Phase 6 → Storage Layer
+
+	12. PHASE LOCK CRITERIA
+		✔ Pods running
+		✔ Topic creation works
+		✔ Offset increases
+		✔ Log readable
+		✔ Streaming works
+		✔ Endpoint consistent
+
+		🔒 FINAL STATUS
+		PHASE 5 = LOCKED
+
+	📋 13. COMMAND REFERENCE TABLE (PHASE 5)
+
+	Step			Command							Purpose			Expected
+	Namespace		kubectl create namespace kafka	isolate			created
+	Install			helm install kafka ...			deploy Kafka	deployed
+	Pods			kubectl get pods -n kafka		verify			Running
+	Access			kubectl exec -it kafka-broker-0	shell			access
+	Delete topic	kafka-topics.sh --delete		reset			success
+	Create topic	kafka-topics.sh --create		topic			created
+	Describe		kafka-topics.sh --describe		verify			leader assigned
+	Offset			GetOffsetShell					verify data		0 → N
+	Producer		kafka-console-producer.sh		write			accepted
+	Consumer		kafka-console-consumer.sh		read			messages
+	Stream			producer + consumer				realtime		working
+
+	🧠 FINAL ENGINEERING INSIGHT
+		Kafka is NOT a messaging queue.
+
+		It is:
+		→ distributed commit log
+		→ event streaming backbone
+		→ system decoupling layer
+
+Phase C5 — EVENT SYSTEM (KAFKA BACKBONE)
+
+	C5 — STEP 1: KAFKA DEPLOYMENT VALIDATION
+		kubectl get pods -n kafka
+
+	C5 — STEP 2: KAFKA SERVICE ENDPOINT VALIDATION
+
+		kubectl get svc -n kafka
+
+	C5 — STEP 3: KAFKA INTERNAL CONNECTIVITY (BROKER ACCESS)
+
+		kubectl exec -it kafka-0 -n kafka -- bash
+
+	C5 — STEP 4: TOPIC CREATION & VALIDATION
+		🔵 STEP 4.1 — CREATE TOPIC
+			Run inside container:
+				/opt/kafka/bin/kafka-topics.sh \
+				--create \
+				--topic c5-test-topic \
+				--bootstrap-server localhost:9092 \
+				--partitions 1 \
+				--replication-factor 1
+
+			EXPECTED OUTPUT
+				Created topic c5-test-topic
+
+		🔵 STEP 4.2 — LIST TOPICS
+				/opt/kafka/bin/kafka-topics.sh \
+				--list \
+				--bootstrap-server localhost:9092
+
+			EXPECTED OUTPUT
+				c5-test-topic
+				(+ any existing topics)
+
+		🔵 STEP 4.3 — DESCRIBE TOPIC
+				/opt/kafka/bin/kafka-topics.sh \
+				--describe \
+				--topic c5-test-topic \
+				--bootstrap-server localhost:9092
+
+			EXPECTED OUTPUT
+				Topic: c5-test-topic
+				PartitionCount: 1
+				ReplicationFactor: 1
+
+	C5 — STEP 5: PRODUCER VALIDATION (SEND EVENT)
+		🔵 STEP 5.1 — START PRODUCER
+		Run:
+			/opt/kafka/bin/kafka-console-producer.sh \
+			--topic c5-test-topic \
+			--bootstrap-server localhost:9092
+
+		ACTION
+		After running:
+		Type a message:
+			test-event-1
+
+		Press ENTER
+
+		EXPECTED
+		No error
+		Message accepted silently
+
+	C5 — STEP 6: CONSUMER VALIDATION (READ EVENT)
+		STEP 6.1 — START CONSUMER
+			Run:
+				/opt/kafka/bin/kafka-console-consumer.sh \
+				--topic c5-test-topic \
+				--from-beginning \
+				--bootstrap-server localhost:9092
+
+			EXPECTED OUTPUT
+				test-event-1
+
+	C5 — STEP 7 (PRODUCTION FIX)
+		We will:
+			Create Persistent Storage
+			Attach to Kafka
+			Fix log.dirs
+			Restart broker
+			Revalidate pipeline
+
+		🔵 STEP 7.1 — DEFINE PVC
+			Create file:
+			nano kafka-pvc.yaml
+
+				apiVersion: v1
+				kind: PersistentVolumeClaim
+				metadata:
+				  name: kafka-data
+				  namespace: kafka
+				spec:
+				  accessModes:
+					- ReadWriteOnce
+				  resources:
+					requests:
+					  storage: 10Gi
+				  storageClassName: local-path
+
+			APPLY
+				kubectl apply -f kafka-pvc.yaml
+
+			VERIFY
+				kubectl get pvc -n kafka
+
+			Expected:
+				kafka-data   Bound
+
+		🔵 STEP 7.2 — PATCH KAFKA STATEFULSET
+
+			Now we attach volume to Kafka pod
+
+			GET CURRENT STATEFULSET
+				kubectl get statefulset -n kafka
+
+			(usually kafka)
+
+			EDIT
+			kubectl edit statefulset kafka -n kafka
+			ADD THIS (CRITICAL)
+			Under spec.template.spec.containers
+			volumeMounts:
+			  - name: kafka-data
+				mountPath: /var/lib/kafka/data
+			Under spec.template.spec
+			volumes:
+			  - name: kafka-data
+				persistentVolumeClaim:
+				  claimName: kafka-data
+
+		🔵 STEP 7.3 — FIX log.dirs
+
+			Inside same StatefulSet:
+
+			Find env or config and set:
+
+			KAFKA_LOG_DIRS=/var/lib/kafka/data
+
+			OR if using config:
+
+			log.dirs=/var/lib/kafka/data
+
+			🔴 IMPORTANT
+
+			If Bitnami chart:
+
+			KAFKA_CFG_LOG_DIRS=/bitnami/kafka/data
+
+			Then mount path must match:
+
+			/bitnami/kafka/data
+
+		🔵 STEP 7.4 — RESTART KAFKA
+			kubectl delete pod kafka-0 -n kafka
+
+		🔵 STEP 7.5 — VERIFY STORAGE
+
+			Inside pod:
+
+			kubectl exec -it kafka-0 -n kafka -- bash
+
+			Then:
+
+			ls /var/lib/kafka/data
+
+			Expected:
+
+			c5-test-topic-0/
+
+		🔵 STEP 7.6 — FINAL VALIDATION
+
+			Repeat:
+
+			produce
+			consume
+
+			Now it will definitely work
+
+			🔒 PRODUCTION LOCK CONDITION
+
+			✔ PVC Bound
+			✔ Volume mounted
+			✔ log.dirs correct
+			✔ Topic directory created
+			✔ Log file size > 0
+			✔ Producer → Consumer works
+
+			🧠 FINAL ENGINEERING NOTE
+
+			You just avoided a critical production failure:
+
+			Kafka without persistence = silent data loss system
+
+	🔷 C5 — EVENT SYSTEM (Kafka Backbone)
+		🧠 MACRO ROLE
+			Central event backbone
+			→ all data flows through Kafka
+
+		✔ WHAT YOU DID
+			Deployment Validation
+			Verified Apache Kafka broker
+			Validated service layer:
+				kafka (headless)
+				kafka-client
+
+		Critical Issue Found & Fixed
+			❌ Kafka writing to /tmp
+			✔ Fixed to /var/lib/kafka/data
+			✔ Aligned with PVC
+
+		Storage Architecture
+			StatefulSet
+			 → PVC (kafka-data-kafka-0)
+			 → Mounted at /var/lib/kafka/data
+			 → log.dirs aligned
+
+		Config Hardening
+			Replaced HostPath with ConfigMap
+			Fixed:
+				listeners
+				advertised.listeners
+				log.dirs
+
+		Topic Validation
+			Existing topics:
+				raw_events
+				validated_events
+				dead_letter_events
+				c5-test-topic
+
+		End-to-End Validation
+			Producer → Kafka → Disk → Consumer
+
+			✔ Messages persisted
+			✔ Messages consumed
+			✔ No data loss
+
+		⚙️ FINAL SETTINGS
+			log.dirs                → /var/lib/kafka/data
+			Storage                → PVC (5Gi)
+			Mode                   → KRaft (no Zookeeper)
+			Listeners              → kafka-0.kafka:9092
+			Replication            → 1 (single-node)
+
+		🧠 VALUE
+			Deterministic event flow
+			Durable data backbone
+			Decoupled system architecture
+			Foundation for trading engine
+
+	🧠 INFRASTRUCTURE STACK
+		Docker → Kubernetes → Networking → Helm → Kafka
+
+	✔ WHAT YOU NOW HAVE
+		1. Deterministic Runtime
+			container consistency
+
+		2. Orchestrated System
+			self-healing cluster
+
+		3. Networked Platform
+			internal + external routing
+
+		4. Controlled Deployment
+			versioned infrastructure
+
+		5. Event Backbone
+			real-time data pipeline

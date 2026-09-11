@@ -32,9 +32,8 @@ spec:
           \ncontroller.listener.names=CONTROLLER\n\ninter.broker.listener.name=PLAINTEXT\n\
           \nlog.dirs=/var/lib/kafka/data/logs\n\noffsets.topic.replication.factor=1\n\
           \ntransaction.state.log.replication.factor=1\n\ntransaction.state.log.min.isr=1\n\
-          sasl.enabled.mechanisms=SCRAM-SHA-256\n\nlistener.name.sasl_ssl.scram-sha-256.sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule\
-          \ required;\n\nlistener.name.sasl_ssl.sasl.enabled.mechanisms=SCRAM-SHA-256\n\
-          \nsasl.mechanism.inter.broker.protocol=SCRAM-SHA-256\n\nssl.keystore.location=/etc/kafka/tls/keystore.jks\n\
+          sasl.enabled.mechanisms=SCRAM-SHA-256\n\nlistener.name.sasl_ssl.sasl.enabled.mechanisms=SCRAM-SHA-256\n\
+          \nserviceName=kafka\n\nssl.keystore.location=/etc/kafka/tls/keystore.jks\n\
           \nssl.truststore.location=/etc/kafka/tls/truststore.jks\nKAFKAEOF\n\n/opt/kafka/bin/kafka-storage.sh\
           \ format \\\n  --ignore-formatted \\\n  --cluster-id $CLUSTER_ID \\\n  --config\
           \ /tmp/server.properties\n\nexec /opt/kafka/bin/kafka-server-start.sh \\\

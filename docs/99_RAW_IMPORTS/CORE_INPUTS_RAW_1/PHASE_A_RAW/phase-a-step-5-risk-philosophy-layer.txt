@@ -1,0 +1,1093 @@
+PHASE A — STEP 5: RISK PHILOSOPHY LAYER
+
+	Reference ID: CORE-TRADING-PHASE-A-STEP5-05
+
+	1. PHASE IDENTITY LAYER
+		1.1 Phase Name
+
+			Phase A — Step 5: Risk Philosophy Layer
+
+		1.2 Phase Role
+
+			Defines the foundational, deterministic risk doctrine governing all trading behavior across strategies, decisions, and execution behavior.
+
+		1.3 Phase Objective
+
+			Establish a fully deterministic, hierarchical, and multi-layer risk philosophy model that governs capital protection, exposure control, and system-wide risk alignment.
+
+		1.4 Why This Phase Exists
+
+			Prevents:
+				uncontrolled capital exposure
+				inconsistent risk interpretation across strategies
+				hidden or implicit risk-taking
+				misalignment between trading logic and firm-level risk objectives
+
+			This phase ensures:
+				risk is defined BEFORE enforcement (Phase D)
+				all downstream layers operate within a unified risk doctrine
+
+
+	2. PHASE SCOPE CONTROL
+		2.1 INCLUDED (STRICT)
+			Risk philosophy definition (multi-layer)
+			Risk hierarchy (firm → portfolio → strategy → trade)
+			Risk concepts and semantics
+			Risk tolerance models (logical)
+			Exposure logic (non-numeric enforcement)
+			Drawdown philosophy
+			Capital preservation doctrine
+			Risk interaction rules with decision/execution
+
+		2.2 EXCLUDED (STRICT)
+			Risk enforcement (Phase D)
+			Numeric limits (Phase B)
+			Capital allocation execution
+			Stop-loss implementation
+			Position sizing execution
+			Infrastructure / monitoring systems
+
+		Boundary Rule:
+		This phase defines WHAT risk means, not HOW it is enforced
+
+
+	3. ARCHITECTURAL INTENT LAYER
+		3.1 Core Design Principles
+			Deterministic risk interpretation
+			Hierarchical risk dominance
+			Capital preservation priority
+			Strategy independence under unified risk
+			Full auditability
+
+		3.2 Architectural Model
+
+			Logical Risk Philosophy Model (non-executable)
+
+		3.3 System Positioning
+
+			Strategy → Signal → Decision → Trade Intent → Execution Behavior → Risk Philosophy → (Phase D Risk Engine)
+
+			Clarification:
+			Risk Philosophy is orthogonal control logic, not part of transformation flow.
+
+
+	4. DOMAIN MODEL DEFINITION
+		4.1 Core Entities
+
+			Risk Layer
+
+				Firm Risk Layer
+				Portfolio Risk Layer
+				Strategy Risk Layer
+				Trade Risk Layer
+
+			Risk Constructs
+
+				Risk Budget (logical)
+				Exposure State (logical)
+				Drawdown State (logical)
+				Risk Event
+
+			Risk Event (OPTIONAL STRUCTURE)
+
+				Attributes:
+
+					event_type
+					trigger_condition
+					associated_risk_state
+					event_time
+
+				Constraint:
+
+					MUST be derivable from Risk_Context
+
+		4.2 Attributes
+
+			Risk Budget (Logical Only)
+
+				scope_level (firm/portfolio/strategy/trade)
+				risk_capacity_class
+				drawdown_tolerance_class
+				exposure_preference
+
+			Exposure State
+
+				directional_exposure
+				concentration_profile
+				correlation_cluster
+
+			Drawdown State
+
+				current_drawdown_state (none / mild / elevated / critical)
+				drawdown_trajectory
+
+		4.3 Relationships
+			Firm Risk → governs → Portfolio Risk
+			Portfolio Risk → governs → Strategy Risk
+			Strategy Risk → governs → Trade Risk
+			Trade Intent → constrained by → Risk Philosophy
+			Execution Behavior → shaped by → Risk Philosophy
+
+		4.4 Ownership
+			Risk Philosophy → Phase A (this step)
+			Risk Enforcement → Phase D
+			Numeric Constraints → Phase B
+
+			Portfolio State (Logical Entity — MANDATORY)
+
+				Attributes:
+
+					portfolio_state_id
+					timestamp (event_time aligned)
+
+					total_exposure_vector
+					net_directional_exposure
+
+					exposure_distribution_profile
+					concentration_profile
+
+					correlation_cluster_map
+
+					realized_drawdown
+					unrealized_drawdown
+					peak_equity_reference
+
+				Constraints:
+
+					MUST be fully reconstructable
+					MUST be deterministic
+					MUST include ALL fields required for risk evaluation
+
+				Missing field → input invalid
+
+			Configuration Snapshot (MANDATORY)
+
+				Attributes:
+
+					risk_parameters:
+						T1, T2
+						R1, R2
+						E_max_class
+						cluster_limit
+
+					weight_parameters:
+						w1, w2
+
+				Constraints:
+
+					All parameters MUST be:
+						bounded
+						immutable
+						versioned
+
+
+			Version Identifiers (MANDATORY)
+
+				Attributes:
+
+					risk_model_version
+					config_version
+					hash_version
+
+				Constraints:
+
+					MUST be included in canonical_input_set
+					MUST be used in hash generation
+
+			correlation_cluster_map:
+
+					mapping:
+						instrument → cluster_id
+
+				drawdown_trajectory:
+
+					time-series of drawdown_ratio over evaluation_time
+
+
+				constraint_flags:
+
+					deterministic boolean map (defined in computation model)
+
+				Constraint:
+
+					correlation_cluster_map MUST be provided as part of input
+
+					No dynamic clustering allowed in this phase
+
+			staleness_limit:
+
+					maximum allowed time difference for input validity
+
+				Constraint:
+
+					staleness_limit > 0
+					MUST be part of configuration_snapshot
+
+
+	5. LOGIC / RULE ENGINE (CORE)
+		5.1 Risk Hierarchy Rule (STRICT)
+
+				Firm Risk > Portfolio Risk > Strategy Risk > Trade Risk
+
+			Constraint:
+			Lower layer MUST NOT override higher layer.
+
+		5.2 Capital Preservation Rule
+
+			Primary objective = survival over profit
+
+			Risk decisions MUST prioritize:
+				drawdown containment
+				capital protection
+				exposure stability
+
+		5.3 Exposure Philosophy
+
+			Exposure MUST be:
+				intentional
+				bounded (logically)
+				diversified
+
+			Rules:
+				No uncontrolled directional accumulation
+				No hidden correlated exposure
+				Exposure must reflect decision confidence + system state
+
+			Exposure Normalization Constraints
+
+				Let:
+
+					E_total = total exposure magnitude
+					E_cluster = exposure per correlation cluster
+
+				Constraints:
+
+					E_total ≤ E_max_class
+					E_cluster ≤ cluster_limit
+
+					exposure_balance_score MUST be computed deterministically
+
+				Violation → constraint_flag MUST be set
+
+		5.4 Drawdown Response Model
+
+			Drawdown States:
+				Normal
+				Elevated
+				Critical
+
+			Behavioral Philosophy:
+				As drawdown increases:
+					risk appetite decreases
+					exposure must contract
+					aggressiveness must reduce
+
+			Drawdown Classification Function
+
+				drawdown_ratio =
+					current_drawdown / peak_equity_reference
+
+				drawdown_state =
+					IF drawdown_ratio < T1 → NORMAL
+					IF T1 ≤ drawdown_ratio < T2 → ELEVATED
+					IF drawdown_ratio ≥ T2 → CRITICAL
+
+				Constraints:
+
+					T1, T2 MUST be globally defined constants
+					Classification MUST be deterministic
+
+			current_drawdown =
+				max(realized_drawdown, unrealized_drawdown)
+
+		5.5 Risk Consistency Rule
+
+			Same conditions → same risk interpretation
+			No discretionary overrides at logic level
+
+		5.6 Strategy Risk Independence Rule
+
+			Strategies do NOT manage their own risk globally
+			Risk is applied consistently across all strategies
+
+		5.7 Risk–Decision Alignment Rule
+
+			Risk Philosophy MUST NOT:
+				change decision logic
+
+			Risk Philosophy MUST:
+				constrain downstream execution behavior
+
+			Risk Evaluation Function (MANDATORY)
+
+				Risk_Context = f(
+					trade_intent_snapshot,
+					execution_instruction_snapshot,
+					portfolio_state_snapshot,
+					configuration_snapshot
+				)
+
+				Constraints:
+
+					Function MUST be:
+						deterministic
+						order-independent
+						replayable
+
+					Same input → identical Risk_Context output
+
+					No implicit logic allowed
+
+			Global Numeric Model (MANDATORY)
+
+				ALL computations in this phase MUST use fixed-point arithmetic:
+
+					value = integer / 10^6
+
+				Applies to:
+
+					drawdown_ratio
+					E_total
+					E_cluster_k
+					exposure_balance_score
+					risk_score
+					all intermediate computations
+
+				Constraint:
+
+					Floating-point arithmetic is strictly forbidden
+
+			Risk Computation Model (MANDATORY — FULL DEFINITION)
+
+				Step 1: Drawdown Evaluation
+
+					drawdown_ratio =
+						IF peak_equity_reference == 0 → 0
+						ELSE current_drawdown / peak_equity_reference
+
+
+				Step 2: Exposure Aggregation
+
+							Exposure Primitive Definition (MANDATORY)
+
+								exposure_vector_i:
+
+									scalar signed exposure value per instrument
+
+									where:
+
+										exposure_vector_i > 0 → long exposure
+										exposure_vector_i < 0 → short exposure
+
+								total_exposure_vector:
+
+									ordered deterministic list of exposure_vector_i across all instruments
+
+							Constraint:
+
+								ordering MUST be deterministic and stable across identical inputs
+
+						E_total = Σ |exposure_vector_i|
+
+							where:
+								exposure_vector_i ∈ total_exposure_vector
+
+						E_cluster_k = Σ exposure_i for cluster k
+
+				Step 3: Exposure Balance Score
+
+					exposure_balance_score =
+						1 - (max(E_cluster_k) / E_total)
+
+					Constraint:
+						E_total > 0
+						IF E_total == 0 → exposure_balance_score = 1
+
+
+				Step 4: Risk Level Computation
+
+					risk_score =
+						w1 * drawdown_ratio
+					  + w2 * (1 - exposure_balance_score)
+
+					Constraints:
+						w1 + w2 = 1
+						fixed-point arithmetic only
+
+
+				Step 5: Risk Level Classification
+
+					risk_level =
+						IF risk_score < R1 → LOW
+						IF R1 ≤ risk_score < R2 → MEDIUM
+						IF risk_score ≥ R2 → HIGH
+
+
+				Step 6: Constraint Flag Generation
+
+					constraint_flags = {
+
+						drawdown_breach:
+							drawdown_state == CRITICAL
+
+						exposure_breach:
+							E_total > E_max_class
+
+						cluster_concentration_breach:
+							any(E_cluster_k > cluster_limit)
+
+					}
+
+
+				Step 7: Precedence Enforcement (STRICT)
+
+					Apply in order:
+
+						1. Firm-level override
+						2. Drawdown constraints
+						3. Exposure constraints
+						4. Strategy-level
+						5. Trade-level
+
+					Constraint:
+						Once constraint activated → lower layers cannot override
+
+			Global Evaluation Order (MANDATORY)
+
+				Risk evaluation MUST follow strict sequence:
+
+					1. Input Validation
+					2. Risk Computation
+					3. Constraint Flag Generation
+					4. Invariant Validation
+					5. Output Emission
+
+				Constraint:
+
+					If invariant violation occurs at step 4:
+
+						Risk_Context MUST NOT be generated
+
+						Constraint flags MAY still be computed but MUST NOT be emitted
+
+			Input Validation Rules
+
+				Reject input if:
+
+					missing required field
+					invalid domain value
+					inconsistent timestamps
+					incomplete snapshot
+
+			Numeric Safety Constraints (MANDATORY)
+
+				1. Division Safety
+
+					IF denominator == 0:
+						computation MUST fallback to defined default
+
+				2. Bounds Enforcement
+
+					0 ≤ drawdown_ratio ≤ 1
+					0 ≤ exposure_balance_score ≤ 1
+					0 ≤ risk_score ≤ 1
+
+				3. Constant Constraints
+
+					0 < T1 < T2 < 1
+					0 < R1 < R2 < 1
+					E_max_class > 0
+					cluster_limit > 0
+
+				Violation → system invalid
+
+		External Input Neutrality Constraint
+
+			Risk Philosophy MUST be defined independent of trade origin:
+
+				CORE and EXTERNAL trades MUST follow same philosophy
+
+			However:
+
+				Risk Philosophy MUST NOT differentiate behavior
+				based on source of trade intent
+
+			Source-based control is enforced in Phase D Risk Engine only
+
+		IF size > capacity_limit:
+			size = capacity_limit
+
+		IF capacity_limit == 0:
+			RETURN NoTradeIntent
+
+
+	6. FLOW ARCHITECTURE
+		6.1 Input
+			Trade Intent (Step 3)
+			Execution Instruction (Step 4)
+			portfolio_state_snapshot (as defined below)
+
+			Canonical Input Definition (MANDATORY)
+
+				canonical_input_set = {
+					trade_intent_snapshot
+					execution_instruction_snapshot
+					portfolio_state_snapshot
+					configuration_snapshot
+					version_identifiers
+				}
+
+				Constraints:
+
+					All inputs MUST be:
+						immutable
+						fully defined
+						schema-complete
+						hash-identifiable
+
+					Partial input is strictly forbidden
+
+					Identical canonical_input_set MUST produce identical output
+
+			portfolio_state_snapshot (REFERENCE — MANDATORY)
+
+				Definition:
+
+					portfolio_state_snapshot is a complete, immutable instance of
+					Portfolio State (defined in Section 4) at evaluation_time.
+
+
+				Structure (STRICT):
+
+					portfolio_state_snapshot = {
+
+						portfolio_state_id
+
+						timestamp
+
+						total_exposure_vector
+						net_directional_exposure
+
+						exposure_distribution_profile
+						concentration_profile
+
+						correlation_cluster_map
+
+						realized_drawdown
+						unrealized_drawdown
+						peak_equity_reference
+					}
+
+
+				Field Constraints:
+
+					1. Completeness:
+
+						ALL fields defined in Section 4 MUST be present
+
+						Missing field → input INVALID
+
+
+					2. Immutability:
+
+						Snapshot MUST NOT change during evaluation
+
+						Any mutation → system invalid
+
+
+					3. Time Consistency:
+
+						timestamp MUST satisfy:
+
+							timestamp ≤ evaluation_time
+
+						AND
+
+							evaluation_time - timestamp ≤ staleness_limit
+
+
+					4. Deterministic Construction:
+
+						Snapshot MUST be fully reconstructable from:
+
+							portfolio history
+							configuration_snapshot
+
+						No derived or implicit fields allowed
+
+
+					5. Hash Consistency:
+
+						portfolio_state_snapshot_hash =
+							HASH_v1(portfolio_state_snapshot)
+
+						Constraint:
+
+							identical snapshot → identical hash
+
+
+					6. Correlation Mapping Constraint:
+
+						correlation_cluster_map MUST be provided as input
+
+						No clustering computation allowed in this phase
+
+
+					7. Drawdown Consistency:
+
+						current_drawdown =
+							max(realized_drawdown, unrealized_drawdown)
+
+						peak_equity_reference > 0 OR explicitly handled (per numeric safety)
+
+
+					8. Exposure Consistency:
+
+						total_exposure_vector MUST match:
+
+							exposure_distribution_profile
+							concentration_profile
+
+						Any mismatch → input INVALID
+
+		6.2 Processing
+			Trade Intent + Execution Behavior + Portfolio State
+			→ Risk Interpretation
+			→ Risk Constraints (logical)
+
+		6.3 Output
+			Risk Context
+			Risk Constraints (logical directives)
+
+			Risk Context (MANDATORY OUTPUT ENTITY)
+
+				Attributes:
+
+					risk_context_id
+					input_hash_reference
+
+					drawdown_state
+					exposure_state_summary
+					risk_level
+
+					constraint_flags
+
+					evaluation_time
+
+					context_hash
+
+				Constraints:
+
+					risk_context_id MUST be deterministic
+					context_hash MUST be derived from full input payload
+
+		6.4 Flow Model
+			Input → Risk Evaluation → Risk Context Output
+
+			Unified Time Model (MANDATORY)
+
+				Definition:
+
+					evaluation_time =
+						max(
+							trade_intent.event_time,
+							execution_instruction.decision_time,
+							portfolio_state.timestamp
+						)
+
+				Explanation:
+
+					evaluation_time represents the ONLY valid logical time
+					at which risk evaluation is performed.
+
+					It ensures:
+						all inputs are aligned to a single deterministic time reference
+
+
+				--------------------------------------------------
+
+				TIME SOURCE RULES (STRICT)
+
+				1. trade_intent.event_time
+					→ inherited from Decision Engine (Step 3)
+
+				2. execution_instruction.decision_time
+					→ inherited from Execution Behavior (Step 4)
+
+				3. portfolio_state.timestamp
+					→ must represent state at exact logical time
+
+
+				Constraint:
+
+					All time values MUST be:
+						deterministic
+						comparable
+						derived from upstream phases
+
+					Manual or arbitrary time assignment is strictly forbidden
+
+
+				--------------------------------------------------
+
+				TIME ALIGNMENT RULE (CRITICAL)
+
+					Deterministic Time Alignment Rule (MANDATORY)
+
+						For each input:
+
+							select value with:
+
+								1. timestamp ≤ evaluation_time
+								2. maximum timestamp among valid candidates
+
+						If multiple candidates share identical timestamp:
+
+							select based on deterministic hash ordering
+
+						Constraint:
+
+							Selection MUST produce identical result for identical inputs
+
+				--------------------------------------------------
+
+				STALENESS VALIDATION (MANDATORY)
+
+				For each input:
+
+					input_time =
+						corresponding timestamp of each input entity
+
+				Constraint:
+
+					Δt_input ≤ staleness_limit
+
+				If violated:
+
+					→ canonical_input_set is INVALID
+					→ Risk_Context MUST NOT be generated
+
+				Δt_input =
+					evaluation_time - input_time
+				--------------------------------------------------
+
+				ORDERING RULE (DETERMINISTIC)
+
+				If multiple evaluations occur:
+
+					evaluations MUST be ordered strictly by:
+
+						1. evaluation_time
+						2. input_hash_reference
+
+				Constraint:
+
+					identical inputs → identical ordering
+
+
+				--------------------------------------------------
+
+				REPLAY CONSISTENCY RULE
+
+				Given identical canonical_input_set:
+
+					evaluation_time MUST be identical
+					output MUST be identical
+
+				Any deviation:
+
+					→ system invalid
+
+	7. PIPELINE STRUCTURE
+
+		Risk Evaluation Pipeline:
+
+			Assess → Classify → Constrain → Emit → Monitor
+
+		State Transitions:
+
+			Neutral → Active Risk Context
+			Active → Escalated
+			Escalated → Critical
+
+	8. CONTROL & CONSTRAINTS
+		8.1 Hard Rules
+			Risk hierarchy MUST be enforced
+			No ambiguity in risk states
+			No hidden exposure
+			No non-deterministic risk decisions
+
+		8.2 Soft Rules
+			Prefer diversification
+			Prefer gradual exposure changes
+			Prefer stability over aggressiveness
+
+		8.3 Guardrails
+			No unlimited exposure accumulation
+			No correlated concentration beyond logical tolerance
+			No risk blind spots
+
+			Risk Invariants (MANDATORY)
+
+				1. Exposure Bound Invariant
+				2. Drawdown Monotonicity Constraint
+				3. Risk Hierarchy Enforcement Invariant
+				4. Deterministic Output Invariant
+
+				Violation → system invalid
+
+			Invariant Enforcement Binding (MANDATORY)
+
+				Invariant validation MUST be executed strictly within:
+
+					Global Evaluation Order (Section 5)
+
+				Constraint:
+
+					Section 8 defines invariants ONLY
+
+					Section 5 defines WHEN and HOW invariants are enforced
+
+				No independent execution logic is allowed in this section
+
+				Invariants:
+
+					Exposure Bound:
+						E_total ≤ E_max_class
+
+					Drawdown Monotonicity:
+						drawdown_state progression must not reverse without input change
+
+					Determinism:
+						identical input → identical output
+
+					Hierarchy:
+						higher-level constraints always dominate
+
+
+	9. STATE & DATA MODEL
+		9.1 State Types
+			Exposure State
+			Drawdown State
+			Risk State
+
+		9.2 State Transitions
+			Deterministic, based on:
+				portfolio evolution
+				decision flow
+
+		9.3 Source of Truth
+			Logical state defined here
+			Physical state → Phase C
+
+			State Reconstruction Rule
+
+				All risk states MUST be derivable from:
+
+					canonical_input_set
+					configuration_snapshot
+
+				If state cannot be reconstructed:
+					system is invalid
+
+			Pipeline-State Mapping
+
+				Assess → Active Risk Context
+				Classify → Active
+				Constrain → Active
+				Emit → Finalized
+				Monitor → Active
+
+				Constraint:
+					Every pipeline stage MUST map to exactly one state
+
+
+	10. FAILURE MODEL
+		10.1 Failure Scenarios
+			ambiguous risk definitions
+			conflicting hierarchy
+			hidden exposure
+
+		10.2 Impact
+			uncontrolled losses
+			portfolio instability
+			systemic risk propagation
+
+		10.3 Mitigation
+			strict hierarchy
+			deterministic classification
+			full traceability
+
+
+	11. ASSUMPTION REGISTER
+		Assumption												Reason							Validate In		Status
+		Portfolio state is deterministic						Required for risk consistency	Phase B			Open
+		Correlation can be logically grouped					Needed for exposure control		Phase B			Open
+		Drawdown states can be classified deterministically		Needed for response model		Phase B			Open
+
+
+	12. VALIDATION FRAMEWORK
+		12.1 Checklist
+			Risk hierarchy defined
+			Exposure logic defined
+			Drawdown model defined
+			No ambiguity
+
+		12.2 Validation Method
+			deterministic replay validation
+			adversarial stress scenarios
+			cross-layer consistency check
+
+		12.3 Acceptance Criteria
+			zero ambiguity
+			deterministic outcomes
+			full traceability
+
+	13. OUTPUT (DELIVERABLE SPEC)
+
+		Risk Philosophy Specification
+
+		Includes:
+			risk hierarchy
+			exposure model
+			drawdown model
+			risk rules
+
+
+	14. TRACEABILITY MAPPING
+		Step 1 → Strategy Architecture
+		Step 2 → Signal Model
+		Step 3 → Decision Engine
+		Step 4 → Execution Behavior
+
+		Output → feeds Phase D Risk Engine
+
+
+	15. CROSS-PHASE CONSISTENCY RULES
+
+		OWNED HERE
+			risk philosophy
+			hierarchy
+			risk semantics
+
+		REFERENCED
+			decision output
+			execution behavior
+			firm-level policy
+
+
+	16. SCALABILITY MODEL
+
+		Supports:
+			multi-strategy portfolios
+			multi-asset exposure
+			high capital deployment
+
+		Model:
+			hierarchical scaling
+			portfolio aggregation
+
+
+	17. GOVERNANCE INTEGRATION
+		Risk philosophy MUST be approved at firm level
+
+		Version-controlled
+
+		Any change requires:
+			impact analysis
+			full system validation
+
+
+	18. AUDITABILITY & OBSERVABILITY
+
+		Must support:
+			risk decision traceability
+			exposure tracking
+			drawdown evolution
+
+		Logging:
+			input state
+			risk classification
+			resulting constraints
+
+		Risk_Context.output_fields (MANDATORY DEFINITION)
+
+			{
+				risk_context_id
+				input_hash_reference
+				drawdown_state
+				exposure_state_summary
+				risk_level
+				constraint_flags
+				evaluation_time
+			}
+
+			Constraint:
+
+				context_hash MUST include EXACTLY these fields
+
+		Hashing Model (UNIFIED — MANDATORY)
+
+			input_hash_reference =
+				HASH_v1(canonical_input_set)
+
+			context_hash =
+				HASH_v1(
+					canonical_input_set +
+					Risk_Context.output_fields
+				)
+
+			Constraint:
+
+				canonical_input_set MUST be identical
+				Risk_Context MUST be identical
+
+				→ context_hash MUST be identical
+
+	19. RISK CONSIDERATIONS
+
+		Introduced Risks:
+			over-restriction → missed opportunity
+			under-definition → uncontrolled exposure
+
+		Controls:
+			deterministic rules
+			hierarchical enforcement
+			alignment with firm policy
+
+
+	20. FAILURE CONDITION (PHASE LEVEL)
+
+		Phase fails if:
+			risk hierarchy unclear
+			exposure undefined
+			drawdown logic missing
+			non-determinism exists
+
+
+	21. PHASE LOCK CRITERIA
+		All 21 sections complete
+		Determinism verified
+		No ambiguity
+		Traceability intact
+		Governance approved
+
+
+	FINAL INSTITUTIONAL NOTE
+
+		This layer is foundational to survival.
+
+		If this is weak:
+			Phase D risk engine becomes inconsistent
+			Execution behavior becomes unsafe
+			Capital preservation fails
+
+		If this is correct:
+			Entire system operates under controlled, unified risk doctrine
+
+	Traceability Bridge:
+	For every TradeIntent:
+
+		store mapping:
+
+		trade_intent_id → signal_ids[]

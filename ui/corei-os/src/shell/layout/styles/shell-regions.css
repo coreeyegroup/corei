@@ -1,106 +1,29 @@
-.corei-region {
-
-    width:100%;
-
-    height:100%;
-
-
-    overflow:hidden;
-
-
-    display:flex;
-
-
-    flex-direction:column;
-
-
-    background:
-        var(--corei-color-surface-primary);
-
-
-    color:
-        var(--corei-color-text-primary);
-
-}
-
-
-
 /*
- COREI REGION OWNERSHIP
-*/
-
-
-.shell-top {
-
-    grid-area:top;
-
-}
-
-
-
-.shell-left {
-
-    grid-area:left;
-
-}
-
-
-
-.shell-center {
-
-    grid-area:center;
-
-}
-
-
-
-.shell-right {
-
-    grid-area:right;
-
-}
-
-
-
-.shell-bottom {
-
-    grid-area:bottom;
-
-}
-
-
-
-.shell-status {
-
-    grid-area:status;
-
-}
-
-.corei-region-surface span {
-
-    font-size:12px;
-
-    letter-spacing:0.08em;
-
-    text-transform:uppercase;
-
-    opacity:0.7;
-
-}
-
-/******************************************************************************
- *
  * COREI OPERATING SYSTEM
  *
  * STAGE-25
- * PHASE-17
- * STEP-03
+ * SHELL SURFACE NORMALIZATION
  *
- * Design System Integration
- *
- ******************************************************************************/
+ * Purpose:
+ * Normalize the existing shell regions without changing
+ * ownership, geometry, runtime composition, or providers.
+ */
 
 .corei-region {
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+
+    box-sizing: border-box;
 
     background:
         var(--corei-color-surface-primary);
@@ -113,29 +36,77 @@
 
     font-size:
         var(--corei-font-size-small);
-
 }
 
+/*
+ * REGION OWNERSHIP
+ */
+
+.shell-top {
+    grid-area: top;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+    border-bottom:
+        1px solid
+        var(--corei-color-border-subtle, rgba(255, 255, 255, 0.08));
+}
+
+.shell-left {
+    grid-area: left;
+    border-right:
+        1px solid
+        var(--corei-color-border-subtle, rgba(255, 255, 255, 0.08));
+}
+
+.shell-center {
+    grid-area: center;
+}
+
+.shell-right {
+    grid-area: right;
+    border-left:
+        1px solid
+        var(--corei-color-border-subtle, rgba(255, 255, 255, 0.08));
+}
+
+.shell-bottom {
+    grid-area: bottom;
+    border-top:
+        1px solid
+        var(--corei-color-border-subtle, rgba(255, 255, 255, 0.08));
+}
+
+.shell-status {
+    grid-area: status;
+    border-top:
+        1px solid
+        var(--corei-color-border-subtle, rgba(255, 255, 255, 0.08));
+}
+
+/*
+ * REGION SURFACE
+ */
 
 .corei-region-surface {
-
-    width:100%;
-
-    height:100%;
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
 
     padding:
         var(--corei-spacing-sm);
 
-    display:flex;
+    display: flex;
+    align-items: center;
 
-    align-items:center;
+    overflow: hidden;
 
-    overflow:hidden;
-
+    box-sizing: border-box;
 }
 
 .corei-region-surface span {
-
     font-size:
         var(--corei-font-size-small);
 
@@ -145,16 +116,32 @@
     text-transform:
         uppercase;
 
+    white-space: nowrap;
 }
 
+/*
+ * LEFT NAVIGATION
+ */
+
 .corei-left-navigation-container {
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
 
-    width:100%;
+    display: flex;
 
-    height:100%;
+    overflow: hidden;
 
-    display:flex;
+    box-sizing: border-box;
+}
 
-    overflow:hidden;
+/*
+ * SURFACE CONTENT SAFETY
+ */
 
+.corei-region > *,
+.corei-region-surface > * {
+    min-width: 0;
+    min-height: 0;
 }

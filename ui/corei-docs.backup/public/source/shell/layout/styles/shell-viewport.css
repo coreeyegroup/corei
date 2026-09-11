@@ -1,0 +1,42 @@
+html,
+body,
+#root {
+
+
+    width:100%;
+
+    height:100%;
+
+
+    margin:0;
+
+
+    overflow:hidden;
+
+}
+
+
+
+.corei-shell-frame {
+
+
+    width:
+        var(--corei-shell-width);
+
+
+    height:
+        var(--corei-shell-height);
+
+
+
+    display:flex;
+
+
+    overflow:hidden;
+
+
+
+    background:
+        var(--corei-color-background-primary);
+
+}

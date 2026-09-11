@@ -1,0 +1,406 @@
+// ui/corei-orbit/status-server.js
+import express from 'express';
+import { execFile } from 'child_process';
+import os from 'os';
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// ─── CORS ──────────────────────────────────────────────────────────────
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  if (req.method === 'OPTIONS') return res.sendStatus(200);
+  next();
+});
+
+app.use(express.json());
+
+// ─── Kubernetes Provider ──────────────────────────────────────────────
+
+function runKubectlJson(args) {
+  return new Promise((resolve, reject) => {
+    const argv = args.split(/\s+/).filter(Boolean);
+
+    if (!argv.includes('-o')) {
+      argv.push('-o', 'json');
+    }
+
+    execFile(
+      'kubectl',
+      argv,
+      {
+        encoding: 'utf-8',
+        maxBuffer: 50 * 1024 * 1024,
+        timeout: 30000,
+      },
+      (error, stdout, stderr) => {
+        if (error) {
+          reject(
+            new Error(
+              `kubectl ${args} failed: ${
+                stderr?.trim() || error.message
+              }`
+            )
+          );
+          return;
+        }
+
+        try {
+          resolve(JSON.parse(stdout));
+        } catch (parseError) {
+          reject(
+            new Error(
+              `kubectl ${args} returned invalid JSON: ${parseError.message}`
+            )
+          );
+        }
+      }
+    );
+  });
+}
+
+async function runKubectlOptionalJson(
+  args,
+  fallback = { items: [] }
+) {
+  try {
+    return await runKubectlJson(args);
+  } catch {
+    return fallback;
+  }
+}
+
+function metadataOnly(resource) {
+  return {
+    name: resource?.metadata?.name || '',
+    namespace: resource?.metadata?.namespace || '',
+    uid: resource?.metadata?.uid || '',
+    creationTimestamp: resource?.metadata?.creationTimestamp || null,
+    labels: resource?.metadata?.labels || {},
+    annotations: resource?.metadata?.annotations || {},
+  };
+}
+
+function resourceItems(resource) {
+  return Array.isArray(resource?.items) ? resource.items : [];
+}
+
+function mapMetadata(resource) {
+  return resourceItems(resource).map(metadataOnly);
+}
+
+function mapWorkloads(resource) {
+  return resourceItems(resource).map((item) => ({
+    ...metadataOnly(item),
+    status: item.status || {},
+    spec: item.spec || {},
+  }));
+}
+
+function mapPods(resource) {
+  return resourceItems(resource).map((pod) => ({
+    ...metadataOnly(pod),
+    status: pod.status || {},
+    spec: {
+      nodeName: pod.spec?.nodeName || '',
+      containers: (pod.spec?.containers || []).map((container) => ({
+        name: container.name,
+        image: container.image,
+        resources: container.resources || {},
+      })),
+    },
+  }));
+}
+
+function mapServices(resource) {
+  return resourceItems(resource).map((service) => ({
+    ...metadataOnly(service),
+    spec: service.spec || {},
+    status: service.status || {},
+  }));
+}
+
+function mapEvents(resource) {
+  return resourceItems(resource).map((event) => ({
+    ...metadataOnly(event),
+    type: event.type || '',
+    reason: event.reason || '',
+    message: event.message || '',
+    involvedObject: event.involvedObject || {},
+    source: event.source || {},
+    firstTimestamp: event.firstTimestamp || null,
+    lastTimestamp: event.lastTimestamp || null,
+    count: event.count || 0,
+  }));
+}
+
+function mapNodes(resource) {
+  return resourceItems(resource).map((node) => {
+    const ready = (node.status?.conditions || []).find(
+      (condition) => condition.type === 'Ready'
+    );
+    return {
+      ...metadataOnly(node),
+      status: ready?.status || 'Unknown',
+      conditions: node.status?.conditions || [],
+      capacity: node.status?.capacity || {},
+      allocatable: node.status?.allocatable || {},
+      nodeInfo: node.status?.nodeInfo || {},
+      addresses: node.status?.addresses || [],
+      taints: node.spec?.taints || [],
+      unschedulable: node.spec?.unschedulable || false,
+    };
+  });
+}
+
+async function getKubernetesMetrics() {
+  try {
+    const nodeMetrics = runKubectlOptionalJson(
+      'get --raw /apis/metrics.k8s.io/v1beta1/nodes'
+    );
+    const podMetrics = runKubectlOptionalJson(
+      'get --raw /apis/metrics.k8s.io/v1beta1/pods'
+    );
+    return {
+      nodes: resourceItems(nodeMetrics),
+      pods: resourceItems(podMetrics),
+    };
+  } catch {
+    return { nodes: [], pods: [] };
+  }
+}
+
+function calculateNodeUsage(metrics) {
+  let cpu = 0;
+  let memory = 0;
+  for (const node of metrics || []) {
+    const usage = node?.usage || {};
+    if (typeof usage.cpu === 'string') {
+      cpu += parseCpuToMillicores(usage.cpu);
+    }
+    if (typeof usage.memory === 'string') {
+      memory += parseMemoryToBytes(usage.memory);
+    }
+  }
+  return {
+    cpu_millicores: cpu,
+    memory_bytes: memory,
+  };
+}
+
+function parseCpuToMillicores(value) {
+  if (!value) return 0;
+  if (value.endsWith('n')) return Number(value.slice(0, -1)) / 1_000_000;
+  if (value.endsWith('u')) return Number(value.slice(0, -1)) / 1_000;
+  if (value.endsWith('m')) return Number(value.slice(0, -1));
+  return Number(value) * 1000;
+}
+
+function parseMemoryToBytes(value) {
+  if (!value) return 0;
+  const match = String(value).match(/^([\d.]+)([KMGTE]i?|)$/);
+  if (!match) return Number(value) || 0;
+  const number = Number(match[1]);
+  const unit = match[2];
+  const multipliers = {
+    '': 1,
+    K: 1000, M: 1000 ** 2, G: 1000 ** 3, T: 1000 ** 4, E: 1000 ** 5,
+    Ki: 1024, Mi: 1024 ** 2, Gi: 1024 ** 3, Ti: 1024 ** 4, Ei: 1024 ** 5,
+  };
+  return number * (multipliers[unit] || 1);
+}
+
+async function getKubernetesOverview() {
+  const providerUrl =
+    process.env.COREI_KUBERNETES_PROVIDER_URL ||
+    'http://127.0.0.1:3001/api/v1/infrastructure/kubernetes/status';
+
+  try {
+    const response = await fetch(providerUrl, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+      },
+      cache: 'no-store',
+    });
+
+    const payload = await response.json();
+
+    if (!response.ok) {
+      throw new Error(
+        payload?.details?.error ||
+        payload?.error ||
+        `Kubernetes provider returned HTTP ${response.status}`
+      );
+    }
+
+    if (payload?.status === 'DEGRADED') {
+      throw new Error(
+        payload?.details?.error ||
+        'Kubernetes provider is degraded'
+      );
+    }
+
+    return payload?.details || payload;
+  } catch (err) {
+    return {
+      error: err instanceof Error
+        ? err.message
+        : String(err),
+    };
+  }
+}
+
+// ─── Endpoints ────────────────────────────────────────────────────────
+
+app.get('/api/v1/infrastructure/status', (req, res) => {
+  // Lightweight overview for sidebar health
+  const kubernetesStatus = getKubernetesOverview();
+  const result = [
+    { service: 'postgres', status: 'DEGRADED', details: { error: 'Not connected' } },
+    { service: 'redis', status: 'DEGRADED', details: { error: 'Not connected' } },
+    { service: 'kafka', status: 'DEGRADED', details: { error: 'Not connected' } },
+    {
+      service: 'kubernetes',
+      status: kubernetesStatus.error ? 'DEGRADED' : 'HEALTHY',
+      details: kubernetesStatus,
+    },
+    {
+      service: 'ubuntu-server',
+      status: 'HEALTHY',
+      details: {
+        os: `${os.type()} ${os.release()}`,
+        uptime: `${Math.floor(os.uptime() / 3600)}h ${Math.floor((os.uptime() % 3600) / 60)}m`,
+        cpu_usage: `${(os.cpus().reduce((acc, cpu) => acc + cpu.times.user, 0) / os.cpus().length / 100).toFixed(0)}%`,
+        memory_usage: `${((os.totalmem() - os.freemem()) / os.totalmem() * 100).toFixed(0)}%`,
+        disk_usage: '45%',
+        load_avg: os.loadavg().map(v => v.toFixed(2)).join(', '),
+      },
+    },
+    {
+      service: 'containerd',
+      status: 'HEALTHY',
+      details: {
+        version: '1.7.13',
+        containers: '18',
+        images: '34',
+        uptime: '72h 14m',
+      },
+    },
+  ];
+  res.json(result);
+});
+
+app.get('/api/v1/infrastructure/kubernetes/status', async (req, res) => {
+  try {
+    const data = await getKubernetesOverview();
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ─── TRADING ENDPOINTS ──────────────────────────────────────────────
+
+// ─── Mock data (replace with real API calls to OMS/EMS/etc. later) ──
+function getMockPositions() {
+  return [
+    { symbol: 'BTC/USD', side: 'BUY', qty: 0.5, entryPrice: 67420, currentPrice: 67550, pnl: 65 },
+    { symbol: 'ETH/USD', side: 'SELL', qty: 2.0, entryPrice: 3455, currentPrice: 3440, pnl: 30 },
+    { symbol: 'XAU/USD', side: 'BUY', qty: 10, entryPrice: 2345.6, currentPrice: 2350.2, pnl: 46 },
+  ];
+}
+
+function getMockOrders() {
+  return [
+    { id: 'ord-001', symbol: 'BTC/USD', side: 'BUY', qty: 0.5, price: 67420, status: 'FILLED', time: Date.now() - 300000 },
+    { id: 'ord-002', symbol: 'ETH/USD', side: 'SELL', qty: 2.0, price: 3455, status: 'FILLED', time: Date.now() - 600000 },
+    { id: 'ord-003', symbol: 'BTC/USD', side: 'BUY', qty: 0.3, price: 67380, status: 'PENDING', time: Date.now() - 120000 },
+  ];
+}
+
+function getMockRisk() {
+  return {
+    var95: 2450,
+    drawdown: 2.4,
+    riskLimit: 45,
+    concentration: 18.5,
+    dailyLoss: 1200,
+    dailyLossLimit: 5000,
+    exposure: 42,
+    exposureLimit: 60,
+    correlation: 0.65,
+    correlationLimit: 0.80,
+  };
+}
+
+function getMockPortfolio() {
+  return {
+    totalCapital: 125400,
+    allocated: 54200,
+    freeCapital: 71200,
+    utilisation: 43.2,
+    pnl: 2350,
+    winRate: 65.2,
+    totalTrades: 18,
+    wins: 12,
+    losses: 6,
+  };
+}
+
+function getMockMarketData() {
+  return {
+    'BTC/USD': { price: 67550, change: 0.19, history: [67400, 67450, 67500, 67550] },
+    'ETH/USD': { price: 3440, change: -0.43, history: [3450, 3445, 3442, 3440] },
+    'EUR/USD': { price: 1.0874, change: 0.02, history: [1.0870, 1.0872, 1.0873, 1.0874] },
+    'USD/INR': { price: 83.12, change: 0.05, history: [83.10, 83.11, 83.12, 83.12] },
+    'XAU/USD': { price: 2350.2, change: 0.20, history: [2345.6, 2347.8, 2349.0, 2350.2] },
+    'WTI': { price: 78.45, change: -0.30, history: [78.70, 78.60, 78.50, 78.45] },
+    'NIFTY 50': { price: 22145, change: 0.45, history: [22050, 22080, 22110, 22145] },
+  };
+}
+
+function getMockTradingStatus() {
+  return {
+    market: { label: 'MARKET', value: 'OPEN' },
+    trading: { label: 'TRADING', value: 'PAPER' },
+    broker: { label: 'BROKER', value: 'CONNECTED' },
+    pnl: { label: 'P&L', value: '+2.3%' },
+    risk: { label: 'RISK', value: '45%' },
+    datafeed: { label: 'DATA FEED', value: 'LIVE' },
+  };
+}
+
+// --- Routes ---
+
+app.get('/api/v1/trading/positions', (req, res) => {
+  res.json(getMockPositions());
+});
+
+app.get('/api/v1/trading/orders', (req, res) => {
+  res.json(getMockOrders());
+});
+
+app.get('/api/v1/trading/risk', (req, res) => {
+  res.json(getMockRisk());
+});
+
+app.get('/api/v1/trading/portfolio', (req, res) => {
+  res.json(getMockPortfolio());
+});
+
+app.get('/api/v1/trading/market-data', (req, res) => {
+  res.json(getMockMarketData());
+});
+
+app.get('/api/v1/trading/status', (req, res) => {
+  res.json(getMockTradingStatus());
+});
+
+// ─── END TRADING ENDPOINTS ──────────────────────────────────────────
+
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Orbit status server running on http://0.0.0.0:${PORT}`);
+});

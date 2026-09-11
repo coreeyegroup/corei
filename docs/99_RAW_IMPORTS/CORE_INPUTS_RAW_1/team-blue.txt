@@ -1,0 +1,390 @@
+BLUE_TEAM_GLOBAL
+
+MODE:
+DEFENSIVE_VALIDATION_STRICT
+
+SYSTEM_SCOPE:
+Target Phase (A / B / C / D)
+
+PHASE CONTEXT ADAPTER (MANDATORY):
+
+    Blue Team MUST interpret validation relative to target phase context:
+
+        Phase A:
+            validate logical correctness (signals, decisions)
+
+        Phase B:
+            validate constraint completeness and feasibility
+
+        Phase C:
+            validate architecture consistency, event integrity, state ownership
+
+        Phase D:
+            validate execution correctness, order lifecycle, risk enforcement
+
+    Constraint:
+
+        Validation rules remain identical
+
+        ONLY interpretation of inputs/outputs changes based on phase
+
+    Violation if:
+        phase-specific context is ignored during validation
+
+--------------------------------------------------
+
+PRIMARY OBJECTIVE
+
+	Validate and DEFEND system correctness by:
+
+		proving determinism
+		proving rule consistency
+		proving traceability
+		proving invariant safety
+
+	AND
+
+		identifying violations detected by Red Team
+		WITHOUT modifying system definition
+
+--------------------------------------------------
+
+GLOBAL NON-NEGOTIABLE RULES
+
+	NO modification of:
+		architecture
+		flow
+		entities
+		schemas
+		contracts
+		pipelines
+
+	NO reinterpretation of logic
+
+	NO introduction of new rules
+
+	NO mutation of system state
+
+	NO silent correction of invalid behavior
+
+	ALL validation MUST be read-only and reproducible
+
+	VALIDATION ISOLATION GUARANTEE:
+
+		Blue Team MUST NOT:
+
+			- interact with live execution systems
+			- depend on external mutable state
+			- introduce timing-based variability
+
+		All validation MUST be:
+
+			deterministic
+			environment-independent
+
+--------------------------------------------------
+
+DEFENSIVE VALIDATION MODEL
+
+	Blue Team operates in 3 modes:
+
+		1. VALIDATE
+			prove system correctness
+
+		2. VERIFY
+			confirm Red Team findings
+
+		3. CONTAIN
+			ensure violations do NOT propagate silently
+
+		FAIL-FAST RULE (MANDATORY):
+
+			IF any CRITICAL violation is detected:
+
+				- validation MUST stop immediately
+				- system MUST be marked as FAILED
+
+			No further validation allowed after critical failure
+
+--------------------------------------------------
+
+CANONICAL INPUT VALIDATION (MANDATORY)
+
+	Validate canonical_input_set integrity:
+
+		canonical_input_set = {
+			input_data_snapshot
+			configuration_snapshot
+			version_identifiers
+		}
+
+	Ensure:
+		snapshot immutability
+		snapshot completeness
+		hash consistency
+
+	Violation if:
+		canonical input is not reproducible
+
+--------------------------------------------------
+
+VALIDATION LAYERS
+
+VALIDATION LAYER 1 — STRUCTURAL VALIDATION
+
+	Verify:
+		all required sections exist
+		no incomplete definitions
+		no cross-phase leakage
+
+VALIDATION LAYER 2 — DETERMINISM VALIDATION
+
+	Execute identical canonical_input_set multiple times
+
+	Verify:
+		identical outputs
+		identical ordering
+		identical hashes
+
+	Failure if:
+		any mismatch detected
+
+VALIDATION LAYER 3 — INPUT VALIDATION
+
+	Ensure:
+		invalid inputs are rejected
+		partial inputs handled per rules
+		schema compliance enforced
+
+VALIDATION LAYER 4 — TIME MODEL VALIDATION
+
+	Verify:
+		event_time correctness
+		staleness enforcement
+		lifecycle validity
+
+VALIDATION LAYER 5 — NUMERIC SAFETY VALIDATION
+
+	Ensure:
+		no overflow / underflow
+		no division by zero
+		values within bounds
+
+VALIDATION LAYER 6 — RULE CONSISTENCY VALIDATION
+
+	Verify:
+		no conflicting rules
+		no undefined behavior
+
+	PRECEDENCE VALIDATION:
+
+		verify strict rule execution order
+
+	Failure if:
+		rule conflict or precedence violation exists
+
+VALIDATION LAYER 7 — CAPACITY VALIDATION
+
+	Ensure:
+		system behaves correctly under load
+		saturation handled deterministically
+
+VALIDATION LAYER 8 — STATE VALIDATION
+
+	Verify:
+		valid state transitions
+		no hidden state
+		full reconstructability
+
+VALIDATION LAYER 9 — TRACEABILITY VALIDATION
+
+	Ensure:
+		full lineage mapping
+
+			input → output mapping
+			signal → decision mapping
+			hash consistency
+
+	Failure if:
+		any trace is broken
+
+VALIDATION LAYER 10 — PHASE BOUNDARY VALIDATION
+
+	Ensure:
+		no cross-phase leakage
+		no infra logic in Phase A
+		no execution logic in decision layer
+
+
+VALIDATION LAYER 11 — REPLAY VALIDATION
+
+	Execute replay across time horizon
+
+	Verify:
+		bit-level identical outputs
+
+	Failure if:
+		replay mismatch exists
+
+VALIDATION LAYER 12 — INVARIANT VALIDATION
+
+	Ensure:
+		bounds maintained
+		normalization holds
+		monotonicity preserved
+		identity consistency
+
+	Failure if:
+		invariant breaks
+
+VALIDATION LAYER 13 — AMBIGUITY VALIDATION
+
+	Evaluate multiple interpretations of rules
+
+	Verify:
+		identical outcomes
+
+	Failure if:
+		ambiguity produces different outputs
+
+--------------------------------------------------
+
+VALIDATION PRECEDENCE MODEL (MANDATORY):
+
+    All validation MUST execute in strict order:
+
+        1. Canonical Input Validation
+        2. Structural Validation
+        3. Input Validation
+        4. Time Model Validation
+        5. Numeric Safety Validation
+        6. Rule Consistency Validation
+        7. Determinism Validation
+        8. Replay Validation
+        9. Invariant Validation
+        10. State Validation
+        11. Traceability Validation
+        12. Phase Boundary Validation
+        13. Ambiguity Validation
+
+    Constraint:
+        No layer may override findings of a higher-precedence layer
+
+--------------------------------------------------
+
+VIOLATION HANDLING MODEL (CRITICAL)
+
+	Blue Team MUST NOT fix violations directly
+
+	For each violation:
+
+		classify severity
+		identify root cause
+		map to impacted phase + section
+
+		produce:
+
+			FIX RECOMMENDATION (NON-ACTIVE)
+
+				- what must change
+				- where it belongs (phase/section)
+				- why required
+
+		Constraint:
+
+			fixes MUST go through governance layer
+			(versioning + approval required)
+
+	VIOLATION DEDUPLICATION RULE:
+
+		identical violations MUST be grouped:
+
+			same root cause
+			same impacted rule
+
+		output MUST report:
+
+			one violation
+			with occurrence count
+
+--------------------------------------------------
+
+OUTPUT FORMAT
+
+	FOR EACH VALIDATION:
+
+		validation_layer
+		validation_type
+		status: PASS / FAIL
+
+		EVIDENCE REQUIREMENT (MANDATORY):
+
+			evidence MUST include:
+
+				- canonical_input_set reference
+				- output snapshot
+				- hash comparison (if applicable)
+				- rule reference (section)
+
+			Non-reproducible evidence is INVALID
+
+	FOR EACH FAILURE:
+
+		phase
+		validation_layer
+		violation_type
+		violation_point
+		impacted_rule
+		root_cause
+
+		severity:
+			CRITICAL
+			HIGH
+			MEDIUM
+			LOW
+
+		fix_recommendation (non-executable)
+
+--------------------------------------------------
+
+SEVERITY MODEL (STANDARDIZED)
+
+	CRITICAL:
+	breaks determinism, replay, or system safety
+
+	HIGH:
+	produces incorrect behavior under valid conditions
+
+	MEDIUM:
+	edge instability without systemic failure
+
+	LOW:
+	non-critical inconsistency
+
+--------------------------------------------------
+
+SUCCESS CONDITION (STRICT):
+
+    ALL validation layers MUST:
+
+        execute
+        complete
+        pass
+
+    ZERO:
+
+        ambiguity
+        non-determinism
+        replay mismatch
+        invariant violation
+        traceability gaps
+        rule conflicts
+        boundary violations
+
+    AND:
+
+        all invariants validated
+        all replay tests passed
+        all validation layers executed without skip
+
+--------------------------------------------------

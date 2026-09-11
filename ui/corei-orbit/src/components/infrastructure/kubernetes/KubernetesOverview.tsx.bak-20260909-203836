@@ -1,0 +1,1249 @@
+/**
+ * COREI Kubernetes Overview
+ *
+ * Institutional Kubernetes control-plane overview.
+ *
+ * Boundary:
+ * - presentation and derived display state only
+ * - consumes the live payload supplied by KubernetesDetail
+ * - no direct Kubernetes/API calls
+ * - no backend mutation
+ * - no synthetic infrastructure state
+ */
+
+import React from 'react';
+import { TablePanel } from '../../Workspace/views/panels';
+
+interface KubernetesOverviewProps {
+  data: any;
+}
+
+const arrayOf = (value: unknown): any[] =>
+  Array.isArray(value) ? value : [];
+
+const objectOf = (value: unknown): Record<string, any> =>
+  value &&
+  typeof value === 'object' &&
+  !Array.isArray(value)
+    ? value as Record<string, any>
+    : {};
+
+const formatNumber = (value: unknown): string =>
+  Number(value || 0).toLocaleString();
+
+const formatMemory = (value: unknown): string => {
+  const raw = String(value ?? '');
+
+  if (raw.endsWith('Ki')) {
+    const n = Number(raw.slice(0, -2));
+
+    if (Number.isFinite(n)) {
+      return `${(n / 1024 / 1024).toFixed(1)} GiB`;
+    }
+  }
+
+  if (raw.endsWith('Mi')) {
+    const n = Number(raw.slice(0, -2));
+
+    if (Number.isFinite(n)) {
+      return `${(n / 1024).toFixed(1)} GiB`;
+    }
+  }
+
+  if (raw.endsWith('Gi')) {
+    return raw;
+  }
+
+  return raw || '—';
+};
+
+const formatAge = (timestamp: unknown): string => {
+  if (!timestamp) return '—';
+
+  const parsed = new Date(String(timestamp)).getTime();
+
+  if (!Number.isFinite(parsed)) {
+    return String(timestamp);
+  }
+
+  const seconds = Math.max(
+    0,
+    Math.floor((Date.now() - parsed) / 1000)
+  );
+
+  if (seconds < 60) return `${seconds}s`;
+  if (seconds < 3600) return `${Math.floor(seconds / 60)}m`;
+  if (seconds < 86400) return `${Math.floor(seconds / 3600)}h`;
+
+  return `${Math.floor(seconds / 86400)}d`;
+};
+
+const ratio = (
+  value: number,
+  total: number
+): number => {
+  if (!total) return 0;
+
+  return Math.min(
+    100,
+    Math.max(0, (value / total) * 100)
+  );
+};
+
+const KubernetesOverview: React.FC<
+  KubernetesOverviewProps
+> = ({ data }) => {
+  const cluster = objectOf(data?.cluster_info);
+  const serverVersion = objectOf(
+    cluster.serverVersion
+  );
+  const clientVersion = objectOf(
+    cluster.clientVersion
+  );
+
+  const nodes = arrayOf(data?.node_status);
+  const pods = arrayOf(data?.pods);
+  const deployments = arrayOf(data?.deployments);
+  const statefulsets = arrayOf(data?.statefulsets);
+  const daemonsets = arrayOf(data?.daemonsets);
+  const jobs = arrayOf(data?.jobs);
+  const cronjobs = arrayOf(data?.cronjobs);
+
+  const services = arrayOf(data?.services);
+  const endpoints = arrayOf(data?.endpoints);
+  const ingresses = arrayOf(data?.ingresses);
+  const networkPolicies = arrayOf(
+    data?.networkpolicies
+  );
+
+  const pvs = arrayOf(data?.persistentvolumes);
+  const pvcs = arrayOf(
+    data?.persistentvolumeclaims
+  );
+  const storageClasses = arrayOf(
+    data?.storageclasses
+  );
+
+  const configmaps = arrayOf(data?.configmaps);
+  const secrets = arrayOf(data?.secrets);
+  const serviceAccounts = arrayOf(
+    data?.serviceaccounts
+  );
+
+  const roles = arrayOf(data?.roles);
+  const roleBindings = arrayOf(
+    data?.rolebindings
+  );
+  const clusterRoles = arrayOf(
+    data?.clusterroles
+  );
+  const clusterRoleBindings = arrayOf(
+    data?.clusterrolebindings
+  );
+
+  const events = arrayOf(data?.events);
+
+  const version =
+    serverVersion.gitVersion ||
+    cluster.version ||
+    '—';
+
+  const context =
+    cluster.context ||
+    cluster.currentContext ||
+    'unknown';
+
+  const apiServer =
+    cluster.server ||
+    cluster.serverAddress ||
+    cluster.apiServer ||
+    '—';
+
+  /* ----------------------------------------------------------
+     NODE CAPACITY
+     ---------------------------------------------------------- */
+
+  const cpuCapacity = nodes.reduce(
+    (sum, node) =>
+      sum + Number(node?.capacity?.cpu || 0),
+    0
+  );
+
+  const cpuAllocatable = nodes.reduce(
+    (sum, node) =>
+      sum + Number(node?.allocatable?.cpu || 0),
+    0
+  );
+
+  const memoryCapacityKi = nodes.reduce(
+    (sum, node) => {
+      const raw = String(
+        node?.capacity?.memory || ''
+      );
+
+      return (
+        sum +
+        (raw.endsWith('Ki')
+          ? Number(raw.slice(0, -2)) || 0
+          : 0)
+      );
+    },
+    0
+  );
+
+  const memoryAllocatableKi = nodes.reduce(
+    (sum, node) => {
+      const raw = String(
+        node?.allocatable?.memory || ''
+      );
+
+      return (
+        sum +
+        (raw.endsWith('Ki')
+          ? Number(raw.slice(0, -2)) || 0
+          : 0)
+      );
+    },
+    0
+  );
+
+  const podCapacity = nodes.reduce(
+    (sum, node) =>
+      sum + Number(
+        node?.capacity?.pods || 0
+      ),
+    0
+  );
+
+  const podAllocatable = nodes.reduce(
+    (sum, node) =>
+      sum + Number(
+        node?.allocatable?.pods || 0
+      ),
+    0
+  );
+
+  /* ----------------------------------------------------------
+     NODE HEALTH
+     ---------------------------------------------------------- */
+
+  const nodeHealth = nodes.reduce(
+    (result, node) => {
+      const conditions = arrayOf(
+        node?.conditions
+      );
+
+      const ready = conditions.find(
+        (condition: any) =>
+          condition?.type === 'Ready'
+      );
+
+      if (ready?.status === 'True') {
+        result.ready += 1;
+      } else {
+        result.notReady += 1;
+      }
+
+      if (node?.unschedulable === true) {
+        result.unschedulable += 1;
+      }
+
+      return result;
+    },
+    {
+      ready: 0,
+      notReady: 0,
+      unschedulable: 0,
+    }
+  );
+
+  /* ----------------------------------------------------------
+     POD STATE
+     ---------------------------------------------------------- */
+
+  const podHealth = pods.reduce(
+    (result, pod) => {
+      const phase = String(
+        pod?.status?.phase ??
+        pod?.status ??
+        'Unknown'
+      ).toLowerCase();
+
+      if (phase === 'running') {
+        result.running += 1;
+      } else if (phase === 'pending') {
+        result.pending += 1;
+      } else if (phase === 'failed') {
+        result.failed += 1;
+      } else if (
+        phase === 'succeeded' ||
+        phase === 'completed'
+      ) {
+        result.succeeded += 1;
+      } else {
+        result.unknown += 1;
+      }
+
+      return result;
+    },
+    {
+      running: 0,
+      pending: 0,
+      failed: 0,
+      succeeded: 0,
+      unknown: 0,
+    }
+  );
+
+  const restartCount = pods.reduce(
+    (sum, pod) => {
+      const containers = arrayOf(
+        pod?.status?.containerStatuses
+      );
+
+      if (containers.length > 0) {
+        return (
+          sum +
+          containers.reduce(
+            (
+              count: number,
+              container: any
+            ) =>
+              count +
+              Number(
+                container?.restartCount || 0
+              ),
+            0
+          )
+        );
+      }
+
+      return (
+        sum +
+        Number(pod?.restarts || 0)
+      );
+    },
+    0
+  );
+
+  /* ----------------------------------------------------------
+     DEPLOYMENT STATE
+     ---------------------------------------------------------- */
+
+  const deploymentHealth =
+    deployments.reduce(
+      (result, deployment) => {
+        const desired = Number(
+          deployment?.spec?.replicas ??
+          deployment?.replicas ??
+          0
+        );
+
+        const ready = Number(
+          deployment?.status?.readyReplicas ??
+          deployment?.ready ??
+          0
+        );
+
+        const available = Number(
+          deployment?.status?.availableReplicas ??
+          deployment?.available ??
+          0
+        );
+
+        result.desired += desired;
+        result.ready += ready;
+        result.available += available;
+
+        if (ready < desired) {
+          result.unready += 1;
+        }
+
+        return result;
+      },
+      {
+        desired: 0,
+        ready: 0,
+        available: 0,
+        unready: 0,
+      }
+    );
+
+  /* ----------------------------------------------------------
+     INVENTORY
+     ---------------------------------------------------------- */
+
+  const inventory = [
+    ['Nodes', nodes.length],
+    ['Pods', pods.length],
+    ['Deployments', deployments.length],
+    ['StatefulSets', statefulsets.length],
+    ['DaemonSets', daemonsets.length],
+    ['Jobs', jobs.length],
+    ['CronJobs', cronjobs.length],
+    ['Services', services.length],
+    ['Endpoints', endpoints.length],
+    ['Ingresses', ingresses.length],
+    ['Network Policies', networkPolicies.length],
+    ['Persistent Volumes', pvs.length],
+    ['Persistent Claims', pvcs.length],
+    ['Storage Classes', storageClasses.length],
+    ['ConfigMaps', configmaps.length],
+    ['Secrets', secrets.length],
+    ['Service Accounts', serviceAccounts.length],
+    ['Roles', roles.length],
+    ['Role Bindings', roleBindings.length],
+    ['Cluster Roles', clusterRoles.length],
+    ['Cluster Bindings', clusterRoleBindings.length],
+    ['Events', events.length],
+  ];
+
+  /* ----------------------------------------------------------
+     EVENTS
+     ---------------------------------------------------------- */
+
+  const eventRows = events
+    .slice(0, 14)
+    .map((event) => ({
+      namespace:
+        event?.namespace ?? '—',
+
+      reason:
+        event?.reason ?? '—',
+
+      message:
+        event?.message ?? '—',
+
+      object:
+        event?.involvedObject?.name ??
+        event?.involved_name ??
+        '—',
+
+      type:
+        event?.type ?? '—',
+
+      age:
+        event?.lastTimestamp ||
+        event?.eventTime ||
+        event?.firstTimestamp
+          ? formatAge(
+              event?.lastTimestamp ||
+              event?.eventTime ||
+              event?.firstTimestamp
+            )
+          : event?.age ?? '—',
+    }));
+
+  /* ----------------------------------------------------------
+     NODE CONDITION HELPER
+     ---------------------------------------------------------- */
+
+  const conditionState = (
+    node: any,
+    type: string
+  ): string => {
+    const condition = arrayOf(
+      node?.conditions
+    ).find(
+      (item: any) =>
+        item?.type === type
+    );
+
+    if (!condition) return '—';
+
+    return condition.status === 'True'
+      ? 'TRUE'
+      : 'FALSE';
+  };
+
+  return (
+    <div className="k8s-ops-overview">
+
+      {/* =====================================================
+          HEADER
+          ===================================================== */}
+
+      <section className="k8s-ops-header">
+
+        <div className="k8s-ops-title">
+
+          <div className="k8s-ops-breadcrumb">
+            INFRASTRUCTURE
+            <span>/</span>
+            KUBERNETES
+            <span>/</span>
+            KUBEADM
+          </div>
+
+          <div className="k8s-ops-heading">
+            <div className="k8s-ops-cluster-icon">
+              K
+            </div>
+
+            <div>
+              <h1>
+                Kubernetes Control Plane
+              </h1>
+
+              <div className="k8s-ops-version">
+                <span className="k8s-live-dot" />
+                LIVE
+                <span>·</span>
+                {version}
+                <span>·</span>
+                {context}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="k8s-ops-header-facts">
+
+          <div>
+            <span>CONTEXT</span>
+            <strong>{context}</strong>
+          </div>
+
+          <div>
+            <span>API SERVER</span>
+            <strong title={apiServer}>
+              {apiServer}
+            </strong>
+          </div>
+
+          <div>
+            <span>CLIENT</span>
+            <strong>
+              {clientVersion.gitVersion ?? '—'}
+            </strong>
+          </div>
+
+          <div>
+            <span>SERVER</span>
+            <strong>{version}</strong>
+          </div>
+
+          <div>
+            <span>NODES</span>
+            <strong>
+              {nodeHealth.ready}/{nodes.length}
+              <small> READY</small>
+            </strong>
+          </div>
+
+        </div>
+
+      </section>
+
+      {/* =====================================================
+          PRIMARY SIGNAL STRIP
+          ===================================================== */}
+
+      <section className="k8s-ops-signals">
+
+        <div className="k8s-ops-signal">
+          <span>NODES</span>
+          <strong>
+            {formatNumber(nodes.length)}
+          </strong>
+          <small>
+            {nodeHealth.ready} READY ·{' '}
+            {nodeHealth.notReady} NOT READY
+          </small>
+          <i
+            style={{
+              width: `${ratio(
+                nodeHealth.ready,
+                nodes.length
+              )}%`,
+            }}
+          />
+        </div>
+
+        <div className="k8s-ops-signal">
+          <span>PODS</span>
+          <strong>
+            {formatNumber(pods.length)}
+          </strong>
+          <small>
+            {formatNumber(
+              podHealth.running
+            )}{' '}
+            RUNNING
+          </small>
+          <i
+            style={{
+              width: `${ratio(
+                podHealth.running,
+                pods.length
+              )}%`,
+            }}
+          />
+        </div>
+
+        <div className="k8s-ops-signal">
+          <span>DEPLOYMENTS</span>
+          <strong>
+            {formatNumber(
+              deployments.length
+            )}
+          </strong>
+          <small>
+            {deploymentHealth.ready}/
+            {deploymentHealth.desired} READY
+          </small>
+          <i
+            style={{
+              width: `${ratio(
+                deploymentHealth.ready,
+                deploymentHealth.desired
+              )}%`,
+            }}
+          />
+        </div>
+
+        <div className="k8s-ops-signal">
+          <span>SERVICES</span>
+          <strong>
+            {formatNumber(
+              services.length
+            )}
+          </strong>
+          <small>
+            {formatNumber(
+              endpoints.length
+            )}{' '}
+            ENDPOINTS
+          </small>
+          <i
+            style={{
+              width: '100%',
+            }}
+          />
+        </div>
+
+        <div className="k8s-ops-signal">
+          <span>STORAGE</span>
+          <strong>
+            {formatNumber(pvcs.length)}
+          </strong>
+          <small>
+            {pvs.length} PV ·{' '}
+            {storageClasses.length} CLASS
+          </small>
+          <i
+            style={{
+              width: '100%',
+            }}
+          />
+        </div>
+
+        <div className="k8s-ops-signal critical">
+          <span>FAILED PODS</span>
+          <strong>
+            {formatNumber(
+              podHealth.failed
+            )}
+          </strong>
+          <small>
+            {podHealth.failed > 0
+              ? 'ATTENTION REQUIRED'
+              : 'CLEAR'}
+          </small>
+          <i
+            style={{
+              width:
+                podHealth.failed > 0
+                  ? '100%'
+                  : '0%',
+            }}
+          />
+        </div>
+
+        <div className="k8s-ops-signal critical">
+          <span>RESTARTS</span>
+          <strong>
+            {formatNumber(
+              restartCount
+            )}
+          </strong>
+          <small>
+            CONTAINER RESTARTS
+          </small>
+          <i
+            style={{
+              width:
+                restartCount > 0
+                  ? '100%'
+                  : '0%',
+            }}
+          />
+        </div>
+
+        <div className="k8s-ops-signal">
+          <span>EVENTS</span>
+          <strong>
+            {formatNumber(
+              events.length
+            )}
+          </strong>
+          <small>
+            CURRENT EVENT SET
+          </small>
+          <i
+            style={{
+              width: '100%',
+            }}
+          />
+        </div>
+
+      </section>
+
+      {/* =====================================================
+          OPERATIONAL PANELS
+          ===================================================== */}
+
+      <section className="k8s-ops-grid">
+
+        {/* NODE RESOURCES */}
+
+        <div className="k8s-ops-panel">
+
+          <header>
+            <span>NODE RESOURCE UTILIZATION</span>
+            <small>
+              {nodes.length} NODE
+            </small>
+          </header>
+
+          <div className="k8s-resource-list">
+
+            <div className="k8s-resource-line">
+
+              <div className="resource-icon">
+                CPU
+              </div>
+
+              <div className="resource-main">
+                <div>
+                  <span>CPU</span>
+                  <strong>
+                    {cpuCapacity} CORES
+                  </strong>
+                </div>
+
+                <div className="resource-bar">
+                  <i
+                    style={{
+                      width: `${ratio(
+                        cpuAllocatable,
+                        cpuCapacity
+                      )}%`,
+                    }}
+                  />
+                </div>
+
+                <small>
+                  {cpuAllocatable} allocatable
+                </small>
+              </div>
+
+              <b>
+                {ratio(
+                  cpuAllocatable,
+                  cpuCapacity
+                )}%
+              </b>
+
+            </div>
+
+            <div className="k8s-resource-line">
+
+              <div className="resource-icon">
+                RAM
+              </div>
+
+              <div className="resource-main">
+                <div>
+                  <span>MEMORY</span>
+                  <strong>
+                    {formatMemory(
+                      `${memoryCapacityKi}Ki`
+                    )}
+                  </strong>
+                </div>
+
+                <div className="resource-bar">
+                  <i
+                    style={{
+                      width: `${ratio(
+                        memoryAllocatableKi,
+                        memoryCapacityKi
+                      )}%`,
+                    }}
+                  />
+                </div>
+
+                <small>
+                  {formatMemory(
+                    `${memoryAllocatableKi}Ki`
+                  )}{' '}
+                  allocatable
+                </small>
+              </div>
+
+              <b>
+                {ratio(
+                  memoryAllocatableKi,
+                  memoryCapacityKi
+                )}%
+              </b>
+
+            </div>
+
+            <div className="k8s-resource-line">
+
+              <div className="resource-icon">
+                POD
+              </div>
+
+              <div className="resource-main">
+                <div>
+                  <span>POD CAPACITY</span>
+                  <strong>
+                    {podCapacity}
+                  </strong>
+                </div>
+
+                <div className="resource-bar">
+                  <i
+                    style={{
+                      width: `${ratio(
+                        podAllocatable,
+                        podCapacity
+                      )}%`,
+                    }}
+                  />
+                </div>
+
+                <small>
+                  {podAllocatable} allocatable
+                </small>
+              </div>
+
+              <b>
+                {ratio(
+                  podAllocatable,
+                  podCapacity
+                )}%
+              </b>
+
+            </div>
+
+          </div>
+        </div>
+
+        {/* POD STATE */}
+
+        <div className="k8s-ops-panel">
+
+          <header>
+            <span>POD STATUS</span>
+            <small>
+              {formatNumber(
+                pods.length
+              )}{' '}
+              PODS
+            </small>
+          </header>
+
+          <div className="k8s-pod-state">
+
+            <div className="pod-state-main">
+              <strong>
+                {formatNumber(
+                  pods.length
+                )}
+              </strong>
+
+              <span>PODS</span>
+            </div>
+
+            <div className="pod-state-list">
+
+              <div>
+                <i className="good" />
+                <span>Running</span>
+                <strong>
+                  {formatNumber(
+                    podHealth.running
+                  )}
+                </strong>
+                <small>
+                  {ratio(
+                    podHealth.running,
+                    pods.length
+                  ).toFixed(0)}%
+                </small>
+              </div>
+
+              <div>
+                <i className="pending" />
+                <span>Pending</span>
+                <strong>
+                  {formatNumber(
+                    podHealth.pending
+                  )}
+                </strong>
+                <small>
+                  {ratio(
+                    podHealth.pending,
+                    pods.length
+                  ).toFixed(0)}%
+                </small>
+              </div>
+
+              <div>
+                <i className="bad" />
+                <span>Failed</span>
+                <strong>
+                  {formatNumber(
+                    podHealth.failed
+                  )}
+                </strong>
+                <small>
+                  {ratio(
+                    podHealth.failed,
+                    pods.length
+                  ).toFixed(0)}%
+                </small>
+              </div>
+
+              <div>
+                <i />
+                <span>Succeeded</span>
+                <strong>
+                  {formatNumber(
+                    podHealth.succeeded
+                  )}
+                </strong>
+                <small>
+                  {ratio(
+                    podHealth.succeeded,
+                    pods.length
+                  ).toFixed(0)}%
+                </small>
+              </div>
+
+              <div>
+                <i />
+                <span>Unknown</span>
+                <strong>
+                  {formatNumber(
+                    podHealth.unknown
+                  )}
+                </strong>
+                <small>
+                  {ratio(
+                    podHealth.unknown,
+                    pods.length
+                  ).toFixed(0)}%
+                </small>
+              </div>
+
+            </div>
+          </div>
+
+          <div className="k8s-panel-footer">
+            <span>RESTARTS</span>
+            <strong>
+              {formatNumber(
+                restartCount
+              )}
+            </strong>
+          </div>
+
+        </div>
+
+        {/* DEPLOYMENT */}
+
+        <div className="k8s-ops-panel">
+
+          <header>
+            <span>DEPLOYMENT READINESS</span>
+            <small>
+              {deployments.length} DEPLOYMENTS
+            </small>
+          </header>
+
+          <div className="k8s-deployment-summary">
+
+            <div>
+              <strong>
+                {deploymentHealth.ready}
+              </strong>
+              <span>READY</span>
+            </div>
+
+            <div>
+              <strong>
+                {deploymentHealth.unready}
+              </strong>
+              <span>UNREADY</span>
+            </div>
+
+            <div>
+              <strong>
+                {deploymentHealth.available}
+              </strong>
+              <span>AVAILABLE</span>
+            </div>
+
+          </div>
+
+          <div className="k8s-deployment-bar">
+            <i
+              style={{
+                width: `${ratio(
+                  deploymentHealth.ready,
+                  deployments.length
+                )}%`,
+              }}
+            />
+          </div>
+
+          <div className="k8s-deployment-meta">
+            <span>
+              {deploymentHealth.ready}/
+              {deploymentHealth.desired}
+              {' '}REPLICAS READY
+            </span>
+
+            <strong>
+              {ratio(
+                deploymentHealth.ready,
+                deploymentHealth.desired
+              ).toFixed(0)}%
+            </strong>
+          </div>
+
+        </div>
+
+      </section>
+
+      {/* =====================================================
+          NODE STATUS
+          ===================================================== */}
+
+      <section className="k8s-ops-panel">
+
+        <header>
+          <span>NODE STATUS</span>
+          <small>
+            {nodeHealth.ready} READY ·{' '}
+            {nodeHealth.notReady} NOT READY
+          </small>
+        </header>
+
+        <div className="k8s-node-table">
+
+          <div className="k8s-node-table-head">
+            <span>NODE</span>
+            <span>INTERNAL IP</span>
+            <span>READY</span>
+            <span>MEMORY</span>
+            <span>DISK</span>
+            <span>PID</span>
+            <span>NETWORK</span>
+            <span>SCHEDULING</span>
+          </div>
+
+          {nodes.map(
+            (node, index) => (
+              <div
+                className="k8s-node-table-row"
+                key={
+                  node?.uid ??
+                  node?.name ??
+                  index
+                }
+              >
+
+                <div>
+                  <strong>
+                    {node?.name ?? '—'}
+                  </strong>
+
+                  <small>
+                    {node?.nodeInfo
+                      ?.containerRuntimeVersion ??
+                      '—'}
+                  </small>
+                </div>
+
+                <span>
+                  {node?.addresses?.find?.(
+                    (address: any) =>
+                      address?.type ===
+                      'InternalIP'
+                  )?.address ?? '—'}
+                </span>
+
+                <b
+                  className={
+                    conditionState(
+                      node,
+                      'Ready'
+                    ) === 'TRUE'
+                      ? 'state-good'
+                      : 'state-bad'
+                  }
+                >
+                  {conditionState(
+                    node,
+                    'Ready'
+                  )}
+                </b>
+
+                <b>
+                  {conditionState(
+                    node,
+                    'MemoryPressure'
+                  )}
+                </b>
+
+                <b>
+                  {conditionState(
+                    node,
+                    'DiskPressure'
+                  )}
+                </b>
+
+                <b>
+                  {conditionState(
+                    node,
+                    'PIDPressure'
+                  )}
+                </b>
+
+                <b>
+                  {conditionState(
+                    node,
+                    'NetworkUnavailable'
+                  )}
+                </b>
+
+                <b
+                  className={
+                    node?.unschedulable
+                      ? 'state-bad'
+                      : 'state-good'
+                  }
+                >
+                  {node?.unschedulable
+                    ? 'DISABLED'
+                    : 'ENABLED'}
+                </b>
+
+              </div>
+            )
+          )}
+
+        </div>
+      </section>
+
+      {/* =====================================================
+          INVENTORY
+          ===================================================== */}
+
+      <section className="k8s-ops-panel">
+
+        <header>
+          <span>
+            CLUSTER RESOURCE INVENTORY
+          </span>
+
+          <small>
+            LIVE OBJECT COUNTS
+          </small>
+        </header>
+
+        <div className="k8s-inventory">
+
+          {inventory.map(
+            ([label, value]) => (
+              <div
+                key={String(label)}
+              >
+                <span>{label}</span>
+                <strong>
+                  {formatNumber(value)}
+                </strong>
+              </div>
+            )
+          )}
+
+        </div>
+
+      </section>
+
+      {/* =====================================================
+          EVENTS
+          ===================================================== */}
+
+      <section className="k8s-ops-panel k8s-events">
+
+        <header>
+          <span>
+            RECENT KUBERNETES EVENTS
+          </span>
+
+          <small>
+            {events.length} EVENTS
+          </small>
+        </header>
+
+        {eventRows.length > 0 ? (
+          <TablePanel
+            title=""
+            columns={[
+              {
+                key: 'namespace',
+                label: 'NAMESPACE',
+              },
+              {
+                key: 'reason',
+                label: 'REASON',
+              },
+              {
+                key: 'message',
+                label: 'MESSAGE',
+              },
+              {
+                key: 'object',
+                label: 'OBJECT',
+              },
+              {
+                key: 'type',
+                label: 'TYPE',
+              },
+              {
+                key: 'age',
+                label: 'AGE',
+              },
+            ]}
+            data={eventRows}
+          />
+        ) : (
+          <div className="k8s-no-events">
+            NO CURRENT KUBERNETES EVENTS
+          </div>
+        )}
+
+      </section>
+
+    </div>
+  );
+};
+
+export default KubernetesOverview;

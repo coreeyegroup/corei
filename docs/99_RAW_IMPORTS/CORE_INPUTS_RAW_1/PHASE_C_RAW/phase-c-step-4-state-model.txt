@@ -1,0 +1,827 @@
+PHASE C — STEP 4: STATE MODEL (FULL BUILD)
+Reference ID: CORE-TRADING-SYSTEM-PHASE-C-STEP4-STATE-MODEL-V1-2026-04-09
+Continuity: Follows Step 1 (Architecture), Step 2 (Physical Infra), Step 3 (Event Model — LOCKED)
+
+1. PHASE IDENTITY LAYER
+	1.1 Phase Name
+
+		Phase C — Step 4: State Model
+
+	1.2 Phase Role
+
+	Defines the deterministic, replay-safe state system derived strictly from:
+
+		EventLog → State → Snapshot → Output
+
+	This layer:
+
+		materializes system state from events
+		guarantees replay equivalence
+		enforces hash-chain integrity
+		provides execution-ready state surface for Phase D
+
+	1.3 Phase Objective
+
+		Construct a fully deterministic state system such that:
+
+		State(t) = f(EventLog[0 → t])
+		Snapshot(t) ≡ State(t)
+		Replay(EventLog) → identical State + Snapshot + Output
+
+	1.4 Why This Phase Exists
+
+		Without a strict state model:
+
+			Event correctness cannot guarantee system correctness
+			Snapshot corruption becomes undetectable
+			Replay becomes non-equivalent
+			Cross-partition inconsistency emerges
+			Hidden state risk appears
+
+		Aligned with Phase C macro invariants:
+
+			State = f(Event Log)
+			Replay must be identical
+
+2. PHASE SCOPE CONTROL
+	2.1 INCLUDED (STRICT)
+		state derivation model
+		state transition rules
+		snapshot model
+		hash-chain integrity model
+		cross-partition state consistency
+		lineage propagation
+		replay equivalence guarantees
+		deterministic state computation
+
+	2.2 EXCLUDED (STRICT)
+		trading logic (Phase A)
+		constraint definition (Phase B)
+		constraint enforcement (Phase D)
+		infra primitives (Step 2)
+		event schema (Step 3)
+
+	2.3 Boundary Rule
+
+		State model MUST:
+
+		derive ONLY from EventLog
+		NOT mutate events
+		NOT introduce new data
+		NOT depend on runtime memory
+
+		Violation → SYSTEM INVALID
+
+3. ARCHITECTURAL INTENT LAYER
+	3.1 Core Principles (MANDATORY)
+		P1 — Event-Derived State Only
+
+			No state exists outside EventLog
+
+		P2 — No Hidden State
+
+			No cache, memory, or implicit variables
+
+		P3 — Replay Equivalence
+
+			Replay must produce identical:
+
+			state
+			snapshot
+			output
+
+		P4 — Hash-Chain Integrity
+
+			Every state must be cryptographically linked
+
+		P5 — Deterministic Transitions
+
+			State transitions must be:
+
+			order-defined
+			side-effect free
+
+		P6 — Snapshot Equivalence
+
+			Snapshot MUST equal full replay state
+
+		P7 — Cross-Partition Consistency
+
+			Dependent events MUST produce consistent global state
+
+	3.2 Architectural Model
+		State(t+1) = F(State(t), Event(t+1))
+		Snapshot(t) = Serialize(State(t))
+		Output(t) = G(State(t))
+
+		Constraints:
+
+			F is deterministic
+			G is deterministic
+			Serialization is canonical
+
+	3.3 System Positioning
+		Event Model (Step 3)
+				↓
+		State Model (THIS)
+				↓
+		Execution Ready State
+				↓
+			Phase D
+
+4. DOMAIN MODEL DEFINITION
+	4.1 Core Entities
+
+		E1 — State
+		E2 — StateComponent
+		E3 — StateTransition
+		E4 — StateSnapshot
+		E5 — StateHash
+		E6 — StateLineage
+		E7 — PartitionState
+		E8 — GlobalState
+		E9 — SnapshotMetadata
+		E10 — OutputState
+
+	4.2 Entity Definitions
+
+		E1 — State
+			state = {
+				state_id
+				partition_id
+				state_components
+				previous_state_hash
+				event_id
+				state_hash
+				lineage_hash
+				version_identifiers
+			}
+
+		E2 — StateComponent
+			state_component = {
+				component_type ∈ {
+					SIGNAL_STATE
+					DECISION_STATE
+					EXECUTION_STATE
+					CONSTRAINT_STATE
+				}
+				entity_id
+				component_payload
+				component_hash
+			}
+
+		E3 — StateTransition
+			state_transition = {
+				previous_state_hash
+				event_id
+				new_state_hash
+				transition_hash
+			}
+
+		E4 — StateSnapshot
+			state_snapshot = {
+				snapshot_id
+				snapshot_time
+				partition_id
+				state_payload
+				state_hash
+				lineage_hash
+			}
+
+		E5 — StateHash
+			state_hash = HASH_v1(
+				previous_state_hash +
+				event_hash +
+				canonical_state_payload
+			)
+
+		E6 — StateLineage
+			lineage_hash = HASH_v1(
+				parent_lineage_hash +
+				event_lineage_hash +
+				state_hash
+			)
+
+		E7 — PartitionState
+
+			State isolated per partition
+
+
+		E8 — GlobalState
+			global_state = {
+				partition_states[]
+				global_state_hash
+			}
+
+		E9 — SnapshotMetadata
+			snapshot_metadata = {
+				checkpoint_offsets
+				snapshot_time
+				version_identifiers
+			}
+
+		E10 — OutputState
+			output_state = {
+				execution_instruction_stream
+				state_hash_reference
+				snapshot_reference
+			}
+
+			global_state_hash = HASH_v1(
+				partition_state_hashes ordered by partition_id ASC
+			)
+
+	4.3 Canonical State Payload Definition
+
+			canonical_state_payload = {
+				partition_id
+				state_components (ordered)
+				version_identifiers
+			}
+
+			Rules:
+
+				strict ordering
+				no optional fields
+				deterministic serialization
+
+		snapshot.lineage_hash derived from state.lineage_hash
+		output.lineage_hash derived from snapshot.lineage_hash
+
+		Serialization Standard:
+
+			- encoding: UTF-8
+			- field order:
+				1. partition_id
+				2. state_components (ordered by component_type ASC, entity_id ASC)
+				3. version_identifiers
+			- no whitespace variation
+			- no optional fields
+			- deterministic byte representation mandatory
+
+
+		output_projection = deterministic mapping:
+
+			output_state = {
+				execution_instruction_stream =
+					extract(execution_state from state_components)
+
+				state_hash_reference = state_hash
+				snapshot_reference = snapshot_id
+			}
+
+			Constraint:
+
+				MUST be pure projection
+				MUST NOT introduce new data
+
+5. LOGIC / RULE ENGINE
+	5.1 Rules
+
+		R1 — State Derivation Rule
+		R2 — Deterministic Transition Rule
+		R3 — Hash Chain Rule
+		R4 — Snapshot Equivalence Rule
+		R5 — Cross-Partition Consistency Rule
+		R6 — Replay Determinism Rule
+		R7 — Idempotency Rule
+
+	5.2 State Transition Function
+			State(t+1) = Apply(Event(t+1), State(t))
+
+		Constraints:
+
+			pure function
+			no external dependency
+			no mutation outside defined fields
+
+	5.3 Execution Order
+		Event Retrieval
+		State Load
+		Transition Apply
+		Hash Compute
+		Lineage Update
+		Snapshot Update
+		Output Emission
+
+		state_update_map = {
+			SIGNAL → update(signal_state)
+			DECISION → update(decision_state)
+			EXECUTION → update(execution_state)
+			CONSTRAINT → update(constraint_state)
+		}
+
+		If event_id already applied:
+			skip transition
+			verify state_hash unchanged
+
+		Dependency Enforcement Rule:
+
+			If event_B depends on event_A:
+
+				state_transition(event_B) is allowed ONLY IF:
+
+					state contains event_A
+
+			Else:
+
+				block processing
+
+		If multiple events update same component:
+
+			resolve using:
+
+			1. event_time ASC
+			2. dependency_depth
+			3. event_id ASC
+
+		State Transition MUST be:
+
+			- side-effect free
+			- referentially transparent
+
+6. FLOW ARCHITECTURE
+	6.0 Canonical Input
+			canonical_input_set_C
+
+		(from Step 2 + Step 3)
+
+	6.1 Processing Flow
+			EventLog
+			→ Ordered Event Stream
+			→ State Transition Engine
+			→ State Update
+			→ Snapshot Generation
+			→ Output
+
+	6.2 Output
+			execution_ready_system_state = {
+				state_snapshots
+				execution_instruction_stream
+				state_hashes
+				lineage_hashes
+			}
+
+		snapshot_boundary = checkpoint where:
+
+			- all partitions reach consistent offset
+			- state_hash stable
+
+		Atomic Snapshot Rule:
+
+			snapshot MUST be committed ONLY IF:
+
+			- all partitions reach checkpoint_offset
+			- all state_hashes aligned
+
+			Else:
+
+			- snapshot INVALID
+
+7. PIPELINE STRUCTURE
+	Event Fetch
+	Partition Routing
+	Ordered Processing
+	State Transition
+	Hash Calculation
+	Snapshot Creation
+	Output Emission
+
+	Strict, sequential, deterministic
+
+8. CONTROL & CONSTRAINTS
+	8.1 Hard Rules
+		state MUST be event-derived
+		no hidden state
+		hash-chain mandatory
+		snapshot must equal replay
+
+	8.2 Guardrails
+		reject invalid transition
+		reject hash mismatch
+		reject ordering violation
+
+	8.3 Invariants
+
+		I1 — State = f(EventLog)
+		I2 — Snapshot = State
+		I3 — Replay identical
+		I4 — Hash chain continuous
+		I5 — Cross-partition consistency
+
+	Invariant:
+
+		snapshot_hash == state_hash
+
+		Violation → HARD FAIL
+
+	Snapshot Completeness Invariant:
+
+		snapshot_payload MUST include:
+
+		- ALL state_components
+		- ALL entity_ids present in state
+
+		Missing component → HARD FAIL
+
+9. STATE & DATA MODEL
+
+	9.1 State Definition
+			State(t) = f(EventLog[0 → t])
+
+	9.2 Transition
+			State(t+1) = f(State(t), Event)
+
+	9.3 Source of Truth
+
+		Primary → EventLog
+		Secondary → Snapshot
+
+	9.4 Hash Model
+			state_hash = HASH_v1(
+				previous_state_hash +
+				event_hash +
+				canonical_state_payload
+			)
+
+	9.5 Reconstruction Rule
+			Rebuild(State) = Replay(EventLog)
+
+			Mismatch → INVALID SYSTEM
+
+	9.6 InfraState (NON-AUTHORITATIVE — MANDATORY)
+
+			InfraState = {
+				order_dispatch_log
+				oms_processing_log
+				ems_routing_log
+				broker_request_log
+				broker_response_log
+			}
+
+			Constraints:
+
+			- InfraState MUST NOT be used for:
+
+				risk decisions
+				policy decisions
+				portfolio computation
+				execution decisions
+
+			- InfraState is OBSERVABILITY ONLY
+
+			- Source of truth remains:
+
+				ExecutionEventLog (Phase C)
+
+			Violation → ARCHITECTURAL FAILURE
+
+10. FAILURE MODEL
+	10.1 Scenarios
+		state divergence
+		snapshot corruption
+		hash mismatch
+		cross-partition inconsistency
+
+	10.2 Impact
+		invalid execution state
+		audit failure
+
+	10.3 Mitigation
+		replay from checkpoint
+		rebuild state
+
+	10.4 Detection
+		hash mismatch
+		invariant violation
+
+		Replay(offset):
+			load checkpoint
+			apply events sequentially
+			validate state_hash at each step
+
+11. ASSUMPTION REGISTER
+	Assumption						Status
+	Event model correct				VALIDATED
+	Partition ordering correct		VALIDATED
+	Hash function deterministic		CONTROLLED
+
+12. VALIDATION FRAMEWORK
+	12.1 Tests
+		replay equivalence
+		snapshot correctness
+		hash chain validation
+		cross-partition ordering
+
+	12.2 Acceptance
+
+		PASS / FAIL
+
+13. OUTPUT (DELIVERABLE SPEC)
+	state_model = {
+		state_entities
+		transition_rules
+		snapshot_model
+		hash_model
+		lineage_model
+	}
+
+14. TRACEABILITY MAPPING
+	Event.id → State.event_id
+	State.hash → Snapshot.hash
+	Snapshot → Output
+
+	Lineage must be continuous end-to-end
+
+15. CROSS-PHASE CONSISTENCY
+
+	Phase A → produces inputs
+	Phase B → defines constraints
+	Phase C → derives state
+	Phase D → consumes state
+
+	No leakage allowed
+
+16. SCALABILITY MODEL
+	partition-based state
+	horizontal scaling
+	deterministic merge
+
+17. GOVERNANCE INTEGRATION
+	versioned state schema
+	hash-based validation
+	audit trace preserved
+
+	state_schema_version
+
+		Rules:
+
+		- version mismatch → replay required
+		- backward incompatible change → HARD FAIL
+		- state reconstruction MUST use same version
+
+18. AUDITABILITY & OBSERVABILITY
+	full replay trace
+	state hash logs
+	lineage verification
+
+19. RISK CONSIDERATIONS
+	state corruption = system failure
+	mitigated via:
+		hash chain
+		replay validation
+		snapshot verification
+
+20. FAILURE CONDITION (PHASE LEVEL)
+
+	Phase fails if:
+
+		state not reproducible
+		snapshot ≠ replay state
+		hash mismatch exists
+		hidden state detected
+
+21. PHASE LOCK CRITERIA
+
+	Phase locked only if:
+
+		deterministic state derivation proven
+		replay equivalence validated
+		hash chain verified
+		cross-partition consistency ensured
+		no ambiguity exists
+
+FINAL SYSTEM GUARANTEE (CRITICAL)
+
+	This step enforces:
+
+		EventLog → deterministic state → verifiable snapshot → execution-ready output
+
+	With guarantees:
+
+		bit-level reproducibility
+		zero hidden state
+		cryptographic lineage integrity
+		full auditability
+
+PHASE C — STEP 4.1: OMS / EMS INFRASTRUCTURE LAYER
+
+	1. OMS (Order Management Service)
+		Role
+
+		Deterministic order transport + lifecycle coordination layer.
+
+		Objective
+			ExecutionOrder → OMS → EMS
+
+		WITHOUT:
+
+			mutation
+			reordering
+			external dependency
+
+		Domain Model (ADD EXACTLY)
+			OMSRequest = {
+				order_id
+				execution_order_payload
+				routing_metadata
+				dispatch_timestamp
+				lineage_hash_reference
+			}
+
+		Rules (MANDATORY)
+			OMS-R1 — No Mutation
+				OMS MUST NOT modify ExecutionOrder
+
+			OMS-R2 — Deterministic Dispatch
+				dispatch_timestamp = ExecutionOrder.timestamp
+
+			OMS-R3 — Ordering Preservation
+				OMS queue order == execution_order_stream order
+
+			OMS-R4 — Idempotency
+				order_id uniqueness enforced
+				duplicate → ignored
+
+		OMS Event Model (NEW — CRITICAL)
+
+			OMSEvent = {
+				order_id
+				event_type ∈ {
+					OMS_RECEIVED
+					OMS_DISPATCHED
+					OMS_FAILED
+				}
+				event_time
+			}
+
+		OMS/EMS DETERMINISTIC PROCESSING CONTRACT (MANDATORY)
+
+			1. ordering_key = {
+				event_time ASC
+				order_id ASC
+			}
+
+			2. OMS and EMS MUST process strictly in ordering_key sequence
+
+			3. NO parallel processing allowed unless:
+			   - partitions are disjoint by order_id
+			   - merge preserves ordering_key
+
+			4. Output order MUST equal input order
+
+			Violation → SYSTEM INVALID
+
+		ExecutionOrder Immutability Lock (MANDATORY)
+
+			OMS MUST validate:
+
+			HASH_v1(ExecutionOrder_payload_before) ==
+			HASH_v1(ExecutionOrder_payload_after)
+
+			IF mismatch:
+				→ HARD FAIL
+				→ reject OMSRequest
+
+			Constraint:
+
+			- ANY field mutation is FORBIDDEN
+			- applies to:
+				size
+				instrument
+				direction
+				price_reference
+				execution_type
+
+		EXACTLY-ONCE DISPATCH RULE (MANDATORY)
+
+			IF OMSRequest.order_id already dispatched:
+
+				DO NOT dispatch again
+
+				emit:
+					OMSEvent = DUPLICATE_SUPPRESSED
+
+			State model:
+
+			dispatch_registry = {
+				order_id → dispatch_status
+			}
+
+			Constraint:
+
+			- registry MUST be reconstructable via event log
+			- no hidden state allowed
+
+	2. EMS (Execution Management Service)
+		Role
+
+		Deterministic routing + execution strategy binding layer.
+
+		Objective
+
+			OMSRequest → EMS → BrokerRequest (via Step 7)
+
+		Domain Model
+			EMSInstruction = {
+				order_id
+				broker_route
+				execution_strategy
+				priority_level
+				lineage_hash_reference
+			}
+
+		Rules
+			EMS-R1 — Deterministic Routing
+				broker_route = f(
+					instrument,
+					execution_type,
+					configuration_snapshot.routing_rules
+				)
+
+			EMS-R2 — No Runtime Dependency
+				NO market data
+				NO broker feedback
+
+			EMS-R3 — Strategy Binding
+				execution_strategy = execution_type_map[strategy_id]
+
+			EMS Event Model
+
+				EMSEvent = {
+					order_id
+					event_type ∈ {
+						ROUTE_SELECTED
+						ROUTE_DISPATCHED
+						ROUTE_FAILED
+					}
+					event_time
+				}
+
+		EMS ROUTING LOCK (MANDATORY)
+
+				broker_route MUST be computed ONLY using:
+
+				f(
+					instrument,
+					execution_type,
+					configuration_snapshot.routing_rules
+				)
+
+				FORBIDDEN:
+
+				- latency-based routing
+				- broker load-based routing
+				- runtime decision inputs
+
+				Tie-break rule:
+
+				IF multiple routes valid:
+
+					select MIN_HASH(route_id)
+
+				Constraint:
+
+				identical input → identical broker_route
+
+		OMS/EMS FAILURE RECOVERY (MANDATORY)
+
+			Scenario: OMS crash after receive
+
+			Recovery:
+
+			1. Reconstruct from event log:
+			   OMSEvent(OMS_RECEIVED)
+
+			2. IF OMS_DISPATCHED missing:
+			   → re-dispatch deterministically
+
+			Scenario: EMS failure
+
+			1. Recompute EMSInstruction using same input
+			2. MUST produce identical output
+
+			Constraint:
+
+			NO state dependency allowed
+
+		OMS/EMS FAILURE RECOVERY (MANDATORY)
+
+			Scenario: OMS crash after receive
+
+			Recovery:
+
+			1. Reconstruct from event log:
+			   OMSEvent(OMS_RECEIVED)
+
+			2. IF OMS_DISPATCHED missing:
+			   → re-dispatch deterministically
+
+			Scenario: EMS failure
+
+			1. Recompute EMSInstruction using same input
+			2. MUST produce identical output
+
+			Constraint:
+
+			NO state dependency allowed

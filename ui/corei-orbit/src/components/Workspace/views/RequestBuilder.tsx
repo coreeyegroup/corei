@@ -72,6 +72,13 @@ interface Template {
   template_name: string;
   workflow: any;
   request: any;
+  market: any;
+  provider: any;
+  runtime: any;
+  collection: any;
+  cache: any;
+  responseFormat: any;
+  trigger: any;
   formData: FormData;
 }
 
@@ -218,7 +225,7 @@ const RequestBuilder: React.FC = () => {
   const updateForm = (section: keyof FormData, field: string, value: any) => {
     setFormData((prev) => ({
       ...prev,
-      [section]: { ...prev[section], [field]: value },
+      [section]: Object.assign({}, prev[section], { [field]: value }),
     }));
   };
 

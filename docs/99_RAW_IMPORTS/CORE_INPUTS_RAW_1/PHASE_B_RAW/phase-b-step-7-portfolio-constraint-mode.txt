@@ -1,0 +1,541 @@
+PHASE B — STEP 7: PORTFOLIO CONSTRAINT MODEL
+
+STATUS: FULL UPS (1–21) — INSTITUTIONAL / DETERMINISTIC / CEI-LOCK READY
+
+1. PHASE IDENTITY LAYER
+	1.1 Phase Name
+
+		Phase B — Step 7: Portfolio Constraint Model
+
+	1.2 Phase Role
+
+		Defines numeric, enforceable portfolio-level constraints that bound the Phase A Step 7 Portfolio Model
+
+	1.3 Objective
+
+		To construct a deterministic constraint envelope ensuring:
+
+			portfolio exposure is bounded
+			diversification is enforceable
+			concentration risk is numerically limited
+			cross-strategy aggregation remains safe
+
+	1.4 Why This Exists
+
+		Without this layer:
+
+			portfolio aggregation becomes unsafe
+			hidden correlation risk accumulates
+			allocation + execution create systemic exposure
+			Phase A portfolio logic becomes non-executable
+
+2. PHASE SCOPE CONTROL
+	2.1 INCLUDED (STRICT)
+		portfolio-level exposure constraints
+		asset-level limits
+		cluster-level limits
+		diversification enforcement
+		concentration constraints
+		normalization bounds
+		portfolio invariant definitions
+
+	2.2 EXCLUDED (STRICT)
+		portfolio construction logic (Phase A Step 7)
+		capital allocation logic (Step 6)
+		risk philosophy semantics (Step 5)
+		execution enforcement (Phase D)
+
+3. ARCHITECTURAL INTENT
+	3.1 Core Principles
+		Deterministic constraint evaluation
+		Portfolio-level safety envelope
+		No transformation of exposures
+		Numeric enforcement only
+		Replay-safe
+
+	3.2 Model Type
+
+		Constraint Envelope over:
+
+			Portfolio State Snapshot → Constraint Evaluation → Constraint Output
+
+	3.3 Position in System
+		Phase A Step 7 → Portfolio State
+						↓
+		Phase B Step 7 → Portfolio Constraints
+						↓
+		Phase D → Enforcement
+
+4. CANONICAL INPUT SET (MANDATORY)
+		Use canonical_input_set defined in Phase B Step 1
+
+		Access:
+
+			canonical_input_set.input_data_snapshot.portfolio_state_snapshot
+			canonical_input_set.input_data_snapshot.capital_allocation_snapshot
+			canonical_input_set.configuration_snapshot
+			canonical_input_set.constraint_parameter_set
+			canonical_input_set.version_identifiers
+
+		Constraint:
+
+			Direct redefinition → FORBIDDEN
+
+5. DOMAIN VARIABLES (CONSTRAINED)
+
+	Derived from Phase A portfolio model
+
+	5.1 Core Variables
+		total_exposure_vector
+		net_exposure(asset_i)
+		normalized_exposure W_i
+		E_total = Σ |E_i|
+		E_cluster_k
+		strategy_weight_i
+
+		Before Σ aggregation:
+
+		IF Σ overflow risk detected:
+			→ HARD FAIL
+
+		Explicit rule:
+
+			Aggregation MUST use INT128 intermediate
+
+6. NUMERIC MODEL (INHERITED — STRICT)
+
+	From Step 6 Numeric Model
+
+		fixed-point (scale = 10^6)
+		ROUND_HALF_UP
+		INT128 intermediate
+		overflow → HARD FAIL
+
+7. PORTFOLIO CONSTRAINT DOMAINS
+	7.1 GLOBAL PORTFOLIO DOMAIN
+		total exposure
+		diversification score
+		net directional exposure
+
+	7.2 ASSET DOMAIN
+		exposure per asset
+
+	7.3 CLUSTER DOMAIN
+		correlation cluster exposure
+
+	7.4 STRATEGY DOMAIN
+		strategy contribution
+
+8. CONSTRAINT DEFINITIONS (NUMERIC)
+	8.1 TOTAL EXPOSURE CONSTRAINT
+			E_total ≤ E_total_max
+
+		min = 0
+		max = E_total_max
+		edge_behavior = REJECT
+
+	8.2 NET DIRECTIONAL EXPOSURE
+		|Σ E_i| ≤ D_max
+
+	Prevents directional bias accumulation
+
+	8.3 ASSET EXPOSURE LIMIT
+
+	For each asset:
+
+		|W_i| ≤ W_asset_max_i
+
+	8.4 CLUSTER EXPOSURE LIMIT
+		|E_cluster_k| ≤ cluster_limit_k
+
+	8.5 STRATEGY CONCENTRATION
+		W_strategy_i ≤ W_strategy_max_i
+
+	8.6 DIVERSIFICATION CONSTRAINT
+		diversification_score ≥ D_min
+
+		Where:
+
+		diversification_score =
+			1 - (max(E_cluster_k) / E_total)
+
+		IF E_total == 0:
+			diversification_score = 1
+
+	8.7 ZERO PORTFOLIO STATE
+
+		If:
+
+			C_total == 0
+
+		Then:
+
+			ALL exposures = 0
+			state = ZERO_PORTFOLIO
+
+	8.8 — PARAMETER DOMAIN DEFINITION (MANDATORY)
+				parameter = {
+				parameter_id
+				min_value_fp
+				max_value_fp
+				edge_behavior
+				invalid_condition
+			}
+
+	8.9 — PARAMETER BINDING (MANDATORY)
+
+			binding = {
+				parameter_id
+				constraint_id
+				domain_id
+			}
+
+			Constraint:
+
+				Every constraint MUST reference exactly one parameter domain
+
+9. EDGE BEHAVIOR (STRICT)
+
+	Precedence:
+
+	REJECT > CLAMP > SATURATE
+
+	Examples:
+
+	Constraint					Behavior
+	Exposure overflow			REJECT
+	Minor threshold breach		CLAMP
+	Soft constraint				SATURATE
+
+10. CONSTRAINT EVALUATION UNITS
+			evaluation_unit = {
+				asset_id
+				strategy_id
+				trade_intent_id
+				cluster_id
+				exposure_unit_id
+			}
+
+		10.1 — TRACEABILITY MAPPING (MANDATORY)
+
+			Full lineage MUST follow:
+
+				constraint_output
+					→ constraint_decision
+						→ evaluation_unit
+							→ exposure_unit
+								→ strategy_allocation
+									→ trade_intent
+
+			Constraints:
+
+				1. Each mapping MUST be:
+
+					deterministic
+					complete
+					one-to-one or many-to-one (no ambiguity)
+
+				2. No implicit linkage allowed
+
+				3. All identifiers MUST be:
+
+					hash-identifiable
+					version-consistent
+
+			Violation Conditions:
+
+				Missing linkage at ANY level → HARD FAIL
+
+11. DETERMINISTIC ORDERING
+	ordering MUST follow:
+
+		1. asset_id ASC
+		2. strategy_id ASC
+		3. trade_intent_id ASC
+		4. cluster_id ASC
+
+12. CONSTRAINT EVALUATION FUNCTION
+		constraint_result = f(
+			portfolio_state_snapshot,
+			constraint_parameter_set
+		)
+
+	Produces:
+
+		PASS / FAIL
+		violation_score
+		severity_level
+
+	For each parameter:
+
+		IF value_fp < min_value_fp → apply edge_behavior
+		IF value_fp > max_value_fp → apply edge_behavior
+
+	DOMAIN ENFORCEMENT ORDER (MANDATORY):
+
+		1. Parameter extraction
+		2. Domain validation (min/max enforcement)
+		3. Constraint evaluation
+		4. Aggregation
+
+		Constraint:
+
+		Domain enforcement MUST occur BEFORE any constraint evaluation
+
+		Violation → HARD FAIL
+
+13. AGGREGATION RULES
+
+	Ordering:
+
+		scope_priority
+		domain_priority
+		precedence_level
+		constraint_id
+
+	SECTION 13.1 — UNIFIED CONSTRAINT PRECEDENCE
+		Final precedence:
+
+			1. scope_priority
+			2. domain_priority
+			3. constraint_type_priority
+			4. precedence_level
+			5. constraint_id
+
+		constraint_type_priority:
+			REJECT = 1
+			CLAMP = 2
+			SATURATE = 3
+
+		Composition Consistency Rule (MANDATORY)
+
+			Portfolio constraint aggregation MUST reuse:
+
+				Step 5 Constraint Composition Function
+
+			Redefinition → FORBIDDEN
+
+14. CONFLICT RESOLUTION
+	Dominance Model (MANDATORY)
+
+		All dominance decisions MUST be derived exclusively from:
+
+			Section 13.1 — Unified Constraint Precedence
+
+		Constraint:
+
+			No independent dominance rules allowed
+			No implicit hierarchy allowed
+
+	Conflict resolution MUST use Section 13.1 unified precedence
+
+	No independent dominance rules allowed
+
+	14.1 — MULTI-CONSTRAINT RESOLUTION
+
+		IF multiple FAIL:
+
+			select dominant constraint using:
+
+				1. scope_priority
+				2. domain_priority
+				3. constraint_type_priority
+				4. precedence_level
+				5. constraint_id
+
+15. DECISION MODEL
+	Binary Layer
+		IF any FAIL → REJECT
+		ELSE → ACCEPT
+
+	Execution Layer
+	Condition				Decision
+	Critical violation		BLOCK
+	Moderate violation		MODIFY
+	No violation			ALLOW
+
+16. MODIFICATION VECTOR
+		modification_vector = {
+
+			size_adjustment ∈ [0,1]
+			direction_override ∈ {-1,0,1}
+
+		}
+
+17. CONSTRAINT SCORE
+	constraint_score ∈ [0,1]
+	monotonic
+	severity-mapped
+
+18. INVARIANTS (CRITICAL)
+	I1 — Exposure Bound
+		E_total ≤ E_total_max
+	I2 — No Negative Capital
+	I3 — Deterministic Ordering
+	I4 — No Hidden Exposure
+	I5 — Cluster Bound Integrity
+
+	18.1 — INVARIANT ENFORCEMENT ORDER
+
+		Apply in order:
+
+			1. Total exposure constraint
+			2. Cluster constraint
+			3. Asset constraint
+			4. Strategy constraint
+
+			Constraint:
+
+				Lower-level constraint MUST NOT violate higher-level invariant
+
+	18.2 — INVARIANT EXECUTION MODE (MANDATORY)
+
+		Invariant enforcement MUST follow a:
+
+			SINGLE-PASS DETERMINISTIC MODEL
+
+		Definition:
+
+			All invariants MUST be evaluated exactly once
+			in the predefined enforcement order (Section 18.1)
+
+		Constraints:
+
+			No iterative rebalancing allowed
+			No recursive enforcement allowed
+			No feedback loop between constraint layers allowed
+
+		Execution Rule:
+
+			Given ordered invariants:
+
+				I1 → I2 → I3 → I4
+
+			System MUST:
+
+				apply I1
+				then I2
+				then I3
+				then I4
+
+			WITHOUT revisiting prior invariants
+
+		Violation Conditions:
+
+			If enforcement of a lower-level invariant
+			requires modification of a higher-level invariant:
+
+				→ HARD FAIL
+
+		Rationale:
+
+			Prevents:
+
+				cyclic constraint adjustment
+				non-deterministic convergence
+				replay inconsistency
+
+19. FAILURE MODEL
+	19.1 Failure Cases
+		overflow exposure
+		missing asset mapping
+		cluster mismatch
+		invalid normalization
+
+	19.2 Failure Action
+
+		→ HARD FAIL
+		→ no constraint_output generated
+
+20. OUTPUT MODEL
+		constraint_output = {
+
+				definition_layer {
+					scope_control_spec
+					domain_model_spec
+				}
+
+				evaluation_layer {
+					constraint_decision_output
+					constraint_result_set
+					numeric_evaluation_output
+				}
+
+				portfolio_layer {
+					portfolio_constraint_output
+				}
+
+				feedback_layer {
+					constraint_feedback_output
+				}
+
+				constraint_hash
+			}
+
+			This step contributes ONLY to constraint_output.
+
+				Standalone output emission → FORBIDDEN
+
+			No step may emit standalone output
+
+				All outputs MUST be nested inside constraint_output
+
+		TRACEABILITY (MANDATORY):
+
+			constraint_output
+			→ constraint_decision
+			→ exposure_unit
+			→ strategy_allocation
+			→ trade_intent
+
+		output_hash = HASH_v1(
+
+			ordered_constraint_decision_set +
+			ordered_violation_set +
+			constraint_score +
+			version_identifiers
+
+		)
+
+		constraint_decision_set ORDER:
+				asset_id ASC
+				strategy_id ASC
+				trade_intent_id ASC
+
+			violation_set ORDER:
+				severity DESC
+				constraint_id ASC
+
+		TRACEABILITY FIELD REQUIREMENTS (MANDATORY):
+
+			Each exposure_unit MUST include:
+
+				source_strategy_id
+				source_trade_intent_id
+
+			Constraint:
+
+				exposure_unit WITHOUT these fields → INVALID
+
+			Each constraint_decision MUST include:
+
+				reference_exposure_unit_id
+
+			Constraint:
+
+				Missing linkage → HARD FAIL
+
+21. CEI / VALIDATION READY
+	Determinism
+		same input → identical output
+
+	Replay
+		Replay(canonical_input_set) = identical result
+
+	Numeric Consistency
+
+	Aligned with Step 6 numeric system
+
+	Phase Alignment
+		Phase A defines exposure logic
+		Phase B constrains it

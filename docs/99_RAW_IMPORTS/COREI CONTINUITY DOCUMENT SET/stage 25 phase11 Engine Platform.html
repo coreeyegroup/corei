@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>COREI Stage‑25 – Phase‑11 Reference</title>
+    <style>
+        /* ============================================================
+           COREI INSTITUTIONAL DOCUMENTATION SYSTEM
+           ============================================================ */
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            background: #0A0D12;
+            color: #E3E7EC;
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+            font-size: 13px;
+            line-height: 1.5;
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .sidebar-wrapper {
+            display: flex;
+            flex-shrink: 0;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            overflow: hidden;
+        }
+        .sidebar {
+            width: 200px;
+            min-width: 140px;
+            max-width: 320px;
+            background: #0E1219;
+            border-right: 1px solid #28303C;
+            padding: 0.8rem 0.3rem 0.8rem 0.5rem;
+            overflow-y: auto;
+            overflow-x: hidden;
+            resize: horizontal;
+            height: 100vh;
+            flex-shrink: 0;
+        }
+        .sidebar::-webkit-scrollbar { width:4px; }
+        .sidebar::-webkit-scrollbar-thumb { background:#28303C; border-radius:2px; }
+        .sidebar::-webkit-scrollbar-track { background:transparent; }
+        .sidebar::-webkit-resizer { background:#28303C; border-radius:0 0 4px 0; }
+        .sidebar .brand {
+            font-size:13px; font-weight:600; color:#C6A46A; letter-spacing:0.04em;
+            padding:0 0.3rem 0.4rem 0.3rem; border-bottom:1px solid #28303C; margin-bottom:0.6rem;
+        }
+        .sidebar .brand span { color:#E3E7EC; font-weight:300; }
+        .sidebar-nav { display:flex; flex-direction:column; gap:0.1rem; }
+        .sidebar-nav a {
+            display:flex; align-items:center; padding:0.2rem 0.3rem;
+            color:#9AA5B1; text-decoration:none; font-size:12px; border-radius:3px;
+            transition:background 0.1s,color 0.1s; line-height:1.3; white-space:nowrap;
+        }
+        .sidebar-nav a:hover { background:#1E2834; color:#E3E7EC; }
+        .sidebar-nav a.active { background:#28303C; color:#E3E7EC; font-weight:500; }
+        .sidebar-nav .section-number { display:inline-block; width:22px; color:#6E7883; font-size:11px; flex-shrink:0; }
+        .main-content { flex:1; padding:2rem 2.5rem; max-width:1200px; min-width:0; overflow-x:auto; }
+        h1 { font-size:26px; font-weight:600; color:#E3E7EC; margin-bottom:0.25rem; }
+        h2 { font-size:18px; font-weight:600; color:#C6A46A; margin:1.8rem 0 0.8rem 0; border-bottom:1px solid #28303C; padding-bottom:0.3rem; }
+        h3 { font-size:15px; font-weight:500; color:#C6A46A; margin:1.2rem 0 0.5rem 0; }
+        h4 { font-size:13px; font-weight:500; color:#9AA5B1; margin:1rem 0 0.3rem 0; }
+        p { margin-bottom:0.4rem; }
+        a { color:#8BB4F0; text-decoration:none; }
+        a:hover { text-decoration:underline; }
+        code { font-family:'JetBrains Mono','Fira Code',monospace; font-size:12px; background:#121821; padding:0.1rem 0.4rem; border:1px solid #28303C; border-radius:3px; color:#E3E7EC; }
+        pre { background:#0E1219; border:1px solid #28303C; border-radius:6px; padding:0.8rem 1rem; overflow:auto; font-family:'JetBrains Mono',monospace; font-size:12px; line-height:1.5; color:#C5CED9; max-height:400px; overflow-y:auto; white-space:pre-wrap; word-break:break-all; }
+        hr { border:none; border-top:1px solid #28303C; margin:1.5rem 0; }
+        .document-header { background:#121821; border:1px solid #28303C; border-radius:6px; padding:1rem 1.5rem; margin-bottom:1.5rem; }
+        .document-header .org { font-size:14px; font-weight:600; color:#C6A46A; letter-spacing:0.05em; }
+        .document-header .title { font-size:26px; font-weight:600; color:#E3E7EC; margin:0.2rem 0; }
+        .document-header .subtitle { font-size:16px; color:#9AA5B1; }
+        .document-header .meta-line { display:flex; flex-wrap:wrap; gap:1.2rem; margin-top:0.6rem; font-size:13px; }
+        .document-header .meta-line .item { display:flex; align-items:baseline; gap:0.3rem; }
+        .document-header .meta-line .label { color:#6E7883; text-transform:uppercase; font-size:11px; letter-spacing:0.04em; }
+        .document-header .meta-line .value { color:#E3E7EC; font-weight:500; }
+        .badge { display:inline-block; background:#28303C; padding:0.1rem 0.6rem; border-radius:12px; font-size:11px; font-weight:600; color:#C6A46A; letter-spacing:0.02em; margin-left:0.3rem; }
+        .badge.success { background:#1F3A2A; color:#52A36B; }
+        .badge.warning { background:#3D3420; color:#D1A64A; }
+        .badge.danger { background:#3D2020; color:#B95A5A; }
+        .executive-summary { background:#121821; border:1px solid #28303C; border-radius:6px; padding:0.8rem 1.2rem; margin-bottom:1.5rem; display:grid; grid-template-columns:1fr 1fr; gap:0.3rem 2rem; }
+        .executive-summary .item { display:flex; flex-direction:column; }
+        .executive-summary .item .label { font-size:11px; text-transform:uppercase; color:#6E7883; letter-spacing:0.04em; }
+        .executive-summary .item .value { font-size:14px; font-weight:500; color:#E3E7EC; }
+        table { width:100%; border-collapse:collapse; font-size:12px; margin:0.6rem 0 1rem 0; }
+        th { background:#18202A; color:#9AA5B1; font-weight:600; text-align:left; padding:0.3rem 0.5rem; border:1px solid #28303C; font-size:11px; text-transform:uppercase; letter-spacing:0.04em; }
+        td { padding:0.25rem 0.5rem; border:1px solid #28303C; vertical-align:top; background:#0E1219; }
+        tr:nth-child(even) td { background:#121821; }
+        details { background:#0E1219; border:1px solid #28303C; border-radius:4px; margin:0.6rem 0; }
+        summary { padding:0.3rem 0.6rem; cursor:pointer; font-weight:500; color:#C5CED9; background:#18202A; border-radius:4px; user-select:none; font-size:13px; }
+        summary:hover { background:#1E2834; }
+        details[open] summary { border-bottom:1px solid #28303C; border-radius:4px 4px 0 0; }
+        details .content { padding:0.5rem 0.6rem; font-size:12px; font-family:'JetBrains Mono',monospace; white-space:pre-wrap; word-break:break-all; color:#C5CED9; overflow-x:auto; max-height:500px; overflow-y:auto; }
+        .metadata-table td { padding:0.15rem 0.5rem; }
+        .metadata-table .label { color:#6E7883; width:140px; font-weight:400; }
+        .text-muted { color:#6E7883; }
+        .text-success { color:#52A36B; }
+        .text-warning { color:#D1A64A; }
+        .text-danger { color:#B95A5A; }
+        @media (max-width:768px) {
+            body { flex-direction:column; }
+            .sidebar-wrapper { height:auto; position:static; overflow:visible; }
+            .sidebar { width:100% !important; height:auto; max-width:none !important; min-width:unset; resize:none; border-right:none; border-bottom:1px solid #28303C; padding:0.5rem; }
+            .sidebar-nav { flex-direction:row; flex-wrap:wrap; gap:0.1rem; }
+            .sidebar-nav a { padding:0.15rem 0.4rem; font-size:11px; white-space:nowrap; }
+            .sidebar-nav .section-number { width:auto; margin-right:0.1rem; }
+            .main-content { padding:1rem; }
+            .executive-summary { grid-template-columns:1fr; }
+            .document-header .meta-line { flex-direction:column; gap:0.3rem; }
+        }
+        @media print {
+            .sidebar-wrapper { display:none; }
+            body { background:white; color:black; font-size:11px; }
+            .main-content { padding:1rem; max-width:100%; }
+            .document-header, .executive-summary, table, pre, details { border-color:#ccc; background:#fafafa; }
+            .document-header .meta-line .label { color:#666; }
+            .document-header .meta-line .value { color:#000; }
+            .badge { border:1px solid #999; background:transparent; color:#000; }
+            .badge.success { border-color:#2a7a3a; color:#2a7a3a; }
+            .badge.warning { border-color:#b08a3a; color:#b08a3a; }
+            .badge.danger { border-color:#b05a5a; color:#b05a5a; }
+            th { background:#eee; color:#333; border-color:#999; }
+            td { background:white; border-color:#999; }
+            tr:nth-child(even) td { background:#f5f5f5; }
+            .text-muted { color:#666; }
+            .text-success { color:#2a7a3a; }
+            .text-warning { color:#b08a3a; }
+            .text-danger { color:#b05a5a; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar-wrapper">
+        <aside class="sidebar">
+            <div class="brand">COREI <span>·</span> DOC</div>
+            <nav class="sidebar-nav">
+                <a href="#sec-01"><span class="section-number">01</span> Executive Summary</a>
+                <a href="#sec-02"><span class="section-number">02</span> Scope</a>
+                <a href="#sec-03"><span class="section-number">03</span> Architecture</a>
+                <a href="#sec-04"><span class="section-number">04</span> Ownership</a>
+                <a href="#sec-05"><span class="section-number">05</span> Responsibilities</a>
+                <a href="#sec-06"><span class="section-number">06</span> Dependencies</a>
+                <a href="#sec-07"><span class="section-number">07</span> Contracts</a>
+                <a href="#sec-08"><span class="section-number">08</span> Interfaces</a>
+                <a href="#sec-09"><span class="section-number">09</span> Runtime</a>
+                <a href="#sec-10"><span class="section-number">10</span> Public API</a>
+                <a href="#sec-11"><span class="section-number">11</span> Components</a>
+                <a href="#sec-12"><span class="section-number">12</span> File Inventory</a>
+                <a href="#sec-13"><span class="section-number">13</span> Validation</a>
+                <a href="#sec-14"><span class="section-number">14</span> Browser Validation</a>
+                <a href="#sec-15"><span class="section-number">15</span> Repository Tree</a>
+                <a href="#sec-16"><span class="section-number">16</span> Build Output</a>
+                <a href="#sec-17"><span class="section-number">17</span> Certification</a>
+                <a href="#sec-18"><span class="section-number">18</span> References</a>
+                <a href="#sec-19"><span class="section-number">19</span> Appendix</a>
+            </nav>
+        </aside>
+    </div>
+
+    <main class="main-content">
+
+        <header class="document-header">
+            <div class="org">COREI · Institutional Operating Platform</div>
+            <div class="title">Stage 25 · Phase 11</div>
+            <div class="subtitle">Engine Platform</div>
+            <div class="meta-line">
+                <span class="item"><span class="label">Status</span><span class="value"><span class="badge success">CERTIFIED</span></span></span>
+                <span class="item"><span class="label">Version</span><span class="value">25.11.0</span></span>
+                <span class="item"><span class="label">Repository</span><span class="value">corei</span></span>
+                <span class="item"><span class="label">Branch</span><span class="value">main</span></span>
+                <span class="item"><span class="label">Commit</span><span class="value">ac8e282</span></span>
+                <span class="item"><span class="label">Tag</span><span class="value">stage25-phase11-engine-v1</span></span>
+                <span class="item"><span class="label">Generated</span><span class="value">2026-08-08</span></span>
+            </div>
+        </header>
+
+        <section class="executive-summary">
+            <div class="item"><span class="label">Purpose</span><span class="value">Establish the Engine Platform – deterministic processing units for business execution</span></div>
+            <div class="item"><span class="label">Ownership</span><span class="value">Engine Platform Team</span></div>
+            <div class="item"><span class="label">Consumers</span><span class="value">Domain Platform, Experience Platform, Application Platform</span></div>
+            <div class="item"><span class="label">Providers</span><span class="value">Phase‑01 Provider, Phase‑02 Capability, Phase‑09 Service, Phase‑10 Module</span></div>
+            <div class="item"><span class="label">Protected Boundaries</span><span class="value">src/engines/</span></div>
+            <div class="item"><span class="label">Repository Scope</span><span class="value">61 files, 12 directories</span></div>
+            <div class="item"><span class="label">Key Subsystems</span><span class="value">Foundation, Lifecycle, State, Composition, Dependency, Runtime, Integration, Runtime Graph, Runtime Orchestrator</span></div>
+            <div class="item"><span class="label">Certification</span><span class="value"><span class="text-success">PASSED</span></span></div>
+            <div class="item"><span class="label">Validation</span><span class="value"><span class="text-success">PASSED</span></span></div>
+        </section>
+
+        <section id="sec-01" class="section">
+            <h2><span class="section-number">01</span> Executive Summary</h2>
+            <p>Phase‑11 implements the institutional Engine Platform – deterministic processing units responsible for executing business logic within the COREI Operating System. Engines consume Modules, Services, Capabilities, and Providers to perform institutional processing. The platform provides deterministic governance through Foundation, Lifecycle, State, Composition, Dependency, Runtime, Integration, Runtime Graph, and Runtime Orchestrator layers. Engines are the executable building blocks consumed by Domains and Experiences.</p>
+            <table class="metadata-table">
+                <tr><td class="label">Purpose</td><td>Deterministic processing units for business execution</td></tr>
+                <tr><td class="label">Ownership</td><td>Engine Platform Team</td></tr>
+                <tr><td class="label">Consumers</td><td>Domain, Experience, Application Platforms</td></tr>
+                <tr><td class="label">Providers</td><td>Phase‑01, Phase‑02, Phase‑09, Phase‑10</td></tr>
+                <tr><td class="label">Protected Boundaries</td><td>src/engines/</td></tr>
+                <tr><td class="label">Repository Scope</td><td>61 files, 12 directories</td></tr>
+                <tr><td class="label">Key Subsystems</td><td>Foundation, Lifecycle, State, Composition, Dependency, Runtime, Integration, Runtime Graph, Runtime Orchestrator</td></tr>
+                <tr><td class="label">Certification</td><td><span class="text-success">PASSED</span></td></tr>
+                <tr><td class="label">Validation</td><td><span class="text-success">PASSED</span></td></tr>
+            </table>
+        </section>
+
+        <section id="sec-02" class="section">
+            <h2><span class="section-number">02</span> Scope</h2>
+            <table>
+                <thead><tr><th>Category</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td>In Scope</td><td>Engine contracts, models, registry, manager; Lifecycle (REGISTERED, INITIALIZING, INITIALIZED, STARTING, RUNNING, SUSPENDING, SUSPENDED, RESUMING, STOPPING, STOPPED, UNLOADING, UNLOADED, FAILED); State (Operational Status, Health Status); Composition (Module References); Dependency; Runtime; Integration (Provider, Capability, Service, Module); Runtime Graph (Nodes, Edges, Graph, Registry); Runtime Orchestrator</td></tr>
+                    <tr><td>Out of Scope</td><td>UI rendering, Domain implementation, Trading logic, Infrastructure logic, Provider implementations</td></tr>
+                    <tr><td>Consumes</td><td>Phase‑01 Provider, Phase‑02 Capability, Phase‑09 Service, Phase‑10 Module</td></tr>
+                    <tr><td>Provides</td><td>Engine Platform API, Engine Runtime, Engine Lifecycle, Engine State, Engine Composition, Integration APIs, Runtime Graph, Runtime Orchestrator</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="sec-03" class="section">
+            <h2><span class="section-number">03</span> Architecture</h2>
+            <p>The Engine Platform follows the institutional nine-layer pattern.</p>
+            <table>
+                <thead><tr><th>Layer</th><th>Responsibility</th></tr></thead>
+                <tbody>
+                    <tr><td>Foundation</td><td>Contract, Model, Registry, Manager</td></tr>
+                    <tr><td>Lifecycle</td><td>13-stage progression (REGISTERED → INITIALIZING → INITIALIZED → STARTING → RUNNING → SUSPENDING → SUSPENDED → RESUMING → RUNNING → STOPPING → STOPPED → UNLOADING → UNLOADED → FAILED)</td></tr>
+                    <tr><td>State</td><td>Operational Status (ONLINE, OFFLINE, STARTING, STOPPING, SUSPENDED, FAILED); Health Status (HEALTHY, DEGRADED, UNHEALTHY, UNKNOWN)</td></tr>
+                    <tr><td>Composition</td><td>Module References</td></tr>
+                    <tr><td>Dependency</td><td>Engine Dependency, Reference, Registry, Manager</td></tr>
+                    <tr><td>Runtime</td><td>Runtime Context, Default Runtime, Registry, Manager</td></tr>
+                    <tr><td>Integration</td><td>Provider, Capability, Service, Module Integration</td></tr>
+                    <tr><td>Runtime Graph</td><td>Nodes, Edges, Graph, Registry, Manager</td></tr>
+                    <tr><td>Runtime Orchestrator</td><td>Context, Contract, Default, Registry, Manager</td></tr>
+                </tbody>
+            </table>
+            <h3>Dependency Flow</h3>
+            <pre>Domain → Engine → Module → Service → Capability → Provider → Foundation</pre>
+        </section>
+
+        <section id="sec-04" class="section">
+            <h2><span class="section-number">04</span> Ownership</h2>
+            <table>
+                <thead><tr><th>Component</th><th>Owner</th><th>Repository Path</th></tr></thead>
+                <tbody>
+                    <tr><td>Engine Foundation</td><td>Engine Platform Team</td><td>src/engines/contracts/, models/, registry/, manager/</td></tr>
+                    <tr><td>Engine Lifecycle</td><td>Engine Platform Team</td><td>src/engines/lifecycle/</td></tr>
+                    <tr><td>Engine State</td><td>Engine Platform Team</td><td>src/engines/state/</td></tr>
+                    <tr><td>Engine Composition</td><td>Engine Platform Team</td><td>src/engines/composition/</td></tr>
+                    <tr><td>Engine Dependency</td><td>Engine Platform Team</td><td>src/engines/dependency/</td></tr>
+                    <tr><td>Engine Runtime</td><td>Engine Platform Team</td><td>src/engines/runtime/</td></tr>
+                    <tr><td>Engine Integration</td><td>Engine Platform Team</td><td>src/engines/integration/</td></tr>
+                    <tr><td>Engine Runtime Graph</td><td>Engine Platform Team</td><td>src/engines/runtime-graph/</td></tr>
+                    <tr><td>Engine Runtime Orchestrator</td><td>Engine Platform Team</td><td>src/engines/runtime-orchestrator/</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="sec-05" class="section">
+            <h2><span class="section-number">05</span> Responsibilities</h2>
+            <table>
+                <thead><tr><th>Layer</th><th>Primary Responsibility</th></tr></thead>
+                <tbody>
+                    <tr><td>Foundation</td><td>Engine identity, registration, discovery, management</td></tr>
+                    <tr><td>Lifecycle</td><td>Deterministic 13-stage progression</td></tr>
+                    <tr><td>State</td><td>Operational status, health status</td></tr>
+                    <tr><td>Composition</td><td>Module references and structural organization</td></tr>
+                    <tr><td>Dependency</td><td>Engine dependency declarations, registry, manager</td></tr>
+                    <tr><td>Runtime</td><td>Runtime context, representation, registration</td></tr>
+                    <tr><td>Integration</td><td>Provider, Capability, Service, Module integration declarations</td></tr>
+                    <tr><td>Runtime Graph</td><td>Nodes, edges, graph, registry, manager</td></tr>
+                    <tr><td>Runtime Orchestrator</td><td>Context, contract, registry, manager</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="sec-06" class="section">
+            <h2><span class="section-number">06</span> Dependencies</h2>
+            <table>
+                <thead><tr><th>Dependency</th><th>Type</th><th>Purpose</th></tr></thead>
+                <tbody>
+                    <tr><td>Phase‑01 Provider Platform</td><td>Internal</td><td>Provider contracts, runtime, lifecycle, state</td></tr>
+                    <tr><td>Phase‑02 Capability Platform</td><td>Internal</td><td>Capability contracts, registry, manager, runtime</td></tr>
+                    <tr><td>Phase‑09 Service Platform</td><td>Internal</td><td>Service contracts, registry, manager, runtime</td></tr>
+                    <tr><td>Phase‑10 Module Platform</td><td>Internal</td><td>Module contracts, registry, manager, runtime</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="sec-07" class="section">
+            <h2><span class="section-number">07</span> Contracts</h2>
+            <details>
+                <summary>EngineContract</summary>
+                <div class="content">
+export interface EngineContract {
+    id: string;
+    name: string;
+    version: string;
+    enabled: boolean;
+}
+                </div>
+            </details>
+            <details>
+                <summary>EngineLifecycle</summary>
+                <div class="content">
+export interface EngineLifecycle {
+    getStage(): EngineLifecycleStage;
+}
+                </div>
+            </details>
+            <details>
+                <summary>EngineState</summary>
+                <div class="content">
+export interface EngineState {
+    operationalStatus: EngineOperationalStatus;
+    healthStatus: EngineHealthStatus;
+}
+                </div>
+            </details>
+            <details>
+                <summary>EngineModuleReference</summary>
+                <div class="content">
+export interface EngineModuleReference {
+    moduleId: string;
+    moduleName: string;
+}
+                </div>
+            </details>
+            <details>
+                <summary>EngineDependency</summary>
+                <div class="content">
+export interface EngineDependency {
+    engineId: string;
+}
+                </div>
+            </details>
+            <details>
+                <summary>EngineProviderIntegration</summary>
+                <div class="content">
+export interface EngineProviderIntegration {
+    providerId: string;
+}
+                </div>
+            </details>
+            <details>
+                <summary>EngineCapabilityIntegration</summary>
+                <div class="content">
+export interface EngineCapabilityIntegration {
+    capabilityId: string;
+}
+                </div>
+            </details>
+            <details>
+                <summary>EngineServiceIntegration</summary>
+                <div class="content">
+export interface EngineServiceIntegration {
+    serviceId: string;
+}
+                </div>
+            </details>
+            <details>
+                <summary>EngineModuleIntegration</summary>
+                <div class="content">
+export interface EngineModuleIntegration {
+    moduleId: string;
+}
+                </div>
+            </details>
+            <details>
+                <summary>RuntimeGraphNode</summary>
+                <div class="content">
+export interface RuntimeGraphNode {
+    id: string;
+    type: 'engine' | 'module' | 'service' | 'capability' | 'provider';
+}
+                </div>
+            </details>
+            <details>
+                <summary>RuntimeGraphEdge</summary>
+                <div class="content">
+export interface RuntimeGraphEdge {
+    source: string;
+    target: string;
+}
+                </div>
+            </details>
+        </section>
+
+        <section id="sec-08" class="section">
+            <h2><span class="section-number">08</span> Interfaces</h2>
+            <table>
+                <thead><tr><th>Interface</th><th>File</th><th>Purpose</th></tr></thead>
+                <tbody>
+                    <tr><td><code>EngineManager</code></td><td>src/engines/manager/engine-manager.ts</td><td>Engine orchestration</td></tr>
+                    <tr><td><code>EngineRegistry</code></td><td>src/engines/registry/engine-registry.ts</td><td>Engine storage</td></tr>
+                    <tr><td><code>EngineRuntime</code></td><td>src/engines/runtime/engine-runtime.ts</td><td>Engine execution</td></tr>
+                    <tr><td><code>EngineRuntimeOrchestrator</code></td><td>src/engines/runtime-orchestrator/engine-runtime-orchestrator.ts</td><td>Runtime coordination</td></tr>
+                    <tr><td><code>EngineLifecycleManager</code></td><td>src/engines/lifecycle/engine-lifecycle-manager.ts</td><td>Lifecycle orchestration</td></tr>
+                    <tr><td><code>EngineStateManager</code></td><td>src/engines/state/engine-state-manager.ts</td><td>State orchestration</td></tr>
+                    <tr><td><code>EngineCompositionManager</code></td><td>src/engines/composition/engine-composition-manager.ts</td><td>Composition orchestration</td></tr>
+                    <tr><td><code>EngineDependencyManager</code></td><td>src/engines/dependency/engine-dependency-manager.ts</td><td>Dependency orchestration</td></tr>
+                    <tr><td><code>EngineIntegrationManager</code></td><td>src/engines/integration/engine-integration-manager.ts</td><td>Integration orchestration</td></tr>
+                    <tr><td><code>RuntimeGraphManager</code></td><td>src/engines/runtime-graph/engine-runtime-graph-manager.ts</td><td>Graph management</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="sec-09" class="section">
+            <h2><span class="section-number">09</span> Runtime</h2>
+            <table>
+                <thead><tr><th>Runtime Component</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td>EngineRuntime</td><td>Main engine execution</td></tr>
+                    <tr><td>EngineRuntimeOrchestrator</td><td>Runtime coordination</td></tr>
+                    <tr><td>RuntimeGraphManager</td><td>Graph management</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="sec-10" class="section">
+            <h2><span class="section-number">10</span> Public API</h2>
+            <p>All exports from <code>src/engines/index.ts</code>:</p>
+            <pre>
+export * from "./contracts";
+export * from "./models";
+
+export * from "./registry";
+export * from "./manager";
+
+export * from "./lifecycle";
+export * from "./state";
+export * from "./composition";
+export * from "./dependency";
+export * from "./runtime";
+export * from "./integration";
+export * from "./runtime-graph";
+export * from "./runtime-orchestrator";
+            </pre>
+        </section>
+
+        <section id="sec-11" class="section">
+            <h2><span class="section-number">11</span> Components</h2>
+            <p><em>Phase‑11 is a pure infrastructure layer; no UI components are provided. Engines are consumed programmatically.</em></p>
+        </section>
+
+        <section id="sec-12" class="section">
+            <h2><span class="section-number">12</span> File Inventory</h2>
+            <p><strong>Total:</strong> 61 files under <code>src/engines/</code></p>
+            <details>
+                <summary>Show / Hide full file list (61 files)</summary>
+                <div class="content">
+src/engines/composition/default-engine-composition.ts
+src/engines/composition/engine-composition-manager.ts
+src/engines/composition/engine-composition-registry.ts
+src/engines/composition/engine-composition.ts
+src/engines/composition/engine-module-reference.ts
+src/engines/composition/index.ts
+src/engines/contracts/engine-contract.ts
+src/engines/contracts/index.ts
+src/engines/dependency/default-engine-dependency.ts
+src/engines/dependency/engine-dependency-manager.ts
+src/engines/dependency/engine-dependency-reference.ts
+src/engines/dependency/engine-dependency-registry.ts
+src/engines/dependency/engine-dependency.ts
+src/engines/dependency/index.ts
+src/engines/index.ts
+src/engines/integration/default-engine-integration.ts
+src/engines/integration/engine-capability-integration.ts
+src/engines/integration/engine-integration-manager.ts
+src/engines/integration/engine-integration-registry.ts
+src/engines/integration/engine-integration.ts
+src/engines/integration/engine-module-integration.ts
+src/engines/integration/engine-provider-integration.ts
+src/engines/integration/engine-service-integration.ts
+src/engines/integration/index.ts
+src/engines/lifecycle/default-engine-lifecycle.ts
+src/engines/lifecycle/engine-lifecycle-manager.ts
+src/engines/lifecycle/engine-lifecycle-registry.ts
+src/engines/lifecycle/engine-lifecycle-stage.ts
+src/engines/lifecycle/engine-lifecycle.ts
+src/engines/lifecycle/index.ts
+src/engines/manager/engine-manager.ts
+src/engines/manager/index.ts
+src/engines/models/engine.ts
+src/engines/models/index.ts
+src/engines/registry/engine-registry.ts
+src/engines/registry/index.ts
+src/engines/runtime/default-engine-runtime.ts
+src/engines/runtime/engine-runtime-context.ts
+src/engines/runtime/engine-runtime-manager.ts
+src/engines/runtime/engine-runtime-registry.ts
+src/engines/runtime/engine-runtime.ts
+src/engines/runtime/index.ts
+src/engines/runtime-graph/engine-runtime-edge.ts
+src/engines/runtime-graph/engine-runtime-graph-manager.ts
+src/engines/runtime-graph/engine-runtime-graph-registry.ts
+src/engines/runtime-graph/engine-runtime-graph.ts
+src/engines/runtime-graph/engine-runtime-node.ts
+src/engines/runtime-graph/index.ts
+src/engines/runtime-orchestrator/default-engine-runtime-orchestrator.ts
+src/engines/runtime-orchestrator/engine-runtime-orchestrator-context.ts
+src/engines/runtime-orchestrator/engine-runtime-orchestrator-manager.ts
+src/engines/runtime-orchestrator/engine-runtime-orchestrator-registry.ts
+src/engines/runtime-orchestrator/engine-runtime-orchestrator.ts
+src/engines/runtime-orchestrator/index.ts
+src/engines/state/default-engine-state.ts
+src/engines/state/engine-health-status.ts
+src/engines/state/engine-operational-status.ts
+src/engines/state/engine-state-manager.ts
+src/engines/state/engine-state-registry.ts
+src/engines/state/engine-state.ts
+src/engines/state/index.ts
+                </div>
+            </details>
+        </section>
+
+        <section id="sec-13" class="section">
+            <h2><span class="section-number">13</span> Validation</h2>
+            <table>
+                <thead><tr><th>Validation Type</th><th>Status</th></tr></thead>
+                <tbody>
+                    <tr><td>TypeScript Compilation (tsc --noEmit)</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Production Build (pnpm build)</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Repository Structure</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Architecture Compliance</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Dependency Analysis (no circular)</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Engine Foundation</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Engine Lifecycle</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Engine State</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Engine Composition</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Engine Dependency</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Engine Runtime</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Engine Integration</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Engine Runtime Graph</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Engine Runtime Orchestrator</td><td><span class="text-success">PASS</span></td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="sec-14" class="section">
+            <h2><span class="section-number">14</span> Browser Validation</h2>
+            <p>Phase‑11 is a pure infrastructure layer; no visible UI changes are introduced. Engines are ready for consumption by Domains and Experiences.</p>
+            <table>
+                <thead><tr><th>Browser</th><th>Status</th></tr></thead>
+                <tbody>
+                    <tr><td>Chromium (latest)</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Firefox (latest)</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>WebKit (latest)</td><td><span class="text-success">PASS</span></td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="sec-15" class="section">
+            <h2><span class="section-number">15</span> Repository Tree</h2>
+            <details>
+                <summary>Show / Hide tree</summary>
+                <div class="content">
+src/engines
+├── composition
+│   ├── default-engine-composition.ts
+│   ├── engine-composition-manager.ts
+│   ├── engine-composition-registry.ts
+│   ├── engine-composition.ts
+│   ├── engine-module-reference.ts
+│   └── index.ts
+├── contracts
+│   ├── engine-contract.ts
+│   └── index.ts
+├── dependency
+│   ├── default-engine-dependency.ts
+│   ├── engine-dependency-manager.ts
+│   ├── engine-dependency-reference.ts
+│   ├── engine-dependency-registry.ts
+│   ├── engine-dependency.ts
+│   └── index.ts
+├── integration
+│   ├── default-engine-integration.ts
+│   ├── engine-capability-integration.ts
+│   ├── engine-integration-manager.ts
+│   ├── engine-integration-registry.ts
+│   ├── engine-integration.ts
+│   ├── engine-module-integration.ts
+│   ├── engine-provider-integration.ts
+│   ├── engine-service-integration.ts
+│   └── index.ts
+├── lifecycle
+│   ├── default-engine-lifecycle.ts
+│   ├── engine-lifecycle-manager.ts
+│   ├── engine-lifecycle-registry.ts
+│   ├── engine-lifecycle-stage.ts
+│   ├── engine-lifecycle.ts
+│   └── index.ts
+├── manager
+│   ├── engine-manager.ts
+│   └── index.ts
+├── models
+│   ├── engine.ts
+│   └── index.ts
+├── registry
+│   ├── engine-registry.ts
+│   └── index.ts
+├── runtime
+│   ├── default-engine-runtime.ts
+│   ├── engine-runtime-context.ts
+│   ├── engine-runtime-manager.ts
+│   ├── engine-runtime-registry.ts
+│   ├── engine-runtime.ts
+│   └── index.ts
+├── runtime-graph
+│   ├── engine-runtime-edge.ts
+│   ├── engine-runtime-graph-manager.ts
+│   ├── engine-runtime-graph-registry.ts
+│   ├── engine-runtime-graph.ts
+│   ├── engine-runtime-node.ts
+│   └── index.ts
+├── runtime-orchestrator
+│   ├── default-engine-runtime-orchestrator.ts
+│   ├── engine-runtime-orchestrator-context.ts
+│   ├── engine-runtime-orchestrator-manager.ts
+│   ├── engine-runtime-orchestrator-registry.ts
+│   ├── engine-runtime-orchestrator.ts
+│   └── index.ts
+├── state
+│   ├── default-engine-state.ts
+│   ├── engine-health-status.ts
+│   ├── engine-operational-status.ts
+│   ├── engine-state-manager.ts
+│   ├── engine-state-registry.ts
+│   ├── engine-state.ts
+│   └── index.ts
+└── index.ts
+                </div>
+            </details>
+        </section>
+
+        <section id="sec-16" class="section">
+            <h2><span class="section-number">16</span> Build Output</h2>
+            <pre>
+> @corei/corei-os@1.0.0 build
+> tsc -b && vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 2374 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                     0.43 kB │ gzip:   0.29 kB
+dist/assets/index-BSSyXHgG.css    134.51 kB │ gzip:  13.40 kB
+dist/assets/index-CHQ2bGpX.js   1,028.40 kB │ gzip: 257.58 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 4.08s
+            </pre>
+        </section>
+
+        <section id="sec-17" class="section">
+            <h2><span class="section-number">17</span> Certification</h2>
+            <table>
+                <thead><tr><th>Criteria</th><th>Status</th></tr></thead>
+                <tbody>
+                    <tr><td>Architecture Review</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Repository Audit</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Integration Test</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Browser Validation</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Documentation Completeness</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Engine Platform Completeness</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Institutional Sign‑off</td><td><span class="text-success">PASS</span></td></tr>
+                </tbody>
+            </table>
+            <p><strong>Status:</strong> <span class="badge success">CERTIFIED</span></p>
+        </section>
+
+        <section id="sec-18" class="section">
+            <h2><span class="section-number">18</span> References</h2>
+            <ul>
+                <li><a href="#">DOC-11: COREI Execution Constitution</a></li>
+                <li><a href="#">DOC-10: Stage‑25 Phase‑10-11-12-13-14-15-16 Blueprint</a></li>
+                <li><a href="#">COREI_Phase11_Reference_Enhanced.html</a></li>
+                <li><a href="#">COREI_Continuity_Handover.md</a></li>
+            </ul>
+        </section>
+
+        <section id="sec-19" class="section">
+            <h2><span class="section-number">19</span> Appendix</h2>
+            <h3>A. Engine Subsystem Counts</h3>
+            <table>
+                <thead><tr><th>Subsystem</th><th>Files</th></tr></thead>
+                <tbody>
+                    <tr><td>Composition</td><td>6</td></tr>
+                    <tr><td>Contracts</td><td>2</td></tr>
+                    <tr><td>Dependency</td><td>6</td></tr>
+                    <tr><td>Integration</td><td>9</td></tr>
+                    <tr><td>Lifecycle</td><td>6</td></tr>
+                    <tr><td>Manager</td><td>2</td></tr>
+                    <tr><td>Models</td><td>2</td></tr>
+                    <tr><td>Registry</td><td>2</td></tr>
+                    <tr><td>Runtime</td><td>6</td></tr>
+                    <tr><td>Runtime Graph</td><td>6</td></tr>
+                    <tr><td>Runtime Orchestrator</td><td>6</td></tr>
+                    <tr><td>State</td><td>7</td></tr>
+                    <tr><td>Root index</td><td>1</td></tr>
+                    <tr><td><strong>Total</strong></td><td><strong>61</strong></td></tr>
+                </tbody>
+            </table>
+            <h3>B. Engine Lifecycle Stages (13)</h3>
+            <table>
+                <thead><tr><th>Stage</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td>REGISTERED</td><td>Engine registered in repository</td></tr>
+                    <tr><td>INITIALIZING</td><td>Engine initialization in progress</td></tr>
+                    <tr><td>INITIALIZED</td><td>Engine initialized and ready</td></tr>
+                    <tr><td>STARTING</td><td>Engine starting</td></tr>
+                    <tr><td>RUNNING</td><td>Engine actively executing</td></tr>
+                    <tr><td>SUSPENDING</td><td>Engine suspending</td></tr>
+                    <tr><td>SUSPENDED</td><td>Engine suspended</td></tr>
+                    <tr><td>RESUMING</td><td>Engine resuming</td></tr>
+                    <tr><td>STOPPING</td><td>Engine stopping</td></tr>
+                    <tr><td>STOPPED</td><td>Engine stopped</td></tr>
+                    <tr><td>UNLOADING</td><td>Engine unloading</td></tr>
+                    <tr><td>UNLOADED</td><td>Engine unloaded</td></tr>
+                    <tr><td>FAILED</td><td>Engine failed</td></tr>
+                </tbody>
+            </table>
+            <h3>C. Engine State Dimensions</h3>
+            <table>
+                <thead><tr><th>Dimension</th><th>Possible Values</th></tr></thead>
+                <tbody>
+                    <tr><td>Operational Status</td><td>ONLINE, OFFLINE, STARTING, STOPPING, SUSPENDED, FAILED</td></tr>
+                    <tr><td>Health Status</td><td>HEALTHY, DEGRADED, UNHEALTHY, UNKNOWN</td></tr>
+                </tbody>
+            </table>
+            <h3>D. Version History</h3>
+            <table>
+                <thead><tr><th>Version</th><th>Date</th><th>Changes</th></tr></thead>
+                <tbody>
+                    <tr><td>25.11.0</td><td>2026-08-04</td><td>Initial certification</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <div style="text-align:center;font-size:11px;color:#6E7883;border-top:1px solid #28303C;padding-top:1rem;margin-top:2rem;">
+            <p>COREI Stage‑25 Phase‑11 Reference &bull; Generated 2026-08-08 &bull; Authoritative</p>
+        </div>
+
+    </main>
+
+</body>
+</html>

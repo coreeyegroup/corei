@@ -1,0 +1,2222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COREI OP 07.07</title>
+  <style>
+  body {
+    background: #0A0D12;
+    color: #E3E7EC;
+    font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px 40px;
+  }
+  h1 {
+    font-size: 26px;
+    font-weight: 600;
+    color: #C6A46A;
+    margin: 24px 0 12px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 8px;
+  }
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #D4B88A;
+    margin: 20px 0 10px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 6px;
+  }
+  h3 {
+    font-size: 17px;
+    font-weight: 500;
+    color: #E3E7EC;
+    margin: 16px 0 8px 0;
+  }
+  h4 {
+    font-size: 15px;
+    font-weight: 500;
+    color: #C5CED9;
+    margin: 12px 0 6px 0;
+  }
+  p { margin-bottom: 8px; color: #C5CED9; }
+  ul, ol { padding-left: 24px; margin-bottom: 8px; color: #C5CED9; }
+  li { margin-bottom: 2px; }
+  code {
+    font-family: 'JetBrains Mono', 'Cascadia Code', monospace;
+    font-size: 13px;
+    background: rgba(255,255,255,0.05);
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid #28303C;
+    color: #C5CED9;
+  }
+  pre {
+    background: #18202A;
+    border: 1px solid #28303C;
+    border-radius: 6px;
+    padding: 16px 20px;
+    overflow: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 12px 0 16px 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #C5CED9;
+  }
+  pre code { background: transparent; border: none; padding: 0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 16px 0;
+    font-size: 13px;
+    color: #C5CED9;
+  }
+  th {
+    background: #18202A;
+    color: #C5CED9;
+    font-weight: 600;
+    text-align: left;
+    padding: 6px 12px;
+    border: 1px solid #28303C;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  td {
+    padding: 4px 12px;
+    border: 1px solid #28303C;
+    background: #0E1219;
+  }
+  tr:nth-child(even) td { background: #121821; }
+  blockquote {
+    border-left: 3px solid #C6A46A;
+    padding-left: 16px;
+    margin: 8px 0 12px 0;
+    color: #6E7883;
+    font-style: italic;
+  }
+  hr { border: none; border-top: 1px solid #28303C; margin: 24px 0; }
+  a { color: #8BB4F0; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  strong { color: #E3E7EC; font-weight: 600; }
+  img { max-width: 100%; border-radius: 4px; border: 1px solid #28303C; }
+  .doc-footer {
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid #28303C;
+    font-size: 12px;
+    color: #6E7883;
+    font-family: monospace;
+  }
+</style>
+</head>
+<body>
+  <div class="doc-header" style="background:#121821;border:1px solid #28303C;border-radius:8px;padding:1.2rem 1.8rem;margin-bottom:1.8rem;">
+    <div style="color:#C6A46A;font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:0.05em;">COREI · Knowledge System</div>
+    <div style="color:#6E7883;font-family:monospace;font-size:14px;margin-top:0.1rem;"></div>
+    <h1 style="font-size:28px;font-weight:600;color:#E3E7EC;margin:0.1rem 0;border-bottom:none;padding-bottom:0;">COREI OP 07.07</h1>
+    <div style="font-size:16px;color:#C5CED9;">00 · Constitutional</div>
+    <div style="display:flex;flex-wrap:wrap;gap:0.6rem 1.8rem;margin-top:0.6rem;font-size:13px;">
+      <span style="display:flex;align-items:baseline;gap:0.3rem;"><span style="color:#6E7883;text-transform:uppercase;font-size:10px;letter-spacing:0.04em;font-weight:600;">Status</span><span style="color:#E3E7EC;font-weight:500;">Approved</span></span>
+      <span style="display:flex;align-items:baseline;gap:0.3rem;"><span style="color:#6E7883;text-transform:uppercase;font-size:10px;letter-spacing:0.04em;font-weight:600;">Version</span><span style="color:#E3E7EC;font-weight:500;">1.0</span></span>
+      <span style="display:flex;align-items:baseline;gap:0.3rem;"><span style="color:#6E7883;text-transform:uppercase;font-size:10px;letter-spacing:0.04em;font-weight:600;">Classification</span><span style="color:#E3E7EC;font-weight:500;">Constitutional</span></span>
+      <span style="display:flex;align-items:baseline;gap:0.3rem;"><span style="color:#6E7883;text-transform:uppercase;font-size:10px;letter-spacing:0.04em;font-weight:600;">Owner</span><span style="color:#E3E7EC;font-weight:500;">COREI</span></span>
+      <span style="display:flex;align-items:baseline;gap:0.3rem;"><span style="color:#6E7883;text-transform:uppercase;font-size:10px;letter-spacing:0.04em;font-weight:600;">Repository</span><span style="color:#E3E7EC;font-weight:500;font-family:monospace;">knowledge/00-00/</span></span>
+    </div>
+
+  </div>
+
+
+
+  <h1>COREI TRADING OPERATIONS</h1>
+<h1>DOCUMENT ID</h1>
+<h1>COREI-OP-07.07</h1>
+<h1>DOCUMENT NAME</h1>
+<h1>TRADING OPERATIONS</h1>
+<h1>REPOSITORY FILE</h1>
+<h1>knowledge/07-operations/COREI-OP-07.07-TRADING-OPERATIONS.md</h1>
+<h1>VERSION</h1>
+<h1>1.0</h1>
+<h1>STATUS</h1>
+<h1>APPROVED</h1>
+<h1>CLASSIFICATION</h1>
+<h1>CONSTITUTIONAL</h1>
+<h1>1. PURPOSE</h1>
+<p>The COREI Trading Operations document defines the<br>
+authoritative institutional operating model for<br>
+running,<br>
+controlling,<br>
+observing,<br>
+and recovering the complete trading lifecycle.</p>
+<p>Its purpose is to ensure that trading activity<br>
+remains</p>
+<p>authorized,</p>
+<p>deterministic,</p>
+<p>risk-controlled,</p>
+<p>portfolio-aware,</p>
+<p>broker-aware,</p>
+<p>account-aware,</p>
+<p>market-aware,</p>
+<p>observable,</p>
+<p>reconcilable,</p>
+<p>recoverable,</p>
+<p>and institutionally accountable.</p>
+<p>Trading Operations SHALL preserve the complete<br>
+authority chain from market observation to final<br>
+financial state.</p>
+<h1>2. SCOPE</h1>
+<p>This document governs operational trading across</p>
+<p>Forex,</p>
+<p>Commodities,</p>
+<p>Crypto,</p>
+<p>Equities,</p>
+<p>Indices,</p>
+<p>Derivatives,</p>
+<p>Options,</p>
+<p>Futures,</p>
+<p>and future approved asset classes.</p>
+<p>It governs</p>
+<p>market intelligence,</p>
+<p>signal intelligence,</p>
+<p>decision intelligence,</p>
+<p>risk intelligence,</p>
+<p>portfolio intelligence,</p>
+<p>execution intelligence,</p>
+<p>position intelligence,</p>
+<p>performance intelligence,</p>
+<p>system intelligence,</p>
+<p>accounts,</p>
+<p>brokers,</p>
+<p>strategies,</p>
+<p>portfolios,</p>
+<p>assets,</p>
+<p>markets,</p>
+<p>regions,</p>
+<p>currencies,</p>
+<p>custodians,</p>
+<p>exchanges,</p>
+<p>jurisdictions,</p>
+<p>operators,</p>
+<p>automation,</p>
+<p>and artificial intelligence systems.</p>
+<h1>3. AUTHORITATIVE TRADING DOMAIN CHAIN</h1>
+<p>COREI Trading Operations SHALL preserve the<br>
+authoritative domain chain</p>
+<p>MARKET INTELLIGENCE</p>
+<p>↓</p>
+<p>SIGNAL INTELLIGENCE</p>
+<p>↓</p>
+<p>DECISION INTELLIGENCE</p>
+<p>↓</p>
+<p>RISK INTELLIGENCE</p>
+<p>↓</p>
+<p>PORTFOLIO INTELLIGENCE</p>
+<p>↓</p>
+<p>EXECUTION INTELLIGENCE</p>
+<p>↓</p>
+<p>POSITION INTELLIGENCE</p>
+<p>↓</p>
+<p>PERFORMANCE INTELLIGENCE</p>
+<p>↓</p>
+<p>SYSTEM INTELLIGENCE</p>
+<p>No downstream domain SHALL silently absorb the<br>
+authority of an upstream or adjacent domain.</p>
+<h1>4. TRADING OPERATIONS PRINCIPLE</h1>
+<p>Trading Operations SHALL operate according to the<br>
+chain</p>
+<p>Observe</p>
+<p>↓</p>
+<p>Validate</p>
+<p>↓</p>
+<p>Understand</p>
+<p>↓</p>
+<p>Generate Signal</p>
+<p>↓</p>
+<p>Form Decision</p>
+<p>↓</p>
+<p>Evaluate Risk</p>
+<p>↓</p>
+<p>Evaluate Portfolio</p>
+<p>↓</p>
+<p>Authorize Execution</p>
+<p>↓</p>
+<p>Submit Order</p>
+<p>↓</p>
+<p>Observe Broker State</p>
+<p>↓</p>
+<p>Establish Position State</p>
+<p>↓</p>
+<p>Measure Performance</p>
+<p>↓</p>
+<p>Reconcile</p>
+<p>↓</p>
+<p>Learn</p>
+<p>Every consequential transition SHALL remain<br>
+traceable.</p>
+<h1>5. TRADING AUTHORITY</h1>
+<p>Trading authority SHALL be explicit.</p>
+<p>Authority SHALL define who or what may</p>
+<p>observe markets,</p>
+<p>generate signals,</p>
+<p>form decisions,</p>
+<p>approve risk,</p>
+<p>allocate capital,</p>
+<p>authorize execution,</p>
+<p>submit orders,</p>
+<p>cancel orders,</p>
+<p>modify orders,</p>
+<p>close positions,</p>
+<p>suspend trading,</p>
+<p>and resume trading.</p>
+<p>Technical capability SHALL NOT automatically create<br>
+trading authority.</p>
+<h1>6. TRADING OWNERSHIP</h1>
+<p>Every production trading capability SHALL have<br>
+explicit ownership.</p>
+<p>Ownership SHALL cover</p>
+<p>strategy behaviour,</p>
+<p>risk,</p>
+<p>portfolio impact,</p>
+<p>execution,</p>
+<p>broker connectivity,</p>
+<p>operational monitoring,</p>
+<p>incident response,</p>
+<p>reconciliation,</p>
+<p>and recovery.</p>
+<p>Shared trading capability SHALL not create<br>
+ambiguous responsibility.</p>
+<h1>7. TRADING MODES</h1>
+<p>Trading modes SHALL be explicit.</p>
+<p>Modes MAY include</p>
+<p>Research</p>
+<p>Backtest</p>
+<p>Simulation</p>
+<p>Paper</p>
+<p>Shadow</p>
+<p>Restricted Live</p>
+<p>Live</p>
+<p>Suspended</p>
+<p>Emergency Close-Only</p>
+<p>The active mode SHALL be observable.</p>
+<p>A system SHALL NOT silently transition between<br>
+trading modes.</p>
+<h1>8. ENVIRONMENT SEPARATION</h1>
+<p>Research,<br>
+backtest,<br>
+simulation,<br>
+paper,<br>
+and live trading environments SHALL be separated<br>
+according to institutional risk.</p>
+<p>Separation MAY include</p>
+<p>accounts,</p>
+<p>credentials,</p>
+<p>brokers,</p>
+<p>data,</p>
+<p>execution paths,</p>
+<p>infrastructure,</p>
+<p>configuration,</p>
+<p>and authority.</p>
+<p>Test activity SHALL NOT reach live execution<br>
+through accidental configuration.</p>
+<h1>9. LIVE TRADING AUTHORITY</h1>
+<p>Live trading SHALL require explicit production<br>
+authority.</p>
+<p>Live authority SHALL identify</p>
+<p>approved strategies,</p>
+<p>approved accounts,</p>
+<p>approved brokers,</p>
+<p>approved portfolios,</p>
+<p>approved instruments,</p>
+<p>approved markets,</p>
+<p>approved limits,</p>
+<p>and approved execution modes.</p>
+<p>Absence of explicit live authority SHALL mean no<br>
+live trading authority.</p>
+<h1>10. MULTI-ACCOUNT OPERATIONS</h1>
+<p>COREI SHALL support explicit multi-account trading<br>
+operations.</p>
+<p>Every trading action SHALL preserve account<br>
+identity.</p>
+<p>Account identity SHALL remain traceable through</p>
+<p>decision,</p>
+<p>risk,</p>
+<p>portfolio,</p>
+<p>order,</p>
+<p>execution,</p>
+<p>position,</p>
+<p>and performance state.</p>
+<p>Cross-account ambiguity is prohibited.</p>
+<h1>11. MULTI-BROKER OPERATIONS</h1>
+<p>COREI SHALL support explicit multi-broker<br>
+operations.</p>
+<p>Broker selection SHALL preserve</p>
+<p>broker identity,</p>
+<p>account identity,</p>
+<p>capability,</p>
+<p>instrument availability,</p>
+<p>execution policy,</p>
+<p>risk,</p>
+<p>and operational state.</p>
+<p>Broker abstraction SHALL NOT erase broker-specific<br>
+execution reality.</p>
+<h1>12. MULTI-STRATEGY OPERATIONS</h1>
+<p>COREI SHALL support explicit multi-strategy<br>
+operations.</p>
+<p>Every consequential trading action SHALL preserve<br>
+strategy identity.</p>
+<p>Strategy interactions SHALL consider</p>
+<p>capital competition,</p>
+<p>position overlap,</p>
+<p>risk aggregation,</p>
+<p>execution interaction,</p>
+<p>and performance attribution.</p>
+<h1>13. MULTI-PORTFOLIO OPERATIONS</h1>
+<p>COREI SHALL support explicit multi-portfolio<br>
+operations.</p>
+<p>Portfolio identity SHALL remain preserved across</p>
+<p>capital,</p>
+<p>allocation,</p>
+<p>risk,</p>
+<p>orders,</p>
+<p>positions,</p>
+<p>and performance.</p>
+<p>Portfolio boundaries SHALL not be inferred from<br>
+strategy identity alone.</p>
+<h1>14. MULTI-ASSET OPERATIONS</h1>
+<p>COREI SHALL support multiple asset classes while<br>
+preserving asset-specific behaviour.</p>
+<p>Operations SHALL account for differences in</p>
+<p>market hours,</p>
+<p>liquidity,</p>
+<p>pricing,</p>
+<p>contract structure,</p>
+<p>settlement,</p>
+<p>margin,</p>
+<p>leverage,</p>
+<p>and execution.</p>
+<p>Asset abstraction SHALL not erase market reality.</p>
+<h1>15. MULTI-REGION OPERATIONS</h1>
+<p>Trading Operations SHALL support multiple regions.</p>
+<p>Regional context MAY affect</p>
+<p>market hours,</p>
+<p>data sources,</p>
+<p>brokers,</p>
+<p>latency,</p>
+<p>regulation,</p>
+<p>currency,</p>
+<p>and operational support.</p>
+<p>Region identity SHALL remain explicit where<br>
+relevant.</p>
+<h1>16. MULTI-CURRENCY OPERATIONS</h1>
+<p>Trading Operations SHALL preserve explicit currency<br>
+context.</p>
+<p>Currency MAY apply to</p>
+<p>account,</p>
+<p>instrument,</p>
+<p>margin,</p>
+<p>settlement,</p>
+<p>fees,</p>
+<p>PnL,</p>
+<p>valuation,</p>
+<p>and reporting.</p>
+<p>Currency conversion SHALL preserve</p>
+<p>rate source,</p>
+<p>time,</p>
+<p>and methodology</p>
+<p>where consequential.</p>
+<h1>17. MULTI-MARKET OPERATIONS</h1>
+<p>COREI SHALL support multiple markets while<br>
+preserving market-specific</p>
+<p>sessions,</p>
+<p>liquidity,</p>
+<p>microstructure,</p>
+<p>execution,</p>
+<p>and operational behaviour.</p>
+<p>Market abstraction SHALL not erase venue reality.</p>
+<h1>18. MULTI-EXCHANGE OPERATIONS</h1>
+<p>Exchange identity SHALL remain explicit where<br>
+applicable.</p>
+<p>Exchange-specific</p>
+<p>symbols,</p>
+<p>sessions,</p>
+<p>order types,</p>
+<p>fees,</p>
+<p>limits,</p>
+<p>and market structure</p>
+<p>SHALL be preserved.</p>
+<h1>19. MULTI-CUSTODIAN OPERATIONS</h1>
+<p>Where custody is relevant,<br>
+custodian identity SHALL remain explicit.</p>
+<p>Custody state SHALL be reconciled with internal<br>
+financial state according to institutional<br>
+requirements.</p>
+<h1>20. MULTI-JURISDICTION OPERATIONS</h1>
+<p>Trading Operations SHALL preserve jurisdictional<br>
+context where applicable.</p>
+<p>Jurisdiction MAY affect</p>
+<p>market access,</p>
+<p>broker access,</p>
+<p>instrument availability,</p>
+<p>reporting,</p>
+<p>data handling,</p>
+<p>and operational authority.</p>
+<p>Jurisdictional requirements SHALL not be hidden by<br>
+technical abstraction.</p>
+<h1>21. 24X7 OPERATIONS</h1>
+<p>COREI SHALL support continuous institutional<br>
+operation where required.</p>
+<p>24x7 operation SHALL account for</p>
+<p>market-specific sessions,</p>
+<p>continuous crypto markets,</p>
+<p>provider maintenance,</p>
+<p>broker maintenance,</p>
+<p>handover,</p>
+<p>incident response,</p>
+<p>and infrastructure continuity.</p>
+<p>Continuous system availability SHALL not imply<br>
+continuous authority to trade every market.</p>
+<h1>22. MARKET INTELLIGENCE OPERATIONS</h1>
+<p>Market Intelligence Operations SHALL establish the<br>
+trusted market state used by downstream trading<br>
+domains.</p>
+<p>It SHALL preserve</p>
+<p>market data acquisition,</p>
+<p>market health,</p>
+<p>technical indicators,</p>
+<p>market structure,</p>
+<p>trend,</p>
+<p>volatility,</p>
+<p>momentum,</p>
+<p>regime,</p>
+<p>and future approved intelligence.</p>
+<p>Market Intelligence SHALL NOT create execution<br>
+authority.</p>
+<h1>23. MARKET DATA READINESS</h1>
+<p>Trading decisions SHALL use market data that meets<br>
+required readiness criteria.</p>
+<p>Readiness MAY include</p>
+<p>availability,</p>
+<p>completeness,</p>
+<p>continuity,</p>
+<p>freshness,</p>
+<p>quality,</p>
+<p>instrument identity,</p>
+<p>and source validity.</p>
+<p>Unready market data SHALL not silently enter<br>
+consequential trading decisions.</p>
+<h1>24. MARKET HEALTH</h1>
+<p>Market health SHALL be explicit.</p>
+<p>Health MAY consider</p>
+<p>data completeness,</p>
+<p>continuity,</p>
+<p>freshness,</p>
+<p>integrity,</p>
+<p>provider state,</p>
+<p>and market state.</p>
+<p>Market health SHALL be available to downstream<br>
+domains where required.</p>
+<h1>25. MARKET SESSION STATE</h1>
+<p>Trading Operations SHALL understand whether the<br>
+relevant market is</p>
+<p>Pre-Open</p>
+<p>Open</p>
+<p>Auction</p>
+<p>Halted</p>
+<p>Closed</p>
+<p>Maintenance</p>
+<p>or another market-specific state.</p>
+<p>Order authority SHALL respect market state.</p>
+<h1>26. MARKET REGIME</h1>
+<p>Where strategy logic depends upon market regime,<br>
+regime state SHALL be</p>
+<p>explicit,</p>
+<p>versioned,</p>
+<p>time-bounded,</p>
+<p>and traceable.</p>
+<p>Regime classification SHALL not silently rewrite<br>
+historical decision context.</p>
+<h1>27. SIGNAL INTELLIGENCE OPERATIONS</h1>
+<p>Signal Intelligence SHALL transform approved market<br>
+and contextual intelligence into explicit signals.</p>
+<p>Signals SHALL preserve</p>
+<p>signal identity,</p>
+<p>strategy,</p>
+<p>instrument,</p>
+<p>time,</p>
+<p>direction,</p>
+<p>strength or confidence where applicable,</p>
+<p>inputs,</p>
+<p>logic or model version,</p>
+<p>and validity.</p>
+<p>Signals SHALL NOT create execution authority.</p>
+<h1>28. SIGNAL STATE</h1>
+<p>Signal state MAY include</p>
+<p>Generated</p>
+<p>Validated</p>
+<p>Active</p>
+<p>Weakening</p>
+<p>Expired</p>
+<p>Invalidated</p>
+<p>Rejected</p>
+<p>Consumed</p>
+<p>Signal lifecycle SHALL be explicit where required.</p>
+<h1>29. SIGNAL VALIDITY</h1>
+<p>Signals SHALL define validity conditions.</p>
+<p>Validity MAY depend upon</p>
+<p>time,</p>
+<p>price,</p>
+<p>market state,</p>
+<p>regime,</p>
+<p>data health,</p>
+<p>or strategy context.</p>
+<p>Expired signals SHALL not silently remain<br>
+actionable.</p>
+<h1>30. DECISION INTELLIGENCE OPERATIONS</h1>
+<p>Decision Intelligence SHALL determine whether an<br>
+approved signal or market condition should become a<br>
+candidate institutional action.</p>
+<p>Decision state SHALL preserve</p>
+<p>decision identity,</p>
+<p>strategy,</p>
+<p>instrument,</p>
+<p>signal context,</p>
+<p>market context,</p>
+<p>time,</p>
+<p>direction,</p>
+<p>intended action,</p>
+<p>and rationale or decision evidence</p>
+<p>where required.</p>
+<p>Decision authority SHALL remain distinct from<br>
+execution authority.</p>
+<h1>31. DECISION DETERMINISM</h1>
+<p>Production decision logic SHALL be deterministic<br>
+where architecture requires deterministic<br>
+behaviour.</p>
+<p>Equivalent authoritative input and equivalent<br>
+versioned configuration SHOULD produce equivalent<br>
+decision outcomes.</p>
+<p>Probabilistic components SHALL be explicitly<br>
+bounded.</p>
+<h1>32. AI-ASSISTED DECISIONS</h1>
+<p>Artificial intelligence MAY support analysis,<br>
+classification,<br>
+or decision intelligence.</p>
+<p>AI output SHALL NOT independently bypass</p>
+<p>data validation,</p>
+<p>strategy rules,</p>
+<p>risk controls,</p>
+<p>portfolio controls,</p>
+<p>execution controls,</p>
+<p>or institutional authority.</p>
+<p>Probabilistic intelligence SHALL remain bounded by<br>
+deterministic control.</p>
+<h1>33. RISK INTELLIGENCE OPERATIONS</h1>
+<p>Risk Intelligence SHALL evaluate whether a<br>
+candidate trading action is institutionally<br>
+permissible.</p>
+<p>Risk evaluation SHALL consider applicable</p>
+<p>account,</p>
+<p>broker,</p>
+<p>strategy,</p>
+<p>portfolio,</p>
+<p>instrument,</p>
+<p>asset,</p>
+<p>market,</p>
+<p>currency,</p>
+<p>region,</p>
+<p>and aggregate exposure.</p>
+<p>Risk authority SHALL precede execution authority.</p>
+<h1>34. PRE-TRADE RISK</h1>
+<p>Every consequential live order SHALL pass required<br>
+pre-trade risk controls.</p>
+<p>Controls MAY include</p>
+<p>position limits,</p>
+<p>exposure limits,</p>
+<p>leverage limits,</p>
+<p>margin limits,</p>
+<p>loss limits,</p>
+<p>drawdown limits,</p>
+<p>concentration limits,</p>
+<p>liquidity constraints,</p>
+<p>and market-state constraints.</p>
+<p>Failed mandatory risk controls SHALL block<br>
+execution.</p>
+<h1>35. RISK LIMIT IDENTITY</h1>
+<p>Every material risk limit SHALL have</p>
+<p>identity,</p>
+<p>scope,</p>
+<p>value,</p>
+<p>unit,</p>
+<p>owner,</p>
+<p>authority,</p>
+<p>effective time,</p>
+<p>and version</p>
+<p>where required.</p>
+<p>Unknown active limits are prohibited.</p>
+<h1>36. RISK AGGREGATION</h1>
+<p>Risk SHALL be aggregated across relevant</p>
+<p>positions,</p>
+<p>orders,</p>
+<p>strategies,</p>
+<p>portfolios,</p>
+<p>accounts,</p>
+<p>brokers,</p>
+<p>assets,</p>
+<p>currencies,</p>
+<p>markets,</p>
+<p>and regions.</p>
+<p>Local approval SHALL not hide unacceptable<br>
+aggregate risk.</p>
+<h1>37. RISK REJECTION</h1>
+<p>Risk rejection SHALL preserve</p>
+<p>decision identity,</p>
+<p>risk rule,</p>
+<p>limit,</p>
+<p>observed value,</p>
+<p>reason,</p>
+<p>time,</p>
+<p>and authority</p>
+<p>where required.</p>
+<p>Rejected actions SHALL not silently re-enter<br>
+execution.</p>
+<h1>38. RISK OVERRIDE</h1>
+<p>Risk override SHALL be exceptional.</p>
+<p>Any permitted override SHALL be</p>
+<p>authorized,</p>
+<p>bounded,</p>
+<p>time-limited where possible,</p>
+<p>attributable,</p>
+<p>observable,</p>
+<p>and audited.</p>
+<p>Automation SHALL not silently override mandatory<br>
+risk controls.</p>
+<h1>39. PORTFOLIO INTELLIGENCE OPERATIONS</h1>
+<p>Portfolio Intelligence SHALL evaluate candidate<br>
+actions within portfolio context.</p>
+<p>Portfolio evaluation MAY consider</p>
+<p>capital,</p>
+<p>allocation,</p>
+<p>existing positions,</p>
+<p>correlation,</p>
+<p>concentration,</p>
+<p>currency,</p>
+<p>liquidity,</p>
+<p>and strategic mandate.</p>
+<p>Portfolio approval SHALL remain explicit.</p>
+<h1>40. CAPITAL AUTHORITY</h1>
+<p>Capital allocation SHALL be explicit.</p>
+<p>Capital authority SHALL define</p>
+<p>available capital,</p>
+<p>reserved capital,</p>
+<p>allocated capital,</p>
+<p>utilized capital,</p>
+<p>and unavailable capital</p>
+<p>where applicable.</p>
+<p>A strategy SHALL NOT assume unlimited capital.</p>
+<h1>41. CAPITAL PARTITIONING</h1>
+<p>Capital MAY be partitioned by</p>
+<p>account,</p>
+<p>portfolio,</p>
+<p>strategy,</p>
+<p>asset,</p>
+<p>market,</p>
+<p>region,</p>
+<p>or risk mandate.</p>
+<p>Partition boundaries SHALL be explicit and<br>
+observable.</p>
+<h1>42. PORTFOLIO CONFLICT</h1>
+<p>Portfolio Operations SHALL detect conflicts such as</p>
+<p>opposing strategy intent,</p>
+<p>duplicate exposure,</p>
+<p>concentration,</p>
+<p>capital contention,</p>
+<p>or portfolio mandate violation.</p>
+<p>Conflict resolution SHALL follow explicit policy.</p>
+<h1>43. EXECUTION INTELLIGENCE OPERATIONS</h1>
+<p>Execution Intelligence SHALL transform approved<br>
+trading intent into controlled executable action.</p>
+<p>Execution SHALL preserve</p>
+<p>decision identity,</p>
+<p>risk approval,</p>
+<p>portfolio approval,</p>
+<p>account,</p>
+<p>broker,</p>
+<p>instrument,</p>
+<p>side,</p>
+<p>quantity,</p>
+<p>order type,</p>
+<p>price instructions,</p>
+<p>time-in-force,</p>
+<p>and execution policy.</p>
+<p>Execution SHALL not recreate upstream authority.</p>
+<h1>44. EXECUTION AUTHORIZATION</h1>
+<p>An order SHALL be executable only when required<br>
+authorization exists.</p>
+<p>Authorization SHALL be bound to the approved</p>
+<p>decision,</p>
+<p>risk state,</p>
+<p>portfolio state,</p>
+<p>account,</p>
+<p>broker,</p>
+<p>instrument,</p>
+<p>quantity,</p>
+<p>and validity window</p>
+<p>where required.</p>
+<p>Material deviation SHALL require re-evaluation.</p>
+<h1>45. ORDER IDENTITY</h1>
+<p>Every order SHALL have unique institutional<br>
+identity.</p>
+<p>Order identity SHALL support correlation across</p>
+<p>internal intent,</p>
+<p>execution service,</p>
+<p>broker request,</p>
+<p>broker acknowledgement,</p>
+<p>execution,</p>
+<p>position,</p>
+<p>and reconciliation.</p>
+<h1>46. ORDER LIFECYCLE</h1>
+<p>Order lifecycle MAY include</p>
+<p>Created</p>
+<p>Validated</p>
+<p>Risk Approved</p>
+<p>Portfolio Approved</p>
+<p>Execution Authorized</p>
+<p>Submitted</p>
+<p>Acknowledged</p>
+<p>Partially Filled</p>
+<p>Filled</p>
+<p>Cancel Pending</p>
+<p>Cancelled</p>
+<p>Rejected</p>
+<p>Expired</p>
+<p>Failed</p>
+<p>Unknown</p>
+<p>State transitions SHALL be explicit.</p>
+<h1>47. ORDER STATE AUTHORITY</h1>
+<p>Order state authority SHALL distinguish</p>
+<p>internal requested state,</p>
+<p>internal accepted state,</p>
+<p>broker acknowledged state,</p>
+<p>and broker execution state.</p>
+<p>Internal submission SHALL NOT be interpreted as<br>
+broker acceptance.</p>
+<h1>48. IDEMPOTENT ORDER SUBMISSION</h1>
+<p>Execution systems SHALL prevent uncontrolled<br>
+duplicate order submission.</p>
+<p>Order submission SHALL use</p>
+<p>stable identity,</p>
+<p>idempotency,</p>
+<p>deduplication,</p>
+<p>or equivalent controls</p>
+<p>where supported.</p>
+<p>Retry SHALL not create unintended duplicate<br>
+financial exposure.</p>
+<h1>49. ORDER RETRY</h1>
+<p>Order retry SHALL be controlled.</p>
+<p>Before retry,<br>
+the system SHALL determine whether the previous<br>
+attempt</p>
+<p>failed before submission,</p>
+<p>may have reached the broker,</p>
+<p>was acknowledged,</p>
+<p>or has unknown state.</p>
+<p>Unknown submission state SHALL not trigger blind<br>
+retry.</p>
+<h1>50. UNKNOWN ORDER STATE</h1>
+<p>Unknown order state is a critical trading<br>
+condition.</p>
+<p>When order state cannot be determined,<br>
+COREI SHALL</p>
+<p>stop unsafe automated assumptions,</p>
+<p>query authoritative broker state,</p>
+<p>reconcile,</p>
+<p>and escalate where required.</p>
+<p>Unknown SHALL remain explicit.</p>
+<h1>51. BROKER CONNECTIVITY OPERATIONS</h1>
+<p>Broker connectivity SHALL preserve</p>
+<p>broker identity,</p>
+<p>account identity,</p>
+<p>authentication,</p>
+<p>session state,</p>
+<p>market access,</p>
+<p>order access,</p>
+<p>rate limits,</p>
+<p>latency,</p>
+<p>and recovery.</p>
+<p>Connected SHALL NOT automatically mean execution<br>
+ready.</p>
+<h1>52. BROKER READINESS</h1>
+<p>Broker readiness SHALL consider</p>
+<p>authentication,</p>
+<p>session validity,</p>
+<p>account state,</p>
+<p>market access,</p>
+<p>instrument availability,</p>
+<p>order capability,</p>
+<p>and operational health.</p>
+<p>Unready broker connections SHALL not receive normal<br>
+orders.</p>
+<h1>53. BROKER ABSTRACTION</h1>
+<p>COREI MAY provide normalized broker interfaces.</p>
+<p>Normalization SHALL preserve broker-specific</p>
+<p>capabilities,</p>
+<p>constraints,</p>
+<p>order semantics,</p>
+<p>execution behaviour,</p>
+<p>fees,</p>
+<p>and failure modes.</p>
+<p>Abstraction SHALL not erase broker reality.</p>
+<h1>54. BROKER ROUTING</h1>
+<p>Where multiple brokers are available,<br>
+routing SHALL follow explicit policy.</p>
+<p>Routing MAY consider</p>
+<p>account,</p>
+<p>instrument,</p>
+<p>market,</p>
+<p>liquidity,</p>
+<p>cost,</p>
+<p>latency,</p>
+<p>capacity,</p>
+<p>risk,</p>
+<p>and broker health.</p>
+<p>Routing SHALL be traceable.</p>
+<h1>55. BROKER RATE LIMITS</h1>
+<p>Broker rate limits SHALL be understood and<br>
+controlled.</p>
+<p>Execution systems SHALL avoid uncontrolled request<br>
+bursts.</p>
+<p>Rate-limit handling SHALL preserve order safety.</p>
+<h1>56. EXECUTION LATENCY</h1>
+<p>Execution latency SHALL be measured where relevant.</p>
+<p>Latency MAY include</p>
+<p>decision-to-authorization,</p>
+<p>authorization-to-submit,</p>
+<p>submit-to-acknowledgement,</p>
+<p>and acknowledgement-to-fill.</p>
+<p>Latency SHALL be interpreted according to strategy<br>
+requirements.</p>
+<h1>57. SLIPPAGE</h1>
+<p>Execution Operations SHALL measure slippage where<br>
+applicable.</p>
+<p>Slippage SHALL preserve</p>
+<p>reference price,</p>
+<p>execution price,</p>
+<p>time,</p>
+<p>quantity,</p>
+<p>market context,</p>
+<p>and methodology.</p>
+<p>Unexpected slippage SHALL be investigated.</p>
+<h1>58. PARTIAL FILLS</h1>
+<p>Partial fills SHALL be explicitly handled.</p>
+<p>The system SHALL preserve</p>
+<p>filled quantity,</p>
+<p>remaining quantity,</p>
+<p>average price,</p>
+<p>order state,</p>
+<p>and resulting exposure.</p>
+<p>Partial execution SHALL not be treated as full<br>
+execution.</p>
+<h1>59. ORDER REJECTION</h1>
+<p>Broker order rejection SHALL preserve</p>
+<p>order identity,</p>
+<p>broker,</p>
+<p>account,</p>
+<p>reason,</p>
+<p>time,</p>
+<p>and resulting state.</p>
+<p>Repeated rejection patterns SHALL be operationally<br>
+visible.</p>
+<h1>60. ORDER CANCELLATION</h1>
+<p>Cancellation SHALL preserve</p>
+<p>order identity,</p>
+<p>requested time,</p>
+<p>broker acknowledgement,</p>
+<p>filled quantity,</p>
+<p>remaining quantity,</p>
+<p>and final state.</p>
+<p>Cancel request SHALL NOT be interpreted as<br>
+cancelled state until authoritative confirmation.</p>
+<h1>61. ORDER MODIFICATION</h1>
+<p>Order modification SHALL respect broker semantics.</p>
+<p>Modification MAY require</p>
+<p>replace,</p>
+<p>cancel-and-replace,</p>
+<p>or native amendment.</p>
+<p>The resulting order identity and exposure SHALL<br>
+remain traceable.</p>
+<h1>62. EXECUTION RECONCILIATION</h1>
+<p>Internal execution state SHALL be reconciled with<br>
+authoritative broker state.</p>
+<p>Reconciliation SHALL include where applicable</p>
+<p>orders,</p>
+<p>executions,</p>
+<p>fills,</p>
+<p>fees,</p>
+<p>and status.</p>
+<p>Unknown differences SHALL remain visible.</p>
+<h1>63. POSITION INTELLIGENCE OPERATIONS</h1>
+<p>Position Intelligence SHALL establish trusted<br>
+position state after execution.</p>
+<p>Position state SHALL preserve</p>
+<p>account,</p>
+<p>broker,</p>
+<p>strategy,</p>
+<p>portfolio,</p>
+<p>instrument,</p>
+<p>quantity,</p>
+<p>direction,</p>
+<p>cost basis,</p>
+<p>valuation,</p>
+<p>and lifecycle.</p>
+<p>Position state SHALL be reconciled.</p>
+<h1>64. POSITION AUTHORITY</h1>
+<p>Position authority SHALL distinguish</p>
+<p>internal calculated position,</p>
+<p>broker-reported position,</p>
+<p>custodian position,</p>
+<p>and reconciled institutional position</p>
+<p>where applicable.</p>
+<p>Conflicting authorities SHALL remain explicit.</p>
+<h1>65. POSITION LIFECYCLE</h1>
+<p>Position lifecycle MAY include</p>
+<p>Pending</p>
+<p>Opening</p>
+<p>Open</p>
+<p>Increasing</p>
+<p>Reducing</p>
+<p>Closing</p>
+<p>Closed</p>
+<p>Reconciliating</p>
+<p>Disputed</p>
+<p>Unknown</p>
+<p>State transitions SHALL be explicit.</p>
+<h1>66. POSITION RECONCILIATION</h1>
+<p>Positions SHALL be reconciled against external<br>
+authority according to criticality.</p>
+<p>Reconciliation SHALL identify</p>
+<p>quantity differences,</p>
+<p>price differences,</p>
+<p>fee differences,</p>
+<p>currency differences,</p>
+<p>and missing executions.</p>
+<p>Unknown financial discrepancy SHALL be escalated.</p>
+<h1>67. BALANCE AND MARGIN RECONCILIATION</h1>
+<p>Where applicable,<br>
+Trading Operations SHALL reconcile</p>
+<p>cash,</p>
+<p>equity,</p>
+<p>margin,</p>
+<p>available margin,</p>
+<p>collateral,</p>
+<p>and account balance.</p>
+<p>Internal calculations SHALL not silently override<br>
+broker or custodian authority.</p>
+<h1>68. PERFORMANCE INTELLIGENCE OPERATIONS</h1>
+<p>Performance Intelligence SHALL measure the outcomes<br>
+of trading activity.</p>
+<p>Performance SHALL preserve</p>
+<p>account,</p>
+<p>strategy,</p>
+<p>portfolio,</p>
+<p>instrument,</p>
+<p>period,</p>
+<p>currency,</p>
+<p>valuation basis,</p>
+<p>and methodology</p>
+<p>where applicable.</p>
+<h1>69. PNL OPERATIONS</h1>
+<p>PnL SHALL distinguish where applicable</p>
+<p>realized PnL,</p>
+<p>unrealized PnL,</p>
+<p>gross PnL,</p>
+<p>net PnL,</p>
+<p>fees,</p>
+<p>funding,</p>
+<p>financing,</p>
+<p>and currency effects.</p>
+<p>PnL methodology SHALL be explicit.</p>
+<h1>70. PERFORMANCE ATTRIBUTION</h1>
+<p>Performance SHOULD be attributable to relevant</p>
+<p>strategy,</p>
+<p>portfolio,</p>
+<p>account,</p>
+<p>broker,</p>
+<p>instrument,</p>
+<p>asset,</p>
+<p>market,</p>
+<p>and time period.</p>
+<p>Attribution SHALL support institutional learning.</p>
+<h1>71. SYSTEM INTELLIGENCE OPERATIONS</h1>
+<p>System Intelligence SHALL observe the operational<br>
+condition of the trading system itself.</p>
+<p>It SHALL consider</p>
+<p>data health,</p>
+<p>service health,</p>
+<p>infrastructure health,</p>
+<p>broker health,</p>
+<p>risk state,</p>
+<p>execution state,</p>
+<p>position reconciliation,</p>
+<p>and active incidents.</p>
+<p>System Intelligence SHALL support safe trading<br>
+control.</p>
+<h1>72. TRADING SYSTEM HEALTH</h1>
+<p>Trading system health SHALL reflect end-to-end<br>
+trading capability.</p>
+<p>A healthy system SHALL require more than</p>
+<p>running processes,</p>
+<p>reachable services,</p>
+<p>or available infrastructure.</p>
+<p>Health SHALL consider whether the complete<br>
+authorized trading chain can operate safely.</p>
+<h1>73. TRADING READINESS</h1>
+<p>Trading readiness SHALL determine whether the<br>
+platform may safely perform intended trading<br>
+activity.</p>
+<p>Readiness MAY require</p>
+<p>market data ready,</p>
+<p>strategy ready,</p>
+<p>risk ready,</p>
+<p>portfolio ready,</p>
+<p>execution ready,</p>
+<p>broker ready,</p>
+<p>position state reconciled,</p>
+<p>security ready,</p>
+<p>and infrastructure ready.</p>
+<p>Failure of a mandatory dependency SHALL block or<br>
+degrade trading according to policy.</p>
+<h1>74. TRADING HEALTH STATE</h1>
+<p>Trading Operations SHOULD expose explicit<br>
+operational state.</p>
+<p>States MAY include</p>
+<p>Ready</p>
+<p>Active</p>
+<p>Degraded</p>
+<p>Restricted</p>
+<p>Close-Only</p>
+<p>Suspended</p>
+<p>Recovering</p>
+<p>Unavailable</p>
+<p>Unknown</p>
+<p>State SHALL be visible to authorized operators.</p>
+<h1>75. TRADING CONTROL PLANE</h1>
+<p>Trading Operations SHALL maintain controlled<br>
+operational actions.</p>
+<p>Actions MAY include</p>
+<p>Enable Strategy</p>
+<p>Disable Strategy</p>
+<p>Enable Account</p>
+<p>Disable Account</p>
+<p>Enable Broker</p>
+<p>Disable Broker</p>
+<p>Suspend New Orders</p>
+<p>Cancel Open Orders</p>
+<p>Close Positions</p>
+<p>Enter Close-Only Mode</p>
+<p>Resume Trading</p>
+<p>Emergency Stop</p>
+<p>Control actions SHALL be authorized and auditable.</p>
+<h1>76. STRATEGY ENABLEMENT</h1>
+<p>A production strategy SHALL be explicitly enabled.</p>
+<p>Enablement SHALL define</p>
+<p>strategy version,</p>
+<p>accounts,</p>
+<p>portfolios,</p>
+<p>instruments,</p>
+<p>markets,</p>
+<p>limits,</p>
+<p>mode,</p>
+<p>and effective time</p>
+<p>where required.</p>
+<p>Deployment SHALL NOT automatically enable trading.</p>
+<h1>77. STRATEGY DISABLEMENT</h1>
+<p>Strategy disablement SHALL define whether to</p>
+<p>stop new signals,</p>
+<p>stop new decisions,</p>
+<p>stop new orders,</p>
+<p>cancel open orders,</p>
+<p>or close existing positions.</p>
+<p>Disablement semantics SHALL be explicit.</p>
+<h1>78. TRADING SUSPENSION</h1>
+<p>Trading suspension SHALL prevent prohibited new<br>
+activity.</p>
+<p>Suspension MAY apply to</p>
+<p>system,</p>
+<p>account,</p>
+<p>broker,</p>
+<p>strategy,</p>
+<p>portfolio,</p>
+<p>instrument,</p>
+<p>asset,</p>
+<p>market,</p>
+<p>or region.</p>
+<p>Suspension scope SHALL be explicit.</p>
+<h1>79. CLOSE-ONLY MODE</h1>
+<p>Close-only mode SHALL permit risk-reducing actions<br>
+while blocking new risk creation.</p>
+<p>The exact permitted actions SHALL be defined.</p>
+<p>Close-only mode SHALL be observable.</p>
+<h1>80. EMERGENCY STOP</h1>
+<p>Emergency stop SHALL provide a controlled mechanism<br>
+to halt unsafe trading activity.</p>
+<p>Emergency stop SHALL define</p>
+<p>scope,</p>
+<p>authority,</p>
+<p>trigger,</p>
+<p>actions,</p>
+<p>broker interaction,</p>
+<p>position treatment,</p>
+<p>and recovery.</p>
+<p>Emergency stop SHALL be tested.</p>
+<h1>81. KILL SWITCH</h1>
+<p>Where a kill switch is implemented,<br>
+it SHALL be</p>
+<p>explicit,</p>
+<p>authorized,</p>
+<p>bounded,</p>
+<p>observable,</p>
+<p>and deterministic.</p>
+<p>A kill switch MAY</p>
+<p>block new orders,</p>
+<p>cancel open orders,</p>
+<p>disable strategies,</p>
+<p>or trigger other approved protective actions.</p>
+<p>It SHALL NOT perform undefined behaviour.</p>
+<h1>82. AUTOMATED TRADING SAFETY</h1>
+<p>Automated trading SHALL operate within explicit</p>
+<p>strategy,</p>
+<p>risk,</p>
+<p>portfolio,</p>
+<p>execution,</p>
+<p>account,</p>
+<p>broker,</p>
+<p>and market boundaries.</p>
+<p>Automation SHALL not expand its own authority.</p>
+<h1>83. HUMAN TRADING INTERVENTION</h1>
+<p>Human intervention SHALL be</p>
+<p>authorized,</p>
+<p>attributable,</p>
+<p>observable,</p>
+<p>and auditable</p>
+<p>where consequential.</p>
+<p>Manual intervention SHALL not create hidden<br>
+financial state.</p>
+<h1>84. MANUAL ORDER OPERATIONS</h1>
+<p>Where manual orders are permitted,<br>
+they SHALL preserve the same required</p>
+<p>account,</p>
+<p>broker,</p>
+<p>instrument,</p>
+<p>risk,</p>
+<p>portfolio,</p>
+<p>order,</p>
+<p>execution,</p>
+<p>and reconciliation context</p>
+<p>as automated orders.</p>
+<p>Manual SHALL NOT mean uncontrolled.</p>
+<h1>85. TRADING INCIDENT</h1>
+<p>A trading incident is an unplanned condition that<br>
+degrades or threatens</p>
+<p>market understanding,</p>
+<p>decision correctness,</p>
+<p>risk control,</p>
+<p>portfolio integrity,</p>
+<p>execution safety,</p>
+<p>position accuracy,</p>
+<p>financial state,</p>
+<p>or trading continuity.</p>
+<p>Trading incidents SHALL be classified according to<br>
+impact.</p>
+<h1>86. TRADING INCIDENT TYPES</h1>
+<p>Trading incidents MAY include</p>
+<p>bad market data,</p>
+<p>stale market data,</p>
+<p>incorrect signal,</p>
+<p>decision defect,</p>
+<p>risk-control failure,</p>
+<p>portfolio-control failure,</p>
+<p>duplicate order,</p>
+<p>unknown order state,</p>
+<p>broker outage,</p>
+<p>execution discrepancy,</p>
+<p>position discrepancy,</p>
+<p>margin issue,</p>
+<p>unauthorized trading,</p>
+<p>or systemic platform failure.</p>
+<h1>87. TRADING INCIDENT TRIAGE</h1>
+<p>Triage SHALL determine</p>
+<p>what trading capability is affected,</p>
+<p>which accounts are affected,</p>
+<p>which brokers are affected,</p>
+<p>which strategies are affected,</p>
+<p>which portfolios are affected,</p>
+<p>which instruments are affected,</p>
+<p>whether financial exposure exists,</p>
+<p>and whether new trading must be suspended.</p>
+<h1>88. TRADING INCIDENT CONTAINMENT</h1>
+<p>Containment MAY include</p>
+<p>disable strategy,</p>
+<p>disable account,</p>
+<p>disable broker,</p>
+<p>block new orders,</p>
+<p>cancel open orders,</p>
+<p>enter close-only mode,</p>
+<p>close positions,</p>
+<p>isolate data source,</p>
+<p>or activate fallback.</p>
+<p>Containment SHALL prioritize capital protection and<br>
+institutional control.</p>
+<h1>89. TRADING RECOVERY</h1>
+<p>Trading recovery SHALL restore trusted trading<br>
+capability.</p>
+<p>Recovery SHALL validate</p>
+<p>market data,</p>
+<p>signals,</p>
+<p>decisions,</p>
+<p>risk,</p>
+<p>portfolio state,</p>
+<p>orders,</p>
+<p>executions,</p>
+<p>positions,</p>
+<p>balances,</p>
+<p>broker state,</p>
+<p>and system health</p>
+<p>where applicable.</p>
+<h1>90. TRADING RECOVERY VALIDATION</h1>
+<p>Trading SHALL NOT resume solely because technical<br>
+services have restarted.</p>
+<p>Recovery SHALL establish</p>
+<p>authoritative order state,</p>
+<p>authoritative execution state,</p>
+<p>reconciled position state,</p>
+<p>reconciled account state,</p>
+<p>valid risk state,</p>
+<p>valid portfolio state,</p>
+<p>and safe trading readiness.</p>
+<h1>91. BROKER OUTAGE</h1>
+<p>Broker outage procedures SHALL define</p>
+<p>detection,</p>
+<p>affected accounts,</p>
+<p>affected orders,</p>
+<p>unknown state handling,</p>
+<p>alternate broker policy,</p>
+<p>position management,</p>
+<p>recovery,</p>
+<p>and reconciliation.</p>
+<p>Broker outage SHALL not trigger unsafe blind<br>
+rerouting.</p>
+<h1>92. MARKET DATA OUTAGE</h1>
+<p>Market data outage procedures SHALL define</p>
+<p>affected instruments,</p>
+<p>affected strategies,</p>
+<p>fallback providers,</p>
+<p>staleness thresholds,</p>
+<p>trading restrictions,</p>
+<p>and recovery validation.</p>
+<p>Stale data SHALL not silently continue to drive<br>
+trading.</p>
+<h1>93. RISK SYSTEM OUTAGE</h1>
+<p>Failure of mandatory risk capability SHALL block<br>
+new risk creation unless an explicitly approved<br>
+safe fallback exists.</p>
+<p>Risk-system unavailability SHALL not be treated as<br>
+risk approval.</p>
+<h1>94. POSITION STATE UNCERTAINTY</h1>
+<p>Unknown or conflicting position state SHALL trigger<br>
+controlled restriction.</p>
+<p>New trading SHOULD be blocked where position<br>
+uncertainty could create unsafe exposure.</p>
+<p>Reconciliation SHALL precede normal resumption.</p>
+<h1>95. DUPLICATE ORDER INCIDENT</h1>
+<p>Suspected duplicate orders SHALL trigger immediate</p>
+<p>order identification,</p>
+<p>broker verification,</p>
+<p>exposure assessment,</p>
+<p>containment,</p>
+<p>and reconciliation.</p>
+<p>Duplicate execution risk SHALL be treated as<br>
+financially consequential.</p>
+<h1>96. RUNAWAY TRADING</h1>
+<p>Runaway trading SHALL include uncontrolled</p>
+<p>order generation,</p>
+<p>order repetition,</p>
+<p>position accumulation,</p>
+<p>or risk expansion.</p>
+<p>Controls SHALL detect and contain runaway behaviour<br>
+through</p>
+<p>limits,</p>
+<p>rate controls,</p>
+<p>exposure controls,</p>
+<p>kill switches,</p>
+<p>and operational monitoring.</p>
+<h1>97. TRADING CONTINUITY</h1>
+<p>Critical trading capability SHALL define continuity<br>
+requirements.</p>
+<p>Continuity SHALL identify</p>
+<p>minimum safe capability,</p>
+<p>required data,</p>
+<p>required risk controls,</p>
+<p>required broker access,</p>
+<p>required position authority,</p>
+<p>alternate providers,</p>
+<p>alternate brokers where approved,</p>
+<p>and decision authority.</p>
+<h1>98. TRADING DISASTER RECOVERY</h1>
+<p>Trading disaster recovery SHALL restore capability<br>
+in dependency-aware order.</p>
+<p>Recovery SHALL consider</p>
+<p>infrastructure,</p>
+<p>security,</p>
+<p>data,</p>
+<p>platforms,</p>
+<p>services,</p>
+<p>market intelligence,</p>
+<p>risk,</p>
+<p>portfolio state,</p>
+<p>broker connectivity,</p>
+<p>orders,</p>
+<p>positions,</p>
+<p>and balances.</p>
+<p>Live trading SHALL resume only after readiness is<br>
+validated.</p>
+<h1>99. TRADING RECOVERY ORDER</h1>
+<p>A typical recovery sequence MAY include</p>
+<p>Infrastructure</p>
+<p>↓</p>
+<p>Security and Identity</p>
+<p>↓</p>
+<p>Data</p>
+<p>↓</p>
+<p>Platform Runtime</p>
+<p>↓</p>
+<p>Trading Services</p>
+<p>↓</p>
+<p>Market Intelligence</p>
+<p>↓</p>
+<p>Broker Connectivity</p>
+<p>↓</p>
+<p>Order Reconciliation</p>
+<p>↓</p>
+<p>Position and Balance Reconciliation</p>
+<p>↓</p>
+<p>Risk State</p>
+<p>↓</p>
+<p>Portfolio State</p>
+<p>↓</p>
+<p>Trading Readiness</p>
+<p>↓</p>
+<p>Controlled Resumption</p>
+<p>The exact sequence SHALL follow actual<br>
+dependencies.</p>
+<h1>100. TRADING RECONCILIATION</h1>
+<p>Reconciliation is a mandatory institutional<br>
+control.</p>
+<p>Trading Operations SHALL reconcile where<br>
+applicable</p>
+<p>orders,</p>
+<p>executions,</p>
+<p>positions,</p>
+<p>balances,</p>
+<p>margin,</p>
+<p>fees,</p>
+<p>and financial outcomes.</p>
+<p>Unknown discrepancy SHALL remain visible.</p>
+<h1>101. RECONCILIATION FREQUENCY</h1>
+<p>Reconciliation frequency SHALL reflect</p>
+<p>asset class,</p>
+<p>market,</p>
+<p>broker,</p>
+<p>account,</p>
+<p>strategy,</p>
+<p>and risk.</p>
+<p>Reconciliation MAY be</p>
+<p>event-driven,</p>
+<p>continuous,</p>
+<p>intraday,</p>
+<p>end-of-session,</p>
+<p>or scheduled.</p>
+<p>Critical state SHALL not wait unnecessarily for<br>
+batch reconciliation.</p>
+<h1>102. RECONCILIATION BREAK</h1>
+<p>A reconciliation break SHALL preserve</p>
+<p>identity,</p>
+<p>scope,</p>
+<p>internal value,</p>
+<p>external value,</p>
+<p>difference,</p>
+<p>time,</p>
+<p>impact,</p>
+<p>and owner.</p>
+<p>Material unresolved breaks SHALL restrict trading<br>
+where required.</p>
+<h1>103. TRADING OBSERVABILITY</h1>
+<p>Trading Operations SHALL provide end-to-end<br>
+observability.</p>
+<p>Observability SHALL include</p>
+<p>market state,</p>
+<p>signal state,</p>
+<p>decision state,</p>
+<p>risk state,</p>
+<p>portfolio state,</p>
+<p>order state,</p>
+<p>execution state,</p>
+<p>position state,</p>
+<p>performance state,</p>
+<p>broker state,</p>
+<p>and system state.</p>
+<h1>104. TRADING METRICS</h1>
+<p>Trading metrics MAY include</p>
+<p>signals generated,</p>
+<p>decisions approved,</p>
+<p>decisions rejected,</p>
+<p>risk rejections,</p>
+<p>orders submitted,</p>
+<p>orders rejected,</p>
+<p>fill rate,</p>
+<p>partial fills,</p>
+<p>execution latency,</p>
+<p>slippage,</p>
+<p>position exposure,</p>
+<p>PnL,</p>
+<p>drawdown,</p>
+<p>reconciliation breaks,</p>
+<p>and broker health.</p>
+<p>Metrics SHALL support operational decisions.</p>
+<h1>105. TRADING ALERTING</h1>
+<p>Critical trading conditions SHALL generate<br>
+actionable alerts.</p>
+<p>Alerts MAY include</p>
+<p>stale market data,</p>
+<p>risk rejection spike,</p>
+<p>broker disconnect,</p>
+<p>order rejection,</p>
+<p>unknown order state,</p>
+<p>duplicate order suspicion,</p>
+<p>position mismatch,</p>
+<p>margin pressure,</p>
+<p>drawdown breach,</p>
+<p>or reconciliation failure.</p>
+<p>Alerts SHALL have ownership.</p>
+<h1>106. TRADING DASHBOARDS</h1>
+<p>Trading dashboards SHALL present actionable<br>
+institutional state.</p>
+<p>Dashboards SHOULD expose</p>
+<p>market health,</p>
+<p>strategy state,</p>
+<p>risk state,</p>
+<p>portfolio exposure,</p>
+<p>orders,</p>
+<p>executions,</p>
+<p>positions,</p>
+<p>performance,</p>
+<p>broker health,</p>
+<p>and incidents.</p>
+<p>Visual availability SHALL not replace underlying<br>
+control.</p>
+<h1>107. TRADING AUDIT</h1>
+<p>Consequential trading actions SHALL preserve audit<br>
+evidence.</p>
+<p>Audit MAY include</p>
+<p>strategy enablement,</p>
+<p>decision,</p>
+<p>risk approval,</p>
+<p>risk rejection,</p>
+<p>portfolio approval,</p>
+<p>order authorization,</p>
+<p>order submission,</p>
+<p>manual intervention,</p>
+<p>suspension,</p>
+<p>resume,</p>
+<p>and emergency action.</p>
+<h1>108. TRADING EVIDENCE</h1>
+<p>Trading evidence SHALL support reconstruction of</p>
+<p>what the market state was,</p>
+<p>what signal existed,</p>
+<p>what decision was formed,</p>
+<p>what risk evaluation occurred,</p>
+<p>what portfolio evaluation occurred,</p>
+<p>what order was authorized,</p>
+<p>what the broker reported,</p>
+<p>what execution occurred,</p>
+<p>what position resulted,</p>
+<p>and what financial outcome followed.</p>
+<h1>109. TRADING RUNBOOKS</h1>
+<p>Critical trading scenarios SHALL maintain usable<br>
+runbooks.</p>
+<p>Runbooks SHOULD cover</p>
+<p>market data outage,</p>
+<p>broker outage,</p>
+<p>risk outage,</p>
+<p>unknown order state,</p>
+<p>duplicate order,</p>
+<p>position mismatch,</p>
+<p>margin issue,</p>
+<p>runaway trading,</p>
+<p>emergency stop,</p>
+<p>and recovery.</p>
+<p>Runbooks SHALL reflect actual trading architecture.</p>
+<h1>110. TRADING ON-CALL</h1>
+<p>Critical trading capability SHALL define an<br>
+appropriate operational and escalation model.</p>
+<p>The model SHALL identify</p>
+<p>trading operations,</p>
+<p>strategy owner,</p>
+<p>risk authority,</p>
+<p>portfolio authority,</p>
+<p>execution owner,</p>
+<p>broker escalation,</p>
+<p>infrastructure escalation,</p>
+<p>security escalation,</p>
+<p>and executive escalation</p>
+<p>where applicable.</p>
+<h1>111. TRADING HANDOVER</h1>
+<p>Responsibility transfer SHALL preserve</p>
+<p>active positions,</p>
+<p>open orders,</p>
+<p>unknown orders,</p>
+<p>broker issues,</p>
+<p>market issues,</p>
+<p>risk restrictions,</p>
+<p>reconciliation breaks,</p>
+<p>temporary controls,</p>
+<p>and required follow-up.</p>
+<p>Critical financial context SHALL not be lost.</p>
+<h1>112. TRADING CHANGE</h1>
+<p>Material trading change SHALL define</p>
+<p>owner,</p>
+<p>scope,</p>
+<p>affected strategies,</p>
+<p>affected accounts,</p>
+<p>affected brokers,</p>
+<p>affected portfolios,</p>
+<p>affected instruments,</p>
+<p>risk impact,</p>
+<p>execution impact,</p>
+<p>validation,</p>
+<p>and recovery.</p>
+<p>Trading change SHALL receive control proportional<br>
+to financial impact.</p>
+<h1>113. STRATEGY CHANGE</h1>
+<p>Production strategy change SHALL preserve</p>
+<p>strategy identity,</p>
+<p>version,</p>
+<p>logic change,</p>
+<p>data dependencies,</p>
+<p>risk impact,</p>
+<p>portfolio impact,</p>
+<p>validation,</p>
+<p>and activation authority.</p>
+<p>Code deployment SHALL not automatically authorize<br>
+strategy activation.</p>
+<h1>114. RISK LIMIT CHANGE</h1>
+<p>Risk limit changes SHALL be</p>
+<p>authorized,</p>
+<p>versioned,</p>
+<p>effective-time controlled,</p>
+<p>observable,</p>
+<p>and auditable.</p>
+<p>Limit increase SHALL receive appropriate authority.</p>
+<h1>115. BROKER CONFIGURATION CHANGE</h1>
+<p>Broker configuration change SHALL consider</p>
+<p>accounts,</p>
+<p>credentials,</p>
+<p>endpoints,</p>
+<p>instrument mapping,</p>
+<p>order semantics,</p>
+<p>rate limits,</p>
+<p>and execution risk.</p>
+<p>Changes SHALL be validated before normal trading.</p>
+<h1>116. TRADING CONFIGURATION</h1>
+<p>Production trading configuration SHALL be</p>
+<p>controlled,</p>
+<p>versioned,</p>
+<p>reviewable,</p>
+<p>validated,</p>
+<p>and attributable.</p>
+<p>Hidden production trading configuration is<br>
+prohibited.</p>
+<h1>117. TRADING CONFIGURATION DRIFT</h1>
+<p>Trading configuration drift SHALL be detectable.</p>
+<p>Drift MAY affect</p>
+<p>strategy parameters,</p>
+<p>risk limits,</p>
+<p>portfolio allocations,</p>
+<p>broker routing,</p>
+<p>account enablement,</p>
+<p>or execution policy.</p>
+<p>Unexplained drift SHALL be investigated.</p>
+<h1>118. TRADING TESTING</h1>
+<p>Trading capability SHALL be tested according to<br>
+risk.</p>
+<p>Testing MAY include</p>
+<p>unit tests,</p>
+<p>integration tests,</p>
+<p>historical backtests,</p>
+<p>simulation,</p>
+<p>paper trading,</p>
+<p>broker sandbox testing,</p>
+<p>failure testing,</p>
+<p>reconciliation testing,</p>
+<p>and recovery testing.</p>
+<p>Backtest success SHALL NOT alone prove production<br>
+readiness.</p>
+<h1>119. PAPER TRADING VALIDATION</h1>
+<p>Paper trading SHALL validate production-like<br>
+behaviour without live financial execution.</p>
+<p>Validation SHOULD include</p>
+<p>market data,</p>
+<p>signals,</p>
+<p>decisions,</p>
+<p>risk,</p>
+<p>portfolio,</p>
+<p>orders,</p>
+<p>execution simulation,</p>
+<p>positions,</p>
+<p>performance,</p>
+<p>observability,</p>
+<p>and recovery.</p>
+<p>Paper mode SHALL remain isolated from live<br>
+authority.</p>
+<h1>120. LIVE READINESS VALIDATION</h1>
+<p>Before live trading,<br>
+COREI SHALL validate the complete trading chain.</p>
+<p>Validation SHALL include</p>
+<p>data readiness,</p>
+<p>strategy readiness,</p>
+<p>risk readiness,</p>
+<p>portfolio readiness,</p>
+<p>execution readiness,</p>
+<p>broker readiness,</p>
+<p>security readiness,</p>
+<p>infrastructure readiness,</p>
+<p>observability,</p>
+<p>reconciliation,</p>
+<p>and emergency controls.</p>
+<h1>121. TRADING DEBT</h1>
+<p>Trading operational debt SHALL be visible.</p>
+<p>Debt MAY include</p>
+<p>manual reconciliation,</p>
+<p>unknown order states,</p>
+<p>weak broker abstraction,</p>
+<p>missing risk aggregation,</p>
+<p>incomplete observability,</p>
+<p>uncontrolled configuration,</p>
+<p>or untested recovery.</p>
+<p>Trading debt MAY create direct financial risk.</p>
+<h1>122. TRADING EXCEPTION</h1>
+<p>Trading operational exceptions SHALL be governed.</p>
+<p>Every exception SHALL define</p>
+<p>requirement,</p>
+<p>reason,</p>
+<p>scope,</p>
+<p>affected accounts,</p>
+<p>affected strategies,</p>
+<p>affected portfolios,</p>
+<p>financial risk,</p>
+<p>owner,</p>
+<p>compensating controls,</p>
+<p>monitoring,</p>
+<p>and expiration.</p>
+<p>Permanent undocumented trading exceptions are<br>
+prohibited.</p>
+<h1>123. NO TRADING PATCH WORK</h1>
+<p>Trading Operations SHALL NOT permanently compensate<br>
+for structural defects through</p>
+<p>manual order correction,</p>
+<p>hidden strategy logic,</p>
+<p>spreadsheet-only state,</p>
+<p>operator memory,</p>
+<p>duplicate execution paths,</p>
+<p>or uncontrolled broker workarounds.</p>
+<p>The defect SHALL be corrected at its proper<br>
+ownership layer.</p>
+<h1>124. NO DIRECT SIGNAL-TO-ORDER BYPASS</h1>
+<p>A signal SHALL NOT directly create a live order<br>
+without required</p>
+<p>decision,</p>
+<p>risk,</p>
+<p>portfolio,</p>
+<p>execution authorization,</p>
+<p>and broker controls.</p>
+<p>Production pressure SHALL not bypass the<br>
+institutional chain.</p>
+<h1>125. NO RISK BYPASS</h1>
+<p>Mandatory risk controls SHALL NOT be bypassed by</p>
+<p>strategy,</p>
+<p>operator,</p>
+<p>service,</p>
+<p>automation,</p>
+<p>AI,</p>
+<p>or infrastructure access</p>
+<p>without explicit governed emergency authority.</p>
+<p>Risk unavailability SHALL not equal risk approval.</p>
+<h1>126. NO BLIND ORDER RETRY</h1>
+<p>Unknown order submission state SHALL NOT trigger<br>
+blind retry.</p>
+<p>Authoritative broker state SHALL be determined<br>
+before retry where duplicate execution is possible.</p>
+<h1>127. NO INTERNAL-STATE ASSUMPTION</h1>
+<p>Internal state SHALL NOT automatically override<br>
+external financial authority.</p>
+<p>Broker,<br>
+exchange,<br>
+or custodian state</p>
+<p>SHALL be reconciled where applicable.</p>
+<h1>128. NO SILENT POSITION UNCERTAINTY</h1>
+<p>Unknown or conflicting position state SHALL remain<br>
+explicit.</p>
+<p>Normal trading SHALL be restricted where position<br>
+uncertainty creates unacceptable risk.</p>
+<h1>129. NO TECHNICAL AUTHORITY COLLAPSE</h1>
+<p>Technical access SHALL NOT automatically create</p>
+<p>strategy authority,</p>
+<p>risk authority,</p>
+<p>portfolio authority,</p>
+<p>execution authority,</p>
+<p>or capital authority.</p>
+<p>Institutional authority boundaries SHALL remain<br>
+explicit.</p>
+<h1>130. NO AI AUTHORITY EXPANSION</h1>
+<p>Artificial intelligence SHALL NOT expand its own<br>
+trading authority.</p>
+<p>AI MAY support intelligence.</p>
+<p>Deterministic institutional controls SHALL govern<br>
+consequential financial action.</p>
+<h1>131. NO FALSE TRADING HEALTH</h1>
+<p>Trading SHALL not be declared healthy solely<br>
+because</p>
+<p>services are running,</p>
+<p>broker sessions are connected,</p>
+<p>or market data is arriving.</p>
+<p>Health SHALL reflect safe end-to-end trading<br>
+capability.</p>
+<h1>132. TRADING LIFECYCLE</h1>
+<p>Every production trading capability follows the<br>
+lifecycle</p>
+<p>Research</p>
+<p>↓</p>
+<p>Specification</p>
+<p>↓</p>
+<p>Implementation</p>
+<p>↓</p>
+<p>Validation</p>
+<p>↓</p>
+<p>Backtest</p>
+<p>↓</p>
+<p>Simulation</p>
+<p>↓</p>
+<p>Paper Trading</p>
+<p>↓</p>
+<p>Production Readiness</p>
+<p>↓</p>
+<p>Controlled Activation</p>
+<p>↓</p>
+<p>Continuous Operation</p>
+<p>↓</p>
+<p>Monitoring</p>
+<p>↓</p>
+<p>Reconciliation</p>
+<p>↓</p>
+<p>Evolution</p>
+<p>↓</p>
+<p>Deprecation</p>
+<p>↓</p>
+<p>Retirement</p>
+<p>The lifecycle SHALL remain traceable.</p>
+<h1>133. STRATEGY LIFECYCLE</h1>
+<p>Every production strategy SHALL follow a controlled<br>
+lifecycle.</p>
+<p>The lifecycle SHALL preserve</p>
+<p>identity,</p>
+<p>version,</p>
+<p>research evidence,</p>
+<p>validation,</p>
+<p>risk profile,</p>
+<p>portfolio context,</p>
+<p>activation,</p>
+<p>monitoring,</p>
+<p>performance,</p>
+<p>change,</p>
+<p>and retirement.</p>
+<h1>134. TRADING EVOLUTION</h1>
+<p>Trading capability evolution SHALL be driven by</p>
+<p>market evidence,</p>
+<p>performance evidence,</p>
+<p>risk evidence,</p>
+<p>execution evidence,</p>
+<p>operational incidents,</p>
+<p>broker changes,</p>
+<p>regulatory changes,</p>
+<p>and architecture.</p>
+<p>Evolution SHALL preserve authority and traceability.</p>
+<h1>135. STRATEGY DEPRECATION</h1>
+<p>Deprecated strategies SHALL define</p>
+<p>affected accounts,</p>
+<p>affected portfolios,</p>
+<p>open positions,</p>
+<p>open orders,</p>
+<p>capital,</p>
+<p>replacement or closure plan,</p>
+<p>and retirement condition.</p>
+<p>Deprecation SHALL be visible.</p>
+<h1>136. STRATEGY RETIREMENT</h1>
+<p>A strategy SHALL be retired only after</p>
+<p>new trading is disabled,</p>
+<p>open orders are resolved,</p>
+<p>positions are resolved or transferred,</p>
+<p>capital is released,</p>
+<p>performance is preserved,</p>
+<p>configuration is archived,</p>
+<p>and documentation is updated.</p>
+<p>Hidden active exposure SHALL block retirement.</p>
+<h1>137. RELATIONSHIP TO PRODUCTION OPERATIONS</h1>
+<p>Production Operations defines the common<br>
+institutional production model.</p>
+<p>Trading Operations extends that model for<br>
+consequential financial capability.</p>
+<p>Every production trading capability SHALL comply<br>
+with both.</p>
+<h1>138. RELATIONSHIP TO PLATFORM OPERATIONS</h1>
+<p>Platforms provide shared institutional capability.</p>
+<p>Trading Operations consumes platform capability<br>
+without transferring trading authority to the<br>
+platform layer.</p>
+<p>Platform failure SHALL be reflected in trading<br>
+readiness.</p>
+<h1>139. RELATIONSHIP TO SERVICE OPERATIONS</h1>
+<p>Services implement trading capabilities.</p>
+<p>Service Operations owns service health and runtime.</p>
+<p>Trading Operations owns the financial authority<br>
+chain and operational trading outcome.</p>
+<p>Service availability SHALL not alone define trading<br>
+readiness.</p>
+<h1>140. RELATIONSHIP TO INFRASTRUCTURE OPERATIONS</h1>
+<p>Infrastructure Operations owns technical<br>
+foundations.</p>
+<p>Trading Operations owns safe use of those<br>
+foundations for financial activity.</p>
+<p>Infrastructure access SHALL not create trading<br>
+authority.</p>
+<h1>141. RELATIONSHIP TO DATA OPERATIONS</h1>
+<p>Data Operations preserves</p>
+<p>authority,</p>
+<p>quality,</p>
+<p>freshness,</p>
+<p>lineage,</p>
+<p>and recoverability</p>
+<p>of trading data.</p>
+<p>Trading Operations consumes data according to<br>
+readiness requirements.</p>
+<p>Data availability SHALL not automatically mean<br>
+trading readiness.</p>
+<h1>142. RELATIONSHIP TO SECURITY OPERATIONS</h1>
+<p>Security Operations protects</p>
+<p>identity,</p>
+<p>access,</p>
+<p>secrets,</p>
+<p>broker credentials,</p>
+<p>data,</p>
+<p>infrastructure,</p>
+<p>and trading authority.</p>
+<p>Security administration SHALL not create trading<br>
+authority.</p>
+<p>Trading continuity SHALL not override mandatory<br>
+security controls.</p>
+<h1>143. MINIMUM TRADING READINESS GATE</h1>
+<p>Before production trading is activated,<br>
+the following SHALL be established where<br>
+applicable.</p>
+<p>Trading Owner Defined</p>
+<p>Trading Authority Defined</p>
+<p>Trading Mode Explicit</p>
+<p>Environment Separation Validated</p>
+<p>Live Authority Explicit</p>
+<p>Accounts Approved</p>
+<p>Brokers Approved</p>
+<p>Strategies Approved</p>
+<p>Portfolios Approved</p>
+<p>Instruments Approved</p>
+<p>Markets Approved</p>
+<p>Regions Defined</p>
+<p>Currencies Defined</p>
+<p>Jurisdictions Defined</p>
+<p>Market Data Ready</p>
+<p>Market Health Defined</p>
+<p>Signal Logic Validated</p>
+<p>Decision Logic Validated</p>
+<p>Risk Controls Active</p>
+<p>Risk Limits Defined</p>
+<p>Aggregate Risk Available</p>
+<p>Portfolio Controls Active</p>
+<p>Capital Authority Defined</p>
+<p>Execution Controls Active</p>
+<p>Order Identity Defined</p>
+<p>Idempotency Defined</p>
+<p>Unknown Order Handling Defined</p>
+<p>Broker Connectivity Ready</p>
+<p>Broker Readiness Validated</p>
+<p>Position Authority Defined</p>
+<p>Position Reconciliation Active</p>
+<p>Balance Reconciliation Active</p>
+<p>Performance Methodology Defined</p>
+<p>System Health Available</p>
+<p>Trading Readiness Available</p>
+<p>Trading State Visible</p>
+<p>Suspension Available</p>
+<p>Close-Only Mode Available</p>
+<p>Emergency Stop Available</p>
+<p>Kill Switch Available Where Required</p>
+<p>Observability Available</p>
+<p>Alerting Available</p>
+<p>Audit Available</p>
+<p>Incident Procedures Available</p>
+<p>Recovery Defined</p>
+<p>Disaster Recovery Defined</p>
+<p>Runbooks Available</p>
+<p>No Direct Signal-to-Order Bypass</p>
+<p>No Mandatory Risk Bypass</p>
+<p>No Blind Order Retry</p>
+<p>No Unknown Position State Hidden</p>
+<p>No Uncontrolled Live Credential</p>
+<p>No Unreconciled Material Financial State</p>
+<p>Trading capability failing mandatory criteria SHALL<br>
+remain blocked from unrestricted live activation.</p>
+<h1>144. MINIMUM ORDER AUTHORIZATION GATE</h1>
+<p>Before a consequential order may be submitted,<br>
+the following SHALL be established where<br>
+applicable.</p>
+<p>Decision Valid</p>
+<p>Decision Not Expired</p>
+<p>Market Data Ready</p>
+<p>Market State Permits Trading</p>
+<p>Strategy Enabled</p>
+<p>Account Enabled</p>
+<p>Broker Enabled</p>
+<p>Portfolio Enabled</p>
+<p>Instrument Approved</p>
+<p>Risk Evaluation Passed</p>
+<p>Risk Approval Current</p>
+<p>Portfolio Evaluation Passed</p>
+<p>Capital Available</p>
+<p>Execution Authorization Valid</p>
+<p>Order Identity Assigned</p>
+<p>Order Parameters Valid</p>
+<p>Broker Ready</p>
+<p>No Applicable Suspension</p>
+<p>No Applicable Kill Switch</p>
+<p>No Unknown Material Position State</p>
+<p>No Unresolved Blocking Reconciliation Break</p>
+<p>Failure of a mandatory condition SHALL block order<br>
+submission.</p>
+<h1>145. MINIMUM TRADING RECOVERY GATE</h1>
+<p>Before normal trading resumes after a material<br>
+incident,<br>
+the following SHALL be established where<br>
+applicable.</p>
+<p>Incident Contained</p>
+<p>Root Cause Understood or Safe Containment Active</p>
+<p>Market Data Validated</p>
+<p>Broker Connectivity Validated</p>
+<p>Open Orders Reconciled</p>
+<p>Unknown Orders Resolved</p>
+<p>Executions Reconciled</p>
+<p>Positions Reconciled</p>
+<p>Balances Reconciled</p>
+<p>Margin State Validated</p>
+<p>Risk State Validated</p>
+<p>Portfolio State Validated</p>
+<p>Strategy State Validated</p>
+<p>Security State Validated</p>
+<p>Infrastructure State Validated</p>
+<p>Trading Readiness Confirmed</p>
+<p>Temporary Controls Documented</p>
+<p>Required Authority Approved Resume</p>
+<p>Evidence Preserved</p>
+<p>Trading SHALL NOT resume solely because services<br>
+have restarted.</p>
+<h1>146. TRADING VALIDATION QUESTIONS</h1>
+<p>Every production trading capability shall answer<br>
+the following institutional questions.</p>
+<p>Who owns the trading capability?</p>
+<p>Who has authority to activate it?</p>
+<p>What trading mode is active?</p>
+<p>Which accounts may it use?</p>
+<p>Which brokers may it use?</p>
+<p>Which strategies may trade?</p>
+<p>Which portfolios may receive exposure?</p>
+<p>Which instruments may be traded?</p>
+<p>Which markets may be traded?</p>
+<p>What data is required?</p>
+<p>How is market data readiness determined?</p>
+<p>How are signals generated?</p>
+<p>How are decisions formed?</p>
+<p>How are decisions validated?</p>
+<p>What risk controls apply?</p>
+<p>How is aggregate risk calculated?</p>
+<p>What portfolio controls apply?</p>
+<p>How is capital allocated?</p>
+<p>How is execution authorized?</p>
+<p>How are duplicate orders prevented?</p>
+<p>How is unknown order state handled?</p>
+<p>How is broker readiness determined?</p>
+<p>How are partial fills handled?</p>
+<p>How are positions established?</p>
+<p>What is the authoritative position source?</p>
+<p>How are positions reconciled?</p>
+<p>How are balances and margin reconciled?</p>
+<p>How is performance calculated?</p>
+<p>How is trading health determined?</p>
+<p>How is trading suspended?</p>
+<p>How is close-only mode entered?</p>
+<p>How is emergency stop activated?</p>
+<p>How is runaway trading contained?</p>
+<p>How is broker failure handled?</p>
+<p>How is market data failure handled?</p>
+<p>How is risk-system failure handled?</p>
+<p>How is trading recovered?</p>
+<p>What must be reconciled before resumption?</p>
+<p>Can the complete financial decision be reconstructed?</p>
+<p>Can every order be traced to authorized upstream<br>
+state?</p>
+<p>Can any technical component create financial<br>
+authority outside its approved boundary?</p>
+<p>If any mandatory answer is negative,</p>
+<p>trading operational readiness remains incomplete.</p>
+<h1>147. TRADING OPERATIONS DECLARATION</h1>
+<p>COREI Trading Operations shall preserve the<br>
+complete institutional trading authority chain from<br>
+market observation to final financial state.</p>
+<p>Trading SHALL remain</p>
+<p>market-aware,</p>
+<p>data-valid,</p>
+<p>signal-explicit,</p>
+<p>decision-controlled,</p>
+<p>risk-governed,</p>
+<p>portfolio-aware,</p>
+<p>capital-bounded,</p>
+<p>execution-authorized,</p>
+<p>broker-aware,</p>
+<p>position-reconciled,</p>
+<p>performance-measured,</p>
+<p>system-observable,</p>
+<p>recoverable,</p>
+<p>and institutionally accountable.</p>
+<p>Trading SHALL not merely generate orders.</p>
+<p>It SHALL preserve controlled financial decision<br>
+making across the complete lifecycle.</p>
+<h1>148. CONSTITUTIONAL COMMITMENT</h1>
+<p>COREI Trading Operations shall remain</p>
+<p>identity-aligned,</p>
+<p>governance-driven,</p>
+<p>architecture-faithful,</p>
+<p>engineering-supported,</p>
+<p>standards-derived,</p>
+<p>specification-compliant,</p>
+<p>production-disciplined,</p>
+<p>market-aware,</p>
+<p>data-governed,</p>
+<p>signal-explicit,</p>
+<p>decision-controlled,</p>
+<p>risk-first,</p>
+<p>portfolio-aware,</p>
+<p>capital-bounded,</p>
+<p>execution-safe,</p>
+<p>broker-aware,</p>
+<p>account-explicit,</p>
+<p>position-reconciled,</p>
+<p>performance-measured,</p>
+<p>system-observable,</p>
+<p>security-preserving,</p>
+<p>incident-ready,</p>
+<p>recovery-capable,</p>
+<p>audit-supported,</p>
+<p>evidence-driven,</p>
+<p>knowledge-preserving,</p>
+<p>and continuously evolvable.</p>
+<p>Trading operations shall preserve institutional<br>
+continuity across</p>
+<p>accounts,</p>
+<p>brokers,</p>
+<p>strategies,</p>
+<p>portfolios,</p>
+<p>assets,</p>
+<p>markets,</p>
+<p>regions,</p>
+<p>currencies,</p>
+<p>teams,</p>
+<p>roles,</p>
+<p>custodians,</p>
+<p>exchanges,</p>
+<p>jurisdictions,</p>
+<p>providers,</p>
+<p>infrastructure,</p>
+<p>data,</p>
+<p>security,</p>
+<p>automation,</p>
+<p>artificial intelligence systems,</p>
+<p>and generations of technology.</p>
+<h1>149. AUTHORITY</h1>
+<p>This document defines the authoritative Trading<br>
+Operations model of COREI.</p>
+<p>Every production trading strategy,</p>
+<p>market data capability,</p>
+<p>signal capability,</p>
+<p>decision capability,</p>
+<p>risk capability,</p>
+<p>portfolio capability,</p>
+<p>execution capability,</p>
+<p>broker integration,</p>
+<p>order,</p>
+<p>execution,</p>
+<p>position,</p>
+<p>performance process,</p>
+<p>trading control,</p>
+<p>trading automation,</p>
+<p>operator action,</p>
+<p>and artificial intelligence capability participating<br>
+in consequential trading activity</p>
+<p>shall comply with this document.</p>
+<p>Trading-specific operational documents MAY extend<br>
+this model.</p>
+<p>No extension may weaken constitutional,<br>
+governance,<br>
+architectural,<br>
+engineering,<br>
+standards,<br>
+specification,<br>
+production,<br>
+platform,<br>
+service,<br>
+infrastructure,<br>
+data,<br>
+security,<br>
+risk,<br>
+portfolio,<br>
+execution,<br>
+reconciliation,<br>
+recovery,<br>
+or trading authority requirements.</p>
+<p>Changes to this document require constitutional<br>
+review.</p>
+<h1>END OF DOCUMENT</h1>
+<h1>DOCUMENT ID</h1>
+<h1>COREI-OP-07.07</h1>
+<h1>DOCUMENT NAME</h1>
+<h1>TRADING OPERATIONS</h1>
+<h1>REPOSITORY FILE</h1>
+<h1>knowledge/07-operations/COREI-OP-07.07-TRADING-OPERATIONS.md</h1>
+
+
+  <div class="doc-footer">
+    <span>DOCUMENT ID: </span>
+    <span>DOCUMENT NAME: COREI OP 07.07</span>
+    <span>VERSION: 1.0</span>
+  </div>
+</body>
+</html>

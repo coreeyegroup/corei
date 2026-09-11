@@ -1,0 +1,3 @@
+NAME                  STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+penpot-postgres-pvc   Bound    pvc-4a537d74-e901-40b9-bd01-d11f60ac6fb7   20Gi       RWO            longhorn       <unset>                 74s
+penpot-redis-pvc      Bound    pvc-1fd9d88f-886c-4d48-b4f1-2e58be3a3353   5Gi        RWO            longhorn       <unset>                 74s

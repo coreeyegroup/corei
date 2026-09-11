@@ -1,0 +1,793 @@
+PHASE A — STEP 4: EXECUTION BEHAVIOR SYSTEM
+
+	(Pure Logical Layer — Post-Decision, Pre-Execution, Non-Infrastructure)
+
+	1. PHASE IDENTITY LAYER
+		1.1 Phase Name
+
+			Phase A — Step 4: Execution Behavior System
+
+		1.2 Phase Role
+
+			Defines how trade intents are translated into execution-ready behavioral instructions, without involving infrastructure, brokers, or order systems.
+
+		1.3 Phase Objective
+
+			Create a fully deterministic, rule-based execution behavior model that converts trade intents into structured execution directives aligned with strategy intent and system constraints.
+
+		1.4 Why This Phase Exists
+
+			Prevents:
+				ambiguous execution interpretation
+				mismatch between decision intent and execution outcome
+				uncontrolled slippage and behavioral drift
+
+			This phase ensures:
+				decision → execution alignment is deterministic
+				execution behavior is explicit, auditable, and reproducible
+
+	2. PHASE SCOPE CONTROL
+		2.1 INCLUDED (STRICT)
+			Execution behavior definition (logical)
+			Order intent shaping (NOT order placement)
+			Execution style modeling (aggressive/passive/etc.)
+			Timing behavior rules
+			Sizing translation (logical, not capital allocation enforcement)
+			Execution constraints (logical)
+
+		2.2 EXCLUDED (STRICT)
+			Order placement (OMS/EMS)
+			Broker interaction
+			API / infrastructure logic
+			Latency engineering
+			Real-time execution feedback loops
+
+		Boundary Rule:
+		This phase defines HOW to execute, not WHERE or THROUGH WHAT system.
+
+	3. ARCHITECTURAL INTENT LAYER
+		3.1 Core Design Principles
+			Deterministic execution behavior
+			Separation of intent vs execution
+			No infra leakage
+			Fully auditable behavior mapping
+			Strategy-consistent execution
+
+		3.2 Architectural Model
+
+			Logical Execution Behavior Model
+
+		3.3 System Positioning
+
+			Strategy → Signal → Decision → Trade Intent → Execution Behavior → (Phase D Execution Engine)
+
+			This phase bridges:
+				Decision Layer (Step 3) → Execution System (Phase D)
+
+	4. DOMAIN MODEL DEFINITION
+		4.1 Core Entities
+
+			Execution Instruction
+			Logical representation of how a trade intent should be executed
+
+			Execution Profile
+			Predefined behavioral template (aggressive, passive, TWAP-like, etc.)
+
+			Execution Slice
+			Logical decomposition of trade intent into execution parts
+
+			Execution Profile Determinism Constraint
+
+				execution_profile_set MUST be:
+
+					fixed
+					versioned
+					immutable during execution
+
+				Profile selection MUST operate ONLY on:
+
+					canonical_input_set.execution_profile_set
+
+				Constraint:
+
+					dynamic profile modification is forbidden
+
+		4.2 Attributes
+
+			Execution Instruction
+
+				instruction_id
+				intent_id (from Step 3)
+				instrument
+				direction
+				execution_profile_id
+				execution_urgency
+				execution_horizon
+				sizing_model_reference
+				slicing_plan
+				timing_constraints
+				behavior_flags
+				instruction_hash
+
+			Execution Profile
+
+				profile_id
+				aggression_level
+				liquidity_preference
+				participation_rate
+				slippage_tolerance
+				execution_pattern
+
+			Instruction Hash Definition
+
+				instruction_hash MUST be computed as:
+
+					instruction_hash = HASH_v1(CBE_payload)
+
+				Where payload includes:
+					intent_id
+					execution_profile_id
+					execution_urgency
+					slicing_plan
+					timing_constraints
+
+				Constraints:
+					canonical binary encoding required
+					field order MUST be fixed
+
+			Slicing Plan Canonicalization (MANDATORY)
+
+				slicing_plan MUST be ordered by:
+
+					1. time_offset (ascending)
+					2. slice_index (ascending)
+
+				Constraints:
+
+					serialization MUST strictly follow this order
+					no alternative ordering permitted
+
+			Timing Constraints Definition
+
+				timing_constraints MUST include:
+
+					start_time = decision_time
+					end_time = expiry_time
+					slice_interval
+
+				Constraints:
+					all values derived deterministically
+
+		4.3 Relationships
+			Trade Intent → mapped to → Execution Instruction
+			Execution Instruction → governed by → Execution Profile
+			Execution Instruction → decomposed into → Execution Slices
+
+		4.4 Ownership
+			Execution behavior logic → Phase A
+			Order lifecycle → Phase D
+
+	5. LOGIC / RULE ENGINE (CORE)
+
+		Numeric Model Enforcement
+
+			ALL numeric computations MUST use fixed-point:
+
+				value = integer / 10^6
+
+			Floating-point arithmetic is strictly forbidden
+
+			Deterministic Rounding Standard (MANDATORY)
+
+				All fixed-point computations MUST use:
+
+					ROUND_HALF_UP
+
+				Definition:
+					fractional part ≥ 0.5 → round up
+					fractional part < 0.5 → round down
+
+				Truncation is strictly forbidden
+
+				Overflow Rule:
+
+					If computation exceeds allowed bounds:
+						computation MUST fail
+						execution instruction MUST NOT be generated
+
+			Input Validation Layer (MANDATORY)
+
+			Execution instruction MUST NOT be generated if:
+
+				trade intent is invalid
+				confidence ∉ [0,1]
+				intent_id missing
+				instrument undefined
+
+		Global Parameter Definitions (MANDATORY)
+
+			validity_window_remaining_ratio =
+				(expiry_time - decision_time) / validity_window
+
+			slice_interval = fixed global constant
+
+			N_max = maximum allowed slice count
+
+			threshold = minimum execution_horizon to trigger slicing
+
+			max_slippage = globally defined upper bound
+
+			Constraint:
+
+				validity_window and expiry_time MUST be inherited
+				from upstream Trade Intent / Signal definitions
+
+				No recomputation allowed in execution layer
+
+			Validity Window Safety Constraint (MANDATORY)
+
+				validity_window MUST satisfy:
+
+					validity_window > 0
+
+				If validity_window ≤ 0:
+					upstream signal MUST be rejected
+					execution instruction MUST NOT be generated
+
+			Deterministic Time Constraint (MANDATORY)
+
+				All time values MUST be derived ONLY from:
+
+					trade_intent_snapshot.decision_time
+					trade_intent_snapshot.expiry_time
+
+				Derived values:
+
+					execution_horizon = expiry_time - decision_time
+
+				Constraint:
+
+					system time (wall clock) MUST NOT be used
+					manual time assignment is forbidden
+
+			Evaluation Time Definition (MANDATORY)
+
+				evaluation_time MUST be defined as:
+
+					evaluation_time =
+						trade_intent_snapshot.decision_time
+						+ elapsed_time_offset
+
+				Where:
+
+					elapsed_time_offset MUST be provided as part of canonical_input_set
+
+				Constraint:
+
+					evaluation_time MUST NOT depend on:
+						system clock
+						runtime conditions
+
+
+		Canonical Input Set (MANDATORY)
+
+			canonical_input_set = {
+
+						trade_intent_snapshot
+						execution_profile_set
+						configuration_snapshot
+						version_identifiers
+
+					}
+
+					trade_intent_snapshot:
+						MUST be immutable input from Step 3
+
+					execution_profile_set:
+						MUST be fixed, versioned, and deterministic
+
+					configuration_snapshot:
+						includes:
+							slice_interval
+							N_max
+							threshold
+							a1, a2, a3
+							w1, w2, w3
+
+					version_identifiers:
+						execution_behavior_version
+						config_version_id
+
+				Constraint:
+
+					ALL execution instructions MUST be derived ONLY from canonical_input_set
+
+					No implicit inputs allowed
+
+			Previous Execution State (MANDATORY)
+
+				canonical_input_set MUST include:
+
+					previous_execution_instruction:
+
+						instruction_id
+						execution_time
+						slicing_state
+
+				Constraint:
+
+					Any behavior depending on prior execution MUST use this input ONLY
+
+					No implicit state allowed
+
+
+		5.1 Input
+
+			Canonical Input (MANDATORY)
+
+				Input MUST be:
+
+					canonical_input_set.trade_intent_snapshot
+
+				Constraint:
+
+					No direct or implicit Trade Intent usage allowed outside canonical_input_set
+
+			Canonical Enforcement Rule (STRICT)
+
+				All computations MUST use ONLY:
+
+					canonical_input_set
+
+				Including:
+
+					Trade Intent fields
+					profile selection inputs
+					timing values
+					slicing inputs
+
+				Constraint:
+
+					Any external or runtime dependency → INVALID SYSTEM
+
+			External Intent Isolation (MANDATORY)
+
+				Execution Behavior MUST operate ONLY on:
+
+					canonical_input_set.trade_intent_snapshot (CORE)
+
+				External trade intents (CEIL):
+
+					MUST NOT enter this phase
+
+				Execution behavior for external inputs is handled in Phase D only
+
+		5.2 Execution Mapping Function
+
+			Canonical Execution Mapping Function
+
+				Execution Instruction = f(
+
+					canonical_input_set.trade_intent_snapshot,
+					canonical_input_set.execution_profile_set,
+					canonical_input_set.configuration_snapshot
+
+				)
+
+				Constraint:
+
+					No external inputs permitted
+
+		5.3 Core Rules
+			R1: Deterministic Mapping
+
+				Same trade intent → identical execution instruction
+
+			R2: Profile Binding Rule
+
+				Each trade intent MUST map to exactly one execution profile
+
+				Profile Selection Function (DETERMINISTIC)
+
+					execution_profile_id MUST be selected using:
+
+						profile_score = f(
+							confidence,
+							validity_window_remaining_ratio,
+							conflict_intensity
+						)
+
+					Selection Rule:
+						Select profile with:
+							highest profile_score
+
+					Tie-Breaking Rule (MANDATORY):
+						If multiple profiles have identical score:
+							select profile with lowest profile_id (lexicographic order)
+
+					Profile Score Computation (MANDATORY)
+
+						profile_score =
+							a1 * confidence
+						  + a2 * (1 - validity_window_remaining_ratio)
+						  + a3 * conflict_intensity
+
+						Constraints:
+							a1, a2, a3 MUST be fixed constants
+							a1 + a2 + a3 = 1
+
+						All computations MUST use fixed-point arithmetic
+
+					Constraint:
+						profile_score function MUST be:
+							deterministic
+							fixed-point based
+							globally defined
+
+			R3: Urgency Derivation
+
+				Execution urgency derived from:
+					signal strength (confidence)
+					validity window remaining
+					conflict context
+
+				Urgency Computation Function (DETERMINISTIC)
+
+					execution_urgency = U
+
+					U = w1 * confidence
+					  + w2 * (1 - validity_window_remaining_ratio)
+					  + w3 * conflict_intensity
+
+					Constraints:
+						w1, w2, w3 MUST be fixed constants
+						w1 + w2 + w3 = 1
+
+					All computations MUST use fixed-point arithmetic
+
+					Output:
+						execution_urgency ∈ [0,1]
+
+			R4: Slicing Trigger Rule (DETERMINISTIC)
+
+				If execution_horizon ≥ threshold:
+					slicing MUST be applied
+
+				If execution_horizon < threshold:
+					slicing MUST NOT be applied
+
+			R5: No Execution Awareness
+
+				Execution behavior MUST NOT include:
+					broker knowledge
+					order book state
+					latency assumptions
+
+		5.4 Execution Behavior Dimensions
+			Dimension			Definition
+			Aggression			Market vs passive bias
+			Urgency				Speed of execution
+			Horizon				Time window
+			Slicing				Split logic
+			Participation		Market participation rate
+			Slippage tolerance	Acceptable deviation
+
+		5.5 Slicing Model
+
+			Deterministic slicing:
+
+				Total Size → N slices
+				Each slice:
+					size = total_size / N
+					time_offset = fixed interval
+
+				Constraints:
+					No adaptive slicing (Phase A restriction)
+					No feedback-based adjustment
+
+			Slice Count Determination (DETERMINISTIC)
+
+				N = ceil(execution_horizon / slice_interval)
+
+				Where:
+					slice_interval = fixed global constant
+
+				Constraints:
+					N ≥ 1
+					N ≤ N_max
+
+				Slice Size:
+					size_i = total_size / N
+
+				Time Offset:
+					time_offset_i = i * slice_interval
+
+			Deterministic Ceil Definition (MANDATORY)
+
+				Let:
+
+					x = execution_horizon / slice_interval
+
+				Under fixed-point representation:
+
+					x_fp = integer value scaled by 10^6
+
+				Ceil MUST be computed as:
+
+					N = (x_fp + scale - 1) // scale
+
+				Where:
+					scale = 10^6
+
+				Constraints:
+
+					floating-point ceil is strictly forbidden
+					computation MUST use integer arithmetic only
+
+	6. FLOW ARCHITECTURE
+		6.1 Input
+
+			Canonical Input
+
+				Execution Behavior MUST consume:
+
+					canonical_input_set.trade_intent_snapshot
+
+				Constraint:
+
+					Flow layer MUST NOT introduce alternative input sources
+
+			Time Reference Constraint
+
+				execution_instruction MUST inherit:
+
+					decision_time (from Trade Intent)
+
+				All timing computations MUST be derived from decision_time
+
+				Manual time assignment is strictly forbidden
+
+		6.2 Processing
+			canonical_input_set.trade_intent_snapshot
+			→ Profile Mapping
+			→ Urgency Calculation
+			→ Sizing Translation
+			→ Slicing Plan Generation
+			→ Execution Instruction
+
+		6.3 Output
+
+			Execution Instruction
+
+		6.4 Flow Diagram
+			canonical_input_set.trade_intent_snapshot → Transform → Execution Instruction
+
+	7. PIPELINE STRUCTURE
+
+		Execution Behavior Pipeline:
+			Generate → Validate → Structure → Emit → Expire
+
+		State Transitions
+			Generated → Valid
+			Valid → Structured
+			Structured → Emitted
+			Emitted → Expired
+
+	8. CONTROL & CONSTRAINTS
+		8.1 Hard Rules
+			Deterministic mapping only
+			No infra dependency
+			No randomness
+			No dynamic adaptation
+
+		8.2 Soft Rules
+			Prefer smoother execution
+			Prefer lower slippage profiles when equivalent
+
+		8.3 Guardrails
+			No oversized execution slices
+			No conflicting execution profiles
+			No undefined timing
+
+		Execution Density Constraint
+
+			Maximum execution instructions per instrument per window MUST be enforced
+
+			If exceeded:
+				excess instructions MUST be rejected deterministically
+
+		Parameter Bounds (MANDATORY)
+
+			execution_urgency ∈ [0,1]
+			participation_rate ∈ [0,1]
+			slippage_tolerance ∈ [0, max_slippage]
+
+			If any value exceeds bounds:
+				instruction MUST be rejected
+
+		Execution Profile Bounds
+
+			aggression_level ∈ [0,1]
+			liquidity_preference ∈ [0,1]
+
+			Values outside bounds → invalid profile
+
+	9. STATE & DATA MODEL
+		9.1 State Types
+			Pending Instruction
+			Active Instruction
+			Expired Instruction
+
+		9.2 State Transitions
+			Created → Active
+			Active → Expired (based on execution_horizon)
+
+			Expiry Rule (DETERMINISTIC)
+
+				expiry_time = decision_time + execution_horizon
+
+				Deterministic Expiry Rule
+
+					Let:
+
+						Δt_execution =
+							evaluation_time
+							- decision_time
+
+					Where:
+
+						evaluation_time MUST be derived from canonical_input_set
+
+					Instruction is ACTIVE if:
+
+						Δt_execution < execution_horizon
+
+					Instruction is EXPIRED if:
+
+						Δt_execution ≥ execution_horizon
+
+		9.3 Source of Truth
+
+			Execution Instruction object (immutable)
+
+		Pipeline-State Mapping (MANDATORY)
+
+			Generated → Pending
+			Validated → Pending
+			Structured → Active
+			Emitted → Active
+			Expired → Expired
+
+			Constraint:
+				Every pipeline stage MUST map to exactly one state
+
+	10. FAILURE MODEL
+		10.1 Failure Scenarios
+			ambiguous execution mapping
+			inconsistent slicing
+			invalid urgency computation
+
+		10.2 Impact
+			execution inefficiency
+			slippage increase
+			divergence from decision intent
+
+		10.3 Mitigation
+			strict profile definitions
+			deterministic slicing
+			validation enforcement
+
+	11. ASSUMPTION REGISTER
+		Assumption						Reason						Validate In			Status
+		Execution profiles sufficient	Needed for standardization	Phase B				Open
+		Slicing model adequate			Required for scaling		Phase D				Open
+		No adaptive logic needed		Maintain determinism		Phase D				Open
+
+	12. VALIDATION FRAMEWORK
+		12.1 Checklist
+			Execution mapping defined
+			Profiles defined
+			Determinism enforced
+			Slicing rules defined
+
+		12.2 Validation Method
+			Replay test (same intent → same instruction)
+			Edge case testing (short horizon, large size)
+
+		12.3 Acceptance Criteria
+			Zero ambiguity
+			Fully deterministic
+			Execution-ready
+
+	13. OUTPUT (DELIVERABLE SPEC)
+
+		Execution Behavior Specification
+
+		Includes:
+			execution instruction schema
+			execution profiles
+			slicing rules
+			timing rules
+
+	14. TRACEABILITY MAPPING
+		Input: Trade Intent (Step 3)
+		Output: Execution Instruction (feeds Phase D)
+
+		Every instruction MUST map to:
+			intent_id
+			supporting signals
+
+		Trace Continuity Rule
+
+			Execution Instruction MUST inherit traceability from Trade Intent:
+
+				intent_id → maps to:
+					supporting_signals (via Trade Intent)
+
+			Constraint:
+				No execution instruction may exist without valid intent_id linkage
+
+			Full lineage:
+				Signal → Decision → Trade Intent → Execution Instruction
+
+	15. CROSS-PHASE CONSISTENCY RULES
+
+		OWNED:
+			execution behavior logic
+
+		REFERENCED:
+			decision output (Step 3)
+			execution system (Phase D)
+
+	16. SCALABILITY MODEL
+
+		Supports:
+			multi-asset execution
+			high-frequency trade intents
+			large capital scaling
+
+		Model:
+			per-instrument isolation
+			profile-based scaling
+
+	17. GOVERNANCE INTEGRATION
+		Execution profiles must be versioned
+		Any change requires approval
+		Impact on downstream execution must be evaluated
+
+	18. AUDITABILITY & OBSERVABILITY
+
+		Must log:
+			trade intent input
+			profile selection
+			slicing plan
+			final instruction
+
+		Replay requirement:
+			identical intent → identical execution instruction
+
+	19. RISK CONSIDERATIONS
+
+		Risks:
+			over-aggressive execution
+			liquidity mismatch
+			excessive slicing
+
+		Controls:
+			profile constraints
+			slippage tolerance bounds
+			deterministic limits
+
+	20. FAILURE CONDITION (PHASE LEVEL)
+
+		Phase fails if:
+			execution behavior ambiguous
+			non-deterministic mapping exists
+			missing traceability
+			slicing undefined
+
+	21. PHASE LOCK CRITERIA
+		All sections complete
+		Determinism verified
+		Validation passed
+		Governance approval obtained

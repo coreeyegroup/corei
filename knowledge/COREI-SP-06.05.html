@@ -1,0 +1,2893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <title>Platform Specifications</title>
+  <style>
+  body {
+    background: #0A0D12;
+    color: #E3E7EC;
+    font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px 40px;
+  }
+
+  h1 {
+    font-size: 26px;
+    font-weight: 600;
+    color: #C6A46A;
+    margin: 24px 0 12px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 8px;
+  }
+
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #D4B88A;
+    margin: 20px 0 10px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 6px;
+  }
+
+  h3 {
+    font-size: 17px;
+    font-weight: 500;
+    color: #E3E7EC;
+    margin: 16px 0 8px 0;
+  }
+
+  h4 {
+    font-size: 15px;
+    font-weight: 500;
+    color: #C5CED9;
+    margin: 12px 0 6px 0;
+  }
+
+  p {
+    margin-bottom: 8px;
+    color: #C5CED9;
+  }
+
+  ul,
+  ol {
+    padding-left: 24px;
+    margin-bottom: 8px;
+    color: #C5CED9;
+  }
+
+  li {
+    margin-bottom: 2px;
+  }
+
+  code {
+    font-family: 'JetBrains Mono', 'Cascadia Code', monospace;
+    font-size: 13px;
+    background: rgba(255,255,255,0.05);
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid #28303C;
+    color: #C5CED9;
+  }
+
+  pre {
+    background: #18202A;
+    border: 1px solid #28303C;
+    border-radius: 6px;
+    padding: 16px 20px;
+    overflow: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 12px 0 16px 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #C5CED9;
+  }
+
+  pre code {
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 16px 0;
+    font-size: 13px;
+    color: #C5CED9;
+  }
+
+  th {
+    background: #18202A;
+    color: #C5CED9;
+    font-weight: 600;
+    text-align: left;
+    padding: 6px 12px;
+    border: 1px solid #28303C;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  td {
+    padding: 4px 12px;
+    border: 1px solid #28303C;
+    background: #0E1219;
+  }
+
+  tr:nth-child(even) td {
+    background: #121821;
+  }
+
+  blockquote {
+    border-left: 3px solid #C6A46A;
+    padding-left: 16px;
+    margin: 8px 0 12px 0;
+    color: #6E7883;
+    font-style: italic;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #28303C;
+    margin: 24px 0;
+  }
+
+  a {
+    color: #8BB4F0;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  strong {
+    color: #E3E7EC;
+    font-weight: 600;
+  }
+
+  img {
+    max-width: 100%;
+    border-radius: 4px;
+    border: 1px solid #28303C;
+  }
+
+  .doc-footer {
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid #28303C;
+    font-size: 12px;
+    color: #6E7883;
+    font-family: monospace;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+</style>
+</head>
+
+<body>
+
+  <div
+    class="doc-header"
+    style="
+      background:#121821;
+      border:1px solid #28303C;
+      border-radius:8px;
+      padding:1.2rem 1.8rem;
+      margin-bottom:1.8rem;
+    "
+  >
+
+    <div
+      style="
+        color:#C6A46A;
+        font-weight:600;
+        font-size:13px;
+        text-transform:uppercase;
+        letter-spacing:0.05em;
+      "
+    >
+      COREI · Knowledge System
+    </div>
+
+
+    <div
+      style="
+        color:#6E7883;
+        font-family:monospace;
+        font-size:14px;
+        margin-top:0.1rem;
+      "
+    >
+      COREI-SP-06.05
+    </div>
+
+
+    <h1
+      style="
+        font-size:28px;
+        font-weight:600;
+        color:#E3E7EC;
+        margin:0.1rem 0;
+        border-bottom:none;
+        padding-bottom:0;
+      "
+    >
+      Platform Specifications
+    </h1>
+
+    <div
+      style="
+        font-size:16px;
+        color:#C5CED9;
+      "
+    >
+      06 — Specifications
+      ·
+      Constitutional
+    </div>
+
+    <div
+      style="
+        display:flex;
+        flex-wrap:wrap;
+        gap:0.6rem 1.8rem;
+        margin-top:0.6rem;
+        font-size:13px;
+      "
+    >
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Status
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          Approved
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Version
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          1
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Classification
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          Constitutional
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Owner
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          COREI
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Repository
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+            font-family:monospace;
+          "
+        >
+          knowledge/06-specifications/
+        </span>
+      </span>
+
+    </div>
+
+
+    <div
+      style="
+        margin-top:0.8rem;
+        padding-top:0.6rem;
+        border-top:1px solid #28303C;
+        display:flex;
+        flex-wrap:wrap;
+        gap:0.3rem;
+        align-items:center;
+      "
+    >
+      <span
+        style="
+          font-size:11px;
+          text-transform:uppercase;
+          color:#6E7883;
+          letter-spacing:0.04em;
+          font-weight:600;
+          margin-right:0.4rem;
+        "
+      >
+        Depends On
+      </span>
+
+      <span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-KS-00.00</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-KS-00.01</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-KS-00.02</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-KS-00.03</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-KS-00.04</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ID-01.00</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ID-01.01</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ID-01.02</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ID-01.05</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-GV-02.00</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-GV-02.01</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-GV-02.02</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-GV-02.03</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-AR-03.00</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-AR-03.01</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-AR-03.02</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-AR-03.03</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-AR-03.04</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-AR-03.05</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-AR-03.06</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-AR-03.07</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-AR-03.08</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-AR-03.09</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-EN-04.00</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-EN-04.01</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-EN-04.02</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-EN-04.03</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-EN-04.04</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-EN-04.05</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-EN-04.06</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-EN-04.07</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-EN-04.08</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-EN-04.09</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ST-05.00</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ST-05.01</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ST-05.02</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ST-05.03</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ST-05.04</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ST-05.05</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ST-05.06</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ST-05.07</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ST-05.08</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-ST-05.09</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-SP-06.00</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-SP-06.01</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-SP-06.02</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-SP-06.03</span><span style="
+              font-family:monospace;
+              font-size:12px;
+              color:#D4B88A;
+              background:rgba(198,164,106,0.1);
+              padding:0.1rem 0.6rem;
+              border-radius:12px;
+              border:1px solid rgba(198,164,106,0.2);
+            ">COREI-SP-06.04</span>
+
+    </div>
+
+
+  </div>
+
+
+  <div
+    style="
+      background:#0E1219;
+      border:1px solid #28303C;
+      border-radius:6px;
+      padding:0.8rem 1.2rem;
+      margin:0.6rem 0 1.2rem 0;
+      font-family:monospace;
+      font-size:12px;
+      color:#C5CED9;
+      overflow-x:auto;
+      line-height:2;
+    "
+  >
+
+    <div
+      style="
+        font-weight:600;
+        color:#C6A46A;
+        margin-bottom:0.25rem;
+      "
+    >
+      Dependency Chain
+    </div>
+
+    <div
+      style="
+        display:flex;
+        flex-wrap:wrap;
+        align-items:center;
+        gap:4px;
+      "
+    >
+
+      <span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-KS-00.00</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-KS-00.01</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-KS-00.02</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-KS-00.03</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-KS-00.04</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ID-01.00</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ID-01.01</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ID-01.02</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ID-01.05</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-GV-02.00</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-GV-02.01</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-GV-02.02</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-GV-02.03</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-AR-03.00</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-AR-03.01</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-AR-03.02</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-AR-03.03</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-AR-03.04</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-AR-03.05</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-AR-03.06</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-AR-03.07</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-AR-03.08</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-AR-03.09</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-EN-04.00</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-EN-04.01</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-EN-04.02</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-EN-04.03</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-EN-04.04</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-EN-04.05</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-EN-04.06</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-EN-04.07</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-EN-04.08</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-EN-04.09</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ST-05.00</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ST-05.01</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ST-05.02</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ST-05.03</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ST-05.04</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ST-05.05</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ST-05.06</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ST-05.07</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ST-05.08</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-ST-05.09</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-SP-06.00</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-SP-06.01</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-SP-06.02</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-SP-06.03</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span><span style="
+              color:#C6A46A;
+              font-weight:600;
+              white-space:nowrap;
+            ">COREI-SP-06.04</span>
+            <span style="
+              color:#4A525E;
+              padding:0 4px;
+            ">→</span>
+
+
+      <span
+        style="
+          color:#C6A46A;
+          font-weight:600;
+          background:rgba(198,164,106,0.15);
+          padding:0 8px;
+          border-radius:3px;
+          white-space:nowrap;
+        "
+      >
+        COREI-SP-06.05
+      </span>
+
+
+    </div>
+
+  </div>
+
+
+  <h1>COREI PLATFORM SPECIFICATIONS</h1>
+<h1>DOCUMENT ID</h1>
+<h1>COREI-SP-06.05</h1>
+<h1>DOCUMENT NAME</h1>
+<h1>PLATFORM SPECIFICATIONS</h1>
+<h1>REPOSITORY FILE</h1>
+<h1>knowledge/06-specifications/COREI-SP-06.05-PLATFORM-SPECIFICATIONS.md</h1>
+<h1>VERSION</h1>
+<h1>1.0</h1>
+<h1>STATUS</h1>
+<h1>APPROVED</h1>
+<h1>CLASSIFICATION</h1>
+<h1>CONSTITUTIONAL</h1>
+<h1>1. PURPOSE</h1>
+<p>The COREI Platform Specifications define the<br>
+authoritative implementation requirements governing<br>
+every institutional platform within the COREI<br>
+Institution.</p>
+<p>Their purpose is to ensure that platforms remain</p>
+<p>architecturally bounded,</p>
+<p>capability-oriented,</p>
+<p>modular,</p>
+<p>contract-governed,</p>
+<p>composable,</p>
+<p>secure,</p>
+<p>observable,</p>
+<p>resilient,</p>
+<p>operationally controlled,</p>
+<p>and continuously evolvable.</p>
+<p>A platform is not merely a collection of services.</p>
+<p>A platform is a governed institutional capability<br>
+system that provides reusable capabilities to<br>
+authorized consumers through explicit contracts<br>
+and controlled runtime boundaries.</p>
+<h1>2. SCOPE</h1>
+<p>These specifications govern</p>
+<p>foundation platforms,</p>
+<p>provider platforms,</p>
+<p>capability platforms,</p>
+<p>cognitive platforms,</p>
+<p>workspace platforms,</p>
+<p>experience platforms,</p>
+<p>application platforms,</p>
+<p>service platforms,</p>
+<p>module platforms,</p>
+<p>engine platforms,</p>
+<p>domain platforms,</p>
+<p>runtime platforms,</p>
+<p>event platforms,</p>
+<p>state platforms,</p>
+<p>data platforms,</p>
+<p>security platforms,</p>
+<p>infrastructure platforms,</p>
+<p>observability platforms,</p>
+<p>delivery platforms,</p>
+<p>automation platforms,</p>
+<p>artificial intelligence platforms,</p>
+<p>trading platforms,</p>
+<p>and future institutional platforms.</p>
+<p>Technology-specific platform specifications MAY<br>
+extend this document.</p>
+<p>No extension may weaken these requirements.</p>
+<h1>3. PLATFORM DEFINITION</h1>
+<p>Within COREI,</p>
+<p>a platform is an explicitly owned,<br>
+architecturally bounded,<br>
+reusable institutional capability system that<br>
+provides governed capabilities,<br>
+contracts,<br>
+runtime services,<br>
+or operational foundations to one or more<br>
+authorized consumers.</p>
+<p>Every platform SHALL define</p>
+<p>institutional purpose,</p>
+<p>ownership,</p>
+<p>capability scope,</p>
+<p>architectural boundary,</p>
+<p>consumer boundary,</p>
+<p>provider boundary,</p>
+<p>public contracts,</p>
+<p>internal composition,</p>
+<p>dependencies,</p>
+<p>runtime responsibilities,</p>
+<p>security boundary,</p>
+<p>state responsibility,</p>
+<p>observability,</p>
+<p>operational responsibility,</p>
+<p>and lifecycle.</p>
+<h1>4. PLATFORM PRINCIPLE</h1>
+<p>Platforms SHALL exist to provide reusable<br>
+institutional capabilities.</p>
+<p>Platforms SHALL NOT exist merely to group<br>
+unrelated technology.</p>
+<p>A platform SHALL provide a coherent capability<br>
+boundary.</p>
+<p>Technology grouping alone does not constitute<br>
+platform architecture.</p>
+<p>Institutional capability defines the platform.</p>
+<p>Technology implements the platform.</p>
+<h1>5. PLATFORM CLASSIFICATION</h1>
+<p>Every platform SHALL declare its primary<br>
+classification.</p>
+<p>Permitted classifications include</p>
+<p>Foundation Platform</p>
+<p>Provider Platform</p>
+<p>Capability Platform</p>
+<p>Cognitive Platform</p>
+<p>Workspace Platform</p>
+<p>Experience Platform</p>
+<p>Application Platform</p>
+<p>Service Platform</p>
+<p>Module Platform</p>
+<p>Engine Platform</p>
+<p>Domain Platform</p>
+<p>Runtime Platform</p>
+<p>Event Platform</p>
+<p>State Platform</p>
+<p>Data Platform</p>
+<p>Security Platform</p>
+<p>Infrastructure Platform</p>
+<p>Observability Platform</p>
+<p>Delivery Platform</p>
+<p>Automation Platform</p>
+<p>Intelligence Platform</p>
+<p>Other approved institutional classification</p>
+<p>Classification SHALL describe the platform’s<br>
+primary institutional responsibility.</p>
+<p>Classification SHALL NOT override architectural<br>
+ownership.</p>
+<h1>6. PLATFORM IDENTITY</h1>
+<p>Every platform SHALL possess a unique and stable<br>
+institutional identity.</p>
+<p>Platform identity SHALL define</p>
+<p>platform name,</p>
+<p>platform identifier,</p>
+<p>institutional purpose,</p>
+<p>owned capabilities,</p>
+<p>architectural domain,</p>
+<p>platform classification,</p>
+<p>accountable owner,</p>
+<p>engineering owner,</p>
+<p>runtime owner where applicable,</p>
+<p>consumer population,</p>
+<p>criticality,</p>
+<p>and lifecycle status.</p>
+<p>Platform identity SHALL remain stable across<br>
+implementation generations.</p>
+<h1>7. PLATFORM OWNERSHIP</h1>
+<p>Every platform SHALL have explicit ownership.</p>
+<p>Ownership SHALL define responsibility for</p>
+<p>platform architecture,</p>
+<p>capability boundaries,</p>
+<p>public contracts,</p>
+<p>internal composition,</p>
+<p>dependency governance,</p>
+<p>security,</p>
+<p>runtime integration,</p>
+<p>observability,</p>
+<p>operational reliability,</p>
+<p>release governance,</p>
+<p>documentation,</p>
+<p>maintenance,</p>
+<p>evolution,</p>
+<p>and retirement.</p>
+<p>Shared contribution is permitted.</p>
+<p>Undefined platform accountability is prohibited.</p>
+<h1>8. PLATFORM BOUNDARY</h1>
+<p>Every platform SHALL define</p>
+<p>what it owns,</p>
+<p>what it provides,</p>
+<p>what it consumes,</p>
+<p>what it does not own,</p>
+<p>which capabilities are public,</p>
+<p>which capabilities are internal,</p>
+<p>which contracts are stable,</p>
+<p>which dependencies are permitted,</p>
+<p>and which consumers are authorized.</p>
+<p>Platform boundaries SHALL follow approved<br>
+architecture.</p>
+<p>Organizational convenience SHALL NOT redefine<br>
+platform ownership.</p>
+<h1>9. CAPABILITY OWNERSHIP</h1>
+<p>Every platform capability SHALL have one<br>
+authoritative ownership boundary.</p>
+<p>A capability SHALL NOT be independently<br>
+reimplemented by multiple platform layers unless<br>
+explicitly approved by architecture.</p>
+<p>Existing institutional capabilities SHALL be<br>
+consumed through approved interfaces.</p>
+<p>Platform composition SHALL favor reuse over<br>
+duplication.</p>
+<p>Foundational capabilities SHALL be integrated.</p>
+<p>They SHALL NOT be rebuilt by downstream platforms.</p>
+<h1>10. PLATFORM COMPOSITION</h1>
+<p>A platform MAY be composed of</p>
+<p>services,</p>
+<p>modules,</p>
+<p>engines,</p>
+<p>providers,</p>
+<p>registries,</p>
+<p>managers,</p>
+<p>runtimes,</p>
+<p>state stores,</p>
+<p>event channels,</p>
+<p>APIs,</p>
+<p>libraries,</p>
+<p>workflows,</p>
+<p>user interfaces,</p>
+<p>and infrastructure capabilities.</p>
+<p>Composition SHALL remain explicit.</p>
+<p>Every component SHALL have</p>
+<p>purpose,</p>
+<p>ownership,</p>
+<p>boundary,</p>
+<p>dependency direction,</p>
+<p>and lifecycle responsibility.</p>
+<p>A platform SHALL NOT become an unstructured<br>
+collection of components.</p>
+<h1>11. PLATFORM LAYERING</h1>
+<p>Platform layering SHALL preserve approved<br>
+architecture.</p>
+<p>Higher-level platforms MAY consume capabilities<br>
+from lower-level platforms.</p>
+<p>Lower-level foundational platforms SHALL NOT<br>
+depend upon higher-level consumer platforms unless<br>
+explicitly required by approved architecture.</p>
+<p>Dependency inversion through implementation<br>
+convenience is prohibited.</p>
+<p>Layering SHALL remain directionally valid.</p>
+<h1>12. PLATFORM DEPENDENCY GRAPH</h1>
+<p>Every platform SHALL maintain an understandable<br>
+dependency graph.</p>
+<p>The graph SHALL identify</p>
+<p>platform dependencies,</p>
+<p>service dependencies,</p>
+<p>capability dependencies,</p>
+<p>runtime dependencies,</p>
+<p>data dependencies,</p>
+<p>event dependencies,</p>
+<p>state dependencies,</p>
+<p>security dependencies,</p>
+<p>and infrastructure dependencies</p>
+<p>where applicable.</p>
+<p>Hidden platform dependencies are prohibited.</p>
+<p>Circular platform dependencies SHALL be identified<br>
+and resolved.</p>
+<h1>13. PUBLIC PLATFORM INTERFACE</h1>
+<p>Every platform SHALL explicitly define its public<br>
+interface.</p>
+<p>Public platform interfaces MAY include</p>
+<p>capability APIs,</p>
+<p>service APIs,</p>
+<p>provider contracts,</p>
+<p>module contracts,</p>
+<p>engine contracts,</p>
+<p>event contracts,</p>
+<p>state contracts,</p>
+<p>extension points,</p>
+<p>registries,</p>
+<p>commands,</p>
+<p>queries,</p>
+<p>and user-facing interfaces.</p>
+<p>Consumers SHALL depend upon approved public<br>
+interfaces.</p>
+<p>Consumers SHALL NOT depend upon internal platform<br>
+implementation details.</p>
+<h1>14. INTERNAL PLATFORM INTERFACE</h1>
+<p>Internal platform interfaces SHALL remain<br>
+encapsulated unless explicitly promoted to a<br>
+public contract.</p>
+<p>Internal implementation details MAY evolve<br>
+without consumer migration where public contracts<br>
+remain unchanged.</p>
+<p>Deep coupling to internal platform structure is<br>
+prohibited across ownership boundaries.</p>
+<p>Encapsulation SHALL preserve platform evolution.</p>
+<h1>15. CONTRACT-FIRST PLATFORM DESIGN</h1>
+<p>Every cross-boundary platform interaction SHALL be<br>
+contract-defined.</p>
+<p>Contracts SHALL define,<br>
+where applicable,</p>
+<p>provider,</p>
+<p>consumer,</p>
+<p>capability,</p>
+<p>input,</p>
+<p>output,</p>
+<p>behaviour,</p>
+<p>failure semantics,</p>
+<p>version,</p>
+<p>compatibility,</p>
+<p>security,</p>
+<p>observability,</p>
+<p>and lifecycle.</p>
+<p>Undocumented platform integration is prohibited.</p>
+<h1>16. PROVIDER SPECIFICATION</h1>
+<p>Platforms supporting multiple implementation<br>
+providers SHALL define a provider contract.</p>
+<p>A provider SHALL implement an approved capability<br>
+interface.</p>
+<p>Provider-specific behaviour SHALL remain behind<br>
+the provider boundary.</p>
+<p>Consumers SHALL depend upon the capability<br>
+contract rather than provider-specific<br>
+implementation.</p>
+<p>Provider selection SHALL be governed by the<br>
+platform.</p>
+<h1>17. PROVIDER REGISTRY</h1>
+<p>Where provider registration is required,<br>
+the platform SHALL define</p>
+<p>provider identity,</p>
+<p>provider type,</p>
+<p>supported capabilities,</p>
+<p>configuration requirements,</p>
+<p>lifecycle state,</p>
+<p>health state,</p>
+<p>priority or selection rules where applicable,</p>
+<p>and registration authority.</p>
+<p>Provider registration SHALL be deterministic.</p>
+<p>Unregistered providers SHALL NOT silently become<br>
+production dependencies.</p>
+<h1>18. CAPABILITY SPECIFICATION</h1>
+<p>Every platform capability SHALL define</p>
+<p>capability identity,</p>
+<p>institutional purpose,</p>
+<p>owner,</p>
+<p>input contract,</p>
+<p>output contract,</p>
+<p>dependencies,</p>
+<p>lifecycle,</p>
+<p>security requirements,</p>
+<p>observability requirements,</p>
+<p>and failure behaviour.</p>
+<p>Capabilities SHALL be independently identifiable.</p>
+<p>Capabilities SHALL NOT be defined only by internal<br>
+class or file names.</p>
+<h1>19. CAPABILITY REGISTRY</h1>
+<p>Where capabilities are dynamically discoverable,<br>
+the platform SHALL maintain an authoritative<br>
+capability registry.</p>
+<p>The registry SHALL define</p>
+<p>capability identity,</p>
+<p>owner,</p>
+<p>version,</p>
+<p>availability,</p>
+<p>dependencies,</p>
+<p>provider relationship where applicable,</p>
+<p>and lifecycle state.</p>
+<p>Capability discovery SHALL NOT depend upon<br>
+undocumented runtime assumptions.</p>
+<h1>20. MODULE SPECIFICATION</h1>
+<p>A platform module SHALL represent a bounded<br>
+implementation unit within an approved platform<br>
+boundary.</p>
+<p>Modules SHALL define</p>
+<p>purpose,</p>
+<p>public interface,</p>
+<p>internal dependencies,</p>
+<p>platform dependencies,</p>
+<p>state responsibility,</p>
+<p>and lifecycle.</p>
+<p>Modules SHALL NOT bypass platform contracts to<br>
+access unrelated internal implementation.</p>
+<h1>21. ENGINE SPECIFICATION</h1>
+<p>A platform engine SHALL provide a bounded<br>
+processing capability.</p>
+<p>Every engine SHALL define</p>
+<p>input,</p>
+<p>processing responsibility,</p>
+<p>output,</p>
+<p>state interaction,</p>
+<p>dependency requirements,</p>
+<p>execution model,</p>
+<p>failure behaviour,</p>
+<p>observability,</p>
+<p>and lifecycle.</p>
+<p>Engine outputs SHALL not acquire institutional<br>
+authority beyond the engine’s approved<br>
+architectural role.</p>
+<h1>22. RUNTIME SPECIFICATION</h1>
+<p>Platforms with runtime responsibilities SHALL<br>
+define their execution model.</p>
+<p>Runtime specifications SHALL identify</p>
+<p>initialization,</p>
+<p>registration,</p>
+<p>dependency resolution,</p>
+<p>lifecycle sequencing,</p>
+<p>state initialization,</p>
+<p>event integration,</p>
+<p>capability activation,</p>
+<p>health transition,</p>
+<p>shutdown,</p>
+<p>and recovery.</p>
+<p>Runtime behaviour SHALL be deterministic.</p>
+<p>Initialization order SHALL NOT depend upon<br>
+accidental import order or undocumented timing.</p>
+<h1>23. PLATFORM INITIALIZATION</h1>
+<p>Platform initialization SHALL follow an explicit<br>
+sequence.</p>
+<p>The sequence MAY include</p>
+<p>configuration validation,</p>
+<p>identity establishment,</p>
+<p>secret acquisition,</p>
+<p>provider registration,</p>
+<p>capability registration,</p>
+<p>dependency resolution,</p>
+<p>state restoration,</p>
+<p>event subscription,</p>
+<p>service activation,</p>
+<p>health validation,</p>
+<p>and readiness transition.</p>
+<p>Initialization failure SHALL fail clearly.</p>
+<p>Partial initialization SHALL be observable.</p>
+<h1>24. PLATFORM LIFECYCLE</h1>
+<p>Every platform SHALL define lifecycle states.</p>
+<p>Lifecycle MAY include</p>
+<p>Uninitialized</p>
+<p>Initializing</p>
+<p>Ready</p>
+<p>Active</p>
+<p>Degraded</p>
+<p>Stopping</p>
+<p>Stopped</p>
+<p>Failed</p>
+<p>Retired</p>
+<p>State transitions SHALL be explicit where runtime<br>
+state affects institutional behaviour.</p>
+<p>Invalid lifecycle transitions SHALL be prevented<br>
+where practical.</p>
+<h1>25. LIFECYCLE OWNERSHIP</h1>
+<p>Platform lifecycle management SHALL have one<br>
+authoritative owner.</p>
+<p>Individual components SHALL NOT independently<br>
+redefine platform lifecycle state.</p>
+<p>Component lifecycle MAY contribute to platform<br>
+health.</p>
+<p>Platform lifecycle authority SHALL remain<br>
+explicit.</p>
+<h1>26. DEPENDENCY RESOLUTION</h1>
+<p>Platforms providing dependency resolution SHALL<br>
+use explicit dependency declarations.</p>
+<p>Dependency resolution SHALL</p>
+<p>detect missing dependencies,</p>
+<p>detect invalid dependency direction,</p>
+<p>detect cycles where prohibited,</p>
+<p>respect lifecycle requirements,</p>
+<p>and fail deterministically.</p>
+<p>Runtime dependency resolution SHALL NOT conceal<br>
+architectural violations.</p>
+<h1>27. EXTENSION SPECIFICATION</h1>
+<p>Platforms supporting extensions SHALL define<br>
+controlled extension points.</p>
+<p>Every extension point SHALL define</p>
+<p>contract,</p>
+<p>registration mechanism,</p>
+<p>allowed capabilities,</p>
+<p>security boundary,</p>
+<p>lifecycle,</p>
+<p>compatibility,</p>
+<p>and failure isolation.</p>
+<p>Extensions SHALL NOT bypass platform governance.</p>
+<p>Extension flexibility SHALL not compromise<br>
+institutional determinism.</p>
+<h1>28. PLUGIN SPECIFICATION</h1>
+<p>Where plugin architecture is used,<br>
+plugins SHALL implement approved contracts.</p>
+<p>Plugins SHALL define</p>
+<p>identity,</p>
+<p>version,</p>
+<p>capabilities,</p>
+<p>dependencies,</p>
+<p>permissions,</p>
+<p>configuration,</p>
+<p>lifecycle,</p>
+<p>and compatibility.</p>
+<p>Plugin loading SHALL be controlled.</p>
+<p>Untrusted or unapproved plugins SHALL NOT execute<br>
+within institutional runtime boundaries.</p>
+<h1>29. EVENT INTEGRATION</h1>
+<p>Platforms participating in event-driven<br>
+architecture SHALL define</p>
+<p>events produced,</p>
+<p>events consumed,</p>
+<p>event ownership,</p>
+<p>schemas,</p>
+<p>versioning,</p>
+<p>ordering requirements,</p>
+<p>delivery expectations,</p>
+<p>idempotency,</p>
+<p>retry behaviour,</p>
+<p>dead-letter behaviour,</p>
+<p>and observability.</p>
+<p>Events SHALL represent explicit institutional<br>
+facts.</p>
+<p>Event integration SHALL not create hidden<br>
+dependency ownership.</p>
+<h1>30. EVENT OWNERSHIP</h1>
+<p>Every event contract SHALL have one authoritative<br>
+owner.</p>
+<p>The event owner SHALL define</p>
+<p>semantic meaning,</p>
+<p>schema,</p>
+<p>versioning,</p>
+<p>compatibility,</p>
+<p>publication conditions,</p>
+<p>and lifecycle.</p>
+<p>Consumers SHALL NOT redefine event meaning.</p>
+<p>Published event semantics SHALL remain stable<br>
+within compatibility commitments.</p>
+<h1>31. STATE INTEGRATION</h1>
+<p>Platforms managing institutional state SHALL<br>
+define</p>
+<p>state identity,</p>
+<p>state ownership,</p>
+<p>state authority,</p>
+<p>state transitions,</p>
+<p>persistence,</p>
+<p>consistency,</p>
+<p>versioning,</p>
+<p>recovery,</p>
+<p>and observability.</p>
+<p>Shared state SHALL NOT create ambiguous ownership.</p>
+<p>State mutation SHALL occur only through authorized<br>
+capabilities.</p>
+<h1>32. STATE AUTHORITY</h1>
+<p>Every authoritative state SHALL have one defined<br>
+authority.</p>
+<p>Derived state SHALL be distinguishable from<br>
+authoritative state.</p>
+<p>Cached state SHALL be distinguishable from<br>
+persistent state.</p>
+<p>Observed state SHALL be distinguishable from<br>
+desired state.</p>
+<p>State ambiguity is prohibited where institutional<br>
+correctness depends upon authority.</p>
+<h1>33. DATA INTEGRATION</h1>
+<p>Platforms consuming or producing institutional<br>
+data SHALL use governed data contracts.</p>
+<p>Data integration SHALL preserve</p>
+<p>meaning,</p>
+<p>ownership,</p>
+<p>schema,</p>
+<p>quality,</p>
+<p>lineage,</p>
+<p>security,</p>
+<p>retention,</p>
+<p>and lifecycle.</p>
+<p>Local representation MAY differ.</p>
+<p>Institutional meaning SHALL remain consistent.</p>
+<h1>34. PLATFORM CONFIGURATION</h1>
+<p>Platform configuration SHALL be</p>
+<p>explicit,</p>
+<p>validated,</p>
+<p>documented,</p>
+<p>version-aware where required,</p>
+<p>environment-aware,</p>
+<p>and separate from secrets.</p>
+<p>Configuration SHALL not silently alter<br>
+constitutional architecture.</p>
+<p>Invalid mandatory configuration SHALL prevent<br>
+unsafe platform activation.</p>
+<h1>35. PLATFORM CONTEXT</h1>
+<p>Platforms supporting multiple institutional<br>
+contexts SHALL explicitly model context.</p>
+<p>Context MAY include</p>
+<p>account,</p>
+<p>broker,</p>
+<p>strategy,</p>
+<p>portfolio,</p>
+<p>asset,</p>
+<p>market,</p>
+<p>region,</p>
+<p>currency,</p>
+<p>team,</p>
+<p>role,</p>
+<p>monitor,</p>
+<p>custodian,</p>
+<p>exchange,</p>
+<p>jurisdiction,</p>
+<p>workspace,</p>
+<p>or other approved institutional dimensions.</p>
+<p>Context SHALL be explicit.</p>
+<p>Context SHALL NOT depend upon unsafe global<br>
+mutable state.</p>
+<h1>36. CONTEXT PROPAGATION</h1>
+<p>Where institutional context crosses platform<br>
+boundaries,<br>
+context propagation SHALL be governed.</p>
+<p>The platform SHALL define</p>
+<p>which context is required,</p>
+<p>who establishes it,</p>
+<p>how it is validated,</p>
+<p>how it is propagated,</p>
+<p>how it is authorized,</p>
+<p>and how it is audited.</p>
+<p>Consumers SHALL NOT infer critical institutional<br>
+context from ambiguous environmental state.</p>
+<h1>37. MULTI-PROVIDER SPECIFICATION</h1>
+<p>Platforms supporting multiple providers SHALL<br>
+preserve provider independence.</p>
+<p>The platform SHALL define</p>
+<p>provider contract,</p>
+<p>provider identity,</p>
+<p>selection rules,</p>
+<p>health evaluation,</p>
+<p>failover behaviour where applicable,</p>
+<p>provider-specific configuration,</p>
+<p>and provider-specific observability.</p>
+<p>Provider failure SHALL NOT silently corrupt<br>
+institutional capability state.</p>
+<h1>38. MULTI-ACCOUNT SPECIFICATION</h1>
+<p>Platforms supporting multiple accounts SHALL<br>
+preserve explicit account context.</p>
+<p>Account-specific</p>
+<p>identity,</p>
+<p>authorization,</p>
+<p>configuration,</p>
+<p>state,</p>
+<p>data,</p>
+<p>risk,</p>
+<p>execution,</p>
+<p>and audit information</p>
+<p>SHALL remain correctly isolated.</p>
+<p>Account context SHALL NOT be inferred from<br>
+process-global mutable state.</p>
+<h1>39. MULTI-BROKER SPECIFICATION</h1>
+<p>Platforms supporting multiple brokers SHALL<br>
+separate institutional broker capability from<br>
+broker-specific implementation.</p>
+<p>Broker integrations SHALL implement approved<br>
+provider contracts.</p>
+<p>Broker-specific</p>
+<p>authentication,</p>
+<p>instrument mapping,</p>
+<p>order mapping,</p>
+<p>execution semantics,</p>
+<p>rate limits,</p>
+<p>errors,</p>
+<p>and reconciliation</p>
+<p>SHALL remain within the approved broker provider<br>
+boundary.</p>
+<h1>40. MULTI-STRATEGY SPECIFICATION</h1>
+<p>Platforms supporting multiple strategies SHALL<br>
+preserve explicit strategy identity and ownership.</p>
+<p>Strategy-specific</p>
+<p>configuration,</p>
+<p>signals,</p>
+<p>decisions,</p>
+<p>state,</p>
+<p>risk context,</p>
+<p>performance,</p>
+<p>and audit evidence</p>
+<p>SHALL remain attributable to the correct strategy.</p>
+<p>Strategy isolation SHALL prevent accidental<br>
+cross-strategy state contamination.</p>
+<h1>41. MULTI-PORTFOLIO SPECIFICATION</h1>
+<p>Platforms supporting multiple portfolios SHALL<br>
+preserve explicit portfolio context.</p>
+<p>Portfolio-specific</p>
+<p>capital,</p>
+<p>positions,</p>
+<p>exposure,</p>
+<p>risk,</p>
+<p>orders,</p>
+<p>performance,</p>
+<p>and governance</p>
+<p>SHALL remain attributable to the correct<br>
+portfolio.</p>
+<p>Portfolio boundaries SHALL be enforced through<br>
+approved contracts.</p>
+<h1>42. MULTI-ASSET SPECIFICATION</h1>
+<p>Platforms supporting multiple asset classes SHALL<br>
+preserve canonical institutional concepts while<br>
+allowing asset-specific specialization.</p>
+<p>Shared concepts SHOULD remain common where their<br>
+institutional meaning is equivalent.</p>
+<p>Asset-specific behaviour SHALL remain explicit<br>
+where semantics differ.</p>
+<p>False abstraction across materially different<br>
+market structures is prohibited.</p>
+<h1>43. MULTI-REGION SPECIFICATION</h1>
+<p>Platforms operating across multiple regions SHALL<br>
+define</p>
+<p>regional deployment,</p>
+<p>data residency,</p>
+<p>latency requirements,</p>
+<p>failure isolation,</p>
+<p>regulatory constraints,</p>
+<p>time conventions,</p>
+<p>and operational authority</p>
+<p>where applicable.</p>
+<p>Regional implementation SHALL preserve one<br>
+institutional architecture unless explicit<br>
+regulatory requirements require controlled<br>
+variation.</p>
+<h1>44. MULTI-CURRENCY SPECIFICATION</h1>
+<p>Platforms processing multiple currencies SHALL<br>
+preserve explicit currency identity.</p>
+<p>Monetary values SHALL NOT be interpreted without<br>
+currency context.</p>
+<p>Conversions SHALL define</p>
+<p>source currency,</p>
+<p>target currency,</p>
+<p>rate source,</p>
+<p>rate time,</p>
+<p>precision,</p>
+<p>rounding,</p>
+<p>and audit requirements</p>
+<p>where applicable.</p>
+<h1>45. MULTI-MARKET SPECIFICATION</h1>
+<p>Platforms operating across multiple markets SHALL<br>
+preserve explicit market identity.</p>
+<p>Market-specific</p>
+<p>calendar,</p>
+<p>session,</p>
+<p>instrument conventions,</p>
+<p>microstructure,</p>
+<p>data semantics,</p>
+<p>execution rules,</p>
+<p>and regulatory requirements</p>
+<p>SHALL remain explicit.</p>
+<p>Market-specific behaviour SHALL not be hidden<br>
+behind false universal assumptions.</p>
+<h1>46. MULTI-TEAM SPECIFICATION</h1>
+<p>Platforms supporting multiple teams SHALL preserve<br>
+ownership and authorization boundaries.</p>
+<p>Team context MAY affect</p>
+<p>workspace,</p>
+<p>permissions,</p>
+<p>operational responsibility,</p>
+<p>resource access,</p>
+<p>and audit attribution.</p>
+<p>Team membership SHALL NOT automatically grant<br>
+unbounded platform authority.</p>
+<h1>47. MULTI-ROLE SPECIFICATION</h1>
+<p>Platforms supporting multiple roles SHALL define<br>
+role-based authority through approved identity and<br>
+authorization mechanisms.</p>
+<p>Roles SHALL reflect institutional responsibility.</p>
+<p>Role permissions SHALL follow least privilege.</p>
+<p>User interface visibility SHALL NOT be treated as<br>
+sufficient authorization enforcement.</p>
+<h1>48. MULTI-JURISDICTION SPECIFICATION</h1>
+<p>Platforms operating across multiple jurisdictions<br>
+SHALL define jurisdictional context where it<br>
+affects</p>
+<p>regulation,</p>
+<p>data handling,</p>
+<p>market access,</p>
+<p>trading authority,</p>
+<p>reporting,</p>
+<p>retention,</p>
+<p>security,</p>
+<p>or operational process.</p>
+<p>Jurisdiction-specific requirements SHALL be<br>
+explicit and governed.</p>
+<p>They SHALL NOT silently fragment institutional<br>
+architecture.</p>
+<h1>49. SECURITY BOUNDARY</h1>
+<p>Every platform SHALL define its security boundary.</p>
+<p>Security specifications SHALL include,<br>
+where applicable,</p>
+<p>identity,</p>
+<p>authentication,</p>
+<p>authorization,</p>
+<p>workload trust,</p>
+<p>service trust,</p>
+<p>network trust,</p>
+<p>secret access,</p>
+<p>data protection,</p>
+<p>audit,</p>
+<p>security monitoring,</p>
+<p>and incident responsibility.</p>
+<p>Platform security SHALL follow Zero Trust<br>
+principles.</p>
+<h1>50. PLATFORM IDENTITY</h1>
+<p>Platforms requiring runtime identity SHALL use<br>
+approved institutional identity mechanisms.</p>
+<p>Platform components SHALL authenticate according<br>
+to their actual authority.</p>
+<p>Shared static credentials SHOULD NOT represent<br>
+multiple independently owned capabilities.</p>
+<p>Identity SHALL remain attributable.</p>
+<h1>51. AUTHORIZATION</h1>
+<p>Platform capabilities SHALL enforce authorization<br>
+at trusted boundaries.</p>
+<p>Authorization SHALL be based upon approved</p>
+<p>identity,</p>
+<p>role,</p>
+<p>permission,</p>
+<p>policy,</p>
+<p>scope,</p>
+<p>context,</p>
+<p>or institutional authority.</p>
+<p>Access SHALL be denied by default where protected<br>
+capabilities require explicit authorization.</p>
+<h1>52. LEAST PRIVILEGE</h1>
+<p>Platforms SHALL grant only the minimum permissions<br>
+required.</p>
+<p>Least privilege applies to</p>
+<p>users,</p>
+<p>services,</p>
+<p>modules,</p>
+<p>engines,</p>
+<p>providers,</p>
+<p>plugins,</p>
+<p>workloads,</p>
+<p>databases,</p>
+<p>event systems,</p>
+<p>state stores,</p>
+<p>secrets,</p>
+<p>networks,</p>
+<p>and infrastructure.</p>
+<p>Platform convenience SHALL NOT justify broad<br>
+uncontrolled privilege.</p>
+<h1>53. TRUST BOUNDARIES</h1>
+<p>Every platform SHALL identify relevant trust<br>
+boundaries.</p>
+<p>Trust boundaries MAY exist between</p>
+<p>users and platform,</p>
+<p>platforms,</p>
+<p>services,</p>
+<p>providers,</p>
+<p>external systems,</p>
+<p>networks,</p>
+<p>regions,</p>
+<p>security zones,</p>
+<p>and operational roles.</p>
+<p>Crossing a trust boundary SHALL trigger appropriate<br>
+verification and control.</p>
+<p>Internal location SHALL NOT imply automatic trust.</p>
+<h1>54. SECRET MANAGEMENT</h1>
+<p>Platforms SHALL use approved secret management<br>
+capabilities.</p>
+<p>Secrets SHALL NOT be embedded in</p>
+<p>source code,</p>
+<p>configuration repositories,</p>
+<p>container images,</p>
+<p>logs,</p>
+<p>events,</p>
+<p>or user interfaces.</p>
+<p>Secret access SHALL be attributable and<br>
+least-privileged.</p>
+<h1>55. PLATFORM OBSERVABILITY</h1>
+<p>Every production platform SHALL be observable as a<br>
+platform,<br>
+not merely as isolated components.</p>
+<p>Platform observability SHALL provide visibility<br>
+into</p>
+<p>capability availability,</p>
+<p>component health,</p>
+<p>dependency health,</p>
+<p>event flow,</p>
+<p>state health,</p>
+<p>error propagation,</p>
+<p>resource pressure,</p>
+<p>security events,</p>
+<p>and operational degradation.</p>
+<p>Component health alone SHALL NOT be treated as<br>
+proof of platform capability health.</p>
+<h1>56. PLATFORM HEALTH MODEL</h1>
+<p>Every production platform SHALL define a health<br>
+model.</p>
+<p>Health MAY include</p>
+<p>Healthy</p>
+<p>Degraded</p>
+<p>Unavailable</p>
+<p>Initializing</p>
+<p>Recovering</p>
+<p>Unknown</p>
+<p>The health model SHALL define how component and<br>
+dependency conditions affect platform capability<br>
+health.</p>
+<p>Health aggregation SHALL preserve meaningful<br>
+institutional semantics.</p>
+<h1>57. METRICS</h1>
+<p>Platforms SHALL expose metrics sufficient to<br>
+understand</p>
+<p>capability usage,</p>
+<p>availability,</p>
+<p>latency,</p>
+<p>errors,</p>
+<p>dependency health,</p>
+<p>resource consumption,</p>
+<p>queue behaviour,</p>
+<p>state behaviour,</p>
+<p>and domain-specific operational performance.</p>
+<p>Metrics SHALL support institutional operations.</p>
+<p>Metrics SHALL not exist solely because tooling can<br>
+collect them.</p>
+<h1>58. LOGGING</h1>
+<p>Platform components SHALL produce structured and<br>
+correlatable logs where practical.</p>
+<p>Logging SHALL preserve</p>
+<p>component identity,</p>
+<p>platform identity,</p>
+<p>version,</p>
+<p>timestamp,</p>
+<p>severity,</p>
+<p>correlation context,</p>
+<p>and relevant operational context.</p>
+<p>Secrets SHALL NOT be logged.</p>
+<p>Sensitive information SHALL be minimized.</p>
+<h1>59. DISTRIBUTED TRACING</h1>
+<p>Cross-platform and cross-service execution SHOULD<br>
+propagate trace context where operationally<br>
+valuable.</p>
+<p>Tracing SHALL support understanding of</p>
+<p>capability flow,</p>
+<p>dependency latency,</p>
+<p>failure propagation,</p>
+<p>and distributed execution.</p>
+<p>Trace propagation SHALL follow security and data<br>
+classification requirements.</p>
+<h1>60. AUDITABILITY</h1>
+<p>Institutionally significant platform actions SHALL<br>
+produce audit evidence where required.</p>
+<p>Audit evidence SHOULD identify</p>
+<p>actor,</p>
+<p>authority,</p>
+<p>action,</p>
+<p>target,</p>
+<p>context,</p>
+<p>time,</p>
+<p>result,</p>
+<p>and correlation information.</p>
+<p>Auditability SHALL support</p>
+<p>security,</p>
+<p>governance,</p>
+<p>operations,</p>
+<p>financial control,</p>
+<p>and institutional investigation.</p>
+<h1>61. FAILURE ISOLATION</h1>
+<p>Platforms SHALL prevent avoidable failure<br>
+propagation across capability boundaries.</p>
+<p>Failure isolation MAY include</p>
+<p>process isolation,</p>
+<p>service isolation,</p>
+<p>queue isolation,</p>
+<p>resource isolation,</p>
+<p>network isolation,</p>
+<p>state isolation,</p>
+<p>provider isolation,</p>
+<p>and regional isolation.</p>
+<p>One failing capability SHALL NOT unnecessarily<br>
+disable unrelated institutional capabilities.</p>
+<h1>62. DEGRADED OPERATION</h1>
+<p>Critical platforms SHALL define degraded operation<br>
+where partial capability can safely continue.</p>
+<p>Degraded mode SHALL define</p>
+<p>available capabilities,</p>
+<p>unavailable capabilities,</p>
+<p>safety constraints,</p>
+<p>operator visibility,</p>
+<p>entry conditions,</p>
+<p>exit conditions,</p>
+<p>and recovery behaviour.</p>
+<p>Degraded operation SHALL never bypass mandatory<br>
+security or risk controls.</p>
+<h1>63. RESILIENCE</h1>
+<p>Critical platforms SHALL define resilience<br>
+requirements.</p>
+<p>Resilience MAY include</p>
+<p>redundancy,</p>
+<p>replication,</p>
+<p>failover,</p>
+<p>queue buffering,</p>
+<p>retry control,</p>
+<p>provider substitution,</p>
+<p>state recovery,</p>
+<p>reconciliation,</p>
+<p>regional recovery,</p>
+<p>and disaster recovery.</p>
+<p>Resilience SHALL be validated.</p>
+<p>It SHALL NOT be assumed from architectural<br>
+diagrams.</p>
+<h1>64. PLATFORM RECOVERY</h1>
+<p>Platforms SHALL define recovery from</p>
+<p>component failure,</p>
+<p>service failure,</p>
+<p>dependency failure,</p>
+<p>state corruption,</p>
+<p>event interruption,</p>
+<p>provider failure,</p>
+<p>configuration failure,</p>
+<p>deployment failure,</p>
+<p>and infrastructure failure</p>
+<p>where applicable.</p>
+<p>Recovery authority SHALL be explicit.</p>
+<p>Recovery SHALL preserve institutional correctness.</p>
+<h1>65. RECONCILIATION</h1>
+<p>Platforms depending upon distributed,<br>
+asynchronous,<br>
+or external state SHALL define reconciliation<br>
+where required.</p>
+<p>Reconciliation SHALL identify</p>
+<p>authoritative source,</p>
+<p>comparison process,</p>
+<p>discrepancy classification,</p>
+<p>repair authority,</p>
+<p>audit evidence,</p>
+<p>and escalation.</p>
+<p>Critical state SHALL NOT depend solely upon<br>
+assumed synchronization.</p>
+<h1>66. PLATFORM DEPLOYMENT</h1>
+<p>Every deployable platform SHALL define its<br>
+deployment topology.</p>
+<p>Deployment specifications SHALL identify</p>
+<p>components,</p>
+<p>services,</p>
+<p>artifacts,</p>
+<p>versions,</p>
+<p>configuration,</p>
+<p>secret references,</p>
+<p>network relationships,</p>
+<p>state dependencies,</p>
+<p>event dependencies,</p>
+<p>resource requirements,</p>
+<p>health checks,</p>
+<p>observability,</p>
+<p>and recovery strategy.</p>
+<p>Deployment topology SHALL reflect approved<br>
+architecture.</p>
+<h1>67. ENVIRONMENT CONSISTENCY</h1>
+<p>Platforms SHALL preserve architectural consistency<br>
+across environments.</p>
+<p>Development,<br>
+test,<br>
+staging,<br>
+and production</p>
+<p>MAY differ in scale and approved configuration.</p>
+<p>They SHALL NOT silently represent different<br>
+architectures where validation depends upon<br>
+production equivalence.</p>
+<p>Environment differences SHALL be explicit.</p>
+<h1>68. IMMUTABLE ARTIFACTS</h1>
+<p>Platform deployments SHOULD use immutable,<br>
+traceable artifacts.</p>
+<p>Every production artifact SHALL be attributable to</p>
+<p>source,</p>
+<p>version,</p>
+<p>build,</p>
+<p>validation,</p>
+<p>and publication</p>
+<p>where applicable.</p>
+<p>Validated artifacts SHALL NOT be modified after<br>
+validation without creating a new traceable<br>
+artifact.</p>
+<h1>69. PLATFORM RELEASE</h1>
+<p>Platform releases SHALL define the compatible set<br>
+of component versions required to provide the<br>
+intended platform capability.</p>
+<p>Release governance SHALL identify</p>
+<p>included components,</p>
+<p>versions,</p>
+<p>contract compatibility,</p>
+<p>migration requirements,</p>
+<p>deployment sequence,</p>
+<p>validation,</p>
+<p>rollback or recovery,</p>
+<p>and release evidence.</p>
+<p>A platform release SHALL represent a known<br>
+institutional state.</p>
+<h1>70. VERSIONING</h1>
+<p>Platforms SHALL define versioning appropriate to<br>
+their public contracts and release model.</p>
+<p>Versioning SHALL support</p>
+<p>traceability,</p>
+<p>compatibility,</p>
+<p>incident investigation,</p>
+<p>migration,</p>
+<p>rollback,</p>
+<p>and retirement.</p>
+<p>Platform version SHALL NOT conceal incompatible<br>
+component combinations.</p>
+<h1>71. COMPATIBILITY</h1>
+<p>Platform evolution SHALL define compatibility<br>
+requirements for</p>
+<p>public APIs,</p>
+<p>events,</p>
+<p>schemas,</p>
+<p>providers,</p>
+<p>modules,</p>
+<p>plugins,</p>
+<p>state,</p>
+<p>configuration,</p>
+<p>and operational tooling</p>
+<p>where applicable.</p>
+<p>Breaking changes SHALL be explicit.</p>
+<p>Silent compatibility breakage is prohibited.</p>
+<h1>72. MIGRATION</h1>
+<p>Breaking platform evolution SHALL define a<br>
+migration strategy.</p>
+<p>Migration SHALL identify</p>
+<p>affected consumers,</p>
+<p>affected contracts,</p>
+<p>state migration,</p>
+<p>data migration,</p>
+<p>configuration migration,</p>
+<p>deployment sequence,</p>
+<p>transition period,</p>
+<p>rollback limitations,</p>
+<p>and retirement conditions.</p>
+<p>Migration SHALL preserve institutional continuity.</p>
+<h1>73. PLATFORM TESTING</h1>
+<p>Every platform SHALL define testing appropriate to<br>
+its scope and criticality.</p>
+<p>Testing MAY include</p>
+<p>component testing,</p>
+<p>service testing,</p>
+<p>contract testing,</p>
+<p>integration testing,</p>
+<p>platform testing,</p>
+<p>system testing,</p>
+<p>security testing,</p>
+<p>performance testing,</p>
+<p>resilience testing,</p>
+<p>recovery testing,</p>
+<p>and acceptance testing.</p>
+<p>Platform testing SHALL validate composition,<br>
+not merely isolated components.</p>
+<h1>74. CONTRACT TESTING</h1>
+<p>Platform public contracts SHALL be tested.</p>
+<p>Contract tests SHALL validate</p>
+<p>interface shape,</p>
+<p>semantic expectations where practical,</p>
+<p>compatibility,</p>
+<p>failure behaviour,</p>
+<p>version expectations,</p>
+<p>and security requirements.</p>
+<p>Contract compliance SHOULD be automated where<br>
+practical.</p>
+<h1>75. INTEGRATION TESTING</h1>
+<p>Platform integration testing SHALL validate</p>
+<p>component interaction,</p>
+<p>service interaction,</p>
+<p>event flow,</p>
+<p>state flow,</p>
+<p>dependency behaviour,</p>
+<p>security boundaries,</p>
+<p>and failure propagation.</p>
+<p>Integration tests SHALL use representative<br>
+dependencies where institutional risk requires it.</p>
+<h1>76. PLATFORM VALIDATION</h1>
+<p>Platform validation SHALL confirm that the<br>
+composed platform provides the intended<br>
+institutional capability.</p>
+<p>Validation SHALL determine whether</p>
+<p>architecture is preserved,</p>
+<p>capability ownership is correct,</p>
+<p>public contracts operate correctly,</p>
+<p>dependencies follow approved direction,</p>
+<p>state authority is preserved,</p>
+<p>security boundaries are effective,</p>
+<p>observability is sufficient,</p>
+<p>failure behaviour is safe,</p>
+<p>and operations can control the platform.</p>
+<p>A collection of individually working components<br>
+does not automatically constitute a valid<br>
+platform.</p>
+<h1>77. PERFORMANCE VALIDATION</h1>
+<p>Platforms with performance requirements SHALL be<br>
+validated under representative workloads.</p>
+<p>Validation MAY include</p>
+<p>throughput,</p>
+<p>latency,</p>
+<p>concurrency,</p>
+<p>event volume,</p>
+<p>state volume,</p>
+<p>resource pressure,</p>
+<p>dependency saturation,</p>
+<p>and recovery performance.</p>
+<p>Performance SHALL be evaluated without compromising<br>
+correctness,<br>
+security,<br>
+or execution safety.</p>
+<h1>78. RESILIENCE VALIDATION</h1>
+<p>Critical platforms SHALL validate important<br>
+failure scenarios.</p>
+<p>Scenarios MAY include</p>
+<p>component loss,</p>
+<p>service loss,</p>
+<p>provider loss,</p>
+<p>message interruption,</p>
+<p>state store failure,</p>
+<p>network partition,</p>
+<p>resource exhaustion,</p>
+<p>deployment failure,</p>
+<p>and recovery.</p>
+<p>Resilience claims SHALL be supported by evidence.</p>
+<h1>79. SECURITY VALIDATION</h1>
+<p>Platforms SHALL undergo security validation<br>
+appropriate to institutional risk.</p>
+<p>Validation MAY include</p>
+<p>identity validation,</p>
+<p>authorization testing,</p>
+<p>trust boundary review,</p>
+<p>secret scanning,</p>
+<p>dependency scanning,</p>
+<p>container scanning,</p>
+<p>network policy validation,</p>
+<p>configuration validation,</p>
+<p>and penetration testing.</p>
+<p>Security validation SHALL produce traceable<br>
+evidence.</p>
+<h1>80. OPERATIONAL READINESS</h1>
+<p>Before production activation,<br>
+a platform SHALL demonstrate,<br>
+where applicable,</p>
+<p>defined ownership,</p>
+<p>known architecture,</p>
+<p>validated contracts,</p>
+<p>validated dependencies,</p>
+<p>security readiness,</p>
+<p>observability readiness,</p>
+<p>capacity readiness,</p>
+<p>deployment readiness,</p>
+<p>incident readiness,</p>
+<p>recovery readiness,</p>
+<p>documentation,</p>
+<p>and operational approval.</p>
+<p>Production readiness SHALL be evidence-based.</p>
+<h1>81. PLATFORM RUNBOOK</h1>
+<p>Critical platforms SHALL maintain an operational<br>
+runbook.</p>
+<p>The runbook SHOULD define</p>
+<p>platform identity,</p>
+<p>capability map,</p>
+<p>component map,</p>
+<p>dependency map,</p>
+<p>health interpretation,</p>
+<p>common failure modes,</p>
+<p>diagnostic procedure,</p>
+<p>safe intervention,</p>
+<p>recovery,</p>
+<p>deployment rollback or recovery,</p>
+<p>escalation,</p>
+<p>and post-incident evidence.</p>
+<p>Runbooks SHALL reflect actual production<br>
+architecture.</p>
+<h1>82. INCIDENT RESPONSIBILITY</h1>
+<p>Every production platform SHALL have explicit<br>
+incident ownership.</p>
+<p>Incident response SHALL support</p>
+<p>detection,</p>
+<p>triage,</p>
+<p>impact assessment,</p>
+<p>containment,</p>
+<p>recovery,</p>
+<p>communication,</p>
+<p>evidence preservation,</p>
+<p>root cause analysis,</p>
+<p>and institutional learning.</p>
+<p>Platform incidents SHALL be analyzed across<br>
+capability boundaries,<br>
+not only component boundaries.</p>
+<h1>83. CHANGE GOVERNANCE</h1>
+<p>Platform changes SHALL be governed according to<br>
+their impact.</p>
+<p>Changes affecting</p>
+<p>public contracts,</p>
+<p>platform boundaries,</p>
+<p>capability ownership,</p>
+<p>dependency direction,</p>
+<p>security boundaries,</p>
+<p>state authority,</p>
+<p>or production topology</p>
+<p>SHALL receive appropriate architectural and<br>
+governance review.</p>
+<p>Implementation changes SHALL NOT silently redefine<br>
+platform architecture.</p>
+<h1>84. NO FOUNDATION REBUILD</h1>
+<p>Downstream platforms SHALL consume approved<br>
+foundational capabilities.</p>
+<p>They SHALL NOT rebuild existing</p>
+<p>provider systems,</p>
+<p>capability systems,</p>
+<p>runtime systems,</p>
+<p>event systems,</p>
+<p>state systems,</p>
+<p>identity systems,</p>
+<p>security systems,</p>
+<p>observability systems,</p>
+<p>or other approved platform foundations</p>
+<p>without explicit architectural authority.</p>
+<p>Existing institutional foundations are assets.</p>
+<p>They SHALL be integrated,<br>
+extended through approved contracts,<br>
+and operationalized.</p>
+<p>They SHALL NOT be duplicated for local<br>
+convenience.</p>
+<h1>85. NO PATCH WORK</h1>
+<p>Platform defects SHALL be corrected at the proper<br>
+ownership boundary.</p>
+<p>A defect SHALL be classified as belonging to</p>
+<p>contract,</p>
+<p>component,</p>
+<p>service,</p>
+<p>platform,</p>
+<p>dependency,</p>
+<p>state,</p>
+<p>event,</p>
+<p>configuration,</p>
+<p>security,</p>
+<p>infrastructure,</p>
+<p>or operations.</p>
+<p>Temporary workarounds MAY exist only as controlled<br>
+exceptions.</p>
+<p>Temporary workarounds SHALL define</p>
+<p>owner,</p>
+<p>risk,</p>
+<p>scope,</p>
+<p>expiration,</p>
+<p>and remediation.</p>
+<p>Patch accumulation SHALL NOT become platform<br>
+architecture.</p>
+<h1>86. PLATFORM DOCUMENTATION</h1>
+<p>Every active platform SHALL maintain or reference<br>
+authoritative documentation defining</p>
+<p>purpose,</p>
+<p>ownership,</p>
+<p>architecture,</p>
+<p>capabilities,</p>
+<p>components,</p>
+<p>public contracts,</p>
+<p>dependencies,</p>
+<p>runtime model,</p>
+<p>event model,</p>
+<p>state model,</p>
+<p>security,</p>
+<p>observability,</p>
+<p>deployment,</p>
+<p>operations,</p>
+<p>recovery,</p>
+<p>and lifecycle.</p>
+<p>Platform knowledge SHALL NOT depend upon<br>
+individual memory.</p>
+<h1>87. PLATFORM LIFECYCLE</h1>
+<p>Every platform follows the institutional<br>
+lifecycle.</p>
+<p>Institutional Need</p>
+<p>↓</p>
+<p>Architecture Approved</p>
+<p>↓</p>
+<p>Platform Boundary Defined</p>
+<p>↓</p>
+<p>Ownership Assigned</p>
+<p>↓</p>
+<p>Capabilities Defined</p>
+<p>↓</p>
+<p>Contracts Defined</p>
+<p>↓</p>
+<p>Components Integrated</p>
+<p>↓</p>
+<p>Runtime Integrated</p>
+<p>↓</p>
+<p>Verified</p>
+<p>↓</p>
+<p>Validated</p>
+<p>↓</p>
+<p>Released</p>
+<p>↓</p>
+<p>Deployed</p>
+<p>↓</p>
+<p>Operated</p>
+<p>↓</p>
+<p>Observed</p>
+<p>↓</p>
+<p>Improved</p>
+<p>↓</p>
+<p>Deprecated</p>
+<p>↓</p>
+<p>Retired</p>
+<p>Platform governance SHALL exist throughout the<br>
+complete lifecycle.</p>
+<h1>88. PLATFORM STATES</h1>
+<p>Every platform SHOULD possess an explicit<br>
+institutional lifecycle state.</p>
+<p>Proposed</p>
+<p>Foundation</p>
+<p>Development</p>
+<p>Integration</p>
+<p>Validation</p>
+<p>Active</p>
+<p>Maintenance</p>
+<p>Deprecated</p>
+<p>Retired</p>
+<p>The state SHALL accurately represent the<br>
+platform’s institutional status.</p>
+<h1>89. PLATFORM DEPRECATION</h1>
+<p>A platform SHALL be deprecated before retirement<br>
+when active consumers require migration.</p>
+<p>Deprecation SHALL define</p>
+<p>reason,</p>
+<p>replacement,</p>
+<p>affected consumers,</p>
+<p>contract migration,</p>
+<p>state migration where applicable,</p>
+<p>support period,</p>
+<p>and retirement condition.</p>
+<p>New consumers SHOULD NOT adopt deprecated<br>
+platforms.</p>
+<h1>90. PLATFORM RETIREMENT</h1>
+<p>Platform retirement SHALL be governed.</p>
+<p>Before retirement,<br>
+the owner SHALL confirm</p>
+<p>consumer migration,</p>
+<p>contract retirement,</p>
+<p>service retirement,</p>
+<p>state disposition,</p>
+<p>data disposition,</p>
+<p>credential revocation,</p>
+<p>resource removal,</p>
+<p>monitoring removal,</p>
+<p>documentation status,</p>
+<p>and preservation of required institutional<br>
+history.</p>
+<p>A retired platform SHALL NOT remain an unmanaged<br>
+production dependency.</p>
+<h1>91. MINIMUM PLATFORM ACCEPTANCE GATE</h1>
+<p>Before a platform is considered institutionally<br>
+active,<br>
+the following SHALL be established where<br>
+applicable.</p>
+<p>Purpose Defined</p>
+<p>Ownership Defined</p>
+<p>Platform Classification Defined</p>
+<p>Architecture Boundary Defined</p>
+<p>Capability Map Defined</p>
+<p>Public Contracts Defined</p>
+<p>Internal Boundaries Defined</p>
+<p>Dependencies Declared</p>
+<p>Dependency Direction Validated</p>
+<p>Runtime Model Defined</p>
+<p>Event Responsibilities Defined</p>
+<p>State Responsibilities Defined</p>
+<p>Security Boundary Defined</p>
+<p>Configuration Defined</p>
+<p>Observability Defined</p>
+<p>Failure Behaviour Defined</p>
+<p>Validation Defined</p>
+<p>Documentation Available</p>
+<p>No Unapproved Circular Dependencies</p>
+<p>No Duplicate Foundational Capability</p>
+<p>Operational Responsibility Defined</p>
+<p>Platforms failing mandatory acceptance criteria<br>
+SHALL remain incomplete.</p>
+<h1>92. PRODUCTION PLATFORM ACCEPTANCE GATE</h1>
+<p>Before a platform enters production,<br>
+it SHALL demonstrate,<br>
+where applicable,</p>
+<p>successful component validation,</p>
+<p>successful service validation,</p>
+<p>contract compliance,</p>
+<p>integration validation,</p>
+<p>security validation,</p>
+<p>dependency validation,</p>
+<p>state validation,</p>
+<p>event validation,</p>
+<p>configuration validation,</p>
+<p>observability readiness,</p>
+<p>capacity readiness,</p>
+<p>deployment readiness,</p>
+<p>recovery readiness,</p>
+<p>incident ownership,</p>
+<p>operational documentation,</p>
+<p>and production approval.</p>
+<p>Production readiness SHALL be evidence-based.</p>
+<h1>93. PLATFORM COMPLIANCE</h1>
+<p>A platform is compliant only when applicable<br>
+requirements are demonstrated through evidence.</p>
+<p>Evidence MAY include</p>
+<p>architecture validation,</p>
+<p>capability validation,</p>
+<p>dependency analysis,</p>
+<p>contract validation,</p>
+<p>build results,</p>
+<p>test results,</p>
+<p>security results,</p>
+<p>integration results,</p>
+<p>runtime observations,</p>
+<p>performance results,</p>
+<p>resilience results,</p>
+<p>recovery validation,</p>
+<p>and documentation review.</p>
+<p>A deployed platform does not automatically<br>
+constitute a compliant platform.</p>
+<h1>94. PLATFORM VALIDATION QUESTIONS</h1>
+<p>Every platform shall answer the following<br>
+constitutional questions.</p>
+<p>Does the platform have a clear institutional<br>
+purpose?</p>
+<p>Is ownership explicit?</p>
+<p>Is the platform boundary clear?</p>
+<p>Are owned capabilities explicit?</p>
+<p>Does the platform preserve approved architecture?</p>
+<p>Are public contracts explicit?</p>
+<p>Are internal boundaries protected?</p>
+<p>Are dependencies declared?</p>
+<p>Do dependencies follow approved direction?</p>
+<p>Are circular dependencies prevented?</p>
+<p>Does the platform consume approved foundations<br>
+rather than rebuild them?</p>
+<p>Are provider boundaries explicit?</p>
+<p>Are capability boundaries explicit?</p>
+<p>Is runtime initialization deterministic?</p>
+<p>Is lifecycle management explicit?</p>
+<p>Are event responsibilities defined?</p>
+<p>Is state authority defined?</p>
+<p>Is institutional context explicit?</p>
+<p>Are security boundaries defined?</p>
+<p>Is least privilege enforced?</p>
+<p>Is the platform observable as a complete<br>
+capability?</p>
+<p>Is failure isolation sufficient?</p>
+<p>Is degraded operation safe?</p>
+<p>Can the platform be deployed reproducibly?</p>
+<p>Can it be recovered?</p>
+<p>Can incidents be investigated?</p>
+<p>Can another engineering team operate and maintain<br>
+the platform without undocumented knowledge?</p>
+<p>Can the platform evolve without architectural<br>
+drift?</p>
+<p>If any mandatory answer is negative,</p>
+<p>platform compliance remains incomplete.</p>
+<h1>95. PLATFORM DECLARATION</h1>
+<p>COREI platforms exist to provide governed,<br>
+reusable,<br>
+composable institutional capabilities.</p>
+<p>Every platform SHALL strengthen</p>
+<p>architectural fidelity,</p>
+<p>capability ownership,</p>
+<p>contract integrity,</p>
+<p>implementation reuse,</p>
+<p>dependency discipline,</p>
+<p>security,</p>
+<p>observability,</p>
+<p>resilience,</p>
+<p>operational reliability,</p>
+<p>knowledge preservation,</p>
+<p>and institutional continuity.</p>
+<p>Platforms SHALL consume approved institutional<br>
+foundations.</p>
+<p>Platforms SHALL compose capabilities.</p>
+<p>Platforms SHALL not duplicate them without<br>
+authority.</p>
+<h1>96. CONSTITUTIONAL COMMITMENT</h1>
+<p>COREI Platform Specifications shall remain</p>
+<p>identity-aligned,</p>
+<p>governance-driven,</p>
+<p>architecture-faithful,</p>
+<p>engineering-supported,</p>
+<p>standards-derived,</p>
+<p>capability-oriented,</p>
+<p>ownership-explicit,</p>
+<p>contract-first,</p>
+<p>modular,</p>
+<p>composable,</p>
+<p>dependency-controlled,</p>
+<p>runtime-deterministic,</p>
+<p>state-aware,</p>
+<p>event-driven where appropriate,</p>
+<p>security-by-design,</p>
+<p>observable-by-default,</p>
+<p>resilient,</p>
+<p>validation-driven,</p>
+<p>production-ready,</p>
+<p>knowledge-preserving,</p>
+<p>and continuously evolvable.</p>
+<p>Platform construction shall preserve institutional<br>
+foundations.</p>
+<p>Platform enablement shall consume,<br>
+integrate,<br>
+operationalize,<br>
+and extend approved capabilities through governed<br>
+contracts.</p>
+<h1>97. AUTHORITY</h1>
+<p>This document defines the authoritative<br>
+Platform Specifications of COREI.</p>
+<p>Every foundation platform,</p>
+<p>provider platform,</p>
+<p>capability platform,</p>
+<p>cognitive platform,</p>
+<p>workspace platform,</p>
+<p>experience platform,</p>
+<p>application platform,</p>
+<p>service platform,</p>
+<p>module platform,</p>
+<p>engine platform,</p>
+<p>domain platform,</p>
+<p>runtime platform,</p>
+<p>event platform,</p>
+<p>state platform,</p>
+<p>data platform,</p>
+<p>security platform,</p>
+<p>infrastructure platform,</p>
+<p>observability platform,</p>
+<p>delivery platform,</p>
+<p>automation platform,</p>
+<p>intelligence platform,</p>
+<p>trading platform,</p>
+<p>and future institutional platform</p>
+<p>shall comply with these specifications.</p>
+<p>Technology-specific platform specifications MAY<br>
+extend these requirements.</p>
+<p>No extension may weaken constitutional,<br>
+governance,<br>
+architectural,<br>
+engineering,<br>
+standards,<br>
+security,<br>
+or operational requirements.</p>
+<p>Changes to this document require constitutional<br>
+review.</p>
+<h1>END OF DOCUMENT</h1>
+<h1>DOCUMENT ID</h1>
+<h1>COREI-SP-06.05</h1>
+<h1>DOCUMENT NAME</h1>
+<h1>PLATFORM SPECIFICATIONS</h1>
+<h1>REPOSITORY FILE</h1>
+<h1>knowledge/06-specifications/COREI-SP-06.05-PLATFORM-SPECIFICATIONS.md</h1>
+
+
+  <div class="doc-footer">
+
+    <span>DOCUMENT ID: COREI-SP-06.05</span>
+
+    <span>
+      DOCUMENT NAME: Platform Specifications
+    </span>
+
+    <span>
+      VERSION: 1
+    </span>
+
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,288 @@
+// src/services/brokerIntelligenceService.ts
+import { useBrokerIntelligenceStore } from '../store/brokerIntelligenceStore';
+import type { BrokerProvider, BrokerAccount, BrokerCredential } from '../types/brokerIntelligence';
+import { toast } from 'sonner';
+
+// FORCE localhost for browser access (Requires port-forward running)
+// Change this to your actual external IP if using a different setup
+const API_BASE = '/api/broker';
+
+const ENDPOINTS = {
+  health: `${API_BASE}/health`,
+  providers: `${API_BASE}/providers`,
+  accounts: `${API_BASE}/accounts`,
+  credentials: `${API_BASE}/credentials`,
+  accountCredentials: (id: string) =>
+    `${API_BASE}/accounts/${id}/credentials`,
+
+  connectAccount: (id: string) => `${API_BASE}/accounts/${id}/connect`,
+  disconnectAccount: (id: string) => `${API_BASE}/accounts/${id}/disconnect`,
+  enableProvider: (id: string) => `${API_BASE}/providers/${id}/enable`,
+  disableProvider: (id: string) => `${API_BASE}/providers/${id}/disable`,
+  rotateCredential: (id: string) => `${API_BASE}/credentials/${id}/rotate`,
+  refreshAccount: (id: string) => `${API_BASE}/accounts/${id}/refresh`,
+};
+
+async function request<T>(url: string, options?: RequestInit): Promise<T> {
+  const response = await fetch(url, {
+    headers: { 'Content-Type': 'application/json' },
+    ...options,
+  });
+
+  if (!response.ok) {
+    throw new Error(`API Error: ${response.status} ${response.statusText}`);
+  }
+  return response.json() as Promise<T>;
+}
+
+export const brokerIntelligenceService = {
+  async registerAccount(input: {
+    accountId: string;
+    broker: string;
+    displayName: string;
+    environment: string;
+    enabled?: boolean;
+  }) {
+    const params = new URLSearchParams({
+      account_id: input.accountId,
+      broker: input.broker,
+      display_name: input.displayName,
+      environment: input.environment,
+      enabled: String(input.enabled ?? true),
+    });
+
+    return request<BrokerAccount>(
+      `${ENDPOINTS.accounts}?${params.toString()}`,
+      {
+        method: "POST",
+      }
+    );
+  },
+
+  async setAccountCredentials(
+    accountId: string,
+    credentials: Record<string, unknown>
+  ) {
+    return request<unknown>(
+      ENDPOINTS.accountCredentials(accountId),
+      {
+        method: "PUT",
+        body: JSON.stringify(credentials),
+      }
+    );
+  },
+
+  async getAccountCredentials(accountId: string) {
+    return request<unknown>(
+      ENDPOINTS.accountCredentials(accountId)
+    );
+  },
+
+  async fetchAll() {
+    const store = useBrokerIntelligenceStore.getState();
+    store.setLoading(true);
+    store.setError(null);
+
+    try {
+      const [providerPayload, accountPayload] = await Promise.all([
+        request<BrokerProvider[] | { brokers?: unknown }>(ENDPOINTS.providers),
+        request<BrokerAccount[] | Record<string, unknown>>(ENDPOINTS.accounts),
+      ]);
+
+      const rawProviders = Array.isArray(providerPayload)
+        ? providerPayload
+        : Array.isArray(providerPayload?.brokers)
+          ? providerPayload.brokers
+          : [];
+
+      const rawAccounts = Array.isArray(accountPayload)
+        ? accountPayload
+        : [];
+
+      const accounts: BrokerAccount[] = rawAccounts.map((account: any) => ({
+        id: String(account.id ?? account.account_id ?? ''),
+        brokerId: String(
+          account.brokerId ??
+          account.broker_id ??
+          account.broker ??
+          ''
+        ),
+        displayName: String(
+          account.displayName ??
+          account.display_name ??
+          account.id ??
+          account.account_id ??
+          ''
+        ),
+        environment:
+          String(account.environment ?? 'TEST').toUpperCase() === 'LIVE'
+            ? 'LIVE'
+            : String(account.environment ?? 'TEST').toUpperCase() === 'PAPER'
+              ? 'PAPER'
+              : 'TEST',
+        enabled: account.enabled !== false,
+        connected: account.connected === true,
+        sessionId: account.sessionId ?? account.session_id ?? null,
+        credentialRef:
+          account.credentialRef ??
+          account.credential_id ??
+          null,
+        health:
+          account.health ??
+          account.state ??
+          'UNKNOWN',
+        tradingEnabled: account.tradingEnabled ?? false,
+        marketDataEnabled: account.marketDataEnabled ?? false,
+      }));
+
+      const providers: BrokerProvider[] = rawProviders.map((broker: any) => {
+        const id = String(
+          typeof broker === 'string'
+            ? broker
+            : broker.id ??
+              broker.brokerId ??
+              broker.broker_id ??
+              broker.name ??
+              ''
+        );
+
+        const name = String(
+          typeof broker === 'string'
+            ? broker
+            : broker.name ?? id
+        );
+
+        const brokerAccounts = accounts.filter(
+          (account) => account.brokerId === id
+        );
+
+        return {
+          id,
+          name,
+          adapterName:
+            typeof broker === 'object'
+              ? String(broker.adapterName ?? broker.adapter ?? id)
+              : id,
+          adapterVersion:
+            typeof broker === 'object'
+              ? String(broker.adapterVersion ?? 'UNKNOWN')
+              : 'UNKNOWN',
+          type: 'BROKER',
+          region:
+            typeof broker === 'object'
+              ? String(broker.region ?? 'UNKNOWN')
+              : 'UNKNOWN',
+          environment:
+            brokerAccounts.some((a) => a.environment === 'LIVE')
+              ? 'LIVE'
+              : brokerAccounts.some((a) => a.environment === 'PAPER')
+                ? 'PAPER'
+                : 'TEST',
+          enabled:
+            typeof broker === 'object'
+              ? broker.enabled !== false
+              : true,
+          state:
+            typeof broker === 'object'
+              ? broker.state ?? 'UNKNOWN'
+              : 'UNKNOWN',
+          authState:
+            typeof broker === 'object'
+              ? broker.authState ?? 'UNKNOWN'
+              : 'UNKNOWN',
+          restState:
+            typeof broker === 'object'
+              ? broker.restState ?? 'UNKNOWN'
+              : 'UNKNOWN',
+          wsState:
+            typeof broker === 'object'
+              ? broker.wsState ?? 'UNKNOWN'
+              : 'UNKNOWN',
+          marketDataState:
+            typeof broker === 'object'
+              ? broker.marketDataState ?? 'UNKNOWN'
+              : 'UNKNOWN',
+          executionState:
+            typeof broker === 'object'
+              ? broker.executionState ?? 'UNKNOWN'
+              : 'UNKNOWN',
+          latency:
+            typeof broker === 'object'
+              ? String(broker.latency ?? 'UNKNOWN')
+              : 'UNKNOWN',
+          rateLimitState:
+            typeof broker === 'object'
+              ? String(broker.rateLimitState ?? 'UNKNOWN')
+              : 'UNKNOWN',
+          accountCount:
+            typeof broker === 'object' && broker.accountCount != null
+              ? Number(broker.accountCount)
+              : brokerAccounts.length,
+          credentialCount:
+            typeof broker === 'object' && broker.credentialCount != null
+              ? Number(broker.credentialCount)
+              : 0,
+        };
+      });
+
+      const credentials: BrokerCredential[] = [];
+
+      store.setProviders(Array.isArray(providers) ? providers : []);
+      store.setAccounts(Array.isArray(accounts) ? accounts : []);
+      store.setCredentials(credentials);
+      store.setLastRefresh(Date.now());
+    } catch (error: any) {
+      store.setError(error.message);
+      toast.error(`Failed to fetch broker data: ${error.message}`);
+    } finally {
+      store.setLoading(false);
+    }
+  },
+  async connectAccount(accountId: string) {
+    const store = useBrokerIntelligenceStore.getState();
+    try {
+      await request(ENDPOINTS.connectAccount(accountId), { method: 'POST' });
+      store.updateAccount(accountId, { connected: true, health: 'CONNECTED' });
+      toast.success(`Account ${accountId} connected`);
+    } catch (err: any) { toast.error(`Connect failed: ${err.message}`); }
+  },
+  async disconnectAccount(accountId: string) {
+    const store = useBrokerIntelligenceStore.getState();
+    try {
+      await request(ENDPOINTS.disconnectAccount(accountId), { method: 'POST' });
+      store.updateAccount(accountId, { connected: false, health: 'DISCONNECTED' });
+      toast.success(`Account ${accountId} disconnected`);
+    } catch (err: any) { toast.error(`Disconnect failed: ${err.message}`); }
+  },
+  async enableProvider(providerId: string) {
+    const store = useBrokerIntelligenceStore.getState();
+    try {
+      await request(ENDPOINTS.enableProvider(providerId), { method: 'POST' });
+      store.updateProvider(providerId, { enabled: true });
+      toast.success(`Provider ${providerId} enabled`);
+    } catch (err: any) { toast.error(`Enable failed: ${err.message}`); }
+  },
+  async disableProvider(providerId: string) {
+    const store = useBrokerIntelligenceStore.getState();
+    try {
+      await request(ENDPOINTS.disableProvider(providerId), { method: 'POST' });
+      store.updateProvider(providerId, { enabled: false });
+      toast.success(`Provider ${providerId} disabled`);
+    } catch (err: any) { toast.error(`Disable failed: ${err.message}`); }
+  },
+  async rotateCredential(credentialId: string) {
+    const store = useBrokerIntelligenceStore.getState();
+    try {
+      await request(ENDPOINTS.rotateCredential(credentialId), { method: 'POST' });
+      store.updateCredential(credentialId, { status: 'ROTATING' });
+      toast.success(`Credential ${credentialId} rotation triggered`);
+    } catch (err: any) { toast.error(`Rotation failed: ${err.message}`); }
+  },
+  async refreshAccount(accountId: string) {
+    try {
+      await request(ENDPOINTS.refreshAccount(accountId), { method: 'POST' });
+      toast.success(`Account ${accountId} refreshed`);
+      this.fetchAll();
+    } catch (err: any) { toast.error(`Refresh failed: ${err.message}`); }
+  },
+};

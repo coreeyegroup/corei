@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>COREI Stage‑25 – Phase‑02 Reference</title>
+    <style>
+        /* ============================================================
+           COREI INSTITUTIONAL DOCUMENTATION SYSTEM
+           ============================================================ */
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            background: #0A0D12;
+            color: #E3E7EC;
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+            font-size: 13px;
+            line-height: 1.5;
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .sidebar-wrapper {
+            display: flex;
+            flex-shrink: 0;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            overflow: hidden;
+        }
+        .sidebar {
+            width: 200px;
+            min-width: 140px;
+            max-width: 320px;
+            background: #0E1219;
+            border-right: 1px solid #28303C;
+            padding: 0.8rem 0.3rem 0.8rem 0.5rem;
+            overflow-y: auto;
+            overflow-x: hidden;
+            resize: horizontal;
+            height: 100vh;
+            flex-shrink: 0;
+        }
+        .sidebar::-webkit-scrollbar { width:4px; }
+        .sidebar::-webkit-scrollbar-thumb { background:#28303C; border-radius:2px; }
+        .sidebar::-webkit-scrollbar-track { background:transparent; }
+        .sidebar::-webkit-resizer { background:#28303C; border-radius:0 0 4px 0; }
+
+        .sidebar .brand {
+            font-size:13px; font-weight:600; color:#C6A46A; letter-spacing:0.04em;
+            padding:0 0.3rem 0.4rem 0.3rem; border-bottom:1px solid #28303C; margin-bottom:0.6rem;
+        }
+        .sidebar .brand span { color:#E3E7EC; font-weight:300; }
+        .sidebar-nav { display:flex; flex-direction:column; gap:0.1rem; }
+        .sidebar-nav a {
+            display:flex; align-items:center; padding:0.2rem 0.3rem;
+            color:#9AA5B1; text-decoration:none; font-size:12px; border-radius:3px;
+            transition:background 0.1s,color 0.1s; line-height:1.3; white-space:nowrap;
+        }
+        .sidebar-nav a:hover { background:#1E2834; color:#E3E7EC; }
+        .sidebar-nav a.active { background:#28303C; color:#E3E7EC; font-weight:500; }
+        .sidebar-nav .section-number { display:inline-block; width:22px; color:#6E7883; font-size:11px; flex-shrink:0; }
+
+        .main-content { flex:1; padding:2rem 2.5rem; max-width:1200px; min-width:0; overflow-x:auto; }
+
+        h1 { font-size:26px; font-weight:600; color:#E3E7EC; margin-bottom:0.25rem; }
+        h2 { font-size:18px; font-weight:600; color:#C6A46A; margin:1.8rem 0 0.8rem 0; border-bottom:1px solid #28303C; padding-bottom:0.3rem; }
+        h3 { font-size:15px; font-weight:500; color:#C6A46A; margin:1.2rem 0 0.5rem 0; }
+        h4 { font-size:13px; font-weight:500; color:#9AA5B1; margin:1rem 0 0.3rem 0; }
+        p { margin-bottom:0.4rem; }
+        a { color:#8BB4F0; text-decoration:none; }
+        a:hover { text-decoration:underline; }
+        code { font-family:'JetBrains Mono','Fira Code',monospace; font-size:12px; background:#121821; padding:0.1rem 0.4rem; border:1px solid #28303C; border-radius:3px; color:#E3E7EC; }
+        pre { background:#0E1219; border:1px solid #28303C; border-radius:6px; padding:0.8rem 1rem; overflow:auto; font-family:'JetBrains Mono',monospace; font-size:12px; line-height:1.5; color:#C5CED9; max-height:400px; overflow-y:auto; white-space:pre-wrap; word-break:break-all; }
+        hr { border:none; border-top:1px solid #28303C; margin:1.5rem 0; }
+
+        .document-header { background:#121821; border:1px solid #28303C; border-radius:6px; padding:1rem 1.5rem; margin-bottom:1.5rem; }
+        .document-header .org { font-size:14px; font-weight:600; color:#C6A46A; letter-spacing:0.05em; }
+        .document-header .title { font-size:26px; font-weight:600; color:#E3E7EC; margin:0.2rem 0; }
+        .document-header .subtitle { font-size:16px; color:#9AA5B1; }
+        .document-header .meta-line { display:flex; flex-wrap:wrap; gap:1.2rem; margin-top:0.6rem; font-size:13px; }
+        .document-header .meta-line .item { display:flex; align-items:baseline; gap:0.3rem; }
+        .document-header .meta-line .label { color:#6E7883; text-transform:uppercase; font-size:11px; letter-spacing:0.04em; }
+        .document-header .meta-line .value { color:#E3E7EC; font-weight:500; }
+
+        .badge { display:inline-block; background:#28303C; padding:0.1rem 0.6rem; border-radius:12px; font-size:11px; font-weight:600; color:#C6A46A; letter-spacing:0.02em; margin-left:0.3rem; }
+        .badge.success { background:#1F3A2A; color:#52A36B; }
+        .badge.warning { background:#3D3420; color:#D1A64A; }
+        .badge.danger { background:#3D2020; color:#B95A5A; }
+
+        .executive-summary { background:#121821; border:1px solid #28303C; border-radius:6px; padding:0.8rem 1.2rem; margin-bottom:1.5rem; display:grid; grid-template-columns:1fr 1fr; gap:0.3rem 2rem; }
+        .executive-summary .item { display:flex; flex-direction:column; }
+        .executive-summary .item .label { font-size:11px; text-transform:uppercase; color:#6E7883; letter-spacing:0.04em; }
+        .executive-summary .item .value { font-size:14px; font-weight:500; color:#E3E7EC; }
+
+        table { width:100%; border-collapse:collapse; font-size:12px; margin:0.6rem 0 1rem 0; }
+        th { background:#18202A; color:#9AA5B1; font-weight:600; text-align:left; padding:0.3rem 0.5rem; border:1px solid #28303C; font-size:11px; text-transform:uppercase; letter-spacing:0.04em; }
+        td { padding:0.25rem 0.5rem; border:1px solid #28303C; vertical-align:top; background:#0E1219; }
+        tr:nth-child(even) td { background:#121821; }
+
+        details { background:#0E1219; border:1px solid #28303C; border-radius:4px; margin:0.6rem 0; }
+        summary { padding:0.3rem 0.6rem; cursor:pointer; font-weight:500; color:#C5CED9; background:#18202A; border-radius:4px; user-select:none; font-size:13px; }
+        summary:hover { background:#1E2834; }
+        details[open] summary { border-bottom:1px solid #28303C; border-radius:4px 4px 0 0; }
+        details .content { padding:0.5rem 0.6rem; font-size:12px; font-family:'JetBrains Mono',monospace; white-space:pre-wrap; word-break:break-all; color:#C5CED9; overflow-x:auto; max-height:500px; overflow-y:auto; }
+
+        .metadata-table td { padding:0.15rem 0.5rem; }
+        .metadata-table .label { color:#6E7883; width:140px; font-weight:400; }
+
+        .text-muted { color:#6E7883; }
+        .text-success { color:#52A36B; }
+        .text-warning { color:#D1A64A; }
+        .text-danger { color:#B95A5A; }
+
+        @media (max-width:768px) {
+            body { flex-direction:column; }
+            .sidebar-wrapper { height:auto; position:static; overflow:visible; }
+            .sidebar { width:100% !important; height:auto; max-width:none !important; min-width:unset; resize:none; border-right:none; border-bottom:1px solid #28303C; padding:0.5rem; }
+            .sidebar-nav { flex-direction:row; flex-wrap:wrap; gap:0.1rem; }
+            .sidebar-nav a { padding:0.15rem 0.4rem; font-size:11px; white-space:nowrap; }
+            .sidebar-nav .section-number { width:auto; margin-right:0.1rem; }
+            .main-content { padding:1rem; }
+            .executive-summary { grid-template-columns:1fr; }
+            .document-header .meta-line { flex-direction:column; gap:0.3rem; }
+        }
+
+        @media print {
+            .sidebar-wrapper { display:none; }
+            body { background:white; color:black; font-size:11px; }
+            .main-content { padding:1rem; max-width:100%; }
+            .document-header, .executive-summary, table, pre, details { border-color:#ccc; background:#fafafa; }
+            .document-header .meta-line .label { color:#666; }
+            .document-header .meta-line .value { color:#000; }
+            .badge { border:1px solid #999; background:transparent; color:#000; }
+            .badge.success { border-color:#2a7a3a; color:#2a7a3a; }
+            .badge.warning { border-color:#b08a3a; color:#b08a3a; }
+            .badge.danger { border-color:#b05a5a; color:#b05a5a; }
+            th { background:#eee; color:#333; border-color:#999; }
+            td { background:white; border-color:#999; }
+            tr:nth-child(even) td { background:#f5f5f5; }
+            .text-muted { color:#666; }
+            .text-success { color:#2a7a3a; }
+            .text-warning { color:#b08a3a; }
+            .text-danger { color:#b05a5a; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================
+    SIDEBAR – Table of Contents
+    ============================================================ -->
+    <div class="sidebar-wrapper">
+        <aside class="sidebar">
+            <div class="brand">COREI <span>·</span> DOC</div>
+            <nav class="sidebar-nav">
+                <a href="#sec-01"><span class="section-number">01</span> Executive Summary</a>
+                <a href="#sec-02"><span class="section-number">02</span> Scope</a>
+                <a href="#sec-03"><span class="section-number">03</span> Architecture</a>
+                <a href="#sec-04"><span class="section-number">04</span> Ownership</a>
+                <a href="#sec-05"><span class="section-number">05</span> Responsibilities</a>
+                <a href="#sec-06"><span class="section-number">06</span> Dependencies</a>
+                <a href="#sec-07"><span class="section-number">07</span> Contracts</a>
+                <a href="#sec-08"><span class="section-number">08</span> Interfaces</a>
+                <a href="#sec-09"><span class="section-number">09</span> Runtime</a>
+                <a href="#sec-10"><span class="section-number">10</span> Public API</a>
+                <a href="#sec-11"><span class="section-number">11</span> Components</a>
+                <a href="#sec-12"><span class="section-number">12</span> File Inventory</a>
+                <a href="#sec-13"><span class="section-number">13</span> Validation</a>
+                <a href="#sec-14"><span class="section-number">14</span> Browser Validation</a>
+                <a href="#sec-15"><span class="section-number">15</span> Repository Tree</a>
+                <a href="#sec-16"><span class="section-number">16</span> Build Output</a>
+                <a href="#sec-17"><span class="section-number">17</span> Certification</a>
+                <a href="#sec-18"><span class="section-number">18</span> References</a>
+                <a href="#sec-19"><span class="section-number">19</span> Appendix</a>
+            </nav>
+        </aside>
+    </div>
+
+    <!-- ============================================================
+    MAIN CONTENT
+    ============================================================ -->
+    <main class="main-content">
+
+        <!-- ============================================================
+        HEADER
+        ============================================================ -->
+        <header class="document-header">
+            <div class="org">COREI · Institutional Operating Platform</div>
+            <div class="title">Stage 25 · Phase 02</div>
+            <div class="subtitle">Platform Foundation</div>
+            <div class="meta-line">
+                <span class="item"><span class="label">Status</span><span class="value"><span class="badge success">CERTIFIED</span></span></span>
+                <span class="item"><span class="label">Version</span><span class="value">25.02.0</span></span>
+                <span class="item"><span class="label">Repository</span><span class="value">corei</span></span>
+                <span class="item"><span class="label">Branch</span><span class="value">main</span></span>
+                <span class="item"><span class="label">Commit</span><span class="value">ac8e282</span></span>
+                <span class="item"><span class="label">Tag</span><span class="value">stage25-phase02-platform-foundation-v1</span></span>
+                <span class="item"><span class="label">Generated</span><span class="value">2026-08-08</span></span>
+            </div>
+        </header>
+
+        <!-- ============================================================
+        EXECUTIVE SUMMARY
+        ============================================================ -->
+        <section class="executive-summary">
+            <div class="item"><span class="label">Purpose</span><span class="value">Establish the reusable Platform Foundation frameworks</span></div>
+            <div class="item"><span class="label">Ownership</span><span class="value">Platform Kernel Team</span></div>
+            <div class="item"><span class="label">Consumers</span><span class="value">All later phases (03–32) and all platform services</span></div>
+            <div class="item"><span class="label">Providers</span><span class="value">Phase‑01 Bootstrap, Configuration, Runtime, Kernel</span></div>
+            <div class="item"><span class="label">Protected Boundaries</span><span class="value">src/foundation/registry/, state/, event/, extension/, logging/, diagnostics/, health/, validation/</span></div>
+            <div class="item"><span class="label">Repository Scope</span><span class="value">101 files across 8 frameworks</span></div>
+            <div class="item"><span class="label">Certification</span><span class="value"><span class="text-success">PASSED</span></span></div>
+            <div class="item"><span class="label">Validation</span><span class="value"><span class="text-success">PASSED</span></span></div>
+        </section>
+
+        <!-- ============================================================
+        SECTION 01 – EXECUTIVE SUMMARY
+        ============================================================ -->
+        <section id="sec-01" class="section">
+            <h2><span class="section-number">01</span> Executive Summary</h2>
+            <p>Phase‑02 builds the institutional Platform Foundation – seven reusable frameworks that provide standardized Registry, State, Event, Extension, Logging, Diagnostics, and Health capabilities. All subsequent phases consume these frameworks rather than rebuilding them.</p>
+            <table class="metadata-table">
+                <tr><td class="label">Purpose</td><td>Establish reusable platform frameworks</td></tr>
+                <tr><td class="label">Ownership</td><td>Platform Kernel Team</td></tr>
+                <tr><td class="label">Consumers</td><td>All later phases (03–32) and all platform services</td></tr>
+                <tr><td class="label">Providers</td><td>Phase‑01 Bootstrap, Configuration, Runtime, Kernel</td></tr>
+                <tr><td class="label">Protected Boundaries</td><td>src/foundation/registry/, state/, event/, extension/, logging/, diagnostics/, health/, validation/</td></tr>
+                <tr><td class="label">Repository Scope</td><td>101 files</td></tr>
+                <tr><td class="label">Certification</td><td><span class="text-success">PASSED</span></td></tr>
+                <tr><td class="label">Validation</td><td><span class="text-success">PASSED</span></td></tr>
+            </table>
+        </section>
+
+        <!-- ============================================================
+        SECTION 02 – SCOPE
+        ============================================================ -->
+        <section id="sec-02" class="section">
+            <h2><span class="section-number">02</span> Scope</h2>
+            <table>
+                <thead><tr><th>Category</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td>In Scope</td><td>Registry Framework, State Framework, Event Framework, Extension Framework, Logging Framework, Diagnostics Framework, Health Framework, Platform Foundation Validation</td></tr>
+                    <tr><td>Out of Scope</td><td>UI rendering, Workspace, Panels, Intelligence, Authentication, Governance, Trading capabilities</td></tr>
+                    <tr><td>Consumes</td><td>Phase‑01 Bootstrap, Configuration, Runtime, Kernel</td></tr>
+                    <tr><td>Provides</td><td>RegistryManager, StateManager, EventManager, ExtensionManager, LoggingManager, DiagnosticsManager, HealthManager, PlatformFoundationValidator</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- ============================================================
+        SECTION 03 – ARCHITECTURE
+        ============================================================ -->
+        <section id="sec-03" class="section">
+            <h2><span class="section-number">03</span> Architecture</h2>
+            <p>The Platform Foundation follows a unified architectural pattern across all frameworks.</p>
+            <table>
+                <thead><tr><th>Framework</th><th>Responsibility</th></tr></thead>
+                <tbody>
+                    <tr><td>Registry</td><td>Standardised registration, discovery, lookup, and enumeration of platform components</td></tr>
+                    <tr><td>State</td><td>Authoritative platform state with lifecycle (CREATED, INITIALIZED, ACTIVE, SUSPENDED, DISPOSED)</td></tr>
+                    <tr><td>Event</td><td>Deterministic in‑process publish/subscribe communication</td></tr>
+                    <tr><td>Extension</td><td>Modular capability lifecycle (REGISTERED, LOADED, INITIALIZED, ACTIVE, INACTIVE, UNLOADED)</td></tr>
+                    <tr><td>Logging</td><td>Structured logging with 6 levels (TRACE, DEBUG, INFO, WARN, ERROR, FATAL)</td></tr>
+                    <tr><td>Diagnostics</td><td>Runtime inspection and status reporting (UNKNOWN, PASS, WARNING, FAIL)</td></tr>
+                    <tr><td>Health</td><td>Operational health evaluation (UNKNOWN, HEALTHY, DEGRADED, UNHEALTHY)</td></tr>
+                    <tr><td>Validation</td><td>Integrated certification of the Platform Foundation</td></tr>
+                </tbody>
+            </table>
+            <h3>Dependency Flow</h3>
+            <pre>Platform Foundation (Phase‑02)
+        │
+        ├── Registry Framework
+        ├── State Framework
+        ├── Event Framework
+        ├── Extension Framework
+        ├── Logging Framework
+        ├── Diagnostics Framework
+        ├── Health Framework
+        └── Validation Framework
+        │
+        ▼
+Future Phases (03–32) consume these frameworks
+</pre>
+        </section>
+
+        <!-- ============================================================
+        SECTION 04 – OWNERSHIP
+        ============================================================ -->
+        <section id="sec-04" class="section">
+            <h2><span class="section-number">04</span> Ownership</h2>
+            <table>
+                <thead><tr><th>Framework</th><th>Owner</th><th>Repository Path</th></tr></thead>
+                <tbody>
+                    <tr><td>Registry</td><td>Platform Kernel Team</td><td>src/foundation/registry/</td></tr>
+                    <tr><td>State</td><td>Platform Kernel Team</td><td>src/foundation/state/</td></tr>
+                    <tr><td>Event</td><td>Platform Kernel Team</td><td>src/foundation/event/</td></tr>
+                    <tr><td>Extension</td><td>Platform Kernel Team</td><td>src/foundation/extension/</td></tr>
+                    <tr><td>Logging</td><td>Platform Kernel Team</td><td>src/foundation/logging/</td></tr>
+                    <tr><td>Diagnostics</td><td>Platform Kernel Team</td><td>src/foundation/diagnostics/</td></tr>
+                    <tr><td>Health</td><td>Platform Kernel Team</td><td>src/foundation/health/</td></tr>
+                    <tr><td>Validation</td><td>Platform Kernel Team</td><td>src/foundation/validation/</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- ============================================================
+        SECTION 05 – RESPONSIBILITIES
+        ============================================================ -->
+        <section id="sec-05" class="section">
+            <h2><span class="section-number">05</span> Responsibilities</h2>
+            <table>
+                <thead><tr><th>Framework</th><th>Primary Responsibility</th></tr></thead>
+                <tbody>
+                    <tr><td>Registry</td><td>Register, resolve, list, unregister, clear platform components</td></tr>
+                    <tr><td>State</td><td>Initialize, get, set, reset authoritative state</td></tr>
+                    <tr><td>Event</td><td>Publish, subscribe, dispatch, clear event payloads</td></tr>
+                    <tr><td>Extension</td><td>Load, initialize, activate, deactivate, unload modular capabilities</td></tr>
+                    <tr><td>Logging</td><td>Log structured messages at 6 levels with context</td></tr>
+                    <tr><td>Diagnostics</td><td>Execute diagnostics and report status</td></tr>
+                    <tr><td>Health</td><td>Evaluate and report operational health</td></tr>
+                    <tr><td>Validation</td><td>Certify the Platform Foundation through build, integration, and certification checks</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- ============================================================
+        SECTION 06 – DEPENDENCIES
+        ============================================================ -->
+        <section id="sec-06" class="section">
+            <h2><span class="section-number">06</span> Dependencies</h2>
+            <table>
+                <thead><tr><th>Dependency</th><th>Type</th><th>Purpose</th></tr></thead>
+                <tbody>
+                    <tr><td>Phase‑01 Bootstrap</td><td>Internal</td><td>Startup lifecycle, context, events</td></tr>
+                    <tr><td>Phase‑01 Configuration</td><td>Internal</td><td>Configuration loading</td></tr>
+                    <tr><td>Phase‑01 Runtime</td><td>Internal</td><td>Runtime lifecycle</td></tr>
+                    <tr><td>Phase‑01 Kernel</td><td>Internal</td><td>Kernel engine</td></tr>
+                    <tr><td>React</td><td>External</td><td>UI foundation (optional for some frameworks)</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- ============================================================
+        SECTION 07 – CONTRACTS
+        ============================================================ -->
+        <section id="sec-07" class="section">
+            <h2><span class="section-number">07</span> Contracts</h2>
+            <details>
+                <summary>RegistryContract</summary>
+                <div class="content">
+export interface RegistryContract&lt;T&gt; {
+    initialize(): void;
+    register(id: string, value: T): void;
+    get(id: string): T | undefined;
+    list(): T[];
+    unregister(id: string): void;
+    clear(): void;
+    getContext(): RegistryContext;
+}
+                </div>
+            </details>
+            <details>
+                <summary>StateContract</summary>
+                <div class="content">
+export interface StateContract&lt;T&gt; {
+    initialize(): void;
+    get(): T;
+    set(value: T): void;
+    reset(): void;
+    getContext(): StateContext;
+}
+                </div>
+            </details>
+            <details>
+                <summary>EventContract</summary>
+                <div class="content">
+export interface EventContract&lt;T&gt; {
+    publish(payload: T): void;
+    get(): T | undefined;
+    clear(): void;
+    getContext(): EventContext;
+}
+                </div>
+            </details>
+            <details>
+                <summary>ExtensionContract</summary>
+                <div class="content">
+export interface ExtensionContract {
+    load(): void;
+    initialize(): void;
+    activate(): void;
+    deactivate(): void;
+    unload(): void;
+    getContext(): ExtensionContext;
+}
+                </div>
+            </details>
+            <details>
+                <summary>LoggingContract</summary>
+                <div class="content">
+export interface LoggingContract {
+    trace(message: string): void;
+    debug(message: string): void;
+    info(message: string): void;
+    warn(message: string): void;
+    error(message: string): void;
+    fatal(message: string): void;
+    getContext(): LogContext;
+}
+                </div>
+            </details>
+            <details>
+                <summary>DiagnosticsContract</summary>
+                <div class="content">
+export interface DiagnosticsContract {
+    execute(): void;
+    getContext(): DiagnosticContext;
+}
+                </div>
+            </details>
+            <details>
+                <summary>HealthContract</summary>
+                <div class="content">
+export interface HealthContract {
+    evaluate(): void;
+    getContext(): HealthContext;
+}
+                </div>
+            </details>
+        </section>
+
+        <!-- ============================================================
+        SECTION 08 – INTERFACES
+        ============================================================ -->
+        <section id="sec-08" class="section">
+            <h2><span class="section-number">08</span> Interfaces</h2>
+            <table>
+                <thead><tr><th>Interface</th><th>File</th><th>Purpose</th></tr></thead>
+                <tbody>
+                    <tr><td><code>RegistryManager</code></td><td>src/foundation/registry/manager/registry-manager.ts</td><td>Generic registry manager</td></tr>
+                    <tr><td><code>RegistryDescriptor</code></td><td>src/foundation/registry/model/registry-descriptor.ts</td><td>Registry metadata</td></tr>
+                    <tr><td><code>StateManager</code></td><td>src/foundation/state/manager/state-manager.ts</td><td>Generic state manager</td></tr>
+                    <tr><td><code>StateDescriptor</code></td><td>src/foundation/state/model/state-descriptor.ts</td><td>State metadata</td></tr>
+                    <tr><td><code>EventManager</code></td><td>src/foundation/event/manager/event-manager.ts</td><td>Generic event manager</td></tr>
+                    <tr><td><code>EventDescriptor</code></td><td>src/foundation/event/model/event-descriptor.ts</td><td>Event metadata</td></tr>
+                    <tr><td><code>ExtensionManager</code></td><td>src/foundation/extension/manager/extension-manager.ts</td><td>Generic extension manager</td></tr>
+                    <tr><td><code>ExtensionDescriptor</code></td><td>src/foundation/extension/model/extension-descriptor.ts</td><td>Extension metadata</td></tr>
+                    <tr><td><code>LoggingManager</code></td><td>src/foundation/logging/manager/logging-manager.ts</td><td>Generic logging manager</td></tr>
+                    <tr><td><code>LoggingDescriptor</code></td><td>src/foundation/logging/model/logging-descriptor.ts</td><td>Logging metadata</td></tr>
+                    <tr><td><code>DiagnosticsManager</code></td><td>src/foundation/diagnostics/manager/diagnostics-manager.ts</td><td>Generic diagnostics manager</td></tr>
+                    <tr><td><code>DiagnosticsDescriptor</code></td><td>src/foundation/diagnostics/model/diagnostics-descriptor.ts</td><td>Diagnostics metadata</td></tr>
+                    <tr><td><code>HealthManager</code></td><td>src/foundation/health/manager/health-manager.ts</td><td>Generic health manager</td></tr>
+                    <tr><td><code>HealthDescriptor</code></td><td>src/foundation/health/model/health-descriptor.ts</td><td>Health metadata</td></tr>
+                    <tr><td><code>PlatformFoundationValidator</code></td><td>src/foundation/validation/platform-foundation-validator.ts</td><td>Validates the entire Platform Foundation</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- ============================================================
+        SECTION 09 – RUNTIME
+        ============================================================ -->
+        <section id="sec-09" class="section">
+            <h2><span class="section-number">09</span> Runtime</h2>
+            <p>Each framework provides a runtime manager that can be consumed by platform modules.</p>
+            <table>
+                <thead><tr><th>Runtime Component</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td>RegistryManager</td><td>Generic registration and lookup</td></tr>
+                    <tr><td>StateManager</td><td>Authoritative state management</td></tr>
+                    <tr><td>EventManager</td><td>Publish/subscribe coordination</td></tr>
+                    <tr><td>ExtensionManager</td><td>Extension lifecycle management</td></tr>
+                    <tr><td>LoggingManager</td><td>Structured logging</td></tr>
+                    <tr><td>DiagnosticsManager</td><td>Diagnostics execution</td></tr>
+                    <tr><td>HealthManager</td><td>Health evaluation</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- ============================================================
+        SECTION 10 – PUBLIC API
+        ============================================================ -->
+        <section id="sec-10" class="section">
+            <h2><span class="section-number">10</span> Public API</h2>
+            <p>All exports from Phase‑02 modules:</p>
+            <details>
+                <summary>Show / Hide Public API</summary>
+                <div class="content">
+--- Registry (src/foundation/registry/index.ts) ---
+export * from "./api";
+export * from "./state/registry-state";
+export * from "./context/registry-context";
+export * from "./contracts/registry-contract";
+export * from "./model";
+export * from "./manager";
+export * from "./diagnostics";
+export * from "./validation";
+
+--- State (src/foundation/state/index.ts) ---
+export * from "./api";
+export * from "./state/platform-state";
+export * from "./context/state-context";
+export * from "./contracts/state-contract";
+export * from "./model";
+export * from "./manager";
+export * from "./diagnostics";
+export * from "./validation";
+
+--- Event (src/foundation/event/index.ts) ---
+export * from "./api";
+export * from "./state/event-state";
+export * from "./context/event-context";
+export * from "./contracts/event-contract";
+export * from "./model";
+export * from "./manager";
+export * from "./diagnostics";
+export * from "./validation";
+
+--- Extension (src/foundation/extension/index.ts) ---
+export * from "./api";
+export * from "./state/extension-state";
+export * from "./context/extension-context";
+export * from "./contracts/extension-contract";
+export * from "./model";
+export * from "./manager";
+export * from "./diagnostics";
+export * from "./validation";
+
+--- Logging (src/foundation/logging/index.ts) ---
+export * from "./api";
+export * from "./state/log-level";
+export * from "./context/log-context";
+export * from "./contracts/logging-contract";
+export * from "./model";
+export * from "./manager";
+export * from "./diagnostics";
+export * from "./validation";
+
+--- Diagnostics (src/foundation/diagnostics/index.ts) ---
+export * from "./api";
+export * from "./state/diagnostic-status";
+export * from "./context/diagnostic-context";
+export * from "./contracts/diagnostics-contract";
+export * from "./model";
+export * from "./manager";
+export * from "./diagnostics";
+export * from "./validation";
+
+--- Health (src/foundation/health/index.ts) ---
+export * from "./api";
+export * from "./state/health-status";
+export * from "./context/health-context";
+export * from "./contracts/health-contract";
+export * from "./model";
+export * from "./manager";
+export * from "./health";
+export * from "./validation";
+
+--- Validation (src/foundation/validation/index.ts) ---
+export * from "./platform-foundation-validator";
+export * from "./runner";
+export * from "./integration";
+export * from "./build";
+export * from "./certification";
+                </div>
+            </details>
+        </section>
+
+        <!-- ============================================================
+        SECTION 11 – COMPONENTS
+        ============================================================ -->
+        <section id="sec-11" class="section">
+            <h2><span class="section-number">11</span> Components</h2>
+            <p><em>Phase‑02 is a pure infrastructure layer and does not contain UI components.</em></p>
+            <p>All frameworks are consumed programmatically through their public APIs.</p>
+        </section>
+
+        <!-- ============================================================
+        SECTION 12 – FILE INVENTORY
+        ============================================================ -->
+        <section id="sec-12" class="section">
+            <h2><span class="section-number">12</span> File Inventory</h2>
+            <p><strong>Total:</strong> 101 files across 8 frameworks under <code>src/foundation/</code></p>
+            <details>
+                <summary>Show / Hide full file list (101 files)</summary>
+                <div class="content">
+src/foundation/registry/api.ts
+src/foundation/registry/context/registry-context.ts
+src/foundation/registry/contracts/registry-contract.ts
+src/foundation/registry/diagnostics/index.ts
+src/foundation/registry/diagnostics/registry-diagnostics.ts
+src/foundation/registry/index.ts
+src/foundation/registry/manager/index.ts
+src/foundation/registry/manager/registry-manager.ts
+src/foundation/registry/model/index.ts
+src/foundation/registry/model/registry-descriptor.ts
+src/foundation/registry/state/registry-state.ts
+src/foundation/registry/validation/index.ts
+src/foundation/registry/validation/registry-validation.ts
+
+src/foundation/state/api.ts
+src/foundation/state/context/state-context.ts
+src/foundation/state/contracts/state-contract.ts
+src/foundation/state/diagnostics/index.ts
+src/foundation/state/diagnostics/state-diagnostics.ts
+src/foundation/state/index.ts
+src/foundation/state/manager/index.ts
+src/foundation/state/manager/state-manager.ts
+src/foundation/state/model/index.ts
+src/foundation/state/model/state-descriptor.ts
+src/foundation/state/state/platform-state.ts
+src/foundation/state/validation/index.ts
+src/foundation/state/validation/state-validation.ts
+
+src/foundation/event/api.ts
+src/foundation/event/context/event-context.ts
+src/foundation/event/contracts/event-contract.ts
+src/foundation/event/diagnostics/event-diagnostics.ts
+src/foundation/event/diagnostics/index.ts
+src/foundation/event/index.ts
+src/foundation/event/manager/event-manager.ts
+src/foundation/event/manager/index.ts
+src/foundation/event/model/event-descriptor.ts
+src/foundation/event/model/index.ts
+src/foundation/event/state/event-state.ts
+src/foundation/event/validation/event-validation.ts
+src/foundation/event/validation/index.ts
+
+src/foundation/extension/api.ts
+src/foundation/extension/context/extension-context.ts
+src/foundation/extension/contracts/extension-contract.ts
+src/foundation/extension/diagnostics/extension-diagnostics.ts
+src/foundation/extension/diagnostics/index.ts
+src/foundation/extension/index.ts
+src/foundation/extension/manager/extension-manager.ts
+src/foundation/extension/manager/index.ts
+src/foundation/extension/model/extension-descriptor.ts
+src/foundation/extension/model/index.ts
+src/foundation/extension/state/extension-state.ts
+src/foundation/extension/validation/extension-validation.ts
+src/foundation/extension/validation/index.ts
+
+src/foundation/logging/api.ts
+src/foundation/logging/context/log-context.ts
+src/foundation/logging/contracts/logging-contract.ts
+src/foundation/logging/diagnostics/index.ts
+src/foundation/logging/diagnostics/logging-diagnostics.ts
+src/foundation/logging/index.ts
+src/foundation/logging/manager/index.ts
+src/foundation/logging/manager/logging-manager.ts
+src/foundation/logging/model/index.ts
+src/foundation/logging/model/logging-descriptor.ts
+src/foundation/logging/state/log-level.ts
+src/foundation/logging/validation/index.ts
+src/foundation/logging/validation/logging-validation.ts
+
+src/foundation/diagnostics/api.ts
+src/foundation/diagnostics/context/diagnostic-context.ts
+src/foundation/diagnostics/contracts/diagnostics-contract.ts
+src/foundation/diagnostics/diagnostics/diagnostics-reporter.ts
+src/foundation/diagnostics/diagnostics/index.ts
+src/foundation/diagnostics/index.ts
+src/foundation/diagnostics/manager/diagnostics-manager.ts
+src/foundation/diagnostics/manager/index.ts
+src/foundation/diagnostics/model/diagnostics-descriptor.ts
+src/foundation/diagnostics/model/index.ts
+src/foundation/diagnostics/state/diagnostic-status.ts
+src/foundation/diagnostics/validation/diagnostics-validation.ts
+src/foundation/diagnostics/validation/index.ts
+
+src/foundation/health/api.ts
+src/foundation/health/context/health-context.ts
+src/foundation/health/contracts/health-contract.ts
+src/foundation/health/health/health-reporter.ts
+src/foundation/health/health/index.ts
+src/foundation/health/index.ts
+src/foundation/health/manager/health-manager.ts
+src/foundation/health/manager/index.ts
+src/foundation/health/model/health-descriptor.ts
+src/foundation/health/model/index.ts
+src/foundation/health/state/health-status.ts
+src/foundation/health/validation/health-validation.ts
+src/foundation/health/validation/index.ts
+
+src/foundation/validation/build/index.ts
+src/foundation/validation/build/platform-build-verifier.ts
+src/foundation/validation/certification/index.ts
+src/foundation/validation/certification/platform-foundation-certification.ts
+src/foundation/validation/index.ts
+src/foundation/validation/integration/index.ts
+src/foundation/validation/integration/platform-integration-verifier.ts
+src/foundation/validation/platform-foundation-validator.ts
+src/foundation/validation/runner/index.ts
+src/foundation/validation/runner/platform-validation-runner.ts
+                </div>
+            </details>
+
+            <h3>File Count by Framework</h3>
+            <table>
+                <thead><tr><th>Framework</th><th>Files</th></tr></thead>
+                <tbody>
+                    <tr><td>Registry</td><td>13</td></tr>
+                    <tr><td>State</td><td>13</td></tr>
+                    <tr><td>Event</td><td>13</td></tr>
+                    <tr><td>Extension</td><td>13</td></tr>
+                    <tr><td>Logging</td><td>13</td></tr>
+                    <tr><td>Diagnostics</td><td>13</td></tr>
+                    <tr><td>Health</td><td>13</td></tr>
+                    <tr><td>Validation</td><td>10</td></tr>
+                    <tr><td><strong>Total</strong></td><td><strong>101</strong></td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- ============================================================
+        SECTION 13 – VALIDATION
+        ============================================================ -->
+        <section id="sec-13" class="section">
+            <h2><span class="section-number">13</span> Validation</h2>
+            <table>
+                <thead><tr><th>Validation Type</th><th>Status</th></tr></thead>
+                <tbody>
+                    <tr><td>TypeScript Compilation (tsc --noEmit)</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Production Build (pnpm build)</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Registry Framework Validation</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>State Framework Validation</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Event Framework Validation</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Extension Framework Validation</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Logging Framework Validation</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Diagnostics Framework Validation</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Health Framework Validation</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Platform Integration Verification</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Platform Build Verification</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Platform Foundation Certification</td><td><span class="text-success">PASS</span></td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- ============================================================
+        SECTION 14 – BROWSER VALIDATION
+        ============================================================ -->
+        <section id="sec-14" class="section">
+            <h2><span class="section-number">14</span> Browser Validation</h2>
+            <p>Phase‑02 is a pure infrastructure layer; browser validation confirms that the platform foundation initialises correctly and does not cause regressions.</p>
+            <table>
+                <thead><tr><th>Browser</th><th>Status</th></tr></thead>
+                <tbody>
+                    <tr><td>Chromium (latest)</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Firefox (latest)</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>WebKit (latest)</td><td><span class="text-success">PASS</span></td></tr>
+                </tbody>
+            </table>
+            <p>No visual regressions; platform foundation is ready for consumption by later phases.</p>
+        </section>
+
+        <!-- ============================================================
+        SECTION 15 – REPOSITORY TREE
+        ============================================================ -->
+        <section id="sec-15" class="section">
+            <h2><span class="section-number">15</span> Repository Tree</h2>
+            <details>
+                <summary>Show / Hide tree</summary>
+                <div class="content">
+src/foundation/registry
+├── context
+│   └── registry-context.ts
+├── contracts
+│   └── registry-contract.ts
+├── diagnostics
+│   ├── index.ts
+│   └── registry-diagnostics.ts
+├── manager
+│   ├── index.ts
+│   └── registry-manager.ts
+├── model
+│   ├── index.ts
+│   └── registry-descriptor.ts
+├── state
+│   └── registry-state.ts
+├── validation
+│   ├── index.ts
+│   └── registry-validation.ts
+├── api.ts
+└── index.ts
+
+src/foundation/state
+├── context
+│   └── state-context.ts
+├── contracts
+│   └── state-contract.ts
+├── diagnostics
+│   ├── index.ts
+│   └── state-diagnostics.ts
+├── manager
+│   ├── index.ts
+│   └── state-manager.ts
+├── model
+│   ├── index.ts
+│   └── state-descriptor.ts
+├── state
+│   └── platform-state.ts
+├── validation
+│   ├── index.ts
+│   └── state-validation.ts
+├── api.ts
+└── index.ts
+
+src/foundation/event
+├── context
+│   └── event-context.ts
+├── contracts
+│   └── event-contract.ts
+├── diagnostics
+│   ├── event-diagnostics.ts
+│   └── index.ts
+├── manager
+│   ├── event-manager.ts
+│   └── index.ts
+├── model
+│   ├── event-descriptor.ts
+│   └── index.ts
+├── state
+│   └── event-state.ts
+├── validation
+│   ├── event-validation.ts
+│   └── index.ts
+├── api.ts
+└── index.ts
+
+src/foundation/extension
+├── context
+│   └── extension-context.ts
+├── contracts
+│   └── extension-contract.ts
+├── diagnostics
+│   ├── extension-diagnostics.ts
+│   └── index.ts
+├── manager
+│   ├── extension-manager.ts
+│   └── index.ts
+├── model
+│   ├── extension-descriptor.ts
+│   └── index.ts
+├── state
+│   └── extension-state.ts
+├── validation
+│   ├── extension-validation.ts
+│   └── index.ts
+├── api.ts
+└── index.ts
+
+src/foundation/logging
+├── context
+│   └── log-context.ts
+├── contracts
+│   └── logging-contract.ts
+├── diagnostics
+│   ├── index.ts
+│   └── logging-diagnostics.ts
+├── manager
+│   ├── index.ts
+│   └── logging-manager.ts
+├── model
+│   ├── index.ts
+│   └── logging-descriptor.ts
+├── state
+│   └── log-level.ts
+├── validation
+│   ├── index.ts
+│   └── logging-validation.ts
+├── api.ts
+└── index.ts
+
+src/foundation/diagnostics
+├── context
+│   └── diagnostic-context.ts
+├── contracts
+│   └── diagnostics-contract.ts
+├── diagnostics
+│   ├── diagnostics-reporter.ts
+│   └── index.ts
+├── manager
+│   ├── diagnostics-manager.ts
+│   └── index.ts
+├── model
+│   ├── diagnostics-descriptor.ts
+│   └── index.ts
+├── state
+│   └── diagnostic-status.ts
+├── validation
+│   ├── diagnostics-validation.ts
+│   └── index.ts
+├── api.ts
+└── index.ts
+
+src/foundation/health
+├── context
+│   └── health-context.ts
+├── contracts
+│   └── health-contract.ts
+├── health
+│   ├── health-reporter.ts
+│   └── index.ts
+├── manager
+│   ├── health-manager.ts
+│   └── index.ts
+├── model
+│   ├── health-descriptor.ts
+│   └── index.ts
+├── state
+│   └── health-status.ts
+├── validation
+│   ├── health-validation.ts
+│   └── index.ts
+├── api.ts
+└── index.ts
+
+src/foundation/validation
+├── build
+│   ├── index.ts
+│   └── platform-build-verifier.ts
+├── certification
+│   ├── index.ts
+│   └── platform-foundation-certification.ts
+├── integration
+│   ├── index.ts
+│   └── platform-integration-verifier.ts
+├── runner
+│   ├── index.ts
+│   └── platform-validation-runner.ts
+├── index.ts
+└── platform-foundation-validator.ts
+                </div>
+            </details>
+        </section>
+
+        <!-- ============================================================
+        SECTION 16 – BUILD OUTPUT
+        ============================================================ -->
+        <section id="sec-16" class="section">
+            <h2><span class="section-number">16</span> Build Output</h2>
+            <pre>
+> @corei/corei-os@1.0.0 build
+> tsc -b && vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 2374 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                     0.43 kB │ gzip:   0.29 kB
+dist/assets/index-BSSyXHgG.css    134.51 kB │ gzip:  13.40 kB
+dist/assets/index-CHQ2bGpX.js   1,028.40 kB │ gzip: 257.58 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 4.08s
+            </pre>
+            <p>Build succeeds. Chunk size warning is informational and deferred to Phase‑30.</p>
+        </section>
+
+        <!-- ============================================================
+        SECTION 17 – CERTIFICATION
+        ============================================================ -->
+        <section id="sec-17" class="section">
+            <h2><span class="section-number">17</span> Certification</h2>
+            <table>
+                <thead><tr><th>Criteria</th><th>Status</th></tr></thead>
+                <tbody>
+                    <tr><td>Architecture Review</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Repository Audit</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Integration Test</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Browser Validation</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Documentation Completeness</td><td><span class="text-success">PASS</span></td></tr>
+                    <tr><td>Institutional Sign‑off</td><td><span class="text-success">PASS</span></td></tr>
+                </tbody>
+            </table>
+            <p><strong>Status:</strong> <span class="badge success">CERTIFIED</span></p>
+        </section>
+
+        <!-- ============================================================
+        SECTION 18 – REFERENCES
+        ============================================================ -->
+        <section id="sec-18" class="section">
+            <h2><span class="section-number">18</span> References</h2>
+            <ul>
+                <li><a href="#">DOC-11: COREI Execution Constitution</a></li>
+                <li><a href="#">DOC-10: Stage‑25 Phase‑01-02 Blueprint</a></li>
+                <li><a href="#">COREI_Phase02_Reference_Enhanced.html</a></li>
+                <li><a href="#">COREI_Continuity_Handover.md</a></li>
+            </ul>
+        </section>
+
+        <!-- ============================================================
+        SECTION 19 – APPENDIX
+        ============================================================ -->
+        <section id="sec-19" class="section">
+            <h2><span class="section-number">19</span> Appendix</h2>
+            <h3>A. Framework Lifecycle States</h3>
+            <table>
+                <thead><tr><th>Framework</th><th>States</th><th>Count</th></tr></thead>
+                <tbody>
+                    <tr><td>Registry</td><td><code>CREATED, INITIALIZED, ACTIVE, DISPOSED</code></td><td>4</td></tr>
+                    <tr><td>State</td><td><code>CREATED, INITIALIZED, ACTIVE, SUSPENDED, DISPOSED</code></td><td>5</td></tr>
+                    <tr><td>Event</td><td><code>CREATED, PUBLISHED, PROCESSED, FAILED</code></td><td>4</td></tr>
+                    <tr><td>Extension</td><td><code>REGISTERED, LOADED, INITIALIZED, ACTIVE, INACTIVE, UNLOADED</code></td><td>6</td></tr>
+                    <tr><td>Logging</td><td><code>TRACE, DEBUG, INFO, WARN, ERROR, FATAL</code></td><td>6</td></tr>
+                    <tr><td>Diagnostics</td><td><code>UNKNOWN, PASS, WARNING, FAIL</code></td><td>4</td></tr>
+                    <tr><td>Health</td><td><code>UNKNOWN, HEALTHY, DEGRADED, UNHEALTHY</code></td><td>4</td></tr>
+                </tbody>
+            </table>
+
+            <h3>B. Version History</h3>
+            <table>
+                <thead><tr><th>Version</th><th>Date</th><th>Changes</th></tr></thead>
+                <tbody>
+                    <tr><td>25.02.0</td><td>2026-08-04</td><td>Initial certification</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- ============================================================
+        FOOTER
+        ============================================================ -->
+        <div style="text-align:center;font-size:11px;color:#6E7883;border-top:1px solid #28303C;padding-top:1rem;margin-top:2rem;">
+            <p>COREI Stage‑25 Phase‑02 Reference &bull; Generated 2026-08-08 &bull; Authoritative</p>
+        </div>
+
+    </main>
+
+</body>
+</html>

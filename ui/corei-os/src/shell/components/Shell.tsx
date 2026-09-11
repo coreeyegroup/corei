@@ -1,74 +1,52 @@
-/******************************************************************************
- *
- * COREI OPERATING SYSTEM
- *
- * STAGE-25
- * PHASE-17
- * STEP-01
- *
- * FILE:
- * Shell.tsx
- *
- * PURPOSE:
- * Institutional Shell Bootstrap
- *
- * DESCRIPTION:
- * Root UI component for the Institutional Shell.
- *
- * This component consumes the Shell Provider and delegates
- * all runtime responsibilities to the Shell Manager.
- *
- * OWNERSHIP:
- * Institutional Shell
- *
- ******************************************************************************/
-
-/*=============================================================================
-    IMPORTS
-=============================================================================*/
-
-import type { ReactElement } from "react";
-
-import { ShellFrame } from "./ShellFrame";
-
-import { ShellProvider } from "../providers/shell-provider";
-
-import type {
-
-    ShellKernelContract
-
-} from "../contracts/shell-kernel-contract";
-
-/*=============================================================================
-    PROPERTIES
-=============================================================================*/
+/**
+ * COREI – Institutional Shell
+ * Stage-25 / Phase-17
+ * The authoritative Shell component used by the application.
+ * Wraps the ShellFrame with the IntelligenceProvider and starts real-time simulation.
+ */
+import React, { useEffect, useRef } from 'react';
+import { ShellProvider } from '../providers/shell-provider';
+import { ShellFrame } from './ShellFrame';
+import { IntelligenceProvider } from '../../intelligence';
+import { useIntelligenceRuntime } from '../hooks/useIntelligenceRuntime';
+import { useInfrastructureRuntime } from '../hooks/useInfrastructureRuntime';
+import { MockDataService } from '../../services/MockDataService';
 
 export interface ShellProps {
-
-    readonly kernel: ShellKernelContract;
-
+  kernel: any;
 }
 
-/*=============================================================================
-    COMPONENT
-=============================================================================*/
+export const Shell: React.FC<ShellProps> = ({ kernel }) => {
+  const intelligenceRuntime = useIntelligenceRuntime();
+  const infrastructureRuntime = useInfrastructureRuntime();
+  const mockServiceRef = useRef<MockDataService | null>(null);
 
-export function Shell({
+  // Start the real-time data simulation once runtimes are ready
+  useEffect(() => {
+    if (intelligenceRuntime && infrastructureRuntime) {
+      if (!mockServiceRef.current) {
+        mockServiceRef.current = new MockDataService(
+          intelligenceRuntime,
+          infrastructureRuntime
+        );
+        mockServiceRef.current.start();
+      }
+      return () => {
+        if (mockServiceRef.current) {
+          mockServiceRef.current.stop();
+          mockServiceRef.current = null;
+        }
+      };
+    }
+  }, [intelligenceRuntime, infrastructureRuntime]);
 
-    kernel
-
-}: ShellProps): ReactElement {
-
-    return (
-
-        <ShellProvider kernel={kernel}>
-
-            <ShellFrame />
-
-        </ShellProvider>
-
-    );
-
-}
+  return (
+    <ShellProvider kernel={kernel}>
+      <IntelligenceProvider runtime={intelligenceRuntime}>
+        <ShellFrame />
+      </IntelligenceProvider>
+    </ShellProvider>
+  );
+};
 
 export default Shell;

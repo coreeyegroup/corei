@@ -1,0 +1,1274 @@
+PHASE D — STEP 5: EXECUTION ENGINE (ORDER GENERATION & EXECUTION LAYER)
+
+Reference Continuity:
+CTS-PHASE-D-STEP4-POLICY-ENGINE-EXECUTION-THREAD-V1-2026-04-10 → CONTINUED
+
+Aligned with:
+
+Phase D Macro Design
+Universal Phase Structure (UPS)
+	1. PHASE IDENTITY LAYER
+	1.1 Phase Name
+
+		Phase D — Step 5: Execution Engine (Order Generation & Execution Layer)
+
+	1.2 Phase Role
+
+		Final deterministic transformation layer that:
+
+			converts PolicyDecisionIntent → ExecutionOrder
+			initializes Order Lifecycle
+			produces execution-ready order stream
+
+		This is the last internal system boundary before market interaction
+
+
+	1.3 Phase Objective
+
+		To construct a deterministic execution transformation such that:
+
+			PolicyDecisionIntent
+			→ ExecutionOrder
+			→ Order Lifecycle Initialization
+
+		Satisfying:
+
+			exact intent preservation
+			deterministic order generation
+			replay-identical execution output
+
+	1.4 Why This Phase Exists
+
+	Prevents:
+
+		(F1) Intent ≠ Order mismatch (audit break)
+		(F2) Non-deterministic order IDs
+		(F3) Execution drift from policy output
+		(F4) Lifecycle inconsistency
+		(F5) Broker integration ambiguity
+
+2. PHASE SCOPE CONTROL
+
+	2.1 INCLUDED (STRICT)
+		order construction
+		order_id generation (hash deterministic)
+		execution instruction generation
+		lifecycle initialization
+		deterministic sequencing
+		execution type mapping
+		price reference binding
+
+		INCLUDED (EXTENSION — INFRA BINDING)
+
+			order dispatch abstraction (OMS binding)
+			execution routing abstraction (EMS binding)
+			broker request preparation (pre-adapter)
+			deterministic message emission to infra layer
+
+		multi-venue routing decision (SOR)
+			venue allocation engine
+			venue-level liquidity modeling
+			routing schedule generation
+
+	2.2 EXCLUDED (STRICT)
+			risk validation (Step 3)
+			policy evaluation (Step 4)
+			broker connectivity (abstract only)
+			portfolio computation
+			external state access
+			real-time market microstructure logic
+			adaptive / dynamic microstructure logic
+
+	2.3 Boundary Rule (MANDATORY)
+
+			Execution Engine MUST:
+
+				transform ONLY
+				NOT evaluate
+				NOT modify economic intent
+
+			Violation → PHASE INVALID
+
+		Microstructure Modeling Clarification (MANDATORY)
+
+			Execution Engine MAY use:
+
+			- precomputed microstructure profiles
+			- deterministic liquidity models
+			- snapshot-based order book references
+
+			Execution Engine MUST NOT:
+
+			- fetch live order book
+			- adapt to runtime market conditions
+			- introduce stochastic execution behavior
+
+3. ARCHITECTURAL INTENT LAYER
+	3.1 Core Principles
+		Determinism (bit-level)
+		Zero Intent Mutation
+		Canonical Dependency Only
+		Lifecycle Integrity
+		Replay Fidelity
+
+	3.2 Architectural Model
+		ExecutionOrderStream = F(
+			policy_decision_intent_stream,
+			configuration_snapshot,
+			version_identifiers
+		)
+
+	3.3 System Positioning
+		Step 1 → ExecutionIntent
+		Step 2 → DecisionValidatedIntent
+		Step 3 → RiskApprovedIntent
+		Step 4 → PolicyDecisionIntent
+		Step 5 → ExecutionOrder   ← THIS
+		→ Order Lifecycle System
+
+	3.4 INFRA BINDING MODEL (MANDATORY)
+
+		Execution Engine MUST NOT directly interact with broker.
+
+		It MUST emit ExecutionOrder into OMS interface:
+
+		ExecutionOrder
+		→ OMS (Order Management Service)
+		→ EMS (Execution Management Service)
+		→ Broker Adapter (Step 7)
+
+		Constraints:
+
+		- Execution Engine remains PURE FUNCTION
+		- Infra layer MUST NOT alter ExecutionOrder
+		- Infra layer is TRANSPORT ONLY
+
+4. DOMAIN MODEL DEFINITION
+
+	4.1 Entities
+		PolicyDecisionIntent (input)
+		ExecutionOrder (output)
+		ExecutionInstruction
+		OrderState
+		ExecutionEvent
+		FillEvent
+		OrderLifecycle
+		ExecutionMicrostructureProfile
+		OrderBookSnapshotReference
+		LiquidityModel
+		ExecutionSchedule
+		FillProbabilityModel
+		SlippageModel
+		Venue
+		VenueLiquidityProfile
+		RoutingDecision
+		VenueAllocation
+
+	4.2 ExecutionOrder Schema:
+			ExecutionOrder = {
+				signal_id
+				order_id
+				policy_decision_intent_id
+				trade_intent_id
+				instrument
+				direction
+				size
+				price_reference
+				execution_type
+				timestamp
+				origin_type
+				lineage_hash_reference
+				execution_schedule
+				expected_slippage
+				liquidity_reference_id
+				venue_allocations[]
+				routing_strategy
+				routing_constraints
+				cost_model_version
+				cost_model_checksum
+			}
+
+				CostModel = {
+						model_id
+						version
+						checksum
+						parameters
+					}
+
+			Microstructure Output Persistence Rule (MANDATORY)
+
+				All outputs from microstructure processing MUST be embedded in ExecutionOrder.
+
+				Recomputation in downstream phases is STRICTLY FORBIDDEN.
+
+			ExecutionOrder MUST include lineage_hash_reference
+				Schema omission → HARD FAIL
+
+			Microstructure Output Persistence Rule (MANDATORY)
+
+				All outputs from microstructure processing MUST be embedded in ExecutionOrder.
+
+				Recomputation in downstream phases is STRICTLY FORBIDDEN.
+
+		ExecutionMicrostructureProfile:
+			execution_microstructure_profile = {
+				instrument
+				tick_size
+				lot_size
+				avg_spread
+				volatility_class
+				liquidity_class
+				market_impact_coefficient
+				slippage_profile_id
+			}
+
+		OrderBookSnapshotReference:
+			order_book_snapshot_reference = {
+				snapshot_id
+				event_time
+				best_bid
+				best_ask
+				bid_depth_levels[]
+				ask_depth_levels[]
+				total_liquidity
+			}
+			Constraint:
+
+				MUST come from Phase C event system
+				NOT real-time fetch (no external dependency)
+
+		LiquidityModel:
+			liquidity_model = {
+				available_liquidity_at_price[]
+				depth_decay_function
+				execution_capacity_limit
+			}
+
+		ExecutionSchedule:
+			execution_schedule = {
+				execution_order_id
+				slices: [
+					{
+						slice_id
+						size
+						price_reference
+						scheduled_event_time
+					}
+				]
+			}
+
+		FillProbabilityModel:
+			fill_probability_model = {
+				price_level
+				probability
+				expected_time_to_fill
+			}
+
+		SlippageModel:
+			slippage_model = {
+				expected_slippage
+				worst_case_slippage
+				slippage_distribution_profile
+			}
+
+		Venue:
+			venue = {
+				venue_id
+				venue_type            // exchange, broker, dark_pool
+				fee_model
+				latency_profile
+				supported_instruments
+			}
+
+		VenueLiquidityProfile:
+			venue_liquidity_profile = {
+				venue_id
+				instrument_id
+				available_liquidity
+				depth_profile
+				spread_profile
+				timestamp_reference
+			}
+
+		RoutingDecision:
+			routing_decision = {
+				order_id
+				strategy_type         // best_price, low_cost, balanced
+				constraints {
+					max_venues
+					min_fill_size
+				}
+			}
+
+		VenueAllocation:
+			venue_allocation = {
+				order_id
+				venue_id
+				allocated_quantity
+				expected_price
+				expected_slippage
+			}
+
+	4.3 OrderState
+		GLOBAL OrderState (MANDATORY — CROSS-PHASE)
+
+			OrderState ∈ {
+				ORDER_CREATED
+				ORDER_ROUTED
+				PARTIALLY_FILLED
+				FULLY_FILLED
+				ORDER_COMPLETED
+				ORDER_FAILED
+			}
+
+		State Ownership Rule (MANDATORY)
+
+			- OrderState definition is GLOBAL (shared across Step 5–8)
+			- No phase may define its own variant
+			- No aliasing allowed (e.g., FILLED ≠ FULLY_FILLED)
+
+			Violation → SYSTEM NON-DETERMINISTIC
+
+		Order Lifecycle Transition Rules (GLOBAL — EVENT-DRIVEN ONLY)
+
+		Transitions MUST follow Event → State mapping ONLY:
+
+			ORDER_CREATED   → ORDER_ROUTED
+			ORDER_ROUTED    → PARTIALLY_FILLED
+			ORDER_ROUTED    → FULLY_FILLED
+			ORDER_ROUTED    → ORDER_FAILED
+
+			PARTIALLY_FILLED → PARTIALLY_FILLED
+			PARTIALLY_FILLED → FULLY_FILLED
+			PARTIALLY_FILLED → ORDER_FAILED
+
+			FULLY_FILLED → ORDER_COMPLETED
+
+			ORDER_FAILED → terminal
+			ORDER_COMPLETED → terminal
+
+			Constraints:
+
+			- ONLY global OrderState allowed
+			- NO legacy states permitted
+			- ALL transitions MUST be triggered by ExecutionEvent.event_type
+
+	4.4 ExecutionEvent
+		ExecutionEvent = {
+			event_id
+			order_id
+			event_type
+			executed_size
+			remaining_size
+			event_time
+		}
+
+	4.5 Relationships
+		1 PolicyDecisionIntent → 1 ExecutionOrder
+		1 ExecutionOrder → N ExecutionEvents
+		ExecutionEvents → drive OrderState transitions
+
+	4.6 Ownership
+		All execution entities → Phase D Step 5 ONLY
+
+	4.7 GLOBAL EventType (MANDATORY — CROSS-PHASE)
+
+		event_type ∈ {
+			ORDER_CREATED
+			ORDER_ROUTED
+			PARTIAL_FILL
+			FULL_FILL
+			ORDER_COMPLETED
+			ORDER_FAILED
+		}
+
+		EventType Standardization Rule
+
+			- ALL phases (Step 5–8) MUST use identical event_type set
+			- NO aliases allowed:
+				PARTIAL_FILL ≠ PARTIALLY_FILLED
+				FULL_FILL ≠ FILLED
+
+			- event_type drives OrderState transitions
+			- mapping MUST be 1:1 deterministic
+
+			Violation → REPLAY FAILURE
+
+		Event → State Mapping (MANDATORY)
+
+			ORDER_CREATED   → ORDER_CREATED
+			ORDER_ROUTED    → ORDER_ROUTED
+			PARTIAL_FILL    → PARTIALLY_FILLED
+			FULL_FILL       → FULLY_FILLED
+			ORDER_COMPLETED → ORDER_COMPLETED
+			ORDER_FAILED    → ORDER_FAILED
+
+		OMSRequest = {
+				order_id
+				execution_order_payload
+				routing_metadata
+				dispatch_timestamp (derived from event_time ONLY)
+			}
+
+			EMSInstruction = {
+				order_id
+				broker_route
+				execution_strategy (mapped from execution_type)
+				priority_level
+			}
+
+5. LOGIC / RULE ENGINE
+
+	5.1 Rule Classes
+		R1 — Input Validation
+		R2 — Order Construction
+		R3 — Order ID Generation
+		R4 — Price Reference Binding
+		R5 — Execution Instruction Mapping
+		R6 — Lifecycle Initialization
+		R7 — Ordering Enforcement
+		R8 — Output Construction
+
+		R9 — Configuration Integrity Validation
+
+			IF input.config_hash != expected.config_hash:
+				→ REJECT execution
+
+			Execution MUST NOT proceed on config mismatch
+
+		SIGNAL TRACE PROPAGATION RULE (MANDATORY)
+
+			signal_id MUST be passed through unchanged across all phases.
+
+			signal_id MUST NOT:
+
+			- be modified
+			- be recomputed
+			- be dropped
+
+			Violation → HARD FAIL
+
+		R13 — Venue Discovery
+				venues = filter(
+					all_venues,
+					instrument_supported == TRUE
+					)
+
+				Constraint:
+
+				static configuration only
+
+		R14 — Liquidity Aggregation
+				aggregated_liquidity = Σ(venue_liquidity_profile.available_liquidity)
+
+		R15 — Routing Optimization
+				Deterministic optimization:
+
+					objective_function = minimize(
+						execution_cost + slippage + fees
+					)
+
+				Subject to:
+
+					Σ(venue_allocations.quantity) = order.quantity
+
+		R16 — Venue Allocation
+				venue_allocations = deterministic_split(
+					order.quantity,
+					venue_liquidity_profiles,
+					routing_strategy
+				)
+
+		R17 — Liquidity Integrity Validation
+				validate(venue_liquidity_profile):
+
+					assert timestamp within tolerance_window
+
+					assert liquidity <= historical_max_threshold
+
+					assert spread within expected bounds
+
+					assert source_verified == TRUE
+
+		R18 — Cost Model Verification
+				assert runtime_cost_model.checksum == execution_order.checksum
+
+
+	5.2 Order Construction Rule
+			ExecutionOrder.size = PolicyDecisionIntent.approved_size (or modified_size)
+
+		Constraint:
+
+			MUST NOT exceed policy-approved size
+
+		IF policy_status == MODIFY:
+				size = modified_size
+			ELSE:
+				size = approved_size
+
+		size MUST be single resolved value
+			dual-field interpretation FORBIDDEN
+
+	5.3 Order ID Rule (MANDATORY)
+		order_id = HASH_v1(
+			policy_decision_intent_id +
+			risk_approved_intent_id +
+			decision_validated_intent_id +
+			execution_intent_id +
+			trade_intent_id +
+			instrument +
+			direction +
+			size +
+			sequence_id +
+			price_model_version_id +
+			execution_config_hash
+		)
+
+		Constraints:
+
+			- MUST NOT depend on timestamp alone
+			- MUST include full lineage chain
+			- identical input → identical order_id
+			- broker IDs MUST NOT be used
+
+		timestamp = PolicyDecisionIntent.event_time
+
+		Constraints:
+
+			deterministic
+			reproducible
+			unique
+
+		Timestamp Source Rule (MANDATORY):
+
+			- timestamp MUST be derived ONLY from:
+				PolicyDecisionIntent.event_time
+
+			- system time usage FORBIDDEN
+
+			Violation → HARD FAIL
+
+
+
+	5.4 Price Reference Rule
+		price_reference = configuration_snapshot.price_model[instrument]
+
+		Constraints:
+
+		MUST be deterministic
+		MUST NOT use live market data
+
+		price_reference constraints:
+
+			min_price > 0
+			max_price ≤ SYSTEM_MAX_PRICE
+
+			overflow → REJECT
+			underflow → REJECT
+
+		Price Model Version Binding (MANDATORY)
+
+			configuration_snapshot MUST include:
+
+				price_model_version_id
+
+			Constraints:
+
+				1. price_reference MUST be derived ONLY from:
+
+					configuration_snapshot.price_model_version_id
+
+				2. price_model MUST be:
+
+					- immutable
+					- versioned
+					- hash-identifiable
+
+				3. Same:
+
+					instrument + version_id
+
+					→ MUST produce identical price_reference
+
+				4. price_reference MUST NOT depend on:
+
+					- live market data
+					- external feeds
+					- runtime inputs
+
+				5. price_model_version_id MUST be included in:
+
+					order_id hash input
+
+			Violation → NON-DETERMINISTIC PRICING
+
+	5.5 Execution Type Mapping
+		execution_type = PolicyDecisionIntent.execution_type
+
+		No transformation allowed
+
+
+
+	5.6 Lifecycle Initialization
+
+		Lifecycle Initialization Rule (CORRECT)
+
+		First event MUST be emitted:
+
+		event_type = ORDER_CREATED
+
+		OrderState derived as:
+
+		OrderState(0) = ORDER_CREATED
+
+	5.7 Ordering Rule (MANDATORY)
+		ordering_key = {
+			event_time ASC
+			origin_type ASC
+			sequence_id ASC
+			policy_decision_intent_id ASC
+		}
+
+		Constraint:
+
+			- MUST exactly preserve Step 4 output ordering
+			- NO reordering allowed
+
+		Aligned with Phase D macro ordering
+
+	5.8 RULE EXECUTION ORDER (STRICT — FINAL)
+
+				1. Input Validation
+				2. Ordering Enforcement
+
+				3. Venue Discovery
+				4. Liquidity Aggregation
+				5. Routing Optimization
+				6. Venue Allocation
+
+				7. Microstructure Modeling
+				8. Liquidity Validation
+				9. Order Slicing
+				10. Slippage Bounding
+				11. Execution Scheduling
+
+				12. Order Construction
+				13. Order ID Generation
+				14. Price Binding
+				15. Execution Mapping
+				16. Lifecycle Initialization
+				17. Output Construction
+
+			Microstructure Precedence Invariant
+
+				Microstructure steps MUST execute BEFORE order construction.
+
+				Violation → NON-DETERMINISTIC EXECUTION
+
+
+			Step 8 — Microstructure Modeling
+				select execution_microstructure_profile by instrument
+
+			Step 9 — Liquidity Validation
+				IF requested_size > execution_capacity_limit:
+					→ MUST slice
+
+			Step 10 — Order Slicing
+				slice_size = deterministic_function(
+					requested_size,
+					liquidity_profile,
+					max_slice_size_config
+				)
+
+				Constraints:
+
+				fixed formula
+				no randomness
+
+			Step 11 — Slippage Bounding
+					expected_slippage ≤ max_allowed_slippage
+
+				IF violated:
+
+					→ reduce slice_size
+
+			Step 12 — Execution Scheduling
+					scheduled_event_time = base_event_time + (slice_index × fixed_interval)
+
+				Constraints:
+
+					NO dynamic delay
+					NO latency-based adjustment
+
+			Microstructure Precedence Invariant
+
+				Microstructure steps MUST execute BEFORE order construction.
+
+				Violation → NON-DETERMINISTIC EXECUTION
+
+	R10 — Broker Normalization Pre-Layer (MANDATORY)
+
+		All downstream execution events MUST pass through normalization:
+
+		normalized_broker_event = {
+			order_id
+			broker_order_id
+			event_type ∈ {ACK, PARTIAL_FILL, FULL_FILL, CANCEL, REJECT}
+			event_time (Phase C derived ONLY)
+			executed_size
+			execution_price
+			sequence_number
+		}
+
+		- broker timestamps MUST NOT be used
+		- event_time MUST be Phase C aligned
+		- events MUST be sorted BEFORE lifecycle:
+
+		ordering_key = {
+			event_time ASC
+			sequence_number ASC
+		}
+
+		Broker Mapping Determinism Rule (MANDATORY)
+
+			configuration_snapshot MUST include:
+
+				broker_mapping_rules
+
+			Definition:
+
+				broker_mapping_rules define deterministic mapping:
+
+					ExecutionOrder → BrokerRequest schema
+
+			Constraints:
+
+				1. Mapping MUST be:
+
+					- static
+					- versioned
+					- hash-identifiable
+
+				2. Mapping MUST NOT depend on:
+
+					- runtime conditions
+					- broker responses
+					- environment variables
+
+				3. Same ExecutionOrder + same mapping_rules:
+
+					→ MUST produce identical BrokerRequest
+
+				4. broker_mapping_rules MUST be included in:
+
+					execution_config_hash
+
+				5. Broker-specific transformations MUST be:
+
+					declarative (NOT procedural)
+
+					Example:
+
+						field_map = {
+							instrument → symbol_code
+							size → quantity
+						}
+
+				6. NO conditional branching allowed in mapping
+
+			Violation → NON-DETERMINISTIC EXTERNAL EXECUTION
+
+		R11 — Execution Config Version Lock
+
+			version_identifiers MUST include:
+
+					execution_engine_version_id
+
+				Constraints:
+
+					- MUST be part of canonical_input_set_D5
+					- MUST be included in execution_config_hash (optional extension)
+
+			Purpose:
+
+				protects against code-level drift
+
+		R12 — Infra Emission Rule (MANDATORY)
+
+			ExecutionOrder MUST be emitted to OMS as:
+
+			OMSRequest = HASH-STABLE TRANSFORMATION of ExecutionOrder
+
+			Constraints:
+
+			- NO mutation of ExecutionOrder
+			- NO additional fields except routing metadata
+			- MUST preserve lineage_hash_reference
+
+		R13 — Microstructure-Aware Execution Construction
+
+			ExecutionOrder = F(
+					RiskApprovedIntent,
+					PolicyDecisionIntent,
+					ExecutionMicrostructureProfile,
+					LiquidityModel,
+					ExecutionConstraints
+				)
+
+6. FLOW ARCHITECTURE
+
+		6.0 Canonical Input Set
+		canonical_input_set_D5 = {
+			policy_decision_intent_stream,
+			configuration_snapshot,
+			version_identifiers,
+			execution_microstructure_profile_snapshot
+			liquidity_model_snapshot
+			slippage_model_snapshot
+		}
+
+		Constraints:
+
+		immutable
+		complete
+		hash-identifiable
+
+		Configuration Hash Binding Rule (MANDATORY)
+
+			configuration_snapshot MUST include:
+
+				execution_config_hash
+
+			Definition:
+
+				execution_config_hash = HASH_v1(
+					price_model_version_id +
+					execution_type_map +
+					retry_policy +
+					broker_mapping_rules
+				)
+
+			Constraints:
+
+				1. execution_config_hash MUST be part of canonical_input_set_D5
+				2. Execution Engine MUST validate:
+
+					input.execution_config_hash == replay.execution_config_hash
+
+				3. ANY mismatch:
+
+					→ HARD FAIL
+					→ reject entire execution_order_stream
+
+				4. execution_config_hash MUST be logged per order
+
+			Violation → NON-REPLAYABLE EXECUTION
+
+		configuration_snapshot MUST include:
+
+			- price_model_version_id
+			- execution_config_hash
+
+			Execution MUST validate:
+
+			input.config_hash == replay.config_hash
+
+	6.1 Input
+
+		From Step 4:
+
+		policy_decision_intent_stream
+
+	6.2 Processing Flow
+		PolicyDecisionIntent
+		→ Validation
+		→ Ordering Enforcement
+		→ Order Construction
+		→ Order ID Generation
+		→ Price Binding
+		→ Lifecycle Init
+		→ ExecutionOrder
+		→ OMSRequest (emit)
+		→ OMSEvent (OMS_RECEIVED)
+		→ OMSEvent (OMS_DISPATCHED)
+		→ EMSInstruction
+		→ EMSEvent (ROUTE_SELECTED)
+		→ EMSEvent (ROUTE_DISPATCHED)
+		→ Broker Adapter (Step 7)
+
+		RiskApprovedIntent
+		→ PolicyDecisionIntent
+		→ Microstructure Modeling
+		→ Liquidity Check
+		→ Order Slicing
+		→ Slippage Control
+		→ Execution Scheduling
+		→ ExecutionOrder
+
+			In ExecutionOrder:
+
+				execution_schedule
+				expected_slippage
+				liquidity_reference_id
+
+				→ Venue-level Execution Simulation
+				→ Per-venue Fill Simulation
+				→ Slippage Realization (per venue)
+				→ Transaction Cost (per venue)
+				→ Aggregation
+				→ PnL Computation
+
+
+
+		Flow MUST mirror Rule Execution Order EXACTLY
+			Any deviation → NON-DETERMINISTIC SYSTEM
+
+	6.3 Output
+		execution_order_stream = {
+			orders: [ExecutionOrder]
+		}
+
+		Execution Event Emission Contract (MANDATORY)
+
+			Each lifecycle transition MUST emit:
+
+			execution_event = {
+				order_id
+				event_type
+				event_time
+				executed_size
+				remaining_size
+				execution_price
+				lineage_hash
+			}
+
+		- MUST be injected into Phase C EventLog
+		- MUST follow Phase C ordering model
+		- MUST preserve lineage chain
+
+	6.4 Flow Rule
+		no external data
+		no implicit values
+		deterministic only
+
+	configuration_snapshot MUST include:
+
+		- price_model
+		- execution_type_map
+		- retry_policy
+		- broker_mapping_rules
+
+7. PIPELINE STRUCTURE
+
+	Execution Lifecycle Pipeline:
+
+		P1: Order Created (ORDER_CREATED)
+		P2: Order Routed
+		P3: Execution Events
+		P4: Fill Processing
+		P5: State Transition
+		P6: Completion
+		P7: OMS Dispatch
+		P8: EMS Routing
+		P9: Broker Adapter Handoff
+
+8. CONTROL & CONSTRAINTS
+
+	8.1 Hard Rules
+		no intent mutation
+		no size increase
+		no external dependency
+		deterministic ordering mandatory
+
+		HR-M1: No dynamic market data dependency
+		HR-M2: All microstructure inputs MUST be snapshot-based
+		HR-M3: Slicing MUST be deterministic
+		HR-M4: Execution schedule MUST be precomputed
+		HR-M5: Slippage MUST be bounded before order emission
+
+		HR-SOR-1:
+			ExecutionOrder MUST fully define venue allocation.
+			Runtime routing decisions are STRICTLY FORBIDDEN.
+
+		I-SOR-3: Unverified or anomalous liquidity MUST NOT be used for routing
+		I-SOR-5: Routing optimization MUST use immutable, version-locked cost models
+
+	8.2 Guardrails
+		reject invalid intent
+		reject zero-size orders
+		reject missing fields
+
+		IF size == 0:
+
+			REJECT order
+
+			reason = ZERO_SIZE_ORDER
+
+	8.3 Invariants
+		ExecutionOrder.size == PolicyDecisionIntent.size
+		Order lifecycle must be monotonic
+		Replay must produce identical order stream
+
+		remaining_size = order.size - Σ(executed_size)
+
+			Constraint:
+
+			remaining_size ≥ 0
+			remaining_size == 0 → FILLED
+
+		Partial Fill Determinism Rule
+
+			filled_size_cumulative = Σ(executed_size_i)
+
+			remaining_size = order.size - filled_size_cumulative
+
+			Constraints:
+
+			- filled_size_cumulative MUST be monotonic
+			- filled_size_cumulative ≤ order.size
+			- remaining_size ≥ 0
+			- remaining_size == 0 → FILLED
+
+		Idempotency Rule (MANDATORY)
+
+		IF order_id already exists:
+
+			DO NOT create new order
+
+			RETURN existing order state
+
+		I-M1: Same input → identical slicing
+		I-M2: Same input → identical schedule
+		I-M3: No runtime liquidity decision
+		I-M4: Execution path fully replayable
+		I-SOR-1: Same input → identical venue allocation
+		I-SOR-2: Routing MUST precede microstructure modeling
+		I-SOR-SIM-1: Simulated fills MUST match venue allocation proportions
+
+9. STATE & DATA MODEL
+
+	9.1 State Definition
+		execution_state = {
+			order_id → OrderState
+		}
+
+	9.2 State Transition
+		State Transition Rule (GLOBAL)
+
+			OrderState MUST be derived ONLY from ExecutionEvent stream:
+
+			State(t+1) = f(State(t), ExecutionEvent.event_type)
+
+			Using mapping:
+
+			ORDER_CREATED   → ORDER_CREATED
+			ORDER_ROUTED    → ORDER_ROUTED
+			PARTIAL_FILL    → PARTIALLY_FILLED
+			FULL_FILL       → FULLY_FILLED
+			ORDER_COMPLETED → ORDER_COMPLETED
+			ORDER_FAILED    → ORDER_FAILED
+
+			No direct state transitions allowed.
+
+	9.3 Source of Truth
+		Event Log (Phase C)
+		Execution Events
+
+	OrderState transitions MUST be derived ONLY from ExecutionEvent stream
+
+		State(t) = f(EventLog_execution[0 → t])
+
+10. FAILURE MODEL
+
+	10.1 Scenarios
+		invalid policy intent
+		order ID collision
+		size mismatch
+		ordering violation
+
+	10.2 Impact
+		execution inconsistency
+		audit failure
+		portfolio corruption
+
+	10.3 Mitigation
+		reject input
+		halt execution pipeline
+
+	10.4 Detection
+		hash mismatch
+		schema validation failure
+
+	Execution Failure Escalation
+
+		IF execution fails after retry:
+
+			dead_letter_event = {
+				order_id
+				failure_stage
+				failure_reason
+				retry_count
+			}
+
+			route → DEAD_LETTER_QUEUE
+
+11. ASSUMPTION REGISTER
+	Assumption					Reason					Validation		Status
+	PolicyDecisionIntent valid	upstream guarantee		Step 4			VALIDATED
+	config complete				required for mapping	Phase C				ZCONTROLLED
+
+12. VALIDATION FRAMEWORK
+	Red Team (3 Rounds)
+
+		Round 1 — Determinism Attack
+
+			attempt non-deterministic order_id
+			→ PASS (hash-based)
+
+		Round 2 — Intent Mutation Attack
+
+			attempt size increase
+			→ REJECTED
+
+		Round 3 — Ordering Attack
+
+			reorder equal timestamps
+			→ resolved via sequence_id
+
+	Blue Team Validation
+		deterministic replay → PASS
+		schema completeness → PASS
+		lifecycle correctness → PASS
+
+	CEI Critical Modifications
+		Enforce strict price_reference model isolation
+		Add order_id collision detection rule
+		Add zero-size rejection invariant
+
+13. OUTPUT (DELIVERABLE SPEC)
+
+		ExecutionOrder = {
+			order_id
+			policy_decision_intent_id
+			trade_intent_id
+			instrument
+			direction
+			size
+			price_reference
+			execution_type
+			timestamp
+			origin_type
+			lineage_hash_reference
+
+			execution_config_hash
+			price_model_version_id
+		}
+
+		Execution Configuration Traceability Rule
+
+			Each ExecutionOrder MUST carry:
+
+				execution_config_hash
+				price_model_version_id
+
+			Constraints:
+
+				- MUST match canonical_input_set_D5
+				- MUST be identical during replay
+				- MUST be verifiable in audit logs
+
+			Purpose:
+
+				ensures full reconstruction of execution environment
+
+		execution_order_stream = {
+				orders: [ExecutionOrder]
+				oms_request_stream: [OMSRequest]
+				ems_instruction_stream: [EMSInstruction]
+			}
+
+		oms_event_stream: [OMSEvent]
+		ems_event_stream: [EMSEvent]
+
+14. TRACEABILITY MAPPING
+		trade_intent_id
+		→ policy_decision_intent_id
+		→ order_id
+
+	Full lineage preserved
+
+	order_lineage_hash = HASH_v1(
+		policy_decision_intent_id +
+		risk_approved_intent_id +
+		decision_validated_intent_id +
+		execution_intent_id +
+		trade_intent_id
+	)
+
+	ExecutionOrder MUST include lineage_hash_reference
+
+	Lineage Continuity Rule
+
+		ExecutionOrder.lineage_hash_reference MUST be:
+
+		HASH_v1(
+			trade_intent_id +
+			execution_intent_id +
+			decision_validated_intent_id +
+			risk_approved_intent_id +
+			policy_decision_intent_id
+		)
+
+15. CROSS-PHASE CONSISTENCY
+
+	Owns:
+
+		ExecutionOrder
+		Order Lifecycle
+
+	References:
+
+		Step 4 output
+		Phase B constraints
+
+16. SCALABILITY MODEL
+		horizontally scalable order generation
+		partition by order_id
+		deterministic partitioning
+
+17. GOVERNANCE INTEGRATION
+		version-controlled execution rules
+		approval required for changes
+
+18. AUDITABILITY & OBSERVABILITY
+		full order trace
+		deterministic replay
+		hash verification
+
+19. RISK CONSIDERATIONS
+		execution drift risk
+		lifecycle inconsistency risk
+
+		Mitigation:
+
+			strict invariants
+			deterministic mapping
+
+20. FAILURE CONDITION (PHASE LEVEL)
+
+	Phase FAILS if:
+
+		determinism breaks
+		ordering inconsistent
+		size mismatch detected
+		replay mismatch
+
+21. PHASE LOCK CRITERIA
+
+	Phase LOCKED only if:
+
+		all 21 sections complete
+		Red Team passed
+		Blue Team validated
+		CEI modifications applied
+		deterministic replay proven

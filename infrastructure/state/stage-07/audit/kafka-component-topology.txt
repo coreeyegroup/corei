@@ -1,0 +1,21 @@
+infrastructure/components/kafka
+├── acl
+│   ├── acl-rules.yaml
+│   └── service-accounts.yaml
+├── config
+├── contracts
+├── dlq
+├── manifests
+├── retry
+├── scripts
+├── tools
+│   └── kafka-ui
+└── topics
+    ├── dlq-topology.yaml
+    ├── partition-governance.yaml
+    ├── replay-governance.yaml
+    ├── retention-policy.yaml
+    ├── retry-topology.yaml
+    └── topics.yaml
+
+10 directories, 8 files

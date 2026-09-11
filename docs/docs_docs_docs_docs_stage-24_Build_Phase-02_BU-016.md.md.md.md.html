@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <title>docs docs docs stage 24 Build Phase 02 BU 016.md.md.md</title>
+  <style>
+  body {
+    background: #0A0D12;
+    color: #E3E7EC;
+    font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px 40px;
+  }
+
+  h1 {
+    font-size: 26px;
+    font-weight: 600;
+    color: #C6A46A;
+    margin: 24px 0 12px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 8px;
+  }
+
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #D4B88A;
+    margin: 20px 0 10px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 6px;
+  }
+
+  h3 {
+    font-size: 17px;
+    font-weight: 500;
+    color: #E3E7EC;
+    margin: 16px 0 8px 0;
+  }
+
+  h4 {
+    font-size: 15px;
+    font-weight: 500;
+    color: #C5CED9;
+    margin: 12px 0 6px 0;
+  }
+
+  p {
+    margin-bottom: 8px;
+    color: #C5CED9;
+  }
+
+  ul,
+  ol {
+    padding-left: 24px;
+    margin-bottom: 8px;
+    color: #C5CED9;
+  }
+
+  li {
+    margin-bottom: 2px;
+  }
+
+  code {
+    font-family: 'JetBrains Mono', 'Cascadia Code', monospace;
+    font-size: 13px;
+    background: rgba(255,255,255,0.05);
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid #28303C;
+    color: #C5CED9;
+  }
+
+  pre {
+    background: #18202A;
+    border: 1px solid #28303C;
+    border-radius: 6px;
+    padding: 16px 20px;
+    overflow: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 12px 0 16px 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #C5CED9;
+  }
+
+  pre code {
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 16px 0;
+    font-size: 13px;
+    color: #C5CED9;
+  }
+
+  th {
+    background: #18202A;
+    color: #C5CED9;
+    font-weight: 600;
+    text-align: left;
+    padding: 6px 12px;
+    border: 1px solid #28303C;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  td {
+    padding: 4px 12px;
+    border: 1px solid #28303C;
+    background: #0E1219;
+  }
+
+  tr:nth-child(even) td {
+    background: #121821;
+  }
+
+  blockquote {
+    border-left: 3px solid #C6A46A;
+    padding-left: 16px;
+    margin: 8px 0 12px 0;
+    color: #6E7883;
+    font-style: italic;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #28303C;
+    margin: 24px 0;
+  }
+
+  a {
+    color: #8BB4F0;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  strong {
+    color: #E3E7EC;
+    font-weight: 600;
+  }
+
+  img {
+    max-width: 100%;
+    border-radius: 4px;
+    border: 1px solid #28303C;
+  }
+
+  .doc-footer {
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid #28303C;
+    font-size: 12px;
+    color: #6E7883;
+    font-family: monospace;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+</style>
+</head>
+
+<body>
+
+  <div
+    class="doc-header"
+    style="
+      background:#121821;
+      border:1px solid #28303C;
+      border-radius:8px;
+      padding:1.2rem 1.8rem;
+      margin-bottom:1.8rem;
+    "
+  >
+
+    <div
+      style="
+        color:#C6A46A;
+        font-weight:600;
+        font-size:13px;
+        text-transform:uppercase;
+        letter-spacing:0.05em;
+      "
+    >
+      COREI · Stage Documentation
+    </div>
+
+
+
+    <h1
+      style="
+        font-size:28px;
+        font-weight:600;
+        color:#E3E7EC;
+        margin:0.1rem 0;
+        border-bottom:none;
+        padding-bottom:0;
+      "
+    >
+      docs docs docs stage 24 Build Phase 02 BU 016.md.md.md
+    </h1>
+
+    <div
+      style="
+        font-size:16px;
+        color:#C5CED9;
+      "
+    >
+      Stage Documentation
+      ·
+      Operational
+    </div>
+
+    <div
+      style="
+        display:flex;
+        flex-wrap:wrap;
+        gap:0.6rem 1.8rem;
+        margin-top:0.6rem;
+        font-size:13px;
+      "
+    >
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Status
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          Approved
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Version
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          1.0
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Classification
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          Operational
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Owner
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          COREI
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Repository
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+            font-family:monospace;
+          "
+        >
+          docs/docs_docs_docs_stage-24_Build_Phase-02_BU-016.md.md.md.md
+        </span>
+      </span>
+
+    </div>
+
+
+
+  </div>
+
+
+
+  <h1>BUILD UNIT-016</h1>
+<h2>Title</h2>
+<p>COREI OS Platform Integration</p>
+<hr>
+<h2>Objective</h2>
+<p>Implement the COREI OS Platform Integration layer responsible for composing all previously developed frameworks into a unified institutional operating environment.</p>
+<p>Unlike previous Build Units that introduced independent frameworks, Platform Integration establishes the composition root that connects Bootstrap, Runtime Services, Foundation, Workspace, Shell, Navigation, Rendering, Visualization, Extension Framework, and all future terminal implementations into one deterministic startup sequence.</p>
+<hr>
+<h2>Scope</h2>
+<p>This Build Unit establishes the Platform Integration layer.</p>
+<p>Implemented:</p>
+<ul>
+<li>Platform Repository</li>
+<li>Platform Contracts</li>
+<li>Platform Context Contracts</li>
+<li>Platform Models</li>
+<li>Platform Context Models</li>
+<li>Platform Registry</li>
+<li>Bootstrap Integration</li>
+<li>Platform Composition Root</li>
+<li>Platform Runtime</li>
+<li>Platform Provider</li>
+<li>Platform Hooks</li>
+<li>Platform Components</li>
+<li>Infrastructure Adapter</li>
+<li>Public API</li>
+</ul>
+<hr>
+<h1>Platform Integration Architecture</h1>
+<pre><code>Platform Integration
+
+│
+
+├── Contracts
+
+├── Models
+
+├── Registry
+
+├── Bootstrap Integration
+
+├── Composition Root
+
+├── Runtime
+
+├── Provider
+
+├── Hooks
+
+├── Components
+
+├── Adapters
+
+└── Public API
+</code></pre>
+<p>The Platform Integration layer becomes the composition root for the entire COREI OS platform.</p>
+<hr>
+<h1>Repository Structure</h1>
+<p>Implemented</p>
+<pre><code>src/platform/
+
+contracts/
+    platform-contract.ts
+    platform-context-contract.ts
+
+models/
+    platform.ts
+    platform-context.ts
+
+registry/
+    platform-registry.ts
+
+bootstrap/
+    platform-bootstrap.ts
+
+composition/
+    platform-composition.ts
+
+runtime/
+    platform-runtime.ts
+
+providers/
+    platform-provider.tsx
+
+hooks/
+    use-platform.ts
+
+adapters/
+    infrastructure-platform.ts
+
+components/
+    PlatformRoot.tsx
+    PlatformShell.tsx
+    PlatformRuntime.tsx
+
+index.ts
+</code></pre>
+<hr>
+<h1>Platform Contracts</h1>
+<p>Implemented:</p>
+<ul>
+<li>Platform Contract</li>
+<li>Platform Context Contract</li>
+</ul>
+<p>Current Platform Contract:</p>
+<ul>
+<li>Identifier</li>
+<li>Name</li>
+<li>Version</li>
+</ul>
+<p>Current Platform Context Contract:</p>
+<ul>
+<li>Workspace</li>
+<li>Terminal</li>
+</ul>
+<p>Future extensions:</p>
+<ul>
+<li>Platform Identity</li>
+<li>Deployment Metadata</li>
+<li>Environment Context</li>
+<li>Runtime Policies</li>
+<li>Platform Configuration</li>
+</ul>
+<hr>
+<h1>Platform Models</h1>
+<p>Implemented runtime models for:</p>
+<ul>
+<li>Platform</li>
+<li>Platform Context</li>
+</ul>
+<p>Current runtime properties:</p>
+<p>Platform</p>
+<ul>
+<li>Initialized</li>
+<li>Running</li>
+</ul>
+<p>Platform Context</p>
+<ul>
+<li>Workspace</li>
+<li>Terminal</li>
+<li>Active</li>
+</ul>
+<p>Future runtime additions:</p>
+<ul>
+<li>Runtime Profile</li>
+<li>Environment</li>
+<li>Startup Phase</li>
+<li>Diagnostics</li>
+<li>Platform Health</li>
+</ul>
+<hr>
+<h1>Platform Registry</h1>
+<p>Implemented:</p>
+<pre><code>platform-registry.ts
+</code></pre>
+<p>Current registered platform:</p>
+<ul>
+<li>COREI Operating System</li>
+</ul>
+<p>The registry becomes the authoritative platform catalogue used during startup.</p>
+<hr>
+<h1>Bootstrap Integration</h1>
+<p>Implemented:</p>
+<pre><code>platform-bootstrap.ts
+</code></pre>
+<p>Current responsibility:</p>
+<ul>
+<li>Delegate platform startup to the Bootstrap Foundation.</li>
+</ul>
+<p>Future responsibilities:</p>
+<ul>
+<li>Environment Validation</li>
+<li>Configuration Loading</li>
+<li>Runtime Preparation</li>
+<li>Startup Sequencing</li>
+</ul>
+<hr>
+<h1>Platform Composition</h1>
+<p>Implemented:</p>
+<pre><code>platform-composition.ts
+</code></pre>
+<p>Introduced the institutional composition root.</p>
+<p>Current responsibility:</p>
+<ul>
+<li>Compose platform startup.</li>
+</ul>
+<p>Future responsibilities:</p>
+<ul>
+<li>Framework Composition</li>
+<li>Dependency Graph Assembly</li>
+<li>Startup Ordering</li>
+<li>Cross-framework Wiring</li>
+<li>Composition Validation</li>
+</ul>
+<hr>
+<h1>Platform Runtime</h1>
+<p>Implemented:</p>
+<pre><code>platform-runtime.ts
+</code></pre>
+<p>Current responsibility:</p>
+<ul>
+<li>Initialize platform runtime.</li>
+</ul>
+<p>Future responsibilities:</p>
+<ul>
+<li>Runtime Orchestration</li>
+<li>Startup Lifecycle</li>
+<li>Shutdown Coordination</li>
+<li>Recovery Coordination</li>
+<li>Runtime Monitoring</li>
+</ul>
+<hr>
+<h1>Provider</h1>
+<p>Implemented:</p>
+<pre><code>platform-provider.tsx
+</code></pre>
+<p>Provides the runtime boundary for platform composition.</p>
+<p>Future responsibilities:</p>
+<ul>
+<li>Runtime Context</li>
+<li>Framework Composition</li>
+<li>Provider Hierarchy</li>
+<li>Shared Services</li>
+</ul>
+<hr>
+<h1>Hooks</h1>
+<p>Implemented:</p>
+<pre><code>usePlatform()
+</code></pre>
+<p>Provides platform state access.</p>
+<p>Future capabilities:</p>
+<ul>
+<li>Platform Discovery</li>
+<li>Runtime Inspection</li>
+<li>Framework Status</li>
+<li>Environment Information</li>
+</ul>
+<hr>
+<h1>Components</h1>
+<p>Implemented:</p>
+<ul>
+<li>PlatformRoot</li>
+<li>PlatformShell</li>
+<li>PlatformRuntime</li>
+</ul>
+<p>These components establish the structural composition of the Platform Integration layer.</p>
+<p>Future implementations will coordinate:</p>
+<ul>
+<li>Shell Composition</li>
+<li>Runtime Initialization</li>
+<li>Workspace Attachment</li>
+<li>Terminal Composition</li>
+</ul>
+<hr>
+<h1>Infrastructure Adapter</h1>
+<p>Implemented:</p>
+<pre><code>infrastructure-platform.ts
+</code></pre>
+<p>Provides Infrastructure Terminal mapping into the platform.</p>
+<p>Future adapters:</p>
+<ul>
+<li>Trading Platform</li>
+<li>Research Platform</li>
+<li>Risk Platform</li>
+<li>Executive Platform</li>
+<li>Compliance Platform</li>
+</ul>
+<hr>
+<h1>Public API</h1>
+<p>Created:</p>
+<pre><code>src/platform/index.ts
+</code></pre>
+<p>Exports:</p>
+<ul>
+<li>Components</li>
+<li>Provider</li>
+<li>Hooks</li>
+<li>Runtime</li>
+<li>Composition</li>
+<li>Bootstrap</li>
+<li>Contracts</li>
+</ul>
+<p>This becomes the public integration point for Platform Integration.</p>
+<hr>
+<h1>Validation</h1>
+<p>Successfully validated:</p>
+<ul>
+<li>TypeScript Compilation</li>
+<li>Platform Contracts</li>
+<li>Models</li>
+<li>Registry</li>
+<li>Bootstrap Integration</li>
+<li>Platform Composition</li>
+<li>Platform Runtime</li>
+<li>Provider</li>
+<li>Hooks</li>
+<li>Components</li>
+<li>Infrastructure Adapter</li>
+<li>Public API</li>
+<li>Vite Production Build</li>
+</ul>
+<p>Validation Result</p>
+<pre><code>TypeScript Compilation     PASS
+
+Vite Production Build      PASS
+</code></pre>
+<hr>
+<h1>Deliverables</h1>
+<p>Completed:</p>
+<ul>
+<li>Platform Repository</li>
+<li>Contracts</li>
+<li>Models</li>
+<li>Registry</li>
+<li>Bootstrap Integration</li>
+<li>Platform Composition</li>
+<li>Runtime</li>
+<li>Provider</li>
+<li>Hooks</li>
+<li>Components</li>
+<li>Infrastructure Adapter</li>
+<li>Public API</li>
+</ul>
+<hr>
+<h1>Repository Impact</h1>
+<p>Created the complete Platform Integration layer under:</p>
+<pre><code>src/platform/
+</code></pre>
+<p>The Platform Integration layer now becomes the composition root responsible for assembling all COREI OS frameworks into a unified operating environment.</p>
+<hr>
+<h1>Result</h1>
+<p>COREI OS now supports a structured Platform Integration layer capable of composing independent frameworks into one deterministic institutional platform.</p>
+<p>This Build Unit establishes the foundation for future:</p>
+<ul>
+<li>Unified Platform Startup</li>
+<li>Framework Composition</li>
+<li>Cross-framework Communication</li>
+<li>Terminal Integration</li>
+<li>Runtime Orchestration</li>
+<li>Institutional Platform Lifecycle</li>
+</ul>
+<p>The Platform Integration layer is now the composition bridge between all COREI OS frameworks.</p>
+<hr>
+<h1>Next Build Unit</h1>
+<p><strong>BU-017 – Terminal SDK</strong></p>
+<p>Implementation Order</p>
+<ul>
+<li>Terminal Contracts</li>
+<li>Workspace Contracts</li>
+<li>Module Contracts</li>
+<li>SDK Models</li>
+<li>SDK Registry</li>
+<li>SDK Runtime</li>
+<li>SDK State</li>
+<li>SDK Lifecycle</li>
+<li>SDK Services</li>
+<li>Provider</li>
+<li>Hooks</li>
+<li>Components</li>
+<li>Infrastructure Adapter</li>
+<li>Validation</li>
+</ul>
+<hr>
+<h1>Status</h1>
+<p><strong>COMPLETED</strong></p>
+
+
+  <div class="doc-footer">
+
+    <span>DOCUMENT KEY: docs:docs_docs_docs_stage-24_Build_Phase-02_BU-016.md.md.md.md</span>
+
+    <span>
+      DOCUMENT NAME: docs docs docs stage 24 Build Phase 02 BU 016.md.md.md
+    </span>
+
+    <span>
+      VERSION: 1.0
+    </span>
+
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,93 @@
+==================================================
+STAGE-21A AUDIT
+==================================================
+
+DATE:
+Thu May 28 10:34:54 PM UTC 2026
+
+KUBERNETES CLIENT VERSION:
+Client Version: v1.29.0
+Kustomize Version: v5.0.4-0.20230601165947-6ce0bf390ce3
+
+NODES:
+NAME        STATUS   ROLES           AGE     VERSION   INTERNAL-IP    EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION       CONTAINER-RUNTIME
+core-node   Ready    control-plane   3d15h   v1.29.0   192.168.1.10   <none>        Ubuntu 22.04.5 LTS   5.15.0-179-generic   containerd://2.2.3
+
+NAMESPACES:
+NAME              STATUS   AGE
+database          Active   2d7h
+default           Active   3d15h
+execution         Active   30h
+kafka             Active   3d1h
+kube-node-lease   Active   3d15h
+kube-public       Active   3d15h
+kube-system       Active   3d15h
+longhorn-system   Active   3d15h
+market-data       Active   3d1h
+monitoring        Active   2d8h
+n8n               Active   23h
+platform          Active   3d9h
+research          Active   2d6h
+trading-infra     Active   30h
+
+PERSISTENT VOLUMES:
+NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                      STORAGECLASS   VOLUMEATTRIBUTESCLASS   REASON   AGE
+pvc-5ae553fe-8457-4806-9324-588758592dfb   10Gi       RWO            Delete           Bound    research/claim-coreeye     longhorn       <unset>                          2d5h
+pvc-94aa2c07-d8c7-4293-97f6-461bea9c88fd   20Gi       RWO            Delete           Bound    kafka/kafka-data-kafka-0   longhorn       <unset>                          2d11h
+pvc-a2ab8b90-3ac2-4eab-a02d-d80949d83797   1Gi        RWO            Delete           Bound    research/hub-db-dir        longhorn       <unset>                          2d6h
+
+PERSISTENT VOLUME CLAIMS:
+NAMESPACE   NAME                 STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+kafka       kafka-data-kafka-0   Bound    pvc-94aa2c07-d8c7-4293-97f6-461bea9c88fd   20Gi       RWO            longhorn       <unset>                 2d11h
+research    claim-coreeye        Bound    pvc-5ae553fe-8457-4806-9324-588758592dfb   10Gi       RWO            longhorn       <unset>                 2d5h
+research    hub-db-dir           Bound    pvc-a2ab8b90-3ac2-4eab-a02d-d80949d83797   1Gi        RWO            longhorn       <unset>                 2d6h
+
+INGRESS:
+NAMESPACE   NAME                        CLASS   HOSTS   ADDRESS   PORTS   AGE
+n8n         n8n-ingress                 kong    *                 80      15h
+platform    operational-api-ingress     kong    *                 80      23h
+platform    trading-dashboard-ingress   kong    *                 80      23h
+platform    websocket-gateway-ingress   kong    *                 80      23h
+
+SERVICES:
+NAMESPACE         NAME                         TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)                  AGE
+database          timescaledb                  ClusterIP      10.100.175.245   <none>        5432/TCP                 2d7h
+default           kubernetes                   ClusterIP      10.96.0.1        <none>        443/TCP                  3d15h
+execution         smart-order-router           ClusterIP      10.105.196.83    <none>        8000/TCP                 29h
+kafka             kafka                        ClusterIP      10.104.37.26     <none>        9092/TCP                 2d12h
+kafka             kafka-headless               ClusterIP      None             <none>        9092/TCP,9093/TCP        2d12h
+kube-system       kube-dns                     ClusterIP      10.96.0.10       <none>        53/UDP,53/TCP,9153/TCP   3d15h
+kube-system       metrics-server               ClusterIP      10.108.3.187     <none>        443/TCP                  2d8h
+longhorn-system   longhorn-admission-webhook   ClusterIP      10.96.78.118     <none>        9502/TCP                 3d15h
+longhorn-system   longhorn-backend             ClusterIP      10.105.139.5     <none>        9500/TCP                 3d15h
+longhorn-system   longhorn-frontend            ClusterIP      10.106.129.135   <none>        80/TCP                   3d15h
+longhorn-system   longhorn-recovery-backend    ClusterIP      10.107.183.188   <none>        9503/TCP                 3d15h
+market-data       historical-data-service      ClusterIP      10.99.34.30      <none>        8080/TCP                 2d7h
+market-data       market-data-ingestion        ClusterIP      10.103.27.146    <none>        8000/TCP                 3d
+n8n               n8n-service                  ClusterIP      10.100.204.27    <none>        5678/TCP                 15h
+platform          audit-service                ClusterIP      10.111.23.50     <none>        80/TCP                   3d3h
+platform          config-service               ClusterIP      10.99.88.22      <none>        80/TCP                   3d3h
+platform          config-snapshot-service      ClusterIP      10.105.144.149   <none>        80/TCP                   3d3h
+platform          event-ingestion-service      ClusterIP      10.108.86.73     <none>        80/TCP                   3d3h
+platform          identity-service             ClusterIP      10.100.103.255   <none>        80/TCP                   3d3h
+platform          operational-api-service      ClusterIP      10.106.96.230    <none>        8081/TCP                 22h
+platform          trading-dashboard-service    ClusterIP      10.96.193.144    <none>        80/TCP                   23h
+platform          websocket-gateway-service    ClusterIP      10.100.89.2      <none>        8080/TCP                 15h
+research          hub                          ClusterIP      10.109.126.93    <none>        8081/TCP                 2d6h
+research          mlflow                       ClusterIP      10.104.4.139     <none>        5000/TCP                 2d2h
+research          proxy-api                    ClusterIP      10.109.210.211   <none>        8001/TCP                 2d6h
+research          proxy-public                 LoadBalancer   10.97.137.74     <pending>     80:31965/TCP             2d6h
+trading-infra     broker-adapter-service       ClusterIP      10.105.105.222   <none>        8003/TCP                 28h
+trading-infra     copy-trade-engine            ClusterIP      10.98.228.183    <none>        8006/TCP                 28h
+trading-infra     ems                          ClusterIP      10.110.213.89    <none>        8002/TCP                 28h
+trading-infra     fill-handler-service         ClusterIP      10.110.46.187    <none>        8004/TCP                 28h
+trading-infra     oms                          ClusterIP      10.101.90.84     <none>        8001/TCP                 29h
+trading-infra     reconciliation-service       ClusterIP      10.109.66.155    <none>        8005/TCP                 28h
+
+FALCO:
+
+VAULT:
+
+KAFKA:
+NAME      READY   STATUS    RESTARTS   AGE
+kafka-0   1/1     Running   0          2d9h

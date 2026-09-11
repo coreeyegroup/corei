@@ -1,0 +1,2 @@
+NAME                    STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+redis-storage-redis-0   Bound    pvc-afa975a7-014f-4eb1-8fe4-0e6a7d71b2f5   5Gi        RWO            longhorn       <unset>                 14m

@@ -1,0 +1,765 @@
+/******************************************************************************
+ *
+ * COREI OPERATING SYSTEM
+ *
+ * TOP RIBBON
+ * Institutional Operational / Developer Command Surface
+ *
+ * Presentation and composition only.
+ *
+ * Existing authoritative capabilities consumed:
+ * - ShellHeaderContextContract
+ * - identityService organization switching
+ * - workspaceRuntime workspace switching
+ * - Infrastructure health & status (Phase‑26)
+ *
+ ******************************************************************************/
+
+import {
+    useEffect,
+    useRef,
+    useState,
+    type ReactElement
+} from "react";
+
+import "../styles/top-ribbon.css";
+
+import {
+    getShellHeaderContext
+} from "../models/shell-header-context";
+
+import {
+    identityService
+} from "../../identity-platform";
+
+import {
+    workspaceRuntime
+} from "../../workbench/workspace/runtime/workspace-runtime";
+
+type RibbonTab =
+    | "operations"
+    | "infrastructure";
+
+
+interface StatusProps {
+    readonly label: string;
+    readonly value: string;
+    readonly tone?: "operational" | "attention" | "critical" | "neutral";
+    readonly subtext?: string;
+}
+
+
+function Status({
+    label,
+    value,
+    tone = "neutral",
+    subtext
+}: StatusProps): ReactElement {
+    return (
+        <div
+            className="corei-ribbon-status"
+            data-status-tone={tone}
+        >
+            <span className="corei-ribbon-status-label">
+                {label}
+            </span>
+
+            <span className="corei-ribbon-status-value">
+                {tone !== "neutral" && (
+                    <i aria-hidden="true" />
+                )}
+                {value}
+                {subtext && (
+                    <span className="corei-ribbon-status-sub">
+                        {subtext}
+                    </span>
+                )}
+            </span>
+        </div>
+    );
+}
+
+
+function Clock(): ReactElement {
+    const [now, setNow] = useState(() => new Date());
+
+    useEffect(() => {
+        const timer = window.setInterval(
+            () => setNow(new Date()),
+            1000
+        );
+        return () => window.clearInterval(timer);
+    }, []);
+
+    return (
+        <div
+            className="corei-ribbon-clock"
+            data-ribbon-block="clock"
+        >
+            <span className="corei-ribbon-clock-time">
+                {now.toLocaleTimeString(undefined, {
+                    hour12: false,
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit"
+                })}
+            </span>
+
+            <span className="corei-ribbon-clock-zone">
+                IST
+            </span>
+        </div>
+    );
+}
+
+
+interface SelectorProps {
+    readonly label: string;
+    readonly value: string;
+    readonly children: ReactElement[];
+    readonly onChange: (value: string) => void;
+}
+
+
+function RibbonSelector({
+    label,
+    value,
+    children,
+    onChange
+}: SelectorProps): ReactElement {
+
+    const [open, setOpen] = useState(false);
+
+    const rootRef =
+        useRef<HTMLDivElement>(null);
+
+    const options =
+        children.map((child) => {
+
+            const option =
+                child as ReactElement<{
+                    value?: string;
+                    children?: unknown;
+                }>;
+
+            return {
+                value: String(option.props.value ?? ""),
+                label: String(option.props.children ?? "")
+            };
+        });
+
+    const selected =
+        options.find(
+            (option) =>
+                option.value === value
+        );
+
+    useEffect(() => {
+
+        const handlePointerDown =
+            (event: MouseEvent) => {
+
+                if (
+                    rootRef.current &&
+                    !rootRef.current.contains(
+                        event.target as Node
+                    )
+                ) {
+                    setOpen(false);
+                }
+            };
+
+        const handleKeyDown =
+            (event: KeyboardEvent) => {
+
+                if (event.key === "Escape") {
+                    setOpen(false);
+                }
+            };
+
+        document.addEventListener(
+            "mousedown",
+            handlePointerDown
+        );
+
+        document.addEventListener(
+            "keydown",
+            handleKeyDown
+        );
+
+        return () => {
+            document.removeEventListener(
+                "mousedown",
+                handlePointerDown
+            );
+
+            document.removeEventListener(
+                "keydown",
+                handleKeyDown
+            );
+        };
+
+    }, []);
+
+    const select =
+        (nextValue: string) => {
+
+            setOpen(false);
+
+            if (nextValue !== value) {
+                onChange(nextValue);
+            }
+        };
+
+    return (
+        <div
+            ref={rootRef}
+            className="corei-ribbon-selector"
+            data-ribbon-block={
+                label.toLowerCase()
+            }
+        >
+
+            <button
+                type="button"
+                className="corei-ribbon-selector-trigger"
+                aria-label={label}
+                aria-haspopup="listbox"
+                aria-expanded={open}
+                onClick={() =>
+                    setOpen((current) => !current)
+                }
+            >
+
+                <span className="corei-ribbon-selector-label">
+                    {label}
+                </span>
+
+                <span className="corei-ribbon-selector-value">
+                    {selected?.label ?? value}
+                </span>
+
+                <span
+                    className="corei-ribbon-selector-chevron"
+                    aria-hidden="true"
+                >
+                    ▾
+                </span>
+
+            </button>
+
+            {open && (
+                <div
+                    className="corei-ribbon-selector-menu"
+                    role="listbox"
+                    aria-label={`${label} options`}
+                >
+
+                    <div className="corei-ribbon-selector-menu-header">
+                        {label}
+                        <span>
+                            {options.length}
+                        </span>
+                    </div>
+
+                    {options.map((option) => (
+
+                        <button
+                            key={option.value}
+                            type="button"
+                            role="option"
+                            aria-selected={
+                                option.value === value
+                            }
+                            className={
+                                option.value === value
+                                    ? "selected"
+                                    : ""
+                            }
+                            onClick={() =>
+                                select(option.value)
+                            }
+                        >
+
+                            <span>
+                                {option.label}
+                            </span>
+
+                            {option.value === value && (
+                                <span
+                                    aria-hidden="true"
+                                    className="corei-ribbon-selector-check"
+                                >
+                                    ✓
+                                </span>
+                            )}
+
+                        </button>
+
+                    ))}
+
+                </div>
+            )}
+
+        </div>
+    );
+}
+
+
+
+// ── Helper: status label from health string ──
+function statusLabel(status: string): string {
+    switch (status) {
+        case "healthy": return "CONNECTED";
+        case "degraded": return "DEGRADED";
+        case "critical": return "CRITICAL";
+        case "offline": return "OFFLINE";
+        default: return "UNAVAILABLE";
+    }
+}
+
+
+// ── Helper: tone from health string ──
+function statusTone(status: string): "operational" | "attention" | "critical" | "neutral" {
+    switch (status) {
+        case "healthy": return "operational";
+        case "degraded": return "attention";
+        case "critical": return "critical";
+        case "offline": return "critical";
+        default: return "neutral";
+    }
+}
+
+
+export function TopRibbon(): ReactElement {
+    const context = getShellHeaderContext();
+
+    const [activeTab, setActiveTab] =
+        useState<RibbonTab>("operations");
+
+    const [organizationId, setOrganizationId] =
+        useState(context.institution.name);
+
+    const [workspaceId, setWorkspaceId] =
+        useState(context.workspace.workspaceId);
+
+    const [workspaceOptions] =
+        useState(() =>
+            workspaceRuntime
+                .list()
+                .map((workspace) => ({
+                    id: workspace.id,
+                    name: workspace.name
+                }))
+        );
+
+    const runtimeReady =
+        context.runtime.state === "ready";
+
+    const runtimeHealthy =
+        context.runtime.health === "healthy";
+
+    const workspaceReady =
+        context.workspace.workspaceState === "ready";
+
+    const notificationTone =
+        context.notifications.critical > 0
+            ? "critical"
+            : context.notifications.unread > 0
+                ? "attention"
+                : "operational";
+
+    const brokerStatus = "unavailable";
+const dataStatus = "unavailable";
+const marketStatus = "unavailable";
+const redisStatus = "unavailable";
+const postgresStatus = "unavailable";
+const servicesStatus = "unavailable";
+
+const platformOverall =
+    context.runtime.health === "healthy"
+        ? "healthy"
+        : context.runtime.health === "degraded"
+            ? "degraded"
+            : context.runtime.health === "critical"
+                ? "critical"
+                : "unknown";
+
+const brokerSub = "";
+const dataSub = "";
+    const platformLabel =
+        platformOverall === "healthy"
+            ? "HEALTHY"
+            : platformOverall === "degraded"
+                ? "DEGRADED"
+                : platformOverall === "critical"
+                    ? "CRITICAL"
+                    : "UNKNOWN";
+
+    const marketSub = "";
+
+    // ── Handlers ──
+    const handleOrganizationChange =
+        async (value: string) => {
+            if (value === organizationId) return;
+            await identityService.switchOrganization(value);
+            setOrganizationId(value);
+        };
+
+    const handleWorkspaceChange =
+        (value: string) => {
+            if (value === workspaceId) return;
+            workspaceRuntime.open(value);
+            setWorkspaceId(value);
+        };
+
+    const openCommandPalette = () => {
+        window.dispatchEvent(
+            new CustomEvent("corei:command-palette:open")
+        );
+    };
+
+
+    return (
+        <header
+            className="corei-top-ribbon"
+            data-ribbon-surface="institutional-operational"
+        >
+
+            {/* ============================================================
+             * PRIMARY INFORMATION / COMMAND ROW
+             * ============================================================ */}
+
+            <div className="corei-ribbon-primary-row">
+
+                <section
+                    className="corei-ribbon-identity"
+                    data-ribbon-block="institution"
+                >
+                    <span className="corei-ribbon-product">
+                        COREI OS
+                    </span>
+
+                    <span className="corei-ribbon-organization">
+                        {context.institution.name}
+                    </span>
+                </section>
+
+
+                <RibbonSelector
+                    label="ORG"
+                    value={organizationId}
+                    onChange={handleOrganizationChange}
+                >
+                    <option value={organizationId}>
+                        {context.institution.name}
+                    </option>
+                    <option value="org-2">
+                        COREI Group
+                    </option>
+                </RibbonSelector>
+
+
+                <RibbonSelector
+                    label="WORKSPACE"
+                    value={workspaceId}
+                    onChange={handleWorkspaceChange}
+                >
+                    {workspaceOptions.map((workspace) => (
+                        <option
+                            key={workspace.id}
+                            value={workspace.id}
+                        >
+                            {workspace.name}
+                        </option>
+                    ))}
+                </RibbonSelector>
+
+
+                <Status
+                    label="ENV"
+                    value={
+                        context.environment.environment
+                            .toUpperCase()
+                    }
+                    tone={
+                        context.environment.environment
+                            .toLowerCase() === "development"
+                            ? "attention"
+                            : "operational"
+                    }
+                />
+
+
+                <Status
+                    label="OPERATOR"
+                    value={
+                        context.session.operatorLabel
+                    }
+                />
+
+
+                <Status
+                    label="RUNTIME"
+                    value={
+                        runtimeReady
+                            ? "READY"
+                            : "STARTING"
+                    }
+                    tone={
+                        runtimeHealthy
+                            ? "operational"
+                            : "critical"
+                    }
+                />
+
+
+                <Status
+                    label="ALERTS"
+                    value={String(context.notifications.total)}
+                    tone={notificationTone}
+                />
+
+
+                <div className="corei-ribbon-primary-spacer" />
+
+
+                <button
+                    type="button"
+                    className="corei-ribbon-command"
+                    onClick={openCommandPalette}
+                    aria-label="Open command palette"
+                >
+                    <span className="corei-ribbon-command-icon">
+                        ⌘
+                    </span>
+
+                    <span>
+                        COMMAND
+                    </span>
+
+                    <kbd>
+                        ⌘⇧P
+                    </kbd>
+                </button>
+
+
+                <Clock />
+
+            </div>
+
+
+
+            <div className="corei-ribbon-secondary-row">
+
+                <nav
+                    className="corei-ribbon-tabs"
+                    aria-label="Top ribbon information"
+                >
+
+                    <button
+                        type="button"
+                        className={
+                            activeTab === "operations"
+                                ? "active"
+                                : ""
+                        }
+                        onClick={() =>
+                            setActiveTab("operations")
+                        }
+                        aria-selected={
+                            activeTab === "operations"
+                        }
+                    >
+                        OPERATIONS
+                    </button>
+
+                    <button
+                        type="button"
+                        className={
+                            activeTab === "infrastructure"
+                                ? "active"
+                                : ""
+                        }
+                        onClick={() =>
+                            setActiveTab("infrastructure")
+                        }
+                        aria-selected={
+                            activeTab === "infrastructure"
+                        }
+                    >
+                        INFRASTRUCTURE
+                    </button>
+
+                </nav>
+
+
+                <div className="corei-ribbon-secondary-content">
+
+                    {activeTab === "operations" ? (
+
+                        <>
+                            <Status
+                                label="MARKET"
+                                value={
+                                    marketStatus !== "unavailable"
+                                        ? statusLabel(marketStatus)
+                                        : "—"
+                                }
+                                tone={
+                                    marketStatus !== "unavailable"
+                                        ? statusTone(marketStatus)
+                                        : "neutral"
+                                }
+                                subtext={marketSub}
+                            />
+
+                            <Status
+                                label="TRADING"
+                                value={
+                                    marketStatus !== "unavailable"
+                                        ? "ACTIVE"
+                                        : "—"
+                                }
+                                tone={
+                                    marketStatus !== "unavailable"
+                                        ? "operational"
+                                        : "neutral"
+                                }
+                            />
+
+                            <Status
+                                label="BROKER"
+                                value={
+                                    brokerStatus !== "unavailable"
+                                        ? statusLabel(brokerStatus)
+                                        : "—"
+                                }
+                                tone={
+                                    brokerStatus !== "unavailable"
+                                        ? statusTone(brokerStatus)
+                                        : "neutral"
+                                }
+                                subtext={brokerSub}
+                            />
+
+                            <Status
+                                label="DATA FEED"
+                                value={
+                                    dataStatus !== "unavailable"
+                                        ? statusLabel(dataStatus)
+                                        : "—"
+                                }
+                                tone={
+                                    dataStatus !== "unavailable"
+                                        ? statusTone(dataStatus)
+                                        : "neutral"
+                                }
+                                subtext={dataSub}
+                            />
+
+                            <Status
+                                label="REGION"
+                                value={
+                                    context.environment.region
+                                        .toUpperCase()
+                                }
+                            />
+                        </>
+
+                    ) : (
+
+                        <>
+                            <Status
+                                label="PLATFORM"
+                                value={platformLabel}
+                                tone={
+                                    platformOverall === "healthy"
+                                        ? "operational"
+                                        : platformOverall === "degraded"
+                                            ? "attention"
+                                            : "critical"
+                                }
+                            />
+
+                            <Status
+                                label="DATA FEED"
+                                value={
+                                    dataStatus !== "unavailable"
+                                        ? statusLabel(dataStatus)
+                                        : "—"
+                                }
+                                tone={
+                                    dataStatus !== "unavailable"
+                                        ? statusTone(dataStatus)
+                                        : "neutral"
+                                }
+                            />
+
+                            <Status
+                                label="ORDER ROUTING"
+                                value={
+                                    brokerStatus !== "unavailable"
+                                        ? statusLabel(brokerStatus)
+                                        : "—"
+                                }
+                                tone={
+                                    brokerStatus !== "unavailable"
+                                        ? statusTone(brokerStatus)
+                                        : "neutral"
+                                }
+                            />
+
+                            <Status
+                                label="CACHE / REDIS"
+                                value={
+                                    redisStatus !== "unavailable"
+                                        ? statusLabel(redisStatus)
+                                        : "—"
+                                }
+                                tone={
+                                    redisStatus !== "unavailable"
+                                        ? statusTone(redisStatus)
+                                        : "neutral"
+                                }
+                            />
+
+                            <Status
+                                label="DATABASE"
+                                value={
+                                    postgresStatus !== "unavailable"
+                                        ? statusLabel(postgresStatus)
+                                        : "—"
+                                }
+                                tone={
+                                    postgresStatus !== "unavailable"
+                                        ? statusTone(postgresStatus)
+                                        : "neutral"
+                                }
+                            />
+
+                            <Status
+                                label="SERVICES"
+                                value={
+                                    servicesStatus !== "unavailable"
+                                        ? statusLabel(servicesStatus)
+                                        : "—"
+                                }
+                                tone={
+                                    servicesStatus !== "unavailable"
+                                        ? statusTone(servicesStatus)
+                                        : "neutral"
+                                }
+                            />
+                        </>
+                    )}
+
+                </div>
+
+            </div>
+
+        </header>
+    );
+}
+
+export default TopRibbon;

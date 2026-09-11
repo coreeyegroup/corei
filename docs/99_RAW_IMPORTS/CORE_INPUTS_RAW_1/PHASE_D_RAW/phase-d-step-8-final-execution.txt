@@ -1,0 +1,756 @@
+PHASE D — STEP 8
+POST-EXECUTION CONTROL & RECONCILIATION SYSTEM
+
+Reference ID: CTS-PHASE-D-STEP8-POST-EXECUTION-CONTROL-LOCK-V1-2026-04-10
+Compliance: UPS (21 Sections) — LOCK-GRADE
+
+1. PHASE IDENTITY LAYER
+
+	1.1 Phase Name
+
+		Phase D — Step 8: Post-Execution Control & Reconciliation System
+
+	1.2 Phase Role
+
+		Final deterministic control layer that:
+
+			reconciles internal lifecycle state (Step 6) with external broker truth (Step 7)
+			produces authoritative execution state
+			guarantees audit-grade correctness
+			enforces event-driven correction (no mutation)
+
+	1.3 Phase Objective
+
+		Construct:
+
+			post_execution_control_output = F(
+				internal_event_stream,
+				external_event_stream,
+				lifecycle_state,
+				configuration_snapshot
+			)
+
+		Such that:
+
+			Final State = f(Reconciled Event Stream)
+			Replay(Reconciled Stream) → identical final state
+			Audit Trace = complete, hash-linked, deterministic
+
+	1.4 Why This Phase Exists
+
+		Without Step 8:
+
+			Execution ≠ Broker reality
+			Portfolio drift accumulates
+			Replay becomes invalid
+			Audit fails (legal/compliance risk)
+			System loses “source of truth”
+
+		Step 8 enforces:
+
+			Execution Reality = System State = Audit Truth
+
+2. PHASE SCOPE CONTROL
+	2.1 INCLUDED (STRICT)
+		internal vs external reconciliation
+		event stream validation + alignment
+		authoritative event stream reconstruction
+		state rebuild (order + portfolio)
+		drift detection
+		audit record construction
+		deterministic correction orchestration
+
+	2.2 EXCLUDED (STRICT)
+		order generation (Step 5)
+		lifecycle simulation (Step 6)
+		broker interaction (Step 7)
+		risk/policy logic
+		constraint definition (Phase B)
+
+	2.3 Boundary Rule
+
+		Step 8 MUST:
+
+			rebuild state ONLY from events
+			enforce external truth dominance
+			remain stateless + deterministic
+
+		Step 8 MUST NOT:
+
+			mutate state directly
+			merge conflicting streams
+			infer missing data
+
+		Violation → SYSTEM INVALID
+
+3. ARCHITECTURAL INTENT LAYER
+	3.1 Core Principles
+		P1 — External Truth Dominance
+		P2 — Event-Only State Authority
+		P3 — Deterministic Reconciliation
+		P4 — Replay Fidelity
+		P5 — Zero Hidden Correction
+		P6 — Full Lineage Traceability
+
+	3.2 Architectural Model
+		FinalState = f(ReconciledEventStream)
+
+		ReconciledEventStream = rebuild_from_external()
+
+		NOT:
+
+		merge(internal, external)
+
+		rebuild_from_external(external_event_stream):
+
+			1. validate completeness
+
+			2. assign external_event_index (MANDATORY FIRST STEP)
+
+			3. sort events using ordering_key
+
+			4. generate lifecycle
+
+			5. compute remaining_size
+
+			6. assign event_id
+
+			7. maintain lineage chain
+
+	3.3 System Positioning
+		Step 5 → Orders
+		Step 6 → Internal Events (Simulated Truth)
+		Step 7 → External Events (Broker Truth)
+
+		Step 8 → FINAL TRUTH (THIS)
+
+	Authoritative Flow Separation:
+
+		Step 6 → Simulated Execution
+		Step 7 → External Execution
+		Step 8 → Final Truth Reconstruction
+
+		Invariant:
+
+		ONLY Step 8 defines:
+
+		- final OrderState
+		- final PortfolioState
+		- audit truth
+
+4. DOMAIN MODEL DEFINITION
+	4.1 Core Entities
+		InternalExecutionEvent
+		ExternalExecutionEvent
+		ReconciledEvent
+		ReconciliationRecord
+		DriftReport
+		FinalOrderState
+		FinalPortfolioState
+		ExecutionAuditRecord
+		venue_level_reconciliation
+
+	4.2 ReconciledEvent
+		ReconciledEvent = {
+			event_id
+			order_id
+			event_type
+			executed_size
+			remaining_size
+			execution_price
+			event_time
+			source = EXTERNAL
+			lineage_hash
+			external_event_index
+			lineage_hash_reference
+		}
+
+		lineage_hash = HASH_v1(
+				previous_lineage_hash +
+				event_id +
+				order_id +
+				executed_size
+			)
+
+			Constraint:
+
+			- MUST be continuous from Step 5
+			- MUST NOT reset during rebuild
+
+		Lineage Root Rule:
+
+			initial_lineage_hash = HASH_v1(order_id + trade_intent_id)
+
+			first event MUST use initial_lineage_hash as seed
+
+		External Event Index Rule (MANDATORY):
+
+			external_event_index is assigned BEFORE ordering:
+
+			FOR each order_id:
+
+				1. sort external_event_stream by:
+					external_event_time ASC
+					broker_order_id ASC
+					fill_id ASC
+
+				2. assign:
+
+					external_event_index = incremental integer (0,1,2,...)
+
+			Constraint:
+
+			- MUST be deterministic
+			- MUST be identical across replays
+			- MUST NOT depend on system runtime
+
+		venue_level_reconciliation = {
+				expected_fill
+				actual_fill
+				slippage_delta
+			}
+
+	4.3 ReconciliationRecord
+		ReconciliationRecord = {
+			order_id
+			internal_event_hash_chain
+			external_event_hash_chain
+			reconciliation_status
+			mismatch_flags[]
+		}
+
+	4.4 ExecutionAuditRecord
+		execution_audit_record = {
+			trade_intent_id
+			order_id
+			execution_events
+			final_state
+			constraint_trace
+			policy_trace
+			risk_trace
+			lineage_hash_chain
+		}
+
+	Global EventType Binding (MANDATORY)
+
+		ReconciledEvent.event_type MUST use global EventType defined in Step 5.
+
+		No deviation allowed.
+
+		EventType set:
+
+		{
+			ORDER_CREATED
+			ORDER_ROUTED
+			PARTIAL_FILL
+			FULL_FILL
+			ORDER_COMPLETED
+			ORDER_FAILED
+		}
+
+5. LOGIC / RULE ENGINE
+	5.1 Rule Classes
+		R1 — Input Validation
+		R2 — Event Alignment
+		R3 — Reconciliation
+		R4 — Event Stream Rebuild
+		R5 — State Reconstruction
+		R6 — Drift Detection
+		R7 — Audit Construction
+		R8 — Output Emission
+
+	5.2 Reconciliation Rule (CRITICAL)
+		IF external_event_exists:
+			use external_event
+		ELSE:
+			reject system (no fallback)
+
+		External Stream Completeness Rule (MANDATORY):
+
+			external_event_stream is VALID only if:
+
+			1. contains ORDER_ROUTED OR ORDER_FAILED
+			2. IF any fill exists:
+			   MUST terminate with FULL_FILL OR ORDER_FAILED
+			3. Σ(executed_size) ≤ order.size
+			4. events cover full lifecycle (no gaps)
+
+			IF NOT:
+				→ HARD REJECT (incomplete external truth)
+
+	5.3 Source Priority Rule
+		External Fill Events > Internal Events
+
+	5.4 Rebuild Rule (MANDATORY)
+		final_event_stream = rebuild_from_external(external_event_stream)
+
+		Constraints:
+
+			discard ALL internal fill events
+			reconstruct lifecycle fully
+			enforce Step 6 transition rules
+			align with Step 7 reconciliation model
+
+		Reconciled Event Ordering Key (MANDATORY):
+
+			ordering_key = {
+				event_time ASC
+				order_id ASC
+				event_type_priority ASC
+				external_event_index ASC
+			}
+
+			All events MUST be sorted BEFORE rebuild.
+
+		Lifecycle Completion Rule:
+
+			IF cumulative_executed_size < order.size:
+				→ DO NOT emit FULL_FILL
+				→ final state = PARTIALLY_FILLED
+
+			IF no terminal event:
+				→ HARD REJECT
+
+			Terminal states:
+				FULL_FILL → ORDER_COMPLETED
+				ORDER_FAILED
+
+		Terminal Event Precedence Rule:
+
+			ORDER_FAILED > FULL_FILL > PARTIAL_FILL
+
+			IF ORDER_FAILED exists:
+				discard all fill events AFTER failure
+
+			IF FULL_FILL exists:
+				no further fills allowed
+
+		Partial Completion Rule:
+
+			IF cumulative_executed_size < order.size:
+
+				final state = PARTIALLY_FILLED
+
+				ORDER_COMPLETED MUST NOT be emitted
+
+		assign event_id deterministically USING:
+
+			event_id = HASH_v1(
+				order_id +
+				event_type +
+				executed_size +
+				remaining_size +
+				event_time +
+				external_event_index
+			)
+
+		Global Ordering Uniqueness Rule:
+
+			(order_id + external_event_index) MUST uniquely identify
+			event sequence across system.
+
+			Constraint:
+
+			No two events across all partitions
+			may share identical:
+
+				event_time
+				order_id
+				event_type_priority
+				external_event_index
+
+		Event Type Priority Mapping (MANDATORY):
+
+			ORDER_CREATED    = 1
+			ORDER_ROUTED     = 2
+			PARTIAL_FILL     = 3
+			FULL_FILL        = 4
+			ORDER_COMPLETED  = 5
+			ORDER_FAILED     = 6
+
+			event_type_priority MUST be used in ordering_key
+			NOT string comparison
+
+	5.5 Drift Detection Rules
+
+		Detect:
+
+		D1: size mismatch
+		D2: missing fills
+		D3: duplicate fills
+		D4: ordering violation
+		D5: state mismatch
+
+		drift_flag = TRUE if:
+
+		Σ(external_fills) ≠ Σ(internal_fills)
+		OR ordering mismatch
+		OR lifecycle mismatch
+
+		Overfill Protection Rule:
+
+			IF Σ(executed_size) > order.size:
+				→ HARD FAIL
+
+			Duplicate Detection:
+
+			duplicate_key = HASH(
+				broker_order_id +
+				executed_size +
+				event_time
+			)
+
+			duplicates MUST be removed deterministically
+			(lowest hash retained)
+
+		IF executed_size <= 0:
+			→ REJECT event
+
+		Duplicate Tie-Break Rule:
+
+			IF hash collision occurs:
+
+				use:
+					event_time ASC
+					order_id ASC
+					executed_size ASC
+
+		Numeric Model Enforcement:
+
+			All numeric values MUST follow:
+
+			value = integer / 10^6
+
+			No floating point allowed
+
+			remaining_size MUST use integer arithmetic only
+
+	5.6 Rule Execution Order (STRICT)
+		Input Validation
+		Event Alignment
+		Reconciliation (external override)
+		Event Rebuild
+		State Reconstruction
+		Drift Detection
+		Audit Construction
+		Output Emission
+
+		No deviation allowed.
+
+	Constraint Enforcement Binding Rule (MANDATORY)
+
+		Phase D MUST act as a pure execution layer.
+
+		Execution behavior MUST be fully determined by constraint_output:
+
+			execution_decision =
+				constraint_output.execution_decision
+
+			modification_vector =
+				constraint_output.modification_vector
+
+			violated_constraints =
+				constraint_output.violated_constraints_set
+
+		Constraints:
+
+			Phase D MUST NOT:
+
+				- derive new execution decisions
+				- reinterpret constraint results
+				- override constraint_output
+				- apply additional logic not defined in Phase B
+
+			Phase D is NOT a decision-making layer.
+
+			Violation → ARCHITECTURAL FAILURE
+
+		Closed Loop Determinism Invariant (MANDATORY)
+
+			For identical canonical_input_set:
+
+				TradeIntent
+					→ constraint_output
+					→ execution_event_stream
+					→ reconciliation_output
+
+			MUST satisfy:
+
+				reconstructed_state == original_state
+
+			Definitions:
+
+				reconstructed_state:
+					derived ONLY from execution_event_stream
+
+			Constraints:
+
+				reconciliation MUST be a pure function of:
+
+					execution_event_stream
+
+				No external data sources allowed
+				No broker reconciliation dependency allowed
+
+			Violation → SYSTEM NON-DETERMINISTIC
+			For identical canonical_input_set:
+
+				TradeIntent
+					→ constraint_output
+					→ execution_event_stream
+					→ reconciliation_output
+
+			MUST satisfy:
+
+				reconstructed_state == original_state
+
+			Definitions:
+
+				reconstructed_state:
+					derived ONLY from execution_event_stream
+
+			Constraints:
+
+				reconciliation MUST be a pure function of:
+
+					execution_event_stream
+
+				No external data sources allowed
+				No broker reconciliation dependency allowed
+
+			Violation → SYSTEM NON-DETERMINISTIC
+
+		Reconciliation Numeric Consistency Rule (MANDATORY)
+
+			All reconstructed values MUST:
+
+				use fixed-point arithmetic
+				match execution_event_stream values EXACTLY
+
+			Constraint:
+
+				No recomputation using floating-point allowed
+
+			Violation → RECONCILIATION MISMATCH
+
+6. FLOW ARCHITECTURE
+	6.0 Canonical Input Set
+		canonical_input_set_D8 = {
+			internal_event_stream
+			external_event_stream
+			lifecycle_state_snapshot
+			configuration_snapshot
+			version_identifiers
+		}
+
+		Constraints:
+
+			immutable
+			complete
+			hash-identifiable
+
+	6.1 Processing Flow
+		Internal + External Events
+			→ Alignment
+			→ Reconciliation
+			→ Event Rebuild
+			→ State Reconstruction
+			→ Drift Detection
+			→ Audit Generation
+			→ Output
+
+	6.3 Output (MANDATORY)
+		post_execution_control_output = {
+			reconciled_event_stream
+			final_order_states
+			final_portfolio_state
+			drift_report
+			audit_records
+			lineage_hash_chain
+		}
+
+7. PIPELINE STRUCTURE
+
+	P1: Input Validation
+	P2: Event Alignment
+	P3: Reconciliation
+	P4: Event Rebuild
+	P5: State Reconstruction
+	P6: Drift Detection
+	P7: Audit Record Generation
+	P8: Output Emission
+
+8. CONTROL & CONSTRAINTS
+	8.1 Hard Rules
+		no state mutation
+		external truth dominance mandatory
+		event-only rebuild
+		deterministic ordering required
+
+		R19 — Venue Fill Consistency Check
+
+			assert Σ(actual_venue_fills) == execution_order.total_quantity
+
+		R-SOR-RECON:
+
+			assert Σ(venue_fills) == execution_order_size
+
+			ELSE:
+				mark RECONCILIATION_FAILED
+				trigger audit_event
+
+	8.2 Guardrails
+		reject incomplete external stream
+		reject invalid lifecycle sequence
+		reject size overflow
+
+	8.3 Invariants
+		I1: FinalState = f(EventStream)
+		I2: Replay = identical output
+		I3: External truth dominates
+		I4: Lineage fully traceable
+		I5 — Ordering Determinism Invariant:
+
+			ordering_key MUST NOT depend on any field
+			that is generated AFTER ordering phase.
+
+			Violation → NON-DETERMINISTIC SYSTEM
+
+		I-SOR-REC-1: Σ(venue fills) == total order fill
+		I-SOR-7: Any mismatch MUST trigger reconciliation failure state
+
+		I-GLOBAL-5: Execution MUST be quantitatively consistent
+
+9. STATE & DATA MODEL
+	9.1 State Definition
+		FinalState = {
+			OrderState
+			PortfolioState
+		}
+
+	9.2 State Transition
+		State(t+1) = f(State(t), ReconciledEvent)
+
+	9.3 Source of Truth
+
+		Primary → Reconciled Event Stream
+		Secondary → Derived Snapshots
+
+10. FAILURE MODEL
+	10.1 Scenarios
+		missing external fills
+		duplicate fills
+		inconsistent lifecycle
+		replay mismatch
+
+	10.2 Impact
+		audit failure
+		PnL corruption
+		legal exposure
+
+	10.3 Mitigation
+		reject output
+		trigger replay rebuild
+		raise drift alert
+
+11. ASSUMPTION REGISTER
+	Assumption							Status
+	Step 6 lifecycle valid				VALIDATED
+	Step 7 normalization correct		VALIDATED
+	External stream complete			CONTROLLED
+
+12. VALIDATION FRAMEWORK
+	Method
+		Red Team (3 rounds)
+		Blue Team validation
+
+	Acceptance
+		deterministic reconciliation
+		replay equality
+		audit completeness
+
+13. OUTPUT (DELIVERABLE SPEC)
+		post_execution_control_output
+
+	All fields mandatory. No optional fields.
+
+14. TRACEABILITY MAPPING
+		TradeIntent
+		→ ExecutionIntent
+		→ DecisionValidatedIntent
+		→ RiskApprovedIntent
+		→ PolicyDecisionIntent
+		→ ExecutionOrder
+		→ ExecutionEvent
+		→ ReconciledEvent
+		→ Final State
+
+		Full hash-chain required.
+
+15. CROSS-PHASE CONSISTENCY
+	Phase B → constraints enforced upstream
+	Phase C → event/state model preserved
+	Phase D → execution chain maintained
+
+16. SCALABILITY MODEL
+	partitioned reconciliation per order_id
+	parallel processing with deterministic merge
+	replay engine horizontal scaling
+
+	Deterministic Partitioning:
+
+		partition_key = order_id
+
+		Each partition processed independently.
+
+		Global merge MUST follow ordering_key.
+
+		No cross-partition state allowed.
+
+	Global Merge Algorithm (MANDATORY):
+
+		1. Collect all partition outputs
+		2. Apply global ordering_key
+		3. Use stable merge sort (guaranteed stable)
+
+		Constraint:
+
+		same inputs → identical merge output
+
+17. GOVERNANCE INTEGRATION
+	version-controlled reconciliation logic
+	audit approval required
+	immutable audit records
+
+18. AUDITABILITY & OBSERVABILITY
+
+	full event trace
+	lineage hash chain
+	drift reports
+	reconciliation logs
+
+19. RISK CONSIDERATIONS
+	reconciliation failure = system failure
+	external dependency risk
+	audit integrity risk
+
+20. FAILURE CONDITION (PHASE LEVEL)
+
+	Phase FAILS if:
+
+	reconciliation ambiguous
+	replay mismatch
+	drift unresolved
+	lineage incomplete
+
+21. PHASE LOCK CRITERIA
+
+	Phase LOCKED only if:
+
+		all 21 sections complete
+		reconciliation deterministic
+		replay validated
+		drift detection verified
+		audit trace complete
+		Red Team passed
+		Blue Team validated

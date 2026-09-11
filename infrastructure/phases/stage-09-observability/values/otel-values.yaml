@@ -4,6 +4,8 @@ image:
   repository: otel/opentelemetry-collector-contrib
   tag: 0.100.0
 
+rewriteDeprecatedComponentNames: false
+
 config:
   extensions:
     health_check: {}
@@ -41,6 +43,8 @@ config:
 
         exporters:
           - otlp
+
+
 
 resources:
   requests:

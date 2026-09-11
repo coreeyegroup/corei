@@ -1,0 +1,180 @@
+🎯 OBJECTIVE
+
+Connect every service to:
+
+platform (workflow, config, lineage, flow control)
+infra (event governance)
+resilience layer
+📍 WHERE TO ADD (APPLIES TO ALL 41 SERVICES)
+
+For every service:
+
+services/<service-name>/
+🔧 ADD THIS EXACT STRUCTURE
+services/<service-name>/
+│
+├── runtime/
+│   ├── event_client.py
+│   ├── workflow_client.py
+│   ├── config_client.py
+│   ├── lineage_client.py
+│   ├── flow_control_client.py
+│   └── resilience_client.py
+│
+├── kafka/
+│   ├── producers.yaml
+│   ├── consumers.yaml
+│   ├── topics.yaml
+│   ├── interceptor.py
+│   └── flow_control.py
+│
+├── middleware/
+│   └── trace_context.py
+│
+├── resilience/
+│   └── circuit_config.yaml
+│
+└── configs/
+    └── dynamic-config.yaml
+🧠 WHAT EACH FILE DOES (NO GUESSWORK)
+1. runtime/event_client.py
+Purpose:
+
+Connect service → Kafka with governance enforcement
+
+Responsibility:
+wraps producer/consumer
+injects schema validation
+enforces topic rules
+2. runtime/workflow_client.py
+Purpose:
+
+Connect service → workflow engine
+
+Responsibility:
+trigger state transitions
+register execution steps
+handle retries via workflow engine
+3. runtime/config_client.py
+Purpose:
+
+Dynamic config + feature flags
+
+Responsibility:
+fetch config from config-service
+subscribe to changes
+expose flags to app layer
+4. runtime/lineage_client.py
+Purpose:
+
+Track every event across system
+
+Responsibility:
+attach trace_id
+propagate hash
+push lineage data
+5. runtime/flow_control_client.py
+Purpose:
+
+Backpressure control
+
+Responsibility:
+monitor lag
+apply throttling
+prioritize queues
+6. runtime/resilience_client.py
+Purpose:
+
+Failure handling
+
+Responsibility:
+circuit breaker
+fallback routing
+retry orchestration
+🔧 KAFKA LAYER (CRITICAL)
+kafka/interceptor.py
+Purpose:
+
+Hook event governance
+
+Must call:
+infrastructure/event-governance/middleware/kafka_interceptor.py
+kafka/flow_control.py
+Purpose:
+
+Consumer-side throttling
+
+Must integrate:
+platform/flow-control/
+🔧 TRACE PROPAGATION
+middleware/trace_context.py
+Purpose:
+
+Carry lineage across services
+
+Must include:
+trace_id
+parent_id
+event_hash
+🔧 RESILIENCE POLICY
+resilience/circuit_config.yaml
+Example:
+service: order-engine-service
+
+circuit_breaker:
+  failure_threshold: 5
+  timeout: 30s
+
+fallback:
+  strategy: retry
+  max_retries: 3
+🔧 DYNAMIC CONFIG
+configs/dynamic-config.yaml
+Example:
+feature_flags:
+  enable_new_execution_path: true
+
+limits:
+  max_orders_per_sec: 1000
+⚠️ IMPORTANT RULES
+❗ RULE 1: DO NOT MODIFY EXISTING FILES
+
+Only ADD:
+
+runtime/
+middleware/
+resilience/
+dynamic config
+❗ RULE 2: ALL SERVICES MUST HAVE THIS
+
+No exception.
+
+Even:
+
+frontend
+audit
+alert
+❗ RULE 3: SAME STRUCTURE EVERYWHERE
+
+Determinism > customization
+
+📊 RESULT AFTER THIS STEP
+BEFORE
+Capability	Status
+Platform exists	❌ Not used
+Governance defined	❌ Not enforced
+Workflow defined	❌ Not connected
+AFTER
+Capability	Status
+Platform integration	✅ Active
+Governance enforced	✅ Runtime
+Workflow control	✅ Deterministic
+Replay correctness	✅ Guaranteed
+Failure handling	✅ Enforced
+🧠 FINAL STATE
+
+After this:
+
+Your system becomes:
+
+deterministic, governed, replay-safe trading platform

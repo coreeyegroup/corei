@@ -1,0 +1,57 @@
+:root {
+
+    /*
+     * COREI INSTITUTIONAL SHELL GEOMETRY
+     *
+     * Phase-17 UX Foundation
+     *
+     * Institutional default values.
+     * These values may be overridden by runtime preferences.
+     */
+
+    --corei-shell-width: 100vw;
+    --corei-shell-height: 100dvh;
+
+    /*
+     * Command Surface
+     */
+
+    --corei-shell-top-height-default: 58px;
+    --corei-shell-top-height: var(--corei-shell-top-height-default);
+
+    /*
+     * Navigation Surface
+     */
+
+    --corei-shell-left-width-default: 260px;
+    --corei-shell-left-width: var(--corei-shell-left-width-default);
+
+    /*
+     * Intelligence Surface
+     */
+
+    --corei-shell-right-width-default: 380px;
+    --corei-shell-right-width: var(--corei-shell-right-width-default);
+
+    /*
+     * Operational Surface
+     */
+
+    --corei-shell-bottom-height-default: 180px;
+    --corei-shell-bottom-height: var(--corei-shell-bottom-height-default);
+
+    /*
+     * System Awareness
+     */
+
+    --corei-shell-status-height-default: 24px;
+    --corei-shell-status-height: var(--corei-shell-status-height-default);
+
+    /*
+     * Workspace Protection
+     */
+
+    --corei-workspace-min-width: 720px;
+    --corei-workspace-min-height: 480px;
+
+}

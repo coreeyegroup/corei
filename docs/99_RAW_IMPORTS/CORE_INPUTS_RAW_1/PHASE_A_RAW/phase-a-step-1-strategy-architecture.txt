@@ -1,0 +1,880 @@
+PHASE A — STEP 1: STRATEGY ARCHITECTURE
+	(Full Institutional Build — Using Locked Template)
+
+	priority_level is:
+
+		- ordinal
+		- immutable across phases
+		- ONLY used for conflict resolution
+
+	1. PHASE IDENTITY LAYER
+		1.1 Phase Name
+			Phase A — Step 1: Strategy Architecture
+
+		1.2 Phase Role
+			Defines the structural foundation of all trading strategies within the system.
+
+		1.3 Objective
+			Create a standardized, modular, scalable strategy framework that supports multi-strategy operation.
+
+			Strategy Alignment to Global Objective
+
+				All strategies defined in this phase MUST align with:
+
+					firm-level objective:
+						consistent risk-adjusted returns at scale
+
+					evaluation metrics (defined globally):
+						Sharpe Ratio
+						Max Drawdown
+						Capital growth rate
+						Win-rate consistency
+
+				Strategy design MUST support downstream evaluation against these metrics
+
+		1.4 Why This Exists
+			Prevents:
+				ad-hoc strategies
+				inconsistent signal definitions
+				non-scalable portfolio construction
+
+
+	2. SCOPE CONTROL
+		2.1 INCLUDED
+				Strategy taxonomy
+				Strategy structure definition
+				Strategy classification
+				Strategy lifecycle (logical)
+				Strategy interfaces (logical, not technical)
+
+		2.2 EXCLUDED (STRICT)
+				Signal calculation implementation
+				Execution logic
+				Infrastructure
+				Backtesting engines (only conceptual reference allowed)
+
+		2.3 Additional Restrictions (STRICT)
+				Strategy layer MUST NOT:
+					perform signal aggregation
+					allocate capital
+					resolve conflicts between strategies
+					apply portfolio-level risk
+
+				These responsibilities belong to:
+					Decision Layer
+					Risk Layer
+
+
+	3. ARCHITECTURAL INTENT
+		3.1 Principles
+			Deterministic strategy behavior
+			Plug-and-play strategy modules
+			Independence between strategies
+			Standardized interfaces
+
+		3.2 Model Type
+			Logical architecture (no system design)
+
+		3.3 Position in System
+			Strategy → produces signals → feeds decision layer
+
+
+	4. DOMAIN MODEL
+		4.1 Core Entities
+			Strategy
+				Independent trading logic unit
+
+			Strategy Class
+				Category of strategy (intraday, swing, etc.)
+
+			Strategy Instance
+				A deployed version of a strategy
+
+			Strategy Configuration
+				Strategy must define:
+				capital sensitivity characteristics (logical, not allocation)
+
+				Parameters controlling behavior
+
+			Strategy Configuration Rules
+				Configuration must be:
+					explicit
+					versioned
+					deterministic
+
+				Must include:
+					parameters controlling logic behavior
+					time horizon constraints
+					instrument scope definition
+
+				Must NOT include:
+					execution details
+					infrastructure-specific parameters
+
+
+		4.2 Attributes
+			Strategy
+				id
+				class
+				objective
+				time horizon
+				asset scope
+				version
+				unique_identifier (strategy_id must be globally unique)
+
+			Strategy Instance
+				config
+				status (active/inactive)
+				capital allocation (logical only)
+
+
+		4.3 Relationships
+			Strategy Class → groups Strategies
+			Strategy → generates Signals (next step)
+			Strategy Instance → executes Strategy logic
+
+
+		4.4 Ownership
+			Strategy definition → owned by Phase A
+			Signal schema → Phase A (next step)
+
+
+		4.5 Strategy Taxonomy Model
+
+			Each strategy MUST be classified across the following dimensions:
+
+			Dimension            Values
+			Time Horizon         HFT / Intraday / Swing / Positional
+			Signal Type          Momentum / Mean Reversion / Arbitrage / ML
+			Data Dependency      Price / Orderbook / Macro / Alt-data
+			Execution Style      Aggressive / Passive
+
+			Rules:
+				Every strategy MUST map to all dimensions
+				No free-form classification allowed
+				Strategy identity = combination of dimensions
+
+
+	5. LOGIC / RULE ENGINE
+		5.1 Strategy Function Definition
+
+			Signal = f(Market State, Strategy Config, Internal Logic)
+
+			Rules:
+				Function must be deterministic
+				No hidden randomness unless explicitly modeled
+				Same input must always produce same output
+
+
+		5.2 Market State Definition
+			Market State = fully ordered, time-indexed input set at event_time
+
+			Constraints:
+				all inputs must share same event_time
+				no partial state allowed
+				if any required input is missing → strategy MUST NOT emit signal
+
+
+		5.3 Time Alignment Rules
+			inputs may originate at different times
+
+			market state must use:
+				last known value at event_time
+
+			all inputs must be aligned deterministically to event_time
+
+			Time Alignment Consistency Constraint
+
+				when multiple inputs are available for the same event_time:
+
+					selection MUST follow a deterministic rule
+
+				rule MUST be fixed per strategy configuration
+
+		5.4 Core Rules
+
+			R1: Strategy Independence
+				No direct dependency between strategies
+
+			R2: Deterministic Behavior
+				Same input → same signal output
+
+			R3: Standard Interface
+				Every strategy MUST output:
+
+					direction (long/short/neutral)
+					timestamp
+					instrument
+
+					signal_id
+						Signal Identity Rules
+							signal_id must be globally unique
+							must be deterministically derived from:
+								strategy_id
+								event_time
+								input snapshot reference
+
+					strategy_id
+
+					signal_strength (normalized)
+						Signal Strength Rules
+							signal_strength must be within [0,1]
+							must be monotonic:
+								higher value = stronger conviction
+							mapping must be internally consistent within strategy
+
+						Signal Strength Determinism Constraint
+
+							signal_strength MUST be derived from a deterministic mapping function
+
+							Constraints:
+								mapping logic MUST be fixed per strategy version
+								mapping MUST produce identical output for identical input
+
+							No implicit or adaptive mapping allowed within same version
+
+					Input Snapshot Reference Constraint
+
+						input snapshot reference MUST be:
+
+							content-derived
+							deterministic
+							independent of memory location or runtime reference
+
+						Same input data MUST always produce identical reference
+
+
+					validity_window (time-bound signal validity)
+						Validity Rules
+							validity_window defines duration from event_time
+							expiry_time = event_time + validity_window
+							validity_window must be fixed at signal generation
+							dynamic extension is not allowed
+
+					metadata (optional context)
+						Metadata Constraints
+							metadata must be non-decision influencing
+
+							must NOT be used in:
+								signal evaluation
+								decision logic
+								risk logic
+
+							metadata must NOT encode hidden signals or decision hints
+
+					event_time (time at which signal is logically generated)
+						Time Constraints
+							event_time = logical time of signal generation
+							timestamp = observation time (non-decision field)
+							all logic must use event_time only
+							ordering of signals must be strictly based on event_time
+
+					direction must be one of:
+						+1 (long)
+						 0 (neutral)
+						-1 (short)
+
+					Signal Identity Definition:
+
+						signal_id = HASH_v1(
+							CBE_encode(signal_payload)
+						)
+
+						Constraints:
+
+							computed BEFORE any modification
+							raw signal only (no scaling applied)
+							immutable
+
+					event_time rules:
+
+						- unit: epoch nanoseconds (int64)
+						- timezone: UTC only
+						- source: exchange timestamp (preferred)
+						- fallback: ingestion timestamp
+
+						Validation:
+
+						IF event_time == null:
+							REJECT signal
+
+			R4: No Execution Awareness
+				Strategy cannot know:
+					broker
+					latency
+					order state
+
+
+			R5: Strategy Priority (Optional)
+				Strategies may define priority level for downstream conflict resolution
+
+				Note:
+					actual conflict resolution is handled in Decision Layer
+
+
+		Unified Priority Model
+			priority_level ∈ [1,10]
+
+			Derived from:
+
+			priority_level = floor(
+				signal_strength_global * priority_scale
+			)
+
+			priority_level definition:
+
+				priority_level = f(
+					strategy_priority,
+					signal_strength,
+					deterministic ranking model
+				)
+
+		Priority Ownership Rule
+			Priority defined ONLY in Phase A
+			Used downstream (Phase D)
+
+		Constraint
+			No redefinition of priority in Phase D
+
+	6. FLOW ARCHITECTURE
+
+		Flow vs Pipeline Distinction
+
+			Flow:
+				defines logical transformation:
+					input → strategy logic → signal
+
+			Pipeline:
+				defines lifecycle stages:
+					research → production → retirement
+
+			These MUST remain strictly separated
+
+		6.1 Input
+
+			Standardized Inputs:
+				raw market data (tick / OHLC — abstract)
+				reference data
+
+			Rules:
+				No strategy-specific data pipelines
+				No inter-strategy data sharing
+
+
+			Reference Data Definition
+				reference data = non-price, externally defined, slowly changing inputs
+
+				Constraints:
+					must not include signals or derived outputs from other strategies
+					must be deterministic and version-controlled
+
+
+			Required Input Definition
+				each strategy MUST explicitly define:
+					required inputs
+					optional inputs
+
+				Constraints:
+					missing required input → no signal emission
+					missing optional input → allowed
+
+			Input Validity Constraint
+
+				strategies MUST operate only on valid input data
+
+				invalid or inconsistent input MUST result in:
+					no signal emission
+
+			External Input Constraint (MANDATORY)
+
+				Strategies MUST operate ONLY on:
+
+					market data
+					reference data
+
+				Strategies MUST NOT accept:
+
+					external trade intents
+					external signals
+					outputs from CEIL or any external system
+
+			CEIL Isolation Constraint (MANDATORY)
+
+				Strategies MUST NOT accept or process:
+
+					external trade intents
+					external signals
+					CEIL-derived outputs
+					outputs from any external system
+
+				Strategies MUST operate ONLY on:
+
+					market data
+					reference data
+
+				Constraint:
+
+					Any dependency on external inputs → strategy INVALID
+
+		6.2 Processing
+			Input Data → Strategy Logic → Signal (standardized)
+
+
+		6.3 Output
+			Standardized signal object
+
+
+		6.4 Signal Emission Model
+
+			Strategies must define:
+				emission frequency (event-driven / interval-based)
+				max signal rate
+
+			Rules:
+				emission must be deterministic
+				no uncontrolled burst behavior
+
+
+			Signal Emission Constraints
+				strategy must NOT emit signal if no meaningful change in:
+					direction
+					signal_strength (within fixed precision)
+					validity_window
+
+				precision tolerance must be predefined
+
+				Precision Consistency Constraint
+
+					precision tolerance MUST be:
+
+						explicitly defined
+						consistent within a strategy
+						consistent across evaluation and emission logic
+
+					Precision MUST NOT change during runtime
+
+			Meaningful Change Definition
+				must be defined using:
+					minimum delta in signal_strength
+					or change in direction
+
+				threshold must be defined in strategy configuration
+
+
+	7. PIPELINE STRUCTURE
+		Strategy Lifecycle Pipeline
+			Research → Backtest → Validate → Paper → Production → Monitor → Retire
+
+		Transitions defined by:
+			performance thresholds
+			risk thresholds
+
+			Threshold Constraints
+				performance and risk thresholds must be:
+					numeric
+					predefined in strategy configuration
+
+				evaluation must be deterministic
+
+
+		Strategy Activation Rules
+
+			Define:
+				maximum number of active strategies
+				promotion criteria (validation → production)
+
+				deactivation triggers:
+					performance degradation
+					risk breach
+
+		Strategy Evaluation Interface
+
+			Strategies MUST support evaluation across:
+
+				frequency:
+					real-time
+					daily
+					weekly
+
+				scope:
+					trade-level
+					strategy-level
+
+			Strategies MUST expose outputs required for:
+
+				capital scaling decisions
+				strategy disabling conditions
+
+			Evaluation logic is defined in later phases, but compatibility MUST be ensured here
+
+	8. CONTROL & CONSTRAINTS
+		Hard Rules
+			Strategy must be deterministic
+			Must follow signal schema
+			Must not depend on infra
+
+		Soft Rules
+			strategies should:
+				minimize unnecessary signal emissions
+				maintain stable signal behavior
+				avoid excessive sensitivity to noise
+
+		Guardrails
+			No hidden state
+			No cross-strategy coupling
+
+
+		Strategy Count Constraint
+			System must enforce limits on:
+				total strategies
+				active strategies
+
+
+		Strategy Capacity Constraints
+			Each strategy MUST define:
+				maximum capital capacity (logical)
+				liquidity sensitivity
+				slippage impact behavior
+				saturation point (performance degradation threshold)
+
+			Rules:
+				Strategy must degrade predictably beyond capacity
+				Capacity must be independent of infrastructure
+
+
+			Capacity Enforcement Rules
+				when capacity threshold is reached:
+					strategy must either:
+						reduce signal_strength
+						or stop emitting signals
+
+				behavior must be predefined in strategy configuration
+
+				Capacity Enforcement Order
+
+					when capacity threshold is reached:
+
+						strategy MUST first attempt:
+							signal_strength reduction
+
+						if further reduction is not possible:
+							strategy MUST stop emitting signals
+
+			Capacity Enforcement Rule (DETERMINISTIC):
+
+				IF capacity_usage ≥ capacity_threshold_1:
+					signal_strength = signal_strength * reduction_factor_1
+
+				IF capacity_usage ≥ capacity_threshold_2:
+					signal_strength = signal_strength * reduction_factor_2
+
+				IF capacity_usage ≥ capacity_threshold_3:
+					STOP signal emission
+
+				Constraint:
+
+				capacity_threshold_1 < capacity_threshold_2 < capacity_threshold_3
+
+	9. STATE MODEL
+		State Types
+			Strategy State:
+				active
+				paused
+				retired
+
+		State Transitions
+
+			active → paused
+				triggered by:
+					risk threshold breach
+					manual or system control
+
+			paused → active
+				triggered by:
+					recovery conditions satisfied
+
+			active → retired
+				triggered by:
+					performance degradation
+					lifecycle completion
+
+			retired → no transition allowed
+
+
+		State Constraints
+			Strategy must not maintain hidden internal state
+
+			All state must be:
+				reproducible
+				replayable
+
+
+			Allowed State:
+				configuration parameters
+				explicitly defined indicators
+
+				Indicator Constraints
+					indicators must be deterministic functions of input data
+					must be fully reconstructable using defined history window
+
+
+			Disallowed:
+				implicit memory
+				non-reproducible state
+
+
+		State Reconstruction Rules
+			all state must be derivable from:
+				input data history
+				strategy configuration
+
+			history window must be explicitly defined in configuration
+
+			if state cannot be reconstructed → strategy is invalid
+
+
+		Minimum History Requirement
+			strategy MUST define minimum history window
+
+			Constraints:
+				if history < required window:
+					strategy state = inactive
+					no signal emission allowed
+
+
+		Source of Truth
+			Logical ownership: Phase A
+			(physical ownership defined later in Phase C)
+
+
+	10. FAILURE MODEL
+		Failure Scenarios
+			Non-deterministic output
+			Inconsistent signal format
+			Hidden dependencies
+			strategy exceeds capacity → performance degradation
+
+		Impact
+			Decision engine corruption
+			Portfolio instability
+			slippage increase
+			execution inefficiency
+
+		Mitigation
+			Strict validation rules
+			schema enforcement
+
+
+	11. ASSUMPTION REGISTER
+		Assumption                      Reason                      Validate In
+		Market data is consistent      Required for determinism    Phase B
+		Strategies can be modularized  Needed for scaling          Phase C
+		Signal schema is sufficient    Needed for decision layer   Step 2
+
+
+	12. VALIDATION FRAMEWORK
+		Checklist
+			Strategy taxonomy defined
+			Entities defined
+			Rules defined
+			Lifecycle defined
+
+		Validation Method
+			multi-stage audit process:
+				structural validation (section completeness)
+				logical validation (determinism, no ambiguity)
+				adversarial validation (red team vs blue team)
+
+			validation must ensure:
+				no interpretation freedom
+				no cross-layer leakage
+
+
+		Acceptance Criteria
+			No ambiguity
+			Fully deterministic
+			No infra leakage
+
+
+		Strategy Evaluation Compatibility
+			All strategies must be evaluated using:
+				standardized performance metrics
+				time-adjusted returns
+				normalized risk measures
+
+			Purpose:
+				enable fair comparison across strategies
+				enable consistent capital allocation
+
+
+	13. OUTPUT (DELIVERABLE)
+		Strategy Architecture Spec
+
+		Includes:
+			strategy taxonomy
+			entity definitions
+			lifecycle model
+			rules
+
+
+	14. TRACEABILITY
+		Output → feeds:
+			Signal Model (next step)
+			Decision Model
+
+		Traceability Constraint
+
+			All outputs defined in this phase MUST:
+
+				map to:
+					input data
+					strategy configuration
+
+			AND MUST be usable by downstream phases for:
+
+				decision mapping
+				execution mapping
+
+			No output may exist without trace linkage to its originating inputs
+
+
+	15. CROSS-PHASE CONSISTENCY
+		OWNED HERE:
+			Strategy structure
+
+		REFERENCED LATER:
+			Execution (Phase D)
+
+
+	16. SCALABILITY MODEL
+		Supports:
+			multi-strategy
+			multi-asset
+			horizontal expansion
+
+
+	17. GOVERNANCE
+		Strategy must be approved before production
+		Versioned definition required
+
+		Version Constraints
+			strategy version and configuration version form immutable pair
+			any change requires new version
+			runtime modification is not allowed
+
+		Governance Integration (Phase 0 Alignment)
+
+			Strategy definitions MUST follow:
+
+				approval hierarchy:
+					research → engineering → risk → final approval
+
+				version control:
+					all strategy definitions must be versioned
+
+				change control:
+					any modification requires:
+						reason
+						impact analysis
+						approval
+
+			No strategy may enter production without governance approval
+
+	18. AUDITABILITY
+		Every signal must map to:
+			strategy id
+			input data
+
+		Every signal must include trace reference to:
+			input data snapshot (logical reference)
+
+				Input Snapshot Definition
+					input snapshot = exact set of input values used at event_time
+					must include all fields used in computation
+					must exclude unused data
+
+			strategy configuration version
+
+		Auditability Requirements
+
+			Strategy outputs MUST support:
+
+				full input-output traceability
+				transformation visibility (input → signal)
+
+			System MUST be capable of:
+
+				deterministic replay
+				reconstruction of strategy outputs from historical inputs
+
+			Logging requirements (logical level):
+
+				inputs used
+				output signals generated
+				transformation logic reference
+
+	19. RISK CONSIDERATION
+		Bad strategy design → systemic risk
+		Overfitting risk introduced here
+
+
+	20. FAILURE CONDITION
+		Phase fails if:
+			strategy definitions ambiguous
+			no standard interface
+			lifecycle missing
+
+
+	21. PHASE LOCK CRITERIA
+		All sections complete
+		No ambiguity
+		Validated and approved
+
+
+	FINAL NOTE
+		This is now your first solid brick of the system.
+
+		If this is correct:
+			Signal model becomes clean
+			Decision engine becomes deterministic
+			Entire system becomes composable
+
+	Capacity Enforcement:
+
+	capacity_usage ∈ [0,1]
+
+		Thresholds:
+
+		T1 = 0.70 → scale_factor = 0.75
+		T2 = 0.85 → scale_factor = 0.50
+		T3 = 1.00 → REJECT signal
+
+		Processing:
+
+		IF capacity_usage >= T3:
+			DROP signal
+
+		ELSE IF capacity_usage >= T2:
+			signal_strength *= 0.50
+
+		ELSE IF capacity_usage >= T1:
+			signal_strength *= 0.75
+
+		ELSE:
+			signal unchanged
+
+		Overflow Rule:
+
+			IF multiplication exceeds int64:
+				CLAMP to max_int64
+
+
+	AGGREGATION ORDERING RULE (MANDATORY)
+
+		aggregation_order_key = {
+			instrument ASC
+			strategy_priority DESC
+			signal_strength DESC
+			signal_time ASC
+			signal_id ASC
+		}

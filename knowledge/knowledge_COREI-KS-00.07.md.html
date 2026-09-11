@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COREI KS 00.07</title>
+  <style>
+  body {
+    background: #0A0D12;
+    color: #E3E7EC;
+    font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px 40px;
+  }
+  h1 {
+    font-size: 26px;
+    font-weight: 600;
+    color: #C6A46A;
+    margin: 24px 0 12px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 8px;
+  }
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #D4B88A;
+    margin: 20px 0 10px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 6px;
+  }
+  h3 {
+    font-size: 17px;
+    font-weight: 500;
+    color: #E3E7EC;
+    margin: 16px 0 8px 0;
+  }
+  h4 {
+    font-size: 15px;
+    font-weight: 500;
+    color: #C5CED9;
+    margin: 12px 0 6px 0;
+  }
+  p { margin-bottom: 8px; color: #C5CED9; }
+  ul, ol { padding-left: 24px; margin-bottom: 8px; color: #C5CED9; }
+  li { margin-bottom: 2px; }
+  code {
+    font-family: 'JetBrains Mono', 'Cascadia Code', monospace;
+    font-size: 13px;
+    background: rgba(255,255,255,0.05);
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid #28303C;
+    color: #C5CED9;
+  }
+  pre {
+    background: #18202A;
+    border: 1px solid #28303C;
+    border-radius: 6px;
+    padding: 16px 20px;
+    overflow: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 12px 0 16px 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #C5CED9;
+  }
+  pre code { background: transparent; border: none; padding: 0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 16px 0;
+    font-size: 13px;
+    color: #C5CED9;
+  }
+  th {
+    background: #18202A;
+    color: #C5CED9;
+    font-weight: 600;
+    text-align: left;
+    padding: 6px 12px;
+    border: 1px solid #28303C;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  td {
+    padding: 4px 12px;
+    border: 1px solid #28303C;
+    background: #0E1219;
+  }
+  tr:nth-child(even) td { background: #121821; }
+  blockquote {
+    border-left: 3px solid #C6A46A;
+    padding-left: 16px;
+    margin: 8px 0 12px 0;
+    color: #6E7883;
+    font-style: italic;
+  }
+  hr { border: none; border-top: 1px solid #28303C; margin: 24px 0; }
+  a { color: #8BB4F0; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  strong { color: #E3E7EC; font-weight: 600; }
+  img { max-width: 100%; border-radius: 4px; border: 1px solid #28303C; }
+  .doc-footer {
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid #28303C;
+    font-size: 12px;
+    color: #6E7883;
+    font-family: monospace;
+  }
+</style>
+</head>
+<body>
+  <div class="doc-header" style="background:#121821;border:1px solid #28303C;border-radius:8px;padding:1.2rem 1.8rem;margin-bottom:1.8rem;">
+    <div style="color:#C6A46A;font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:0.05em;">COREI · Knowledge System</div>
+    <div style="color:#6E7883;font-family:monospace;font-size:14px;margin-top:0.1rem;"></div>
+    <h1 style="font-size:28px;font-weight:600;color:#E3E7EC;margin:0.1rem 0;border-bottom:none;padding-bottom:0;">COREI KS 00.07</h1>
+    <div style="font-size:16px;color:#C5CED9;">00 · Constitutional</div>
+    <div style="display:flex;flex-wrap:wrap;gap:0.6rem 1.8rem;margin-top:0.6rem;font-size:13px;">
+      <span style="display:flex;align-items:baseline;gap:0.3rem;"><span style="color:#6E7883;text-transform:uppercase;font-size:10px;letter-spacing:0.04em;font-weight:600;">Status</span><span style="color:#E3E7EC;font-weight:500;">Approved</span></span>
+      <span style="display:flex;align-items:baseline;gap:0.3rem;"><span style="color:#6E7883;text-transform:uppercase;font-size:10px;letter-spacing:0.04em;font-weight:600;">Version</span><span style="color:#E3E7EC;font-weight:500;">1.0</span></span>
+      <span style="display:flex;align-items:baseline;gap:0.3rem;"><span style="color:#6E7883;text-transform:uppercase;font-size:10px;letter-spacing:0.04em;font-weight:600;">Classification</span><span style="color:#E3E7EC;font-weight:500;">Constitutional</span></span>
+      <span style="display:flex;align-items:baseline;gap:0.3rem;"><span style="color:#6E7883;text-transform:uppercase;font-size:10px;letter-spacing:0.04em;font-weight:600;">Owner</span><span style="color:#E3E7EC;font-weight:500;">COREI</span></span>
+      <span style="display:flex;align-items:baseline;gap:0.3rem;"><span style="color:#6E7883;text-transform:uppercase;font-size:10px;letter-spacing:0.04em;font-weight:600;">Repository</span><span style="color:#E3E7EC;font-weight:500;font-family:monospace;">knowledge/00-00/</span></span>
+    </div>
+
+  </div>
+
+
+
+  <h1>COREI KNOWLEDGE ASSET STANDARD</h1>
+<h1>DOCUMENT ID</h1>
+<h1>COREI-KS-00.07</h1>
+<h1>DOCUMENT NAME</h1>
+<h1>KNOWLEDGE ASSET STANDARD</h1>
+<h1>VERSION</h1>
+<h1>1.0</h1>
+<h1>STATUS</h1>
+<h1>APPROVED</h1>
+<h1>CLASSIFICATION</h1>
+<h1>CONSTITUTIONAL</h1>
+<h1>1. PURPOSE</h1>
+<p>The COREI Knowledge Asset Standard defines the mandatory<br>
+contract that every Knowledge Asset within the COREI<br>
+Knowledge System shall follow.</p>
+<p>The purpose of this standard is to ensure that every<br>
+Knowledge Asset remains consistent,<br>
+traceable,<br>
+governed,<br>
+machine-readable,<br>
+and institutionally reusable.</p>
+<p>This standard applies to every Knowledge Domain.</p>
+<h1>2. OBJECTIVES</h1>
+<p>The Knowledge Asset Standard exists to</p>
+<p>• standardize every Knowledge Asset</p>
+<p>• establish one document contract</p>
+<p>• support deterministic navigation</p>
+<p>• support AI-native interpretation</p>
+<p>• enable institutional traceability</p>
+<p>• eliminate structural inconsistency</p>
+<p>• preserve repository quality</p>
+<p>• enable long-term maintainability</p>
+<h1>3. KNOWLEDGE ASSET DEFINITION</h1>
+<p>A Knowledge Asset is the smallest authoritative unit of<br>
+institutional knowledge within COREI.</p>
+<p>Every Knowledge Asset owns one institutional<br>
+responsibility.</p>
+<p>Knowledge Assets collectively form the COREI<br>
+Knowledge System.</p>
+<h1>4. MANDATORY METADATA</h1>
+<p>Every Knowledge Asset shall define the following metadata.</p>
+<p>asset_id</p>
+<p>title</p>
+<p>domain</p>
+<p>domain_code</p>
+<p>document_number</p>
+<p>classification</p>
+<p>authority</p>
+<p>version</p>
+<p>status</p>
+<p>owner</p>
+<p>repository</p>
+<p>depends_on</p>
+<p>supersedes</p>
+<p>superseded_by</p>
+<p>review_cycle (optional)</p>
+<p>tags (optional)</p>
+<p>No mandatory field may be omitted.</p>
+<h1>5. KNOWLEDGE ASSET IDENTIFIER</h1>
+<p>Every Knowledge Asset shall have one globally unique<br>
+identifier.</p>
+<p>Standard format</p>
+<p>COREI-<DOMAIN>-<DOCUMENT></p>
+<p>Examples</p>
+<p>COREI-ID-01.04</p>
+<p>COREI-GV-02.03</p>
+<p>COREI-AR-03.12</p>
+<p>COREI-EN-04.09</p>
+<p>Knowledge Asset identifiers are permanent.</p>
+<p>Identifiers shall never be reused.</p>
+<h1>6. DOCUMENT STRUCTURE</h1>
+<p>Every Knowledge Asset shall follow a consistent structure.</p>
+<p>Metadata</p>
+<p>↓</p>
+<p>Document Header</p>
+<p>↓</p>
+<p>Purpose</p>
+<p>↓</p>
+<p>Objectives</p>
+<p>↓</p>
+<p>Body</p>
+<p>↓</p>
+<p>Authority</p>
+<p>↓</p>
+<p>End of Document</p>
+<p>Domain-specific sections may be added where required.</p>
+<p>The standard structure shall remain consistent.</p>
+<h1>7. OWNERSHIP</h1>
+<p>Every Knowledge Asset shall have</p>
+<p>one owner,</p>
+<p>one primary purpose,</p>
+<p>one authoritative location,</p>
+<p>and one governing Knowledge Domain.</p>
+<p>Multiple ownership is prohibited.</p>
+<h1>8. RELATIONSHIPS</h1>
+<p>Knowledge Assets shall explicitly declare relationships.</p>
+<p>Supported relationships include</p>
+<p>Depends On</p>
+<p>Inherited From</p>
+<p>Referenced By</p>
+<p>Supersedes</p>
+<p>Superseded By</p>
+<p>Supports</p>
+<p>Extends</p>
+<p>Constrained By</p>
+<p>Hidden relationships are prohibited.</p>
+<h1>9. VERSIONING</h1>
+<p>Every Knowledge Asset shall maintain version history.</p>
+<p>Major Version</p>
+<p>Constitutional or structural change.</p>
+<p>Minor Version</p>
+<p>Functional enhancement.</p>
+<p>Patch Version</p>
+<p>Editorial correction.</p>
+<p>Version history shall remain permanently traceable.</p>
+<h1>10. LIFECYCLE STATUS</h1>
+<p>Every Knowledge Asset shall define one lifecycle status.</p>
+<p>Draft</p>
+<p>Review</p>
+<p>Approved</p>
+<p>Frozen</p>
+<p>Deprecated</p>
+<p>Superseded</p>
+<p>Status shall appear within the metadata.</p>
+<h1>11. QUALITY REQUIREMENTS</h1>
+<p>Every Knowledge Asset shall be</p>
+<p>Accurate.</p>
+<p>Complete.</p>
+<p>Consistent.</p>
+<p>Explainable.</p>
+<p>Traceable.</p>
+<p>Governed.</p>
+<p>Version Controlled.</p>
+<p>Machine Readable.</p>
+<p>Institutionally Maintainable.</p>
+<p>Knowledge Assets failing these requirements<br>
+shall not become authoritative.</p>
+<h1>12. AI COMPATIBILITY</h1>
+<p>Every Knowledge Asset shall support</p>
+<p>Semantic retrieval.</p>
+<p>Knowledge graph construction.</p>
+<p>Dependency analysis.</p>
+<p>Institutional reasoning.</p>
+<p>Cross-domain navigation.</p>
+<p>Machine interpretation.</p>
+<p>The document contract shall remain deterministic<br>
+to enable reliable AI consumption.</p>
+<h1>13. AUTHORITY</h1>
+<p>The COREI Knowledge Asset Standard defines the<br>
+mandatory contract for every Knowledge Asset<br>
+within the COREI Knowledge System.</p>
+<p>Every Knowledge Domain,</p>
+<p>every Knowledge Asset,</p>
+<p>every future document,</p>
+<p>every engineering team,</p>
+<p>every AI system,</p>
+<p>and every automation workflow</p>
+<p>shall comply with this standard.</p>
+<p>Compliance with this standard is mandatory.</p>
+<h1>END OF DOCUMENT</h1>
+<h1>DOCUMENT ID</h1>
+<h1>COREI-KS-00.07</h1>
+<h1>DOCUMENT NAME</h1>
+<h1>KNOWLEDGE ASSET STANDARD</h1>
+
+
+  <div class="doc-footer">
+    <span>DOCUMENT ID: </span>
+    <span>DOCUMENT NAME: COREI KS 00.07</span>
+    <span>VERSION: 1.0</span>
+  </div>
+</body>
+</html>

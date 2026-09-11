@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <title>docs stage 24 Build Phase 02 BU 020.md</title>
+  <style>
+  body {
+    background: #0A0D12;
+    color: #E3E7EC;
+    font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px 40px;
+  }
+
+  h1 {
+    font-size: 26px;
+    font-weight: 600;
+    color: #C6A46A;
+    margin: 24px 0 12px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 8px;
+  }
+
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #D4B88A;
+    margin: 20px 0 10px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 6px;
+  }
+
+  h3 {
+    font-size: 17px;
+    font-weight: 500;
+    color: #E3E7EC;
+    margin: 16px 0 8px 0;
+  }
+
+  h4 {
+    font-size: 15px;
+    font-weight: 500;
+    color: #C5CED9;
+    margin: 12px 0 6px 0;
+  }
+
+  p {
+    margin-bottom: 8px;
+    color: #C5CED9;
+  }
+
+  ul,
+  ol {
+    padding-left: 24px;
+    margin-bottom: 8px;
+    color: #C5CED9;
+  }
+
+  li {
+    margin-bottom: 2px;
+  }
+
+  code {
+    font-family: 'JetBrains Mono', 'Cascadia Code', monospace;
+    font-size: 13px;
+    background: rgba(255,255,255,0.05);
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid #28303C;
+    color: #C5CED9;
+  }
+
+  pre {
+    background: #18202A;
+    border: 1px solid #28303C;
+    border-radius: 6px;
+    padding: 16px 20px;
+    overflow: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 12px 0 16px 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #C5CED9;
+  }
+
+  pre code {
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 16px 0;
+    font-size: 13px;
+    color: #C5CED9;
+  }
+
+  th {
+    background: #18202A;
+    color: #C5CED9;
+    font-weight: 600;
+    text-align: left;
+    padding: 6px 12px;
+    border: 1px solid #28303C;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  td {
+    padding: 4px 12px;
+    border: 1px solid #28303C;
+    background: #0E1219;
+  }
+
+  tr:nth-child(even) td {
+    background: #121821;
+  }
+
+  blockquote {
+    border-left: 3px solid #C6A46A;
+    padding-left: 16px;
+    margin: 8px 0 12px 0;
+    color: #6E7883;
+    font-style: italic;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #28303C;
+    margin: 24px 0;
+  }
+
+  a {
+    color: #8BB4F0;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  strong {
+    color: #E3E7EC;
+    font-weight: 600;
+  }
+
+  img {
+    max-width: 100%;
+    border-radius: 4px;
+    border: 1px solid #28303C;
+  }
+
+  .doc-footer {
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid #28303C;
+    font-size: 12px;
+    color: #6E7883;
+    font-family: monospace;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+</style>
+</head>
+
+<body>
+
+  <div
+    class="doc-header"
+    style="
+      background:#121821;
+      border:1px solid #28303C;
+      border-radius:8px;
+      padding:1.2rem 1.8rem;
+      margin-bottom:1.8rem;
+    "
+  >
+
+    <div
+      style="
+        color:#C6A46A;
+        font-weight:600;
+        font-size:13px;
+        text-transform:uppercase;
+        letter-spacing:0.05em;
+      "
+    >
+      COREI · Stage Documentation
+    </div>
+
+
+
+    <h1
+      style="
+        font-size:28px;
+        font-weight:600;
+        color:#E3E7EC;
+        margin:0.1rem 0;
+        border-bottom:none;
+        padding-bottom:0;
+      "
+    >
+      docs stage 24 Build Phase 02 BU 020.md
+    </h1>
+
+    <div
+      style="
+        font-size:16px;
+        color:#C5CED9;
+      "
+    >
+      Stage Documentation
+      ·
+      Operational
+    </div>
+
+    <div
+      style="
+        display:flex;
+        flex-wrap:wrap;
+        gap:0.6rem 1.8rem;
+        margin-top:0.6rem;
+        font-size:13px;
+      "
+    >
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Status
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          Approved
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Version
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          1.0
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Classification
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          Operational
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Owner
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          COREI
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Repository
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+            font-family:monospace;
+          "
+        >
+          docs/docs_stage-24_Build_Phase-02_BU-020.md.md
+        </span>
+      </span>
+
+    </div>
+
+
+
+  </div>
+
+
+
+  <h1>BUILD UNIT-020</h1>
+<h2>Title</h2>
+<p>COREI OS Institutional Validation</p>
+<hr>
+<h2>Objective</h2>
+<p>Perform a comprehensive institutional validation of the COREI OS repository, framework architecture, platform composition, runtime services, SDK, hosted experiences, build integrity, and documentation.</p>
+<p>This Build Unit serves as the formal acceptance gate for Stage-24.</p>
+<p>No new functionality is introduced. The purpose is to verify that all Build Units implemented throughout Stage-24 operate together as a coherent institutional operating environment.</p>
+<hr>
+<h1>Scope</h1>
+<p>Validated:</p>
+<ul>
+<li>Repository Structure</li>
+<li>Architecture</li>
+<li>Frameworks</li>
+<li>Platform Integration</li>
+<li>Runtime Services</li>
+<li>Terminal SDK</li>
+<li>Infrastructure Terminal</li>
+<li>Trading Terminal</li>
+<li>Dependency Resolution</li>
+<li>Build Integrity</li>
+<li>Documentation</li>
+<li>Production Readiness</li>
+</ul>
+<hr>
+<h1>Repository Validation</h1>
+<p>Repository successfully validated.</p>
+<p>Major repositories present:</p>
+<pre><code>bootstrap
+foundation
+shell
+workspace
+windowing
+docking
+ribbon
+navigation
+command-center
+rendering
+visualization
+extensions
+runtime
+platform
+sdk
+experiences
+</code></pre>
+<p>Experience repositories:</p>
+<pre><code>Infrastructure
+Trading
+</code></pre>
+<p>The repository structure is modular, layered, and consistent with the COREI OS architecture.</p>
+<hr>
+<h1>Architecture Validation</h1>
+<p>Validated architectural layers:</p>
+<pre><code>Bootstrap
+
+↓
+
+Foundation
+
+↓
+
+Shell
+
+↓
+
+Workspace
+
+↓
+
+Window Manager
+
+↓
+
+Docking
+
+↓
+
+Ribbon
+
+↓
+
+Navigation
+
+↓
+
+Command Center
+
+↓
+
+Rendering
+
+↓
+
+Visualization
+
+↓
+
+Extension Framework
+
+↓
+
+Runtime Services
+
+↓
+
+Platform Integration
+
+↓
+
+Terminal SDK
+
+↓
+
+Hosted Experiences
+</code></pre>
+<p>Architecture Characteristics:</p>
+<ul>
+<li>Modular</li>
+<li>Layered</li>
+<li>Deterministic</li>
+<li>Adapter-based</li>
+<li>Institution-oriented</li>
+<li>Extensible</li>
+</ul>
+<p>Validation Result:</p>
+<p>PASS</p>
+<hr>
+<h1>Framework Validation</h1>
+<p>Validated frameworks:</p>
+<ul>
+<li>Bootstrap</li>
+<li>Foundation</li>
+<li>Shell</li>
+<li>Workspace</li>
+<li>Window Manager</li>
+<li>Docking</li>
+<li>Ribbon</li>
+<li>Navigation</li>
+<li>Command Center</li>
+<li>Rendering</li>
+<li>Visualization</li>
+<li>Extension Framework</li>
+<li>Runtime Services</li>
+<li>Platform Integration</li>
+<li>Terminal SDK</li>
+</ul>
+<p>Each framework includes the required foundational elements appropriate to its role:</p>
+<ul>
+<li>Contracts</li>
+<li>Models</li>
+<li>Registry</li>
+<li>Runtime</li>
+<li>State</li>
+<li>Lifecycle</li>
+<li>Providers</li>
+<li>Hooks</li>
+<li>Components</li>
+<li>Public API</li>
+</ul>
+<p>Validation Result:</p>
+<p>PASS</p>
+<hr>
+<h1>Platform Validation</h1>
+<p>Validated:</p>
+<ul>
+<li>Platform Composition</li>
+<li>Bootstrap Integration</li>
+<li>Runtime Wiring</li>
+<li>Composition Root</li>
+<li>Provider Chain</li>
+</ul>
+<p>The Platform layer successfully composes previously implemented frameworks into a unified operating environment.</p>
+<p>Validation Result:</p>
+<p>PASS</p>
+<hr>
+<h1>Runtime Validation</h1>
+<p>Validated Runtime Services:</p>
+<ul>
+<li>Runtime Registry</li>
+<li>Service Registry</li>
+<li>Dependency Resolver</li>
+<li>Event Bus</li>
+<li>Health Monitor</li>
+<li>Runtime Lifecycle</li>
+</ul>
+<p>Runtime services compile successfully and expose the expected integration surface.</p>
+<p>Validation Result:</p>
+<p>PASS</p>
+<hr>
+<h1>Terminal SDK Validation</h1>
+<p>Validated:</p>
+<ul>
+<li>Terminal Contracts</li>
+<li>Workspace Contracts</li>
+<li>Module Contracts</li>
+<li>SDK Registry</li>
+<li>SDK Runtime</li>
+<li>SDK State</li>
+<li>SDK Lifecycle</li>
+<li>SDK Services</li>
+<li>Provider</li>
+<li>Hooks</li>
+<li>Components</li>
+</ul>
+<p>The SDK provides the official integration boundary between COREI OS and hosted terminal experiences.</p>
+<p>Validation Result:</p>
+<p>PASS</p>
+<hr>
+<h1>Experience Validation</h1>
+<p>Validated hosted experiences:</p>
+<p>Infrastructure Terminal</p>
+<ul>
+<li>Platform Adapter</li>
+<li>Runtime Adapter</li>
+<li>Workspace Adapter</li>
+<li>Provider</li>
+<li>Hook</li>
+<li>Root Component</li>
+</ul>
+<p>Trading Terminal</p>
+<ul>
+<li>Platform Adapter</li>
+<li>Runtime Adapter</li>
+<li>Workspace Adapter</li>
+<li>Provider</li>
+<li>Hook</li>
+<li>Root Component</li>
+</ul>
+<p>Both experiences follow the same institutional integration pattern.</p>
+<p>Validation Result:</p>
+<p>PASS</p>
+<hr>
+<h1>Dependency Validation</h1>
+<p>Validated project dependencies.</p>
+<p>Installed packages include:</p>
+<ul>
+<li>React</li>
+<li>React DOM</li>
+<li>React Router</li>
+<li>TypeScript</li>
+<li>Vite</li>
+<li>Tailwind CSS</li>
+<li>React Type Definitions</li>
+<li>React DOM Type Definitions</li>
+<li>Vite React Plugin</li>
+</ul>
+<p>Dependency resolution completed successfully.</p>
+<p>Validation Result:</p>
+<p>PASS</p>
+<hr>
+<h1>Build Validation</h1>
+<p>Executed:</p>
+<pre><code>pnpm exec tsc --noEmit
+
+pnpm exec vite build
+</code></pre>
+<p>Results:</p>
+<pre><code>TypeScript Compilation
+
+PASS
+
+Production Build
+
+PASS
+</code></pre>
+<p>No compilation or production build errors were observed during institutional validation.</p>
+<hr>
+<h1>Documentation Validation</h1>
+<p>Validated Build Unit documentation:</p>
+<p>BU-001 through BU-020</p>
+<p>Repository documentation is complete for Stage-24.</p>
+<p>Validation Result:</p>
+<p>PASS</p>
+<hr>
+<h1>Repository Summary</h1>
+<p>COREI OS now contains:</p>
+<pre><code>Bootstrap
+
+Foundation
+
+Shell
+
+Workspace
+
+Window Manager
+
+Docking
+
+Ribbon
+
+Navigation
+
+Command Center
+
+Rendering
+
+Visualization
+
+Extension Framework
+
+Runtime Services
+
+Platform Integration
+
+Terminal SDK
+
+Infrastructure Experience
+
+Trading Experience
+</code></pre>
+<p>This represents the complete Stage-24 repository foundation.</p>
+<hr>
+<h1>Production Readiness Assessment</h1>
+<p>Current assessment:</p>
+<p>Repository Structure</p>
+<p>PASS</p>
+<p>Architecture</p>
+<p>PASS</p>
+<p>Compilation</p>
+<p>PASS</p>
+<p>Production Build</p>
+<p>PASS</p>
+<p>Platform Composition</p>
+<p>PASS</p>
+<p>Runtime</p>
+<p>PASS</p>
+<p>SDK</p>
+<p>PASS</p>
+<p>Experience Integration</p>
+<p>PASS</p>
+<p>Documentation</p>
+<p>PASS</p>
+<p>Overall Stage-24 Status</p>
+<p>PASS</p>
+<hr>
+<h1>Deliverables</h1>
+<p>Completed:</p>
+<ul>
+<li>Institutional Validation</li>
+<li>Repository Audit</li>
+<li>Architecture Audit</li>
+<li>Framework Audit</li>
+<li>Runtime Audit</li>
+<li>Platform Audit</li>
+<li>SDK Audit</li>
+<li>Experience Audit</li>
+<li>Dependency Audit</li>
+<li>Build Audit</li>
+<li>Documentation Audit</li>
+</ul>
+<hr>
+<h1>Result</h1>
+<p>Stage-24 has been successfully completed.</p>
+<p>The COREI OS repository now provides:</p>
+<ul>
+<li>Modular architecture</li>
+<li>Deterministic framework composition</li>
+<li>Runtime services</li>
+<li>Platform composition</li>
+<li>Terminal SDK</li>
+<li>Infrastructure Terminal integration</li>
+<li>Trading Terminal integration</li>
+<li>Successful production compilation</li>
+<li>Successful production build</li>
+</ul>
+<p>This establishes the complete institutional operating system foundation required for future functional implementation.</p>
+<hr>
+<h1>Next Stage</h1>
+<p><strong>Stage-25 – COREI OS Shell Composition &amp; Experience Assembly</strong></p>
+<p>The next stage will transition from building framework infrastructure to composing the actual institutional operating environment by assembling the shell, workspace regions, ribbons, navigation, docking layout, and hosted terminal experiences into a functioning workstation.</p>
+<hr>
+<h1>Status</h1>
+<p><strong>COMPLETED</strong></p>
+
+
+  <div class="doc-footer">
+
+    <span>DOCUMENT KEY: docs:docs_stage-24_Build_Phase-02_BU-020.md.md</span>
+
+    <span>
+      DOCUMENT NAME: docs stage 24 Build Phase 02 BU 020.md
+    </span>
+
+    <span>
+      VERSION: 1.0
+    </span>
+
+  </div>
+
+</body>
+</html>

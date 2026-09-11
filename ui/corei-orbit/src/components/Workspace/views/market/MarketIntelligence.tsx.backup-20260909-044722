@@ -1,0 +1,813 @@
+import React, { useEffect, useMemo, useState } from 'react';
+import {
+  Activity,
+  BarChart3,
+  ChevronDown,
+  Database,
+  Download,
+  Eye,
+  EyeOff,
+  GitBranch,
+  History,
+  Maximize2,
+  RefreshCw,
+  Search,
+  ShieldCheck,
+  SlidersHorizontal,
+  X,
+} from 'lucide-react';
+import { useMarketStore } from '../../../../services/marketDataService';
+import './MarketIntelligence.css';
+
+export type MarketIntelligenceSection =
+  | 'overview'
+  | 'market-data'
+  | 'market-health'
+  | 'technical'
+  | 'structure'
+  | 'trend'
+  | 'volatility'
+  | 'momentum'
+  | 'regime';
+
+type Instrument = {
+  price: number;
+  change: number;
+  history: number[];
+};
+
+interface MarketIntelligenceProps {
+  section?: MarketIntelligenceSection;
+}
+
+const SECTION_META: Record<
+  MarketIntelligenceSection,
+  { title: string; subtitle: string; short: string }
+> = {
+  overview: {
+    title: 'Market Intelligence',
+    subtitle: 'Institutional market workspace — observation, state, context and analytical capability surface',
+    short: 'Overview',
+  },
+  'market-data': {
+    title: 'Market Data',
+    subtitle: 'Live instrument observations from the existing market-data service',
+    short: 'Data',
+  },
+  'market-health': {
+    title: 'Market Health',
+    subtitle: 'Observable data availability and feed-state boundary',
+    short: 'Health',
+  },
+  technical: {
+    title: 'Technical Indicators',
+    subtitle: 'Backend-authoritative technical analytics',
+    short: 'Technical',
+  },
+  structure: {
+    title: 'Market Structure',
+    subtitle: 'Structure, liquidity and market-level analytical state',
+    short: 'Structure',
+  },
+  trend: {
+    title: 'Trend Analysis',
+    subtitle: 'Trend direction, strength and multi-timeframe state',
+    short: 'Trend',
+  },
+  volatility: {
+    title: 'Volatility Analysis',
+    subtitle: 'Volatility measurements and regime state',
+    short: 'Volatility',
+  },
+  momentum: {
+    title: 'Momentum Analysis',
+    subtitle: 'Momentum measurements and directional state',
+    short: 'Momentum',
+  },
+  regime: {
+    title: 'Market Regime',
+    subtitle: 'Authoritative market-context regime state',
+    short: 'Regime',
+  },
+};
+
+const SECTION_ORDER: MarketIntelligenceSection[] = [
+  'overview',
+  'market-data',
+  'market-health',
+  'technical',
+  'structure',
+  'trend',
+  'volatility',
+  'momentum',
+  'regime',
+];
+
+const ANALYTICS_SECTIONS: MarketIntelligenceSection[] = [
+  'technical',
+  'structure',
+  'trend',
+  'volatility',
+  'momentum',
+  'regime',
+];
+
+function formatPrice(value: number | undefined) {
+  if (value === undefined || Number.isNaN(value)) return '--';
+  return value.toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+}
+
+function formatPercent(value: number | undefined) {
+  if (value === undefined || Number.isNaN(value)) return '--';
+  return `${value >= 0 ? '+' : ''}${value.toFixed(2)}%`;
+}
+
+function stateClass(available: boolean, error: boolean) {
+  if (error) return 'mi-state-error';
+  return available ? 'mi-state-live' : 'mi-state-neutral';
+}
+
+const CapabilityUnavailable: React.FC<{
+  title: string;
+  description: string;
+}> = ({ title, description }) => (
+  <section className="mi-panel mi-unavailable">
+    <div className="mi-panel-heading">
+      <div>
+        <span className="mi-panel-title">{title}</span>
+        <span className="mi-panel-subtitle">Capability surface</span>
+      </div>
+      <span className="mi-state mi-state-neutral">NOT EXPOSED</span>
+    </div>
+    <div className="mi-unavailable-body">
+      <ShieldCheck size={16} />
+      <div>
+        <strong>Backend authority required</strong>
+        <span>{description}</span>
+      </div>
+    </div>
+  </section>
+);
+
+const SectionHeader: React.FC<{
+  title: string;
+  subtitle: string;
+  onRefresh: () => void;
+  loading: boolean;
+  onFullscreen: () => void;
+}> = ({ title, subtitle, onRefresh, loading, onFullscreen }) => (
+  <div className="mi-header">
+    <div className="mi-header-copy">
+      <div className="mi-kicker">
+        <Activity size={12} />
+        MARKET INTELLIGENCE
+      </div>
+      <h1>{title}</h1>
+      <p>{subtitle}</p>
+    </div>
+    <div className="mi-header-actions">
+      <span className="mi-authority-chip">
+        <ShieldCheck size={12} />
+        READ / ANALYZE
+      </span>
+      <button className="mi-icon-button" title="Refresh market observations" onClick={onRefresh}>
+        <RefreshCw size={14} className={loading ? 'mi-spin' : ''} />
+      </button>
+      <button className="mi-icon-button" title="Fullscreen workspace" onClick={onFullscreen}>
+        <Maximize2 size={14} />
+      </button>
+    </div>
+  </div>
+);
+
+const ControlBar: React.FC<{
+  symbols: string[];
+  selectedSymbol: string;
+  setSelectedSymbol: (symbol: string) => void;
+  timeframe: string;
+  setTimeframe: (value: string) => void;
+  search: string;
+  setSearch: (value: string) => void;
+  autoRefresh: boolean;
+  setAutoRefresh: (value: boolean) => void;
+  compact: boolean;
+  setCompact: (value: boolean) => void;
+  onRefresh: () => void;
+  loading: boolean;
+  onTogglePanels: () => void;
+}> = ({
+  symbols,
+  selectedSymbol,
+  setSelectedSymbol,
+  timeframe,
+  setTimeframe,
+  search,
+  setSearch,
+  autoRefresh,
+  setAutoRefresh,
+  compact,
+  setCompact,
+  onRefresh,
+  loading,
+  onTogglePanels,
+}) => (
+  <div className="mi-control-bar">
+    <label className="mi-search">
+      <Search size={13} />
+      <input
+        value={search}
+        onChange={(event) => setSearch(event.target.value)}
+        placeholder="Search instrument..."
+        aria-label="Search instrument"
+      />
+      {search && (
+        <button type="button" onClick={() => setSearch('')} title="Clear search">
+          <X size={12} />
+        </button>
+      )}
+    </label>
+
+    <label className="mi-select-control">
+      <span>INSTRUMENT</span>
+      <select value={selectedSymbol} onChange={(event) => setSelectedSymbol(event.target.value)}>
+        {symbols.length ? (
+          symbols.map((symbol) => <option key={symbol}>{symbol}</option>)
+        ) : (
+          <option>--</option>
+        )}
+      </select>
+      <ChevronDown size={12} />
+    </label>
+
+    <div className="mi-segmented" role="group" aria-label="Timeframe">
+      {['1m', '5m', '15m', '1h', '4h', '1D'].map((value) => (
+        <button
+          type="button"
+          key={value}
+          className={timeframe === value ? 'active' : ''}
+          onClick={() => setTimeframe(value)}
+        >
+          {value}
+        </button>
+      ))}
+    </div>
+
+    <div className="mi-control-spacer" />
+
+    <button
+      type="button"
+      className={`mi-toggle ${autoRefresh ? 'active' : ''}`}
+      onClick={() => setAutoRefresh(!autoRefresh)}
+      title="UI refresh control; source polling remains governed by the existing market-data store"
+    >
+      <span className="mi-toggle-dot" />
+      AUTO
+    </button>
+
+    <button
+      type="button"
+      className={`mi-density ${compact ? 'active' : ''}`}
+      onClick={() => setCompact(!compact)}
+      title="Toggle compact information density"
+    >
+      {compact ? <Eye size={13} /> : <EyeOff size={13} />}
+      {compact ? 'COMPACT' : 'STANDARD'}
+    </button>
+
+    <button type="button" className="mi-secondary-button" onClick={onTogglePanels}>
+      <SlidersHorizontal size={13} />
+      PANELS
+    </button>
+
+    <button type="button" className="mi-secondary-button" onClick={onRefresh} disabled={loading}>
+      <RefreshCw size={13} className={loading ? 'mi-spin' : ''} />
+      REFRESH
+    </button>
+  </div>
+);
+
+const Sparkline: React.FC<{ values: number[]; positive?: boolean }> = ({ values, positive }) => {
+  const points = useMemo(() => {
+    if (!values.length) return '';
+    const min = Math.min(...values);
+    const max = Math.max(...values);
+    const range = max - min || 1;
+    return values
+      .map((value, index) => {
+        const x = (index / Math.max(values.length - 1, 1)) * 100;
+        const y = 28 - ((value - min) / range) * 24;
+        return `${x.toFixed(2)},${y.toFixed(2)}`;
+      })
+      .join(' ');
+  }, [values]);
+
+  return (
+    <svg className={`mi-sparkline ${positive === false ? 'negative' : ''}`} viewBox="0 0 100 32" preserveAspectRatio="none">
+      <polyline points={points} fill="none" vectorEffect="non-scaling-stroke" />
+    </svg>
+  );
+};
+
+const InstrumentStrip: React.FC<{
+  instruments: Record<string, Instrument>;
+  selectedSymbol: string;
+  onSelect: (symbol: string) => void;
+}> = ({ instruments, selectedSymbol, onSelect }) => {
+  const entries = Object.entries(instruments);
+
+  if (!entries.length) {
+    return <div className="mi-empty-strip">NO MARKET OBSERVATIONS</div>;
+  }
+
+  return (
+    <div className="mi-instrument-strip">
+      {entries.slice(0, 10).map(([symbol, data]) => (
+        <button
+          type="button"
+          key={symbol}
+          className={`mi-instrument-card ${selectedSymbol === symbol ? 'selected' : ''}`}
+          onClick={() => onSelect(symbol)}
+        >
+          <div className="mi-instrument-card-top">
+            <span>{symbol}</span>
+            <span className={data.change >= 0 ? 'mi-positive' : 'mi-negative'}>
+              {formatPercent(data.change)}
+            </span>
+          </div>
+          <div className="mi-instrument-card-bottom">
+            <strong>{formatPrice(data.price)}</strong>
+            <Sparkline values={data.history ?? []} positive={data.change >= 0} />
+          </div>
+        </button>
+      ))}
+    </div>
+  );
+};
+
+const PriceChart: React.FC<{
+  symbol: string;
+  data?: Instrument;
+  timeframe: string;
+}> = ({ symbol, data, timeframe }) => {
+  const history = data?.history ?? [];
+  const stats = useMemo(() => {
+    if (!history.length) return null;
+    const first = history[0];
+    const last = history[history.length - 1];
+    const min = Math.min(...history);
+    const max = Math.max(...history);
+    const delta = first ? ((last - first) / first) * 100 : 0;
+    return { first, last, min, max, delta };
+  }, [history]);
+
+  const line = useMemo(() => {
+    if (!history.length) return '';
+    const min = Math.min(...history);
+    const max = Math.max(...history);
+    const range = max - min || 1;
+    return history
+      .map((value, index) => {
+        const x = 12 + (index / Math.max(history.length - 1, 1)) * 96;
+        const y = 12 + 70 - ((value - min) / range) * 70;
+        return `${x.toFixed(2)},${y.toFixed(2)}`;
+      })
+      .join(' ');
+  }, [history]);
+
+  return (
+    <section className="mi-panel mi-chart-panel">
+      <div className="mi-panel-heading">
+        <div>
+          <span className="mi-panel-title">{symbol || 'Market'} · Price Observation</span>
+          <span className="mi-panel-subtitle">Observed series · {timeframe}</span>
+        </div>
+        <div className="mi-chart-tools">
+          <span className="mi-state mi-state-neutral">OBSERVED</span>
+          <button className="mi-mini-button" type="button" title="Chart controls">
+            <SlidersHorizontal size={12} />
+          </button>
+        </div>
+      </div>
+
+      <div className="mi-chart-toolbar">
+        <span>O/H/L/C</span>
+        <span>INDICATORS</span>
+        <span>COMPARE</span>
+        <span>DRAW</span>
+        <span>DEPTH</span>
+        <span>LINEAGE</span>
+      </div>
+
+      {stats ? (
+        <>
+          <div className="mi-chart-readout">
+            <strong>{formatPrice(stats.last)}</strong>
+            <span className={stats.delta >= 0 ? 'mi-positive' : 'mi-negative'}>
+              {formatPercent(stats.delta)}
+            </span>
+            <span>H {formatPrice(stats.max)}</span>
+            <span>L {formatPrice(stats.min)}</span>
+            <span>N {history.length}</span>
+          </div>
+          <div className="mi-chart">
+            <svg viewBox="0 0 120 94" preserveAspectRatio="none" role="img" aria-label={`${symbol} observed price series`}>
+              {[15, 35, 55, 75].map((y) => (
+                <line key={y} x1="12" x2="108" y1={y} y2={y} className="mi-grid-line" />
+              ))}
+              {[12, 36, 60, 84, 108].map((x) => (
+                <line key={x} x1={x} x2={x} y1="12" y2="82" className="mi-grid-line" />
+              ))}
+              <polyline points={line} className="mi-chart-line" fill="none" vectorEffect="non-scaling-stroke" />
+            </svg>
+          </div>
+          <div className="mi-chart-footer">
+            <span>OBSERVATION COUNT {history.length}</span>
+            <span>FIRST {formatPrice(stats.first)}</span>
+            <span>LAST {formatPrice(stats.last)}</span>
+            <span>SOURCE: EXISTING MARKET-DATA SERVICE</span>
+          </div>
+        </>
+      ) : (
+        <div className="mi-empty">No history is available for the selected instrument.</div>
+      )}
+    </section>
+  );
+};
+
+const MarketDataTable: React.FC<{
+  instruments: Record<string, Instrument>;
+  query: string;
+  selectedSymbol: string;
+  onSelect: (symbol: string) => void;
+}> = ({ instruments, query, selectedSymbol, onSelect }) => {
+  const rows = useMemo(
+    () =>
+      Object.entries(instruments)
+        .filter(([symbol]) => symbol.toLowerCase().includes(query.toLowerCase()))
+        .sort((a, b) => Math.abs(b[1].change) - Math.abs(a[1].change)),
+    [instruments, query],
+  );
+
+  return (
+    <section className="mi-panel mi-table-panel">
+      <div className="mi-panel-heading">
+        <div>
+          <span className="mi-panel-title">Market Data Matrix</span>
+          <span className="mi-panel-subtitle">Current observations available to Orbit</span>
+        </div>
+        <span className="mi-count">{rows.length} instruments</span>
+      </div>
+      <div className="mi-table-wrap">
+        <table className="mi-table">
+          <thead>
+            <tr>
+              <th>INSTRUMENT</th>
+              <th>LAST</th>
+              <th>CHANGE</th>
+              <th>OBSERVATIONS</th>
+              <th>SERIES LOW</th>
+              <th>SERIES HIGH</th>
+              <th>STATE</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map(([symbol, data]) => {
+              const history = data.history ?? [];
+              return (
+                <tr
+                  key={symbol}
+                  className={selectedSymbol === symbol ? 'selected' : ''}
+                  onClick={() => onSelect(symbol)}
+                >
+                  <td><strong>{symbol}</strong></td>
+                  <td>{formatPrice(data.price)}</td>
+                  <td className={data.change >= 0 ? 'mi-positive' : 'mi-negative'}>
+                    {formatPercent(data.change)}
+                  </td>
+                  <td>{history.length || 0}</td>
+                  <td>{history.length ? formatPrice(Math.min(...history)) : '--'}</td>
+                  <td>{history.length ? formatPrice(Math.max(...history)) : '--'}</td>
+                  <td><span className="mi-state mi-state-live">AVAILABLE</span></td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+        {!rows.length && <div className="mi-empty">No instruments match the current search.</div>}
+      </div>
+    </section>
+  );
+};
+
+const MarketHealth: React.FC<{
+  instruments: Record<string, Instrument>;
+  loading: boolean;
+  error: string | null;
+}> = ({ instruments, loading, error }) => {
+  const count = Object.keys(instruments).length;
+  const availability = error ? 'ERROR' : count ? 'AVAILABLE' : loading ? 'LOADING' : 'NO DATA';
+
+  return (
+    <section className="mi-panel">
+      <div className="mi-panel-heading">
+        <div>
+          <span className="mi-panel-title">Market Health Boundary</span>
+          <span className="mi-panel-subtitle">Only observable frontend state is shown here</span>
+        </div>
+        <span className={`mi-state ${stateClass(count > 0, !!error)}`}>{availability}</span>
+      </div>
+
+      <div className="mi-health-grid">
+        <div className="mi-health-cell">
+          <span>INSTRUMENTS</span>
+          <strong>{count}</strong>
+        </div>
+        <div className="mi-health-cell">
+          <span>REQUEST STATE</span>
+          <strong>{loading ? 'LOADING' : 'READY'}</strong>
+        </div>
+        <div className="mi-health-cell">
+          <span>ERROR STATE</span>
+          <strong className={error ? 'mi-negative' : 'mi-positive'}>{error ? 'ERROR' : 'NONE'}</strong>
+        </div>
+        <div className="mi-health-cell">
+          <span>TRUST INFERENCE</span>
+          <strong>BLOCKED</strong>
+        </div>
+      </div>
+
+      <div className="mi-boundary-note">
+        <Database size={14} />
+        <span>
+          Feed latency, freshness, sequence integrity, snapshot trust, context and regime are not inferred by the browser.
+          They require the corresponding backend-authoritative state.
+        </span>
+      </div>
+    </section>
+  );
+};
+
+const CapabilityMatrix: React.FC = () => (
+  <section className="mi-panel">
+    <div className="mi-panel-heading">
+      <div>
+        <span className="mi-panel-title">Intelligence Capability Matrix</span>
+        <span className="mi-panel-subtitle">UI surface is complete; authority follows backend exposure</span>
+      </div>
+      <span className="mi-state mi-state-neutral">GOVERNED</span>
+    </div>
+    <div className="mi-capability-grid">
+      {ANALYTICS_SECTIONS.map((section) => (
+        <div className="mi-capability-cell" key={section}>
+          <div>
+            <strong>{SECTION_META[section].short}</strong>
+            <span>{SECTION_META[section].subtitle}</span>
+          </div>
+          <span className="mi-state mi-state-neutral">BACKEND</span>
+        </div>
+      ))}
+      {[
+        ['Screening', 'Instrument discovery and monitoring'],
+        ['Cross-Market', 'Macro and cross-asset context'],
+        ['Historical / Replay', 'Deterministic historical reconstruction controls'],
+        ['Data Quality', 'Freshness, completeness and sequence integrity'],
+        ['Lineage', 'Event/source/persistence provenance'],
+        ['Configuration', 'Presentation and analytical preferences'],
+      ].map(([title, description]) => (
+        <div className="mi-capability-cell" key={title}>
+          <div>
+            <strong>{title}</strong>
+            <span>{description}</span>
+          </div>
+          <span className="mi-state mi-state-neutral">BACKEND</span>
+        </div>
+      ))}
+    </div>
+  </section>
+);
+
+const OperatorControls: React.FC<{ onRefresh: () => void; onExport: () => void }> = ({
+  onRefresh,
+  onExport,
+}) => (
+  <section className="mi-panel">
+    <div className="mi-panel-heading">
+      <div>
+        <span className="mi-panel-title">Operator Controls</span>
+        <span className="mi-panel-subtitle">Read-only / analytical actions only</span>
+      </div>
+      <span className="mi-state mi-state-neutral">NO EXECUTION</span>
+    </div>
+    <div className="mi-command-grid">
+      <button type="button" onClick={onRefresh}><RefreshCw size={14} /> Refresh observations</button>
+      <button type="button" onClick={() => window.print()}><Download size={14} /> Print workspace</button>
+      <button type="button" onClick={onExport}><Download size={14} /> Export visible data</button>
+      <button type="button" disabled><History size={14} /> Historical / Replay</button>
+      <button type="button" disabled><GitBranch size={14} /> Trace lineage</button>
+      <button type="button" disabled><BarChart3 size={14} /> Run backend analytics</button>
+    </div>
+  </section>
+);
+
+const MarketIntelligence: React.FC<MarketIntelligenceProps> = ({ section = 'overview' }) => {
+  const instruments = useMarketStore((state) => state.instruments) as Record<string, Instrument>;
+  const loading = useMarketStore((state) => state.loading);
+  const error = useMarketStore((state) => state.error);
+  const fetchData = useMarketStore((state) => state.fetchData);
+
+  const symbols = Object.keys(instruments);
+  const [selectedSymbol, setSelectedSymbol] = useState('');
+  const [timeframe, setTimeframe] = useState('15m');
+  const [search, setSearch] = useState('');
+  const [autoRefresh, setAutoRefresh] = useState(false);
+  const [compact, setCompact] = useState(true);
+  const [showPanels, setShowPanels] = useState(true);
+
+  useEffect(() => {
+    if (!selectedSymbol && symbols.length) setSelectedSymbol(symbols[0]);
+    if (selectedSymbol && !symbols.includes(selectedSymbol) && symbols.length) {
+      setSelectedSymbol(symbols[0]);
+    }
+  }, [symbols, selectedSymbol]);
+
+  const selectedData = instruments[selectedSymbol];
+
+  const handleExport = () => {
+    const payload = JSON.stringify(
+      {
+        exported_at: new Date().toISOString(),
+        source: 'COREI Orbit market-data store',
+        instruments,
+      },
+      null,
+      2,
+    );
+    const blob = new Blob([payload], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = 'corei-market-intelligence-observations.json';
+    anchor.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleFullscreen = () => {
+    const element = document.querySelector('.market-intelligence-root');
+    if (element && !document.fullscreenElement) {
+      void (element as HTMLElement).requestFullscreen?.();
+    } else if (document.fullscreenElement) {
+      void document.exitFullscreen?.();
+    }
+  };
+
+  const metadata = SECTION_META[section];
+
+  return (
+    <div className={`market-intelligence-root ${compact ? 'mi-compact' : ''}`}>
+      <SectionHeader
+        title={metadata.title}
+        subtitle={metadata.subtitle}
+        onRefresh={() => void fetchData()}
+        loading={loading}
+        onFullscreen={handleFullscreen}
+      />
+
+      <ControlBar
+        symbols={symbols}
+        selectedSymbol={selectedSymbol}
+        setSelectedSymbol={setSelectedSymbol}
+        timeframe={timeframe}
+        setTimeframe={setTimeframe}
+        search={search}
+        setSearch={setSearch}
+        autoRefresh={autoRefresh}
+        setAutoRefresh={setAutoRefresh}
+        compact={compact}
+        setCompact={setCompact}
+        onRefresh={() => void fetchData()}
+        loading={loading}
+        onTogglePanels={() => setShowPanels(!showPanels)}
+      />
+
+      <div className="mi-command-strip">
+        <span><ShieldCheck size={11} /> MARKET DATA AUTHORITY</span>
+        <span>Source: existing market-data service</span>
+        <span>Timeframe: {timeframe}</span>
+        <span>Selected: {selectedSymbol || '--'}</span>
+        <span className={error ? 'mi-negative' : 'mi-positive'}>
+          {error ? 'ERROR' : loading ? 'UPDATING' : 'READY'}
+        </span>
+      </div>
+
+      {section === 'overview' && (
+        <>
+          <InstrumentStrip
+            instruments={instruments}
+            selectedSymbol={selectedSymbol}
+            onSelect={setSelectedSymbol}
+          />
+
+          {showPanels && (
+            <div className="mi-overview-grid">
+              <PriceChart symbol={selectedSymbol} data={selectedData} timeframe={timeframe} />
+              <MarketHealth instruments={instruments} loading={loading} error={error} />
+
+              <MarketDataTable
+                instruments={instruments}
+                query={search}
+                selectedSymbol={selectedSymbol}
+                onSelect={setSelectedSymbol}
+              />
+
+              <CapabilityMatrix />
+
+              <div className="mi-two-column">
+                <CapabilityUnavailable
+                  title="Technical / Structure"
+                  description="RSI, MACD, moving averages, support/resistance, liquidity and order-book analytics must be supplied by governed backend feature services."
+                />
+                <CapabilityUnavailable
+                  title="Trend / Volatility / Momentum"
+                  description="Directional scores, volatility measurements, momentum state and multi-timeframe analytics are not fabricated in the browser."
+                />
+              </div>
+
+              <div className="mi-two-column">
+                <CapabilityUnavailable
+                  title="Market Regime / Context"
+                  description="Regime, context, confidence and transition state require the backend Market Intelligence state chain."
+                />
+                <CapabilityUnavailable
+                  title="Historical / Replay / Lineage"
+                  description="Replay and lineage controls remain disabled until the authoritative backend exposure is available."
+                />
+              </div>
+
+              <OperatorControls onRefresh={() => void fetchData()} onExport={handleExport} />
+            </div>
+          )}
+        </>
+      )}
+
+      {section === 'market-data' && (
+        <div className="mi-section-stack">
+          <InstrumentStrip instruments={instruments} selectedSymbol={selectedSymbol} onSelect={setSelectedSymbol} />
+          <MarketDataTable instruments={instruments} query={search} selectedSymbol={selectedSymbol} onSelect={setSelectedSymbol} />
+          <PriceChart symbol={selectedSymbol} data={selectedData} timeframe={timeframe} />
+        </div>
+      )}
+
+      {section === 'market-health' && (
+        <div className="mi-section-stack">
+          <MarketHealth instruments={instruments} loading={loading} error={error} />
+          <CapabilityUnavailable
+            title="Feed Health / Freshness / Sequence Integrity"
+            description="The UI will render feed health, latency, freshness, event rate and sequence integrity once those backend-authoritative fields are exposed."
+          />
+        </div>
+      )}
+
+      {ANALYTICS_SECTIONS.includes(section) && (
+        <div className="mi-section-stack">
+          <CapabilityUnavailable
+            title={metadata.title}
+            description={metadata.subtitle}
+          />
+          <div className="mi-feature-register">
+            {section === 'technical' && ['RSI', 'MACD', 'EMA / SMA', 'VWAP', 'ATR', 'ADX', 'Bollinger Bands'].map((item) => (
+              <span key={item}>{item}</span>
+            ))}
+            {section === 'structure' && ['Support / Resistance', 'Key Levels', 'Depth', 'Imbalance', 'Liquidity Zones', 'Sweeps', 'MTF Alignment'].map((item) => (
+              <span key={item}>{item}</span>
+            ))}
+            {section === 'trend' && ['Direction', 'Strength', 'ADX', 'EMA Alignment', 'MTF Agreement', 'Trend Change'].map((item) => (
+              <span key={item}>{item}</span>
+            ))}
+            {section === 'volatility' && ['ATR', 'Realized Volatility', 'Percentile', 'Expansion', 'Contraction', 'Spread Behaviour'].map((item) => (
+              <span key={item}>{item}</span>
+            ))}
+            {section === 'momentum' && ['RSI', 'Momentum Score', 'Direction', 'Change', 'Overbought / Oversold', 'MTF Momentum'].map((item) => (
+              <span key={item}>{item}</span>
+            ))}
+            {section === 'regime' && ['Current Regime', 'Confidence', 'Since', 'Transition', 'History', 'Context'].map((item) => (
+              <span key={item}>{item}</span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <nav className="mi-section-nav" aria-label="Market Intelligence sections">
+        {SECTION_ORDER.map((item) => (
+          <span key={item} className={item === section ? 'active' : ''}>
+            {SECTION_META[item].short}
+          </span>
+        ))}
+      </nav>
+    </div>
+  );
+};
+
+export default MarketIntelligence;

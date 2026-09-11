@@ -1,0 +1,24 @@
+NAME: penpot
+LAST DEPLOYED: Sun May 31 23:26:19 2026
+NAMESPACE: tools
+STATUS: deployed
+REVISION: 2
+TEST SUITE: None
+NOTES:
+>--
+  APP NAME: penpot
+  APP VERSION: 2.15.3
+  CHART VERSION: 1.1.0
+  RELEASE NAME: penpot
+
+  To learn more about the release, try:
+
+    $ helm status penpot
+    $ helm get all penpot
+
+  ⚠️  MCP WARNING:
+     Starting with Penpot 2.15, Penpot MCP integration does not currently
+     support high-availability deployments.
+
+     If you are using MCP, keep frontend, backend and exporter as single replicas
+     and do not enable HPA for those workloads.

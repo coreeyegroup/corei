@@ -1,0 +1,16 @@
+.corei-window-switcher {
+  display: inline-block;
+}
+.corei-window-select {
+  height: 28px;
+  padding: 0 8px;
+  border: 1px solid var(--workspace-border);
+  border-radius: 4px;
+  background: var(--workspace-surface);
+  color: var(--workspace-text-primary);
+  font-size: 12px;
+  cursor: pointer;
+}
+.corei-window-select:hover {
+  border-color: #4a5460;
+}

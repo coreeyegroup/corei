@@ -1,0 +1,151 @@
+/home/coreeye/corei
+├── artifacts
+│   └── install
+├── backups
+├── brokers
+├── chaos
+├── cicd
+│   ├── github-actions
+│   ├── pipelines
+│   ├── README.md
+│   ├── release
+│   └── validation
+├── compliance
+├── contracts
+│   └── events
+├── datasets
+├── deployments
+├── docs
+│   ├── adr
+│   ├── architecture
+│   ├── governance
+│   ├── host
+│   ├── infrastructure
+│   ├── lineage
+│   ├── machine-spec.md
+│   ├── observability
+│   ├── operations
+│   ├── recovery
+│   ├── replay
+│   ├── runbooks
+│   ├── runtime
+│   ├── schemas
+│   ├── security
+│   ├── services
+│   ├── stage-01
+│   ├── stage-02
+│   ├── stages
+│   └── standards
+├── environments
+│   ├── development
+│   ├── disaster-recovery
+│   ├── production
+│   └── staging
+├── feature-store
+├── generated
+├── governance
+│   ├── compliance
+│   ├── deployment
+│   ├── events
+│   ├── naming
+│   ├── orchestration
+│   ├── replay
+│   ├── runtime
+│   ├── security
+│   ├── services
+│   └── versioning
+├── infrastructure
+│   ├── bootstrap
+│   ├── components
+│   ├── config
+│   ├── governance
+│   ├── host
+│   ├── locks
+│   ├── logs
+│   ├── orchestrator
+│   ├── phases
+│   ├── recovery
+│   ├── scripts
+│   ├── stages
+│   ├── state
+│   └── validation
+├── init-git.sh
+├── libraries
+├── lineage
+├── logs
+├── Makefile
+├── observability
+├── operations
+├── orchestration
+├── platform
+│   ├── config-control
+│   ├── contracts
+│   ├── determinism
+│   ├── governance
+│   ├── mode-governance
+│   ├── policy-runtime
+│   ├── README.md
+│   ├── runtime
+│   ├── sdk
+│   ├── security
+│   ├── shared
+│   ├── system-registry
+│   └── system-state
+├── platform-manifest.yaml
+├── policies
+│   ├── deployment
+│   ├── orchestration
+│   ├── replay
+│   ├── retry
+│   ├── risk
+│   ├── routing
+│   ├── runtime
+│   └── security
+├── README.md
+├── replay
+├── repos
+│   ├── corei-core
+│   ├── corei-infrastructure
+│   ├── corei-schemas
+│   ├── corei-sdk
+│   └── corei-services
+├── research
+├── runbooks
+├── runtime
+├── schemas
+│   ├── avro
+│   ├── compatibility
+│   ├── README.md
+│   └── registry
+├── scratch
+├── scripts
+│   ├── deployment
+│   ├── foundation
+│   ├── governance
+│   ├── host
+│   ├── migration
+│   ├── recovery
+│   ├── tooling
+│   └── validation
+├── security
+├── services
+│   ├── market-data-service
+│   ├── platform
+│   ├── README.md
+│   └── _template
+├── simulation
+├── state
+├── strategies
+├── tests
+│   ├── chaos
+│   ├── contracts
+│   ├── fixtures
+│   ├── integration
+│   ├── performance
+│   └── replay
+├── tools
+├── ui
+├── VERSION
+└── workflows
+
+138 directories, 10 files

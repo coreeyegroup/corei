@@ -1,0 +1,36 @@
+# RCA DETERMINATION
+
+CURRENT STATUS
+
+OPEN
+
+---
+
+ROOT CAUSE IDENTIFIED
+
+YES
+
+---
+
+ROOT CAUSE REPRODUCED
+
+PARTIAL
+
+---
+
+ROOT CAUSE ELIMINATED
+
+NOT YET PROVEN
+
+---
+
+RCA CLOSURE
+
+DENIED
+
+---
+
+REASON
+
+Controlled deployment test
+has not yet been executed.

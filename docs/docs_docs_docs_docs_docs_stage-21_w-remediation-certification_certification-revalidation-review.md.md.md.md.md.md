@@ -1,0 +1,39 @@
+# CERTIFICATION REVALIDATION REVIEW
+
+STATUS
+
+ACTIVE
+
+SCOPE
+
+W-05
+
+SCRAM GENERATOR IMPLEMENTATION
+
+W-07
+
+SCRAM VALIDATOR IMPLEMENTATION
+
+W-08
+
+PACKAGE REBUILD
+
+ARTIFACT REVIEW
+
+manifest_generator.py
+
+generated_manifest_validator.py
+
+deployment_packager.py
+
+secured-statefulset.yaml
+
+generated-manifest-validation.yaml
+
+CERTIFICATION RESULT
+
+UNDER REVIEW
+
+DEPLOYMENT AUTHORIZED
+
+NO

@@ -1,0 +1,4185 @@
+.
+├── argocd
+│   ├── apps
+│   │   └── core-root-app.yaml
+│   └── projects
+│       └── core-system-project.yaml
+├── artifacts
+│   ├── configuration
+│   │   └── config-snapshot.json
+│   ├── events
+│   ├── execution_gate
+│   │   └── stage-11-execution-readiness.json
+│   ├── install
+│   ├── .keep
+│   ├── operations
+│   ├── platform
+│   │   ├── deployments
+│   │   ├── runtime-governance
+│   │   └── sdk
+│   ├── portfolio
+│   ├── replay
+│   ├── resilience
+│   ├── stage-14
+│   │   ├── audit
+│   │   ├── hashes
+│   │   ├── lineage
+│   │   ├── recovery
+│   │   ├── replay
+│   │   └── validation
+│   └── testing
+│       ├── chaos
+│       │   └── chaos.xml
+│       ├── contracts
+│       │   └── contracts.xml
+│       ├── determinism
+│       ├── junit
+│       │   ├── chaos-validation.xml
+│       │   ├── contracts.xml
+│       │   ├── integration.xml
+│       │   ├── load.xml
+│       │   ├── performance.xml
+│       │   ├── replay-validation.xml
+│       │   ├── schemas.xml
+│       │   └── simulation.xml
+│       ├── latency
+│       ├── load
+│       │   ├── load-test-report.json
+│       │   └── load.xml
+│       ├── orchestration
+│       │   └── orchestration-summary.json
+│       ├── performance
+│       │   └── performance.xml
+│       ├── replay
+│       │   └── replay-validation.xml
+│       ├── schemas
+│       │   └── schemas.xml
+│       ├── simulation
+│       │   └── simulation.xml
+│       └── synthetic-market
+├── audit
+│   └── stage-14
+│       ├── decisions
+│       ├── lineage
+│       └── signals
+├── brokers
+│   └── .keep
+├── -c
+├── chaos
+│   ├── artifacts
+│   │   ├── chaos-summary.json
+│   │   ├── mock-database-interruption.json
+│   │   ├── mock-kafka-broker-failure.json
+│   │   └── mock-network-partition.json
+│   ├── database
+│   ├── engine
+│   │   └── chaos-engine.py
+│   ├── kafka
+│   ├── .keep
+│   ├── network
+│   ├── pods
+│   ├── recovery
+│   └── scenarios
+│       └── scenario-manifest.json
+├── cicd
+│   ├── github-actions
+│   │   ├── build.yaml
+│   │   ├── deploy.yaml
+│   │   └── rollback.yaml
+│   ├── .keep
+│   ├── pipelines
+│   ├── README.md
+│   ├── release
+│   └── validation
+│       ├── deployment_risk_score.py
+│       ├── latency_regression_check.py
+│       ├── lineage_integrity_check.py
+│       ├── replay_equivalence_check.py
+│       └── schema_compatibility_check.py
+├── compliance
+│   └── .keep
+├── config
+│   └── platform
+│       └── platform-config.yaml
+├── contracts
+│   ├── events
+│   │   └── event-envelope.yaml
+│   └── .keep
+├── corei-tree.txt
+├── core_platform
+│   ├── config-control
+│   │   └── __init__.py
+│   ├── config_governance
+│   │   ├── audit
+│   │   │   ├── config_audit_log.py
+│   │   │   └── __init__.py
+│   │   ├── __init__.py
+│   │   ├── lineage
+│   │   │   ├── config_lineage.py
+│   │   │   └── __init__.py
+│   │   ├── restoration
+│   │   │   ├── config_restoration.py
+│   │   │   └── __init__.py
+│   │   ├── runtime
+│   │   │   ├── __init__.py
+│   │   │   └── test_config_governance.py
+│   │   ├── schemas
+│   │   │   ├── __init__.py
+│   │   │   └── platform-config-schema.json
+│   │   ├── snapshots
+│   │   │   ├── __init__.py
+│   │   │   └── snapshot_engine.py
+│   │   ├── validate-config-governance.sh
+│   │   └── validation
+│   │       ├── config_validator.py
+│   │       └── __init__.py
+│   ├── contracts
+│   │   ├── health
+│   │   │   ├── health-contract.md
+│   │   │   └── __init__.py
+│   │   ├── __init__.py
+│   │   └── metadata
+│   │       ├── __init__.py
+│   │       └── service-metadata-contract.md
+│   ├── deployment-governance
+│   │   ├── health
+│   │   │   └── health-gate.py
+│   │   ├── helm
+│   │   │   ├── templates
+│   │   │   │   ├── deployment.yaml
+│   │   │   │   └── service.yaml
+│   │   │   └── values.yaml
+│   │   ├── policies
+│   │   ├── rollbacks
+│   │   │   └── rollback-policy.md
+│   │   ├── sequencing
+│   │   │   └── platform-deployment-order.json
+│   │   └── validate-deployment-governance.sh
+│   ├── determinism
+│   │   └── __init__.py
+│   ├── deterministic_replay
+│   │   ├── consistency
+│   │   │   ├── __init__.py
+│   │   │   └── state_consistency_validator.py
+│   │   ├── engine
+│   │   │   ├── __init__.py
+│   │   │   └── replay_engine.py
+│   │   ├── __init__.py
+│   │   ├── lineage
+│   │   │   ├── __init__.py
+│   │   │   └── replay_lineage.py
+│   │   ├── runtime
+│   │   │   ├── __init__.py
+│   │   │   └── test_deterministic_replay.py
+│   │   ├── validate-deterministic-replay.sh
+│   │   └── validation
+│   │       ├── __init__.py
+│   │       └── replay_validator.py
+│   ├── event_bus
+│   │   ├── contracts
+│   │   │   └── __init__.py
+│   │   ├── gateway.py
+│   │   ├── __init__.py
+│   │   ├── ordering_coordinator.py
+│   │   ├── runtime
+│   │   │   └── __init__.py
+│   │   └── tests
+│   │       └── __init__.py
+│   ├── event_governance
+│   │   ├── audit
+│   │   │   ├── event_audit_log.py
+│   │   │   └── __init__.py
+│   │   ├── dead_letter
+│   │   │   ├── dead_letter_router.py
+│   │   │   └── __init__.py
+│   │   ├── __init__.py
+│   │   ├── lineage
+│   │   │   ├── event_lineage.py
+│   │   │   └── __init__.py
+│   │   ├── replay
+│   │   │   ├── event_replay.py
+│   │   │   └── __init__.py
+│   │   ├── runtime
+│   │   │   ├── event_ingestion_gateway.py
+│   │   │   ├── __init__.py
+│   │   │   └── test_event_governance.py
+│   │   ├── schemas
+│   │   │   ├── __init__.py
+│   │   │   └── platform-event-schema.json
+│   │   ├── validate-event-governance.sh
+│   │   └── validation
+│   │       ├── event_validator.py
+│   │       └── __init__.py
+│   ├── execution_gate
+│   │   ├── certification
+│   │   │   ├── execution_certifier.py
+│   │   │   └── __init__.py
+│   │   ├── governance
+│   │   │   └── __init__.py
+│   │   ├── __init__.py
+│   │   ├── reconciliation
+│   │   │   ├── __init__.py
+│   │   │   └── platform_reconciliation.py
+│   │   ├── runtime
+│   │   │   ├── __init__.py
+│   │   │   └── test_execution_gate.py
+│   │   ├── validate-execution-gate.sh
+│   │   └── validation
+│   │       ├── governance_validator.py
+│   │       └── __init__.py
+│   ├── flow_control
+│   │   ├── __init__.py
+│   │   ├── lag_monitor.py
+│   │   ├── monitoring
+│   │   │   └── __init__.py
+│   │   ├── rate_limiter.py
+│   │   ├── runtime
+│   │   │   └── __init__.py
+│   │   └── tests
+│   │       └── __init__.py
+│   ├── governance
+│   │   └── __init__.py
+│   ├── __init__.py
+│   ├── lineage
+│   │   ├── hasher.py
+│   │   ├── __init__.py
+│   │   ├── runtime
+│   │   │   └── __init__.py
+│   │   ├── tests
+│   │   │   └── __init__.py
+│   │   ├── trace_propagation.py
+│   │   └── tracking
+│   │       └── __init__.py
+│   ├── mode-governance
+│   │   └── __init__.py
+│   ├── operations
+│   │   ├── alerts
+│   │   │   ├── alert_router.py
+│   │   │   └── __init__.py
+│   │   ├── escalation
+│   │   │   ├── escalation_orchestrator.py
+│   │   │   └── __init__.py
+│   │   ├── incidents
+│   │   │   ├── incident_manager.py
+│   │   │   └── __init__.py
+│   │   ├── __init__.py
+│   │   ├── lineage
+│   │   │   ├── __init__.py
+│   │   │   └── operations_lineage.py
+│   │   ├── runtime
+│   │   │   ├── __init__.py
+│   │   │   └── test_operations_foundation.py
+│   │   ├── severity
+│   │   │   ├── __init__.py
+│   │   │   └── severity_classifier.py
+│   │   ├── validate-operations-foundation.sh
+│   │   └── validation
+│   │       ├── __init__.py
+│   │       └── operations_validator.py
+│   ├── policy-runtime
+│   │   └── __init__.py
+│   ├── portfolio
+│   │   ├── engine
+│   │   │   ├── __init__.py
+│   │   │   └── portfolio_state_engine.py
+│   │   ├── __init__.py
+│   │   ├── lineage
+│   │   │   ├── __init__.py
+│   │   │   └── portfolio_lineage.py
+│   │   ├── replay
+│   │   │   ├── __init__.py
+│   │   │   └── portfolio_replay.py
+│   │   ├── runtime
+│   │   │   ├── __init__.py
+│   │   │   └── test_portfolio_foundation.py
+│   │   ├── snapshots
+│   │   │   ├── __init__.py
+│   │   │   └── snapshot_engine.py
+│   │   ├── state
+│   │   │   └── __init__.py
+│   │   ├── validate-portfolio-foundation.sh
+│   │   └── validation
+│   │       ├── __init__.py
+│   │       └── portfolio_validator.py
+│   ├── README.md
+│   ├── replay
+│   │   ├── consistency
+│   │   │   └── __init__.py
+│   │   ├── __init__.py
+│   │   ├── replay_controller.py
+│   │   ├── runtime
+│   │   │   └── __init__.py
+│   │   ├── snapshot_consistency_guard.py
+│   │   └── tests
+│   │       └── __init__.py
+│   ├── resilience
+│   │   ├── circuit_breaker.py
+│   │   ├── circuit_breaker_runtime
+│   │   │   └── __init__.py
+│   │   ├── fallback_manager.py
+│   │   ├── __init__.py
+│   │   ├── runtime
+│   │   │   └── __init__.py
+│   │   └── tests
+│   │       └── __init__.py
+│   ├── resilience_runtime
+│   │   ├── circuit_breakers
+│   │   │   ├── circuit_breaker_engine.py
+│   │   │   └── __init__.py
+│   │   ├── fallback
+│   │   │   ├── fallback_manager.py
+│   │   │   └── __init__.py
+│   │   ├── __init__.py
+│   │   ├── lineage
+│   │   │   ├── __init__.py
+│   │   │   └── resilience_lineage.py
+│   │   ├── recovery
+│   │   │   ├── __init__.py
+│   │   │   └── recovery_engine.py
+│   │   ├── retry
+│   │   │   ├── __init__.py
+│   │   │   └── retry_orchestrator.py
+│   │   ├── runtime
+│   │   │   ├── __init__.py
+│   │   │   └── test_resilience_foundation.py
+│   │   ├── validate-resilience-foundation.sh
+│   │   └── validation
+│   │       ├── __init__.py
+│   │       └── resilience_validator.py
+│   ├── runtime
+│   │   └── __init__.py
+│   ├── runtime_governance
+│   │   ├── health
+│   │   │   └── __init__.py
+│   │   ├── ingress
+│   │   │   └── __init__.py
+│   │   ├── __init__.py
+│   │   ├── namespace
+│   │   │   ├── __init__.py
+│   │   │   └── platform-namespace.yaml
+│   │   ├── network
+│   │   │   ├── __init__.py
+│   │   │   └── platform-network-policy.yaml
+│   │   ├── policies
+│   │   │   └── __init__.py
+│   │   ├── rbac
+│   │   │   ├── __init__.py
+│   │   │   ├── platform-role-binding.yaml
+│   │   │   ├── platform-role.yaml
+│   │   │   └── platform-service-account.yaml
+│   │   └── validate-runtime-governance.sh
+│   ├── sdk
+│   │   ├── artifacts
+│   │   │   └── __init__.py
+│   │   ├── __init__.py
+│   │   ├── pyproject.toml
+│   │   ├── .pytest_cache
+│   │   │   ├── CACHEDIR.TAG
+│   │   │   ├── .gitignore
+│   │   │   ├── __init__.py
+│   │   │   ├── README.md
+│   │   │   └── v
+│   │   │       ├── cache
+│   │   │       │   ├── __init__.py
+│   │   │       │   ├── lastfailed
+│   │   │       │   ├── nodeids
+│   │   │       │   └── stepwise
+│   │   │       └── __init__.py
+│   │   ├── README.md
+│   │   ├── registry
+│   │   │   ├── harbor-pypi.conf
+│   │   │   ├── __init__.py
+│   │   │   └── validate-registry.sh
+│   │   ├── requirements.txt
+│   │   ├── sdk
+│   │   │   ├── bootstrap
+│   │   │   │   ├── __init__.py
+│   │   │   │   └── validator.py
+│   │   │   ├── config
+│   │   │   │   ├── client.py
+│   │   │   │   └── __init__.py
+│   │   │   ├── context
+│   │   │   │   ├── execution_context.py
+│   │   │   │   ├── __init__.py
+│   │   │   │   └── trace_context.py
+│   │   │   ├── event
+│   │   │   │   ├── client.py
+│   │   │   │   ├── governance.py
+│   │   │   │   ├── __init__.py
+│   │   │   │   └── interceptor.py
+│   │   │   ├── flow_control
+│   │   │   │   ├── client.py
+│   │   │   │   └── __init__.py
+│   │   │   ├── __init__.py
+│   │   │   ├── lineage
+│   │   │   │   ├── client.py
+│   │   │   │   └── __init__.py
+│   │   │   ├── resilience
+│   │   │   │   ├── client.py
+│   │   │   │   └── __init__.py
+│   │   │   └── workflow
+│   │   │       ├── client.py
+│   │   │       └── __init__.py
+│   │   ├── setup.py
+│   │   ├── tests
+│   │   │   ├── __init__.py
+│   │   │   └── test_sdk.py
+│   │   ├── trading_platform_sdk.egg-info
+│   │   │   ├── dependency_links.txt
+│   │   │   ├── __init__.py
+│   │   │   ├── PKG-INFO
+│   │   │   ├── requires.txt
+│   │   │   ├── SOURCES.txt
+│   │   │   └── top_level.txt
+│   │   ├── validate-version.py
+│   │   └── VERSION
+│   ├── security
+│   │   └── __init__.py
+│   ├── services
+│   │   ├── conflict_resolver.py
+│   │   ├── decision-engine-service
+│   │   │   ├── app
+│   │   │   │   ├── health.py
+│   │   │   │   └── main.py
+│   │   │   ├── artifacts
+│   │   │   ├── config
+│   │   │   │   └── service.env
+│   │   │   ├── DECISION-GOVERNANCE.md
+│   │   │   ├── logs
+│   │   │   ├── README.md
+│   │   │   ├── replay
+│   │   │   ├── schemas
+│   │   │   └── tests
+│   │   │       └── test_placeholder.py
+│   │   ├── event_emitter.py
+│   │   ├── feature_store_service
+│   │   │   ├── app
+│   │   │   │   └── main.py
+│   │   │   ├── Dockerfile
+│   │   │   └── requirements.txt
+│   │   ├── float_auditor.py
+│   │   ├── historical_data_service
+│   │   │   ├── app
+│   │   │   │   ├── config.py
+│   │   │   │   ├── database.py
+│   │   │   │   └── main.py
+│   │   │   ├── Dockerfile
+│   │   │   └── requirements.txt
+│   │   ├── instrument-monitoring-service
+│   │   │   ├── app
+│   │   │   │   ├── health.py
+│   │   │   │   └── main.py
+│   │   │   ├── artifacts
+│   │   │   ├── config
+│   │   │   │   └── service.env
+│   │   │   ├── logs
+│   │   │   ├── MONITORING-GOVERNANCE.md
+│   │   │   ├── README.md
+│   │   │   ├── replay
+│   │   │   ├── schemas
+│   │   │   └── tests
+│   │   │       └── test_placeholder.py
+│   │   ├── instrument-screening-service
+│   │   │   ├── app
+│   │   │   │   ├── health.py
+│   │   │   │   └── main.py
+│   │   │   ├── artifacts
+│   │   │   ├── config
+│   │   │   │   └── service.env
+│   │   │   ├── logs
+│   │   │   ├── README.md
+│   │   │   ├── replay
+│   │   │   ├── schemas
+│   │   │   ├── SCREENING-GOVERNANCE.md
+│   │   │   └── tests
+│   │   │       └── test_placeholder.py
+│   │   ├── market_data_ingestion
+│   │   │   ├── app
+│   │   │   │   ├── config
+│   │   │   │   │   ├── __init__.py
+│   │   │   │   │   └── settings.py
+│   │   │   │   ├── connectors
+│   │   │   │   │   ├── base_connector.py
+│   │   │   │   │   ├── __init__.py
+│   │   │   │   │   └── mock_connector.py
+│   │   │   │   ├── ingestion_service.py
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── main.py
+│   │   │   │   ├── models
+│   │   │   │   │   ├── __init__.py
+│   │   │   │   │   └── market_tick.py
+│   │   │   │   ├── publishers
+│   │   │   │   │   ├── __init__.py
+│   │   │   │   │   └── kafka_publisher.py
+│   │   │   │   └── validators
+│   │   │   │       ├── __init__.py
+│   │   │   │       └── tick_validator.py
+│   │   │   ├── Dockerfile
+│   │   │   ├── market-data-ingestion-stage12.tar
+│   │   │   ├── README.md
+│   │   │   └── requirements.txt
+│   │   ├── market_data_normalizer
+│   │   │   ├── app
+│   │   │   │   ├── config.py
+│   │   │   │   ├── main.py
+│   │   │   │   ├── normalizer.py
+│   │   │   │   └── symbols.py
+│   │   │   ├── Dockerfile
+│   │   │   └── requirements.txt
+│   │   ├── market_data_persistence
+│   │   │   ├── app
+│   │   │   │   └── main.py
+│   │   │   ├── Dockerfile
+│   │   │   └── requirements.txt
+│   │   ├── mlflow
+│   │   │   ├── Dockerfile
+│   │   │   └── requirements.txt
+│   │   ├── signal-processor-service
+│   │   │   ├── app
+│   │   │   │   ├── health.py
+│   │   │   │   └── main.py
+│   │   │   ├── artifacts
+│   │   │   ├── config
+│   │   │   │   └── service.env
+│   │   │   ├── logs
+│   │   │   ├── README.md
+│   │   │   ├── replay
+│   │   │   ├── schemas
+│   │   │   ├── SIGNAL-GOVERNANCE.md
+│   │   │   └── tests
+│   │   │       └── test_placeholder.py
+│   │   ├── strategy-engine-service
+│   │   │   ├── app
+│   │   │   │   ├── health.py
+│   │   │   │   └── main.py
+│   │   │   ├── artifacts
+│   │   │   ├── config
+│   │   │   │   └── service.env
+│   │   │   ├── logs
+│   │   │   ├── README.md
+│   │   │   ├── replay
+│   │   │   ├── schemas
+│   │   │   ├── STRATEGY-GOVERNANCE.md
+│   │   │   └── tests
+│   │   │       └── test_placeholder.py
+│   │   ├── synthetic-market-generator
+│   │   │   ├── Dockerfile
+│   │   │   ├── generator.py
+│   │   │   └── requirements.txt
+│   │   └── ttl_validator.py
+│   ├── service-template
+│   │   ├── config
+│   │   │   └── __init__.py
+│   │   ├── Dockerfile
+│   │   ├── helm
+│   │   │   ├── Chart.yaml
+│   │   │   ├── templates
+│   │   │   │   └── deployment.yaml
+│   │   │   └── values.yaml
+│   │   ├── __init__.py
+│   │   ├── .pytest_cache
+│   │   │   ├── CACHEDIR.TAG
+│   │   │   ├── .gitignore
+│   │   │   ├── __init__.py
+│   │   │   ├── README.md
+│   │   │   └── v
+│   │   │       ├── cache
+│   │   │       │   ├── __init__.py
+│   │   │       │   ├── lastfailed
+│   │   │       │   ├── nodeids
+│   │   │       │   └── stepwise
+│   │   │       └── __init__.py
+│   │   ├── requirements.txt
+│   │   ├── scripts
+│   │   │   ├── __init__.py
+│   │   │   └── validate-service-template.sh
+│   │   ├── src
+│   │   │   ├── app.py
+│   │   │   └── __init__.py
+│   │   └── tests
+│   │       ├── __init__.py
+│   │       └── test_health_contracts.py
+│   ├── shared
+│   │   └── __init__.py
+│   ├── system
+│   │   ├── deployment_order_enforcer.py
+│   │   ├── governance
+│   │   │   └── __init__.py
+│   │   ├── health
+│   │   │   ├── health_aggregator.py
+│   │   │   └── __init__.py
+│   │   ├── __init__.py
+│   │   ├── kill_switch
+│   │   │   ├── __init__.py
+│   │   │   └── kill_switch_controller.py
+│   │   └── tests
+│   │       ├── __init__.py
+│   │       └── test_platform_subsystems.py
+│   ├── system_registry
+│   │   ├── execution_registry.py
+│   │   ├── __init__.py
+│   │   ├── README.md
+│   │   ├── runtime
+│   │   │   └── __init__.py
+│   │   └── tests
+│   │       └── __init__.py
+│   ├── system-state
+│   │   └── __init__.py
+│   └── workflow_engine
+│       ├── __init__.py
+│       ├── runtime
+│       │   └── __init__.py
+│       ├── saga
+│       │   ├── __init__.py
+│       │   └── saga_orchestrator.py
+│       ├── state_machine
+│       │   ├── __init__.py
+│       │   └── workflow_state_machine.py
+│       └── tests
+│           └── __init__.py
+├── datasets
+│   └── .keep
+├── deployments
+│   └── .keep
+├── docs
+│   ├── adr
+│   │   ├── ADR-001-kafka-authority.md
+│   │   ├── ADR-001-kafka-source-of-truth.md
+│   │   ├── ADR-002-replay-first-governance.md
+│   │   ├── ADR-002-sha256-lineage.md
+│   │   ├── ADR-003-bounded-context-services.md
+│   │   ├── ADR-003-fixed-point-int64.md
+│   │   ├── ADR-004-event-time-governance.md
+│   │   ├── ADR-004-governance-before-scale.md
+│   │   ├── ADR-005-multi-repo-topology.md
+│   │   ├── ADR-005-paper-first-activation.md
+│   │   └── README.md
+│   ├── architecture
+│   │   ├── governance.md
+│   │   ├── MASTER_TREE_v2.md
+│   │   ├── README.md
+│   │   ├── stage-00-engineering-foundation.md
+│   │   └── standards.md
+│   ├── blueprints
+│   │   ├── stage-07-event-backbone-foundation.md
+│   │   └── stage-13-portfolio-foundation.md
+│   ├── continuity
+│   │   └── platform-continuity-restoration-block.md
+│   ├── governance
+│   │   ├── artifact-governance.md
+│   │   ├── authoritative-platform-execution-model.md
+│   │   ├── authoritative-stage-index.md
+│   │   ├── branching-strategy.md
+│   │   ├── build-state-governance.md
+│   │   ├── capital-partition-governance.md
+│   │   ├── change-management-policy.md
+│   │   ├── config-governance.md
+│   │   ├── configuration-governance.md
+│   │   ├── definition-of-done.md
+│   │   ├── engineering-workflow.md
+│   │   ├── environment-governance.md
+│   │   ├── environment-naming.md
+│   │   ├── environment-runtime-governance.md
+│   │   ├── event-governance.md
+│   │   ├── filesystem-governance.md
+│   │   ├── fixed-point-governance.md
+│   │   ├── installer-governance.md
+│   │   ├── institutional-stage-execution-lifecycle.md
+│   │   ├── lineage-governance.md
+│   │   ├── mode-governance.md
+│   │   ├── platform-manifest-governance.md
+│   │   ├── policy-governance.md
+│   │   ├── portfolio-audit-governance.md
+│   │   ├── portfolio-domain-architecture.md
+│   │   ├── portfolio-event-governance.md
+│   │   ├── portfolio-governance-laws.md
+│   │   ├── portfolio-persistence-governance.md
+│   │   ├── portfolio-replay-governance.md
+│   │   ├── pr-review-policy.md
+│   │   ├── README.md
+│   │   ├── release-governance.md
+│   │   ├── repository-boundaries.md
+│   │   ├── repository-ownership.md
+│   │   ├── repository-strategy.md
+│   │   ├── repository-topology.md
+│   │   ├── runtime-authority.md
+│   │   ├── schema-governance.md
+│   │   ├── schema-versioning.md
+│   │   ├── scripting-governance.md
+│   │   ├── security-authority.md
+│   │   ├── service-boundary-governance.md
+│   │   ├── service-ownership-governance.md
+│   │   ├── stage13-freeze-governance.md
+│   │   ├── stage-14a-freeze-certification.md
+│   │   ├── stage-14a-validation-authority.md
+│   │   ├── system-state-governance.md
+│   │   ├── timestamp-governance.md
+│   │   ├── topic-governance.md
+│   │   ├── trading-conflict-governance.md
+│   │   ├── trading-event-governance
+│   │   │   └── topic-governance.md
+│   │   ├── trading-event-transport-governance.md
+│   │   ├── trading-numeric-governance.md
+│   │   ├── trading-runtime-governance.md
+│   │   ├── trading-temporal-governance.md
+│   │   ├── validation-governance.md
+│   │   └── versioning-policy.md
+│   ├── host
+│   │   ├── cloud-init-governance.md
+│   │   ├── ssh-access-governance.md
+│   │   ├── stage-0a-classification.md
+│   │   ├── stage-0a-windows-host-preparation.md
+│   │   ├── vm-specification.md
+│   │   ├── vmware-networking.md
+│   │   └── windows-tooling.md
+│   ├── infrastructure
+│   │   └── README.md
+│   ├── lineage
+│   ├── machine-spec.md
+│   ├── observability
+│   ├── operations
+│   │   ├── observability
+│   │   │   └── stage-09-observability-operations.md
+│   │   ├── README.md
+│   │   └── recovery
+│   │       ├── CALICO_RECOVERY.md
+│   │       ├── CERTIFICATE_RECOVERY.md
+│   │       ├── CONTROL_PLANE_RECOVERY.md
+│   │       ├── ETCD_RECOVERY.md
+│   │       ├── LONGHORN_RECOVERY.md
+│   │       └── NETWORK_RECOVERY.md
+│   ├── recovery
+│   │   ├── cluster-recovery.md
+│   │   ├── disaster-recovery.md
+│   │   ├── full-platform-rebuild.md
+│   │   ├── node-replacement.md
+│   │   └── vm-to-vps-migration.md
+│   ├── replay
+│   ├── runbooks
+│   │   └── README.md
+│   ├── runtime
+│   ├── schemas
+│   │   └── README.md
+│   ├── security
+│   ├── services
+│   │   └── README.md
+│   ├── stage-01
+│   │   ├── firewall-baseline.md
+│   │   ├── kernel-tuning.md
+│   │   ├── machine-foundation.md
+│   │   ├── network-baseline.md
+│   │   ├── normalization-report.md
+│   │   ├── README.md
+│   │   ├── runtime-inventory.md
+│   │   ├── storage-layout.md
+│   │   └── time-sync-governance.md
+│   ├── stage-02
+│   │   ├── makefile-governance.md
+│   │   ├── monorepo-governance.md
+│   │   ├── normalization-report.md
+│   │   ├── precommit-governance.md
+│   │   ├── README.md
+│   │   ├── repository-foundation.md
+│   │   ├── runtime-inventory.md
+│   │   └── service-scaffolding.md
+│   ├── stage-03
+│   │   ├── config-hierarchy.md
+│   │   ├── environment-hierarchy.md
+│   │   ├── event-contracts.md
+│   │   ├── fixed-point-governance.md
+│   │   ├── governance-foundation.md
+│   │   ├── lineage-governance.md
+│   │   ├── normalization-report.md
+│   │   ├── README.md
+│   │   ├── runtime-inventory.md
+│   │   ├── schema-governance.md
+│   │   ├── service-boundaries.md
+│   │   ├── timestamp-governance.md
+│   │   └── topic-governance.md
+│   ├── stage-04
+│   ├── stage-05
+│   ├── stage-06
+│   ├── stage-10a
+│   ├── stage-12
+│   │   ├── data-lineage-governance.md
+│   │   ├── deprecated-schema-governance.md
+│   │   ├── feature-contract-governance.md
+│   │   ├── feature-store-governance.md
+│   │   ├── kafka-governance.md
+│   │   ├── market-data-foundation.md
+│   │   ├── market-data-governance.md
+│   │   ├── normalization-governance.md
+│   │   ├── partition-governance.md
+│   │   ├── README.md
+│   │   ├── replay-governance.md
+│   │   ├── schema-governance.md
+│   │   └── timestamp-governance.md
+│   ├── stages
+│   │   ├── README.md
+│   │   ├── stage-02-cluster-foundation.md
+│   │   ├── stage-02-repository-foundation.md
+│   │   └── stage-03-platform-governance-foundation.md
+│   ├── standards
+│   │   ├── api-standards.md
+│   │   ├── coding-standards.md
+│   │   ├── commit-standards.md
+│   │   ├── documentation-standards.md
+│   │   ├── engineering-principles.md
+│   │   ├── json-standards.md
+│   │   ├── naming-standards.md
+│   │   ├── security-standards.md
+│   │   ├── shell-script-standards.md
+│   │   └── yaml-standards.md
+│   └── testing
+│       ├── chaos-recovery-governance.md
+│       ├── contract-testing-governance.md
+│       ├── determinism-governance.md
+│       ├── orchestrated-testing-governance.md
+│       ├── performance-governance.md
+│       ├── platform-deployment-governance.md
+│       ├── platform-deterministic-replay.md
+│       ├── platform-event-governance.md
+│       ├── platform-execution-governance.md
+│       ├── platform-operations-governance.md
+│       ├── platform-portfolio-authority.md
+│       ├── platform-resilience-governance.md
+│       ├── platform-runtime-governance.md
+│       ├── platform-runtime-governance-policies.md
+│       ├── platform-service-deployment.md
+│       ├── platform-service-standardization.md
+│       ├── platform-subsystem-governance.md
+│       ├── replay-governance.md
+│       ├── replay-validation-governance.md
+│       ├── schema-validation-governance.md
+│       ├── sdk-publishing-governance.md
+│       └── testing-governance.md
+├── .env.example
+├── environments
+│   ├── dev
+│   ├── development
+│   │   └── environment.yaml
+│   ├── disaster-recovery
+│   │   └── environment.yaml
+│   ├── .keep
+│   ├── production
+│   │   └── environment.yaml
+│   └── staging
+│       └── environment.yaml
+├── events
+│   ├── audit_stream
+│   │   └── audit-events.jsonl
+│   ├── dead_letter_stream
+│   │   └── dead-events.jsonl
+│   ├── ingress
+│   └── replay
+├── feature-store
+│   └── .keep
+├── final-argocd-state.txt
+├── final-platform-state.txt
+├── final-rs-state.txt
+├── generated
+│   └── .keep
+├── .gitignore
+├── gitops
+│   ├── argocd
+│   │   ├── apps
+│   │   │   ├── cicd.yaml
+│   │   │   ├── observability.yaml
+│   │   │   └── storage.yaml
+│   │   ├── environments
+│   │   │   ├── dev
+│   │   │   ├── production
+│   │   │   └── staging
+│   │   └── root-application.yaml
+│   ├── base
+│   │   ├── applications
+│   │   │   ├── analytics
+│   │   │   ├── market-data
+│   │   │   ├── persistence
+│   │   │   └── trading
+│   │   ├── infrastructure
+│   │   └── platform
+│   │       ├── cicd
+│   │       ├── networking
+│   │       ├── observability
+│   │       ├── security
+│   │       └── storage
+│   ├── DEPLOYMENT_POLICY.md
+│   └── overlays
+│       ├── dev
+│       ├── production
+│       └── staging
+├── governance
+│   ├── chaos
+│   │   └── chaos-governance.yaml
+│   ├── compliance
+│   ├── deployment
+│   │   └── deployment-governance.yaml
+│   ├── determinism
+│   │   └── determinism-governance.yaml
+│   ├── events
+│   │   └── event-governance.yaml
+│   ├── .keep
+│   ├── naming
+│   │   └── naming-conventions.yaml
+│   ├── orchestration
+│   │   └── orchestration-governance.yaml
+│   ├── performance
+│   │   └── performance-governance.yaml
+│   ├── platform
+│   │   ├── platform-governance.yaml
+│   │   └── platform-service-order.json
+│   ├── replay
+│   │   └── replay-governance.yaml
+│   ├── runtime
+│   ├── schema
+│   │   └── schema-governance.yaml
+│   ├── sdk
+│   │   └── sdk-registry-governance.yaml
+│   ├── security
+│   ├── services
+│   │   └── service-governance.yaml
+│   ├── simulation
+│   │   └── simulation-governance.yaml
+│   ├── technical-debt
+│   │   ├── chaos-session-isolation.md
+│   │   ├── pact-v3-migration.md
+│   │   ├── performance-session-isolation.md
+│   │   ├── replay-session-isolation.md
+│   │   └── sdk-packaging-standardization.md
+│   ├── testing
+│   │   └── testing-governance.yaml
+│   └── versioning
+├── infrastructure
+│   ├── audit
+│   │   ├── portfolio
+│   │   │   ├── certification
+│   │   │   ├── evidence
+│   │   │   │   ├── capital-certification.json
+│   │   │   │   ├── reconciliation-evidence.json
+│   │   │   │   └── replay-certification.json
+│   │   │   ├── reconciliation
+│   │   │   │   └── reconciliation-governance.md
+│   │   │   └── reports
+│   │   │       └── stage13-audit-report.txt
+│   │   └── stage-08
+│   ├── backups
+│   │   ├── postgres
+│   │   │   └── .gitkeep
+│   │   ├── timescaledb
+│   │   │   └── .gitkeep
+│   │   └── wal
+│   │       ├── archive
+│   │       └── .gitkeep
+│   ├── bootstrap
+│   │   └── install.sh
+│   ├── capital-governance
+│   │   ├── allocations
+│   │   │   └── allocation-governance.md
+│   │   ├── partitions
+│   │   │   └── partition-governance.md
+│   │   └── reservations
+│   ├── components
+│   │   ├── argocd
+│   │   │   ├── configure-repository.sh
+│   │   │   ├── configure.sh
+│   │   │   ├── install.sh
+│   │   │   ├── rollback.sh
+│   │   │   └── validate.sh
+│   │   ├── cert-manager
+│   │   │   ├── certificates
+│   │   │   ├── issuers
+│   │   │   └── scripts
+│   │   ├── containerd
+│   │   ├── docker
+│   │   ├── falco
+│   │   │   ├── rules
+│   │   │   └── scripts
+│   │   ├── helm
+│   │   ├── ingress
+│   │   ├── istio
+│   │   │   ├── gateways
+│   │   │   ├── mtls
+│   │   │   ├── policies
+│   │   │   └── scripts
+│   │   ├── kafka
+│   │   │   ├── acl
+│   │   │   │   ├── acl-rules.yaml
+│   │   │   │   └── service-accounts.yaml
+│   │   │   ├── config
+│   │   │   ├── contracts
+│   │   │   │   ├── audit-event
+│   │   │   │   │   ├── audit_event_v1.avsc
+│   │   │   │   │   └── README.md
+│   │   │   │   ├── execution-intent
+│   │   │   │   │   ├── execution_intent_v1.avsc
+│   │   │   │   │   └── README.md
+│   │   │   │   ├── execution-order
+│   │   │   │   │   ├── execution_order_v1.avsc
+│   │   │   │   │   └── README.md
+│   │   │   │   ├── fill
+│   │   │   │   │   ├── fill_v1.avsc
+│   │   │   │   │   └── README.md
+│   │   │   │   ├── kill-switch
+│   │   │   │   │   ├── kill_switch_v1.avsc
+│   │   │   │   │   └── README.md
+│   │   │   │   ├── signal
+│   │   │   │   │   ├── README.md
+│   │   │   │   │   └── signal_v1.avsc
+│   │   │   │   └── trade-intent
+│   │   │   │       ├── README.md
+│   │   │   │       └── trade_intent_v1.avsc
+│   │   │   ├── dlq
+│   │   │   ├── manifests
+│   │   │   ├── market-data
+│   │   │   │   ├── create-topics.sh
+│   │   │   │   ├── delete-topics.sh
+│   │   │   │   ├── README.md
+│   │   │   │   ├── replay-governance.env
+│   │   │   │   ├── retention-governance.env
+│   │   │   │   ├── retention-governance.md
+│   │   │   │   ├── topic-config.env
+│   │   │   │   ├── topic-governance.md
+│   │   │   │   ├── topology-governance.md
+│   │   │   │   └── validate-topics.sh
+│   │   │   ├── retry
+│   │   │   ├── scripts
+│   │   │   ├── tools
+│   │   │   │   └── kafka-ui
+│   │   │   └── topics
+│   │   │       ├── dlq-topology.yaml
+│   │   │       ├── partition-governance.yaml
+│   │   │       ├── replay-governance.yaml
+│   │   │       ├── retention-policy.yaml
+│   │   │       ├── retry-topology.yaml
+│   │   │       └── topics.yaml
+│   │   ├── keycloak
+│   │   │   ├── clients
+│   │   │   │   └── service-clients.json
+│   │   │   ├── config
+│   │   │   ├── exports
+│   │   │   ├── realms
+│   │   │   │   └── trading-platform-realm.json
+│   │   │   ├── roles
+│   │   │   │   └── platform-roles.json
+│   │   │   └── scripts
+│   │   │       ├── backup.sh
+│   │   │       ├── configure.sh
+│   │   │       ├── install.sh
+│   │   │       ├── restore.sh
+│   │   │       └── validate.sh
+│   │   ├── kong
+│   │   │   ├── consumers
+│   │   │   ├── plugins
+│   │   │   ├── routes
+│   │   │   └── scripts
+│   │   ├── kubectl
+│   │   ├── longhorn
+│   │   ├── metallb
+│   │   ├── network-policy
+│   │   │   ├── inventory.sh
+│   │   │   ├── rollback.sh
+│   │   │   ├── setup.sh
+│   │   │   └── validate.sh
+│   │   ├── pgbouncer
+│   │   │   ├── backup.sh
+│   │   │   ├── configure.sh
+│   │   │   ├── install.sh
+│   │   │   ├── inventory.sh
+│   │   │   ├── restore.sh
+│   │   │   └── validate.sh
+│   │   ├── postgres
+│   │   │   ├── backup.sh
+│   │   │   ├── configure.sh
+│   │   │   ├── install.sh
+│   │   │   ├── inventory.sh
+│   │   │   ├── migrate.sh
+│   │   │   ├── restore.sh
+│   │   │   └── validate.sh
+│   │   ├── rbac
+│   │   │   ├── configure-harbor-access.sh
+│   │   │   ├── configure-imagepull-governance.sh
+│   │   │   ├── reset-runtime-pull.sh
+│   │   │   ├── rollback.sh
+│   │   │   ├── rotate-harbor-robots.sh
+│   │   │   ├── rotate-runtime-pull.sh
+│   │   │   ├── setup.sh
+│   │   │   ├── validate-harbor-access.sh
+│   │   │   ├── validate-imagepull-governance.sh
+│   │   │   └── validate.sh
+│   │   ├── redis
+│   │   │   ├── backup.sh
+│   │   │   ├── configure.sh
+│   │   │   ├── install.sh
+│   │   │   ├── inventory.sh
+│   │   │   ├── restore.sh
+│   │   │   └── validate.sh
+│   │   ├── registry
+│   │   │   ├── configure.sh
+│   │   │   ├── install.sh
+│   │   │   ├── rollback.sh
+│   │   │   └── validate.sh
+│   │   ├── schema-registry
+│   │   │   ├── compatibility
+│   │   │   ├── config
+│   │   │   ├── manifests
+│   │   │   └── scripts
+│   │   │       ├── compatibility-check.sh
+│   │   │       ├── enforce-schema-compatibility.sh
+│   │   │       ├── export-schemas.sh
+│   │   │       ├── register-schemas.sh
+│   │   │       └── validate-schemas.sh
+│   │   ├── _standards
+│   │   │   ├── component-contract.md
+│   │   │   ├── install-contract.md
+│   │   │   ├── lifecycle-governance.md
+│   │   │   ├── rollback-contract.md
+│   │   │   └── validate-contract.md
+│   │   ├── terraform
+│   │   ├── timescaledb
+│   │   │   ├── backup.sh
+│   │   │   ├── configure.sh
+│   │   │   ├── install.sh
+│   │   │   ├── inventory.sh
+│   │   │   ├── migrate.sh
+│   │   │   ├── restore.sh
+│   │   │   └── validate.sh
+│   │   ├── vault
+│   │   │   ├── config
+│   │   │   ├── policies
+│   │   │   │   └── trading-policy.hcl
+│   │   │   ├── scripts
+│   │   │   └── secrets
+│   │   └── wireguard
+│   ├── config
+│   │   ├── accounts
+│   │   │   └── accounts.yaml
+│   │   ├── approval-policy.yaml
+│   │   ├── brokers
+│   │   │   └── brokers.yaml
+│   │   ├── config-registry.yaml
+│   │   ├── environments
+│   │   │   ├── development.yaml
+│   │   │   ├── production.yaml
+│   │   │   └── staging.yaml
+│   │   ├── feature-flags
+│   │   │   └── feature-flags.yaml
+│   │   ├── global.env
+│   │   ├── instruments
+│   │   │   └── instruments.yaml
+│   │   ├── lineage
+│   │   │   └── bootstrap-lineage.yaml
+│   │   ├── lineage-policy.yaml
+│   │   ├── network.env
+│   │   ├── README.md
+│   │   ├── risk
+│   │   │   └── risk-limits.yaml
+│   │   ├── runtime
+│   │   │   └── runtime.yaml
+│   │   ├── schemas
+│   │   │   ├── account.schema.yaml
+│   │   │   ├── broker.schema.yaml
+│   │   │   ├── environment-config.schema.yaml
+│   │   │   ├── feature-flags.schema.yaml
+│   │   │   ├── instrument.schema.yaml
+│   │   │   ├── README.md
+│   │   │   ├── risk-config.schema.yaml
+│   │   │   ├── runtime-params.schema.yaml
+│   │   │   └── strategy-config.schema.yaml
+│   │   ├── snapshot-policy.yaml
+│   │   ├── snapshots
+│   │   │   └── bootstrap
+│   │   │       └── bootstrap-snapshot.yaml
+│   │   ├── storage.env
+│   │   ├── strategies
+│   │   └── versions.env
+│   ├── freeze
+│   │   └── stage-13
+│   │       ├── certification
+│   │       ├── inventory
+│   │       │   └── stage13-inventory.txt
+│   │       ├── recovery
+│   │       │   └── recovery-governance.md
+│   │       └── snapshots
+│   │           ├── snapshot-governance.md
+│   │           ├── stage13-backup-20260527-091417.tar.gz
+│   │           └── stage13-snapshot-20260527-091425.txt
+│   ├── governance
+│   │   └── install
+│   │       ├── checkpoint-governance.md
+│   │       ├── execution-governance.md
+│   │       ├── failure-governance.md
+│   │       ├── retry-governance.md
+│   │       └── rollback-governance.md
+│   ├── host
+│   │   ├── cloud-init
+│   │   │   ├── meta-data.yaml
+│   │   │   └── user-data.yaml
+│   │   ├── iso
+│   │   │   └── ubuntu-22.04.sha256
+│   │   └── vmware
+│   │       └── core-node.vmx
+│   ├── kubernetes
+│   │   ├── feature-store-service
+│   │   │   └── deployment.yaml
+│   │   ├── historical-data-service
+│   │   │   └── deployment.yaml
+│   │   ├── kafka
+│   │   │   ├── bootstrap.env
+│   │   │   ├── deploy.sh
+│   │   │   ├── kafka-configmap.yaml
+│   │   │   ├── kafka-headless-service.yaml
+│   │   │   ├── kafka-service.yaml
+│   │   │   ├── kafka-statefulset.yaml
+│   │   │   ├── market-topics-job.yaml
+│   │   │   ├── namespace.yaml
+│   │   │   ├── README.md
+│   │   │   ├── validate.sh
+│   │   │   └── values.yaml
+│   │   ├── market-data
+│   │   │   ├── cleanup.sh
+│   │   │   ├── configmap.yaml
+│   │   │   ├── deploy.sh
+│   │   │   ├── ingestion-deployment.yaml
+│   │   │   ├── ingestion-service.yaml
+│   │   │   ├── limit-range.yaml
+│   │   │   ├── logs.sh
+│   │   │   ├── namespace.yaml
+│   │   │   ├── network-policy.yaml
+│   │   │   ├── README.md
+│   │   │   ├── resource-quota.yaml
+│   │   │   ├── role-binding.yaml
+│   │   │   ├── role.yaml
+│   │   │   ├── secrets-template.yaml
+│   │   │   ├── service-account.yaml
+│   │   │   └── validate.sh
+│   │   ├── market-data-normalizer
+│   │   │   └── deployment.yaml
+│   │   ├── market-data-persistence
+│   │   │   └── deployment.yaml
+│   │   ├── mlflow
+│   │   │   └── deployment.yaml
+│   │   ├── persistence
+│   │   │   ├── namespace.yaml
+│   │   │   └── persistence-writer.yaml
+│   │   ├── research
+│   │   │   └── network-policy.yaml
+│   │   ├── research-service-account.yaml
+│   │   ├── storage
+│   │   │   ├── namespace.yaml
+│   │   │   ├── pgbouncer-deployment.yaml
+│   │   │   ├── postgres-config.yaml
+│   │   │   ├── postgres-pvc.yaml
+│   │   │   ├── postgres-secret.yaml
+│   │   │   ├── postgres-service.yaml
+│   │   │   ├── postgres-statefulset.yaml
+│   │   │   ├── redis-pvc.yaml
+│   │   │   ├── redis-secret.yaml
+│   │   │   ├── redis-statefulset.yaml
+│   │   │   ├── timescaledb-pvc.yaml
+│   │   │   ├── timescaledb-secret.yaml
+│   │   │   └── timescaledb-statefulset.yaml
+│   │   ├── synthetic-market-generator
+│   │   │   └── deployment.yaml
+│   │   └── timescaledb
+│   │       └── deployment.yaml
+│   ├── locks
+│   │   ├── docker.lock
+│   │   ├── helm.lock
+│   │   ├── kubernetes.lock
+│   │   ├── runtime.lock
+│   │   └── terraform.lock
+│   ├── logs
+│   ├── migrations
+│   │   ├── postgres
+│   │   │   ├── 001_accounts.sql
+│   │   │   ├── 002_account_groups.sql
+│   │   │   ├── 003_orders.sql
+│   │   │   ├── 004_positions.sql
+│   │   │   ├── 005_portfolio_snapshots.sql
+│   │   │   ├── 006_strategy_versions.sql
+│   │   │   ├── 007_config_snapshots.sql
+│   │   │   ├── 008_reconciliation_log.sql
+│   │   │   ├── 009_audit_log.sql
+│   │   │   └── 010_operation_modes.sql
+│   │   └── timescaledb
+│   │       ├── 001_ticks.sql
+│   │       ├── 002_ohlcv_1m.sql
+│   │       ├── 003_ohlcv_5m.sql
+│   │       ├── 004_ohlcv_1h.sql
+│   │       ├── 005_signals.sql
+│   │       ├── 006_fills.sql
+│   │       └── 007_features.sql
+│   ├── orchestrator
+│   │   ├── checkpoint-manager.sh
+│   │   ├── dependency-resolver.sh
+│   │   ├── execute-phase.sh
+│   │   ├── execution-engine.sh
+│   │   ├── rebuild-platform.sh
+│   │   ├── resume-install.sh
+│   │   ├── rollback-phase.sh
+│   │   ├── runtime
+│   │   │   ├── dependency-map.yaml
+│   │   │   ├── execution-graph.yaml
+│   │   │   ├── phase-authority.yaml
+│   │   │   └── recovery-map.yaml
+│   │   └── validate-platform.sh
+│   ├── persistence
+│   │   └── portfolio
+│   │       ├── postgresql
+│   │       │   ├── migrations
+│   │       │   │   ├── 001_positions.sql
+│   │       │   │   ├── 002_portfolio_snapshots.sql
+│   │       │   │   ├── 003_pnl_ledger.sql
+│   │       │   │   ├── 004_capital_allocations.sql
+│   │       │   │   ├── 005_reconciliation_log.sql
+│   │       │   │   ├── 006_capital_partitions.sql
+│   │       │   │   └── 007_capital_reservations.sql
+│   │       │   ├── triggers
+│   │       │   │   └── immutable_pnl_ledger.sql
+│   │       │   └── views
+│   │       └── timescaledb
+│   │           ├── hypertables
+│   │           │   ├── equity_history.sql
+│   │           │   ├── exposure_history.sql
+│   │           │   └── margin_history.sql
+│   │           └── policies
+│   ├── phases
+│   │   ├── _shared
+│   │   │   ├── checkpoint-schema.yaml
+│   │   │   ├── execution-governance.md
+│   │   │   ├── manifest-schema.yaml
+│   │   │   ├── phase-contract.md
+│   │   │   ├── rollback-contract.md
+│   │   │   └── validation-contract.md
+│   │   ├── stage-01-machine-foundation
+│   │   │   ├── backup.sh
+│   │   │   ├── inventory.sh
+│   │   │   ├── README.md
+│   │   │   ├── rollback.sh
+│   │   │   ├── setup.sh
+│   │   │   ├── snapshot.sh
+│   │   │   ├── state.sh
+│   │   │   └── validate.sh
+│   │   ├── stage-02-repository-foundation
+│   │   │   ├── backup.sh
+│   │   │   ├── inventory.sh
+│   │   │   ├── README.md
+│   │   │   ├── rollback.sh
+│   │   │   ├── setup.sh
+│   │   │   ├── snapshot.sh
+│   │   │   ├── state.sh
+│   │   │   └── validate.sh
+│   │   ├── stage-03a-configuration-foundation
+│   │   │   ├── backup.sh
+│   │   │   ├── inventory.sh
+│   │   │   ├── README.md
+│   │   │   ├── rollback.sh
+│   │   │   ├── setup.sh
+│   │   │   ├── snapshot.sh
+│   │   │   ├── state.sh
+│   │   │   └── validate.sh
+│   │   ├── stage-03-platform-governance-foundation
+│   │   │   ├── backup.sh
+│   │   │   ├── checkpoints
+│   │   │   ├── inventory.sh
+│   │   │   ├── README.md
+│   │   │   ├── rollback.sh
+│   │   │   ├── runtime
+│   │   │   ├── setup.sh
+│   │   │   ├── snapshot.sh
+│   │   │   ├── state.sh
+│   │   │   └── validate.sh
+│   │   ├── stage-04-infra-foundation
+│   │   │   ├── backup.sh
+│   │   │   ├── inventory.sh
+│   │   │   ├── README.md
+│   │   │   ├── rollback.sh
+│   │   │   ├── setup.sh
+│   │   │   ├── snapshot.sh
+│   │   │   ├── state.sh
+│   │   │   └── validate.sh
+│   │   ├── stage-05-k8s-platform
+│   │   │   ├── backup.sh
+│   │   │   ├── inventory.sh
+│   │   │   ├── README.md
+│   │   │   ├── rollback.sh
+│   │   │   ├── setup.sh
+│   │   │   ├── snapshot.sh
+│   │   │   ├── state.sh
+│   │   │   └── validate.sh
+│   │   ├── stage-06-security
+│   │   │   ├── backup.sh
+│   │   │   ├── DEFERRED-HARDENING.md
+│   │   │   ├── inventory.sh
+│   │   │   ├── README.md
+│   │   │   ├── rollback.sh
+│   │   │   ├── setup.sh
+│   │   │   ├── snapshot.sh
+│   │   │   ├── state.sh
+│   │   │   └── validate.sh
+│   │   ├── stage-07-event-backbone
+│   │   │   ├── backup.sh
+│   │   │   ├── inventory.sh
+│   │   │   ├── README.md
+│   │   │   ├── rollback.sh
+│   │   │   ├── setup.sh
+│   │   │   ├── snapshot.sh
+│   │   │   ├── state.sh
+│   │   │   └── validate.sh
+│   │   ├── stage-08-storage
+│   │   │   ├── backup.sh
+│   │   │   ├── DEFERRED-HARDENING.md
+│   │   │   ├── inventory.sh
+│   │   │   ├── README.md
+│   │   │   ├── rollback.sh
+│   │   │   ├── setup.sh
+│   │   │   ├── snapshot.sh
+│   │   │   ├── state.sh
+│   │   │   └── validate.sh
+│   │   ├── stage-09-observability
+│   │   │   ├── alertmanager
+│   │   │   │   ├── alertmanager-config.yaml
+│   │   │   │   └── alertmanager-secret-config.yaml
+│   │   │   ├── alerts
+│   │   │   │   ├── alertmanager.yaml
+│   │   │   │   ├── db-alerts.yaml
+│   │   │   │   ├── infra-alerts.yaml
+│   │   │   │   ├── kafka-alerts.yaml
+│   │   │   │   ├── platform-alert-rules.yaml
+│   │   │   │   ├── test-alert.yaml
+│   │   │   │   └── trading-alerts.yaml
+│   │   │   ├── components
+│   │   │   │   ├── grafana
+│   │   │   │   │   └── install.sh
+│   │   │   │   ├── jaeger
+│   │   │   │   │   └── install.sh
+│   │   │   │   ├── loki
+│   │   │   │   │   └── install.sh
+│   │   │   │   ├── otel-collector
+│   │   │   │   │   └── install.sh
+│   │   │   │   ├── prometheus
+│   │   │   │   │   └── install.sh
+│   │   │   │   └── promtail
+│   │   │   │       └── install.sh
+│   │   │   ├── coredns-configmap.yaml
+│   │   │   ├── DEFERRED-HARDENING.md
+│   │   │   ├── grafana
+│   │   │   │   ├── dashboards
+│   │   │   │   │   ├── account-summary.json
+│   │   │   │   │   ├── broker-connections.json
+│   │   │   │   │   ├── infrastructure.json
+│   │   │   │   │   ├── kafka-health.json
+│   │   │   │   │   ├── platform-overview.json
+│   │   │   │   │   ├── portfolio-live.json
+│   │   │   │   │   ├── reconciliation.json
+│   │   │   │   │   ├── risk-dashboard.json
+│   │   │   │   │   └── trading-pipeline.json
+│   │   │   │   ├── grafana-deployment.yaml
+│   │   │   │   └── provisioning
+│   │   │   │       ├── dashboards
+│   │   │   │       └── datasources
+│   │   │   ├── logging
+│   │   │   │   ├── example-structured-log.json
+│   │   │   │   ├── logging-governance.md
+│   │   │   │   └── structured-log-schema.json
+│   │   │   ├── operations
+│   │   │   │   ├── backup.sh
+│   │   │   │   ├── inventory.sh
+│   │   │   │   ├── rollback.sh
+│   │   │   │   ├── snapshot.sh
+│   │   │   │   └── state.sh
+│   │   │   ├── setup.sh
+│   │   │   ├── validate.sh
+│   │   │   └── values
+│   │   │       ├── grafana-values.yaml
+│   │   │       ├── jaeger-values.yaml
+│   │   │       ├── loki-values.yaml
+│   │   │       ├── otel-values.yaml
+│   │   │       ├── prometheus-values.yaml
+│   │   │       └── promtail-values.yaml
+│   │   ├── stage-10a-testing-foundation
+│   │   │   ├── backup.sh
+│   │   │   ├── checkpoints
+│   │   │   ├── inventory.sh
+│   │   │   ├── rollback.sh
+│   │   │   ├── runtime
+│   │   │   │   └── toolchain-versions.env
+│   │   │   ├── setup.sh
+│   │   │   ├── snapshot.sh
+│   │   │   ├── state.sh
+│   │   │   └── validate.sh
+│   │   ├── stage-10-cicd
+│   │   │   ├── DEFERRED-HARDENING.md
+│   │   │   ├── inventory.sh
+│   │   │   ├── rbac
+│   │   │   ├── README.md
+│   │   │   ├── rollback.sh
+│   │   │   ├── setup.sh
+│   │   │   ├── snapshot.sh
+│   │   │   ├── state.sh
+│   │   │   ├── validate.sh
+│   │   │   └── values
+│   │   │       └── harbor-values.yaml
+│   │   ├── stage-11-platform-foundation
+│   │   │   ├── backup.sh
+│   │   │   ├── inventory.sh
+│   │   │   ├── setup.sh
+│   │   │   ├── snapshot.sh
+│   │   │   └── validate.sh
+│   │   ├── stage-12-market-data
+│   │   │   ├── backup.sh
+│   │   │   ├── checkpoints
+│   │   │   ├── configs
+│   │   │   │   ├── ingestion
+│   │   │   │   └── normalizer
+│   │   │   ├── governance
+│   │   │   ├── inventory.sh
+│   │   │   ├── manifests
+│   │   │   │   ├── ingestion
+│   │   │   │   │   └── ingestion-deployment.yaml
+│   │   │   │   ├── kafka
+│   │   │   │   │   ├── kafka-configmap.yaml
+│   │   │   │   │   ├── kafka-headless-service.yaml
+│   │   │   │   │   ├── kafka-service.yaml
+│   │   │   │   │   ├── kafka-statefulset.yaml
+│   │   │   │   │   ├── market-topics-job.yaml
+│   │   │   │   │   ├── namespace.yaml
+│   │   │   │   │   └── values.yaml
+│   │   │   │   ├── normalizer
+│   │   │   │   │   └── deployment.yaml
+│   │   │   │   └── storage
+│   │   │   ├── README.md
+│   │   │   ├── rollback.sh
+│   │   │   ├── runtime
+│   │   │   ├── scripts
+│   │   │   ├── setup.sh
+│   │   │   ├── snapshot.sh
+│   │   │   ├── state.sh
+│   │   │   └── validate.sh
+│   │   ├── stage-13-portfolio
+│   │   │   ├── audit.sh
+│   │   │   ├── backup.sh
+│   │   │   ├── inventory.sh
+│   │   │   ├── rollback.sh
+│   │   │   ├── scripts
+│   │   │   │   ├── certify-replay.sh
+│   │   │   │   ├── certify-stage13-freeze.sh
+│   │   │   │   ├── generate-audit-report.sh
+│   │   │   │   ├── generate-replay-hash.sh
+│   │   │   │   ├── register-portfolio-schemas.sh
+│   │   │   │   ├── run-synthetic-replay.sh
+│   │   │   │   ├── validate-audit-governance.sh
+│   │   │   │   ├── validate-capital-governance.sh
+│   │   │   │   ├── validate-domain-topology.sh
+│   │   │   │   ├── validate-persistence-governance.sh
+│   │   │   │   ├── validate-replay-governance.sh
+│   │   │   │   └── validate-replay-hash.sh
+│   │   │   ├── setup.sh
+│   │   │   ├── snapshot.sh
+│   │   │   ├── state.sh
+│   │   │   └── validate.sh
+│   │   ├── stage-14a-operational-reconciliation
+│   │   │   ├── audit
+│   │   │   │   ├── event-lineage-20260527-111451.txt
+│   │   │   │   ├── governance-20260527-111451.txt
+│   │   │   │   ├── replay-20260527-103333.txt
+│   │   │   │   ├── runtime-logs-20260527-111451.txt
+│   │   │   │   └── services-20260527-103333.txt
+│   │   │   ├── audit.sh
+│   │   │   ├── certification-state.sh
+│   │   │   ├── freeze.sh
+│   │   │   ├── inventory.sh
+│   │   │   ├── rollback.sh
+│   │   │   ├── scripts
+│   │   │   │   ├── start-services.sh
+│   │   │   │   ├── stop-services.sh
+│   │   │   │   ├── test-conflict-resolution.py
+│   │   │   │   ├── test-float-auditor.py
+│   │   │   │   ├── test-ttl-runtime.py
+│   │   │   │   ├── validate-conflict-governance.sh
+│   │   │   │   ├── validate-event-transport.sh
+│   │   │   │   ├── validate-float-governance.sh
+│   │   │   │   ├── validate-runtime-readiness.sh
+│   │   │   │   ├── validate-service-orchestration.sh
+│   │   │   │   └── validate-ttl-governance.sh
+│   │   │   ├── setup.sh
+│   │   │   ├── snapshots
+│   │   │   ├── snapshot.sh
+│   │   │   ├── state.sh
+│   │   │   └── validate.sh
+│   │   └── stage-14-trading-logic
+│   │       ├── backup.sh
+│   │       ├── certify-stage14-freeze.sh
+│   │       ├── DEFERRED-HARDENING.md
+│   │       ├── inventory.sh
+│   │       ├── README.md
+│   │       ├── recover.sh
+│   │       ├── REPLAY-GOVERNANCE.md
+│   │       ├── rollback.sh
+│   │       ├── scripts
+│   │       │   ├── generate-stage14-replay-hash.sh
+│   │       │   ├── validate-decision-engine.sh
+│   │       │   ├── validate-kafka-governance.sh
+│   │       │   ├── validate-monitoring-service.sh
+│   │       │   ├── validate-replay-governance.sh
+│   │       │   ├── validate-schema-governance.sh
+│   │       │   ├── validate-screening-service.sh
+│   │       │   ├── validate-signal-processor.sh
+│   │       │   ├── validate-stage14-replay-hash.sh
+│   │       │   ├── validate-stage14-runtime.sh
+│   │       │   └── validate-strategy-engine.sh
+│   │       ├── setup.sh
+│   │       ├── snapshot.sh
+│   │       ├── STAGE-14-EXECUTION-PLAN.md
+│   │       ├── state.sh
+│   │       ├── validate.sh
+│   │       └── VALIDATION-GOVERNANCE.md
+│   ├── recovery
+│   │   ├── cluster-recovery.sh
+│   │   ├── disaster-recovery.md
+│   │   ├── etcd-recovery.sh
+│   │   ├── kafka-recovery.sh
+│   │   ├── longhorn-recovery.sh
+│   │   ├── postgres-recovery.sh
+│   │   ├── rebuild-from-state.sh
+│   │   └── recovery-policies.yaml
+│   ├── replay
+│   │   ├── portfolio
+│   │   │   ├── contracts
+│   │   │   │   └── replay-governance.md
+│   │   │   ├── datasets
+│   │   │   │   └── synthetic-fills.json
+│   │   │   ├── hashes
+│   │   │   │   └── replay.sha256
+│   │   │   └── results
+│   │   │       └── replay-results.json
+│   │   └── stage-14
+│   │       ├── contracts
+│   │       │   └── replay-governance.md
+│   │       ├── datasets
+│   │       │   ├── trading-lineage.json
+│   │       │   └── trading-lineage.sha256
+│   │       ├── results
+│   │       │   └── replay-results.json
+│   │       └── run-replay.py
+│   ├── research
+│   │   └── jupyterhub
+│   │       └── values.yaml
+│   ├── scripts
+│   │   ├── lib
+│   │   │   ├── docker.sh
+│   │   │   ├── env.sh
+│   │   │   ├── filesystem.sh
+│   │   │   ├── github.sh
+│   │   │   ├── governance.sh
+│   │   │   ├── helm.sh
+│   │   │   ├── kubernetes.sh
+│   │   │   ├── log.sh
+│   │   │   ├── report.sh
+│   │   │   ├── retry.sh
+│   │   │   ├── state.sh
+│   │   │   └── validate.sh
+│   │   ├── persistence
+│   │   │   └── build-persistence-writer.sh
+│   │   └── storage
+│   │       ├── apply-retention-policies.sh
+│   │       ├── audit-stage-08.sh
+│   │       ├── backup-postgres.sh
+│   │       ├── backup-timescaledb.sh
+│   │       ├── check-stage-08-contamination.sh
+│   │       ├── validate-backup.sh
+│   │       ├── validate-migrations.sh
+│   │       ├── validate-persistence.sh
+│   │       ├── validate-redis.sh
+│   │       ├── validate-restore.sh
+│   │       ├── validate-retention.sh
+│   │       ├── validate-schema-governance.sh
+│   │       ├── validate-storage-runtime.sh
+│   │       ├── validate-timescaledb.sh
+│   │       └── validate-wal.sh
+│   ├── services
+│   │   ├── market-data-producer
+│   │   │   ├── app
+│   │   │   └── requirements.txt
+│   │   └── persistence-writer
+│   │       ├── app
+│   │       │   └── main.py
+│   │       ├── Dockerfile
+│   │       └── requirements.txt
+│   ├── stages
+│   ├── state
+│   │   ├── install
+│   │   │   ├── checkpoints
+│   │   │   ├── manifests
+│   │   │   ├── rebuild-history
+│   │   │   └── recovery-state.json
+│   │   ├── install.state
+│   │   ├── stage-01
+│   │   │   ├── backups
+│   │   │   │   └── stage-01-backup-20260510-203125.tar.gz
+│   │   │   ├── inventory
+│   │   │   │   └── runtime-inventory.txt
+│   │   │   ├── logs
+│   │   │   ├── snapshots
+│   │   │   │   └── stage-01-20260510-203117.snapshot
+│   │   │   └── validation
+│   │   ├── stage-02
+│   │   │   ├── backup
+│   │   │   ├── inventory
+│   │   │   │   └── repository-tree.txt
+│   │   │   ├── logs
+│   │   │   ├── snapshots
+│   │   │   └── validation
+│   │   ├── stage-03
+│   │   │   ├── backups
+│   │   │   ├── inventory
+│   │   │   │   ├── architecture-governance-docs.txt
+│   │   │   │   ├── contract-files.txt
+│   │   │   │   ├── governance-files.txt
+│   │   │   │   ├── governance-scripts.txt
+│   │   │   │   ├── schema-files.txt
+│   │   │   │   └── system-registry-files.txt
+│   │   │   └── logs
+│   │   ├── stage-03a
+│   │   │   ├── audit
+│   │   │   │   ├── broker-config-audit.txt
+│   │   │   │   ├── config-files.txt
+│   │   │   │   ├── config-governance-docs.txt
+│   │   │   │   ├── config-schema-audit.txt
+│   │   │   │   ├── config-scripts.txt
+│   │   │   │   ├── env-dependency-audit.txt
+│   │   │   │   ├── environment-files.txt
+│   │   │   │   ├── operation-mode-audit.txt
+│   │   │   │   ├── phase-topology.txt
+│   │   │   │   ├── platform-config-files.txt
+│   │   │   │   ├── platform-services.txt
+│   │   │   │   └── risk-config-audit.txt
+│   │   │   ├── backups
+│   │   │   │   ├── stage-03a-config-backup-20260511-113157.tar.gz
+│   │   │   │   └── stage-03a-config-backup-20260511-113942.tar.gz
+│   │   │   └── inventory
+│   │   │       ├── config-docs.txt
+│   │   │       ├── config-files.txt
+│   │   │       ├── config-lineage.txt
+│   │   │       ├── config-schemas.txt
+│   │   │       └── config-scripts.txt
+│   │   ├── stage-04
+│   │   │   ├── audit
+│   │   │   │   ├── component-topology.txt
+│   │   │   │   ├── contamination-report.txt
+│   │   │   │   ├── docker-version.txt
+│   │   │   │   ├── helm-version.txt
+│   │   │   │   ├── infrastructure-scripts.txt
+│   │   │   │   ├── kubectl-version.txt
+│   │   │   │   ├── network-state.txt
+│   │   │   │   ├── phase-topology.txt
+│   │   │   │   ├── runtime-tooling-audit.txt
+│   │   │   │   ├── stage-04-docs.txt
+│   │   │   │   ├── terraform-topology.txt
+│   │   │   │   ├── terraform-version.txt
+│   │   │   │   ├── time-sync.txt
+│   │   │   │   └── validation-audit.txt
+│   │   │   ├── backups
+│   │   │   │   └── stage-04-backup-20260511-122147.tar.gz
+│   │   │   └── inventory
+│   │   │       ├── component-topology.txt
+│   │   │       ├── docker-version.txt
+│   │   │       ├── helm-version.txt
+│   │   │       ├── infrastructure-scripts.txt
+│   │   │       ├── kubectl-version.txt
+│   │   │       ├── terraform-topology.txt
+│   │   │       └── terraform-version.txt
+│   │   ├── stage-05
+│   │   │   ├── audit
+│   │   │   │   ├── all-pods.txt
+│   │   │   │   ├── contamination-report.txt
+│   │   │   │   ├── future-platform-domains.txt
+│   │   │   │   ├── helm-repositories.txt
+│   │   │   │   ├── kubeadm-version.txt
+│   │   │   │   ├── kubectl-version.txt
+│   │   │   │   ├── kubernetes-manifests.txt
+│   │   │   │   ├── kubernetes-scripts.txt
+│   │   │   │   ├── kubernetes-topology.txt
+│   │   │   │   ├── lifecycle-audit.txt
+│   │   │   │   ├── namespaces.txt
+│   │   │   │   ├── network-policies.txt
+│   │   │   │   ├── node-state.txt
+│   │   │   │   ├── pod-disruption-budgets.txt
+│   │   │   │   ├── priority-classes.txt
+│   │   │   │   ├── resource-quotas.txt
+│   │   │   │   ├── runtime-tooling-audit.txt
+│   │   │   │   ├── service-accounts.txt
+│   │   │   │   ├── stage-05-lifecycle.txt
+│   │   │   │   └── storage-classes.txt
+│   │   │   ├── backups
+│   │   │   │   ├── stage-05-backup-20260511-130107.tar.gz
+│   │   │   │   └── stage-05-backup-20260511-142701.tar.gz
+│   │   │   └── inventory
+│   │   │       ├── kubernetes-scripts.txt
+│   │   │       ├── kubernetes-topology.txt
+│   │   │       ├── namespaces.txt
+│   │   │       ├── network-policies.txt
+│   │   │       ├── priority-classes.txt
+│   │   │       ├── rbac.txt
+│   │   │       ├── resource-quotas.txt
+│   │   │       ├── service-accounts.txt
+│   │   │       └── stage-05-lifecycle.txt
+│   │   ├── stage-06
+│   │   │   ├── audit
+│   │   │   │   ├── admission-webhooks.txt
+│   │   │   │   ├── all-security-pods.txt
+│   │   │   │   ├── cert-issuers.txt
+│   │   │   │   ├── cluster-namespaces.txt
+│   │   │   │   ├── helm-security-repositories.txt
+│   │   │   │   ├── mtls-policies.txt
+│   │   │   │   ├── security-components.txt
+│   │   │   │   ├── security-scripts.txt
+│   │   │   │   ├── security-topology.txt
+│   │   │   │   ├── stage-topology.txt
+│   │   │   │   └── storage-classes.txt
+│   │   │   ├── backups
+│   │   │   │   └── stage-06-backup-20260511-151606.tar.gz
+│   │   │   ├── inventory
+│   │   │   │   ├── security-manifests.txt
+│   │   │   │   ├── security-scripts.txt
+│   │   │   │   ├── stage-06-lifecycle.txt
+│   │   │   │   └── vault-policies.txt
+│   │   │   └── vault
+│   │   │       └── vault-init-20260511-205557.json
+│   │   └── stage-07
+│   │       ├── audit
+│   │       │   ├── .gitkeep
+│   │       │   ├── kafka-component-topology.txt
+│   │       │   ├── kubernetes-messaging-topology.txt
+│   │       │   ├── messaging-scripts-topology.txt
+│   │       │   ├── phase-04-kafka-governance.txt
+│   │       │   ├── phase-04-lifecycle-governance.txt
+│   │       │   ├── phase-04-schema-governance.txt
+│   │       │   ├── phase-04-script-governance.txt
+│   │       │   ├── schema-registry-topology.txt
+│   │       │   └── stage-07-phase-topology.txt
+│   │       ├── backups
+│   │       │   └── .gitkeep
+│   │       ├── inventory
+│   │       │   └── .gitkeep
+│   │       ├── logs
+│   │       │   └── .gitkeep
+│   │       ├── snapshots
+│   │       │   └── .gitkeep
+│   │       └── validation
+│   │           └── .gitkeep
+│   └── validation
+│       ├── filesystem
+│       │   └── validate-root-structure.sh
+│       ├── governance
+│       │   ├── check-no-float.sh
+│       │   └── validate-governance.sh
+│       ├── repository
+│       │   └── validate-repositories.sh
+│       ├── scripts
+│       │   └── validate-libraries.sh
+│       ├── services
+│       │   └── validate-service-template.sh
+│       └── stages
+│           ├── validate-phases.sh
+│           └── validate-stage-02.sh
+├── init-git.sh
+├── .install.state
+├── kafka
+│   └── stage-14
+│       └── create-topics.sh
+├── kafka-0
+├── kubernetes
+│   ├── admission
+│   ├── cicd
+│   │   ├── argocd
+│   │   │   ├── argocd-rbac-cm.yaml
+│   │   │   └── argocd-values.yaml
+│   │   ├── rbac
+│   │   │   ├── cicd-clusterrolebindings.yaml
+│   │   │   ├── cicd-clusterroles.yaml
+│   │   │   ├── cicd-rolebindings.yaml
+│   │   │   ├── cicd-roles.yaml
+│   │   │   ├── cicd-serviceaccounts.yaml
+│   │   │   ├── harbor-imagepull-secret.yaml
+│   │   │   └── harbor-robot-accounts.yaml
+│   │   └── registry
+│   ├── cluster-config
+│   │   └── kubeadm-config.yaml
+│   ├── messaging
+│   │   ├── configmaps
+│   │   │   └── kafka-config.yaml
+│   │   ├── kafka
+│   │   │   ├── kafka-service.yaml
+│   │   │   ├── kafka-statefulset.yaml
+│   │   │   └── namespace.yaml
+│   │   ├── kafka-ui
+│   │   │   ├── kafka-ui-service.yaml
+│   │   │   └── kafka-ui.yaml
+│   │   ├── monitoring
+│   │   ├── network-policies
+│   │   ├── pvc
+│   │   │   └── kafka-pvc.yaml
+│   │   ├── schema-registry
+│   │   │   ├── schema-registry-service.yaml
+│   │   │   └── schema-registry.yaml
+│   │   ├── secrets
+│   │   └── service-accounts
+│   ├── namespaces
+│   │   └── all-namespaces.yaml
+│   ├── network-policies
+│   │   ├── base
+│   │   │   ├── allow-cluster-dns.yaml
+│   │   │   └── default-deny-all.yaml
+│   │   ├── cicd
+│   │   │   ├── allow-argocd-git-egress.yaml
+│   │   │   ├── allow-cicd-dns.yaml
+│   │   │   ├── allow-harbor-internal.yaml
+│   │   │   ├── allow-platform-ingress.yaml
+│   │   │   └── cicd-default-deny.yaml
+│   │   ├── default-deny.yaml
+│   │   ├── execution-isolation.yaml
+│   │   ├── observability
+│   │   │   ├── allow-kube-api.yaml
+│   │   │   ├── allow-loki-ingestion.yaml
+│   │   │   ├── allow-observability-dns.yaml
+│   │   │   ├── allow-observability-ingress.yaml
+│   │   │   ├── allow-otel-collector.yaml
+│   │   │   └── allow-prometheus-scrape.yaml
+│   │   └── platform
+│   ├── observability
+│   │   └── prometheus-runtime-override.yaml
+│   ├── platform
+│   ├── pod-disruption-budgets
+│   ├── portfolio
+│   │   ├── base
+│   │   ├── dev
+│   │   ├── kafka
+│   │   │   └── topics.yaml
+│   │   ├── prod
+│   │   └── staging
+│   ├── priority-classes
+│   │   └── priority-classes.yaml
+│   ├── rbac
+│   │   └── platform-rbac.yaml
+│   ├── resource-quotas
+│   │   └── resource-quotas.yaml
+│   ├── security
+│   │   ├── cert-manager
+│   │   │   └── cluster-issuer.yaml
+│   │   ├── falco
+│   │   │   └── falco-rules.yaml
+│   │   ├── istio
+│   │   ├── keycloak
+│   │   │   ├── config
+│   │   │   │   └── keycloak-values.yaml
+│   │   │   ├── ingress
+│   │   │   │   └── keycloak-ingress.yaml
+│   │   │   ├── keycloak-deployment.yaml
+│   │   │   ├── keycloak-service.yaml
+│   │   │   ├── postgres-deployment.yaml
+│   │   │   ├── postgres-secret.yaml
+│   │   │   ├── postgres-service.yaml
+│   │   │   ├── realm
+│   │   │   └── secrets
+│   │   │       └── keycloak-secrets.yaml
+│   │   ├── kong
+│   │   │   └── jwt-plugin.yaml
+│   │   ├── mtls
+│   │   │   └── strict-mtls.yaml
+│   │   ├── pod-security
+│   │   │   └── pod-security.yaml
+│   │   ├── rbac
+│   │   └── vault
+│   ├── service-accounts
+│   │   └── platform-service-accounts.yaml
+│   ├── testing
+│   │   └── testing-namespace.yaml
+│   └── trading-logic
+│       └── kafka
+│           └── topics.yaml
+├── libraries
+│   └── .keep
+├── lineage
+│   └── .keep
+├── logs
+├── Makefile
+├── observability
+│   └── .keep
+├── operations
+│   ├── alerts
+│   ├── backups
+│   ├── incidents
+│   │   └── incident-log.json
+│   ├── .keep
+│   ├── logs
+│   ├── runbooks
+│   │   └── README.md
+│   ├── snapshots
+│   └── state
+├── orchestration
+│   ├── engine
+│   │   ├── load-test-engine.py
+│   │   └── test-orchestrator.py
+│   ├── graphs
+│   │   └── test-execution-graph.json
+│   ├── .keep
+│   ├── reports
+│   └── state
+├── performance
+│   ├── artifacts
+│   │   └── performance-report.json
+│   ├── engine
+│   │   └── performance-engine.py
+│   ├── latency
+│   │   └── latency-budget.json
+│   └── throughput
+├── platform-manifest.yaml
+├── policies
+│   ├── deployment
+│   ├── .keep
+│   ├── orchestration
+│   ├── replay
+│   │   └── default-replay-policy.yaml
+│   ├── retry
+│   │   └── default-retry-policy.yaml
+│   ├── risk
+│   ├── routing
+│   ├── runtime
+│   ├── security
+│   └── testing
+│       └── default-testing-policy.yaml
+├── portfolio
+│   ├── events
+│   ├── snapshots
+│   │   └── latest_snapshot.json
+│   └── state
+├── post-recovery-nodes.txt
+├── post-recovery-pods.txt
+├── post-recovery-pvc.txt
+├── post-recovery-services.txt
+├── .pre-commit-config.yaml
+├── .pytest_cache
+│   ├── CACHEDIR.TAG
+│   ├── .gitignore
+│   ├── README.md
+│   └── v
+│       └── cache
+│           ├── lastfailed
+│           ├── nodeids
+│           └── stepwise
+├── README.md
+├── replay
+│   ├── artifacts
+│   ├── engine
+│   │   └── replay-engine.py
+│   ├── events
+│   │   └── fills.jsonl
+│   ├── hashes
+│   │   └── replay.sha256
+│   ├── .keep
+│   ├── lineage
+│   │   └── replay-lineage.json
+│   ├── sessions
+│   ├── snapshots
+│   ├── stage-14
+│   │   ├── market-replay
+│   │   ├── signals
+│   │   └── trade-intents
+│   ├── state
+│   ├── validation
+│   └── verification
+├── repos
+│   ├── corei-core
+│   │   ├── config
+│   │   ├── docs
+│   │   │   ├── environment.md
+│   │   │   ├── .keep
+│   │   │   ├── machine-spec.md
+│   │   │   └── repository-architecture.md
+│   │   ├── event-bus
+│   │   ├── governance
+│   │   │   ├── execution-governance.yaml
+│   │   │   ├── .keep
+│   │   │   ├── lifecycle-guard-rules.yaml
+│   │   │   ├── platform-governance.yaml
+│   │   │   ├── replay-governance.yaml
+│   │   │   └── workflow-governance.yaml
+│   │   ├── README.md
+│   │   ├── replay-engine
+│   │   ├── runtime
+│   │   ├── scripts
+│   │   │   └── .keep
+│   │   ├── system
+│   │   ├── tests
+│   │   └── workflow-engine
+│   ├── corei-infrastructure
+│   │   ├── configs
+│   │   ├── database
+│   │   │   └── .keep
+│   │   ├── docs
+│   │   │   └── .keep
+│   │   ├── frontend
+│   │   │   └── .keep
+│   │   ├── kubernetes
+│   │   ├── logs
+│   │   ├── modules
+│   │   ├── phases
+│   │   ├── README.md
+│   │   ├── scripts
+│   │   ├── stages
+│   │   ├── state
+│   │   ├── terraform
+│   │   └── tests
+│   │       └── .keep
+│   ├── corei-schemas
+│   │   ├── contracts
+│   │   ├── database
+│   │   ├── docs
+│   │   │   └── .keep
+│   │   ├── events
+│   │   ├── governance
+│   │   │   ├── event-governance.yaml
+│   │   │   ├── .keep
+│   │   │   ├── naming-conventions.yaml
+│   │   │   ├── schema-versioning.yaml
+│   │   │   ├── topic-governance.yaml
+│   │   │   └── validation-rules.yaml
+│   │   ├── README.md
+│   │   ├── tests
+│   │   │   └── .keep
+│   │   └── versions
+│   ├── corei-sdk
+│   │   ├── bootstrap
+│   │   ├── config
+│   │   ├── context
+│   │   ├── docs
+│   │   │   └── .keep
+│   │   ├── event
+│   │   ├── flow_control
+│   │   ├── governance
+│   │   │   ├── config-governance.yaml
+│   │   │   ├── context-governance.yaml
+│   │   │   ├── flow-control-governance.yaml
+│   │   │   ├── .keep
+│   │   │   └── resilience-governance.yaml
+│   │   ├── lineage
+│   │   ├── README.md
+│   │   ├── resilience
+│   │   ├── tests
+│   │   └── workflow
+│   └── corei-services
+│       ├── audit-service
+│       ├── docs
+│       │   └── .keep
+│       ├── market-data-service
+│       ├── orchestration-service
+│       ├── order-service
+│       ├── README.md
+│       ├── risk-service
+│       ├── scripts
+│       │   └── .keep
+│       ├── state-update-service
+│       ├── _template
+│       │   ├── bootstrap
+│       │   ├── config
+│       │   ├── contracts
+│       │   └── tests
+│       └── tests
+│           └── .keep
+├── research
+│   ├── backtesting
+│   │   ├── configs
+│   │   ├── engines
+│   │   │   └── run_backtest.py
+│   │   ├── metrics
+│   │   ├── replay_engine
+│   │   │   └── run_deterministic_replay.py
+│   │   ├── replay_results
+│   │   ├── results
+│   │   ├── strategies
+│   │   │   └── momentum_strategy.py
+│   │   └── trade_logs
+│   ├── backtest_registry
+│   │   └── backtest_template.yaml
+│   ├── backtests
+│   ├── catalog
+│   │   └── dataset_catalog.yaml
+│   ├── datasets
+│   │   └── catalog.yaml
+│   ├── dataset_versions
+│   ├── experiments
+│   ├── features
+│   │   ├── generated
+│   │   ├── registry
+│   │   ├── replay
+│   │   ├── sdk
+│   │   └── transformations
+│   │       └── generate_midprice_features.py
+│   ├── feature_versions
+│   │   └── feature_registry.yaml
+│   ├── .keep
+│   ├── lineage
+│   │   └── dataset_lineage.yaml
+│   ├── metadata
+│   ├── mlflow
+│   │   ├── artifacts
+│   │   ├── metrics
+│   │   ├── models
+│   │   └── runs
+│   ├── notebooks
+│   ├── promotion_registry
+│   ├── README.md
+│   ├── replay
+│   │   ├── configs
+│   │   │   └── replay_config.yaml
+│   │   ├── controllers
+│   │   │   └── export_ticks.py
+│   │   ├── datasets
+│   │   ├── engines
+│   │   │   └── run_deterministic_replay.py
+│   │   ├── exporters
+│   │   │   ├── export_persisted_ticks.py
+│   │   │   └── generate_replay_features.py
+│   │   ├── logs
+│   │   └── sessions
+│   │       └── session_registry.yaml
+│   └── sdk
+│       └── data_access.py
+├── resilience
+│   ├── events
+│   ├── recovery
+│   │   └── recovery-log.json
+│   └── state
+├── runbooks
+│   └── .keep
+├── runtime
+│   ├── images
+│   │   ├── audit-service.tar
+│   │   ├── config-service.tar
+│   │   ├── config-snapshot-service.tar
+│   │   ├── event-ingestion-service.tar
+│   │   └── identity-service.tar
+│   ├── .keep
+│   ├── platform
+│   ├── python
+│   │   └── testing
+│   │       └── venv
+│   │           ├── bin
+│   │           │   ├── activate
+│   │           │   ├── activate.csh
+│   │           │   ├── activate.fish
+│   │           │   ├── Activate.ps1
+│   │           │   ├── faker
+│   │           │   ├── fastapi
+│   │           │   ├── fastavro
+│   │           │   ├── httpx
+│   │           │   ├── idna
+│   │           │   ├── normalizer
+│   │           │   ├── pact-verifier
+│   │           │   ├── pip
+│   │           │   ├── pip3
+│   │           │   ├── pip3.10
+│   │           │   ├── pyproject-build
+│   │           │   ├── py.test
+│   │           │   ├── pytest
+│   │           │   ├── python -> python3
+│   │           │   ├── python3 -> /usr/bin/python3
+│   │           │   ├── python3.10 -> python3
+│   │           │   ├── uvicorn
+│   │           │   └── wheel
+│   │           ├── include
+│   │           ├── lib
+│   │           │   └── python3.10
+│   │           ├── lib64 -> lib
+│   │           ├── LICENSE.txt
+│   │           └── pyvenv.cfg
+│   └── stage-14
+│       ├── events
+│       │   ├── decision_events
+│       │   │   ├── 20260527T105938241796.json
+│       │   │   ├── 20260527T110038300847.json
+│       │   │   ├── 20260527T110138359682.json
+│       │   │   ├── 20260527T110238416327.json
+│       │   │   ├── 20260527T110338476344.json
+│       │   │   ├── 20260527T110438536473.json
+│       │   │   ├── 20260527T110500184135.json
+│       │   │   ├── 20260527T110600236861.json
+│       │   │   ├── 20260527T110700296374.json
+│       │   │   ├── 20260527T110800356241.json
+│       │   │   ├── 20260527T110900416659.json
+│       │   │   ├── 20260527T111017044164.json
+│       │   │   ├── 20260527T111117104535.json
+│       │   │   ├── 20260527T111217166775.json
+│       │   │   ├── 20260527T111317224908.json
+│       │   │   ├── 20260527T111417285411.json
+│       │   │   ├── 20260527T111517338213.json
+│       │   │   ├── 20260527T111617398545.json
+│       │   │   ├── 20260527T111717456879.json
+│       │   │   ├── 20260527T111817516371.json
+│       │   │   ├── 20260527T111917580324.json
+│       │   │   ├── 20260527T112017640612.json
+│       │   │   ├── 20260527T112117700395.json
+│       │   │   ├── 20260527T112217760361.json
+│       │   │   ├── 20260527T112317820263.json
+│       │   │   ├── 20260527T112417879549.json
+│       │   │   ├── 20260527T112517936722.json
+│       │   │   ├── 20260527T112617985406.json
+│       │   │   ├── 20260527T112718044800.json
+│       │   │   ├── 20260527T112818104337.json
+│       │   │   ├── 20260527T112918164355.json
+│       │   │   ├── 20260527T113018224364.json
+│       │   │   ├── 20260527T113118284251.json
+│       │   │   ├── 20260527T113218344629.json
+│       │   │   ├── 20260527T113318404347.json
+│       │   │   ├── 20260527T113418464701.json
+│       │   │   ├── 20260527T113518522861.json
+│       │   │   ├── 20260527T113618580908.json
+│       │   │   ├── 20260527T113718640384.json
+│       │   │   ├── 20260527T113818700514.json
+│       │   │   ├── 20260527T113918760452.json
+│       │   │   ├── 20260527T114018821085.json
+│       │   │   ├── 20260527T114118880888.json
+│       │   │   ├── 20260527T114218940420.json
+│       │   │   ├── 20260527T114319000564.json
+│       │   │   ├── 20260527T114419060275.json
+│       │   │   ├── 20260527T114519116676.json
+│       │   │   ├── 20260527T114619176528.json
+│       │   │   ├── 20260527T114719236061.json
+│       │   │   ├── 20260527T114819293962.json
+│       │   │   ├── 20260527T114919346420.json
+│       │   │   ├── 20260527T115019406717.json
+│       │   │   ├── 20260527T115119465890.json
+│       │   │   └── 20260527T115219525353.json
+│       │   ├── instrument_monitor_events
+│       │   │   ├── 20260527T105926153710.json
+│       │   │   ├── 20260527T105926153846.json
+│       │   │   ├── 20260527T105926153939.json
+│       │   │   ├── 20260527T105956184656.json
+│       │   │   ├── 20260527T105956185016.json
+│       │   │   ├── 20260527T105956185193.json
+│       │   │   ├── 20260527T110026213519.json
+│       │   │   ├── 20260527T110026213729.json
+│       │   │   ├── 20260527T110026213840.json
+│       │   │   ├── 20260527T110056236547.json
+│       │   │   ├── 20260527T110056236767.json
+│       │   │   ├── 20260527T110056236879.json
+│       │   │   ├── 20260527T110126264919.json
+│       │   │   ├── 20260527T110126265078.json
+│       │   │   ├── 20260527T110126265157.json
+│       │   │   ├── 20260527T110156292304.json
+│       │   │   ├── 20260527T110156292553.json
+│       │   │   ├── 20260527T110156292678.json
+│       │   │   ├── 20260527T110226321489.json
+│       │   │   ├── 20260527T110226321812.json
+│       │   │   ├── 20260527T110226321928.json
+│       │   │   ├── 20260527T110256348736.json
+│       │   │   ├── 20260527T110256348920.json
+│       │   │   ├── 20260527T110256348998.json
+│       │   │   ├── 20260527T110326376784.json
+│       │   │   ├── 20260527T110326376956.json
+│       │   │   ├── 20260527T110326377037.json
+│       │   │   ├── 20260527T110356406206.json
+│       │   │   ├── 20260527T110356406408.json
+│       │   │   ├── 20260527T110356406510.json
+│       │   │   ├── 20260527T110426436665.json
+│       │   │   ├── 20260527T110426436837.json
+│       │   │   ├── 20260527T110426436923.json
+│       │   │   ├── 20260527T110448118468.json
+│       │   │   ├── 20260527T110448118620.json
+│       │   │   ├── 20260527T110448118824.json
+│       │   │   ├── 20260527T110518148480.json
+│       │   │   ├── 20260527T110518149078.json
+│       │   │   ├── 20260527T110518149394.json
+│       │   │   ├── 20260527T110548179646.json
+│       │   │   ├── 20260527T110548179994.json
+│       │   │   ├── 20260527T110548180280.json
+│       │   │   ├── 20260527T110618208632.json
+│       │   │   ├── 20260527T110618209186.json
+│       │   │   ├── 20260527T110618209548.json
+│       │   │   ├── 20260527T110648238784.json
+│       │   │   ├── 20260527T110648239092.json
+│       │   │   ├── 20260527T110648239275.json
+│       │   │   ├── 20260527T110718268365.json
+│       │   │   ├── 20260527T110718268593.json
+│       │   │   ├── 20260527T110718268723.json
+│       │   │   ├── 20260527T110748298127.json
+│       │   │   ├── 20260527T110748298382.json
+│       │   │   ├── 20260527T110748298476.json
+│       │   │   ├── 20260527T110818327089.json
+│       │   │   ├── 20260527T110818327308.json
+│       │   │   ├── 20260527T110818327414.json
+│       │   │   ├── 20260527T110848356943.json
+│       │   │   ├── 20260527T110848357228.json
+│       │   │   ├── 20260527T110848357393.json
+│       │   │   ├── 20260527T110918379854.json
+│       │   │   ├── 20260527T110918380194.json
+│       │   │   ├── 20260527T110918380347.json
+│       │   │   ├── 20260527T110948409328.json
+│       │   │   ├── 20260527T110948409535.json
+│       │   │   ├── 20260527T110948409661.json
+│       │   │   ├── 20260527T111004994484.json
+│       │   │   ├── 20260527T111004994644.json
+│       │   │   ├── 20260527T111004994859.json
+│       │   │   ├── 20260527T111035020329.json
+│       │   │   ├── 20260527T111035020538.json
+│       │   │   ├── 20260527T111035020639.json
+│       │   │   ├── 20260527T111105046396.json
+│       │   │   ├── 20260527T111105046607.json
+│       │   │   ├── 20260527T111105046698.json
+│       │   │   ├── 20260527T111135075842.json
+│       │   │   ├── 20260527T111135076241.json
+│       │   │   ├── 20260527T111135076395.json
+│       │   │   ├── 20260527T111205104329.json
+│       │   │   ├── 20260527T111205104553.json
+│       │   │   ├── 20260527T111205104681.json
+│       │   │   ├── 20260527T111235130470.json
+│       │   │   ├── 20260527T111235131185.json
+│       │   │   ├── 20260527T111235131636.json
+│       │   │   ├── 20260527T111305160322.json
+│       │   │   ├── 20260527T111305160610.json
+│       │   │   ├── 20260527T111305160732.json
+│       │   │   ├── 20260527T111335190198.json
+│       │   │   ├── 20260527T111335190396.json
+│       │   │   ├── 20260527T111335190505.json
+│       │   │   ├── 20260527T111405219114.json
+│       │   │   ├── 20260527T111405219495.json
+│       │   │   ├── 20260527T111405219703.json
+│       │   │   ├── 20260527T111435250118.json
+│       │   │   ├── 20260527T111435250289.json
+│       │   │   ├── 20260527T111435250370.json
+│       │   │   ├── 20260527T111505280050.json
+│       │   │   ├── 20260527T111505280275.json
+│       │   │   ├── 20260527T111505280379.json
+│       │   │   ├── 20260527T111535310336.json
+│       │   │   ├── 20260527T111535310579.json
+│       │   │   ├── 20260527T111535310709.json
+│       │   │   ├── 20260527T111605340472.json
+│       │   │   ├── 20260527T111605340811.json
+│       │   │   ├── 20260527T111605340940.json
+│       │   │   ├── 20260527T111635367015.json
+│       │   │   ├── 20260527T111635367250.json
+│       │   │   ├── 20260527T111635367395.json
+│       │   │   ├── 20260527T111705397031.json
+│       │   │   ├── 20260527T111705397299.json
+│       │   │   ├── 20260527T111705397418.json
+│       │   │   ├── 20260527T111735427769.json
+│       │   │   ├── 20260527T111735428188.json
+│       │   │   ├── 20260527T111735428513.json
+│       │   │   ├── 20260527T111805458066.json
+│       │   │   ├── 20260527T111805458239.json
+│       │   │   ├── 20260527T111805458319.json
+│       │   │   ├── 20260527T111835488395.json
+│       │   │   ├── 20260527T111835488679.json
+│       │   │   ├── 20260527T111835488851.json
+│       │   │   ├── 20260527T111905518671.json
+│       │   │   ├── 20260527T111905518928.json
+│       │   │   ├── 20260527T111905519070.json
+│       │   │   ├── 20260527T111935548435.json
+│       │   │   ├── 20260527T111935548761.json
+│       │   │   ├── 20260527T111935548962.json
+│       │   │   ├── 20260527T112005576644.json
+│       │   │   ├── 20260527T112005576916.json
+│       │   │   ├── 20260527T112005577047.json
+│       │   │   ├── 20260527T112035606261.json
+│       │   │   ├── 20260527T112035606512.json
+│       │   │   ├── 20260527T112035606634.json
+│       │   │   ├── 20260527T112105636879.json
+│       │   │   ├── 20260527T112105637201.json
+│       │   │   ├── 20260527T112105637383.json
+│       │   │   ├── 20260527T112135665642.json
+│       │   │   ├── 20260527T112135665851.json
+│       │   │   ├── 20260527T112135665966.json
+│       │   │   ├── 20260527T112205696216.json
+│       │   │   ├── 20260527T112205696453.json
+│       │   │   ├── 20260527T112205696582.json
+│       │   │   ├── 20260527T112235726482.json
+│       │   │   ├── 20260527T112235726838.json
+│       │   │   ├── 20260527T112235737794.json
+│       │   │   ├── 20260527T112305767299.json
+│       │   │   ├── 20260527T112305767944.json
+│       │   │   ├── 20260527T112305768637.json
+│       │   │   ├── 20260527T112335798657.json
+│       │   │   ├── 20260527T112335798925.json
+│       │   │   ├── 20260527T112335799078.json
+│       │   │   ├── 20260527T112405828363.json
+│       │   │   ├── 20260527T112405828549.json
+│       │   │   ├── 20260527T112405828640.json
+│       │   │   ├── 20260527T112435855054.json
+│       │   │   ├── 20260527T112435855238.json
+│       │   │   ├── 20260527T112435855328.json
+│       │   │   ├── 20260527T112505885553.json
+│       │   │   ├── 20260527T112505885724.json
+│       │   │   ├── 20260527T112505885807.json
+│       │   │   ├── 20260527T112535912290.json
+│       │   │   ├── 20260527T112535912475.json
+│       │   │   ├── 20260527T112535912564.json
+│       │   │   ├── 20260527T112605938372.json
+│       │   │   ├── 20260527T112605938616.json
+│       │   │   ├── 20260527T112605938741.json
+│       │   │   ├── 20260527T112635967137.json
+│       │   │   ├── 20260527T112635967702.json
+│       │   │   ├── 20260527T112635967963.json
+│       │   │   ├── 20260527T112705991817.json
+│       │   │   ├── 20260527T112705992275.json
+│       │   │   ├── 20260527T112705992507.json
+│       │   │   ├── 20260527T112736016752.json
+│       │   │   ├── 20260527T112736016966.json
+│       │   │   ├── 20260527T112736017080.json
+│       │   │   ├── 20260527T112806047341.json
+│       │   │   ├── 20260527T112806047591.json
+│       │   │   ├── 20260527T112806047738.json
+│       │   │   ├── 20260527T112836076322.json
+│       │   │   ├── 20260527T112836076514.json
+│       │   │   ├── 20260527T112836076614.json
+│       │   │   ├── 20260527T112906104453.json
+│       │   │   ├── 20260527T112906104852.json
+│       │   │   ├── 20260527T112906105098.json
+│       │   │   ├── 20260527T112936144298.json
+│       │   │   ├── 20260527T112936144502.json
+│       │   │   ├── 20260527T112936144619.json
+│       │   │   ├── 20260527T113006168202.json
+│       │   │   ├── 20260527T113006168553.json
+│       │   │   ├── 20260527T113006168767.json
+│       │   │   ├── 20260527T113036197912.json
+│       │   │   ├── 20260527T113036198128.json
+│       │   │   ├── 20260527T113036198253.json
+│       │   │   ├── 20260527T113106232319.json
+│       │   │   ├── 20260527T113106232571.json
+│       │   │   ├── 20260527T113106232687.json
+│       │   │   ├── 20260527T113136262948.json
+│       │   │   ├── 20260527T113136263174.json
+│       │   │   ├── 20260527T113136263292.json
+│       │   │   ├── 20260527T113206293438.json
+│       │   │   ├── 20260527T113206293657.json
+│       │   │   ├── 20260527T113206293779.json
+│       │   │   ├── 20260527T113236318956.json
+│       │   │   ├── 20260527T113236319168.json
+│       │   │   ├── 20260527T113236319273.json
+│       │   │   ├── 20260527T113306347540.json
+│       │   │   ├── 20260527T113306347773.json
+│       │   │   ├── 20260527T113306347907.json
+│       │   │   ├── 20260527T113336378285.json
+│       │   │   ├── 20260527T113336378522.json
+│       │   │   ├── 20260527T113336388337.json
+│       │   │   ├── 20260527T113406418284.json
+│       │   │   ├── 20260527T113406418519.json
+│       │   │   ├── 20260527T113406418652.json
+│       │   │   ├── 20260527T113436448349.json
+│       │   │   ├── 20260527T113436448523.json
+│       │   │   ├── 20260527T113436448612.json
+│       │   │   ├── 20260527T113506477847.json
+│       │   │   ├── 20260527T113506478064.json
+│       │   │   ├── 20260527T113506478171.json
+│       │   │   ├── 20260527T113536508367.json
+│       │   │   ├── 20260527T113536508694.json
+│       │   │   ├── 20260527T113536508855.json
+│       │   │   ├── 20260527T113606533254.json
+│       │   │   ├── 20260527T113606533492.json
+│       │   │   ├── 20260527T113606533586.json
+│       │   │   ├── 20260527T113636560599.json
+│       │   │   ├── 20260527T113636560808.json
+│       │   │   ├── 20260527T113636560957.json
+│       │   │   ├── 20260527T113706589413.json
+│       │   │   ├── 20260527T113706589653.json
+│       │   │   ├── 20260527T113706589776.json
+│       │   │   ├── 20260527T113736616335.json
+│       │   │   ├── 20260527T113736616602.json
+│       │   │   ├── 20260527T113736616737.json
+│       │   │   ├── 20260527T113806646213.json
+│       │   │   ├── 20260527T113806646401.json
+│       │   │   ├── 20260527T113806646492.json
+│       │   │   ├── 20260527T113836676513.json
+│       │   │   ├── 20260527T113836676765.json
+│       │   │   ├── 20260527T113836676880.json
+│       │   │   ├── 20260527T113906706856.json
+│       │   │   ├── 20260527T113906707082.json
+│       │   │   ├── 20260527T113906707403.json
+│       │   │   ├── 20260527T113936736628.json
+│       │   │   ├── 20260527T113936736914.json
+│       │   │   ├── 20260527T113936737065.json
+│       │   │   ├── 20260527T114006766983.json
+│       │   │   ├── 20260527T114006767161.json
+│       │   │   ├── 20260527T114006767249.json
+│       │   │   ├── 20260527T114036787853.json
+│       │   │   ├── 20260527T114036788050.json
+│       │   │   ├── 20260527T114036788227.json
+│       │   │   ├── 20260527T114106817519.json
+│       │   │   ├── 20260527T114106817858.json
+│       │   │   ├── 20260527T114106818056.json
+│       │   │   ├── 20260527T114136836260.json
+│       │   │   ├── 20260527T114136836470.json
+│       │   │   ├── 20260527T114136836583.json
+│       │   │   ├── 20260527T114206865950.json
+│       │   │   ├── 20260527T114206866172.json
+│       │   │   ├── 20260527T114206866328.json
+│       │   │   ├── 20260527T114236896296.json
+│       │   │   ├── 20260527T114236896552.json
+│       │   │   ├── 20260527T114236896697.json
+│       │   │   ├── 20260527T114306926565.json
+│       │   │   ├── 20260527T114306926804.json
+│       │   │   ├── 20260527T114306926931.json
+│       │   │   ├── 20260527T114336956934.json
+│       │   │   ├── 20260527T114336957171.json
+│       │   │   ├── 20260527T114336957330.json
+│       │   │   ├── 20260527T114406986733.json
+│       │   │   ├── 20260527T114406986900.json
+│       │   │   ├── 20260527T114406986982.json
+│       │   │   ├── 20260527T114437016476.json
+│       │   │   ├── 20260527T114437016698.json
+│       │   │   ├── 20260527T114437016816.json
+│       │   │   ├── 20260527T114507046798.json
+│       │   │   ├── 20260527T114507046984.json
+│       │   │   ├── 20260527T114507047073.json
+│       │   │   ├── 20260527T114537076356.json
+│       │   │   ├── 20260527T114537076577.json
+│       │   │   ├── 20260527T114537076701.json
+│       │   │   ├── 20260527T114607105740.json
+│       │   │   ├── 20260527T114607106495.json
+│       │   │   ├── 20260527T114607106889.json
+│       │   │   ├── 20260527T114637136440.json
+│       │   │   ├── 20260527T114637136661.json
+│       │   │   ├── 20260527T114637136782.json
+│       │   │   ├── 20260527T114707166404.json
+│       │   │   ├── 20260527T114707166630.json
+│       │   │   ├── 20260527T114707166758.json
+│       │   │   ├── 20260527T114737196386.json
+│       │   │   ├── 20260527T114737196603.json
+│       │   │   ├── 20260527T114737196715.json
+│       │   │   ├── 20260527T114807226084.json
+│       │   │   ├── 20260527T114807226304.json
+│       │   │   ├── 20260527T114807226419.json
+│       │   │   ├── 20260527T114837256739.json
+│       │   │   ├── 20260527T114837256939.json
+│       │   │   ├── 20260527T114837257034.json
+│       │   │   ├── 20260527T114907286761.json
+│       │   │   ├── 20260527T114907286991.json
+│       │   │   ├── 20260527T114907287113.json
+│       │   │   ├── 20260527T114937316590.json
+│       │   │   ├── 20260527T114937316838.json
+│       │   │   ├── 20260527T114937316971.json
+│       │   │   ├── 20260527T115007344313.json
+│       │   │   ├── 20260527T115007344551.json
+│       │   │   ├── 20260527T115007344686.json
+│       │   │   ├── 20260527T115037371054.json
+│       │   │   ├── 20260527T115037371228.json
+│       │   │   ├── 20260527T115037371312.json
+│       │   │   ├── 20260527T115107401249.json
+│       │   │   ├── 20260527T115107401467.json
+│       │   │   ├── 20260527T115107401590.json
+│       │   │   ├── 20260527T115137422747.json
+│       │   │   ├── 20260527T115137423015.json
+│       │   │   ├── 20260527T115137423172.json
+│       │   │   ├── 20260527T115207452325.json
+│       │   │   ├── 20260527T115207452562.json
+│       │   │   ├── 20260527T115207452691.json
+│       │   │   ├── 20260527T115237479559.json
+│       │   │   ├── 20260527T115237479740.json
+│       │   │   ├── 20260527T115237479833.json
+│       │   │   ├── 20260527T115307506573.json
+│       │   │   ├── 20260527T115307507409.json
+│       │   │   └── 20260527T115307507863.json
+│       │   ├── instrument_screened
+│       │   │   ├── 20260527T105922121817.json
+│       │   │   ├── 20260527T105922121934.json
+│       │   │   ├── 20260527T105922122018.json
+│       │   │   ├── 20260527T110022180450.json
+│       │   │   ├── 20260527T110022180615.json
+│       │   │   ├── 20260527T110022180699.json
+│       │   │   ├── 20260527T110122240339.json
+│       │   │   ├── 20260527T110122240575.json
+│       │   │   ├── 20260527T110122240701.json
+│       │   │   ├── 20260527T110222300498.json
+│       │   │   ├── 20260527T110222300759.json
+│       │   │   ├── 20260527T110222300886.json
+│       │   │   ├── 20260527T110322360709.json
+│       │   │   ├── 20260527T110322360995.json
+│       │   │   ├── 20260527T110322361233.json
+│       │   │   ├── 20260527T110422419596.json
+│       │   │   ├── 20260527T110422419866.json
+│       │   │   ├── 20260527T110422420013.json
+│       │   │   ├── 20260527T110444103399.json
+│       │   │   ├── 20260527T110444103520.json
+│       │   │   ├── 20260527T110444103612.json
+│       │   │   ├── 20260527T110544160597.json
+│       │   │   ├── 20260527T110544160803.json
+│       │   │   ├── 20260527T110544160898.json
+│       │   │   ├── 20260527T110644219338.json
+│       │   │   ├── 20260527T110644219758.json
+│       │   │   ├── 20260527T110644220021.json
+│       │   │   ├── 20260527T110744275341.json
+│       │   │   ├── 20260527T110744275604.json
+│       │   │   ├── 20260527T110744275757.json
+│       │   │   ├── 20260527T110844332516.json
+│       │   │   ├── 20260527T110844332866.json
+│       │   │   ├── 20260527T110844333007.json
+│       │   │   ├── 20260527T110944392615.json
+│       │   │   ├── 20260527T110944392833.json
+│       │   │   ├── 20260527T110944392937.json
+│       │   │   ├── 20260527T111000959288.json
+│       │   │   ├── 20260527T111000959425.json
+│       │   │   ├── 20260527T111000959513.json
+│       │   │   ├── 20260527T111101019465.json
+│       │   │   ├── 20260527T111101019656.json
+│       │   │   ├── 20260527T111101019756.json
+│       │   │   ├── 20260527T111201078652.json
+│       │   │   ├── 20260527T111201078909.json
+│       │   │   ├── 20260527T111201079158.json
+│       │   │   ├── 20260527T111301134075.json
+│       │   │   ├── 20260527T111301134484.json
+│       │   │   ├── 20260527T111301134693.json
+│       │   │   ├── 20260527T111401194464.json
+│       │   │   ├── 20260527T111401194809.json
+│       │   │   ├── 20260527T111401195125.json
+│       │   │   ├── 20260527T111501255667.json
+│       │   │   ├── 20260527T111501255855.json
+│       │   │   ├── 20260527T111501255946.json
+│       │   │   ├── 20260527T111601316412.json
+│       │   │   ├── 20260527T111601316660.json
+│       │   │   ├── 20260527T111601316802.json
+│       │   │   ├── 20260527T111701376363.json
+│       │   │   ├── 20260527T111701376597.json
+│       │   │   ├── 20260527T111701376722.json
+│       │   │   ├── 20260527T111801436349.json
+│       │   │   ├── 20260527T111801436545.json
+│       │   │   ├── 20260527T111801436655.json
+│       │   │   ├── 20260527T111901497374.json
+│       │   │   ├── 20260527T111901497684.json
+│       │   │   ├── 20260527T111901497784.json
+│       │   │   ├── 20260527T112001563838.json
+│       │   │   ├── 20260527T112001566978.json
+│       │   │   ├── 20260527T112001568183.json
+│       │   │   ├── 20260527T112101628278.json
+│       │   │   ├── 20260527T112101628461.json
+│       │   │   ├── 20260527T112101628546.json
+│       │   │   ├── 20260527T112201688467.json
+│       │   │   ├── 20260527T112201688864.json
+│       │   │   ├── 20260527T112201689133.json
+│       │   │   ├── 20260527T112301749926.json
+│       │   │   ├── 20260527T112301750143.json
+│       │   │   ├── 20260527T112301750244.json
+│       │   │   ├── 20260527T112401808700.json
+│       │   │   ├── 20260527T112401808870.json
+│       │   │   ├── 20260527T112401808955.json
+│       │   │   ├── 20260527T112501868337.json
+│       │   │   ├── 20260527T112501868512.json
+│       │   │   ├── 20260527T112501868674.json
+│       │   │   ├── 20260527T112601928241.json
+│       │   │   ├── 20260527T112601928539.json
+│       │   │   ├── 20260527T112601928777.json
+│       │   │   ├── 20260527T112701984868.json
+│       │   │   ├── 20260527T112701985082.json
+│       │   │   ├── 20260527T112701985175.json
+│       │   │   ├── 20260527T112802043783.json
+│       │   │   ├── 20260527T112802044434.json
+│       │   │   ├── 20260527T112802044776.json
+│       │   │   ├── 20260527T112902102137.json
+│       │   │   ├── 20260527T112902102347.json
+│       │   │   ├── 20260527T112902102462.json
+│       │   │   ├── 20260527T113002160297.json
+│       │   │   ├── 20260527T113002160598.json
+│       │   │   ├── 20260527T113002160731.json
+│       │   │   ├── 20260527T113102220294.json
+│       │   │   ├── 20260527T113102220513.json
+│       │   │   ├── 20260527T113102220627.json
+│       │   │   ├── 20260527T113202280372.json
+│       │   │   ├── 20260527T113202285842.json
+│       │   │   ├── 20260527T113202286037.json
+│       │   │   ├── 20260527T113302346063.json
+│       │   │   ├── 20260527T113302346271.json
+│       │   │   ├── 20260527T113302346427.json
+│       │   │   ├── 20260527T113402406236.json
+│       │   │   ├── 20260527T113402406473.json
+│       │   │   ├── 20260527T113402406604.json
+│       │   │   ├── 20260527T113502464311.json
+│       │   │   ├── 20260527T113502464521.json
+│       │   │   ├── 20260527T113502464686.json
+│       │   │   ├── 20260527T113602524533.json
+│       │   │   ├── 20260527T113602524828.json
+│       │   │   ├── 20260527T113602524996.json
+│       │   │   ├── 20260527T113702584145.json
+│       │   │   ├── 20260527T113702584484.json
+│       │   │   ├── 20260527T113702584646.json
+│       │   │   ├── 20260527T113802638593.json
+│       │   │   ├── 20260527T113802638886.json
+│       │   │   ├── 20260527T113802638997.json
+│       │   │   ├── 20260527T113902693302.json
+│       │   │   ├── 20260527T113902693626.json
+│       │   │   ├── 20260527T113902693788.json
+│       │   │   ├── 20260527T114002752738.json
+│       │   │   ├── 20260527T114002752908.json
+│       │   │   ├── 20260527T114002752992.json
+│       │   │   ├── 20260527T114102804384.json
+│       │   │   ├── 20260527T114102804672.json
+│       │   │   ├── 20260527T114102804815.json
+│       │   │   ├── 20260527T114202864404.json
+│       │   │   ├── 20260527T114202864671.json
+│       │   │   ├── 20260527T114202864828.json
+│       │   │   ├── 20260527T114302916839.json
+│       │   │   ├── 20260527T114302917077.json
+│       │   │   ├── 20260527T114302917202.json
+│       │   │   ├── 20260527T114402977109.json
+│       │   │   ├── 20260527T114402977404.json
+│       │   │   ├── 20260527T114402977506.json
+│       │   │   ├── 20260527T114503030886.json
+│       │   │   ├── 20260527T114503031198.json
+│       │   │   ├── 20260527T114503031389.json
+│       │   │   ├── 20260527T114603091120.json
+│       │   │   ├── 20260527T114603091293.json
+│       │   │   ├── 20260527T114603091398.json
+│       │   │   ├── 20260527T114703151713.json
+│       │   │   ├── 20260527T114703151942.json
+│       │   │   ├── 20260527T114703152070.json
+│       │   │   ├── 20260527T114803207654.json
+│       │   │   ├── 20260527T114803207860.json
+│       │   │   ├── 20260527T114803207969.json
+│       │   │   ├── 20260527T114903265921.json
+│       │   │   ├── 20260527T114903266179.json
+│       │   │   ├── 20260527T114903266306.json
+│       │   │   ├── 20260527T115003325971.json
+│       │   │   ├── 20260527T115003326717.json
+│       │   │   ├── 20260527T115003326823.json
+│       │   │   ├── 20260527T115103386716.json
+│       │   │   ├── 20260527T115103386950.json
+│       │   │   ├── 20260527T115103387086.json
+│       │   │   ├── 20260527T115203446298.json
+│       │   │   ├── 20260527T115203446466.json
+│       │   │   ├── 20260527T115203446555.json
+│       │   │   ├── 20260527T115303504519.json
+│       │   │   ├── 20260527T115303504750.json
+│       │   │   └── 20260527T115303504878.json
+│       │   └── signal_events
+│       │       ├── 20260527T105930184179.json
+│       │       ├── 20260527T105930184338.json
+│       │       ├── 20260527T105934217140.json
+│       │       ├── 20260527T110030242100.json
+│       │       ├── 20260527T110030242318.json
+│       │       ├── 20260527T110130302693.json
+│       │       ├── 20260527T110130303043.json
+│       │       ├── 20260527T110230356821.json
+│       │       ├── 20260527T110230357110.json
+│       │       ├── 20260527T110330416952.json
+│       │       ├── 20260527T110330417305.json
+│       │       ├── 20260527T110430476995.json
+│       │       ├── 20260527T110430477375.json
+│       │       ├── 20260527T110452144431.json
+│       │       ├── 20260527T110452144575.json
+│       │       ├── 20260527T110456162518.json
+│       │       ├── 20260527T110552204349.json
+│       │       ├── 20260527T110552204533.json
+│       │       ├── 20260527T110652263146.json
+│       │       ├── 20260527T110652263318.json
+│       │       ├── 20260527T110752315945.json
+│       │       ├── 20260527T110752316333.json
+│       │       ├── 20260527T110852372249.json
+│       │       ├── 20260527T110852372510.json
+│       │       ├── 20260527T110952432256.json
+│       │       ├── 20260527T110952432456.json
+│       │       ├── 20260527T111009005310.json
+│       │       ├── 20260527T111009005440.json
+│       │       ├── 20260527T111013024182.json
+│       │       ├── 20260527T111109064261.json
+│       │       ├── 20260527T111109064440.json
+│       │       ├── 20260527T111209124230.json
+│       │       ├── 20260527T111209124467.json
+│       │       ├── 20260527T111309184303.json
+│       │       ├── 20260527T111309184566.json
+│       │       ├── 20260527T111409244344.json
+│       │       ├── 20260527T111409244566.json
+│       │       ├── 20260527T111509304645.json
+│       │       ├── 20260527T111509304865.json
+│       │       ├── 20260527T111609364374.json
+│       │       ├── 20260527T111609364748.json
+│       │       ├── 20260527T111709424339.json
+│       │       ├── 20260527T111709424584.json
+│       │       ├── 20260527T111809485394.json
+│       │       ├── 20260527T111809485914.json
+│       │       ├── 20260527T111909545306.json
+│       │       ├── 20260527T111909545538.json
+│       │       ├── 20260527T112009605459.json
+│       │       ├── 20260527T112009605736.json
+│       │       ├── 20260527T112109665858.json
+│       │       ├── 20260527T112109666051.json
+│       │       ├── 20260527T112209726264.json
+│       │       ├── 20260527T112209726557.json
+│       │       ├── 20260527T112309788413.json
+│       │       ├── 20260527T112309788714.json
+│       │       ├── 20260527T112409846229.json
+│       │       ├── 20260527T112409846440.json
+│       │       ├── 20260527T112509904557.json
+│       │       ├── 20260527T112509905082.json
+│       │       ├── 20260527T112609965687.json
+│       │       ├── 20260527T112609965948.json
+│       │       ├── 20260527T112710026324.json
+│       │       ├── 20260527T112710026553.json
+│       │       ├── 20260527T112810085485.json
+│       │       ├── 20260527T112810085881.json
+│       │       ├── 20260527T112910144792.json
+│       │       ├── 20260527T112910145027.json
+│       │       ├── 20260527T113010204377.json
+│       │       ├── 20260527T113010204597.json
+│       │       ├── 20260527T113110264340.json
+│       │       ├── 20260527T113110264607.json
+│       │       ├── 20260527T113210320771.json
+│       │       ├── 20260527T113210321017.json
+│       │       ├── 20260527T113310380919.json
+│       │       ├── 20260527T113310381389.json
+│       │       ├── 20260527T113410440503.json
+│       │       ├── 20260527T113410440736.json
+│       │       ├── 20260527T113510502270.json
+│       │       ├── 20260527T113510502483.json
+│       │       ├── 20260527T113610561352.json
+│       │       ├── 20260527T113610561575.json
+│       │       ├── 20260527T113710607244.json
+│       │       ├── 20260527T113710607566.json
+│       │       ├── 20260527T113810664547.json
+│       │       ├── 20260527T113810665063.json
+│       │       ├── 20260527T113910724702.json
+│       │       ├── 20260527T113910724913.json
+│       │       ├── 20260527T114010778659.json
+│       │       ├── 20260527T114010778870.json
+│       │       ├── 20260527T114110825986.json
+│       │       ├── 20260527T114110826341.json
+│       │       ├── 20260527T114210886259.json
+│       │       ├── 20260527T114210886499.json
+│       │       ├── 20260527T114310945516.json
+│       │       ├── 20260527T114310945925.json
+│       │       ├── 20260527T114411004415.json
+│       │       ├── 20260527T114411004754.json
+│       │       ├── 20260527T114511061609.json
+│       │       ├── 20260527T114511061836.json
+│       │       ├── 20260527T114611117570.json
+│       │       ├── 20260527T114611117791.json
+│       │       ├── 20260527T114711176577.json
+│       │       ├── 20260527T114711176828.json
+│       │       ├── 20260527T114811237415.json
+│       │       ├── 20260527T114811237931.json
+│       │       ├── 20260527T114911292977.json
+│       │       ├── 20260527T114911293223.json
+│       │       ├── 20260527T115011344404.json
+│       │       ├── 20260527T115011344918.json
+│       │       ├── 20260527T115111404328.json
+│       │       ├── 20260527T115111404540.json
+│       │       ├── 20260527T115211464379.json
+│       │       ├── 20260527T115211464606.json
+│       │       ├── 20260527T115311524594.json
+│       │       └── 20260527T115311524809.json
+│       ├── logs
+│       └── pids
+│           ├── decision-engine-service-health.pid
+│           ├── decision-engine-service-main.pid
+│           ├── instrument-monitoring-service-health.pid
+│           ├── instrument-monitoring-service-main.pid
+│           ├── instrument-screening-service-health.pid
+│           ├── instrument-screening-service-main.pid
+│           ├── signal-processor-service-health.pid
+│           ├── signal-processor-service-main.pid
+│           ├── strategy-engine-service-health.pid
+│           └── strategy-engine-service-main.pid
+├── schemas
+│   ├── avro
+│   │   ├── audit
+│   │   │   └── audit_event_v1.avsc
+│   │   ├── common
+│   │   │   └── base-event.avsc
+│   │   ├── deprecated
+│   │   │   └── market-tick.avsc
+│   │   ├── execution
+│   │   │   ├── execution_intent_v1.avsc
+│   │   │   ├── execution_order_v1.avsc
+│   │   │   └── fill_v1.avsc
+│   │   ├── governance
+│   │   │   └── kill_switch_v1.avsc
+│   │   ├── market-data
+│   │   │   ├── feature_store_update_v1.avsc
+│   │   │   ├── historical_query_v1.avsc
+│   │   │   ├── market_session_v1.avsc
+│   │   │   ├── normalized_market_data_v1.avsc
+│   │   │   └── raw_market_data_v1.avsc
+│   │   ├── orders
+│   │   ├── portfolio
+│   │   ├── risk
+│   │   ├── signals
+│   │   └── strategy
+│   │       ├── signal_v1.avsc
+│   │       └── trade_intent_v1.avsc
+│   ├── compatibility
+│   ├── monitoring
+│   │   └── InstrumentMonitorEvent_v1.avsc
+│   ├── portfolio
+│   │   ├── avro
+│   │   │   ├── exposure-state.avsc
+│   │   │   ├── pnl-state.avsc
+│   │   │   ├── portfolio-state.avsc
+│   │   │   └── position-state.avsc
+│   │   ├── capital
+│   │   │   ├── allocation-state.avsc
+│   │   │   ├── capital-partition.avsc
+│   │   │   └── capital-reservation.avsc
+│   │   ├── contracts
+│   │   │   └── topic-governance.md
+│   │   └── registry
+│   ├── README.md
+│   ├── registry
+│   ├── screening
+│   │   └── InstrumentScreened_v1.avsc
+│   ├── signal
+│   │   └── Signal_v1.avsc
+│   ├── strategy
+│   │   └── contracts
+│   │       └── schema-governance.md
+│   └── trade_intent
+│       └── TradeIntent_v1.avsc
+├── scratch
+│   ├── .keep
+│   └── legacy-cleanup
+│       ├── quarantine
+│       │   ├── docs-stages
+│       │   │   └── stage-03a-platform-governance-stabilization.md
+│       │   ├── infrastructure-scripts-host
+│       │   │   ├── create-vm.ps1
+│       │   │   ├── init-stage-0a-structure.sh
+│       │   │   ├── install-host-tools.ps1
+│       │   │   ├── validate.ps1
+│       │   │   └── windows-prereq-check.ps1
+│       │   ├── infrastructure-validation-governance
+│       │   │   ├── validate-stage-03a.sh
+│       │   │   └── validate-stage-03.sh
+│       │   ├── stage-02-cluster-foundation
+│       │   │   ├── checkpoints
+│       │   │   │   ├── cert-manager.checkpoint
+│       │   │   │   ├── ingress.checkpoint
+│       │   │   │   ├── istio-base.checkpoint
+│       │   │   │   ├── longhorn.checkpoint
+│       │   │   │   ├── metallb.checkpoint
+│       │   │   │   ├── namespaces.checkpoint
+│       │   │   │   └── network-policies.checkpoint
+│       │   │   ├── manifest.yaml
+│       │   │   ├── README.md
+│       │   │   ├── rollback.sh
+│       │   │   ├── runtime
+│       │   │   │   ├── dependencies.yaml
+│       │   │   │   ├── execution-order.yaml
+│       │   │   │   ├── recovery-map.yaml
+│       │   │   │   └── validation-rules.yaml
+│       │   │   ├── setup.sh
+│       │   │   ├── state.sh
+│       │   │   └── validate.sh
+│       │   ├── stage-03a-platform-governance-stabilization
+│       │   │   ├── README.md
+│       │   │   ├── rollback.sh
+│       │   │   ├── setup.sh
+│       │   │   ├── state.sh
+│       │   │   └── validate.sh
+│       │   └── stage-03-governance-foundation
+│       │       ├── README.md
+│       │       ├── rollback.sh
+│       │       ├── setup.sh
+│       │       ├── state.sh
+│       │       └── validate.sh
+│       ├── stage-03a-configuration
+│       └── stage-03-governance
+│           ├── setup-stage-03a-platform-governance.sh
+│           └── setup-stage-03-governance.sh
+├── scripts
+│   ├── config
+│   │   ├── seed-config.sh
+│   │   └── validate-config.sh
+│   ├── deploy
+│   ├── deployment
+│   ├── foundation
+│   │   ├── generate-stage-02-artifacts.sh
+│   │   ├── generate-standards.sh
+│   │   ├── init-adrs.sh
+│   │   ├── new-service.sh
+│   │   ├── normalize-makefile.py
+│   │   ├── setup-github.sh
+│   │   ├── setup-repos.sh
+│   │   ├── setup-stage-02-cluster-foundation.sh
+│   │   └── validate.sh
+│   ├── gitops
+│   ├── governance
+│   │   ├── check-lineage-rules.py
+│   │   ├── inventory-contaminated-scripts.sh
+│   │   ├── inventory-legacy-artifacts.sh
+│   │   └── validate-governance.py
+│   ├── health
+│   │   └── platform-health-check.sh
+│   ├── host
+│   │   ├── create-vm.ps1
+│   │   ├── install-host-tools.ps1
+│   │   ├── validate.ps1
+│   │   └── windows-prereq-check.ps1
+│   ├── infrastructure
+│   │   ├── audit-stage-04.sh
+│   │   ├── check-stage-04-contamination.sh
+│   │   ├── configure-containerd.sh
+│   │   ├── install-docker.sh
+│   │   ├── install-helm.sh
+│   │   ├── install-kubectl.sh
+│   │   ├── install-terraform.sh
+│   │   ├── start-registry.sh
+│   │   └── validate-runtime.sh
+│   ├── kubernetes
+│   │   ├── apply-network-policies.sh
+│   │   ├── apply-pdb.sh
+│   │   ├── apply-priority-classes.sh
+│   │   ├── apply-rbac.sh
+│   │   ├── apply-resource-quotas.sh
+│   │   ├── apply-service-accounts.sh
+│   │   ├── audit-stage-05.sh
+│   │   ├── check-stage-05-contamination.sh
+│   │   ├── create-namespaces.sh
+│   │   ├── install-calico.sh
+│   │   ├── install-kubernetes.sh
+│   │   └── validate-cluster.sh
+│   ├── messaging
+│   │   ├── apply-acls.sh
+│   │   ├── audit-stage-07.sh
+│   │   ├── check-stage-07-contamination.sh
+│   │   ├── create-topics.sh
+│   │   ├── install-kafka.sh
+│   │   ├── install-kafka-ui.sh
+│   │   ├── install-schema-registry.sh
+│   │   ├── register-schemas.sh
+│   │   ├── validate-acls.sh
+│   │   ├── validate-event-backbone.sh
+│   │   ├── validate-replay.sh
+│   │   ├── validate-schemas.sh
+│   │   └── validate-topics.sh
+│   ├── migration
+│   │   └── migrate-to-corei.sh
+│   ├── platform
+│   │   ├── apply-platform-governance.sh
+│   │   ├── build-sdk.sh
+│   │   ├── deploy-platform-services.sh
+│   │   ├── publish-sdk.sh
+│   │   ├── run-config-governance-tests.sh
+│   │   ├── run-deterministic-replay-tests.sh
+│   │   ├── run-deterministic-replay-validation.sh
+│   │   ├── run-event-governance-tests.sh
+│   │   ├── run-execution-gate-tests.sh
+│   │   ├── run-full-platform-validation.sh
+│   │   ├── run-operations-foundation-tests.sh
+│   │   ├── run-operations-validation.sh
+│   │   ├── run-platform-subsystem-tests.sh
+│   │   ├── run-portfolio-foundation-tests.sh
+│   │   ├── run-resilience-foundation-tests.sh
+│   │   ├── run-resilience-validation.sh
+│   │   ├── run-sdk-tests.sh
+│   │   ├── validate-helm-governance.sh
+│   │   ├── validate-platform-services.sh
+│   │   └── validate-sdk-install.sh
+│   ├── recovery
+│   │   └── backup.sh
+│   ├── rollback
+│   ├── security
+│   │   ├── audit-stage-06.sh
+│   │   ├── check-stage-06-contamination.sh
+│   │   ├── configure-cert-manager.sh
+│   │   ├── configure-istio.sh
+│   │   ├── configure-keycloak.sh
+│   │   ├── configure-kong.sh
+│   │   ├── configure-vault.sh
+│   │   ├── install-cert-manager.sh
+│   │   ├── install-falco.sh
+│   │   ├── install-istio.sh
+│   │   ├── install-keycloak.sh
+│   │   ├── install-kong.sh
+│   │   ├── install-vault.sh
+│   │   └── validate-security.sh
+│   ├── testing
+│   │   ├── run-chaos-tests.sh
+│   │   ├── run-contract-tests.sh
+│   │   ├── run-load-tests.sh
+│   │   ├── run-orchestrated-tests.sh
+│   │   ├── run-performance-tests.sh
+│   │   ├── run-replay-validation.sh
+│   │   ├── run-schema-tests.sh
+│   │   ├── run-simulation-stack.sh
+│   │   ├── run-simulation-tests.sh
+│   │   ├── run-tests.sh
+│   │   ├── setup-test-env.sh
+│   │   ├── stop-simulation-stack.sh
+│   │   └── validate-test-env.sh
+│   ├── tooling
+│   └── validation
+├── secrets
+│   └── gitops
+│       ├── argocd-repo-key
+│       └── argocd-repo-key.pub
+├── security
+│   └── .keep
+├── services
+│   ├── alert-service
+│   │   ├── config
+│   │   ├── helm
+│   │   │   └── templates
+│   │   ├── src
+│   │   └── tests
+│   ├── audit-service
+│   │   ├── config
+│   │   ├── Dockerfile
+│   │   ├── helm
+│   │   │   ├── Chart.yaml
+│   │   │   ├── templates
+│   │   │   │   ├── deployment.yaml
+│   │   │   │   └── service.yaml
+│   │   │   ├── tests
+│   │   │   └── values.yaml
+│   │   ├── requirements.txt
+│   │   ├── scripts
+│   │   ├── src
+│   │   │   └── app.py
+│   │   └── tests
+│   ├── capital-partition-service
+│   │   ├── api
+│   │   ├── cmd
+│   │   ├── configs
+│   │   ├── internal
+│   │   ├── README.md
+│   │   └── scripts
+│   ├── config-service
+│   │   ├── config
+│   │   ├── Dockerfile
+│   │   ├── helm
+│   │   │   ├── Chart.yaml
+│   │   │   ├── templates
+│   │   │   │   ├── deployment.yaml
+│   │   │   │   └── service.yaml
+│   │   │   ├── tests
+│   │   │   └── values.yaml
+│   │   ├── requirements.txt
+│   │   ├── scripts
+│   │   ├── src
+│   │   │   └── app.py
+│   │   └── tests
+│   ├── config-snapshot-service
+│   │   ├── config
+│   │   ├── Dockerfile
+│   │   ├── helm
+│   │   │   ├── Chart.yaml
+│   │   │   ├── templates
+│   │   │   │   ├── deployment.yaml
+│   │   │   │   └── service.yaml
+│   │   │   ├── tests
+│   │   │   └── values.yaml
+│   │   ├── requirements.txt
+│   │   ├── scripts
+│   │   ├── src
+│   │   │   └── app.py
+│   │   └── tests
+│   ├── event-ingestion-service
+│   │   ├── config
+│   │   ├── Dockerfile
+│   │   ├── helm
+│   │   │   ├── Chart.yaml
+│   │   │   ├── templates
+│   │   │   │   ├── deployment.yaml
+│   │   │   │   └── service.yaml
+│   │   │   ├── tests
+│   │   │   └── values.yaml
+│   │   ├── requirements.txt
+│   │   ├── scripts
+│   │   ├── src
+│   │   │   └── app.py
+│   │   └── tests
+│   ├── event-ordering-service
+│   │   ├── config
+│   │   ├── helm
+│   │   │   └── templates
+│   │   ├── src
+│   │   └── tests
+│   ├── event-validation-service
+│   │   ├── config
+│   │   ├── helm
+│   │   │   └── templates
+│   │   ├── src
+│   │   └── tests
+│   ├── exposure-service
+│   │   ├── api
+│   │   ├── cmd
+│   │   ├── configs
+│   │   ├── internal
+│   │   ├── README.md
+│   │   └── scripts
+│   ├── failure-handling-service
+│   │   ├── config
+│   │   ├── helm
+│   │   │   └── templates
+│   │   ├── src
+│   │   └── tests
+│   ├── identity-service
+│   │   ├── config
+│   │   ├── Dockerfile
+│   │   ├── helm
+│   │   │   ├── Chart.yaml
+│   │   │   ├── templates
+│   │   │   │   ├── deployment.yaml
+│   │   │   │   └── service.yaml
+│   │   │   ├── tests
+│   │   │   └── values.yaml
+│   │   ├── requirements.txt
+│   │   ├── scripts
+│   │   ├── src
+│   │   │   └── app.py
+│   │   └── tests
+│   ├── market-data-service
+│   │   ├── app
+│   │   │   └── main.py
+│   │   ├── config
+│   │   │   └── service.yaml
+│   │   ├── contracts
+│   │   │   └── events.yaml
+│   │   ├── Dockerfile
+│   │   ├── helm
+│   │   │   ├── Chart.yaml
+│   │   │   ├── templates
+│   │   │   │   ├── deployment.yaml
+│   │   │   │   └── service.yaml
+│   │   │   └── values.yaml
+│   │   ├── Makefile
+│   │   ├── README.md
+│   │   ├── scripts
+│   │   │   └── start.sh
+│   │   ├── service-metadata.yaml
+│   │   ├── service.yaml
+│   │   ├── src
+│   │   └── tests
+│   │       └── test_health.py
+│   ├── orchestration-service
+│   │   ├── config
+│   │   ├── helm
+│   │   │   └── templates
+│   │   ├── src
+│   │   └── tests
+│   ├── platform
+│   │   ├── audit-service
+│   │   ├── config
+│   │   ├── config-service
+│   │   ├── config-snapshot-service
+│   │   ├── helm
+│   │   │   └── templates
+│   │   ├── src
+│   │   └── tests
+│   ├── portfolio-service
+│   │   ├── api
+│   │   ├── cmd
+│   │   ├── config
+│   │   ├── configs
+│   │   ├── helm
+│   │   │   └── templates
+│   │   ├── internal
+│   │   ├── README.md
+│   │   ├── scripts
+│   │   ├── src
+│   │   └── tests
+│   ├── README.md
+│   ├── replay-engine-service
+│   │   ├── config
+│   │   ├── helm
+│   │   │   └── templates
+│   │   ├── src
+│   │   └── tests
+│   ├── snapshot-service
+│   │   ├── config
+│   │   ├── helm
+│   │   │   └── templates
+│   │   ├── src
+│   │   └── tests
+│   └── _template
+│       ├── app
+│       │   └── main.py
+│       ├── config
+│       │   └── service.yaml
+│       ├── contracts
+│       │   └── events.yaml
+│       ├── Dockerfile
+│       ├── helm
+│       │   ├── Chart.yaml
+│       │   ├── templates
+│       │   │   ├── deployment.yaml
+│       │   │   └── service.yaml
+│       │   └── values.yaml
+│       ├── Makefile
+│       ├── README.md
+│       ├── scripts
+│       │   └── start.sh
+│       ├── service.yaml
+│       ├── src
+│       └── tests
+│           └── test_health.py
+├── simulation
+│   ├── broker
+│   ├── broker-runtime
+│   ├── .keep
+│   ├── market-data
+│   ├── market-runtime
+│   └── replay
+├── .snapshots
+│   ├── corei-governance-normalization.tar.gz
+│   ├── stage-02-repository-foundation.tar.gz
+│   ├── stage-03a-configuration-foundation.tar.gz
+│   ├── stage-03-governance-foundation.tar.gz
+│   ├── stage-04-infra-foundation.tar.gz
+│   ├── stage-05-k8s-platform.tar.gz
+│   └── stage-06-security.tar.gz
+├── snapshots
+│   └── stage-14a-freeze-20260527-111836
+│       ├── governance
+│       │   ├── artifact-governance.md
+│       │   ├── authoritative-platform-execution-model.md
+│       │   ├── authoritative-stage-index.md
+│       │   ├── branching-strategy.md
+│       │   ├── build-state-governance.md
+│       │   ├── capital-partition-governance.md
+│       │   ├── change-management-policy.md
+│       │   ├── config-governance.md
+│       │   ├── configuration-governance.md
+│       │   ├── definition-of-done.md
+│       │   ├── engineering-workflow.md
+│       │   ├── environment-governance.md
+│       │   ├── environment-naming.md
+│       │   ├── environment-runtime-governance.md
+│       │   ├── event-governance.md
+│       │   ├── filesystem-governance.md
+│       │   ├── fixed-point-governance.md
+│       │   ├── installer-governance.md
+│       │   ├── institutional-stage-execution-lifecycle.md
+│       │   ├── lineage-governance.md
+│       │   ├── mode-governance.md
+│       │   ├── platform-manifest-governance.md
+│       │   ├── policy-governance.md
+│       │   ├── portfolio-audit-governance.md
+│       │   ├── portfolio-domain-architecture.md
+│       │   ├── portfolio-event-governance.md
+│       │   ├── portfolio-governance-laws.md
+│       │   ├── portfolio-persistence-governance.md
+│       │   ├── portfolio-replay-governance.md
+│       │   ├── pr-review-policy.md
+│       │   ├── README.md
+│       │   ├── release-governance.md
+│       │   ├── repository-boundaries.md
+│       │   ├── repository-ownership.md
+│       │   ├── repository-strategy.md
+│       │   ├── repository-topology.md
+│       │   ├── runtime-authority.md
+│       │   ├── schema-governance.md
+│       │   ├── schema-versioning.md
+│       │   ├── scripting-governance.md
+│       │   ├── security-authority.md
+│       │   ├── service-boundary-governance.md
+│       │   ├── service-ownership-governance.md
+│       │   ├── stage13-freeze-governance.md
+│       │   ├── stage-14a-freeze-certification.md
+│       │   ├── stage-14a-validation-authority.md
+│       │   ├── system-state-governance.md
+│       │   ├── timestamp-governance.md
+│       │   ├── topic-governance.md
+│       │   ├── trading-conflict-governance.md
+│       │   ├── trading-event-governance
+│       │   │   └── topic-governance.md
+│       │   ├── trading-event-transport-governance.md
+│       │   ├── trading-numeric-governance.md
+│       │   ├── trading-runtime-governance.md
+│       │   ├── trading-temporal-governance.md
+│       │   ├── validation-governance.md
+│       │   └── versioning-policy.md
+│       ├── schemas
+│       │   ├── avro
+│       │   │   ├── audit
+│       │   │   │   └── audit_event_v1.avsc
+│       │   │   ├── common
+│       │   │   │   └── base-event.avsc
+│       │   │   ├── deprecated
+│       │   │   │   └── market-tick.avsc
+│       │   │   ├── execution
+│       │   │   │   ├── execution_intent_v1.avsc
+│       │   │   │   ├── execution_order_v1.avsc
+│       │   │   │   └── fill_v1.avsc
+│       │   │   ├── governance
+│       │   │   │   └── kill_switch_v1.avsc
+│       │   │   ├── market-data
+│       │   │   │   ├── feature_store_update_v1.avsc
+│       │   │   │   ├── historical_query_v1.avsc
+│       │   │   │   ├── market_session_v1.avsc
+│       │   │   │   ├── normalized_market_data_v1.avsc
+│       │   │   │   └── raw_market_data_v1.avsc
+│       │   │   ├── orders
+│       │   │   ├── portfolio
+│       │   │   ├── risk
+│       │   │   ├── signals
+│       │   │   └── strategy
+│       │   │       ├── signal_v1.avsc
+│       │   │       └── trade_intent_v1.avsc
+│       │   ├── compatibility
+│       │   ├── monitoring
+│       │   │   └── InstrumentMonitorEvent_v1.avsc
+│       │   ├── portfolio
+│       │   │   ├── avro
+│       │   │   │   ├── exposure-state.avsc
+│       │   │   │   ├── pnl-state.avsc
+│       │   │   │   ├── portfolio-state.avsc
+│       │   │   │   └── position-state.avsc
+│       │   │   ├── capital
+│       │   │   │   ├── allocation-state.avsc
+│       │   │   │   ├── capital-partition.avsc
+│       │   │   │   └── capital-reservation.avsc
+│       │   │   ├── contracts
+│       │   │   │   └── topic-governance.md
+│       │   │   └── registry
+│       │   ├── README.md
+│       │   ├── registry
+│       │   ├── screening
+│       │   │   └── InstrumentScreened_v1.avsc
+│       │   ├── signal
+│       │   │   └── Signal_v1.avsc
+│       │   ├── strategy
+│       │   │   └── contracts
+│       │   │       └── schema-governance.md
+│       │   └── trade_intent
+│       │       └── TradeIntent_v1.avsc
+│       ├── services
+│       │   ├── conflict_resolver.py
+│       │   ├── decision-engine-service
+│       │   │   ├── app
+│       │   │   │   ├── health.py
+│       │   │   │   └── main.py
+│       │   │   ├── artifacts
+│       │   │   ├── config
+│       │   │   │   └── service.env
+│       │   │   ├── DECISION-GOVERNANCE.md
+│       │   │   ├── logs
+│       │   │   ├── README.md
+│       │   │   ├── replay
+│       │   │   ├── schemas
+│       │   │   └── tests
+│       │   │       └── test_placeholder.py
+│       │   ├── event_emitter.py
+│       │   ├── feature_store_service
+│       │   │   ├── app
+│       │   │   │   └── main.py
+│       │   │   ├── Dockerfile
+│       │   │   └── requirements.txt
+│       │   ├── float_auditor.py
+│       │   ├── historical_data_service
+│       │   │   ├── app
+│       │   │   │   ├── config.py
+│       │   │   │   ├── database.py
+│       │   │   │   └── main.py
+│       │   │   ├── Dockerfile
+│       │   │   └── requirements.txt
+│       │   ├── instrument-monitoring-service
+│       │   │   ├── app
+│       │   │   │   ├── health.py
+│       │   │   │   └── main.py
+│       │   │   ├── artifacts
+│       │   │   ├── config
+│       │   │   │   └── service.env
+│       │   │   ├── logs
+│       │   │   ├── MONITORING-GOVERNANCE.md
+│       │   │   ├── README.md
+│       │   │   ├── replay
+│       │   │   ├── schemas
+│       │   │   └── tests
+│       │   │       └── test_placeholder.py
+│       │   ├── instrument-screening-service
+│       │   │   ├── app
+│       │   │   │   ├── health.py
+│       │   │   │   └── main.py
+│       │   │   ├── artifacts
+│       │   │   ├── config
+│       │   │   │   └── service.env
+│       │   │   ├── logs
+│       │   │   ├── README.md
+│       │   │   ├── replay
+│       │   │   ├── schemas
+│       │   │   ├── SCREENING-GOVERNANCE.md
+│       │   │   └── tests
+│       │   │       └── test_placeholder.py
+│       │   ├── market_data_ingestion
+│       │   │   ├── app
+│       │   │   │   ├── config
+│       │   │   │   ├── connectors
+│       │   │   │   ├── ingestion_service.py
+│       │   │   │   ├── __init__.py
+│       │   │   │   ├── main.py
+│       │   │   │   ├── models
+│       │   │   │   ├── publishers
+│       │   │   │   └── validators
+│       │   │   ├── Dockerfile
+│       │   │   ├── market-data-ingestion-stage12.tar
+│       │   │   ├── README.md
+│       │   │   └── requirements.txt
+│       │   ├── market_data_normalizer
+│       │   │   ├── app
+│       │   │   │   ├── config.py
+│       │   │   │   ├── main.py
+│       │   │   │   ├── normalizer.py
+│       │   │   │   └── symbols.py
+│       │   │   ├── Dockerfile
+│       │   │   └── requirements.txt
+│       │   ├── market_data_persistence
+│       │   │   ├── app
+│       │   │   │   └── main.py
+│       │   │   ├── Dockerfile
+│       │   │   └── requirements.txt
+│       │   ├── mlflow
+│       │   │   ├── Dockerfile
+│       │   │   └── requirements.txt
+│       │   ├── signal-processor-service
+│       │   │   ├── app
+│       │   │   │   ├── health.py
+│       │   │   │   └── main.py
+│       │   │   ├── artifacts
+│       │   │   ├── config
+│       │   │   │   └── service.env
+│       │   │   ├── logs
+│       │   │   ├── README.md
+│       │   │   ├── replay
+│       │   │   ├── schemas
+│       │   │   ├── SIGNAL-GOVERNANCE.md
+│       │   │   └── tests
+│       │   │       └── test_placeholder.py
+│       │   ├── strategy-engine-service
+│       │   │   ├── app
+│       │   │   │   ├── health.py
+│       │   │   │   └── main.py
+│       │   │   ├── artifacts
+│       │   │   ├── config
+│       │   │   │   └── service.env
+│       │   │   ├── logs
+│       │   │   ├── README.md
+│       │   │   ├── replay
+│       │   │   ├── schemas
+│       │   │   ├── STRATEGY-GOVERNANCE.md
+│       │   │   └── tests
+│       │   │       └── test_placeholder.py
+│       │   ├── synthetic-market-generator
+│       │   │   ├── Dockerfile
+│       │   │   ├── generator.py
+│       │   │   └── requirements.txt
+│       │   └── ttl_validator.py
+│       ├── stage-14
+│       │   ├── events
+│       │   │   ├── decision_events
+│       │   │   │   ├── 20260527T105938241796.json
+│       │   │   │   ├── 20260527T110038300847.json
+│       │   │   │   ├── 20260527T110138359682.json
+│       │   │   │   ├── 20260527T110238416327.json
+│       │   │   │   ├── 20260527T110338476344.json
+│       │   │   │   ├── 20260527T110438536473.json
+│       │   │   │   ├── 20260527T110500184135.json
+│       │   │   │   ├── 20260527T110600236861.json
+│       │   │   │   ├── 20260527T110700296374.json
+│       │   │   │   ├── 20260527T110800356241.json
+│       │   │   │   ├── 20260527T110900416659.json
+│       │   │   │   ├── 20260527T111017044164.json
+│       │   │   │   ├── 20260527T111117104535.json
+│       │   │   │   ├── 20260527T111217166775.json
+│       │   │   │   ├── 20260527T111317224908.json
+│       │   │   │   ├── 20260527T111417285411.json
+│       │   │   │   ├── 20260527T111517338213.json
+│       │   │   │   ├── 20260527T111617398545.json
+│       │   │   │   ├── 20260527T111717456879.json
+│       │   │   │   └── 20260527T111817516371.json
+│       │   │   ├── instrument_monitor_events
+│       │   │   │   ├── 20260527T105926153710.json
+│       │   │   │   ├── 20260527T105926153846.json
+│       │   │   │   ├── 20260527T105926153939.json
+│       │   │   │   ├── 20260527T105956184656.json
+│       │   │   │   ├── 20260527T105956185016.json
+│       │   │   │   ├── 20260527T105956185193.json
+│       │   │   │   ├── 20260527T110026213519.json
+│       │   │   │   ├── 20260527T110026213729.json
+│       │   │   │   ├── 20260527T110026213840.json
+│       │   │   │   ├── 20260527T110056236547.json
+│       │   │   │   ├── 20260527T110056236767.json
+│       │   │   │   ├── 20260527T110056236879.json
+│       │   │   │   ├── 20260527T110126264919.json
+│       │   │   │   ├── 20260527T110126265078.json
+│       │   │   │   ├── 20260527T110126265157.json
+│       │   │   │   ├── 20260527T110156292304.json
+│       │   │   │   ├── 20260527T110156292553.json
+│       │   │   │   ├── 20260527T110156292678.json
+│       │   │   │   ├── 20260527T110226321489.json
+│       │   │   │   ├── 20260527T110226321812.json
+│       │   │   │   ├── 20260527T110226321928.json
+│       │   │   │   ├── 20260527T110256348736.json
+│       │   │   │   ├── 20260527T110256348920.json
+│       │   │   │   ├── 20260527T110256348998.json
+│       │   │   │   ├── 20260527T110326376784.json
+│       │   │   │   ├── 20260527T110326376956.json
+│       │   │   │   ├── 20260527T110326377037.json
+│       │   │   │   ├── 20260527T110356406206.json
+│       │   │   │   ├── 20260527T110356406408.json
+│       │   │   │   ├── 20260527T110356406510.json
+│       │   │   │   ├── 20260527T110426436665.json
+│       │   │   │   ├── 20260527T110426436837.json
+│       │   │   │   ├── 20260527T110426436923.json
+│       │   │   │   ├── 20260527T110448118468.json
+│       │   │   │   ├── 20260527T110448118620.json
+│       │   │   │   ├── 20260527T110448118824.json
+│       │   │   │   ├── 20260527T110518148480.json
+│       │   │   │   ├── 20260527T110518149078.json
+│       │   │   │   ├── 20260527T110518149394.json
+│       │   │   │   ├── 20260527T110548179646.json
+│       │   │   │   ├── 20260527T110548179994.json
+│       │   │   │   ├── 20260527T110548180280.json
+│       │   │   │   ├── 20260527T110618208632.json
+│       │   │   │   ├── 20260527T110618209186.json
+│       │   │   │   ├── 20260527T110618209548.json
+│       │   │   │   ├── 20260527T110648238784.json
+│       │   │   │   ├── 20260527T110648239092.json
+│       │   │   │   ├── 20260527T110648239275.json
+│       │   │   │   ├── 20260527T110718268365.json
+│       │   │   │   ├── 20260527T110718268593.json
+│       │   │   │   ├── 20260527T110718268723.json
+│       │   │   │   ├── 20260527T110748298127.json
+│       │   │   │   ├── 20260527T110748298382.json
+│       │   │   │   ├── 20260527T110748298476.json
+│       │   │   │   ├── 20260527T110818327089.json
+│       │   │   │   ├── 20260527T110818327308.json
+│       │   │   │   ├── 20260527T110818327414.json
+│       │   │   │   ├── 20260527T110848356943.json
+│       │   │   │   ├── 20260527T110848357228.json
+│       │   │   │   ├── 20260527T110848357393.json
+│       │   │   │   ├── 20260527T110918379854.json
+│       │   │   │   ├── 20260527T110918380194.json
+│       │   │   │   ├── 20260527T110918380347.json
+│       │   │   │   ├── 20260527T110948409328.json
+│       │   │   │   ├── 20260527T110948409535.json
+│       │   │   │   ├── 20260527T110948409661.json
+│       │   │   │   ├── 20260527T111004994484.json
+│       │   │   │   ├── 20260527T111004994644.json
+│       │   │   │   ├── 20260527T111004994859.json
+│       │   │   │   ├── 20260527T111035020329.json
+│       │   │   │   ├── 20260527T111035020538.json
+│       │   │   │   ├── 20260527T111035020639.json
+│       │   │   │   ├── 20260527T111105046396.json
+│       │   │   │   ├── 20260527T111105046607.json
+│       │   │   │   ├── 20260527T111105046698.json
+│       │   │   │   ├── 20260527T111135075842.json
+│       │   │   │   ├── 20260527T111135076241.json
+│       │   │   │   ├── 20260527T111135076395.json
+│       │   │   │   ├── 20260527T111205104329.json
+│       │   │   │   ├── 20260527T111205104553.json
+│       │   │   │   ├── 20260527T111205104681.json
+│       │   │   │   ├── 20260527T111235130470.json
+│       │   │   │   ├── 20260527T111235131185.json
+│       │   │   │   ├── 20260527T111235131636.json
+│       │   │   │   ├── 20260527T111305160322.json
+│       │   │   │   ├── 20260527T111305160610.json
+│       │   │   │   ├── 20260527T111305160732.json
+│       │   │   │   ├── 20260527T111335190198.json
+│       │   │   │   ├── 20260527T111335190396.json
+│       │   │   │   ├── 20260527T111335190505.json
+│       │   │   │   ├── 20260527T111405219114.json
+│       │   │   │   ├── 20260527T111405219495.json
+│       │   │   │   ├── 20260527T111405219703.json
+│       │   │   │   ├── 20260527T111435250118.json
+│       │   │   │   ├── 20260527T111435250289.json
+│       │   │   │   ├── 20260527T111435250370.json
+│       │   │   │   ├── 20260527T111505280050.json
+│       │   │   │   ├── 20260527T111505280275.json
+│       │   │   │   ├── 20260527T111505280379.json
+│       │   │   │   ├── 20260527T111535310336.json
+│       │   │   │   ├── 20260527T111535310579.json
+│       │   │   │   ├── 20260527T111535310709.json
+│       │   │   │   ├── 20260527T111605340472.json
+│       │   │   │   ├── 20260527T111605340811.json
+│       │   │   │   ├── 20260527T111605340940.json
+│       │   │   │   ├── 20260527T111635367015.json
+│       │   │   │   ├── 20260527T111635367250.json
+│       │   │   │   ├── 20260527T111635367395.json
+│       │   │   │   ├── 20260527T111705397031.json
+│       │   │   │   ├── 20260527T111705397299.json
+│       │   │   │   ├── 20260527T111705397418.json
+│       │   │   │   ├── 20260527T111735427769.json
+│       │   │   │   ├── 20260527T111735428188.json
+│       │   │   │   ├── 20260527T111735428513.json
+│       │   │   │   ├── 20260527T111805458066.json
+│       │   │   │   ├── 20260527T111805458239.json
+│       │   │   │   ├── 20260527T111805458319.json
+│       │   │   │   ├── 20260527T111835488395.json
+│       │   │   │   ├── 20260527T111835488679.json
+│       │   │   │   └── 20260527T111835488851.json
+│       │   │   ├── instrument_screened
+│       │   │   │   ├── 20260527T105922121817.json
+│       │   │   │   ├── 20260527T105922121934.json
+│       │   │   │   ├── 20260527T105922122018.json
+│       │   │   │   ├── 20260527T110022180450.json
+│       │   │   │   ├── 20260527T110022180615.json
+│       │   │   │   ├── 20260527T110022180699.json
+│       │   │   │   ├── 20260527T110122240339.json
+│       │   │   │   ├── 20260527T110122240575.json
+│       │   │   │   ├── 20260527T110122240701.json
+│       │   │   │   ├── 20260527T110222300498.json
+│       │   │   │   ├── 20260527T110222300759.json
+│       │   │   │   ├── 20260527T110222300886.json
+│       │   │   │   ├── 20260527T110322360709.json
+│       │   │   │   ├── 20260527T110322360995.json
+│       │   │   │   ├── 20260527T110322361233.json
+│       │   │   │   ├── 20260527T110422419596.json
+│       │   │   │   ├── 20260527T110422419866.json
+│       │   │   │   ├── 20260527T110422420013.json
+│       │   │   │   ├── 20260527T110444103399.json
+│       │   │   │   ├── 20260527T110444103520.json
+│       │   │   │   ├── 20260527T110444103612.json
+│       │   │   │   ├── 20260527T110544160597.json
+│       │   │   │   ├── 20260527T110544160803.json
+│       │   │   │   ├── 20260527T110544160898.json
+│       │   │   │   ├── 20260527T110644219338.json
+│       │   │   │   ├── 20260527T110644219758.json
+│       │   │   │   ├── 20260527T110644220021.json
+│       │   │   │   ├── 20260527T110744275341.json
+│       │   │   │   ├── 20260527T110744275604.json
+│       │   │   │   ├── 20260527T110744275757.json
+│       │   │   │   ├── 20260527T110844332516.json
+│       │   │   │   ├── 20260527T110844332866.json
+│       │   │   │   ├── 20260527T110844333007.json
+│       │   │   │   ├── 20260527T110944392615.json
+│       │   │   │   ├── 20260527T110944392833.json
+│       │   │   │   ├── 20260527T110944392937.json
+│       │   │   │   ├── 20260527T111000959288.json
+│       │   │   │   ├── 20260527T111000959425.json
+│       │   │   │   ├── 20260527T111000959513.json
+│       │   │   │   ├── 20260527T111101019465.json
+│       │   │   │   ├── 20260527T111101019656.json
+│       │   │   │   ├── 20260527T111101019756.json
+│       │   │   │   ├── 20260527T111201078652.json
+│       │   │   │   ├── 20260527T111201078909.json
+│       │   │   │   ├── 20260527T111201079158.json
+│       │   │   │   ├── 20260527T111301134075.json
+│       │   │   │   ├── 20260527T111301134484.json
+│       │   │   │   ├── 20260527T111301134693.json
+│       │   │   │   ├── 20260527T111401194464.json
+│       │   │   │   ├── 20260527T111401194809.json
+│       │   │   │   ├── 20260527T111401195125.json
+│       │   │   │   ├── 20260527T111501255667.json
+│       │   │   │   ├── 20260527T111501255855.json
+│       │   │   │   ├── 20260527T111501255946.json
+│       │   │   │   ├── 20260527T111601316412.json
+│       │   │   │   ├── 20260527T111601316660.json
+│       │   │   │   ├── 20260527T111601316802.json
+│       │   │   │   ├── 20260527T111701376363.json
+│       │   │   │   ├── 20260527T111701376597.json
+│       │   │   │   ├── 20260527T111701376722.json
+│       │   │   │   ├── 20260527T111801436349.json
+│       │   │   │   ├── 20260527T111801436545.json
+│       │   │   │   └── 20260527T111801436655.json
+│       │   │   └── signal_events
+│       │   │       ├── 20260527T105930184179.json
+│       │   │       ├── 20260527T105930184338.json
+│       │   │       ├── 20260527T105934217140.json
+│       │   │       ├── 20260527T110030242100.json
+│       │   │       ├── 20260527T110030242318.json
+│       │   │       ├── 20260527T110130302693.json
+│       │   │       ├── 20260527T110130303043.json
+│       │   │       ├── 20260527T110230356821.json
+│       │   │       ├── 20260527T110230357110.json
+│       │   │       ├── 20260527T110330416952.json
+│       │   │       ├── 20260527T110330417305.json
+│       │   │       ├── 20260527T110430476995.json
+│       │   │       ├── 20260527T110430477375.json
+│       │   │       ├── 20260527T110452144431.json
+│       │   │       ├── 20260527T110452144575.json
+│       │   │       ├── 20260527T110456162518.json
+│       │   │       ├── 20260527T110552204349.json
+│       │   │       ├── 20260527T110552204533.json
+│       │   │       ├── 20260527T110652263146.json
+│       │   │       ├── 20260527T110652263318.json
+│       │   │       ├── 20260527T110752315945.json
+│       │   │       ├── 20260527T110752316333.json
+│       │   │       ├── 20260527T110852372249.json
+│       │   │       ├── 20260527T110852372510.json
+│       │   │       ├── 20260527T110952432256.json
+│       │   │       ├── 20260527T110952432456.json
+│       │   │       ├── 20260527T111009005310.json
+│       │   │       ├── 20260527T111009005440.json
+│       │   │       ├── 20260527T111013024182.json
+│       │   │       ├── 20260527T111109064261.json
+│       │   │       ├── 20260527T111109064440.json
+│       │   │       ├── 20260527T111209124230.json
+│       │   │       ├── 20260527T111209124467.json
+│       │   │       ├── 20260527T111309184303.json
+│       │   │       ├── 20260527T111309184566.json
+│       │   │       ├── 20260527T111409244344.json
+│       │   │       ├── 20260527T111409244566.json
+│       │   │       ├── 20260527T111509304645.json
+│       │   │       ├── 20260527T111509304865.json
+│       │   │       ├── 20260527T111609364374.json
+│       │   │       ├── 20260527T111609364748.json
+│       │   │       ├── 20260527T111709424339.json
+│       │   │       ├── 20260527T111709424584.json
+│       │   │       ├── 20260527T111809485394.json
+│       │   │       └── 20260527T111809485914.json
+│       │   ├── logs
+│       │   └── pids
+│       │       ├── decision-engine-service-health.pid
+│       │       ├── decision-engine-service-main.pid
+│       │       ├── instrument-monitoring-service-health.pid
+│       │       ├── instrument-monitoring-service-main.pid
+│       │       ├── instrument-screening-service-health.pid
+│       │       ├── instrument-screening-service-main.pid
+│       │       ├── signal-processor-service-health.pid
+│       │       ├── signal-processor-service-main.pid
+│       │       ├── strategy-engine-service-health.pid
+│       │       └── strategy-engine-service-main.pid
+│       └── stage-14a-operational-reconciliation
+│           ├── audit
+│           │   ├── event-lineage-20260527-111451.txt
+│           │   ├── governance-20260527-111451.txt
+│           │   ├── replay-20260527-103333.txt
+│           │   ├── runtime-logs-20260527-111451.txt
+│           │   └── services-20260527-103333.txt
+│           ├── audit.sh
+│           ├── certification-state.sh
+│           ├── freeze.sh
+│           ├── inventory.sh
+│           ├── rollback.sh
+│           ├── scripts
+│           │   ├── start-services.sh
+│           │   ├── stop-services.sh
+│           │   ├── test-conflict-resolution.py
+│           │   ├── test-float-auditor.py
+│           │   ├── test-ttl-runtime.py
+│           │   ├── validate-conflict-governance.sh
+│           │   ├── validate-event-transport.sh
+│           │   ├── validate-float-governance.sh
+│           │   ├── validate-runtime-readiness.sh
+│           │   ├── validate-service-orchestration.sh
+│           │   └── validate-ttl-governance.sh
+│           ├── setup.sh
+│           ├── snapshots
+│           ├── snapshot.sh
+│           ├── state.sh
+│           └── validate.sh
+├── state
+│   ├── configuration
+│   ├── corei-tree-depth4.txt
+│   ├── corei-tree-size.txt
+│   ├── corei-tree.txt
+│   ├── events
+│   ├── execution_gate
+│   ├── .keep
+│   ├── operations
+│   ├── portfolio
+│   ├── replay
+│   ├── resilience
+│   ├── stage-10a
+│   │   ├── audit
+│   │   ├── backups
+│   │   │   ├── stage-10a-backup-20260525-083945.tar.gz
+│   │   │   ├── stage-10a-backup-20260525-085104.tar.gz
+│   │   │   ├── stage-10a-backup-20260525-091802.tar.gz
+│   │   │   ├── stage-10a-backup-20260525-094407.tar.gz
+│   │   │   ├── stage-10a-backup-20260525-100225.tar.gz
+│   │   │   ├── stage-10a-backup-20260525-101006.tar.gz
+│   │   │   ├── stage-10a-backup-20260525-101431.tar.gz
+│   │   │   ├── stage-10a-backup-20260525-102307.tar.gz
+│   │   │   ├── stage-10a-backup-20260525-102723.tar.gz
+│   │   │   └── stage-10a-backup-20260525-105841.tar.gz
+│   │   ├── inventory
+│   │   │   └── testing-topology.txt
+│   │   ├── logs
+│   │   ├── runtime
+│   │   │   └── mock-broker.pid
+│   │   ├── runtime-state.json
+│   │   ├── snapshots
+│   │   │   ├── stage-10a-20260525-083234.snapshot
+│   │   │   ├── stage-10a-20260525-083938.snapshot
+│   │   │   ├── stage-10a-20260525-085059.snapshot
+│   │   │   ├── stage-10a-20260525-091756.snapshot
+│   │   │   ├── stage-10a-20260525-094402.snapshot
+│   │   │   ├── stage-10a-20260525-100219.snapshot
+│   │   │   ├── stage-10a-20260525-101000.snapshot
+│   │   │   ├── stage-10a-20260525-101426.snapshot
+│   │   │   ├── stage-10a-20260525-102712.snapshot
+│   │   │   └── stage-10a-20260525-105834.snapshot
+│   │   └── validation
+│   │       └── .initialized
+│   ├── stage-11
+│   │   ├── backups
+│   │   │   └── stage-11-platform-backup.tar.gz
+│   │   ├── checkpoints
+│   │   ├── inventory
+│   │   │   ├── core_platform-topology.txt
+│   │   │   └── platform-topology.txt
+│   │   ├── runtime
+│   │   │   └── stage-11-init.timestamp
+│   │   └── snapshots
+│   │       ├── stage-11-20260525-121954.snapshot
+│   │       ├── stage-11-20260525-123009.snapshot
+│   │       ├── stage-11-20260525-123932.snapshot
+│   │       ├── stage-11-20260525-124452.snapshot
+│   │       ├── stage-11-20260525-125401.snapshot
+│   │       ├── stage-11-20260525-125547.snapshot
+│   │       ├── stage-11-20260525-172525.snapshot
+│   │       ├── stage-11-20260525-172755.snapshot
+│   │       ├── stage-11-20260525-173323.snapshot
+│   │       ├── stage-11-20260525-180110.snapshot
+│   │       ├── stage-11-20260525-183217.snapshot
+│   │       ├── stage-11-20260525-184652.snapshot
+│   │       ├── stage-11-20260525-185618.snapshot
+│   │       ├── stage-11-20260525-190828.snapshot
+│   │       ├── stage-11-20260525-191608.snapshot
+│   │       ├── stage-11-20260525-192134.snapshot
+│   │       └── stage-11-20260525-192617.snapshot
+│   └── stage-12
+│       ├── audit
+│       ├── contracts
+│       ├── inventory
+│       ├── kafka
+│       │   ├── bootstrap
+│       │   ├── brokers
+│       │   ├── cluster
+│       │   ├── replay
+│       │   ├── retention
+│       │   ├── storage
+│       │   ├── topology
+│       │   │   └── topic-inventory.txt
+│       │   └── validation
+│       ├── kubernetes
+│       ├── logs
+│       ├── namespaces
+│       ├── runtime
+│       ├── schemas
+│       └── validation
+├── strategies
+│   ├── forex_momentum_strategy
+│   │   ├── artifacts
+│   │   ├── config
+│   │   │   └── strategy.env
+│   │   ├── forex_momentum_strategy.py
+│   │   ├── lineage
+│   │   ├── logs
+│   │   ├── README.md
+│   │   ├── replay
+│   │   ├── signals
+│   │   └── tests
+│   │       └── test_strategy_placeholder.py
+│   ├── gold_timing_strategy
+│   │   ├── artifacts
+│   │   ├── config
+│   │   │   └── strategy.env
+│   │   ├── gold_timing_strategy.py
+│   │   ├── lineage
+│   │   ├── logs
+│   │   ├── README.md
+│   │   ├── replay
+│   │   ├── signals
+│   │   └── tests
+│   │       └── test_strategy_placeholder.py
+│   ├── .keep
+│   ├── mean_reversion_strategy
+│   │   ├── artifacts
+│   │   ├── config
+│   │   │   └── strategy.env
+│   │   ├── lineage
+│   │   ├── logs
+│   │   ├── mean_reversion_strategy.py
+│   │   ├── README.md
+│   │   ├── replay
+│   │   ├── signals
+│   │   └── tests
+│   │       └── test_strategy_placeholder.py
+│   └── stock_momentum_strategy
+│       ├── artifacts
+│       ├── config
+│       │   └── strategy.env
+│       ├── lineage
+│       ├── logs
+│       ├── README.md
+│       ├── replay
+│       ├── signals
+│       ├── stock_momentum_strategy.py
+│       └── tests
+│           └── test_strategy_placeholder.py
+├── terraform
+│   ├── environments
+│   │   ├── production
+│   │   ├── vmware
+│   │   └── vps-staging
+│   ├── modules
+│   └── shared
+├── tests
+│   ├── chaos
+│   │   ├── fixtures
+│   │   ├── recovery
+│   │   ├── reports
+│   │   └── test_chaos_recovery.py
+│   ├── config
+│   │   ├── pytest.ini
+│   │   └── test-runtime.yaml
+│   ├── contracts
+│   │   ├── consumer
+│   │   │   └── test_market_consumer_contract.py
+│   │   ├── pacts
+│   │   ├── provider
+│   │   └── reports
+│   ├── determinism
+│   │   ├── fixtures
+│   │   ├── reports
+│   │   └── test_replay_determinism.py
+│   ├── fixtures
+│   │   └── sample-events.json
+│   ├── integration
+│   │   ├── test_mock_broker.py
+│   │   └── test_runtime_validation.py
+│   ├── lineage
+│   ├── load
+│   │   ├── fixtures
+│   │   ├── reports
+│   │   ├── scenarios
+│   │   │   └── load-test-scenario.json
+│   │   └── test_load_validation.py
+│   ├── mock-services
+│   │   ├── brokers
+│   │   │   └── mock-broker.py
+│   │   └── market-data
+│   │       └── synthetic-market-generator.py
+│   ├── orchestration
+│   ├── performance
+│   │   ├── benchmarks
+│   │   ├── fixtures
+│   │   ├── reports
+│   │   └── test_latency_budget.py
+│   ├── replay
+│   │   ├── fixtures
+│   │   │   └── replay-session.jsonl
+│   │   ├── output
+│   │   │   └── replay-output.jsonl
+│   │   ├── reports
+│   │   ├── sessions
+│   │   └── test_replay_output.py
+│   ├── reports
+│   ├── schemas
+│   │   ├── avro
+│   │   ├── compatibility
+│   │   │   └── test_schema_compatibility.py
+│   │   ├── fixtures
+│   │   │   ├── market-tick-invalid.json
+│   │   │   └── market-tick-valid.json
+│   │   ├── reports
+│   │   └── test_market_tick_schema.py
+│   ├── state
+│   ├── synthetic
+│   │   ├── config
+│   │   ├── fixtures
+│   │   ├── output
+│   │   │   └── generated-ticks.jsonl
+│   │   └── test_synthetic_market_generation.py
+│   └── validation
+├── tools
+│   └── .keep
+├── ui
+│   └── .keep
+├── VERSION
+├── .vscode
+│   └── settings.json
+└── workflows
+    └── .keep
+
+1295 directories, 2887 files

@@ -1,120 +1,31 @@
+// src/ribbon/components/TopRibbon.tsx
 /******************************************************************************
  *
  * COREI OPERATING SYSTEM
  *
- * STAGE-25
- * PHASE-17
- * STEP-05-B
+ * TOP RIBBON – CONTAINER
  *
- * FILE:
- * TopRibbon.tsx
+ * Institutional Workbench Control Surface
  *
- * PURPOSE:
- * Institutional Header Composition Surface
+ * This component composes Row 1 and Row 2 into a single header.
+ * It does not contain any logic itself – all logic is in the rows.
  *
  ******************************************************************************/
 
-import type {
-    ReactElement
-} from "react";
-
-import "../styles/top-ribbon.css";
-
-
-import {
-    RibbonInstitutionIdentity
-} from "./RibbonInstitutionIdentity";
-
-
-import {
-    RibbonEnvironmentIdentity
-} from "./RibbonEnvironmentIdentity";
-
-
-import {
-    RibbonRuntime
-} from "./RibbonRuntime";
-
-
-import {
-    RibbonSessionContext
-} from "./RibbonSessionContext";
-
-
-import {
-    RibbonWorkspace
-} from "./RibbonWorkspace";
-
-
-import {
-    RibbonNotifications
-} from "./RibbonNotifications";
-
-
-import {
-    DEFAULT_SHELL_HEADER_CONTEXT
-} from "../models/default-shell-header-context";
-
+import React, { type ReactElement } from 'react';
+import Row1 from './Row1';
+import Row2 from './Row2';
 
 export function TopRibbon(): ReactElement {
-
-    const context =
-        DEFAULT_SHELL_HEADER_CONTEXT;
-
-
-    return (
-
-        <header
-            className="corei-top-ribbon"
-            data-ribbon-surface="institutional"
-        >
-
-            <RibbonInstitutionIdentity
-                identity={
-                    context.institution
-                }
-            />
-
-
-            <RibbonEnvironmentIdentity
-                environment={
-                    context.environment
-                }
-            />
-
-
-            <RibbonRuntime
-                runtime={
-                    context.runtime
-                }
-            />
-
-
-            <RibbonSessionContext
-                session={
-                    context.session
-                }
-            />
-
-
-            <RibbonWorkspace
-                workspace={
-                    context.workspace
-                }
-            />
-
-
-            <RibbonNotifications
-                notifications={
-                    context.notifications
-                }
-            />
-
-        </header>
-
-    );
-
+  return (
+    <header
+      className="corei-top-ribbon"
+      data-ribbon-surface="institutional-operational"
+    >
+      <Row1 />
+      <Row2 />
+    </header>
+  );
 }
-
 
 export default TopRibbon;

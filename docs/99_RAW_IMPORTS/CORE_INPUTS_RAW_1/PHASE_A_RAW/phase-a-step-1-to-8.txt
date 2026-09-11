@@ -1,0 +1,6971 @@
+PHASE A — STEP 1: STRATEGY ARCHITECTURE
+	(Full Institutional Build — Using Locked Template)
+
+	priority_level is:
+
+		- ordinal
+		- immutable across phases
+		- ONLY used for conflict resolution
+
+	1. PHASE IDENTITY LAYER
+		1.1 Phase Name
+			Phase A — Step 1: Strategy Architecture
+
+		1.2 Phase Role
+			Defines the structural foundation of all trading strategies within the system.
+
+		1.3 Objective
+			Create a standardized, modular, scalable strategy framework that supports multi-strategy operation.
+
+			Strategy Alignment to Global Objective
+
+				All strategies defined in this phase MUST align with:
+
+					firm-level objective:
+						consistent risk-adjusted returns at scale
+
+					evaluation metrics (defined globally):
+						Sharpe Ratio
+						Max Drawdown
+						Capital growth rate
+						Win-rate consistency
+
+				Strategy design MUST support downstream evaluation against these metrics
+
+		1.4 Why This Exists
+			Prevents:
+				ad-hoc strategies
+				inconsistent signal definitions
+				non-scalable portfolio construction
+
+
+	2. SCOPE CONTROL
+		2.1 INCLUDED
+				Strategy taxonomy
+				Strategy structure definition
+				Strategy classification
+				Strategy lifecycle (logical)
+				Strategy interfaces (logical, not technical)
+
+		2.2 EXCLUDED (STRICT)
+				Signal calculation implementation
+				Execution logic
+				Infrastructure
+				Backtesting engines (only conceptual reference allowed)
+
+		2.3 Additional Restrictions (STRICT)
+				Strategy layer MUST NOT:
+					perform signal aggregation
+					allocate capital
+					resolve conflicts between strategies
+					apply portfolio-level risk
+
+				These responsibilities belong to:
+					Decision Layer
+					Risk Layer
+
+
+	3. ARCHITECTURAL INTENT
+		3.1 Principles
+			Deterministic strategy behavior
+			Plug-and-play strategy modules
+			Independence between strategies
+			Standardized interfaces
+
+		3.2 Model Type
+			Logical architecture (no system design)
+
+		3.3 Position in System
+			Strategy → produces signals → feeds decision layer
+
+
+	4. DOMAIN MODEL
+		4.1 Core Entities
+			Strategy
+				Independent trading logic unit
+
+			Strategy Class
+				Category of strategy (intraday, swing, etc.)
+
+			Strategy Instance
+				A deployed version of a strategy
+
+			Strategy Configuration
+				Strategy must define:
+				capital sensitivity characteristics (logical, not allocation)
+
+				Parameters controlling behavior
+
+			Strategy Configuration Rules
+				Configuration must be:
+					explicit
+					versioned
+					deterministic
+
+				Must include:
+					parameters controlling logic behavior
+					time horizon constraints
+					instrument scope definition
+
+				Must NOT include:
+					execution details
+					infrastructure-specific parameters
+
+
+		4.2 Attributes
+			Strategy
+				id
+				class
+				objective
+				time horizon
+				asset scope
+				version
+				unique_identifier (strategy_id must be globally unique)
+
+			Strategy Instance
+				config
+				status (active/inactive)
+				capital allocation (logical only)
+
+
+		4.3 Relationships
+			Strategy Class → groups Strategies
+			Strategy → generates Signals (next step)
+			Strategy Instance → executes Strategy logic
+
+
+		4.4 Ownership
+			Strategy definition → owned by Phase A
+			Signal schema → Phase A (next step)
+
+
+		4.5 Strategy Taxonomy Model
+
+			Each strategy MUST be classified across the following dimensions:
+
+			Dimension            Values
+			Time Horizon         HFT / Intraday / Swing / Positional
+			Signal Type          Momentum / Mean Reversion / Arbitrage / ML
+			Data Dependency      Price / Orderbook / Macro / Alt-data
+			Execution Style      Aggressive / Passive
+
+			Rules:
+				Every strategy MUST map to all dimensions
+				No free-form classification allowed
+				Strategy identity = combination of dimensions
+
+
+	5. LOGIC / RULE ENGINE
+		5.1 Strategy Function Definition
+
+			Signal = f(Market State, Strategy Config, Internal Logic)
+
+			Rules:
+				Function must be deterministic
+				No hidden randomness unless explicitly modeled
+				Same input must always produce same output
+
+
+		5.2 Market State Definition
+			Market State = fully ordered, time-indexed input set at event_time
+
+			Constraints:
+				all inputs must share same event_time
+				no partial state allowed
+				if any required input is missing → strategy MUST NOT emit signal
+
+
+		5.3 Time Alignment Rules
+			inputs may originate at different times
+
+			market state must use:
+				last known value at event_time
+
+			all inputs must be aligned deterministically to event_time
+
+			Time Alignment Consistency Constraint
+
+				when multiple inputs are available for the same event_time:
+
+					selection MUST follow a deterministic rule
+
+				rule MUST be fixed per strategy configuration
+
+		5.4 Core Rules
+
+			R1: Strategy Independence
+				No direct dependency between strategies
+
+			R2: Deterministic Behavior
+				Same input → same signal output
+
+			R3: Standard Interface
+				Every strategy MUST output:
+
+					direction (long/short/neutral)
+					timestamp
+					instrument
+
+					signal_id
+						Signal Identity Rules
+							signal_id must be globally unique
+							must be deterministically derived from:
+								strategy_id
+								event_time
+								input snapshot reference
+
+					strategy_id
+
+					signal_strength (normalized)
+						Signal Strength Rules
+							signal_strength must be within [0,1]
+							must be monotonic:
+								higher value = stronger conviction
+							mapping must be internally consistent within strategy
+
+						Signal Strength Determinism Constraint
+
+							signal_strength MUST be derived from a deterministic mapping function
+
+							Constraints:
+								mapping logic MUST be fixed per strategy version
+								mapping MUST produce identical output for identical input
+
+							No implicit or adaptive mapping allowed within same version
+
+					Input Snapshot Reference Constraint
+
+						input snapshot reference MUST be:
+
+							content-derived
+							deterministic
+							independent of memory location or runtime reference
+
+						Same input data MUST always produce identical reference
+
+
+					validity_window (time-bound signal validity)
+						Validity Rules
+							validity_window defines duration from event_time
+							expiry_time = event_time + validity_window
+							validity_window must be fixed at signal generation
+							dynamic extension is not allowed
+
+					metadata (optional context)
+						Metadata Constraints
+							metadata must be non-decision influencing
+
+							must NOT be used in:
+								signal evaluation
+								decision logic
+								risk logic
+
+							metadata must NOT encode hidden signals or decision hints
+
+					event_time (time at which signal is logically generated)
+						Time Constraints
+							event_time = logical time of signal generation
+							timestamp = observation time (non-decision field)
+							all logic must use event_time only
+							ordering of signals must be strictly based on event_time
+
+					direction must be one of:
+						+1 (long)
+						 0 (neutral)
+						-1 (short)
+
+					Signal Identity Definition:
+
+						signal_id = HASH_v1(
+							CBE_encode(signal_payload)
+						)
+
+						Constraints:
+
+							computed BEFORE any modification
+							raw signal only (no scaling applied)
+							immutable
+
+					event_time rules:
+
+						- unit: epoch nanoseconds (int64)
+						- timezone: UTC only
+						- source: exchange timestamp (preferred)
+						- fallback: ingestion timestamp
+
+						Validation:
+
+						IF event_time == null:
+							REJECT signal
+
+			R4: No Execution Awareness
+				Strategy cannot know:
+					broker
+					latency
+					order state
+
+
+			R5: Strategy Priority (Optional)
+				Strategies may define priority level for downstream conflict resolution
+
+				Note:
+					actual conflict resolution is handled in Decision Layer
+
+
+		Unified Priority Model
+			priority_level ∈ [1,10]
+
+			Derived from:
+
+			priority_level = floor(
+				signal_strength_global * priority_scale
+			)
+
+			priority_level definition:
+
+				priority_level = f(
+					strategy_priority,
+					signal_strength,
+					deterministic ranking model
+				)
+
+		Priority Ownership Rule
+			Priority defined ONLY in Phase A
+			Used downstream (Phase D)
+
+		Constraint
+			No redefinition of priority in Phase D
+
+	6. FLOW ARCHITECTURE
+
+		Flow vs Pipeline Distinction
+
+			Flow:
+				defines logical transformation:
+					input → strategy logic → signal
+
+			Pipeline:
+				defines lifecycle stages:
+					research → production → retirement
+
+			These MUST remain strictly separated
+
+		6.1 Input
+
+			Standardized Inputs:
+				raw market data (tick / OHLC — abstract)
+				reference data
+
+			Rules:
+				No strategy-specific data pipelines
+				No inter-strategy data sharing
+
+
+			Reference Data Definition
+				reference data = non-price, externally defined, slowly changing inputs
+
+				Constraints:
+					must not include signals or derived outputs from other strategies
+					must be deterministic and version-controlled
+
+
+			Required Input Definition
+				each strategy MUST explicitly define:
+					required inputs
+					optional inputs
+
+				Constraints:
+					missing required input → no signal emission
+					missing optional input → allowed
+
+			Input Validity Constraint
+
+				strategies MUST operate only on valid input data
+
+				invalid or inconsistent input MUST result in:
+					no signal emission
+
+			External Input Constraint (MANDATORY)
+
+				Strategies MUST operate ONLY on:
+
+					market data
+					reference data
+
+				Strategies MUST NOT accept:
+
+					external trade intents
+					external signals
+					outputs from CEIL or any external system
+
+			CEIL Isolation Constraint (MANDATORY)
+
+				Strategies MUST NOT accept or process:
+
+					external trade intents
+					external signals
+					CEIL-derived outputs
+					outputs from any external system
+
+				Strategies MUST operate ONLY on:
+
+					market data
+					reference data
+
+				Constraint:
+
+					Any dependency on external inputs → strategy INVALID
+
+		6.2 Processing
+			Input Data → Strategy Logic → Signal (standardized)
+
+
+		6.3 Output
+			Standardized signal object
+
+
+		6.4 Signal Emission Model
+
+			Strategies must define:
+				emission frequency (event-driven / interval-based)
+				max signal rate
+
+			Rules:
+				emission must be deterministic
+				no uncontrolled burst behavior
+
+
+			Signal Emission Constraints
+				strategy must NOT emit signal if no meaningful change in:
+					direction
+					signal_strength (within fixed precision)
+					validity_window
+
+				precision tolerance must be predefined
+
+				Precision Consistency Constraint
+
+					precision tolerance MUST be:
+
+						explicitly defined
+						consistent within a strategy
+						consistent across evaluation and emission logic
+
+					Precision MUST NOT change during runtime
+
+			Meaningful Change Definition
+				must be defined using:
+					minimum delta in signal_strength
+					or change in direction
+
+				threshold must be defined in strategy configuration
+
+
+	7. PIPELINE STRUCTURE
+		Strategy Lifecycle Pipeline
+			Research → Backtest → Validate → Paper → Production → Monitor → Retire
+
+		Transitions defined by:
+			performance thresholds
+			risk thresholds
+
+			Threshold Constraints
+				performance and risk thresholds must be:
+					numeric
+					predefined in strategy configuration
+
+				evaluation must be deterministic
+
+
+		Strategy Activation Rules
+
+			Define:
+				maximum number of active strategies
+				promotion criteria (validation → production)
+
+				deactivation triggers:
+					performance degradation
+					risk breach
+
+		Strategy Evaluation Interface
+
+			Strategies MUST support evaluation across:
+
+				frequency:
+					real-time
+					daily
+					weekly
+
+				scope:
+					trade-level
+					strategy-level
+
+			Strategies MUST expose outputs required for:
+
+				capital scaling decisions
+				strategy disabling conditions
+
+			Evaluation logic is defined in later phases, but compatibility MUST be ensured here
+
+	8. CONTROL & CONSTRAINTS
+		Hard Rules
+			Strategy must be deterministic
+			Must follow signal schema
+			Must not depend on infra
+
+		Soft Rules
+			strategies should:
+				minimize unnecessary signal emissions
+				maintain stable signal behavior
+				avoid excessive sensitivity to noise
+
+		Guardrails
+			No hidden state
+			No cross-strategy coupling
+
+
+		Strategy Count Constraint
+			System must enforce limits on:
+				total strategies
+				active strategies
+
+
+		Strategy Capacity Constraints
+			Each strategy MUST define:
+				maximum capital capacity (logical)
+				liquidity sensitivity
+				slippage impact behavior
+				saturation point (performance degradation threshold)
+
+			Rules:
+				Strategy must degrade predictably beyond capacity
+				Capacity must be independent of infrastructure
+
+
+			Capacity Enforcement Rules
+				when capacity threshold is reached:
+					strategy must either:
+						reduce signal_strength
+						or stop emitting signals
+
+				behavior must be predefined in strategy configuration
+
+				Capacity Enforcement Order
+
+					when capacity threshold is reached:
+
+						strategy MUST first attempt:
+							signal_strength reduction
+
+						if further reduction is not possible:
+							strategy MUST stop emitting signals
+
+			Capacity Enforcement Rule (DETERMINISTIC):
+
+				IF capacity_usage ≥ capacity_threshold_1:
+					signal_strength = signal_strength * reduction_factor_1
+
+				IF capacity_usage ≥ capacity_threshold_2:
+					signal_strength = signal_strength * reduction_factor_2
+
+				IF capacity_usage ≥ capacity_threshold_3:
+					STOP signal emission
+
+				Constraint:
+
+				capacity_threshold_1 < capacity_threshold_2 < capacity_threshold_3
+
+	9. STATE MODEL
+		State Types
+			Strategy State:
+				active
+				paused
+				retired
+
+		State Transitions
+
+			active → paused
+				triggered by:
+					risk threshold breach
+					manual or system control
+
+			paused → active
+				triggered by:
+					recovery conditions satisfied
+
+			active → retired
+				triggered by:
+					performance degradation
+					lifecycle completion
+
+			retired → no transition allowed
+
+
+		State Constraints
+			Strategy must not maintain hidden internal state
+
+			All state must be:
+				reproducible
+				replayable
+
+
+			Allowed State:
+				configuration parameters
+				explicitly defined indicators
+
+				Indicator Constraints
+					indicators must be deterministic functions of input data
+					must be fully reconstructable using defined history window
+
+
+			Disallowed:
+				implicit memory
+				non-reproducible state
+
+
+		State Reconstruction Rules
+			all state must be derivable from:
+				input data history
+				strategy configuration
+
+			history window must be explicitly defined in configuration
+
+			if state cannot be reconstructed → strategy is invalid
+
+
+		Minimum History Requirement
+			strategy MUST define minimum history window
+
+			Constraints:
+				if history < required window:
+					strategy state = inactive
+					no signal emission allowed
+
+
+		Source of Truth
+			Logical ownership: Phase A
+			(physical ownership defined later in Phase C)
+
+
+	10. FAILURE MODEL
+		Failure Scenarios
+			Non-deterministic output
+			Inconsistent signal format
+			Hidden dependencies
+			strategy exceeds capacity → performance degradation
+
+		Impact
+			Decision engine corruption
+			Portfolio instability
+			slippage increase
+			execution inefficiency
+
+		Mitigation
+			Strict validation rules
+			schema enforcement
+
+
+	11. ASSUMPTION REGISTER
+		Assumption                      Reason                      Validate In
+		Market data is consistent      Required for determinism    Phase B
+		Strategies can be modularized  Needed for scaling          Phase C
+		Signal schema is sufficient    Needed for decision layer   Step 2
+
+
+	12. VALIDATION FRAMEWORK
+		Checklist
+			Strategy taxonomy defined
+			Entities defined
+			Rules defined
+			Lifecycle defined
+
+		Validation Method
+			multi-stage audit process:
+				structural validation (section completeness)
+				logical validation (determinism, no ambiguity)
+				adversarial validation (red team vs blue team)
+
+			validation must ensure:
+				no interpretation freedom
+				no cross-layer leakage
+
+
+		Acceptance Criteria
+			No ambiguity
+			Fully deterministic
+			No infra leakage
+
+
+		Strategy Evaluation Compatibility
+			All strategies must be evaluated using:
+				standardized performance metrics
+				time-adjusted returns
+				normalized risk measures
+
+			Purpose:
+				enable fair comparison across strategies
+				enable consistent capital allocation
+
+
+	13. OUTPUT (DELIVERABLE)
+		Strategy Architecture Spec
+
+		Includes:
+			strategy taxonomy
+			entity definitions
+			lifecycle model
+			rules
+
+
+	14. TRACEABILITY
+		Output → feeds:
+			Signal Model (next step)
+			Decision Model
+
+		Traceability Constraint
+
+			All outputs defined in this phase MUST:
+
+				map to:
+					input data
+					strategy configuration
+
+			AND MUST be usable by downstream phases for:
+
+				decision mapping
+				execution mapping
+
+			No output may exist without trace linkage to its originating inputs
+
+
+	15. CROSS-PHASE CONSISTENCY
+		OWNED HERE:
+			Strategy structure
+
+		REFERENCED LATER:
+			Execution (Phase D)
+
+
+	16. SCALABILITY MODEL
+		Supports:
+			multi-strategy
+			multi-asset
+			horizontal expansion
+
+
+	17. GOVERNANCE
+		Strategy must be approved before production
+		Versioned definition required
+
+		Version Constraints
+			strategy version and configuration version form immutable pair
+			any change requires new version
+			runtime modification is not allowed
+
+		Governance Integration (Phase 0 Alignment)
+
+			Strategy definitions MUST follow:
+
+				approval hierarchy:
+					research → engineering → risk → final approval
+
+				version control:
+					all strategy definitions must be versioned
+
+				change control:
+					any modification requires:
+						reason
+						impact analysis
+						approval
+
+			No strategy may enter production without governance approval
+
+	18. AUDITABILITY
+		Every signal must map to:
+			strategy id
+			input data
+
+		Every signal must include trace reference to:
+			input data snapshot (logical reference)
+
+				Input Snapshot Definition
+					input snapshot = exact set of input values used at event_time
+					must include all fields used in computation
+					must exclude unused data
+
+			strategy configuration version
+
+		Auditability Requirements
+
+			Strategy outputs MUST support:
+
+				full input-output traceability
+				transformation visibility (input → signal)
+
+			System MUST be capable of:
+
+				deterministic replay
+				reconstruction of strategy outputs from historical inputs
+
+			Logging requirements (logical level):
+
+				inputs used
+				output signals generated
+				transformation logic reference
+
+	19. RISK CONSIDERATION
+		Bad strategy design → systemic risk
+		Overfitting risk introduced here
+
+
+	20. FAILURE CONDITION
+		Phase fails if:
+			strategy definitions ambiguous
+			no standard interface
+			lifecycle missing
+
+
+	21. PHASE LOCK CRITERIA
+		All sections complete
+		No ambiguity
+		Validated and approved
+
+
+	FINAL NOTE
+		This is now your first solid brick of the system.
+
+		If this is correct:
+			Signal model becomes clean
+			Decision engine becomes deterministic
+			Entire system becomes composable
+
+	Capacity Enforcement:
+
+	capacity_usage ∈ [0,1]
+
+		Thresholds:
+
+		T1 = 0.70 → scale_factor = 0.75
+		T2 = 0.85 → scale_factor = 0.50
+		T3 = 1.00 → REJECT signal
+
+		Processing:
+
+		IF capacity_usage >= T3:
+			DROP signal
+
+		ELSE IF capacity_usage >= T2:
+			signal_strength *= 0.50
+
+		ELSE IF capacity_usage >= T1:
+			signal_strength *= 0.75
+
+		ELSE:
+			signal unchanged
+
+		Overflow Rule:
+
+			IF multiplication exceeds int64:
+				CLAMP to max_int64
+
+
+	AGGREGATION ORDERING RULE (MANDATORY)
+
+		aggregation_order_key = {
+			instrument ASC
+			strategy_priority DESC
+			signal_strength DESC
+			signal_time ASC
+			signal_id ASC
+		}
+
+PHASE A — STEP 2: SIGNAL MODEL
+	(Fully Hardened — Deterministic, Mathematical, Adversarial-Proof, Long-Horizon Safe)
+
+	Reference Base:
+
+
+	1. PHASE IDENTITY LAYER
+		1.1 Phase Name
+			Phase A — Step 2: Signal Model
+
+		1.2 Phase Role
+			Defines the formal structure, semantics, and behavior of signals produced by strategies.
+
+		1.3 Objective
+			Define a fully deterministic, standardized, and auditable signal model that enables consistent downstream decision-making.
+
+			Signal Alignment to Global Objective
+
+				All signals produced MUST support downstream evaluation against:
+
+					firm-level objective:
+						consistent risk-adjusted returns at scale
+
+					evaluation metrics:
+						Sharpe Ratio
+						Max Drawdown
+						Capital growth rate
+						Win-rate consistency
+
+				Signal design MUST preserve information required for these evaluations
+
+		1.4 Why This Exists
+			Without this layer:
+				Signals become inconsistent
+				Decision engine becomes non-deterministic
+				Strategy outputs become non-comparable
+
+			Step 1 defines who produces
+			Step 2 defines what exactly is produced
+
+
+	2. PHASE SCOPE CONTROL
+		2.1 INCLUDED
+			Signal definition (formal schema)
+			Signal semantics
+			Signal lifecycle
+			Deterministic encoding & hashing
+			Signal quality model
+			Signal emission rules (logical only)
+
+		2.2 EXCLUDED (STRICT)
+			Signal aggregation (Decision Layer)
+			Trade execution
+			Risk application
+			Infrastructure (Kafka, DB, APIs)
+			Latency / delivery guarantees
+
+
+	3. ARCHITECTURAL INTENT
+		3.1 Principles
+			Deterministic signal generation
+			Immutable signal objects
+			Complete auditability
+			Cross-strategy comparability
+			Long-horizon reproducibility
+
+		3.2 Model Type
+			Logical + Mathematical Specification
+
+		3.3 Position in System
+			Strategy → Signal → Decision Engine
+			Signals are the only communication contract between Strategy Layer and Decision Layer.
+
+
+	4. DOMAIN MODEL
+		4.1 Core Entity
+			Signal
+			A time-bound, deterministic representation of trading intent generated by a strategy.
+
+		4.2 Signal Attributes (FULL SPEC)
+			REQUIRED FIELDS (NON-NEGOTIABLE)
+				signal_id
+				strategy_id
+				instrument
+				direction
+
+				signal_strength_local
+				signal_strength_global
+
+				event_time
+				processing_time
+
+				validity_window
+				expiry_time
+
+				input_snapshot_hash
+
+				strategy_version
+				config_version
+
+				strategy_hash
+				config_hash
+
+				decay_function_id
+
+				encoding_version
+				hash_version
+
+			direction MUST be:
+				+1 → Long
+				 0 → Neutral
+				-1 → Short
+			Any other value → invalid
+
+		4.3 Relationships
+			Strategy → generates → Signal
+			Signal → consumed by → Decision Layer
+
+		4.4 Ownership
+			Signal schema → Phase A
+			Enforcement → downstream layers
+
+
+	5. LOGIC / RULE ENGINE
+		5.1 Signal Function
+			Signal = f(Market State, Strategy Config, Internal Logic)
+
+		5.2 Determinism Rules
+			Same input → identical signal (bit-level)
+			No hidden randomness
+			No floating-point arithmetic allowed
+
+		5.3 Arithmetic Model (CRITICAL)
+			ALL computations → fixed-point
+
+			value = integer / 10^6
+
+		5.4 Indicator Determinism
+			Each indicator MUST define:
+				formula
+				window
+				computation order
+				rounding rules
+
+			All inputs used in indicator computation MUST be included in input_snapshot
+
+		5.5 Market State Dependency
+			Fully aligned to event_time
+			No partial inputs
+			Missing required input → NO SIGNAL
+
+		5.6 Numeric Safety Rules
+
+			All fixed-point computations MUST define:
+
+				Maximum value bounds
+				Minimum value bounds
+
+			If overflow or underflow occurs:
+				→ Computation MUST fail
+				→ Signal MUST NOT be generated
+
+			Silent numeric clipping is strictly forbidden
+
+		6. FLOW ARCHITECTURE
+			6.1 Input
+				Market state (aligned, deterministic)
+				Strategy configuration
+				Reference data
+
+			6.2 Processing
+				Input → deterministic computation → signal generation → encoding → hashing
+
+			6.3 Output
+				Standardized Signal Object
+
+			6.4 Flow Model
+
+				Input → Processing → Output
+				Market State → Strategy Logic → Signal
+
+				Full system flow reference:
+
+					Market State → Strategy → Signal → Decision → Trade Intent
+
+	7. PIPELINE STRUCTURE
+		Pipeline defines operational lifecycle, not logical transformation
+
+		Signal Lifecycle Pipeline
+			Generate → Validate → Emit → Active → Expire → Archive
+
+		Transition Rules
+			Generate → only if valid inputs
+			Emit → only if meaningful change
+			Expire → deterministic
+
+		Signal is ACTIVE if:
+			current_time < expiry_time
+
+		Signal is EXPIRED if:
+			current_time ≥ expiry_time
+
+
+	8. CONTROL & CONSTRAINTS
+		8.1 Hard Rules
+			Deterministic
+			Immutable
+			Replayable
+			Schema-compliant
+
+		8.2 Soft Rules
+			Signals should:
+				minimize unnecessary emission
+				maintain stability (avoid noise sensitivity)
+				avoid excessive oscillation
+
+		8.3 Guardrails
+			No hidden signal encoding
+			No metadata influence
+			No cross-strategy coupling
+
+		Failure Precedence Order
+
+			Validation MUST execute in strict order:
+
+				1. Input completeness
+				2. Input freshness
+				3. Numeric safety
+				4. Time constraints
+				5. Validity bounds
+				6. Emission constraints
+
+			First failure encountered:
+				→ Signal MUST be rejected
+				→ further checks MUST NOT execute
+
+
+	9. STATE & DATA MODEL
+		9.1 State Types
+			Active
+			Expired
+			Archived
+
+		9.2 State Transitions
+			Generated → Active
+			Active → Expired
+			Expired → Archived
+
+			Transitions MUST be:
+				deterministic
+				derived from event_time and expiry_time
+
+		9.3 State Source
+			Derived from event_time and expiry_time
+
+		9.4 Source of Truth
+			Signal object itself (immutable)
+
+
+	10. ENCODING & HASHING MODEL (CRITICAL)
+		10.1 Encoding
+			Canonical Binary Encoding (CBE_v1)
+
+			Constraints:
+				Fixed byte layout
+				Schema-indexed fields
+				No JSON representation allowed
+
+		10.2 Hashing
+
+			signal_id MUST be computed as:
+				signal_id = HASH_v1(CBE_payload)
+
+			hash_version = SHA256_v1
+
+			Signal identity MUST be derived ONLY from encoded payload
+
+		10.3 Versioning
+			encoding_version mandatory
+			hash_version mandatory
+
+		10.4 Hash Domain Definition
+
+			strategy_hash MUST include:
+				full strategy logic
+				all indicator definitions
+				all parameters
+
+			config_hash MUST include:
+				all runtime configurations
+				thresholds
+				emission rules
+
+			Partial hashing is strictly forbidden
+
+	11. SIGNAL SEMANTICS
+		Signals represent:
+
+			Intent, not execution
+
+		They DO NOT:
+			Execute trades
+			Allocate capital
+			Apply risk
+
+		They ONLY express:
+			Directional intent + conviction + time validity
+
+		External Influence Constraint (MANDATORY)
+
+			Signals MUST be generated ONLY from:
+
+				strategy logic
+				market state
+				configuration
+
+			Signals MUST NOT incorporate:
+
+				external trade intents
+				external model outputs
+				CEIL-derived data
+
+			Any such dependency → signal invalid
+
+
+	12. TIME MODEL
+
+		processing_time MUST be system ingestion time in UTC
+
+		Dual Time System
+			event_time      → logical (decision basis)
+			processing_time → system (non-decision)
+
+		Constraints
+			All logic must use event_time
+			Must satisfy latency bound:
+				processing_time - event_time ≤ allowed_limit
+
+		Violation Rule
+
+			If processing_time - event_time > allowed_limit:
+				→ Signal MUST be rejected (invalid)
+
+			Event-time violation is a hard failure, not a warning
+
+		event_time MUST be derived from input snapshot:
+
+			event_time = max(timestamp of all inputs used)
+
+		Manual assignment is strictly forbidden
+
+		Deterministic Ordering Rule
+
+			Signals MUST be ordered by:
+
+				1. event_time
+				2. strategy_id (lexicographic)
+				3. signal_id
+
+			This ordering MUST be used in:
+				emission
+				density control
+				replay
+
+	13. SIGNAL STRENGTH MODEL
+		Dual Strength
+			local  → strategy internal
+			global → calibrated (used downstream)
+
+		Constraints
+			Monotonic
+			Globally validated
+			Cannot be self-approved
+
+		Calibration Validation Rules
+
+			Calibration MUST satisfy:
+
+				Statistical consistency with historical outcomes
+				Distribution alignment across strategies
+
+			Validation Metrics (MANDATORY):
+				Calibration error bounds
+				Distribution deviation thresholds
+
+			If calibration fails validation:
+				→ Strategy signals MUST be rejected
+
+			Calibration MUST be based on historical out-of-sample data
+
+		signal_strength_local ∈ [0,1]
+		signal_strength_global ∈ [0,1]
+
+		Values outside range → invalid signal
+
+	14. VALIDITY & DECAY MODEL
+		Validity
+			validity_window ∈ bounded class
+			expiry_time = event_time + validity_window
+
+			validity_class ∈ {ultra_short, short, medium, long}
+
+		Decay
+		Allowed:
+			linear_standard
+			exponential_standard
+
+		Constraints:
+			Monotonic
+			Standardized parameters
+			No custom decay shapes
+
+		Parameter Constraints
+
+			Each decay type MUST define bounded parameters
+
+			Example:
+				exponential_standard:
+					lambda ∈ [λ_min, λ_max]
+
+			Parameter values outside bounds → invalid signal
+
+		Validity Bounds Enforcement
+
+			validity_window MUST fall within globally defined numeric bounds
+
+			If validity_window outside allowed range:
+				→ Signal MUST be rejected
+
+
+	15. INPUT SNAPSHOT MODEL
+		Snapshot Rules
+			Immutable
+			Minimal
+			Deterministic
+
+		Hash
+			input_snapshot_hash = HASH(CBE(snapshot))
+
+		Freshness Constraint
+			All inputs must satisfy global staleness limits
+
+		Completeness Rule
+
+			Input snapshot MUST include ALL inputs used in signal computation
+
+			Validation:
+				If any required input is missing:
+					→ Signal MUST NOT be generated
+
+			Partial snapshot usage is strictly forbidden
+
+		Freshness Enforcement
+
+			Global staleness limits MUST be enforced strictly
+
+			If any input exceeds allowed staleness:
+				→ Signal MUST be rejected
+
+		Canonical Snapshot Rule
+
+			Input snapshot MUST contain EXACTLY the inputs used in signal computation
+
+			AND MUST NOT contain:
+				unused fields
+				extra metadata
+				derived values not used in computation
+
+			If snapshot is not exact:
+				→ Signal MUST be rejected
+
+
+	16. SIGNAL QUALITY MODEL
+
+		(Aligned with Phase A Signal Quality Framework)
+
+		System-Derived
+			signal_quality_score ∈ [0,1]
+
+		Derived from:
+			input completeness
+			input freshness
+			input validity
+
+		Strategy cannot modify this value
+
+		Quality Computation Rules
+
+			signal_quality_score MUST be computed deterministically using:
+
+				input completeness score
+				input freshness score
+				input validity score
+
+			Computation MUST be:
+				Deterministic
+				Reproducible
+				Independent of strategy control
+
+			signal_quality_score = weighted combination of:
+				completeness
+				freshness
+				validity
+
+		Evaluation Compatibility Requirement
+
+			Signals MUST expose sufficient information to support:
+
+				evaluation frequency:
+					real-time
+					daily
+					weekly
+
+				evaluation scope:
+					trade-level
+					strategy-level
+					portfolio-level
+
+			Signal structure MUST remain compatible with downstream evaluation systems
+
+
+	17. SIGNAL EMISSION MODEL
+		Constraints
+			emission_frequency defined
+			system_max_rate enforced
+
+		Anti-Oscillation
+			hysteresis
+			minimum persistence duration
+
+		Density Control
+			max_signals_per_instrument_per_window
+
+		Duplicate Handling Rule
+
+			Signal identity is defined strictly by signal_id
+
+		Cases:
+			1. Same signal_id + identical payload
+				→ Ignore (idempotent)
+
+			2. Same signal_id + different payload
+				→ HARD ERROR (system violation)
+
+		Strategies MUST NOT emit duplicate signals
+
+		Density Enforcement:
+
+			If signal count exceeds max_signals_per_instrument_per_window:
+				→ Excess signals MUST be rejected
+
+			System-level enforcement is mandatory
+
+		Emission requires:
+
+			|Δsignal_strength| > threshold + hysteresis_margin
+			AND persistence_duration ≥ min_duration
+
+			threshold, hysteresis_margin, min_duration MUST be defined in strategy configuration
+
+		Density Selection Rule
+
+			If signal count exceeds limit:
+
+				signals MUST be sorted by:
+
+					1. event_time (ascending)
+					2. signal_strength_global (descending)
+					3. strategy_id (lexicographic)
+
+				excess signals MUST be rejected based on this order
+
+	18. TRACEABILITY MODEL
+		Every signal MUST map to:
+			strategy_id
+			strategy_hash
+			config_hash
+			input_snapshot_hash
+			event_time
+			encoding_version
+			hash_version
+
+		Replay Guarantee
+			System must produce bit-identical output across replays
+
+		Lineage Constraint (Phase Alignment)
+
+			Every signal MUST maintain full lineage mapping to:
+
+				input data (market + reference)
+				strategy configuration
+				strategy logic version
+
+			This MUST satisfy:
+
+				traceability:
+					output → input mapping
+
+				explainability:
+					signal must be reproducible from inputs
+
+			No signal may exist without complete lineage linkage
+
+	19. FAILURE MODEL
+		Failure Scenarios
+			Encoding mismatch
+			Hash mismatch
+			Time inconsistency
+			Snapshot corruption
+
+		Impact
+			Decision corruption
+			Portfolio instability
+
+		Mitigation
+			Deterministic encoding
+			Replay validation
+			Schema enforcement
+
+
+	20. ASSUMPTION REGISTER
+		Assumption					Reason					Validate In		Status
+		Market data deterministic	required for replay		Phase B			open
+		Fixed-point sufficient		eliminate drift			Phase B			open
+		Calibration valid			cross-strategy fairness	Step 3			open
+
+
+	21. VALIDATION FRAMEWORK
+		Checklist
+			Schema complete
+			Determinism guaranteed
+			Encoding verified
+			Replay test passed
+			Cross-strategy comparable
+
+		Acceptance Criteria
+			Zero ambiguity
+			Bit-level reproducibility
+			Decision-ready
+
+		Replay Certification
+
+			System MUST pass long-horizon replay validation
+
+			Requirement:
+				Replay over extended period → identical signal outputs
+
+			If replay mismatch detected:
+				→ System invalid
+
+
+	22. OUTPUT (DELIVERABLE)
+		Signal Model Specification
+
+		Includes:
+			Signal schema
+			Field definitions
+			Lifecycle model
+			Encoding & hashing rules
+			Constraints
+
+
+	23. TRACEABILITY
+		Step 1 → Strategy Architecture
+		Step 2 → Signal Model
+		Step 3 → Decision Engine
+
+
+	24. CROSS-PHASE CONSISTENCY
+		OWNED HERE
+			Signal schema
+			Signal semantics
+			Encoding rules
+
+		REFERENCED LATER
+			Decision aggregation
+			Risk enforcement
+
+
+	25. SCALABILITY MODEL
+		Supports:
+			1000+ strategies
+			multi-asset
+			high-frequency signal environments
+
+
+	26. GOVERNANCE
+		Signal schema must be versioned
+		Encoding version locked
+		Hash version controlled
+
+		Any change requires:
+			New version
+			Approval
+			Impact analysis
+
+		Governance Integration (Phase 0 Alignment)
+
+			Signal model changes MUST follow:
+
+				approval hierarchy:
+					research → engineering → risk → final approval
+
+				change control:
+					reason must be documented
+					impact analysis required
+					backward compatibility assessed
+
+			No signal schema change is allowed without governance approval
+
+
+	27. AUDITABILITY
+		Must support:
+			Full replay
+			Signal lineage tracking
+			Input traceability
+
+
+	28. RISK CONSIDERATION
+		Risks:
+			signal miscalibration
+			stale inputs
+			overfitting
+
+		Controls:
+			global validation
+			freshness enforcement
+
+
+	29. FAILURE CONDITION
+		Phase fails if:
+			Signal definition is ambiguous
+			Non-determinism exists
+			Replay is not possible
+			Cross-strategy comparison fails
+
+
+	30. PHASE LOCK CRITERIA
+		All sections complete
+		Determinism enforced
+		Replay validated
+		No ambiguity
+		Approved via governance
+
+
+Phase A — Step 3: Decision Engine (Signal → TradeIntent)
+
+	All incoming signals MUST be ordered before any processing:
+
+		ordered_signals = sort(signals, by:
+			1. event_time ASC
+			2. signal_id ASC
+		)
+
+		signals = UNIQUE_BY(signal_id)
+
+			IF duplicate detected:
+				KEEP first occurrence only
+
+		IF signals is empty:
+			RETURN NoTradeIntent
+
+	CORE CONTENT (MANDATORY)
+	1. OBJECTIVE
+		Transform Signal → TradeIntent deterministically
+
+	4. DOMAIN MODEL (NEW ENTITY)
+
+		ADD:
+
+		TradeIntent = {
+			trade_intent_id
+			signal_ids[]
+			strategy_ids[]
+			instrument
+			direction ∈ {BUY, SELL}
+			size
+			aggregation_score
+			priority_level
+			event_time
+			origin_type
+			account_id
+			origin_type ∈ {CORE, EXTERNAL}
+
+			trace_id
+			hash_version
+		}
+
+		signal_ids MUST be:
+			sorted ASC
+			unique
+
+		trace_id = HASH_v1(signal_ids)
+
+		hash_version = "v1"
+
+	5. LOGIC ENGINE (CRITICAL)
+	ADD RULES:
+		R1 — Signal Validity Filter
+			Only ACTIVE signals allowed
+			Expired signals → reject
+
+		R2 — Aggregation Rule (A-03 FIX)
+			Aggregation Model:
+
+				aggregation_score = Σ (strategy_weight_i * signal_strength_i)
+
+				Where:
+
+				- strategy_weight_i = predefined constant (config only)
+				- signal_strength_i = fixed-point int64 in range [-1, +1]
+
+				Rules:
+
+				1. No dynamic weighting
+				2. No override by priority
+				3. No conditional branching
+				4. Same input → same output ALWAYS
+
+
+		R3 — Direction Resolution
+			IF aggregation_score > 0:
+				direction = BUY
+
+			ELSE IF aggregation_score < 0:
+				direction = SELL
+
+			ELSE:
+				RETURN NULL (no TradeIntent)
+
+		R4 — Signal → Size Mapping (A-04 FIX)
+			size = floor(
+				abs(aggregation_score) * capital_scaling_factor
+			)
+
+			Constraints:
+
+			size > 0 → valid
+			size = 0 → reject
+
+
+
+		R5 — Strategy Conflict Resolution
+			If opposing signals:
+
+			use aggregation_score (no voting ambiguity)
+
+		R6 — TradeIntent Creation
+			TradeIntent created ONLY IF:
+
+			aggregation_score ≠ 0
+			AND size > 0
+
+		R7 — Identity Rule (A-02 PARTIAL)
+			trade_intent_id = HASH_v1(
+					canonical_trade_intent_payload
+				)
+
+				WHERE:
+
+				canonical_trade_intent_payload =
+					"[" + join(signal_ids, "|") + "]" + "|" +
+					instrument + "|" +
+					direction + "|" +
+					size + "|" +
+					event_time
+
+			ALL hash inputs MUST follow:
+
+				- integers → base-10 string
+				- no leading zeros
+				- fields separated by "|"
+				- lists enclosed in []
+				- no whitespace
+
+		Priority MUST NOT be used in:
+
+		- aggregation
+		- direction
+		- size
+
+		Priority is ONLY forwarded to Phase D
+
+		event_time MUST be:
+
+			- UTC
+			- epoch_ns (int64)
+			- monotonic per signal source
+
+		TradeIntent.event_time = MAX(signal.event_time)
+
+		R8 — Capacity Clamp (Decision Layer)
+
+			IF size > capacity_limit:
+				size = capacity_limit
+
+			IF capacity_limit == 0:
+				RETURN NoTradeIntent
+
+	5.5 RULE ORDER (MANDATORY)
+		1. Signal validation
+		2. Grouping (instrument)
+		3. Aggregation
+		4. Direction resolution
+		5. Size calculation
+		6. TradeIntent creation
+		7. ID generation
+
+	DecisionEngine:
+
+		INPUT:
+			List<Signal>
+
+		PROCESS:
+			1. Normalize signals (already Step 1 output)
+			2. Apply deterministic ordering:
+				sort by (event_time ASC, signal_id ASC)
+
+			3. Aggregate:
+				aggregation_score = Σ(weight * signal_strength)
+
+			4. Resolve direction:
+				if score > 0 → BUY
+				if score < 0 → SELL
+				if score == 0 → NO INTENT
+
+			5. Map size (delegated to SizeMapper)
+
+		OUTPUT:
+			TradeIntent (or NULL)
+
+		TradeIntent DEFINITION:
+
+		TradeIntent_v1:
+
+			STRICT FIELD ORDER:
+
+			1. trade_intent_id: bytes32
+			2. instrument: string
+			3. direction: enum {BUY, SELL}
+			4. size: int64
+			5. aggregation_score: int64
+			6. signal_ids: List<bytes32> (SORTED ASC)
+			7. event_time: int64 (epoch ns)
+			8. encoding_version: int = 1
+
+			TradeIntent Encoding:
+
+				CBE (Canonical Binary Encoding)
+
+				Rules:
+
+				- fixed field order
+				- fixed byte size per field
+				- no JSON
+				- no optional fields
+
+			TradeIntent Hashing:
+
+					trade_intent_id = HASH_v1(
+						CBE_encode([
+							instrument,
+							direction,
+							size,
+							aggregation_score,
+							signal_ids_sorted,
+							event_time
+						])
+					)
+
+
+		SizeMapper:
+
+			INPUT:
+				aggregation_score (int64 fixed-point)
+
+			PROCESS:
+
+			1. absolute_score = abs(aggregation_score)
+
+			2. size_raw = absolute_score * capital_scaling_factor
+
+				WHERE:
+				- capital_scaling_factor = fixed int64
+				- multiplication = integer-only (NO FLOAT)
+
+			3. size = FLOOR(size_raw)
+
+			RULES:
+
+			- NO rounding up
+			- NO floating point
+			- NO adaptive scaling
+
+			VALIDATION:
+
+			IF size == 0:
+				REJECT TradeIntent
+
+		Deduplication Rule:
+
+			signals = UNIQUE_BY(signal_id)
+
+			IF duplicate detected:
+				KEEP first occurrence only
+
+		SORT ORDER:
+
+
+		ordered_signals = sort(signals, by:
+				1. event_time ASC
+				2. strategy_priority DESC
+				3. signal_id ASC
+			)
+
+
+
+
+PHASE A — STEP 3: DECISION ENGINE SYSTEM
+	(Fully Deterministic — Conflict-Resolved, Aggregation-Safe, Institution-Grade Decision Layer)
+
+	Reference Base:
+
+
+	1. PHASE IDENTITY LAYER
+		1.1 Phase Name
+			Phase A — Step 3: Decision Engine System
+
+		1.2 Phase Role
+			Transforms standardized signals into deterministic trade decisions (trade intent).
+
+		1.3 Objective
+			Define a fully deterministic, auditable, and conflict-resolved decision model that converts signals → trade intents.
+
+		1.4 Why This Exists
+			Without this layer:
+				Signals remain isolated
+				Decision outcomes become inconsistent
+				Strategy conflicts create ambiguity
+
+			Step 2 defines what is produced
+			Step 3 defines how decisions are made
+
+
+	2. PHASE SCOPE CONTROL
+		2.1 INCLUDED
+			Signal aggregation logic
+			Conflict resolution model
+			Decision scoring system
+			Trade intent definition
+			Decision lifecycle
+
+		2.2 EXCLUDED (STRICT)
+			Trade execution
+			Risk enforcement
+			Capital allocation enforcement
+			Infrastructure (Kafka, DB, APIs)
+			Latency / delivery guarantees
+
+		Strict Boundary Rules
+			Decision layer MUST NOT:
+				send orders
+				interact with broker
+				apply real risk constraints
+
+
+	3. ARCHITECTURAL INTENT
+		3.1 Principles
+			Deterministic decision making
+			Order-independent aggregation
+			Full auditability
+			Conflict-safe logic
+			Replayable outcomes
+
+		3.2 Model Type
+			Logical + Mathematical Decision Specification
+
+		3.3 Position in System
+			Strategy → Signal → Decision Engine → Trade Intent
+
+
+	4. DOMAIN MODEL
+		4.1 Core Entities
+			Decision Context
+				Group of signals for same instrument and decision window
+
+			Decision Unit
+				Processed aggregation result per instrument
+
+			Trade Intent
+				Final deterministic output of decision engine
+
+		4.2 Attributes
+
+			Decision Context
+				instrument
+				event_time
+				signal_set
+				context_id
+
+			Decision Unit
+				aggregated_direction
+				confidence_score
+				participating_signals
+				conflict_flag
+				conflict_intensity
+				conflict_score
+
+			Trade Intent
+				intent_id
+				instrument
+				direction
+				confidence
+				decision_time
+				supporting_signals
+				decision_trace_hash
+
+		4.3 Relationships
+			Signals → grouped into → Decision Context
+			Decision Context → processed into → Decision Unit
+			Decision Unit → produces → Trade Intent
+
+		4.4 Ownership
+			Decision logic → Phase A
+			Trade intent schema → Phase A
+			Execution → Phase D
+
+
+	5. LOGIC / RULE ENGINE
+
+		5.1 Input Definition (DETERMINISTIC GROUPING)
+
+			Canonical Input Set (MANDATORY)
+
+				canonical_input_set = {
+					input_signal_snapshot
+					configuration_snapshot
+					previous_trade_intent
+					version_identifiers
+				}
+
+				Constraint:
+
+					ALL decision outputs MUST be derived ONLY from canonical_input_set
+
+					No implicit inputs allowed
+
+			Canonical Enforcement Rule (STRICT)
+
+				All computations MUST use ONLY:
+
+					canonical_input_set.input_signal_snapshot
+
+				Replace ALL references of:
+					"active signals"
+					"collected signals"
+					"input signals"
+
+				WITH:
+					canonical_input_set.input_signal_snapshot
+
+				decision_time MUST be derived ONLY from:
+					canonical_input_set.input_signal_snapshot
+
+				Constraint:
+
+					Any dependency outside canonical_input_set → INVALID SYSTEM
+
+			Previous Decision State Input
+
+				previous_trade_intent MUST include:
+
+					direction
+					NS
+					decision_time
+
+				Constraint:
+
+					inertia evaluation MUST use only this explicit input
+
+			Input Domain Validation (MANDATORY)
+
+				Each signal MUST satisfy:
+
+					direction ∈ {-1, 0, +1}
+					signal_strength_global ∈ [0,1]
+					event_time valid
+
+				Invalid signals MUST be rejected BEFORE processing
+
+			Step 1:
+				Collect ALL signals from:
+
+					canonical_input_set.input_signal_snapshot
+
+				WHERE:
+					signal.instrument == instrument
+
+			Step 2:
+				decision_time = max(event_time from:
+
+					canonical_input_set.input_signal_snapshot)
+
+			Step 3:
+				Final Decision Context includes signals WHERE:
+
+					signal.event_time ≤ decision_time
+
+					AND signal ∈ canonical_input_set.input_signal_snapshot
+
+			Empty Set Rule
+
+				IF no active signals exist:
+
+					Decision MUST be:
+						direction = NEUTRAL
+						confidence = 0
+
+					Trade Intent MUST still be generated
+
+			Freshness Enforcement
+
+				signals MUST satisfy:
+					decision_time - signal.event_time ≤ staleness_limit
+
+				If violated:
+					signal MUST be excluded
+
+				staleness_limit must be globally defined
+
+			Strategy Emission Cap
+
+				max_signals_per_strategy_per_window enforced
+
+				If exceeded:
+					excess signals MUST be ignored
+
+			Global Signal Cap
+
+				Filtered Signal Set Definition
+
+					filtered_signal_set is defined as:
+
+						signals from canonical_input_set.input_signal_snapshot
+						AFTER applying:
+
+							instrument filtering
+							staleness enforcement
+							strategy emission cap
+							input domain validation
+
+					Constraint:
+
+						filtered_signal_set MUST be deterministic and reproducible
+
+				Deterministic Top-K Selection (STRICT)
+
+					Input Set Definition:
+
+						Top-K selection MUST be applied ONLY on:
+
+							filtered_signal_set
+
+						Where filtered_signal_set is the result AFTER:
+
+							instrument filtering
+							staleness enforcement
+							strategy emission cap
+							input domain validation
+
+						AND MUST be derived ONLY from:
+
+							canonical_input_set.input_signal_snapshot
+
+					Ordering Rule (TOTAL ORDER — NO TIES)
+
+						Signals MUST be sorted using the following keys:
+
+							1. signal_strength_global (descending)
+							2. event_time (ascending)
+							3. signal_id (lexicographic)
+
+						Constraint:
+
+							signal_id MUST be globally unique
+
+							This guarantees strict total ordering
+							(no two signals can have identical ordering keys)
+
+					Selection Rule
+
+						Top-K signals MUST be selected from the ordered list:
+
+							selected_signals = first K elements
+
+					Determinism Constraint
+
+						The combination of:
+
+							canonical_input_set
+							filtered_signal_set definition
+							ordering rule
+
+						MUST produce identical Top-K selection across all executions
+
+					Invalid Condition
+
+						If ordering produces ambiguity:
+
+							system MUST fail validation
+
+			External Input Exclusion (MANDATORY)
+
+				Decision Engine MUST consume ONLY:
+
+					canonical_input_set.input_signal_snapshot
+
+				External trade intents MUST NOT:
+
+					enter canonical_input_set
+					participate in aggregation
+					influence decision outcomes
+
+				Any external dependency → system invalid
+
+		5.2 Aggregation Model
+			MUST be:
+				order-independent
+				deterministic
+				replayable
+
+			Canonical Ordering Rule (UNIFIED — STRICT)
+
+				All signals entering aggregation MUST follow the SAME ordering used in Top-K selection.
+
+				Signals MUST be sorted using:
+
+					1. signal_strength_global (descending)
+					2. event_time (ascending)
+					3. signal_id (lexicographic)
+
+				Constraint:
+
+					This ordering MUST be preserved across:
+
+						Top-K selection
+						aggregation
+						normalization
+						conflict evaluation
+
+					Re-ordering at any stage is NOT allowed
+
+		5.3 Direction Aggregation
+
+			Let:
+				D_i ∈ {-1, 0, +1}
+				W_i = signal_strength_global
+
+			Weight Cap Rule
+
+				W_i ≤ W_max
+
+			Weight Floor Rule
+
+				W_i ≥ W_min
+
+			Adaptive Density Normalization
+
+				N = number of signals
+				D = min(N, N_cap)
+				W_i = W_i / D
+
+			Temporal Weighting
+
+				Δt_i = decision_time - signal.event_time
+				T_i = max(0, 1 - (Δt_i / staleness_limit))
+
+			Temporal Smoothing
+
+				T_i = floor(T_i / τ_step) * τ_step
+
+				W_i = W_i * T_i
+
+			Weighted Direction Score:
+				WDS = Σ (D_i * W_i)
+
+		5.4 Normalization
+
+			Let:
+				S_raw = Σ |W_i|
+
+			Denominator Safety Rule
+
+				IF S_raw == 0:
+					NS = 0
+					Decision = NEUTRAL
+					confidence = 0
+					conflict_flag = FALSE
+
+				IF S_raw < ε_min:
+					NS = 0
+					Decision = NEUTRAL
+					confidence = 0
+
+			Responsive Normalization
+
+				IF S_raw ≥ S_min:
+					S = S_raw
+				ELSE:
+					S = α*S_raw + (1-α)*S_min
+
+			Normalized Score:
+				NS = WDS / S
+
+			Constraints:
+				ε_min, S_min, α must be globally defined
+
+		5.5 Decision Threshold Model
+
+			Hysteresis Rule
+
+				θ_entry > θ_exit
+
+				Enter LONG if NS > θ_entry
+				Stay LONG if NS > θ_exit
+
+				Enter SHORT if NS < -θ_entry
+				Stay SHORT if NS < -θ_exit
+
+			Conflict Suppression Rule
+
+				IF conflict_intensity ≥ γ_threshold
+				AND total_magnitude ≥ M_threshold:
+
+					Decision MUST be NEUTRAL
+
+			Conflict Deadlock Override
+
+				IF conflict_intensity ≥ γ_threshold
+				AND total_magnitude ≥ M_threshold
+				AND |NS| ≥ conflict_override_threshold:
+
+					Allow directional decision
+
+			Constrained Activation Rule
+
+				IF max(|W_i|) ≥ activation_threshold
+				AND NS within dead zone
+				AND conflict_intensity < γ_threshold:
+
+					Decision MAY follow dominant direction
+
+				Else:
+					Activation MUST NOT trigger
+
+			Final Decision Resolution Rule (STRICT)
+
+				IF conflict suppression condition satisfied:
+
+					Decision MUST be NEUTRAL
+					Activation MUST NOT trigger
+
+				ELSE IF conflict override condition satisfied:
+
+					Decision follows override logic
+					Activation MUST NOT trigger
+
+				ELSE:
+
+					Activation rule MAY apply (subject to constraints)
+
+				Constraint:
+
+					Activation rule is lowest precedence
+
+			Dead Zone Definition (EXPLICIT)
+
+				-θ_entry ≤ NS ≤ θ_entry
+
+				Boundary Rules:
+
+					NS = +θ_entry → treated as ENTRY
+					NS = -θ_entry → treated as ENTRY
+
+		5.6 Confidence Model
+
+			confidence = |NS|
+
+			Constraints:
+				confidence ∈ [0,1]
+				monotonic
+
+		5.7 Conflict Detection
+
+			Let:
+				P = Σ positive weights
+				N = Σ absolute negative weights
+
+			total_magnitude = P + N
+
+			Conflict exists if:
+				P > 0 AND N > 0
+
+			conflict_flag MUST be recorded
+
+				IF max(P, N) == 0:
+					conflict_intensity = 0
+				ELSE:
+					conflict_intensity = min(P, N) / max(P, N)
+
+			conflict_score = conflict_intensity * total_magnitude
+
+		5.8 Priority Adjustment (Optional)
+
+			W_i = W_i * priority_weight
+
+			Constraints:
+				priority_weight ∈ [p_min, p_max]
+
+			Priority Cluster Constraint
+
+				P_cluster ≤ P_cluster_max
+
+		5.9 Time Model
+
+			decision_time = max(event_time of all signals)
+
+			Manual override forbidden
+
+		5.10 Determinism Constraints
+
+			Same input signals → identical trade intent
+
+			Numeric Model Enforcement
+
+				ALL computations MUST use fixed-point:
+					value = integer / 10^6
+
+				Floating-point arithmetic forbidden
+
+		5.11 Decision Rule Precedence (STRICT ORDER — NO DEVIATION)
+
+			All decision logic MUST be applied in the following sequence:
+
+				1. Input Validation Layer
+				2. Signal Filtering (caps, staleness, limits)
+				3. Weight Construction (W_i computation)
+				4. Aggregation (WDS, S, NS)
+				5. Conflict Evaluation
+				6. Threshold Evaluation (Hysteresis)
+				7. Inertia Evaluation
+				8. Conflict Override Evaluation
+				9. Activation Rule (FINAL FALLBACK ONLY)
+
+			Constraint:
+				No rule may override a higher-precedence layer
+
+			Purpose:
+				Eliminate rule conflict ambiguity
+
+			Execution Constraint
+
+				Implementation MUST strictly follow precedence order
+
+				Any deviation → system invalid
+
+			Activation rule MUST operate only within defined constraints and MUST NOT override conflict suppression or normalization layers
+
+		Aggregation Constraints
+			- MUST be deterministic
+			- MUST use fixed-point arithmetic
+			- MUST define ordering of signals before aggregation
+
+		Ordering Rule
+			sort signals by:
+
+			1. event_time ASC
+			2. signal_id ASC
+
+		Strategy Weight Definition
+			strategy_weight ∈ [0,1]
+
+			Defined in strategy configuration
+
+		Aggregation Formula (FINAL)
+			aggregation_score =
+				Σ (direction_i * signal_strength_i * strategy_weight_i)
+
+		Size Mapping Function
+			size = floor(
+				abs(aggregation_score) * capital_scaling_factor
+			)
+
+			size = MIN(size, max_position_size)
+
+		Constraints
+			capital_scaling_factor:
+				defined in configuration_snapshot
+
+			size ∈ [1, MAX_INT]
+
+			MAX_INT = 10^12
+
+		Invalid Conditions
+			aggregation_score = 0 → NO TradeIntent
+			size = 0 → reject
+			size = MIN(size, MAX_INT)
+
+		AGGREGATION ORDERING RULE (MANDATORY)
+
+			All signals contributing to a single TradeIntent MUST be aggregated using deterministic ordering.
+
+			aggregation_order_key = {
+				instrument ASC
+				strategy_priority DESC
+				signal_strength DESC
+				signal_time ASC
+				signal_id ASC
+			}
+
+			Rules:
+
+			1. All signals MUST be sorted using aggregation_order_key BEFORE aggregation.
+			2. Aggregation MUST be applied sequentially on sorted signals.
+			3. No parallel aggregation allowed.
+
+			Tie-break guarantee:
+
+			- signal_id MUST be final tie-breaker (lexicographic)
+
+			Constraint:
+
+			- identical input signal set → identical TradeIntent output
+
+			Violation → NON-DETERMINISTIC DECISION
+
+		SIZE MAPPING STANDARDIZATION (MANDATORY)
+
+			All size computations MUST use fixed-point arithmetic:
+
+			size = integer / 10^6
+
+			Mapping function:
+
+			trade_size = floor(
+				signal_strength * strategy_capital_allocation * scaling_factor
+			)
+
+			Constraints:
+
+			- floating point FORBIDDEN
+			- overflow → HARD REJECT
+			- underflow → 0
+
+			Global Scaling Rule:
+
+			- scaling_factor MUST be defined in configuration_snapshot
+			- identical configuration → identical size mapping
+
+			Boundary:
+
+			trade_size ∈ (0, MAX_INT]
+
+			MAX_INT = 10^12
+
+			Violation → INVALID TRADE INTENT
+
+
+	6. FLOW ARCHITECTURE
+		6.1 Input
+			Active signals (from Step 2)
+
+		6.2 Processing
+			Signal Set → Context Formation → Aggregation → Decision
+
+		6.3 Output
+			Trade Intent object
+
+		6.4 Flow Model
+			Canonical Flow
+
+				Signals → Decision Context → Decision Unit → Trade Intent
+
+			Explicit Flow Mapping (DECOMPOSED VIEW)
+
+				Input:
+					Active signals (validated set)
+
+				Transform:
+					Context formation → aggregation → normalization → decision logic
+
+				Output:
+					Trade Intent object
+
+			Constraint:
+				Canonical flow defines structural pipeline
+				Explicit mapping defines transformation semantics
+
+				Both MUST be consistent with 6.1, 6.2, 6.3
+
+	7. PIPELINE STRUCTURE
+		Decision Lifecycle
+			Collect → Validate → Aggregate → Decide → Emit → Archive
+
+		State Transitions
+			Pending → Active → Finalized
+
+		Decision Stability Rules
+
+			Canonical Stability Rule
+
+				Let:
+
+					Δt_decision =
+						decision_time
+						- previous_trade_intent.decision_time
+
+				Decision MUST NOT be emitted unless:
+
+					Δt_decision ≥ MDI
+					OR
+					|ΔNS| ≥ decision_delta_threshold
+
+				Constraint:
+
+					All timing MUST be derived from canonical_input_set
+
+		State Transition Definition (EXPLICIT)
+
+			Pending → Active
+				when signals enter valid decision context
+
+			Active → Recomputed
+				when new signals arrive or existing signals expire
+
+			Active → Finalized
+				when decision emitted and stable
+
+			Recomputed → Finalized
+				when stability conditions satisfied
+
+		Constraints:
+			State transitions MUST be deterministic
+			No implicit transitions allowed
+
+	8. CONTROL & CONSTRAINTS
+		8.1 Hard Rules
+			Deterministic aggregation
+			Valid signal set required
+			Fixed threshold enforcement
+
+		8.2 Soft Rules
+
+			Prefer stability over sensitivity in borderline conditions
+
+			Prefer conflict-aware neutrality when directional clarity is weak
+
+			Prefer signal diversity over concentrated dominance
+
+			Prefer smoother transitions over abrupt directional changes
+
+			Prefer temporal relevance (recent signals) over stale signals within valid range
+
+			Constraints:
+				Soft rules MUST NOT override hard rules
+				Soft rules act only as tie-breakers or secondary preference logic
+
+
+		8.3 Guardrails
+			No cross-instrument aggregation
+			No uncontrolled signal dominance
+
+			Correlation Guard
+
+				If strategy class concentration exceeds threshold:
+					weights must be reduced
+
+			Behavioral Correlation Proxy
+
+				If directional + temporal clustering detected:
+					weights must be reduced
+
+		Full Parameter Constraint Graph
+
+			S_min > ε_min
+			W_max > W_min > 0
+			θ_entry > θ_exit > 0
+
+			inertia_threshold ≤ θ_entry
+			conflict_override_threshold ≤ θ_entry
+			activation_threshold ≤ W_max
+
+			Constraint:
+				If violated → configuration invalid
+
+			Account Binding Rule (MANDATORY)
+
+				- Every TradeIntent MUST belong to exactly one account_id
+				- account_id MUST be present in canonical_input_set
+				- Missing account_id → HARD REJECT
+
+				Origin Classification Rule (MANDATORY)
+
+				- origin_type MUST be assigned at TradeIntent creation
+				- CORE → generated by Decision Engine
+				- EXTERNAL → generated by CEIL
+				- origin_type MUST NOT change downstream
+
+	9. STATE & DATA MODEL
+		9.1 State Types
+			Active Decision Context
+			Finalized Decision
+
+		9.2 State Transitions
+			New signals → recompute decision deterministically
+
+		Decision Inertia Rule
+
+			If direction changes:
+
+				|NS| ≥ inertia_threshold * β
+
+			where:
+				β = max(β_min, 1 - conflict_intensity)
+
+		9.3 Source of Truth
+			Trade Intent object
+
+			Ownership Clarification
+
+				Trade Intent object is the authoritative decision output
+
+				Persistence Responsibility:
+					Owned by downstream system (execution layer)
+
+				Decision Engine MUST NOT mutate historical trade intents
+
+			Constraint:
+				State must remain immutable once finalized
+
+	10. FAILURE MODEL
+		10.1 Failure Scenarios
+			Ambiguous aggregation
+			Threshold inconsistency
+			Conflicts not handled
+			Numeric instability
+			Invalid input set
+			Adversarial signal flooding
+			Over-constraint suppression
+
+		10.2 Impact
+			Incorrect trade intent
+			Portfolio inconsistency
+
+		10.3 Mitigation
+			Strict aggregation rules
+			Deterministic thresholds
+			Input validation enforcement
+			Balanced constraint design
+
+
+	11. ASSUMPTION REGISTER
+		Assumption					Reason					Validate In		Status
+		Signal calibration valid		required for aggregation fairness	Phase B		open
+		Signal timing aligned		required for grouping				Phase B		open
+		Threshold sufficiency		required for decision clarity		Phase B		open
+
+
+	12. VALIDATION FRAMEWORK
+		12.1 Checklist
+				Aggregation defined
+				Conflict logic defined
+				Determinism enforced
+				Numeric safety enforced
+				Responsiveness verified
+
+		12.2 Validation Method
+
+				Deterministic Replay Testing
+
+					Replay identical signal sets
+					Verify identical trade intent output
+
+				Edge Case Simulation
+
+					Test:
+						empty signal set
+						high conflict scenarios
+						max signal density
+						staleness boundary conditions
+
+				Stress Testing
+
+					Simulate:
+						high-frequency updates
+						multi-strategy signal floods
+						conflict-heavy environments
+
+				Parameter Sensitivity Testing
+
+					Vary:
+						θ_entry, θ_exit
+						W_max, W_min
+						S_min, ε_min
+
+					Verify:
+						no dead zones
+						no instability
+
+				Invariant Validation
+
+					Ensure:
+						no division by zero
+						bounded outputs
+						confidence ∈ [0,1]
+
+				Replay Consistency Check
+
+					Hash comparison across runs must match
+
+		12.3 Acceptance Criteria
+				Zero ambiguity
+				Replay consistency
+				Deterministic output
+
+		Replay Validation
+			Identical signals → identical trade intents
+
+		Phase Gate Compliance
+
+			This phase MUST NOT be approved unless:
+
+				all checklist items satisfied
+				all validation tests passed
+				replay consistency verified
+
+			Constraint:
+
+				partial validation is NOT acceptable
+
+
+	13. OUTPUT (DELIVERABLE)
+		Decision Model Specification
+
+		Includes:
+			aggregation logic
+			conflict rules
+			trade intent schema
+
+		Output Schema Definition
+
+			Trade Intent Structure (MANDATORY)
+
+				intent_id: string
+				instrument: string
+				direction: {LONG, SHORT, NEUTRAL}
+				confidence: fixed-point [0,1]
+				decision_time: timestamp (Δt_fixed aligned)
+				supporting_signals: list<signal_id>
+				conflict_flag: boolean
+				conflict_intensity: fixed-point [0,1]
+				conflict_score: fixed-point
+				decision_trace_hash: string
+				config_version_id: string
+
+		Output Format
+
+			Must be serializable as:
+				JSON (primary)
+				Binary format (optional for execution layer)
+
+		Output Contract
+
+			Schema MUST be:
+				backward compatible
+				versioned
+				strictly validated before emission
+
+			Null values NOT allowed in mandatory fields
+
+		Trade Intent Ownership Constraint
+
+			Trade Intent produced in this phase represents:
+
+				CORE trade intent only
+
+			External trade intents are NOT produced here
+			and MUST be handled exclusively via CEIL outside Phase A
+
+		signal_id (MANDATORY)
+
+			TradeIntent = {
+				signal_id
+				trade_intent_id
+				...
+			}
+
+
+	14. TRACEABILITY
+		Step 2 → Signal Model
+		Step 3 → Decision Engine
+		Step 4 → Execution Behavior
+
+		Trace Continuity Constraint
+
+		Each Trade Intent MUST maintain mapping to:
+
+			input signal_ids (from Step 2)
+			Decision Context identifier
+
+		Constraint:
+
+			no transformation may break input-to-output trace linkage
+
+		Purpose:
+
+			ensure full lineage from signal → decision → execution
+
+
+	15. CROSS-PHASE CONSISTENCY
+		OWNED HERE
+			decision logic
+			aggregation rules
+
+		REFERENCED
+			signal schema (Step 2)
+			risk layer (future phase)
+
+
+
+
+	16. SCALABILITY MODEL
+		Supports:
+			1000+ strategies
+			multi-asset decisioning
+			high-frequency updates
+
+		Scaling Model
+			per-instrument isolation
+
+
+	17. GOVERNANCE
+		Decision logic must be versioned
+
+		Changes require:
+			approval
+			impact analysis
+			version increment
+
+
+	18. AUDITABILITY
+		Must support:
+			full decision replay
+			signal-to-decision traceability
+
+		Log Requirements:
+			input signals
+			aggregation steps
+			final decision
+
+		Decision Trace Hash Definition
+
+			decision_trace_hash MUST include:
+
+				signal_ids
+				W_i values
+				NS
+				decision_time
+				conflict_intensity
+				W_max
+				W_min
+				ε_min
+				S_min
+				γ_threshold
+				M_threshold
+				staleness_limit
+				MDI
+				θ_entry
+				θ_exit
+				config_version_id
+
+				Hash Versioning
+
+					HASH_v1 MUST be used for current implementation
+
+					Future changes MUST introduce:
+						HASH_v2, HASH_v3, ...
+
+				Constraint:
+					Hash version must be included in decision_trace_hash metadata
+
+		Observability Requirements
+
+			Metrics
+
+				decision_rate_per_instrument
+				conflict_frequency
+				neutral_decision_ratio
+				average_confidence
+				signal_density_distribution
+
+			Alerts
+
+				trigger if:
+					decision inactivity exceeds threshold
+					conflict_rate spikes
+					NS remains near zero for extended duration
+
+			Monitoring Signals
+
+				NS distribution over time
+				WDS trends
+				signal arrival rate
+				decision transitions
+
+			Logging Requirements
+
+				each decision MUST log:
+					input signal set
+					intermediate aggregation values
+					final NS and decision
+
+		Constraints:
+			Observability MUST NOT affect decision logic
+
+	19. RISK CONSIDERATION
+		Risks:
+			signal overweight bias
+			strategy conflict
+			adversarial signal injection
+			system rigidity
+
+		Controls:
+			normalization
+			threshold enforcement
+			rate limiting
+			adaptive balancing
+
+
+	20. FAILURE CONDITION
+		Phase fails if:
+			decision logic is ambiguous
+			non-determinism exists
+			replay mismatch occurs
+
+
+	21. PHASE LOCK CRITERIA
+		All sections complete
+		Determinism enforced
+		Replay validated
+		No ambiguity
+		Governance approved
+
+PHASE A — STEP 4: EXECUTION BEHAVIOR SYSTEM
+
+	(Pure Logical Layer — Post-Decision, Pre-Execution, Non-Infrastructure)
+
+	1. PHASE IDENTITY LAYER
+		1.1 Phase Name
+
+			Phase A — Step 4: Execution Behavior System
+
+		1.2 Phase Role
+
+			Defines how trade intents are translated into execution-ready behavioral instructions, without involving infrastructure, brokers, or order systems.
+
+		1.3 Phase Objective
+
+			Create a fully deterministic, rule-based execution behavior model that converts trade intents into structured execution directives aligned with strategy intent and system constraints.
+
+		1.4 Why This Phase Exists
+
+			Prevents:
+				ambiguous execution interpretation
+				mismatch between decision intent and execution outcome
+				uncontrolled slippage and behavioral drift
+
+			This phase ensures:
+				decision → execution alignment is deterministic
+				execution behavior is explicit, auditable, and reproducible
+
+	2. PHASE SCOPE CONTROL
+		2.1 INCLUDED (STRICT)
+			Execution behavior definition (logical)
+			Order intent shaping (NOT order placement)
+			Execution style modeling (aggressive/passive/etc.)
+			Timing behavior rules
+			Sizing translation (logical, not capital allocation enforcement)
+			Execution constraints (logical)
+
+		2.2 EXCLUDED (STRICT)
+			Order placement (OMS/EMS)
+			Broker interaction
+			API / infrastructure logic
+			Latency engineering
+			Real-time execution feedback loops
+
+		Boundary Rule:
+		This phase defines HOW to execute, not WHERE or THROUGH WHAT system.
+
+	3. ARCHITECTURAL INTENT LAYER
+		3.1 Core Design Principles
+			Deterministic execution behavior
+			Separation of intent vs execution
+			No infra leakage
+			Fully auditable behavior mapping
+			Strategy-consistent execution
+
+		3.2 Architectural Model
+
+			Logical Execution Behavior Model
+
+		3.3 System Positioning
+
+			Strategy → Signal → Decision → Trade Intent → Execution Behavior → (Phase D Execution Engine)
+
+			This phase bridges:
+				Decision Layer (Step 3) → Execution System (Phase D)
+
+	4. DOMAIN MODEL DEFINITION
+		4.1 Core Entities
+
+			Execution Instruction
+			Logical representation of how a trade intent should be executed
+
+			Execution Profile
+			Predefined behavioral template (aggressive, passive, TWAP-like, etc.)
+
+			Execution Slice
+			Logical decomposition of trade intent into execution parts
+
+			Execution Profile Determinism Constraint
+
+				execution_profile_set MUST be:
+
+					fixed
+					versioned
+					immutable during execution
+
+				Profile selection MUST operate ONLY on:
+
+					canonical_input_set.execution_profile_set
+
+				Constraint:
+
+					dynamic profile modification is forbidden
+
+		4.2 Attributes
+
+			Execution Instruction
+
+				instruction_id
+				intent_id (from Step 3)
+				instrument
+				direction
+				execution_profile_id
+				execution_urgency
+				execution_horizon
+				sizing_model_reference
+				slicing_plan
+				timing_constraints
+				behavior_flags
+				instruction_hash
+
+			Execution Profile
+
+				profile_id
+				aggression_level
+				liquidity_preference
+				participation_rate
+				slippage_tolerance
+				execution_pattern
+
+			Instruction Hash Definition
+
+				instruction_hash MUST be computed as:
+
+					instruction_hash = HASH_v1(CBE_payload)
+
+				Where payload includes:
+					intent_id
+					execution_profile_id
+					execution_urgency
+					slicing_plan
+					timing_constraints
+
+				Constraints:
+					canonical binary encoding required
+					field order MUST be fixed
+
+			Slicing Plan Canonicalization (MANDATORY)
+
+				slicing_plan MUST be ordered by:
+
+					1. time_offset (ascending)
+					2. slice_index (ascending)
+
+				Constraints:
+
+					serialization MUST strictly follow this order
+					no alternative ordering permitted
+
+			Timing Constraints Definition
+
+				timing_constraints MUST include:
+
+					start_time = decision_time
+					end_time = expiry_time
+					slice_interval
+
+				Constraints:
+					all values derived deterministically
+
+		4.3 Relationships
+			Trade Intent → mapped to → Execution Instruction
+			Execution Instruction → governed by → Execution Profile
+			Execution Instruction → decomposed into → Execution Slices
+
+		4.4 Ownership
+			Execution behavior logic → Phase A
+			Order lifecycle → Phase D
+
+	5. LOGIC / RULE ENGINE (CORE)
+
+		Numeric Model Enforcement
+
+			ALL numeric computations MUST use fixed-point:
+
+				value = integer / 10^6
+
+			Floating-point arithmetic is strictly forbidden
+
+			Deterministic Rounding Standard (MANDATORY)
+
+				All fixed-point computations MUST use:
+
+					ROUND_HALF_UP
+
+				Definition:
+					fractional part ≥ 0.5 → round up
+					fractional part < 0.5 → round down
+
+				Truncation is strictly forbidden
+
+				Overflow Rule:
+
+					If computation exceeds allowed bounds:
+						computation MUST fail
+						execution instruction MUST NOT be generated
+
+			Input Validation Layer (MANDATORY)
+
+			Execution instruction MUST NOT be generated if:
+
+				trade intent is invalid
+				confidence ∉ [0,1]
+				intent_id missing
+				instrument undefined
+
+		Global Parameter Definitions (MANDATORY)
+
+			validity_window_remaining_ratio =
+				(expiry_time - decision_time) / validity_window
+
+			slice_interval = fixed global constant
+
+			N_max = maximum allowed slice count
+
+			threshold = minimum execution_horizon to trigger slicing
+
+			max_slippage = globally defined upper bound
+
+			Constraint:
+
+				validity_window and expiry_time MUST be inherited
+				from upstream Trade Intent / Signal definitions
+
+				No recomputation allowed in execution layer
+
+			Validity Window Safety Constraint (MANDATORY)
+
+				validity_window MUST satisfy:
+
+					validity_window > 0
+
+				If validity_window ≤ 0:
+					upstream signal MUST be rejected
+					execution instruction MUST NOT be generated
+
+			Deterministic Time Constraint (MANDATORY)
+
+				All time values MUST be derived ONLY from:
+
+					trade_intent_snapshot.decision_time
+					trade_intent_snapshot.expiry_time
+
+				Derived values:
+
+					execution_horizon = expiry_time - decision_time
+
+				Constraint:
+
+					system time (wall clock) MUST NOT be used
+					manual time assignment is forbidden
+
+			Evaluation Time Definition (MANDATORY)
+
+				evaluation_time MUST be defined as:
+
+					evaluation_time =
+						trade_intent_snapshot.decision_time
+						+ elapsed_time_offset
+
+				Where:
+
+					elapsed_time_offset MUST be provided as part of canonical_input_set
+
+				Constraint:
+
+					evaluation_time MUST NOT depend on:
+						system clock
+						runtime conditions
+
+
+		Canonical Input Set (MANDATORY)
+
+			canonical_input_set = {
+
+						trade_intent_snapshot
+						execution_profile_set
+						configuration_snapshot
+						version_identifiers
+
+					}
+
+					trade_intent_snapshot:
+						MUST be immutable input from Step 3
+
+					execution_profile_set:
+						MUST be fixed, versioned, and deterministic
+
+					configuration_snapshot:
+						includes:
+							slice_interval
+							N_max
+							threshold
+							a1, a2, a3
+							w1, w2, w3
+
+					version_identifiers:
+						execution_behavior_version
+						config_version_id
+
+				Constraint:
+
+					ALL execution instructions MUST be derived ONLY from canonical_input_set
+
+					No implicit inputs allowed
+
+			Previous Execution State (MANDATORY)
+
+				canonical_input_set MUST include:
+
+					previous_execution_instruction:
+
+						instruction_id
+						execution_time
+						slicing_state
+
+				Constraint:
+
+					Any behavior depending on prior execution MUST use this input ONLY
+
+					No implicit state allowed
+
+
+		5.1 Input
+
+			Canonical Input (MANDATORY)
+
+				Input MUST be:
+
+					canonical_input_set.trade_intent_snapshot
+
+				Constraint:
+
+					No direct or implicit Trade Intent usage allowed outside canonical_input_set
+
+			Canonical Enforcement Rule (STRICT)
+
+				All computations MUST use ONLY:
+
+					canonical_input_set
+
+				Including:
+
+					Trade Intent fields
+					profile selection inputs
+					timing values
+					slicing inputs
+
+				Constraint:
+
+					Any external or runtime dependency → INVALID SYSTEM
+
+			External Intent Isolation (MANDATORY)
+
+				Execution Behavior MUST operate ONLY on:
+
+					canonical_input_set.trade_intent_snapshot (CORE)
+
+				External trade intents (CEIL):
+
+					MUST NOT enter this phase
+
+				Execution behavior for external inputs is handled in Phase D only
+
+		5.2 Execution Mapping Function
+
+			Canonical Execution Mapping Function
+
+				Execution Instruction = f(
+
+					canonical_input_set.trade_intent_snapshot,
+					canonical_input_set.execution_profile_set,
+					canonical_input_set.configuration_snapshot
+
+				)
+
+				Constraint:
+
+					No external inputs permitted
+
+		5.3 Core Rules
+			R1: Deterministic Mapping
+
+				Same trade intent → identical execution instruction
+
+			R2: Profile Binding Rule
+
+				Each trade intent MUST map to exactly one execution profile
+
+				Profile Selection Function (DETERMINISTIC)
+
+					execution_profile_id MUST be selected using:
+
+						profile_score = f(
+							confidence,
+							validity_window_remaining_ratio,
+							conflict_intensity
+						)
+
+					Selection Rule:
+						Select profile with:
+							highest profile_score
+
+					Tie-Breaking Rule (MANDATORY):
+						If multiple profiles have identical score:
+							select profile with lowest profile_id (lexicographic order)
+
+					Profile Score Computation (MANDATORY)
+
+						profile_score =
+							a1 * confidence
+						  + a2 * (1 - validity_window_remaining_ratio)
+						  + a3 * conflict_intensity
+
+						Constraints:
+							a1, a2, a3 MUST be fixed constants
+							a1 + a2 + a3 = 1
+
+						All computations MUST use fixed-point arithmetic
+
+					Constraint:
+						profile_score function MUST be:
+							deterministic
+							fixed-point based
+							globally defined
+
+			R3: Urgency Derivation
+
+				Execution urgency derived from:
+					signal strength (confidence)
+					validity window remaining
+					conflict context
+
+				Urgency Computation Function (DETERMINISTIC)
+
+					execution_urgency = U
+
+					U = w1 * confidence
+					  + w2 * (1 - validity_window_remaining_ratio)
+					  + w3 * conflict_intensity
+
+					Constraints:
+						w1, w2, w3 MUST be fixed constants
+						w1 + w2 + w3 = 1
+
+					All computations MUST use fixed-point arithmetic
+
+					Output:
+						execution_urgency ∈ [0,1]
+
+			R4: Slicing Trigger Rule (DETERMINISTIC)
+
+				If execution_horizon ≥ threshold:
+					slicing MUST be applied
+
+				If execution_horizon < threshold:
+					slicing MUST NOT be applied
+
+			R5: No Execution Awareness
+
+				Execution behavior MUST NOT include:
+					broker knowledge
+					order book state
+					latency assumptions
+
+		5.4 Execution Behavior Dimensions
+			Dimension			Definition
+			Aggression			Market vs passive bias
+			Urgency				Speed of execution
+			Horizon				Time window
+			Slicing				Split logic
+			Participation		Market participation rate
+			Slippage tolerance	Acceptable deviation
+
+		5.5 Slicing Model
+
+			Deterministic slicing:
+
+				Total Size → N slices
+				Each slice:
+					size = total_size / N
+					time_offset = fixed interval
+
+				Constraints:
+					No adaptive slicing (Phase A restriction)
+					No feedback-based adjustment
+
+			Slice Count Determination (DETERMINISTIC)
+
+				N = ceil(execution_horizon / slice_interval)
+
+				Where:
+					slice_interval = fixed global constant
+
+				Constraints:
+					N ≥ 1
+					N ≤ N_max
+
+				Slice Size:
+					size_i = total_size / N
+
+				Time Offset:
+					time_offset_i = i * slice_interval
+
+			Deterministic Ceil Definition (MANDATORY)
+
+				Let:
+
+					x = execution_horizon / slice_interval
+
+				Under fixed-point representation:
+
+					x_fp = integer value scaled by 10^6
+
+				Ceil MUST be computed as:
+
+					N = (x_fp + scale - 1) // scale
+
+				Where:
+					scale = 10^6
+
+				Constraints:
+
+					floating-point ceil is strictly forbidden
+					computation MUST use integer arithmetic only
+
+	6. FLOW ARCHITECTURE
+		6.1 Input
+
+			Canonical Input
+
+				Execution Behavior MUST consume:
+
+					canonical_input_set.trade_intent_snapshot
+
+				Constraint:
+
+					Flow layer MUST NOT introduce alternative input sources
+
+			Time Reference Constraint
+
+				execution_instruction MUST inherit:
+
+					decision_time (from Trade Intent)
+
+				All timing computations MUST be derived from decision_time
+
+				Manual time assignment is strictly forbidden
+
+		6.2 Processing
+			canonical_input_set.trade_intent_snapshot
+			→ Profile Mapping
+			→ Urgency Calculation
+			→ Sizing Translation
+			→ Slicing Plan Generation
+			→ Execution Instruction
+
+		6.3 Output
+
+			Execution Instruction
+
+		6.4 Flow Diagram
+			canonical_input_set.trade_intent_snapshot → Transform → Execution Instruction
+
+	7. PIPELINE STRUCTURE
+
+		Execution Behavior Pipeline:
+			Generate → Validate → Structure → Emit → Expire
+
+		State Transitions
+			Generated → Valid
+			Valid → Structured
+			Structured → Emitted
+			Emitted → Expired
+
+	8. CONTROL & CONSTRAINTS
+		8.1 Hard Rules
+			Deterministic mapping only
+			No infra dependency
+			No randomness
+			No dynamic adaptation
+
+		8.2 Soft Rules
+			Prefer smoother execution
+			Prefer lower slippage profiles when equivalent
+
+		8.3 Guardrails
+			No oversized execution slices
+			No conflicting execution profiles
+			No undefined timing
+
+		Execution Density Constraint
+
+			Maximum execution instructions per instrument per window MUST be enforced
+
+			If exceeded:
+				excess instructions MUST be rejected deterministically
+
+		Parameter Bounds (MANDATORY)
+
+			execution_urgency ∈ [0,1]
+			participation_rate ∈ [0,1]
+			slippage_tolerance ∈ [0, max_slippage]
+
+			If any value exceeds bounds:
+				instruction MUST be rejected
+
+		Execution Profile Bounds
+
+			aggression_level ∈ [0,1]
+			liquidity_preference ∈ [0,1]
+
+			Values outside bounds → invalid profile
+
+	9. STATE & DATA MODEL
+		9.1 State Types
+			Pending Instruction
+			Active Instruction
+			Expired Instruction
+
+		9.2 State Transitions
+			Created → Active
+			Active → Expired (based on execution_horizon)
+
+			Expiry Rule (DETERMINISTIC)
+
+				expiry_time = decision_time + execution_horizon
+
+				Deterministic Expiry Rule
+
+					Let:
+
+						Δt_execution =
+							evaluation_time
+							- decision_time
+
+					Where:
+
+						evaluation_time MUST be derived from canonical_input_set
+
+					Instruction is ACTIVE if:
+
+						Δt_execution < execution_horizon
+
+					Instruction is EXPIRED if:
+
+						Δt_execution ≥ execution_horizon
+
+		9.3 Source of Truth
+
+			Execution Instruction object (immutable)
+
+		Pipeline-State Mapping (MANDATORY)
+
+			Generated → Pending
+			Validated → Pending
+			Structured → Active
+			Emitted → Active
+			Expired → Expired
+
+			Constraint:
+				Every pipeline stage MUST map to exactly one state
+
+	10. FAILURE MODEL
+		10.1 Failure Scenarios
+			ambiguous execution mapping
+			inconsistent slicing
+			invalid urgency computation
+
+		10.2 Impact
+			execution inefficiency
+			slippage increase
+			divergence from decision intent
+
+		10.3 Mitigation
+			strict profile definitions
+			deterministic slicing
+			validation enforcement
+
+	11. ASSUMPTION REGISTER
+		Assumption						Reason						Validate In			Status
+		Execution profiles sufficient	Needed for standardization	Phase B				Open
+		Slicing model adequate			Required for scaling		Phase D				Open
+		No adaptive logic needed		Maintain determinism		Phase D				Open
+
+	12. VALIDATION FRAMEWORK
+		12.1 Checklist
+			Execution mapping defined
+			Profiles defined
+			Determinism enforced
+			Slicing rules defined
+
+		12.2 Validation Method
+			Replay test (same intent → same instruction)
+			Edge case testing (short horizon, large size)
+
+		12.3 Acceptance Criteria
+			Zero ambiguity
+			Fully deterministic
+			Execution-ready
+
+	13. OUTPUT (DELIVERABLE SPEC)
+
+		Execution Behavior Specification
+
+		Includes:
+			execution instruction schema
+			execution profiles
+			slicing rules
+			timing rules
+
+	14. TRACEABILITY MAPPING
+		Input: Trade Intent (Step 3)
+		Output: Execution Instruction (feeds Phase D)
+
+		Every instruction MUST map to:
+			intent_id
+			supporting signals
+
+		Trace Continuity Rule
+
+			Execution Instruction MUST inherit traceability from Trade Intent:
+
+				intent_id → maps to:
+					supporting_signals (via Trade Intent)
+
+			Constraint:
+				No execution instruction may exist without valid intent_id linkage
+
+			Full lineage:
+				Signal → Decision → Trade Intent → Execution Instruction
+
+	15. CROSS-PHASE CONSISTENCY RULES
+
+		OWNED:
+			execution behavior logic
+
+		REFERENCED:
+			decision output (Step 3)
+			execution system (Phase D)
+
+	16. SCALABILITY MODEL
+
+		Supports:
+			multi-asset execution
+			high-frequency trade intents
+			large capital scaling
+
+		Model:
+			per-instrument isolation
+			profile-based scaling
+
+	17. GOVERNANCE INTEGRATION
+		Execution profiles must be versioned
+		Any change requires approval
+		Impact on downstream execution must be evaluated
+
+	18. AUDITABILITY & OBSERVABILITY
+
+		Must log:
+			trade intent input
+			profile selection
+			slicing plan
+			final instruction
+
+		Replay requirement:
+			identical intent → identical execution instruction
+
+	19. RISK CONSIDERATIONS
+
+		Risks:
+			over-aggressive execution
+			liquidity mismatch
+			excessive slicing
+
+		Controls:
+			profile constraints
+			slippage tolerance bounds
+			deterministic limits
+
+	20. FAILURE CONDITION (PHASE LEVEL)
+
+		Phase fails if:
+			execution behavior ambiguous
+			non-deterministic mapping exists
+			missing traceability
+			slicing undefined
+
+	21. PHASE LOCK CRITERIA
+		All sections complete
+		Determinism verified
+		Validation passed
+		Governance approval obtained
+
+PHASE A — STEP 5: RISK PHILOSOPHY LAYER
+
+	Reference ID: CORE-TRADING-PHASE-A-STEP5-05
+
+	1. PHASE IDENTITY LAYER
+		1.1 Phase Name
+
+			Phase A — Step 5: Risk Philosophy Layer
+
+		1.2 Phase Role
+
+			Defines the foundational, deterministic risk doctrine governing all trading behavior across strategies, decisions, and execution behavior.
+
+		1.3 Phase Objective
+
+			Establish a fully deterministic, hierarchical, and multi-layer risk philosophy model that governs capital protection, exposure control, and system-wide risk alignment.
+
+		1.4 Why This Phase Exists
+
+			Prevents:
+				uncontrolled capital exposure
+				inconsistent risk interpretation across strategies
+				hidden or implicit risk-taking
+				misalignment between trading logic and firm-level risk objectives
+
+			This phase ensures:
+				risk is defined BEFORE enforcement (Phase D)
+				all downstream layers operate within a unified risk doctrine
+
+
+	2. PHASE SCOPE CONTROL
+		2.1 INCLUDED (STRICT)
+			Risk philosophy definition (multi-layer)
+			Risk hierarchy (firm → portfolio → strategy → trade)
+			Risk concepts and semantics
+			Risk tolerance models (logical)
+			Exposure logic (non-numeric enforcement)
+			Drawdown philosophy
+			Capital preservation doctrine
+			Risk interaction rules with decision/execution
+
+		2.2 EXCLUDED (STRICT)
+			Risk enforcement (Phase D)
+			Numeric limits (Phase B)
+			Capital allocation execution
+			Stop-loss implementation
+			Position sizing execution
+			Infrastructure / monitoring systems
+
+		Boundary Rule:
+		This phase defines WHAT risk means, not HOW it is enforced
+
+
+	3. ARCHITECTURAL INTENT LAYER
+		3.1 Core Design Principles
+			Deterministic risk interpretation
+			Hierarchical risk dominance
+			Capital preservation priority
+			Strategy independence under unified risk
+			Full auditability
+
+		3.2 Architectural Model
+
+			Logical Risk Philosophy Model (non-executable)
+
+		3.3 System Positioning
+
+			Strategy → Signal → Decision → Trade Intent → Execution Behavior → Risk Philosophy → (Phase D Risk Engine)
+
+			Clarification:
+			Risk Philosophy is orthogonal control logic, not part of transformation flow.
+
+
+	4. DOMAIN MODEL DEFINITION
+		4.1 Core Entities
+
+			Risk Layer
+
+				Firm Risk Layer
+				Portfolio Risk Layer
+				Strategy Risk Layer
+				Trade Risk Layer
+
+			Risk Constructs
+
+				Risk Budget (logical)
+				Exposure State (logical)
+				Drawdown State (logical)
+				Risk Event
+
+			Risk Event (OPTIONAL STRUCTURE)
+
+				Attributes:
+
+					event_type
+					trigger_condition
+					associated_risk_state
+					event_time
+
+				Constraint:
+
+					MUST be derivable from Risk_Context
+
+		4.2 Attributes
+
+			Risk Budget (Logical Only)
+
+				scope_level (firm/portfolio/strategy/trade)
+				risk_capacity_class
+				drawdown_tolerance_class
+				exposure_preference
+
+			Exposure State
+
+				directional_exposure
+				concentration_profile
+				correlation_cluster
+
+			Drawdown State
+
+				current_drawdown_state (none / mild / elevated / critical)
+				drawdown_trajectory
+
+		4.3 Relationships
+			Firm Risk → governs → Portfolio Risk
+			Portfolio Risk → governs → Strategy Risk
+			Strategy Risk → governs → Trade Risk
+			Trade Intent → constrained by → Risk Philosophy
+			Execution Behavior → shaped by → Risk Philosophy
+
+		4.4 Ownership
+			Risk Philosophy → Phase A (this step)
+			Risk Enforcement → Phase D
+			Numeric Constraints → Phase B
+
+			Portfolio State (Logical Entity — MANDATORY)
+
+				Attributes:
+
+					portfolio_state_id
+					timestamp (event_time aligned)
+
+					total_exposure_vector
+					net_directional_exposure
+
+					exposure_distribution_profile
+					concentration_profile
+
+					correlation_cluster_map
+
+					realized_drawdown
+					unrealized_drawdown
+					peak_equity_reference
+
+				Constraints:
+
+					MUST be fully reconstructable
+					MUST be deterministic
+					MUST include ALL fields required for risk evaluation
+
+				Missing field → input invalid
+
+			Configuration Snapshot (MANDATORY)
+
+				Attributes:
+
+					risk_parameters:
+						T1, T2
+						R1, R2
+						E_max_class
+						cluster_limit
+
+					weight_parameters:
+						w1, w2
+
+				Constraints:
+
+					All parameters MUST be:
+						bounded
+						immutable
+						versioned
+
+
+			Version Identifiers (MANDATORY)
+
+				Attributes:
+
+					risk_model_version
+					config_version
+					hash_version
+
+				Constraints:
+
+					MUST be included in canonical_input_set
+					MUST be used in hash generation
+
+			correlation_cluster_map:
+
+					mapping:
+						instrument → cluster_id
+
+				drawdown_trajectory:
+
+					time-series of drawdown_ratio over evaluation_time
+
+
+				constraint_flags:
+
+					deterministic boolean map (defined in computation model)
+
+				Constraint:
+
+					correlation_cluster_map MUST be provided as part of input
+
+					No dynamic clustering allowed in this phase
+
+			staleness_limit:
+
+					maximum allowed time difference for input validity
+
+				Constraint:
+
+					staleness_limit > 0
+					MUST be part of configuration_snapshot
+
+
+	5. LOGIC / RULE ENGINE (CORE)
+		5.1 Risk Hierarchy Rule (STRICT)
+
+				Firm Risk > Portfolio Risk > Strategy Risk > Trade Risk
+
+			Constraint:
+			Lower layer MUST NOT override higher layer.
+
+		5.2 Capital Preservation Rule
+
+			Primary objective = survival over profit
+
+			Risk decisions MUST prioritize:
+				drawdown containment
+				capital protection
+				exposure stability
+
+		5.3 Exposure Philosophy
+
+			Exposure MUST be:
+				intentional
+				bounded (logically)
+				diversified
+
+			Rules:
+				No uncontrolled directional accumulation
+				No hidden correlated exposure
+				Exposure must reflect decision confidence + system state
+
+			Exposure Normalization Constraints
+
+				Let:
+
+					E_total = total exposure magnitude
+					E_cluster = exposure per correlation cluster
+
+				Constraints:
+
+					E_total ≤ E_max_class
+					E_cluster ≤ cluster_limit
+
+					exposure_balance_score MUST be computed deterministically
+
+				Violation → constraint_flag MUST be set
+
+		5.4 Drawdown Response Model
+
+			Drawdown States:
+				Normal
+				Elevated
+				Critical
+
+			Behavioral Philosophy:
+				As drawdown increases:
+					risk appetite decreases
+					exposure must contract
+					aggressiveness must reduce
+
+			Drawdown Classification Function
+
+				drawdown_ratio =
+					current_drawdown / peak_equity_reference
+
+				drawdown_state =
+					IF drawdown_ratio < T1 → NORMAL
+					IF T1 ≤ drawdown_ratio < T2 → ELEVATED
+					IF drawdown_ratio ≥ T2 → CRITICAL
+
+				Constraints:
+
+					T1, T2 MUST be globally defined constants
+					Classification MUST be deterministic
+
+			current_drawdown =
+				max(realized_drawdown, unrealized_drawdown)
+
+		5.5 Risk Consistency Rule
+
+			Same conditions → same risk interpretation
+			No discretionary overrides at logic level
+
+		5.6 Strategy Risk Independence Rule
+
+			Strategies do NOT manage their own risk globally
+			Risk is applied consistently across all strategies
+
+		5.7 Risk–Decision Alignment Rule
+
+			Risk Philosophy MUST NOT:
+				change decision logic
+
+			Risk Philosophy MUST:
+				constrain downstream execution behavior
+
+			Risk Evaluation Function (MANDATORY)
+
+				Risk_Context = f(
+					trade_intent_snapshot,
+					execution_instruction_snapshot,
+					portfolio_state_snapshot,
+					configuration_snapshot
+				)
+
+				Constraints:
+
+					Function MUST be:
+						deterministic
+						order-independent
+						replayable
+
+					Same input → identical Risk_Context output
+
+					No implicit logic allowed
+
+			Global Numeric Model (MANDATORY)
+
+				ALL computations in this phase MUST use fixed-point arithmetic:
+
+					value = integer / 10^6
+
+				Applies to:
+
+					drawdown_ratio
+					E_total
+					E_cluster_k
+					exposure_balance_score
+					risk_score
+					all intermediate computations
+
+				Constraint:
+
+					Floating-point arithmetic is strictly forbidden
+
+			Risk Computation Model (MANDATORY — FULL DEFINITION)
+
+				Step 1: Drawdown Evaluation
+
+					drawdown_ratio =
+						IF peak_equity_reference == 0 → 0
+						ELSE current_drawdown / peak_equity_reference
+
+
+				Step 2: Exposure Aggregation
+
+							Exposure Primitive Definition (MANDATORY)
+
+								exposure_vector_i:
+
+									scalar signed exposure value per instrument
+
+									where:
+
+										exposure_vector_i > 0 → long exposure
+										exposure_vector_i < 0 → short exposure
+
+								total_exposure_vector:
+
+									ordered deterministic list of exposure_vector_i across all instruments
+
+							Constraint:
+
+								ordering MUST be deterministic and stable across identical inputs
+
+						E_total = Σ |exposure_vector_i|
+
+							where:
+								exposure_vector_i ∈ total_exposure_vector
+
+						E_cluster_k = Σ exposure_i for cluster k
+
+				Step 3: Exposure Balance Score
+
+					exposure_balance_score =
+						1 - (max(E_cluster_k) / E_total)
+
+					Constraint:
+						E_total > 0
+						IF E_total == 0 → exposure_balance_score = 1
+
+
+				Step 4: Risk Level Computation
+
+					risk_score =
+						w1 * drawdown_ratio
+					  + w2 * (1 - exposure_balance_score)
+
+					Constraints:
+						w1 + w2 = 1
+						fixed-point arithmetic only
+
+
+				Step 5: Risk Level Classification
+
+					risk_level =
+						IF risk_score < R1 → LOW
+						IF R1 ≤ risk_score < R2 → MEDIUM
+						IF risk_score ≥ R2 → HIGH
+
+
+				Step 6: Constraint Flag Generation
+
+					constraint_flags = {
+
+						drawdown_breach:
+							drawdown_state == CRITICAL
+
+						exposure_breach:
+							E_total > E_max_class
+
+						cluster_concentration_breach:
+							any(E_cluster_k > cluster_limit)
+
+					}
+
+
+				Step 7: Precedence Enforcement (STRICT)
+
+					Apply in order:
+
+						1. Firm-level override
+						2. Drawdown constraints
+						3. Exposure constraints
+						4. Strategy-level
+						5. Trade-level
+
+					Constraint:
+						Once constraint activated → lower layers cannot override
+
+			Global Evaluation Order (MANDATORY)
+
+				Risk evaluation MUST follow strict sequence:
+
+					1. Input Validation
+					2. Risk Computation
+					3. Constraint Flag Generation
+					4. Invariant Validation
+					5. Output Emission
+
+				Constraint:
+
+					If invariant violation occurs at step 4:
+
+						Risk_Context MUST NOT be generated
+
+						Constraint flags MAY still be computed but MUST NOT be emitted
+
+			Input Validation Rules
+
+				Reject input if:
+
+					missing required field
+					invalid domain value
+					inconsistent timestamps
+					incomplete snapshot
+
+			Numeric Safety Constraints (MANDATORY)
+
+				1. Division Safety
+
+					IF denominator == 0:
+						computation MUST fallback to defined default
+
+				2. Bounds Enforcement
+
+					0 ≤ drawdown_ratio ≤ 1
+					0 ≤ exposure_balance_score ≤ 1
+					0 ≤ risk_score ≤ 1
+
+				3. Constant Constraints
+
+					0 < T1 < T2 < 1
+					0 < R1 < R2 < 1
+					E_max_class > 0
+					cluster_limit > 0
+
+				Violation → system invalid
+
+		External Input Neutrality Constraint
+
+			Risk Philosophy MUST be defined independent of trade origin:
+
+				CORE and EXTERNAL trades MUST follow same philosophy
+
+			However:
+
+				Risk Philosophy MUST NOT differentiate behavior
+				based on source of trade intent
+
+			Source-based control is enforced in Phase D Risk Engine only
+
+		IF size > capacity_limit:
+			size = capacity_limit
+
+		IF capacity_limit == 0:
+			RETURN NoTradeIntent
+
+
+	6. FLOW ARCHITECTURE
+		6.1 Input
+			Trade Intent (Step 3)
+			Execution Instruction (Step 4)
+			portfolio_state_snapshot (as defined below)
+
+			Canonical Input Definition (MANDATORY)
+
+				canonical_input_set = {
+					trade_intent_snapshot
+					execution_instruction_snapshot
+					portfolio_state_snapshot
+					configuration_snapshot
+					version_identifiers
+				}
+
+				Constraints:
+
+					All inputs MUST be:
+						immutable
+						fully defined
+						schema-complete
+						hash-identifiable
+
+					Partial input is strictly forbidden
+
+					Identical canonical_input_set MUST produce identical output
+
+			portfolio_state_snapshot (REFERENCE — MANDATORY)
+
+				Definition:
+
+					portfolio_state_snapshot is a complete, immutable instance of
+					Portfolio State (defined in Section 4) at evaluation_time.
+
+
+				Structure (STRICT):
+
+					portfolio_state_snapshot = {
+
+						portfolio_state_id
+
+						timestamp
+
+						total_exposure_vector
+						net_directional_exposure
+
+						exposure_distribution_profile
+						concentration_profile
+
+						correlation_cluster_map
+
+						realized_drawdown
+						unrealized_drawdown
+						peak_equity_reference
+					}
+
+
+				Field Constraints:
+
+					1. Completeness:
+
+						ALL fields defined in Section 4 MUST be present
+
+						Missing field → input INVALID
+
+
+					2. Immutability:
+
+						Snapshot MUST NOT change during evaluation
+
+						Any mutation → system invalid
+
+
+					3. Time Consistency:
+
+						timestamp MUST satisfy:
+
+							timestamp ≤ evaluation_time
+
+						AND
+
+							evaluation_time - timestamp ≤ staleness_limit
+
+
+					4. Deterministic Construction:
+
+						Snapshot MUST be fully reconstructable from:
+
+							portfolio history
+							configuration_snapshot
+
+						No derived or implicit fields allowed
+
+
+					5. Hash Consistency:
+
+						portfolio_state_snapshot_hash =
+							HASH_v1(portfolio_state_snapshot)
+
+						Constraint:
+
+							identical snapshot → identical hash
+
+
+					6. Correlation Mapping Constraint:
+
+						correlation_cluster_map MUST be provided as input
+
+						No clustering computation allowed in this phase
+
+
+					7. Drawdown Consistency:
+
+						current_drawdown =
+							max(realized_drawdown, unrealized_drawdown)
+
+						peak_equity_reference > 0 OR explicitly handled (per numeric safety)
+
+
+					8. Exposure Consistency:
+
+						total_exposure_vector MUST match:
+
+							exposure_distribution_profile
+							concentration_profile
+
+						Any mismatch → input INVALID
+
+		6.2 Processing
+			Trade Intent + Execution Behavior + Portfolio State
+			→ Risk Interpretation
+			→ Risk Constraints (logical)
+
+		6.3 Output
+			Risk Context
+			Risk Constraints (logical directives)
+
+			Risk Context (MANDATORY OUTPUT ENTITY)
+
+				Attributes:
+
+					risk_context_id
+					input_hash_reference
+
+					drawdown_state
+					exposure_state_summary
+					risk_level
+
+					constraint_flags
+
+					evaluation_time
+
+					context_hash
+
+				Constraints:
+
+					risk_context_id MUST be deterministic
+					context_hash MUST be derived from full input payload
+
+		6.4 Flow Model
+			Input → Risk Evaluation → Risk Context Output
+
+			Unified Time Model (MANDATORY)
+
+				Definition:
+
+					evaluation_time =
+						max(
+							trade_intent.event_time,
+							execution_instruction.decision_time,
+							portfolio_state.timestamp
+						)
+
+				Explanation:
+
+					evaluation_time represents the ONLY valid logical time
+					at which risk evaluation is performed.
+
+					It ensures:
+						all inputs are aligned to a single deterministic time reference
+
+
+				--------------------------------------------------
+
+				TIME SOURCE RULES (STRICT)
+
+				1. trade_intent.event_time
+					→ inherited from Decision Engine (Step 3)
+
+				2. execution_instruction.decision_time
+					→ inherited from Execution Behavior (Step 4)
+
+				3. portfolio_state.timestamp
+					→ must represent state at exact logical time
+
+
+				Constraint:
+
+					All time values MUST be:
+						deterministic
+						comparable
+						derived from upstream phases
+
+					Manual or arbitrary time assignment is strictly forbidden
+
+
+				--------------------------------------------------
+
+				TIME ALIGNMENT RULE (CRITICAL)
+
+					Deterministic Time Alignment Rule (MANDATORY)
+
+						For each input:
+
+							select value with:
+
+								1. timestamp ≤ evaluation_time
+								2. maximum timestamp among valid candidates
+
+						If multiple candidates share identical timestamp:
+
+							select based on deterministic hash ordering
+
+						Constraint:
+
+							Selection MUST produce identical result for identical inputs
+
+				--------------------------------------------------
+
+				STALENESS VALIDATION (MANDATORY)
+
+				For each input:
+
+					input_time =
+						corresponding timestamp of each input entity
+
+				Constraint:
+
+					Δt_input ≤ staleness_limit
+
+				If violated:
+
+					→ canonical_input_set is INVALID
+					→ Risk_Context MUST NOT be generated
+
+				Δt_input =
+					evaluation_time - input_time
+				--------------------------------------------------
+
+				ORDERING RULE (DETERMINISTIC)
+
+				If multiple evaluations occur:
+
+					evaluations MUST be ordered strictly by:
+
+						1. evaluation_time
+						2. input_hash_reference
+
+				Constraint:
+
+					identical inputs → identical ordering
+
+
+				--------------------------------------------------
+
+				REPLAY CONSISTENCY RULE
+
+				Given identical canonical_input_set:
+
+					evaluation_time MUST be identical
+					output MUST be identical
+
+				Any deviation:
+
+					→ system invalid
+
+	7. PIPELINE STRUCTURE
+
+		Risk Evaluation Pipeline:
+
+			Assess → Classify → Constrain → Emit → Monitor
+
+		State Transitions:
+
+			Neutral → Active Risk Context
+			Active → Escalated
+			Escalated → Critical
+
+	8. CONTROL & CONSTRAINTS
+		8.1 Hard Rules
+			Risk hierarchy MUST be enforced
+			No ambiguity in risk states
+			No hidden exposure
+			No non-deterministic risk decisions
+
+		8.2 Soft Rules
+			Prefer diversification
+			Prefer gradual exposure changes
+			Prefer stability over aggressiveness
+
+		8.3 Guardrails
+			No unlimited exposure accumulation
+			No correlated concentration beyond logical tolerance
+			No risk blind spots
+
+			Risk Invariants (MANDATORY)
+
+				1. Exposure Bound Invariant
+				2. Drawdown Monotonicity Constraint
+				3. Risk Hierarchy Enforcement Invariant
+				4. Deterministic Output Invariant
+
+				Violation → system invalid
+
+			Invariant Enforcement Binding (MANDATORY)
+
+				Invariant validation MUST be executed strictly within:
+
+					Global Evaluation Order (Section 5)
+
+				Constraint:
+
+					Section 8 defines invariants ONLY
+
+					Section 5 defines WHEN and HOW invariants are enforced
+
+				No independent execution logic is allowed in this section
+
+				Invariants:
+
+					Exposure Bound:
+						E_total ≤ E_max_class
+
+					Drawdown Monotonicity:
+						drawdown_state progression must not reverse without input change
+
+					Determinism:
+						identical input → identical output
+
+					Hierarchy:
+						higher-level constraints always dominate
+
+
+	9. STATE & DATA MODEL
+		9.1 State Types
+			Exposure State
+			Drawdown State
+			Risk State
+
+		9.2 State Transitions
+			Deterministic, based on:
+				portfolio evolution
+				decision flow
+
+		9.3 Source of Truth
+			Logical state defined here
+			Physical state → Phase C
+
+			State Reconstruction Rule
+
+				All risk states MUST be derivable from:
+
+					canonical_input_set
+					configuration_snapshot
+
+				If state cannot be reconstructed:
+					system is invalid
+
+			Pipeline-State Mapping
+
+				Assess → Active Risk Context
+				Classify → Active
+				Constrain → Active
+				Emit → Finalized
+				Monitor → Active
+
+				Constraint:
+					Every pipeline stage MUST map to exactly one state
+
+
+	10. FAILURE MODEL
+		10.1 Failure Scenarios
+			ambiguous risk definitions
+			conflicting hierarchy
+			hidden exposure
+
+		10.2 Impact
+			uncontrolled losses
+			portfolio instability
+			systemic risk propagation
+
+		10.3 Mitigation
+			strict hierarchy
+			deterministic classification
+			full traceability
+
+
+	11. ASSUMPTION REGISTER
+		Assumption												Reason							Validate In		Status
+		Portfolio state is deterministic						Required for risk consistency	Phase B			Open
+		Correlation can be logically grouped					Needed for exposure control		Phase B			Open
+		Drawdown states can be classified deterministically		Needed for response model		Phase B			Open
+
+
+	12. VALIDATION FRAMEWORK
+		12.1 Checklist
+			Risk hierarchy defined
+			Exposure logic defined
+			Drawdown model defined
+			No ambiguity
+
+		12.2 Validation Method
+			deterministic replay validation
+			adversarial stress scenarios
+			cross-layer consistency check
+
+		12.3 Acceptance Criteria
+			zero ambiguity
+			deterministic outcomes
+			full traceability
+
+	13. OUTPUT (DELIVERABLE SPEC)
+
+		Risk Philosophy Specification
+
+		Includes:
+			risk hierarchy
+			exposure model
+			drawdown model
+			risk rules
+
+
+	14. TRACEABILITY MAPPING
+		Step 1 → Strategy Architecture
+		Step 2 → Signal Model
+		Step 3 → Decision Engine
+		Step 4 → Execution Behavior
+
+		Output → feeds Phase D Risk Engine
+
+
+	15. CROSS-PHASE CONSISTENCY RULES
+
+		OWNED HERE
+			risk philosophy
+			hierarchy
+			risk semantics
+
+		REFERENCED
+			decision output
+			execution behavior
+			firm-level policy
+
+
+	16. SCALABILITY MODEL
+
+		Supports:
+			multi-strategy portfolios
+			multi-asset exposure
+			high capital deployment
+
+		Model:
+			hierarchical scaling
+			portfolio aggregation
+
+
+	17. GOVERNANCE INTEGRATION
+		Risk philosophy MUST be approved at firm level
+
+		Version-controlled
+
+		Any change requires:
+			impact analysis
+			full system validation
+
+
+	18. AUDITABILITY & OBSERVABILITY
+
+		Must support:
+			risk decision traceability
+			exposure tracking
+			drawdown evolution
+
+		Logging:
+			input state
+			risk classification
+			resulting constraints
+
+		Risk_Context.output_fields (MANDATORY DEFINITION)
+
+			{
+				risk_context_id
+				input_hash_reference
+				drawdown_state
+				exposure_state_summary
+				risk_level
+				constraint_flags
+				evaluation_time
+			}
+
+			Constraint:
+
+				context_hash MUST include EXACTLY these fields
+
+		Hashing Model (UNIFIED — MANDATORY)
+
+			input_hash_reference =
+				HASH_v1(canonical_input_set)
+
+			context_hash =
+				HASH_v1(
+					canonical_input_set +
+					Risk_Context.output_fields
+				)
+
+			Constraint:
+
+				canonical_input_set MUST be identical
+				Risk_Context MUST be identical
+
+				→ context_hash MUST be identical
+
+	19. RISK CONSIDERATIONS
+
+		Introduced Risks:
+			over-restriction → missed opportunity
+			under-definition → uncontrolled exposure
+
+		Controls:
+			deterministic rules
+			hierarchical enforcement
+			alignment with firm policy
+
+
+	20. FAILURE CONDITION (PHASE LEVEL)
+
+		Phase fails if:
+			risk hierarchy unclear
+			exposure undefined
+			drawdown logic missing
+			non-determinism exists
+
+
+	21. PHASE LOCK CRITERIA
+		All 21 sections complete
+		Determinism verified
+		No ambiguity
+		Traceability intact
+		Governance approved
+
+
+	FINAL INSTITUTIONAL NOTE
+
+		This layer is foundational to survival.
+
+		If this is weak:
+			Phase D risk engine becomes inconsistent
+			Execution behavior becomes unsafe
+			Capital preservation fails
+
+		If this is correct:
+			Entire system operates under controlled, unified risk doctrine
+
+	Traceability Bridge:
+	For every TradeIntent:
+
+		store mapping:
+
+		trade_intent_id → signal_ids[]
+
+PHASE A — STEP 6: CAPITAL ALLOCATION MODEL
+
+	Reference ID: CORE-TRADING-PHASE-A-STEP6-06
+
+	1. PHASE IDENTITY LAYER
+		1.1 Phase Name
+
+			Phase A — Step 6: Capital Allocation Model
+
+		1.2 Phase Role
+
+			Defines deterministic logic for distributing capital across strategies, assets, and trade intents within the trading model.
+
+		1.3 Phase Objective
+
+			Produce a fully deterministic allocation mapping:
+			(decision output → capital weight → position size constraint)
+
+		1.4 Why This Phase Exists
+
+			Prevents:
+				Overexposure concentration risk
+				Inconsistent sizing across similar signals
+				Capital inefficiency under multi-strategy conditions
+
+			Controls:
+				Portfolio balance integrity
+				Risk-normalized allocation consistency
+
+
+	2. PHASE SCOPE CONTROL
+		2.1 Included Scope (STRICT)
+
+			Capital distribution logic
+			Strategy-level allocation rules
+			Signal-strength-based weighting
+			Risk-adjusted sizing logic
+			Portfolio exposure balancing
+
+		2.2 Excluded Scope (STRICT)
+
+			Execution sizing mechanics
+			Order placement logic
+			Broker/margin considerations
+			Latency or slippage handling
+			Infrastructure or capital availability constraints
+
+
+	3. ARCHITECTURAL INTENT LAYER
+		3.1 Core Design Principles
+
+			Deterministic allocation mapping
+			Modular per-strategy allocation
+			Auditability of every capital decision
+			Scalable across N strategies / assets
+
+		3.2 Architectural Model
+
+			Logical allocation engine (pure mathematical + rule-based)
+
+		3.3 System Positioning
+
+			Signal → Decision → Capital Allocation → Trade Intent Structuring
+
+
+	4. DOMAIN MODEL DEFINITION
+		4.1 Entities
+
+			capital_pool
+			strategy_unit
+			allocation_weight
+			signal_strength
+			risk_factor
+			position_size
+			allocation_constraint
+
+		4.2 Attributes
+
+			capital_pool: total_allocatable_value
+			strategy_unit: strategy_id, priority, category
+			allocation_weight: normalized_weight
+			signal_strength: score (0–1 normalized)
+			risk_factor: volatility, drawdown_sensitivity
+			position_size: capital_assigned
+			allocation_constraint: max_cap, min_cap
+
+		4.3 Relationships
+
+			signal_strength → allocation_weight
+			allocation_weight × capital_pool → position_size
+			risk_factor modifies allocation_weight
+
+		4.4 Ownership
+
+			Fully owned by Phase A
+			Referenced by Phase D (execution sizing only)
+
+
+	5. LOGIC / RULE ENGINE (CORE)
+
+		Deterministic Strategy Ordering
+
+			All strategies MUST be processed in strict order:
+
+				1. strategy_id (lexicographic)
+
+			This ordering MUST be used in:
+
+				weight computation
+				aggregation
+				normalization
+
+		5.1 Core Allocation Formula
+
+			Base Allocation Weight
+
+				W_base = f(signal_strength)
+
+			Risk-Adjusted Weight
+
+				W_adj = W_base × Risk_Modifier
+
+			Normalized Allocation
+
+				W_norm = W_constrained / Σ(W_constrained across active strategies)
+
+			Capital Assignment
+
+				Capital_i = Total_Capital × W_norm_i
+
+			Normalization Safety Rule
+
+				Let:
+					S = Σ(W_constrained across active strategies)
+
+				IF S == 0:
+
+					ALL W_norm_i = 0
+					system MUST transition to ZERO_ALLOCATION state
+
+				ELSE:
+
+					W_norm_i = W_constrained_i / S
+
+			Risk Modifier Constraint
+
+				Risk_Modifier MUST be:
+
+					deterministic
+					monotonic decreasing with risk_factor
+					bounded within [0,1]
+
+				Defined in Risk Model (Step 4)
+
+		5.2 Deterministic Rules
+
+			Rule 1: Signal Dominance
+
+				Higher signal_strength → strictly higher allocation weight
+
+			Rule 2: Risk Suppression
+
+				Higher risk_factor → reduces allocation weight
+
+			Rule 3: Strategy Independence
+
+				Each strategy evaluated independently before normalization
+
+			Rule 4: Allocation Normalization
+
+				Total allocation must equal 100% of capital_pool
+
+			Rule 5: Minimum Viability Threshold
+
+				Signals below threshold → allocation = 0
+
+		5.3 Constraints
+
+			No negative allocation
+			No over-allocation (>100%)
+			No allocation without decision validation
+
+			Constraint Integration Rule (MANDATORY)
+
+				Allocation constraints MUST be applied BEFORE normalization:
+
+					W_adj_i → W_constrained_i
+
+				Where:
+
+					W_constrained_i = min(max(W_adj_i, W_min_i), W_max_i)
+
+				Normalization MUST use:
+
+					W_constrained_i (NOT W_adj_i)
+
+				No iterative re-normalization allowed
+
+
+	6. FLOW ARCHITECTURE
+		6.1 Input Definition
+
+			From Step 3 (Decision Engine):
+
+				trade_intent_snapshot
+				signal_strength_global
+
+			From Step 5 (Risk Philosophy):
+
+				risk_profile_snapshot
+
+			External Capital Isolation (MANDATORY)
+
+				Capital Allocation MUST operate ONLY on:
+
+					validated CORE decisions
+
+				External trade intents (CEIL):
+
+					MUST NOT participate in allocation computation
+
+				External capital allocation is handled outside Phase A
+
+		6.2 Processing Flow
+
+			Extract active decisions
+			Compute base weights
+			Apply risk modifiers
+			Apply allocation constraints
+			Normalize weights
+			Assign capital
+
+		6.3 Output Definition
+
+			capital_allocation_map
+			position_size_per_strategy
+
+		6.4 Flow Diagram
+
+			Decision → Weight Calculation → Risk Adjustment → Normalization → Capital Assignment
+
+
+	7. PIPELINE STRUCTURE
+
+		Stages:
+
+			Decision Intake
+			Weight Computation
+			Risk Adjustment
+			Normalization
+			Capital Mapping
+
+		State Transition:
+
+			inactive → eligible → weighted → allocated
+
+
+	8. CONTROL & CONSTRAINTS
+		8.1 Hard Rules
+
+			Allocation sum = 1 (100%)
+			Deterministic mapping only
+			No allocation without validated signal
+
+		8.2 Soft Rules
+
+			Prefer diversification across strategies
+			Avoid concentration bias
+
+		8.3 Guardrails
+
+			Max allocation per strategy cap
+			Minimum allocation threshold
+
+			Constraint Feasibility Condition
+
+				Σ(W_min_i) ≤ 1 ≤ Σ(W_max_i)
+
+				If violated:
+
+					system MUST fail validation
+
+
+	9. STATE & DATA MODEL
+		9.1 State Definition
+
+			allocation_state
+			normalized_weights
+			assigned_capital
+
+		9.2 State Transitions
+
+			pending → computed → normalized → finalized
+
+		9.3 Source of Truth
+
+			Capital Allocation Model (this phase)
+
+
+			Zero Allocation State
+
+				Condition:
+
+					Σ(W_constrained) == 0
+
+				State:
+
+					allocation_state = ZERO_ALLOCATION
+					all position_size = 0
+
+				Transition:
+
+					computed → ZERO_ALLOCATION → finalized
+
+	10. FAILURE MODEL
+		10.1 Failure Scenarios
+
+			Weight normalization failure
+			Missing signal_strength
+			Conflicting allocations
+
+			Constraint infeasibility (Σ(W_min_i) > 1 OR Σ(W_max_i) < 1)
+			Constraint-normalization mismatch
+			Zero-allocation state mis-trigger
+
+
+		10.2 Failure Impact
+
+			Portfolio imbalance
+			Overexposure risk
+			Undefined trade sizing
+
+		10.3 Mitigation Logic
+
+			Reject incomplete inputs
+			Enforce normalization validation
+			Default to zero allocation on invalid signals
+
+
+	11. ASSUMPTION REGISTER
+
+		Assumption						Why							Validation Phase	Status
+
+		Signals are normalized			Required for comparability	Step 2				Validated
+		Risk factors are measurable		Needed for adjustment		Step 4				Validated
+		Capital pool is fixed input		Required determinism		Phase B				Open
+
+
+	12. VALIDATION FRAMEWORK
+		12.1 Completeness Checklist
+
+			All strategies mapped
+			All weights computed
+			Normalization verified
+
+		12.2 Validation Method
+
+			Sum(weights) == 1
+			Deterministic re-run consistency
+
+			Constraint-integrated normalization validation
+
+			Verify:
+
+				Σ(W_constrained) used in normalization
+				Zero-allocation state triggered when Σ(W_constrained) == 0
+
+		12.3 Acceptance Criteria
+
+			Binary pass: exact reproducibility
+
+
+	13. OUTPUT (DELIVERABLE SPEC)
+
+		capital_allocation_spec = {
+		  strategy_id: {
+			weight: float,
+			capital_assigned: float,
+			risk_adjustment: float
+		  }
+		}
+
+
+	14. TRACEABILITY MAPPING
+
+		Input ← Step 5 (Decision Engine)
+		Output → Step 7 (Portfolio Model)
+
+		Every allocation must trace:
+
+			signal → decision → weight → capital
+
+		Mapping Store Requirements:
+
+			- storage: append-only log
+			- key: trade_intent_id
+			- value: ordered signal_ids[]
+
+			Constraints:
+
+			- immutable after write
+			- must survive restart
+
+			trace_id = HASH_v1(signal_ids_sorted)
+
+
+	15. CROSS-PHASE CONSISTENCY RULES
+
+		Owns:
+
+			Allocation logic
+			Weight computation
+
+		References:
+
+			Signal Model (Step 2)
+			Risk Model (Step 4)
+
+
+	16. SCALABILITY MODEL
+
+		Linear scaling with number of strategies
+		Supports multi-asset, multi-strategy expansion
+		No coupling between strategies
+
+
+	17. GOVERNANCE INTEGRATION
+
+		Versioned allocation logic
+
+		Requires approval for:
+
+			weight function changes
+			risk modifier changes
+
+
+	18. AUDITABILITY & OBSERVABILITY
+
+		Must log:
+
+			input signals
+			computed weights
+			normalization results
+			final capital assignment
+
+		Full trace required per strategy
+
+		constrained weights (W_constrained)
+
+	19. RISK CONSIDERATIONS
+
+		Risks:
+
+			Over-concentration
+			Under-diversification
+			Misweighted signals
+
+		Controls:
+
+			normalization
+			caps
+			risk modifiers
+
+
+	20. FAILURE CONDITION (PHASE LEVEL)
+
+		Phase fails if:
+
+			allocation is non-deterministic
+			weights do not sum to 1
+			missing traceability
+			inconsistent outputs for same input
+
+
+	21. PHASE LOCK CRITERIA
+
+		Phase locked only if:
+
+			all 21 sections complete
+			deterministic validation passed
+			traceability confirmed
+			assumptions documented
+			governance approval applied
+
+
+	FINAL OUTPUT SUMMARY
+
+		This Capital Allocation Model establishes:
+
+			Deterministic capital distribution
+			Risk-aware weight adjustment
+			Strategy-level independence
+			Full audit trace from signal → capital
+
+		It completes the core decision chain of Phase A:
+
+			Signal → Decision → Risk → Capital Allocation → (Next: Portfolio Model)
+
+PHASE A — STEP 7: PORTFOLIO MODEL
+
+	Reference ID: CORE-TRADING-PHASE-A-STEP7-PORTFOLIO-001
+	Status: DETERMINISTIC SPECIFICATION
+
+
+	1. PHASE IDENTITY LAYER
+
+		1.1 Phase Name
+
+			Phase A — Step 7: Portfolio Model
+
+		1.2 Phase Role
+
+			Defines the deterministic structure, composition, and behavior of the portfolio as the aggregation layer above capital allocation and below system-level execution.
+
+		1.3 Phase Objective
+
+			To construct a fully deterministic, multi-strategy, multi-asset portfolio structure that transforms allocated capital (Step 5) and approved trade intents (Step 6) into a coherent exposure system.
+
+		1.4 Why This Phase Exists
+
+			Prevents:
+
+				uncontrolled exposure aggregation
+				hidden correlation risks
+				non-deterministic portfolio composition
+				capital fragmentation across strategies
+
+
+	2. PHASE SCOPE CONTROL
+
+		2.1 Included Scope (STRICT)
+
+			Portfolio structure definition
+			Strategy aggregation rules
+			Exposure composition logic
+			Diversification model (logical)
+			Portfolio-level constraints (logical only)
+			Portfolio state definition
+
+		2.2 Excluded Scope (STRICT)
+
+			Execution logic (Phase D)
+			Risk enforcement (Step 4 owns risk philosophy)
+			Capital allocation computation (Step 5 owns)
+			Signal / decision logic (Steps 2–3)
+			Infrastructure / storage
+
+
+	3. ARCHITECTURAL INTENT LAYER
+
+		3.1 Core Design Principles
+
+			Deterministic aggregation
+			Modular strategy composition
+			Full auditability of exposure
+			Scalable across assets and strategies
+
+		3.2 Architectural Model
+
+			Logical aggregation layer:
+
+				Strategy Outputs → Capital Allocation → Portfolio Composition → Portfolio State
+
+		3.3 System Positioning
+
+			Sits between:
+
+				Input:
+
+				Step 6 (Capital Allocation Model)
+				Step 4 (Execution Behavior System)
+				Output: Portfolio State (input to Phase D)
+
+
+	4. DOMAIN MODEL DEFINITION
+
+		4.1 Entities
+
+			Portfolio
+			Strategy Allocation Unit
+			Exposure Unit
+			Asset Bucket
+			Correlation Cluster
+			Portfolio State Snapshot
+
+		4.2 Attributes
+
+			Portfolio
+
+				portfolio_id
+				total_allocated_capital
+				active_strategies_set
+				exposure_vector
+				diversification_profile
+
+			Strategy Allocation Unit
+
+				strategy_id
+				allocated_capital
+				strategy_weight
+				strategy_exposure_vector
+
+			Exposure Unit
+
+				asset_id
+				direction (long/short/neutral)
+				notional_exposure
+				normalized_weight
+
+				Exposure Computation Definition (MANDATORY)
+
+					strategy_exposure(asset_id) MUST be defined as:
+
+						signed_notional_exposure
+
+					Where:
+
+						signed_notional_exposure =
+							+notional_exposure  (if direction = long)
+							−notional_exposure  (if direction = short)
+							0                   (if direction = neutral)
+
+					net_exposure(asset_id) = Σ(signed_notional_exposure across strategies)
+
+			Asset Bucket
+
+				asset_class
+				instruments_set
+				bucket_exposure
+
+				Asset Bucket Mapping Rule (MANDATORY)
+
+					asset_id MUST map to:
+
+						asset_class (bucket)
+
+					Mapping MUST be provided via:
+
+						asset_to_bucket_mapping (from canonical_input_set)
+
+					Each asset MUST map to exactly ONE bucket
+
+			Correlation Cluster
+
+				cluster_id
+				member_assets
+				aggregate_exposure
+
+				Correlation Cluster Mapping Rule (MANDATORY)
+
+					cluster_id MUST be derived from:
+
+						asset_id → cluster_id (predefined mapping)
+
+					Mapping MUST come from:
+
+						configuration_snapshot
+
+					Each asset MUST map to exactly one cluster
+
+			Portfolio State Snapshot
+
+				timestamp
+				portfolio_exposure_vector
+				concentration_metrics
+				diversification_score
+
+		4.3 Relationships
+
+			Portfolio → contains → Strategy Allocation Units
+			Strategy Allocation Unit → generates → Exposure Units
+			Exposure Units → grouped into → Asset Buckets
+			Asset Buckets → mapped into → Correlation Clusters
+			All → produce → Portfolio State Snapshot
+
+			Traceability Mapping (MANDATORY)
+
+				trade_intent → strategy_allocation_unit → exposure_unit
+
+				Each exposure_unit MUST include:
+
+					source_strategy_id
+					source_trade_intent_id
+
+			Extended Traceability Mapping (MANDATORY)
+
+				exposure_unit → asset_bucket → correlation_cluster
+
+				Each mapping MUST be:
+
+					deterministic
+					traceable via canonical_input_set
+
+		4.4 Ownership
+
+			Portfolio structure → Phase A Step 7
+			Capital values → Step 5 (referenced only)
+			Trade intents → Step 6 (referenced only)
+
+
+	5. LOGIC / RULE ENGINE
+
+		Deterministic Strategy Ordering (MANDATORY)
+
+			All strategies MUST be processed in:
+
+				strategy_id (lexicographic ascending)
+
+			Applies to:
+
+				extraction
+				aggregation
+				normalization
+
+		Deterministic Asset Ordering (MANDATORY)
+
+			All asset-level operations MUST follow:
+
+				asset_id (lexicographic ascending)
+
+			Applies to:
+
+				exposure aggregation
+				bucket mapping
+				cluster mapping
+				output generation
+
+			Violation if:
+
+				any asset iteration is unordered
+
+		5.1 Rules
+
+			R1: Portfolio Composition Rule
+
+				Portfolio = deterministic aggregation of all strategy exposures
+
+			R2: Exposure Normalization Rule
+
+				All exposures must be normalized relative to total allocated capital
+
+				R2.1 Normalization Formula (MANDATORY)
+
+					Let:
+
+						E_i = net_exposure for asset i
+						C_total = total_allocated_capital
+
+					Normalized Exposure:
+
+						W_i = E_i / C_total
+
+					Constraint:
+
+						C_total > 0
+
+					IF C_total == 0:
+
+						ALL W_i = 0
+						system MUST enter ZERO_PORTFOLIO_STATE
+
+			R3: Aggregation Rule
+
+				For each asset:
+
+					net_exposure(asset) = Σ(strategy_exposure(asset))
+
+			R4: Diversification Rule
+
+				Portfolio must maintain distribution across:
+
+					asset buckets
+					correlation clusters
+
+			R5: Concentration Rule
+
+				No single:
+
+					strategy
+					asset
+					cluster
+
+					may dominate portfolio beyond threshold defined in configuration_snapshot
+
+
+		5.2 Conditions
+
+			Only approved strategies (Step 6) enter portfolio
+			Only allocated capital (Step 5) contributes
+
+			All exposures must be:
+
+				finite
+				signed
+				normalized
+
+			Asset Definition Enforcement (MANDATORY)
+
+				All asset_id in:
+
+					exposure_unit
+					asset_to_bucket_mapping
+					asset_to_cluster_mapping
+
+				MUST exist in:
+
+					asset_definition_set
+
+				Violation → REJECT INPUT
+
+			configuration_snapshot MUST include:
+
+				strategy_threshold_map:
+					strategy_id → max_weight
+
+				asset_threshold_map:
+					asset_id → max_weight
+
+				cluster_threshold_map:
+					cluster_id → max_weight
+
+				All thresholds MUST be:
+
+					numeric
+					finite
+					≥ 0
+
+
+		5.3 Decision Logic
+
+			Step-by-step:
+
+				Collect strategy allocation units
+				Extract exposure vectors
+				Normalize exposures
+				Aggregate by asset
+				Map to asset buckets
+				Map to correlation clusters
+				Compute concentration structure
+				Generate portfolio state
+
+
+		5.4 Constraints
+
+			No hidden exposure
+			No unallocated capital
+			No orphan strategy
+
+
+		5.5 RULE EXECUTION ORDER
+
+			Strategy Inclusion Validation
+			Capital Mapping
+			Exposure Extraction
+			Normalization
+			Aggregation (asset level)
+			Bucket Mapping
+			Cluster Mapping
+			Concentration Evaluation
+			Portfolio State Generation
+
+			No rule override allowed.
+
+		Before hashing:
+
+			signal_ids_sorted = sort(signal_ids)
+
+			signal_ids_sorted MUST be:
+
+			- immutable
+			- final
+			- no post-hash modification allowed
+
+
+	6. FLOW ARCHITECTURE
+
+		6.0 Canonical Input Set
+
+			canonical_input_set = {
+
+					strategy_allocation_snapshot
+					trade_intent_snapshot
+					asset_definition_set
+					asset_to_bucket_mapping
+					asset_to_cluster_mapping
+					configuration_snapshot
+					version_identifiers
+
+				}
+
+				Constraints:
+
+					all mappings MUST be explicit
+					no implicit derivation allowed
+
+					Mapping Completeness and Uniqueness (MANDATORY)
+
+						For every asset_id in asset_definition_set:
+
+							exactly one bucket mapping MUST exist
+							exactly one cluster mapping MUST exist
+
+						No duplicates allowed:
+
+							asset_id → multiple buckets → INVALID
+							asset_id → multiple clusters → INVALID
+
+						No missing mappings allowed
+
+		External Exposure Exclusion (MANDATORY)
+
+			Portfolio Model MUST include ONLY:
+
+				CORE trade intents
+				CORE allocations
+
+			External trades (CEIL):
+
+				MUST NOT be included in portfolio construction
+
+			External exposure handling is performed in Phase D
+
+		6.1 Input Definition
+
+			Allocated capital per strategy
+			Strategy exposure outputs
+
+
+		6.2 Processing Flow
+
+			Input
+			→ Validate strategies
+			→ Extract exposures
+			→ Normalize
+			→ Aggregate (asset)
+			→ Bucket mapping
+			→ Cluster mapping
+			→ Compute portfolio structure
+			→ Generate state
+
+
+		6.3 Output Definition
+
+			Portfolio State Snapshot
+			Exposure Vector
+			Concentration Structure
+
+			Exposure Vector Canonical Form (MANDATORY)
+
+				exposure_vector MUST be an ordered sequence:
+
+					ordered by asset_id (ascending)
+
+				Each entry MUST be:
+
+					(asset_id, normalized_exposure)
+
+				No missing or duplicate asset_id allowed
+
+			Portfolio State Snapshot MUST support deterministic derivation of outcome_record_set
+
+		6.4 Flow Model
+
+			Strategy Allocations + Trade Intents
+			→ Exposure Aggregation
+			→ Portfolio Structuring
+			→ Portfolio State
+
+
+	7. PIPELINE STRUCTURE
+
+		Portfolio Lifecycle:
+
+			Construct → Evaluate → Maintain → Rebalance → Persist State → Update
+
+		Transitions:
+
+			Triggered by:
+
+				new allocations
+				strategy changes
+				exposure shifts
+
+
+	8. CONTROL & CONSTRAINTS
+
+		8.1 Hard Rules
+
+			Deterministic aggregation only
+			No duplication of exposure
+			Full capital accounting required
+
+		8.2 Soft Rules
+
+			Prefer diversification across clusters
+			Prefer balanced strategy contribution
+
+		8.3 Guardrails
+
+			Prevent empty portfolio
+			Prevent single-strategy dominance
+
+		8.4 Boundary Definitions
+
+			For any exposure metric:
+
+				min = full short
+				max = full long
+				edge = neutral (0)
+				invalid = undefined / NaN / infinite
+
+
+	9. STATE & DATA MODEL
+
+		9.1 State Definition
+
+			Portfolio State = full representation of:
+
+				exposures
+				allocations
+				structure
+
+			ZERO_PORTFOLIO_STATE
+
+				Definition:
+
+					all exposures = 0
+					all allocations = 0
+					portfolio_exposure_vector = 0
+
+				Trigger:
+
+					total_allocated_capital == 0
+
+		9.2 State Transitions
+
+			Triggered by:
+
+				capital reallocation
+				strategy activation/deactivation
+				exposure change
+
+		9.3 Source of Truth
+
+			Logical ownership: Phase A
+			Physical ownership: Phase C (future)
+
+
+	10. FAILURE MODEL
+
+		10.1 Failure Scenarios
+
+			F1: Missing strategy allocation
+			F2: Exposure mismatch
+			F3: Non-normalized exposure
+			F4: Concentration violation
+			F5: Incomplete portfolio state
+
+		10.2 Failure Impact
+
+			invalid portfolio composition
+			hidden risk
+			downstream execution errors
+
+		10.3 Mitigation Logic
+
+			reject portfolio construction
+			enforce recomputation
+			block output emission
+
+		10.4 Detection Rule
+
+			Each failure must define:
+
+				Failure    Trigger                    Detection              Response
+				F1         missing allocation         null check             reject
+				F2         mismatch                   aggregation diff       recompute
+				F3         normalization fail         sum != 1               reject
+				F4         concentration breach       threshold violation    flag
+				F5         missing fields             schema validation      reject
+
+
+	11. ASSUMPTION REGISTER
+
+		Assumption                              Reason                              Validation Phase   Status
+
+		Strategy outputs are valid              ensured by Step 6                  Phase D            OPEN
+		Capital allocation correct             ensured by Step 5                  Phase B            OPEN
+		Correlation clusters predefined        required for diversification       Phase B            OPEN
+
+
+	12. VALIDATION FRAMEWORK
+
+		12.1 Completeness Checklist
+
+			All entities defined
+			All flows deterministic
+			No undefined variables
+
+		12.2 Validation Method
+
+			deterministic replay
+			synthetic portfolio construction
+
+		12.3 Acceptance Criteria
+
+			identical input → identical portfolio
+			no ambiguity in aggregation
+
+		12.4 Coverage Rule
+
+			All rules mapped to validation scenarios
+
+		12.5 Ambiguity Check
+
+			No multiple interpretations possible
+
+
+	13. OUTPUT (DELIVERABLE SPEC)
+
+		portfolio_spec = {
+
+			portfolio_id
+			strategy_allocation_map
+			exposure_vector
+			asset_bucket_distribution
+			correlation_cluster_distribution
+			concentration_profile
+			portfolio_state_snapshot
+
+		}
+
+		Portfolio Spec Canonical Ordering (MANDATORY)
+
+			portfolio_spec fields MUST follow exact order:
+
+				portfolio_id
+				strategy_allocation_map
+				exposure_vector
+				asset_bucket_distribution
+				correlation_cluster_distribution
+				concentration_profile
+				portfolio_state_snapshot
+
+			No reordering allowed
+
+
+	14. TRACEABILITY MAPPING
+
+		Step 1 → strategies define structure
+		Step 2 → signals define exposure intent
+		Step 3 → decisions select strategies
+		Step 4 → risk defines boundaries
+		Step 6 → capital defines weights
+		Step 4 → execution defines valid trades
+
+		→ Step 7 aggregates ALL into portfolio
+
+
+	15. CROSS-PHASE CONSISTENCY RULES
+
+		OWNED:
+
+			portfolio structure
+			exposure aggregation
+
+		REFERENCED:
+
+			capital (Step 5)
+			trade intent (Step 6)
+
+
+	16. SCALABILITY MODEL
+
+		Supports:
+
+			unlimited strategies
+			multi-asset expansion
+			hierarchical portfolio structures
+
+
+	17. GOVERNANCE INTEGRATION
+
+		Requires Phase A approval
+
+		Versioned as:
+
+			PORTFOLIO_MODEL_v1.0
+
+		Any change → full impact analysis
+
+
+	18. AUDITABILITY & OBSERVABILITY
+
+		Must log:
+
+			inputs (allocations, exposures)
+			transformations
+			outputs
+
+		Replay:
+
+			full deterministic reconstruction required
+
+
+	19. RISK CONSIDERATIONS
+
+		Risks:
+
+			concentration risk
+			correlation risk
+			hidden exposure
+
+		Controls:
+
+			deterministic aggregation
+			structural constraints
+
+
+	20. FAILURE CONDITION (PHASE LEVEL)
+
+		Phase FAILS if:
+
+			any ambiguity exists
+			aggregation is non-deterministic
+			traceability broken
+			missing constraints
+
+
+	21. PHASE LOCK CRITERIA
+
+		Phase can be LOCKED only if:
+
+			all sections complete
+			validation passed
+			no ambiguity
+			governance approval obtained
+
+
+	FINAL OUTPUT SUMMARY
+
+		This Portfolio Model establishes:
+
+			fully deterministic
+			strictly layered
+			traceable from Step 1 → Step 6
+			compliant with universal-phase-structure
+			free from execution / infra leakage
+
+	signal_ids MUST be:
+
+		- complete
+		- sorted
+		- immutable
+
+	Identity Chain Rule:
+
+		signal_id = HASH(signal_payload)
+
+		trade_intent_id = HASH(signal_ids + payload)
+
+		Chain MUST be reconstructable end-to-end
+
+	event_time in TradeIntent:
+
+		- MUST equal latest(signal.event_time)
+		- MUST NOT be modified downstream
+
+	hash_version: "v1"
+
+	Hash Version Governance:
+
+		- hash_version field MUST be included in TradeIntent
+		- allowed values: {v1}
+
+		Future rule:
+
+		IF hash_version changes:
+			→ full replay validation REQUIRED
+			→ version mixing NOT allowed
+
+		trade_intent_id = HASH_v1(canonical_trade_intent_payload)
+
+		event_time:
+			- mandatory
+			- epoch_ns
+			- UTC
+
+		TradeIntent.event_time = MAX(signal.event_time)
+
+PHASE A — STEP 8: FEEDBACK / LEARNING MODEL
+
+	(Strict DSS | Institutional-Grade | No Cross-Phase Leakage)
+
+	Reference compliance:
+
+
+	1. PHASE IDENTITY LAYER
+		1.1 Phase Name
+
+			Phase A — Step 8: Feedback / Learning Model
+
+		1.2 Phase Role
+
+			Defines deterministic, non-adaptive-at-runtime learning logic that evaluates historical performance and produces versioned parameter updates for upstream components (Strategy, Signal, Decision, Portfolio).
+
+		1.3 Objective
+
+			Produce a deterministic, auditable, version-controlled learning output that improves trading model performance without introducing runtime non-determinism.
+
+		1.4 Why This Exists
+
+			Prevents:
+
+				uncontrolled adaptive behavior
+				hidden drift in strategy logic
+				non-reproducible system evolution
+
+			Ensures:
+
+				learning is offline, explicit, versioned
+				full traceability from performance → parameter change
+
+	2. PHASE SCOPE CONTROL
+		2.1 INCLUDED (STRICT)
+			performance evaluation logic (logical)
+			parameter adjustment rules (deterministic)
+			learning dataset definition
+			model update rules (non-ML / deterministic ML allowed)
+			version generation rules
+			feedback loop structure (logical only)
+
+		2.2 EXCLUDED (STRICT)
+			real-time adaptive learning
+			online learning / reinforcement learning execution
+			infrastructure pipelines
+			training frameworks / ML infra
+			execution feedback loops (Phase D)
+			latency / scheduling
+
+	3. ARCHITECTURAL INTENT LAYER
+		3.1 Core Principles
+			Deterministic learning output
+			No runtime adaptation
+			Full replayability
+			Version-controlled evolution
+			Strict separation from execution
+
+		3.2 Architectural Model
+
+			Logical Evaluation + Deterministic Update Model
+
+		3.3 System Positioning
+			Signal → Decision → Trade → Portfolio → Performance
+												  ↓
+										   Learning Model
+												  ↓
+									 Updated Config Versions (Step 1–7)
+
+			This is a closed-loop logical system, not runtime adaptation.
+
+	4. DOMAIN MODEL DEFINITION
+		4.1 Core Entities
+
+			Performance Snapshot
+			Deterministic aggregation of historical outcomes
+
+			Learning Dataset
+			Canonical dataset used for evaluation
+
+			Learning Cycle
+			One complete evaluation + update process
+
+			Parameter Update Set
+			Collection of parameter changes
+
+			Model Version
+			New version of strategy/config/decision parameters
+
+			Outcome Record
+			realized result of a trade intent
+
+			Feedback Signal
+			normalized evaluation output
+
+			Parameter Update Instruction
+			deterministic modification instruction
+
+			Strategy Scorecard
+			performance metrics container
+
+			Performance Snapshot MUST be defined exactly once and reused across all references
+				Duplicate definitions are strictly forbidden
+
+		4.2 Attributes
+
+			Performance Snapshot
+
+				strategy_id
+				time_window
+				return_series
+				drawdown_series
+				trade_outcomes
+				risk_metrics
+				evaluation_metrics
+
+			Learning Dataset
+
+				dataset_id
+				time_range
+				included_strategies
+				data_hash
+
+			Learning Cycle
+
+				cycle_id
+				dataset_id
+				evaluation_timestamp
+				version_input_set
+				version_output_set
+
+			Parameter Update Set
+
+				parameter_id
+				old_value
+				new_value
+				update_reason
+				update_magnitude
+
+			Model Version
+
+				version_id
+				parent_version_id
+				change_set_hash
+				approval_status
+
+		4.3 Relationships
+			Portfolio Output → produces → Performance Snapshot
+			Performance Snapshot → feeds → Learning Dataset
+			Learning Dataset → processed by → Learning Cycle
+			Learning Cycle → generates → Parameter Update Set
+			Parameter Update Set → produces → Model Version
+
+		4.4 Ownership
+			Learning logic → Phase A
+			Performance input → derived within Step 8 from Step 7 outputs
+			Version control → Phase 0 governance
+
+	5. LOGIC / RULE ENGINE
+		5.1 Canonical Input Set (MANDATORY)
+			canonical_input_set = {
+				performance_snapshot_set
+				configuration_snapshot
+				version_identifiers
+			}
+
+			Constraints:
+
+			immutable
+			complete
+			hash-identifiable
+			no external inputs allowed
+
+		learning_dataset MUST NOT be part of canonical_input_set
+
+			learning_dataset MUST be derived strictly after canonical_input_set resolution as:
+
+			learning_dataset = f(performance_snapshot_set, configuration_snapshot)
+
+			Constraints:
+
+			no independent dataset construction allowed
+			no external data sources permitted
+			derivation function MUST be deterministic and fully specified
+
+		External Feedback Exclusion (MANDATORY)
+
+			Learning Model MUST use ONLY:
+
+				CORE performance data
+
+			External trade outcomes (CEIL):
+
+				MUST NOT be included in:
+					performance_snapshot_set
+					learning_dataset
+					parameter updates
+
+			Constraint:
+
+				External trades MUST NOT influence model evolution
+
+		5.2 Evaluation Rules
+			R1: Deterministic Metric Computation
+
+				All metrics MUST be computed using:
+
+				fixed formulas
+				fixed time windows
+				fixed-point arithmetic
+
+				Examples:
+
+				Sharpe
+				max drawdown
+				win-rate
+				return variance
+
+			R2: Dataset Selection Rule
+
+				Learning dataset MUST satisfy:
+
+				fixed time window
+				no missing data
+				deterministic inclusion criteria
+
+				If violation:
+				→ learning cycle MUST NOT execute
+
+				Deterministic Inclusion Definition (MANDATORY)
+
+					learning_dataset MUST be constructed using:
+
+					fixed time_window
+					fixed strategy set
+					fixed completeness requirement
+
+					Inclusion Rule:
+
+					include ALL performance_snapshot entries WHERE:
+
+					timestamp ∈ time_window
+					strategy_id ∈ predefined strategy_set
+					data completeness = TRUE
+
+					No conditional or adaptive filtering allowed
+
+				data completeness = TRUE IF AND ONLY IF:
+
+						all required fields present
+						AND no null values
+						AND timestamps fully aligned within time_window
+
+						Else:
+						data completeness = FALSE
+
+			R3: Parameter Sensitivity Evaluation
+
+				Each parameter MUST be evaluated independently:
+
+				Δperformance = f(parameter_variation)
+
+				Constraints:
+
+				variation steps predefined
+				evaluation grid fixed
+				no stochastic search
+
+				Parameter Evaluation Grid (MANDATORY)
+
+					Each parameter MUST define:
+
+					min_value
+					max_value
+					step_size
+
+					Evaluation Set:
+
+					parameter_values = {min_value + k * step_size}
+
+					Constraints:
+
+					k MUST be integer
+					range MUST be finite
+					evaluation order MUST be ascending
+
+					No stochastic variation allowed
+
+				IF (max_value - min_value) is not divisible by step_size:
+
+					parameter_values MUST include only values ≤ max_value
+
+					No extension beyond max_value allowed
+
+
+				All parameter updates MUST be:
+
+					computed independently
+					AND applied simultaneously
+
+					No sequential dependency allowed
+
+
+			R4: Update Eligibility Rule
+
+				Parameter update allowed ONLY IF:
+
+				improvement_metric ≥ threshold_min
+				AND
+				risk_metric ≤ threshold_max
+
+				Else:
+				→ parameter remains unchanged
+
+				Precedence Rule (MANDATORY)
+
+					Evaluation order MUST be:
+
+					1 risk_metric validation
+					2 improvement_metric validation
+
+					Constraint:
+
+					IF risk_metric > threshold_max
+					→ update MUST be rejected
+
+					improvement condition MUST NOT override risk constraint
+
+			R5: Update Magnitude Constraint
+				|new_value - old_value| ≤ delta_max
+
+				Edge:
+
+				if exceeded → clamp to delta_max
+				if undefined → reject update
+
+			R6: Version Generation Rule
+
+				New version MUST be created ONLY IF:
+
+				at least one parameter updated
+				all updates validated
+
+				Else:
+				→ no new version
+
+				version_id MUST be computed from:
+
+					ordered parameter_update_set (by parameter_id)
+					performance_snapshot_set hash
+					configuration_snapshot hash
+					version_identifiers
+					learning_dataset hash
+
+					Ordering MUST be deterministic
+
+			All inputs to version_id MUST be serialized in deterministic order:
+
+					1 parameter_update_set (sorted by parameter_id)
+					2 performance_snapshot_set hash
+					3 configuration_snapshot hash
+					4 learning_dataset hash
+					5 version_identifiers
+
+					No permutation allowed
+
+			R7: Deterministic Ordering
+
+				All updates MUST be ordered by:
+
+				parameter_id (lexicographic)
+				magnitude (descending)
+
+				Precondition (MANDATORY)
+
+					update_magnitude MUST be computed BEFORE ordering
+
+					Constraint:
+
+					ordering MUST depend only on:
+
+					parameter_id
+					update_magnitude (deterministically computed)
+
+					No runtime-dependent values allowed
+
+		5.3 RULE EXECUTION ORDER (STRICT)
+			Input validation
+			Dataset validation
+			Metric computation
+			Parameter sensitivity evaluation
+			Update eligibility check
+			Update magnitude enforcement
+			Version generation
+			Hash computation
+
+			No deviation allowed.
+
+	6. FLOW ARCHITECTURE
+
+		learning_dataset.time_window MUST be identical to performance_snapshot_set.time_window
+
+		Partial overlap is invalid
+
+		6.0 Canonical Contract
+
+			All outputs derived ONLY from canonical_input_set
+
+		6.1 Input
+
+			Performance Snapshot Construction Rule (MANDATORY)
+
+				performance_snapshot_set MUST be derived as:
+
+				performance_snapshot_set = f(
+					portfolio_state_snapshot,
+					outcome_record_set,
+					configuration_snapshot
+				)
+
+				Where:
+
+				outcome_record_set MUST include:
+
+					trade_intent_id
+					execution_result (filled / partial / rejected)
+					realized_pnl
+					execution_timestamp
+
+				Constraints:
+
+					ALL inputs MUST be:
+						deterministic
+						time-aligned
+						complete
+
+					Aggregation MUST produce:
+
+						return_series
+						drawdown_series
+						trade_outcomes
+						risk_metrics
+
+					Same inputs → identical performance_snapshot_set
+
+					No external data sources allowed
+					No implicit computation allowed
+
+			performance_snapshot_set (Step 7)
+			configuration_snapshot (Steps 1–7)
+			version identifiers
+
+		6.2 Processing
+			Performance → Evaluation → Parameter Testing → Update Filtering → Version Creation
+
+		6.3 Output
+			parameter_update_set
+			model_version_object
+
+		6.4 Flow Model
+			Input → Transform → Output
+
+		Performance Snapshot → Learning Logic → Model Version
+
+	7. PIPELINE STRUCTURE
+
+		Learning Lifecycle:
+
+		Collect → Validate → Evaluate → Update → Version → Approve → Deploy
+
+		State Transitions:
+
+		Pending → Validated
+		Validated → Evaluated
+		Evaluated → Updated
+		Updated → Versioned
+
+		Pending → Validated ONLY IF dataset completeness = TRUE
+
+			Validated → Evaluated ONLY IF metric computation successful
+
+			Evaluated → Updated ONLY IF valid updates exist
+
+			Updated → Versioned ONLY IF all updates validated
+
+	8. CONTROL & CONSTRAINTS
+		8.1 Hard Rules
+			No runtime adaptation
+			Deterministic outputs only
+			Fixed evaluation logic
+
+		8.2 Soft Rules
+			Prefer stability over aggressiveness
+			Prefer smaller updates
+
+		8.3 Guardrails
+			no overfitting loops
+			no parameter oscillation
+
+		8.4 Boundary Definitions
+
+			For each parameter:
+
+			min_value
+			max_value
+			delta_max
+			invalid range
+
+			Violation:
+			→ update rejected
+
+		Edge Behavior Definition (MANDATORY)
+
+			|new_value - old_value| = delta_max → allowed
+			|new_value - old_value| > delta_max → clamp to delta_max
+			|new_value - old_value| = 0 → no update generated
+
+			All boundary conditions MUST produce deterministic output
+
+	9. STATE & DATA MODEL
+		9.1 State Types
+			Learning Pending
+			Learning Completed
+			Version Generated
+
+		9.2 State Transitions
+			Pending → Completed (valid dataset)
+			Completed → Version Generated (valid updates)
+
+		9.3 Source of Truth
+			Model Version Object
+
+		Reconstruction Rule (MANDATORY)
+
+			model_version_object MUST be computable as:
+
+				f(
+				canonical_input_set,
+				learning_dataset,
+				parameter_update_set
+				)
+
+			Constraint:
+
+			All inputs used in version generation MUST be included in canonical_input_set
+			No hidden state allowed
+
+	10. FAILURE MODEL
+		10.1 Scenarios
+			incomplete dataset
+			metric inconsistency
+			conflicting updates
+			non-deterministic output
+		10.2 Detection
+
+			Each failure MUST define:
+
+			Scenario	Trigger	Detection	Response
+			Missing data	dataset incomplete	validation fail	abort cycle
+			Metric inconsistency	mismatch across runs	replay check	reject
+			update overflow	delta > max	bounds check	clamp/reject
+			ambiguity	multiple outputs	replay mismatch	invalidate
+
+	11. ASSUMPTION REGISTER
+	Assumption	Reason	Validate In	Status
+	performance data accurate	required for learning	Phase B	open
+	parameter space bounded	required for determinism	Step 7	open
+	evaluation metrics sufficient	decision quality	Step 9	open
+
+	12. VALIDATION FRAMEWORK
+		12.1 Checklist
+			deterministic outputs
+			bounded parameters
+			version traceability
+
+		12.2 Validation Method
+			replay identical dataset
+			verify identical version output
+
+		12.3 Acceptance Criteria
+			zero ambiguity
+			identical replay output
+
+		12.4 Coverage Rule
+			every rule stress-tested via:
+			parameter extremes
+			empty dataset
+			conflicting updates
+
+		12.5 Ambiguity Check
+			simulate multiple update orders
+			→ must produce identical version
+
+	13. OUTPUT (DELIVERABLE SPEC)
+
+		Feedback / Learning Model Specification
+
+		Includes:
+
+		evaluation logic
+		update rules
+		versioning model
+		constraints
+
+	14. TRACEABILITY MAPPING
+		Input:
+			portfolio_state_snapshot (Step 7)
+			outcome_record_set (derived from Step 7 + execution outcomes)
+		Output: Updated configurations for:
+		Step 1 (Strategy)
+		Step 2 (Signal)
+		Step 3 (Decision)
+		Step 7 (Portfolio)
+
+		Full lineage required.
+
+		Mandatory Lineage Mapping
+
+			Each parameter_update_set entry MUST include:
+
+			origin_performance_snapshot_id
+			origin_dataset_id
+
+			Constraint:
+
+			Every update MUST be traceable to exact input data used
+
+	15. CROSS-PHASE CONSISTENCY
+
+		OWNED:
+
+		learning logic
+		update rules
+
+		REFERENCED:
+
+		strategy config
+		signal config
+		decision config
+
+		No duplication allowed.
+
+	16. SCALABILITY MODEL
+
+		Supports:
+
+		1000+ strategies
+		multi-asset evaluation
+		long-horizon datasets
+
+		Scaling:
+
+		per-strategy isolation
+		batch deterministic processing
+
+	17. GOVERNANCE INTEGRATION
+		every version MUST be approved
+		change requires:
+		reason
+		impact analysis
+		rollback plan
+
+		No auto-deployment allowed.
+
+	18. AUDITABILITY & OBSERVABILITY
+
+		Must support:
+
+		full replay of learning cycle
+		parameter change traceability
+		version lineage graph
+
+		Logs:
+
+		dataset used
+		metrics computed
+		updates applied
+
+	19. RISK CONSIDERATIONS
+
+		Risks:
+
+		overfitting
+		parameter instability
+		hidden drift
+
+		Controls:
+
+		bounded updates
+		validation thresholds
+		version gating
+
+	20. FAILURE CONDITION
+
+		Phase fails if:
+
+		learning is non-deterministic
+		version not reproducible
+		parameters unbounded
+		traceability missing
+
+	21. PHASE LOCK CRITERIA
+		all sections complete
+		deterministic replay verified
+		no ambiguity
+		governance approval obtained
+
+	FINAL STATE
+
+		Phase A — Step 8 is now:
+
+		Fully deterministic
+		Fully bounded
+		Replay-safe
+		Governance-controlled
+
+Phase A → Output Contract (TradeIntent Definition)
+
+	TradeIntent_v1:
+
+	Fields (STRICT ORDER):
+
+	1. trade_intent_id: bytes32
+	2. instrument: string
+	3. direction: enum {BUY, SELL}
+	4. size: int64
+	5. aggregation_score: int64 (fixed-point)
+	6. signal_ids: List<bytes32> (SORTED)
+	7. event_time: int64 (epoch ns)
+	8. encoding_version: int = 1
+
+HASH DEFINITION
+	trade_intent_id = HASH_v1(
+		CBE_encode([
+			instrument,
+			direction,
+			size,
+			aggregation_score,
+			signal_ids_sorted,
+			event_time
+		])
+	)
+
+HARD RULE
+	NO JSON
+	NO dynamic fields
+	NO optional ordering
+
+Step 8 Determinism Validation:
+	Validate:
+
+	1. Same input signals → same TradeIntent_id
+	2. Hash reproducibility = TRUE
+	3. No floating point used
+	4. signal_ids fully linked
+	5. event_time consistent
+
+	IF ANY FAIL:
+		REJECT PIPELINE OUTPUT

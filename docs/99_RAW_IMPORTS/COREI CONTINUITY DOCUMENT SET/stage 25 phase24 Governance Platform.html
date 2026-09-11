@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>COREI Phase 24 Reference</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #0A0D12;
+            color: #E3E7EC;
+            font-family: 'Segoe UI', 'Inter', system-ui, sans-serif;
+            font-size: 13px;
+            line-height: 1.5;
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .sidebar-wrapper {
+            display: flex;
+            flex-shrink: 0;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            overflow: hidden;
+        }
+        .sidebar {
+            width: 200px;
+            min-width: 140px;
+            max-width: 320px;
+            background: #0E1219;
+            border-right: 1px solid #28303C;
+            padding: 0.8rem 0.3rem 0.8rem 0.5rem;
+            overflow-y: auto;
+            overflow-x: hidden;
+            resize: horizontal;
+            height: 100vh;
+            flex-shrink: 0;
+        }
+        .sidebar::-webkit-scrollbar { width: 4px; }
+        .sidebar::-webkit-scrollbar-thumb { background: #28303C; border-radius: 2px; }
+        .sidebar .brand {
+            font-size: 13px;
+            font-weight: 600;
+            color: #C6A46A;
+            letter-spacing: 0.04em;
+            padding: 0 0.3rem 0.4rem 0.3rem;
+            border-bottom: 1px solid #28303C;
+            margin-bottom: 0.6rem;
+        }
+        .sidebar .brand span { color: #E3E7EC; font-weight: 300; }
+        .sidebar-nav { display: flex; flex-direction: column; gap: 0.1rem; }
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            padding: 0.2rem 0.3rem;
+            color: #9AA5B1;
+            text-decoration: none;
+            font-size: 12px;
+            border-radius: 3px;
+            transition: background 0.1s, color 0.1s;
+            line-height: 1.3;
+            white-space: nowrap;
+        }
+        .sidebar-nav a:hover { background: #1E2834; color: #E3E7EC; }
+        .sidebar-nav a.active { background: #28303C; color: #E3E7EC; font-weight: 500; }
+        .sidebar-nav .section-number {
+            display: inline-block;
+            width: 22px;
+            color: #6E7883;
+            font-size: 11px;
+            flex-shrink: 0;
+        }
+        .main-content {
+            flex: 1;
+            padding: 2rem 2.5rem;
+            max-width: 1200px;
+            min-width: 0;
+            overflow-x: auto;
+        }
+        h1 { font-size: 26px; font-weight: 600; letter-spacing: -0.02em; color: #E3E7EC; margin-bottom: 0.25rem; }
+        h2 { font-size: 18px; font-weight: 600; color: #C6A46A; margin: 1.8rem 0 0.8rem 0; border-bottom: 1px solid #28303C; padding-bottom: 0.3rem; }
+        h3 { font-size: 15px; font-weight: 500; color: #C6A46A; margin: 1.2rem 0 0.5rem 0; }
+        h4 { font-size: 13px; font-weight: 500; color: #9AA5B1; margin: 1rem 0 0.3rem 0; }
+        p { margin-bottom: 0.4rem; }
+        a { color: #8BB4F0; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        code { font-family: 'JetBrains Mono', monospace; font-size: 12px; background: #121821; padding: 0.1rem 0.4rem; border: 1px solid #28303C; border-radius: 3px; color: #E3E7EC; }
+        pre {
+            background: #0E1219;
+            border: 1px solid #28303C;
+            border-radius: 6px;
+            padding: 0.8rem 1rem;
+            overflow: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            line-height: 1.5;
+            color: #C5CED9;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        hr { border: none; border-top: 1px solid #28303C; margin: 1.5rem 0; }
+        .document-header {
+            background: #121821;
+            border: 1px solid #28303C;
+            border-radius: 6px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .document-header .org { font-size: 14px; font-weight: 600; color: #C6A46A; letter-spacing: 0.05em; }
+        .document-header .title { font-size: 26px; font-weight: 600; color: #E3E7EC; margin: 0.2rem 0; }
+        .document-header .subtitle { font-size: 16px; color: #9AA5B1; }
+        .document-header .meta-line {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            margin-top: 0.6rem;
+            font-size: 13px;
+        }
+        .document-header .meta-line .item { display: flex; align-items: baseline; gap: 0.3rem; }
+        .document-header .meta-line .label { color: #6E7883; text-transform: uppercase; font-size: 11px; letter-spacing: 0.04em; }
+        .document-header .meta-line .value { color: #E3E7EC; font-weight: 500; }
+        .badge {
+            display: inline-block;
+            background: #28303C;
+            padding: 0.1rem 0.6rem;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #C6A46A;
+            letter-spacing: 0.02em;
+            margin-left: 0.3rem;
+        }
+        .badge.success { background: #1F3A2A; color: #52A36B; }
+        .badge.warning { background: #3D3420; color: #D1A64A; }
+        .badge.danger { background: #3D2020; color: #B95A5A; }
+        .executive-summary {
+            background: #121821;
+            border: 1px solid #28303C;
+            border-radius: 6px;
+            padding: 0.8rem 1.2rem;
+            margin-bottom: 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.3rem 2rem;
+        }
+        .executive-summary .item { display: flex; flex-direction: column; }
+        .executive-summary .item .label { font-size: 11px; text-transform: uppercase; color: #6E7883; letter-spacing: 0.04em; }
+        .executive-summary .item .value { font-size: 14px; font-weight: 500; color: #E3E7EC; }
+        table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 0.6rem 0 1rem 0; }
+        th { background: #18202A; color: #9AA5B1; font-weight: 600; text-align: left; padding: 0.3rem 0.5rem; border: 1px solid #28303C; font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; }
+        td { padding: 0.25rem 0.5rem; border: 1px solid #28303C; vertical-align: top; background: #0E1219; }
+        tr:nth-child(even) td { background: #121821; }
+        details { background: #0E1219; border: 1px solid #28303C; border-radius: 4px; margin: 0.6rem 0; }
+        summary { padding: 0.3rem 0.6rem; cursor: pointer; font-weight: 500; color: #C5CED9; background: #18202A; border-radius: 4px; user-select: none; font-size: 13px; }
+        summary:hover { background: #1E2834; }
+        details[open] summary { border-bottom: 1px solid #28303C; border-radius: 4px 4px 0 0; }
+        details .content { padding: 0.5rem 0.6rem; font-size: 12px; font-family: 'JetBrains Mono', monospace; white-space: pre-wrap; word-break: break-all; color: #C5CED9; overflow-x: auto; max-height: 500px; overflow-y: auto; }
+        .metadata-table td { padding: 0.15rem 0.5rem; }
+        .metadata-table .label { color: #6E7883; width: 140px; font-weight: 400; }
+        .text-muted { color: #6E7883; }
+        .text-success { color: #52A36B; }
+        .text-warning { color: #D1A64A; }
+        .text-danger { color: #B95A5A; }
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar-wrapper { height: auto; position: static; overflow: visible; }
+            .sidebar { width: 100% !important; height: auto; max-width: none !important; min-width: unset; resize: none; border-right: none; border-bottom: 1px solid #28303C; padding: 0.5rem; }
+            .sidebar-nav { flex-direction: row; flex-wrap: wrap; gap: 0.1rem; }
+            .sidebar-nav a { padding: 0.15rem 0.4rem; font-size: 11px; white-space: nowrap; }
+            .sidebar-nav .section-number { width: auto; margin-right: 0.1rem; }
+            .main-content { padding: 1rem; }
+            .executive-summary { grid-template-columns: 1fr; }
+            .document-header .meta-line { flex-direction: column; gap: 0.3rem; }
+        }
+        @media print {
+            .sidebar-wrapper { display: none; }
+            body { background: white; color: black; font-size: 11px; }
+            .main-content { padding: 1rem; max-width: 100%; }
+            .document-header, .executive-summary, table, pre, details { border-color: #ccc; background: #fafafa; }
+            .document-header .meta-line .label { color: #666; }
+            .document-header .meta-line .value { color: #000; }
+            .badge { border: 1px solid #999; background: transparent; color: #000; }
+            .badge.success { border-color: #2a7a3a; color: #2a7a3a; }
+            .badge.warning { border-color: #b08a3a; color: #b08a3a; }
+            .badge.danger { border-color: #b05a5a; color: #b05a5a; }
+            th { background: #eee; color: #333; border-color: #999; }
+            td { background: white; border-color: #999; }
+            tr:nth-child(even) td { background: #f5f5f5; }
+            .text-muted { color: #666; }
+            .text-success { color: #2a7a3a; }
+            .text-warning { color: #b08a3a; }
+            .text-danger { color: #b05a5a; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar-wrapper">
+    <aside class="sidebar">
+        <div class="brand">COREI <span>·</span> DOC</div>
+        <nav class="sidebar-nav">
+            <a href="#sec-01"><span class="section-number">01</span> Executive Summary</a>
+            <a href="#sec-02"><span class="section-number">02</span> Scope</a>
+            <a href="#sec-03"><span class="section-number">03</span> Architecture</a>
+            <a href="#sec-04"><span class="section-number">04</span> Ownership</a>
+            <a href="#sec-05"><span class="section-number">05</span> Responsibilities</a>
+            <a href="#sec-06"><span class="section-number">06</span> Dependencies</a>
+            <a href="#sec-07"><span class="section-number">07</span> Contracts</a>
+            <a href="#sec-08"><span class="section-number">08</span> Interfaces</a>
+            <a href="#sec-09"><span class="section-number">09</span> Runtime</a>
+            <a href="#sec-10"><span class="section-number">10</span> Public API</a>
+            <a href="#sec-11"><span class="section-number">11</span> Components</a>
+            <a href="#sec-12"><span class="section-number">12</span> File Inventory</a>
+            <a href="#sec-13"><span class="section-number">13</span> Validation</a>
+            <a href="#sec-14"><span class="section-number">14</span> Browser Validation</a>
+            <a href="#sec-15"><span class="section-number">15</span> Repository Tree</a>
+            <a href="#sec-16"><span class="section-number">16</span> Build Output</a>
+            <a href="#sec-17"><span class="section-number">17</span> Certification</a>
+            <a href="#sec-18"><span class="section-number">18</span> References</a>
+            <a href="#sec-19"><span class="section-number">19</span> Appendix</a>
+        </nav>
+    </aside>
+</div>
+
+<main class="main-content">
+
+    <header class="document-header">
+        <div class="org">COREI · Institutional Operating Platform</div>
+        <div class="title">Stage 25 · Phase 24</div>
+        <div class="subtitle">Governance Platform</div>
+        <div class="meta-line">
+            <span class="item"><span class="label">Status</span><span class="value"><span class="badge success">CERTIFIED COMPLETE</span></span></span>
+            <span class="item"><span class="label">Version</span><span class="value">25.24.0</span></span>
+            <span class="item"><span class="label">Repository</span><span class="value">corei</span></span>
+            <span class="item"><span class="label">Commit</span><span class="value">ac8e282</span></span>
+            <span class="item"><span class="label">Tag</span><span class="value">stage25-phase24-certified-v1</span></span>
+            <span class="item"><span class="label">Generated</span><span class="value">2026-08-09</span></span>
+        </div>
+    </header>
+
+    <section class="executive-summary">
+        <div class="item"><span class="label">Purpose</span><span class="value">Operationalize institutional governance capabilities.</span></div>
+        <div class="item"><span class="label">Ownership</span><span class="value">Governance Platform Team</span></div>
+        <div class="item"><span class="label">Consumers</span><span class="value">Shell, Workspace, Panels, Productivity, Intelligence, Identity</span></div>
+        <div class="item"><span class="label">Providers</span><span class="value">Platform Kernel (Phases 01–16), Phase‑17 Shell, Phase‑18 Capability Provider, Phase‑19 Window &amp; Workspace, Phase‑20 Panel &amp; Visualization, Phase‑21 Operator Productivity, Phase‑22 Workspace Intelligence, Phase‑23 Identity &amp; Organization</span></div>
+        <div class="item"><span class="label">Protected Boundaries</span><span class="value">src/kernel/, src/platform/, src/providers/, src/shell/, src/workbench/, src/intelligence/, src/operator-productivity/, src/identity/</span></div>
+        <div class="item"><span class="label">Repository Scope</span><span class="value">src/governance/ (20 files), src/governance-ui/ (15 files), src/shell/hooks/useGovernanceRuntime.ts, src/ribbon/components/RibbonContextualControl.tsx</span></div>
+        <div class="item"><span class="label">Certification</span><span class="value"><span class="text-success">PASSED</span></span></div>
+        <div class="item"><span class="label">Validation</span><span class="value"><span class="text-success">PASSED</span></span></div>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-01"><h2><span class="section-number">01</span> Executive Summary</h2>
+        <p><strong>Phase‑24</strong> delivers the <strong>Governance Platform</strong> – the institutional governance and compliance layer. It consumes the completed Platform Kernel (Phases 01‑16), Institutional Shell (Phase‑17), Capability Provider Platform (Phase‑18), Window &amp; Workspace Platform (Phase‑19), Panel &amp; Visualization Platform (Phase‑20), Operator Productivity Platform (Phase‑21), Workspace Intelligence Platform (Phase‑22), and Identity &amp; Organization Platform (Phase‑23), and <strong>operationalises</strong> existing governance, policy, approval, workflow, compliance, and audit foundations – <strong>without rebuilding</strong> them.</p>
+        <p>The phase follows the <strong>Platform Enablement</strong> philosophy:</p>
+        <blockquote style="color:#C5CED9; margin:0.5rem 0 0.5rem 1.2rem;"><strong>Consume → Integrate → Coordinate → Operationalize → Validate → Freeze</strong></blockquote>
+        <p>The authoritative execution map defines <strong>21 controlled steps</strong> (see §19). At completion, Phase‑24 provides:</p>
+        <ul style="color:#C5CED9; margin-left:1.2rem;">
+            <li>✅ Governance Runtime (Singleton, single entry point)</li>
+            <li>✅ Governance Services (Governance, Policy, Approval, Workflow, Compliance)</li>
+            <li>✅ Governance State and Context (unified governance context)</li>
+            <li>✅ Governance Event Integration (event‑driven governance refresh)</li>
+            <li>✅ Policy Management (active policies, policy lookup)</li>
+            <li>✅ Approval Management (pending approvals, approval status)</li>
+            <li>✅ Workflow Management (active workflows, workflow state)</li>
+            <li>✅ Compliance Management (compliance status, non‑compliant items)</li>
+            <li>✅ Audit Management (audit records)</li>
+            <li>✅ Shell Governance Integration (GovernanceProvider wraps Shell)</li>
+            <li>✅ Governance UI Components (GovernanceDashboard, GovernanceStatus, hooks)</li>
+            <li>✅ Diagnostics &amp; Observability</li>
+        </ul>
+        <p><strong>Current Status:</strong> Phase‑24 is <strong>certified complete</strong> and frozen. The repository already contains a substantial governance implementation – all 21 steps have been implemented, validated, and the platform is ready for Phase‑25 consumption.</p>
+        <table class="metadata-table">
+            <tr><td class="label">Purpose</td><td>Operationalize institutional governance capabilities</td></tr>
+            <tr><td class="label">Ownership</td><td>Governance Platform Team</td></tr>
+            <tr><td class="label">Consumers</td><td>Shell, Workspace, Panels, Productivity, Intelligence, Identity</td></tr>
+            <tr><td class="label">Providers</td><td>Platform Kernel (Phases 01–16), Phase‑17 Shell, Phase‑18 Capability Provider, Phase‑19 Window &amp; Workspace, Phase‑20 Panel &amp; Visualization, Phase‑21 Operator Productivity, Phase‑22 Workspace Intelligence, Phase‑23 Identity &amp; Organization</td></tr>
+            <tr><td class="label">Protected Boundaries</td><td>src/kernel/, src/platform/, src/providers/, src/shell/, src/workbench/, src/intelligence/, src/operator-productivity/, src/identity/</td></tr>
+            <tr><td class="label">Repository Scope</td><td>src/governance/ (20 files), src/governance-ui/ (15 files), src/shell/hooks/useGovernanceRuntime.ts, src/ribbon/components/RibbonContextualControl.tsx</td></tr>
+            <tr><td class="label">Certification</td><td><span class="text-success">PASSED</span></td></tr>
+            <tr><td class="label">Validation</td><td><span class="text-success">PASSED</span></td></tr>
+        </table>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-02"><h2><span class="section-number">02</span> Scope</h2>
+        <table>
+            <thead><tr><th>Category</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td>In Scope</td><td>Governance Runtime, Governance Services (Governance, Policy, Approval, Workflow, Compliance), Governance State, Governance Context, Governance Events, Policy Management, Approval Management, Workflow Management, Compliance Management, Audit Management, Shell Governance Integration, Governance UI Components (Dashboard, Status, hooks), Diagnostics</td></tr>
+                <tr><td>Out of Scope</td><td>External Compliance Systems, External Policy Engines, External Workflow Engines, External Audit Systems, Institutional Scale (Phase 25), Infrastructure (Phase 26), Trading (Phase 27), Experience (Phase 28)</td></tr>
+                <tr><td>Consumes</td><td>Platform Kernel (Phases 01–16), Institutional Shell (Phase 17), Capability Provider Platform (Phase 18), Window &amp; Workspace Platform (Phase 19), Panel &amp; Visualization Platform (Phase 20), Operator Productivity Platform (Phase 21), Workspace Intelligence Platform (Phase 22), Identity &amp; Organization Platform (Phase 23)</td></tr>
+                <tr><td>Provides</td><td>Governance Platform public API, Governance Runtime, Governance Provider, Policy/Approval/Workflow/Compliance/Audit context</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-03"><h2><span class="section-number">03</span> Architecture</h2>
+        <p>The Phase‑24 architecture follows the institutional layered model. It is organised into five execution blocks:</p>
+        <ol style="color:#C5CED9; margin-left:1.2rem;">
+            <li><strong>Repository Truth</strong> (Steps 01–03) – baseline discovery, contract boundary, domain &amp; ownership certification.</li>
+            <li><strong>Backend Governance Foundations</strong> (Steps 04–08) – runtime, lifecycle, state/context, services, event integration.</li>
+            <li><strong>Platform Integrations</strong> (Steps 09–13) – platform composition, shell, workspace, identity, workflow coordination.</li>
+            <li><strong>Frontend Experience</strong> (Steps 14–15) – backend platform composition, frontend governance experience.</li>
+            <li><strong>Validation, Audit &amp; Freeze</strong> (Steps 16–21) – shell consumption, diagnostics, platform validation, audit, certification, freeze.</li>
+        </ol>
+        <p>The target composition chain is:</p>
+        <pre>Platform Kernel
+    ↓
+Institutional Shell (Phase‑17)
+    ↓
+Workspace Platform (Phase‑19)
+    ↓
+Panel &amp; Visualization Platform (Phase‑20)
+    ↓
+Operator Productivity Platform (Phase‑21)
+    ↓
+Workspace Intelligence Platform (Phase‑22)
+    ↓
+Identity &amp; Organization Platform (Phase‑23)
+    ↓
+Governance Platform (Phase‑24)
+    │
+    ├── Governance Runtime (Singleton)
+    ├── Governance Services (Governance, Policy, Approval, Workflow, Compliance)
+    ├── Governance State &amp; Context
+    ├── Governance Events
+    ├── Policy Management
+    ├── Approval Management
+    ├── Workflow Management
+    ├── Compliance Management
+    ├── Audit Management
+    └── Diagnostics
+    │
+    ▼
+Governance Provider (React)
+    │
+    ▼
+Shell, Workspace, Panels, Ribbon, Intelligence</pre>
+        <p>Governance ownership remains with Phase‑24; all consumed platforms are preserved without modification.</p>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-04"><h2><span class="section-number">04</span> Ownership</h2>
+        <table>
+            <thead><tr><th>Component</th><th>Owner</th><th>Repository Path</th></tr></thead>
+            <tbody>
+                <tr><td>Governance Runtime</td><td>Governance Platform Team</td><td>src/governance/runtime/GovernanceRuntime.ts</td></tr>
+                <tr><td>Governance State</td><td>Governance Platform Team</td><td>src/governance/state/GovernanceState.ts</td></tr>
+                <tr><td>Governance Service</td><td>Governance Platform Team</td><td>src/governance/services/GovernanceService.ts</td></tr>
+                <tr><td>Policy Service</td><td>Governance Platform Team</td><td>src/governance/services/PolicyService.ts</td></tr>
+                <tr><td>Approval Service</td><td>Governance Platform Team</td><td>src/governance/services/ApprovalService.ts</td></tr>
+                <tr><td>Workflow Service</td><td>Governance Platform Team</td><td>src/governance/services/WorkflowService.ts</td></tr>
+                <tr><td>Compliance Service</td><td>Governance Platform Team</td><td>src/governance/services/ComplianceService.ts</td></tr>
+                <tr><td>Governance Events</td><td>Governance Platform Team</td><td>src/governance/events/GovernanceEventHandlers.ts</td></tr>
+                <tr><td>Governance Models</td><td>Governance Platform Team</td><td>src/governance/models/GovernanceModels.ts</td></tr>
+                <tr><td>Governance Contracts</td><td>Governance Platform Team</td><td>src/governance/contracts/GovernanceContracts.ts</td></tr>
+                <tr><td>Backend Composition</td><td>Governance Platform Team</td><td>src/governance/backend-composition.ts</td></tr>
+                <tr><td>Governance Provider</td><td>Governance Platform Team</td><td>src/governance-ui/providers/GovernanceProvider.tsx</td></tr>
+                <tr><td>Governance Hooks</td><td>Governance Platform Team</td><td>src/governance-ui/hooks/</td></tr>
+                <tr><td>Governance Components</td><td>Governance Platform Team</td><td>src/governance-ui/components/</td></tr>
+                <tr><td>Governance Dashboard</td><td>Governance Platform Team</td><td>src/governance-ui/dashboards/GovernanceDashboard.tsx</td></tr>
+                <tr><td>Shell Governance Hook</td><td>Governance Platform Team</td><td>src/shell/hooks/useGovernanceRuntime.ts</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-05"><h2><span class="section-number">05</span> Responsibilities</h2>
+        <table>
+            <thead><tr><th>Responsibility</th><th>Owner</th></tr></thead>
+            <tbody>
+                <tr><td>Governance runtime coordination (singleton entry point)</td><td>Governance Runtime</td></tr>
+                <tr><td>Governance context management (policies, approvals, workflows, compliance, audits)</td><td>Governance Context / State</td></tr>
+                <tr><td>Policy management (active policies, policy lookup)</td><td>Policy Service</td></tr>
+                <tr><td>Approval management (pending approvals, approval status)</td><td>Approval Service</td></tr>
+                <tr><td>Workflow management (active workflows, workflow state)</td><td>Workflow Service</td></tr>
+                <tr><td>Compliance management (compliance status, non‑compliant items)</td><td>Compliance Service</td></tr>
+                <tr><td>Audit management (audit records)</td><td>Governance Service</td></tr>
+                <tr><td>Governance service orchestration</td><td>Governance Service</td></tr>
+                <tr><td>Event‑driven governance refresh</td><td>Governance Event Handlers</td></tr>
+                <tr><td>Shell governance integration</td><td>Governance Provider + useGovernanceRuntime</td></tr>
+                <tr><td>Governance UI components</td><td>Governance UI (Dashboard, Status, hooks)</td></tr>
+                <tr><td>Governance diagnostics &amp; observability</td><td>Governance Runtime</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-06"><h2><span class="section-number">06</span> Dependencies</h2>
+        <table>
+            <thead><tr><th>Dependency</th><th>Type</th><th>Purpose</th></tr></thead>
+            <tbody>
+                <tr><td>Platform Kernel (Phases 01–16)</td><td>Internal</td><td>Runtime, lifecycle, state, events, logging, diagnostics, health</td></tr>
+                <tr><td>Institutional Shell (Phase 17)</td><td>Internal</td><td>Shell regions, GovernanceProvider integration</td></tr>
+                <tr><td>Capability Provider Platform (Phase 18)</td><td>Internal</td><td>Provider resolution, capability integration</td></tr>
+                <tr><td>Window &amp; Workspace Platform (Phase 19)</td><td>Internal</td><td>Workspace lifecycle, active workspace context</td></tr>
+                <tr><td>Panel &amp; Visualization Platform (Phase 20)</td><td>Internal</td><td>Panel infrastructure</td></tr>
+                <tr><td>Operator Productivity Platform (Phase 21)</td><td>Internal</td><td>Command Platform, Search</td></tr>
+                <tr><td>Workspace Intelligence Platform (Phase 22)</td><td>Internal</td><td>Governance‑aware intelligence</td></tr>
+                <tr><td>Identity &amp; Organization Platform (Phase 23)</td><td>Internal</td><td>Identity context (governance relies on identity)</td></tr>
+                <tr><td>State Platform (Phase 08)</td><td>Internal</td><td>Shared state (consumed by GovernanceState)</td></tr>
+                <tr><td>Event Platform (Phase 09)</td><td>Internal</td><td>Event infrastructure (consumed by GovernanceEventHandlers)</td></tr>
+                <tr><td>Runtime Platform (Phase 02)</td><td>Internal</td><td>Runtime infrastructure</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-07"><h2><span class="section-number">07</span> Contracts</h2>
+        <p>The following contracts have been established and certified during Phase‑24 implementation.</p>
+        <details>
+            <summary>GovernanceRuntimeContract</summary>
+            <div class="content">
+export interface GovernanceRuntimeContract {
+  getGovernanceContext(): GovernanceContext;
+  getPolicies(): GovernancePolicy[];
+  getDecisions(): GovernanceDecision[];
+  getApprovals(): GovernanceApproval[];
+  getWorkflows(): GovernanceWorkflow[];
+  getCompliance(): GovernanceCompliance[];
+  getAudits(): GovernanceAudit[];
+  refreshContext(): void;
+  initialize(): void;
+  shutdown(): void;
+}
+            </div>
+        </details>
+        <details>
+            <summary>GovernanceContext</summary>
+            <div class="content">
+export interface GovernanceContext {
+  policies: GovernancePolicy[];
+  decisions: GovernanceDecision[];
+  approvals: GovernanceApproval[];
+  workflows: GovernanceWorkflow[];
+  compliance: GovernanceCompliance[];
+  audits: GovernanceAudit[];
+}
+            </div>
+        </details>
+        <details>
+            <summary>GovernancePolicy</summary>
+            <div class="content">
+export interface GovernancePolicy {
+  id: string;
+  name: string;
+  description: string;
+  category: 'security' | 'compliance' | 'operational' | 'data';
+  status: 'active' | 'inactive' | 'draft';
+  effectiveDate: string;
+  metadata: Record&lt;string, unknown&gt;;
+}
+            </div>
+        </details>
+        <details>
+            <summary>GovernanceApproval</summary>
+            <div class="content">
+export interface GovernanceApproval {
+  id: string;
+  title: string;
+  description: string;
+  status: 'pending' | 'approved' | 'rejected';
+  decisionMaker: string;
+  timestamp: number;
+}
+            </div>
+        </details>
+        <details>
+            <summary>GovernanceWorkflow</summary>
+            <div class="content">
+export interface GovernanceWorkflow {
+  id: string;
+  name: string;
+  state: 'active' | 'paused' | 'closed';
+  steps: string[];
+  currentStep: number;
+}
+            </div>
+        </details>
+        <details>
+            <summary>GovernanceCompliance</summary>
+            <div class="content">
+export interface GovernanceCompliance {
+  id: string;
+  regulation: string;
+  status: 'compliant' | 'non-compliant' | 'in-progress';
+  evidence: string[];
+  lastAudit: number;
+}
+            </div>
+        </details>
+        <details>
+            <summary>GovernanceAudit</summary>
+            <div class="content">
+export interface GovernanceAudit {
+  id: string;
+  timestamp: number;
+  action: string;
+  actor: string;
+  resource: string;
+  details: Record&lt;string, unknown&gt;;
+}
+            </div>
+        </details>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-08"><h2><span class="section-number">08</span> Interfaces</h2>
+        <table>
+            <thead><tr><th>Interface</th><th>File</th><th>Purpose</th></tr></thead>
+            <tbody>
+                <tr><td><code>GovernanceRuntime</code></td><td>src/governance/runtime/GovernanceRuntime.ts</td><td>Singleton runtime – single governance entry point</td></tr>
+                <tr><td><code>GovernanceState</code></td><td>src/governance/state/GovernanceState.ts</td><td>Governance state management</td></tr>
+                <tr><td><code>GovernanceService</code></td><td>src/governance/services/GovernanceService.ts</td><td>Governance coordination service</td></tr>
+                <tr><td><code>PolicyService</code></td><td>src/governance/services/PolicyService.ts</td><td>Policy management service</td></tr>
+                <tr><td><code>ApprovalService</code></td><td>src/governance/services/ApprovalService.ts</td><td>Approval management service</td></tr>
+                <tr><td><code>WorkflowService</code></td><td>src/governance/services/WorkflowService.ts</td><td>Workflow management service</td></tr>
+                <tr><td><code>ComplianceService</code></td><td>src/governance/services/ComplianceService.ts</td><td>Compliance management service</td></tr>
+                <tr><td><code>GovernanceEventHandlers</code></td><td>src/governance/events/GovernanceEventHandlers.ts</td><td>Event‑driven governance refresh</td></tr>
+                <tr><td><code>GovernanceProvider</code></td><td>src/governance-ui/providers/GovernanceProvider.tsx</td><td>React provider for governance context</td></tr>
+                <tr><td><code>useGovernance</code></td><td>src/governance-ui/providers/GovernanceProvider.tsx</td><td>Hook to access GovernanceRuntime</td></tr>
+                <tr><td><code>useGovernanceContext</code></td><td>src/governance-ui/hooks/useGovernanceContext.ts</td><td>Hook to access GovernanceContext</td></tr>
+                <tr><td><code>usePolicies</code></td><td>src/governance-ui/hooks/usePolicies.ts</td><td>Hook to access policies</td></tr>
+                <tr><td><code>useApprovals</code></td><td>src/governance-ui/hooks/useApprovals.ts</td><td>Hook to access approvals</td></tr>
+                <tr><td><code>useWorkflows</code></td><td>src/governance-ui/hooks/useWorkflows.ts</td><td>Hook to access workflows</td></tr>
+                <tr><td><code>useCompliance</code></td><td>src/governance-ui/hooks/useCompliance.ts</td><td>Hook to access compliance</td></tr>
+                <tr><td><code>createGovernancePlatform</code></td><td>src/governance/backend-composition.ts</td><td>Backend composition function</td></tr>
+                <tr><td><code>useGovernanceRuntime</code></td><td>src/shell/hooks/useGovernanceRuntime.ts</td><td>Shell‑specific governance runtime hook</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-09"><h2><span class="section-number">09</span> Runtime</h2>
+        <table>
+            <thead><tr><th>Runtime Component</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td>GovernanceRuntime</td><td>Singleton runtime – single governance entry point</td></tr>
+                <tr><td>GovernanceState</td><td>Governance state management (policies, approvals, workflows, compliance, audits)</td></tr>
+                <tr><td>GovernanceService</td><td>Governance coordination (get context, policies, approvals, workflows, compliance, audits)</td></tr>
+                <tr><td>PolicyService</td><td>Policy management (active policies, policy lookup)</td></tr>
+                <tr><td>ApprovalService</td><td>Approval management (pending approvals, approval status)</td></tr>
+                <tr><td>WorkflowService</td><td>Workflow management (active workflows, workflow state)</td></tr>
+                <tr><td>ComplianceService</td><td>Compliance management (compliance status, non‑compliant items)</td></tr>
+                <tr><td>GovernanceEventHandlers</td><td>Event‑driven governance refresh</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-10"><h2><span class="section-number">10</span> Public API</h2>
+        <p>The Phase‑24 public API is exposed through <code>src/governance/index.ts</code> and <code>src/governance-ui/index.ts</code>.</p>
+        <p>Exports include:</p>
+        <pre>
+// Backend
+export { GovernanceRuntime } from './runtime/GovernanceRuntime';
+export { GovernanceState } from './state/GovernanceState';
+export { GovernanceService } from './services/GovernanceService';
+export { PolicyService } from './services/PolicyService';
+export { ApprovalService } from './services/ApprovalService';
+export { WorkflowService } from './services/WorkflowService';
+export { ComplianceService } from './services/ComplianceService';
+export { GovernanceEventHandlers } from './events/GovernanceEventHandlers';
+export { createGovernancePlatform } from './backend-composition';
+
+export type { GovernanceRuntimeContract } from './contracts/GovernanceContracts';
+export type {
+  GovernanceContext,
+  GovernancePolicy,
+  GovernanceDecision,
+  GovernanceApproval,
+  GovernanceWorkflow,
+  GovernanceCompliance,
+  GovernanceAudit
+} from './models/GovernanceModels';
+
+// Frontend (governance-ui)
+export { GovernanceProvider, useGovernance } from './providers/GovernanceProvider';
+export { usePolicies, useApprovals, useWorkflows, useCompliance, useGovernanceContext } from './hooks';
+export { GovernanceDashboard, GovernanceStatus } from './components';
+        </pre>
+        <p>Existing public APIs consumed:</p>
+        <ul style="color:#C5CED9; margin-left:1.2rem;">
+            <li>Workspace Platform – workspace runtime, lifecycle</li>
+            <li>Panel Platform – panel runtime</li>
+            <li>Operator Productivity – command platform (governance‑aware commands)</li>
+            <li>Workspace Intelligence – governance‑aware intelligence</li>
+            <li>Identity Platform – identity context (governance relies on identity)</li>
+            <li>State Platform – shared state (consumed by GovernanceState)</li>
+            <li>Event Platform – event infrastructure (consumed by GovernanceEventHandlers)</li>
+        </ul>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-11"><h2><span class="section-number">11</span> Components</h2>
+        <table>
+            <thead><tr><th>Component</th><th>Path</th><th>Purpose</th></tr></thead>
+            <tbody>
+                <tr><td><code>GovernanceProvider</code></td><td>src/governance-ui/providers/GovernanceProvider.tsx</td><td>React provider for governance context – wraps Shell</td></tr>
+                <tr><td><code>GovernanceDashboard</code></td><td>src/governance-ui/dashboards/GovernanceDashboard.tsx</td><td>Governance dashboard – displays policies, approvals, workflows, compliance, audits</td></tr>
+                <tr><td><code>GovernanceStatus</code></td><td>src/governance-ui/components/GovernanceStatus.tsx</td><td>Displays governance status summary</td></tr>
+                <tr><td><code>RibbonContextualControl</code></td><td>src/ribbon/components/RibbonContextualControl.tsx</td><td>Ribbon governance control surface</td></tr>
+                <tr><td><code>Shell</code></td><td>src/shell/Shell.tsx</td><td>Main Shell component – wraps GovernanceProvider</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-12"><h2><span class="section-number">12</span> File Inventory</h2>
+        <p><strong>Relevant source directories and file counts (from discovery):</strong></p>
+        <table>
+            <thead><tr><th>Directory</th><th>File Count</th></tr></thead>
+            <tbody>
+                <tr><td>src/governance</td><td>20</td></tr>
+                <tr><td>src/governance-ui</td><td>15</td></tr>
+                <tr><td>src/shell/hooks/</td><td>1 (useGovernanceRuntime.ts)</td></tr>
+                <tr><td>src/ribbon/components/</td><td>1 (RibbonContextualControl.tsx)</td></tr>
+                <tr><td>src/capabilities/ui/workflow/</td><td>1</td></tr>
+            </tbody>
+        </table>
+        <p><strong>Total Phase‑24 relevant files:</strong> ~37 files across the Governance domain.</p>
+        <details>
+            <summary>Show key index.ts files (public API surfaces)</summary>
+            <div class="content">
+src/governance/index.ts
+src/governance/contracts/GovernanceContracts.ts
+src/governance/models/GovernanceModels.ts
+src/governance-ui/index.ts
+src/governance-ui/providers/GovernanceProvider.tsx
+src/governance-ui/hooks/index.ts
+src/governance-ui/components/index.ts
+src/capabilities/ui/workflow/index.ts
+            </div>
+        </details>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-13"><h2><span class="section-number">13</span> Validation</h2>
+        <table>
+            <thead><tr><th>Validation Type</th><th>Status</th></tr></thead>
+            <tbody>
+                <tr><td>TypeScript Compilation</td><td><span class="text-success">PASS</span></td></tr>
+                <tr><td>Production Build</td><td><span class="text-success">PASS</span> (with chunk warning)</td></tr>
+                <tr><td>Repository Structure</td><td><span class="text-success">PASS</span></td></tr>
+                <tr><td>Architecture Compliance</td><td><span class="text-success">PASS</span></td></tr>
+                <tr><td>Dependency Analysis (Madge)</td><td><span class="text-warning">4 circular dependencies found</span> (one new: governance ↔ events, three inherited)</td></tr>
+                <tr><td>Integration Verification</td><td><span class="text-success">PASS</span></td></tr>
+                <tr><td>Browser Validation</td><td><span class="text-success">PASS</span></td></tr>
+            </tbody>
+        </table>
+        <p><strong>Known circular dependencies:</strong></p>
+        <ul style="color:#C5CED9; margin-left:1.2rem;">
+            <li><code>intelligence/runtime ↔ intelligence/events</code> (inherited)</li>
+            <li><code>workspace/runtime ↔ workspace-loader</code> (inherited)</li>
+            <li><code>identity/runtime ↔ identity/events</code> (inherited from Phase‑23)</li>
+            <li><code>governance/runtime/GovernanceRuntime.ts</code> ↔ <code>governance/events/GovernanceEventHandlers.ts</code> (new in Phase‑24 – addressable in later refactoring)</li>
+        </ul>
+        <p>These are non‑blocking for Phase‑24 certification and will be addressed in later integration steps.</p>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-14"><h2><span class="section-number">14</span> Browser Validation</h2>
+        <table>
+            <thead><tr><th>Browser</th><th>Status</th></tr></thead>
+            <tbody>
+                <tr><td>Chromium (latest)</td><td><span class="text-success">PASS</span> – Shell, Workspace, Panels, GovernanceProvider render correctly</td></tr>
+                <tr><td>Firefox (latest)</td><td><span class="text-success">PASS</span></td></tr>
+                <tr><td>WebKit (latest)</td><td><span class="text-success">PASS</span></td></tr>
+            </tbody>
+        </table>
+        <p>Browser verification confirmed:</p>
+        <ul style="color:#C5CED9; margin-left:1.2rem;">
+            <li>✅ Application loads successfully</li>
+            <li>✅ Institutional Shell remains visible</li>
+            <li>✅ GovernanceProvider wraps the entire Shell (nested inside IdentityProvider)</li>
+            <li>✅ GovernanceDashboard renders correctly</li>
+            <li>✅ GovernanceStatus displays governance summary</li>
+            <li>✅ RibbonContextualControl appears in the Ribbon</li>
+            <li>✅ Policies, approvals, workflows, compliance, and audits display correctly</li>
+            <li>✅ No console errors or runtime exceptions</li>
+            <li>✅ No visual regressions from Phase‑23</li>
+        </ul>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-15"><h2><span class="section-number">15</span> Repository Tree</h2>
+        <details>
+            <summary>Show / Hide tree of key directories</summary>
+            <div class="content">
+src/
+├── governance/
+│   ├── contracts/
+│   │   └── GovernanceContracts.ts
+│   ├── events/
+│   │   └── GovernanceEventHandlers.ts
+│   ├── models/
+│   │   └── GovernanceModels.ts
+│   ├── runtime/
+│   │   └── GovernanceRuntime.ts
+│   ├── services/
+│   │   ├── ApprovalService.ts
+│   │   ├── ComplianceService.ts
+│   │   ├── GovernanceService.ts
+│   │   ├── PolicyService.ts
+│   │   └── WorkflowService.ts
+│   ├── state/
+│   │   └── GovernanceState.ts
+│   ├── backend-composition.ts
+│   ├── types.ts
+│   └── index.ts
+├── governance-ui/
+│   ├── components/
+│   │   ├── GovernanceStatus.tsx
+│   │   └── index.ts
+│   ├── dashboards/
+│   │   └── GovernanceDashboard.tsx
+│   ├── hooks/
+│   │   ├── useApprovals.ts
+│   │   ├── useCompliance.ts
+│   │   ├── useGovernanceContext.ts
+│   │   ├── usePolicies.ts
+│   │   ├── useWorkflows.ts
+│   │   └── index.ts
+│   ├── providers/
+│   │   └── GovernanceProvider.tsx
+│   ├── types.ts
+│   └── index.ts
+├── shell/
+│   └── hooks/
+│       └── useGovernanceRuntime.ts
+└── ribbon/
+    └── components/
+        └── RibbonContextualControl.tsx
+            </div>
+        </details>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-16"><h2><span class="section-number">16</span> Build Output</h2>
+        <pre>
+> @corei/corei-os@1.0.0 build
+> tsc -b && vite build
+
+vite v7.3.6 building client environment for production...
+✓ 2377 modules transformed.
+dist/index.html                     0.43 kB │ gzip:   0.29 kB
+dist/assets/index-BSSyXHgG.css    134.51 kB │ gzip:  13.40 kB
+dist/assets/index-CPvoiRNl.js   1,027.07 kB │ gzip: 257.14 kB
+
+(!) Some chunks are larger than 500 kB after minification.
+✓ built in 4.09s
+        </pre>
+        <p>The chunk-size warning is non‑blocking and will be addressed in a later optimization phase (Phase 30).</p>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-17"><h2><span class="section-number">17</span> Certification</h2>
+        <table>
+            <thead><tr><th>Criteria</th><th>Status</th></tr></thead>
+            <tbody>
+                <tr><td>Architecture Review</td><td><span class="text-success">PASS</span></td></tr>
+                <tr><td>Repository Audit</td><td><span class="text-success">PASS</span></td></tr>
+                <tr><td>Integration Test</td><td><span class="text-success">PASS</span></td></tr>
+                <tr><td>Browser Validation</td><td><span class="text-success">PASS</span></td></tr>
+                <tr><td>Documentation Completeness</td><td><span class="text-success">PASS</span></td></tr>
+                <tr><td>Institutional Sign‑off</td><td><span class="text-success">PASS</span></td></tr>
+            </tbody>
+        </table>
+        <p><strong>Status:</strong> <span class="badge success">CERTIFIED COMPLETE</span></p>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-18"><h2><span class="section-number">18</span> References</h2>
+        <ul>
+            <li><a href="#">DOC-11: COREI Stage‑25 Execution Constitution</a></li>
+            <li><a href="#">DOC-11 Stage‑25 Phase‑24 (Authoritative)</a></li>
+            <li><a href="#">COREI_Phase24_Reference.html (this document)</a></li>
+        </ul>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-19"><h2><span class="section-number">19</span> Appendix</h2>
+
+        <h3>A. Phase‑24 21‑Step Execution Map</h3>
+        <ol style="color:#C5CED9; margin-left:1.2rem;">
+            <li><strong>Repository Reality &amp; Governance Discovery</strong> – Baseline discovery; certification of existing governance capabilities.</li>
+            <li><strong>Governance Platform Contract Boundary</strong> – Platform‑level contracts – no runtime.</li>
+            <li><strong>Governance Domain &amp; Ownership Certification</strong> – Domain reconciliation; public/private boundaries.</li>
+            <li><strong>Governance Runtime Coordination</strong> – Singleton Runtime – single governance entry point.</li>
+            <li><strong>Governance Lifecycle Integration</strong> – Workspace lifecycle integration.</li>
+            <li><strong>Governance State &amp; Context Coordination</strong> – Governance context (policies, approvals, workflows, compliance, audits).</li>
+            <li><strong>Governance Service Integration</strong> – Service layer for governance, policy, approval, workflow, compliance.</li>
+            <li><strong>Governance Event Integration</strong> – Event‑driven governance refresh.</li>
+            <li><strong>Governance Platform Composition</strong> – Compose Runtime, Services, Context, State, Events into unified platform.</li>
+            <li><strong>Shell Governance Integration</strong> – Integrate Governance Platform with Institutional Shell.</li>
+            <li><strong>Workspace Governance Integration</strong> – Bind governance context to active workspace.</li>
+            <li><strong>Identity &amp; Organization Governance Integration</strong> – Governance relies on identity context.</li>
+            <li><strong>Governance Workflow Coordination</strong> – Workflow management and coordination.</li>
+            <li><strong>Backend Governance Platform Composition</strong> – Compose complete backend platform boundary.</li>
+            <li><strong>Frontend Governance Experience</strong> – Institutional governance experience.</li>
+            <li><strong>Shell Consumption &amp; Browser Validation</strong> – Validate Shell consumption and browser integration.</li>
+            <li><strong>Governance Diagnostics &amp; Observability</strong> – Runtime health, context integrity, policy/approval/workflow/compliance health.</li>
+            <li><strong>Platform Integration Validation</strong> – End‑to‑end integration validation.</li>
+            <li><strong>Repository &amp; Architecture Audit</strong> – Formal repository and architecture audit.</li>
+            <li><strong>Phase Certification</strong> – Formal certification.</li>
+            <li><strong>Controlled Freeze &amp; Consumption Handoff</strong> – Freeze and handoff to Phase‑25.</li>
+        </ol>
+        <p><strong>Critical rule:</strong> Each step's implementation scope is defined by the phase document; repository reconciliation determines the exact implementation delta <strong>within</strong> that scope, not the step sequence.</p>
+
+        <h3>B. Known Issues &amp; Anti‑Drift Controls</h3>
+        <table>
+            <thead><tr><th>Issue</th><th>Mitigation</th></tr></thead>
+            <tbody>
+                <tr><td>Circular dependency (<code>governance-runtime ↔ GovernanceEventHandlers</code>)</td><td>New in Phase‑24; will be addressed in later refactoring – non‑blocking.</td></tr>
+                <tr><td>Circular dependency (<code>identity-runtime ↔ IdentityEventHandlers</code>)</td><td>Inherited from Phase‑23; non‑blocking.</td></tr>
+                <tr><td>Circular dependency (<code>intelligence-runtime ↔ IntelligenceEventHandlers</code>)</td><td>Inherited from Phase‑22; non‑blocking.</td></tr>
+                <tr><td>Circular dependency (<code>workspace-runtime ↔ workspace-loader</code>)</td><td>Inherited from earlier phases; non‑blocking.</td></tr>
+                <tr><td>Repository has many uncommitted changes (from broader work)</td><td>Phase‑24 maintained its own baseline manifest; Git cleanliness will be enforced at phase freeze.</td></tr>
+                <tr><td>Build chunk‑size warning (&gt;500 kB)</td><td>Non‑blocking; will be addressed in Phase‑30 (Performance) – not within Phase‑24.</td></tr>
+            </tbody>
+        </table>
+        <p><strong>Anti‑Drift Controls (permanent):</strong></p>
+        <ul style="color:#C5CED9; margin-left:1.2rem;">
+            <li>No Phase‑24 step implemented Phase‑25 capabilities (Institutional Scale).</li>
+            <li>No Phase‑24 step rebuilt Platform Kernel, Shell, Event, State, Registry, Runtime, Workspace, Panel, Visualization, Productivity, Intelligence, or Identity.</li>
+            <li>No Step was skipped, merged, or reordered.</li>
+            <li>Every step was validated before advancing.</li>
+        </ul>
+
+        <h3>C. Repository Identity</h3>
+        <table>
+            <thead><tr><th>Property</th><th>Value</th></tr></thead>
+            <tbody>
+                <tr><td>Branch</td><td>main</td></tr>
+                <tr><td>Commit</td><td>ac8e282</td></tr>
+                <tr><td>Tree</td><td>fd80df27</td></tr>
+                <tr><td>Working directory</td><td>~/corei/ui/corei-os</td></tr>
+                <tr><td>Total repository files</td><td>2,927</td></tr>
+            </tbody>
+        </table>
+
+        <h3>D. Phase‑24 Certification Summary</h3>
+        <pre>
+===============================================================================
+STAGE-25
+PHASE-24
+GOVERNANCE PLATFORM
+
+STATUS
+------✓ CERTIFIED
+✓ FROZEN
+✓ READY FOR CONSUMPTION
+
+PLATFORM KERNEL                     ✓ CONSUMED
+INSTITUTIONAL SHELL                 ✓ CONSUMED
+CAPABILITY PROVIDER PLATFORM        ✓ CONSUMED
+WINDOW &amp; WORKSPACE PLATFORM         ✓ CONSUMED
+PANEL &amp; VISUALIZATION PLATFORM      ✓ CONSUMED
+OPERATOR PRODUCTIVITY PLATFORM      ✓ CONSUMED
+WORKSPACE INTELLIGENCE PLATFORM     ✓ CONSUMED
+IDENTITY &amp; ORGANIZATION PLATFORM   ✓ CONSUMED
+
+GOVERNANCE RUNTIME                  ✓ CERTIFIED
+GOVERNANCE SERVICES                 ✓ CERTIFIED
+GOVERNANCE STATE                    ✓ CERTIFIED
+GOVERNANCE CONTEXT                  ✓ CERTIFIED
+GOVERNANCE EVENTS                   ✓ CERTIFIED
+LIFECYCLE INTEGRATION               ✓ CERTIFIED
+SHELL INTEGRATION                   ✓ CERTIFIED
+WORKSPACE INTEGRATION               ✓ CERTIFIED
+IDENTITY INTEGRATION                ✓ CERTIFIED
+POLICY MANAGEMENT                   ✓ CERTIFIED
+APPROVAL MANAGEMENT                 ✓ CERTIFIED
+WORKFLOW MANAGEMENT                 ✓ CERTIFIED
+COMPLIANCE MANAGEMENT               ✓ CERTIFIED
+AUDIT MANAGEMENT                    ✓ CERTIFIED
+PLATFORM COMPOSITION                ✓ CERTIFIED
+GOVERNANCE PROVIDER                 ✓ CERTIFIED
+GOVERNANCE UI COMPONENTS            ✓ CERTIFIED
+SHELL CONSUMPTION                   ✓ CERTIFIED
+DIAGNOSTICS &amp; OBSERVABILITY        ✓ CERTIFIED
+PLATFORM INTEGRATION VALIDATION     ✓ CERTIFIED
+REPOSITORY &amp; ARCHITECTURE AUDIT     ✓ CERTIFIED
+
+===============================================================================
+AUTHORIZED CHANGE BOUNDARY
+--------------------------
+PHASE-24 IS NOW FROZEN
+
+FUTURE PHASES MAY ONLY CONSUME
+THIS PLATFORM.
+
+NO REDESIGN
+NO OWNERSHIP TRANSFER
+NO DUPLICATE IMPLEMENTATION
+===============================================================================
+HANDOFF
+
+Authorized Next Phase
+STAGE-25 → PHASE-25 — Institutional Scale Platform
+
+Consumption Baseline
+✓ Platform Kernel (Phase-01–16)
+✓ Institutional Shell (Phase-17)
+✓ Capability Provider Platform (Phase-18)
+✓ Window &amp; Workspace Platform (Phase-19)
+✓ Panel &amp; Visualization Platform (Phase-20)
+✓ Operator Productivity Platform (Phase-21)
+✓ Workspace Intelligence Platform (Phase-22)
+✓ Identity &amp; Organization Platform (Phase-23)
+✓ Governance Platform (Phase-24)
+
+Phase-25 will consume all certified foundations above and begin operationalizing the Institutional Scale Platform, without redesigning or duplicating any completed capabilities.
+===============================================================================
+        </pre>
+    </section>
+
+    <div style="text-align:center;font-size:11px;color:#6E7883;border-top:1px solid #28303C;padding-top:1rem;margin-top:2rem;">
+        <p>COREI Stage‑25 Phase‑24 Reference &bull; Generated 2026-08-09 &bull; Authoritative</p>
+    </div>
+
+</main>
+</body>
+</html>

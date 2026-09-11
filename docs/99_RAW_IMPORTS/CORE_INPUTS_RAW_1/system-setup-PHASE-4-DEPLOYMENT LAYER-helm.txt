@@ -1,0 +1,74 @@
+Phase C4 — DEPLOYMENT LAYER (Helm + controlled rollout)
+
+	C4 — STEP 1: HELM INSTALLATION VALIDATION
+		helm version
+
+		OUTPUT:
+			version.BuildInfo{Version:"v3.20.2", GitCommit:"8fb76d6ab555577e98e23b7500009537a471feee", GitTreeState:"clean", GoVersion:"go1.25.9"}
+
+	C4 — STEP 2: HELM REPOSITORY CONFIGURATION
+		helm repo add bitnami https://charts.bitnami.com/bitnami
+		helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+		helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+		helm repo update
+
+	C4 — STEP 3: HELM DEPLOYMENT VALIDATION (TEST RELEASE)
+		We must validate:
+			Helm → Kubernetes deployment pipeline works end-to-end
+
+		helm install c4-test bitnami/nginx
+
+			EXPECTED OUTPUT
+				NAME: c4-test
+				STATUS: deployed
+
+		kubectl get pods
+
+	C4 — STEP 4: HELM RELEASE MANAGEMENT
+
+			helm list
+			c4-test   deployed
+			helm status c4-test
+
+			helm uninstall c4-test
+			kubectl get pods
+
+	🔷 C4 — DEPLOYMENT LAYER (Helm)
+		🧠 MACRO ROLE
+			Declarative deployment + version control
+
+		✔ WHAT YOU DID
+			Installed Helm
+			Added repositories:
+				Bitnami
+				ingress-nginx
+				prometheus-community
+			Deployed test workload (nginx)
+			Validated:
+				install
+				status
+				uninstall
+
+		⚙️ FINAL RULES
+			NO kubectl apply (for apps)
+			ONLY Helm deployments
+			NO latest tags
+			VALUES.yaml = source of truth
+
+		🧠 VALUE
+			Version-controlled deployments
+			Reproducibility
+			Rollback capability
+
+	⚠️ IMPORTANT RULES (FROM NOW ON)
+		1. NO DIRECT kubectl APPLY
+			All deployments → Helm only
+
+		2. NO “latest” TAGS
+			Always pin image versions
+
+		3. ALWAYS VERSION CONTROL VALUES
+			Helm values.yaml = source of truth
+
+		4. DEPLOYMENT FLOW
+			Build → Save → Import → Helm deploy

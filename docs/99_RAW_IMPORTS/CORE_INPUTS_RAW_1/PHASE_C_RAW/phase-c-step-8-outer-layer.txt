@@ -1,0 +1,651 @@
+PHASE C — STEP 8: OUTPUT LAYER
+
+Reference ID: CORE-TRADING-SYSTEM-PHASE-C-STEP8-OUTPUT-LAYER-V1-2026-04-09
+Continuity: Step 1–7 LOCKED (Architecture → Infra → Event → State → Orchestration → Execution → Recovery)
+Position: FINAL INFRA OUTPUT LAYER BEFORE PHASE D
+
+1. PHASE IDENTITY LAYER
+	1.1 Phase Name
+
+		Phase C — Step 8: Output Layer
+
+	1.2 Phase Role
+
+		Defines the deterministic output projection system that:
+
+			converts State + Snapshot → Execution-Ready Outputs
+			produces execution_instruction_stream
+			binds state + snapshot + lineage + orchestration metadata
+			guarantees bit-level replay equivalence
+
+		This is the final transformation boundary of Phase C.
+
+	1.3 Phase Objective
+
+		Construct a deterministic output system such that:
+
+		Output(t) = G(State(t), Snapshot(t), Orchestration_Metadata)
+
+		Guarantees:
+
+			identical State → identical Output (bit-level)
+			replay(EventLog) → identical Output
+			zero transformation ambiguity
+			full lineage preservation
+
+	1.4 Why This Phase Exists
+
+		Without Step 8:
+
+			execution layer receives ambiguous instructions
+			state → instruction mapping becomes non-deterministic
+			replay output mismatch → audit failure
+			lineage chain breaks before Phase D
+			cross-partition outputs become inconsistent
+
+		Aligned with Phase C macro:
+
+		Step 8 = Output Formation Layer
+
+2. PHASE SCOPE CONTROL
+
+	2.1 INCLUDED (STRICT)
+		output entity definition
+		execution_instruction_stream construction
+		state → output projection rules
+		lineage propagation to output
+		snapshot binding
+		orchestration metadata binding
+		deterministic ordering + serialization
+		replay equivalence guarantees
+
+	2.2 EXCLUDED (STRICT)
+		state computation (Step 4)
+		execution logic (Step 6)
+		orchestration logic (Step 5)
+		constraint enforcement (Phase D)
+		event schema (Step 3)
+
+	2.3 Boundary Rule (CRITICAL)
+
+		Output Layer MUST:
+
+			be pure projection
+			depend ONLY on:
+			state
+			snapshot
+			orchestration metadata
+
+		Output Layer MUST NOT:
+
+			modify state
+			introduce new logic
+			infer missing data
+			access external inputs
+
+		Violation → SYSTEM INVALID
+
+3. ARCHITECTURAL INTENT LAYER
+	3.1 Core Principles (MANDATORY)
+
+		P1 — Pure Projection Principle
+
+			Output MUST be:
+
+				Output = deterministic_projection(State)
+
+			NO transformation logic allowed.
+
+		P2 — Deterministic Output Guarantee
+
+			Same:
+
+				State + Snapshot + Orchestration_Metadata
+
+			→ identical output (bit-level)
+
+		P3 — Replay Equivalence
+			Replay(EventLog) → identical Output
+
+				Aligned with Step 7 replay invariant
+
+		P4 — Canonical Dependency
+
+			Output depends ONLY on:
+
+				canonical_input_set_C
+
+			No external or runtime dependency allowed.
+
+		P5 — Lineage Continuity
+
+			Full chain MUST be preserved:
+
+				Event → ExecutionTask → State → Snapshot → Output
+
+		P6 — No Hidden Logic
+
+			Output MUST NOT:
+
+				interpret state
+				infer missing instructions
+				reorder implicitly
+				P7 — Deterministic Ordering
+
+			All output elements MUST follow strict ordering rules.
+
+	3.2 Architectural Model
+			Output = G(
+				StateSnapshot,
+				ExecutionState,
+				Orchestration_Metadata
+			)
+
+		Where:
+
+			G = pure deterministic projection
+			no mutation
+			no branching
+
+	3.3 System Positioning
+
+		Event Model (Step 3)
+				↓
+		State Model (Step 4)
+				↓
+		Execution Engine (Step 6)
+				↓
+		Recovery & Replay (Step 7)
+				↓
+		OUTPUT LAYER (THIS)
+				↓
+		Phase D (Execution & Enforcement)
+
+4. DOMAIN MODEL DEFINITION
+	4.1 Core Entity — ExecutionReadyOutput
+			execution_ready_output = {
+				execution_instruction_stream
+				state_reference
+				snapshot_reference
+				lineage_hash
+				orchestration_metadata_reference
+			}
+	4.2 Sub-Entities
+		E1 — ExecutionInstructionStream
+			execution_instruction_stream = {
+				instructions[]  // ordered list
+			}
+
+			Each instruction:
+
+				instruction = {
+					instruction_id
+					partition_id
+					event_id
+					task_id
+					service_id
+
+					state_component_reference
+
+					instruction_payload
+					instruction_hash
+
+					instruction_schema_version
+				}
+
+		E2 — StateReference
+			state_reference = {
+				state_hash
+				partition_id
+			}
+
+		E3 — SnapshotReference
+			snapshot_reference = {
+				snapshot_id
+				snapshot_time
+			}
+
+		E4 — LineageHash
+			lineage_hash = HASH_v1(
+					snapshot.lineage_hash +
+					orchestration_metadata_hash +
+					execution_instruction_stream_hash +
+					canonical_serialization(version_identifiers)
+				)
+
+		E5 — OrchestrationMetadataReference
+			orchestration_metadata_reference = {
+				execution_plan_hash
+				ordering_reference
+			}
+
+	4.3 Relationships
+		State → produces → ExecutionInstructionStream
+		Snapshot → binds → Output
+		ExecutionPlan → binds → Output ordering
+		Lineage → extends → Output
+
+	4.4 Ownership
+
+		All output entities owned by Phase C
+
+5. LOGIC / RULE ENGINE
+	5.1 Rule Set
+
+		R2 — Instruction Identity Rule
+			instruction_id = HASH_v1(
+				event_id + task_id + instruction_payload
+			)
+
+		R3 — Ordering Rule (GLOBAL)
+
+			GLOBAL OUTPUT ORDERING RULE (REPLACEMENT)
+
+				Instructions MUST be ordered by:
+
+				1. event_time ASC
+				2. partition_id ASC
+				3. dependency_depth ASC
+				4. service_id ASC
+				5. event_id ASC
+				6. task_id ASC
+
+				Constraint:
+
+				- merge MUST NOT re-order
+				- partition streams MUST be pre-aligned to global ordering
+
+		R4 — Multi-Partition Merge Rule
+
+				Merge MUST NOT introduce any re-ordering.
+
+				Partition streams MUST already conform to GLOBAL OUTPUT ORDERING RULE.
+
+				Merge operation MUST be:
+
+					stable
+					append-only
+					order-preserving
+
+				Any reordering → HARD FAIL
+
+
+		R5 — Lineage Propagation Rule
+			output.lineage_hash =
+				HASH_v1(snapshot.lineage_hash + instruction_stream_hash)
+
+		R6 — Replay Validation Rule
+			hash(output_live) == hash(output_replay)
+
+			Else → HARD FAIL
+
+		R7 — Canonical Serialization Rule
+
+			All outputs MUST use:
+
+			fixed field order
+			UTF-8 encoding
+			no optional fields
+			deterministic byte representation
+
+		R8 — Output Projection Function (MANDATORY)
+
+			Define projection function G as:
+
+			execution_instruction_stream = map_over_state_components:
+
+				FOR each state_component WHERE component_type == EXECUTION_STATE:
+
+					instruction = {
+						instruction_id = HASH_v1(
+							event_id +
+							task_id +
+							canonical_component_payload
+						)
+
+						partition_id = state.partition_id
+						event_id = state.event_id
+						task_id = derived from execution_plan
+
+						instruction_payload =
+							canonical_component_payload
+
+						instruction_hash =
+							HASH_v1(instruction_payload)
+					}
+
+			Constraints:
+
+				- MUST use ONLY canonical_state_payload
+				- MUST NOT transform values
+				- MUST NOT infer fields
+				- MUST preserve ordering defined in Step 4
+
+			task_id = HASH_v1(
+					event_id +
+					service_id +
+					dependency_set (ordered)
+				)
+
+		Ordering MUST match execution_plan ordering (Step 5)
+
+			Any deviation → HARD FAIL
+
+		R9 — Instruction Schema Binding Rule (MANDATORY)
+
+			instruction_payload MUST conform to:
+
+				execution_instruction_schema_v1
+
+			Constraints:
+
+			- schema MUST be:
+				- versioned
+				- immutable
+				- canonical (fixed field ordering)
+
+			- validation MUST occur BEFORE instruction_hash computation
+
+			- schema violation → HARD FAIL
+
+		R10 — Output Hash Rule (MANDATORY)
+
+			execution_ready_output_hash = HASH_v1(
+				canonical_serialization(execution_ready_output WITHOUT execution_ready_output_hash)
+			)
+
+			Constraints:
+
+			- MUST use canonical serialization (R7)
+			- MUST exclude self-reference field
+			- MUST be computed AFTER full output assembly
+
+		R11 — Version Binding Rule (MANDATORY)
+
+			Output MUST bind to version_identifiers:
+
+			execution_ready_output.version_identifiers =
+				canonical_input_set_C.version_identifiers
+
+			Constraints:
+
+			- version mismatch between replay and live → HARD FAIL
+
+		Lineage MUST include version_identifiers.
+
+			Any mismatch in version_identifiers MUST produce different lineage_hash.
+
+			Violation → HARD FAIL
+
+
+	5.2 Rule Execution Order (STRICT)
+		State Validation
+		Snapshot Validation
+		Instruction Extraction
+		Instruction Ordering
+		Lineage Construction
+		Output Serialization
+
+6. FLOW ARCHITECTURE
+
+	6.0 Canonical Input
+		canonical_input_set_C = {
+			state_snapshot
+			orchestration_metadata
+			configuration_snapshot
+			version_identifiers
+		}
+
+		orchestration_metadata MUST be:
+
+			- immutable snapshot
+			- hash-identifiable:
+				orchestration_metadata_hash = HASH_v1(canonical_serialization(metadata))
+
+			- derived ONLY from execution_plan (Step 5)
+
+		version_identifiers = {
+				output_schema_version
+				projection_function_version
+				instruction_schema_version
+			}
+
+	6.1 Processing Flow
+		StateSnapshot
+			→ Extract Execution State
+			→ Build Instruction Stream
+			→ Order Instructions
+			→ Bind Snapshot Reference
+			→ Bind Orchestration Metadata
+			→ Compute Lineage Hash
+			→ Serialize Output
+
+	6.2 Output
+		execution_ready_output
+
+	6.5 Flow Canonicalization Rule
+		no external inputs
+		no runtime logic
+		no dynamic branching
+
+7. PIPELINE STRUCTURE
+
+	Stage 1 — Input Validation
+	Stage 2 — Instruction Extraction
+	Stage 3 — Instruction Ordering
+	Stage 4 — Lineage Construction
+	Stage 5 — Output Assembly
+	Stage 6 — Serialization
+
+	Strict sequential execution.
+
+8. CONTROL & CONSTRAINTS
+
+	8.1 Hard Rules
+		no transformation
+		no implicit ordering
+		no external dependency
+		no floating-point arithmetic
+		deterministic serialization mandatory
+
+		All numeric values in instruction_payload MUST:
+
+			- use fixed-point representation (integer / 10^6)
+			- follow Step 2 numeric constraints
+
+	8.2 Guardrails
+		reject incomplete state
+		reject missing snapshot
+		reject ordering ambiguity
+
+	8.3 Invariants
+		I1: Output = projection(State)
+		I2: Replay produces identical output
+		I3: Lineage chain preserved
+		I4: Ordering deterministic
+
+9. STATE & DATA MODEL
+
+	9.1 State Binding
+
+		Output MUST reference:
+
+			state_hash
+			snapshot_id
+
+	9.2 Data Derivation
+		execution_instruction_stream =
+			derived ONLY from execution_state
+
+		(Defined in Step 4 output projection )
+
+	9.3 Source of Truth
+		EventLog (Step 3)
+		State (Step 4)
+		Snapshot (Step 4)
+
+10. FAILURE MODEL
+
+	10.1 Failure Scenarios
+	instruction ordering mismatch
+	missing state reference
+	lineage mismatch
+	serialization inconsistency
+
+	10.2 Failure Impact
+	execution ambiguity
+	replay divergence
+	audit failure
+
+	10.3 Mitigation
+	reject output generation
+	trigger replay validation
+
+11. ASSUMPTION REGISTER
+	State is deterministic (validated in Step 4)
+	Snapshot is valid (Step 7 validated)
+	Orchestration metadata is deterministic (Step 5)
+
+12. VALIDATION FRAMEWORK
+
+	12.1 Method
+		Red Team (ordering attacks, partition merge attacks)
+		Blue Team (determinism validation)
+
+	12.2 Core Tests
+		replay equivalence
+		ordering determinism
+		lineage continuity
+
+	12.3 Acceptance
+
+		PASS / FAIL only
+
+13. OUTPUT (DELIVERABLE SPEC)
+
+
+		execution_ready_output = {
+			execution_instruction_stream
+			state_reference
+			snapshot_reference
+			lineage_hash
+			orchestration_metadata_reference
+
+			version_identifiers
+			execution_ready_output_hash
+		}
+
+		NO optional fields allowed
+
+14. TRACEABILITY MAPPING
+	Event → ExecutionTask → State → Snapshot → Output
+
+	Every instruction MUST map to:
+
+	originating event_id
+	originating task_id
+
+	Instruction → StateComponent mapping REQUIRED:
+
+		instruction.state_component_reference.component_hash
+			MUST equal
+		state_component.component_hash
+
+15. CROSS-PHASE CONSISTENCY
+	Phase C produces execution-ready output
+	Phase D consumes without reinterpretation
+
+16. SCALABILITY MODEL
+	supports multi-partition output streams
+	deterministic merge across partitions
+	linear scalability with partitions
+
+17. GOVERNANCE INTEGRATION
+	output schema versioned
+	hash-based audit
+	change requires approval
+
+	All outputs MUST include version identifiers:
+
+		output_schema_version
+		projection_function_version
+		instruction_schema_version
+
+		Constraints:
+
+		- versions MUST be immutable
+		- versions MUST be part of lineage_hash
+		- version change requires governance approval
+
+	GLOBAL INFRA TRANSPORT RULE (MANDATORY)
+
+		OMS / EMS / Broker Runtime MUST:
+
+		NOT modify:
+			order_id
+			trade_intent_id
+			size
+			direction
+			instrument
+			lineage_hash_reference
+
+		NOT introduce:
+			timing drift
+			sequencing changes
+			reordering
+
+		NOT influence:
+			execution decisions
+			risk evaluation
+			policy outcomes
+
+		Infra layer = TRANSPORT ONLY
+
+		All transformations MUST originate ONLY from Phase D logic.
+
+		Violation → SYSTEM INVALID
+
+18. AUDITABILITY & OBSERVABILITY
+	full lineage trace
+	output hash verification
+	replay validation logs
+
+	Output hash MUST be:
+
+		- logged
+		- persisted
+		- used for replay validation
+
+		hash(output_live) == hash(output_replay)
+
+19. RISK CONSIDERATIONS
+	output inconsistency = execution risk
+	mitigated via deterministic projection + replay validation
+
+20. FAILURE CONDITION (PHASE LEVEL)
+
+	Phase fails if:
+
+		output differs under replay
+		ordering ambiguity exists
+		lineage breaks
+		non-canonical serialization detected
+
+21. PHASE LOCK CRITERIA
+
+	Phase locked ONLY if:
+
+	all 21 sections complete
+	output determinism proven
+	replay equivalence validated
+	lineage continuity verified
+	no ambiguity exists
+
+FINAL STATUS
+
+	Phase C — Step 8: OUTPUT LAYER
+
+	Deterministic Projection Layer: ✅
+	Replay-Safe Output System: ✅
+	Lineage Continuity Preserved: ✅
+	Phase D Interface Defined: ✅

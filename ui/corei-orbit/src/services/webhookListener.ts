@@ -4,7 +4,7 @@ import { log } from './loggerService';
 // This service can be used to listen for incoming webhooks from n8n
 // For now, we simulate receiving webhook events via a setInterval.
 
-let listenerInterval: NodeJS.Timeout | null = null;
+let listenerInterval: number | null = null;
 
 export function startWebhookListener() {
   if (listenerInterval) return;

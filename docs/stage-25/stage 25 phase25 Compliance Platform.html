@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>COREI Phase 25 Reference</title>
+    <style>
+        /* ============================================================
+           COREI INSTITUTIONAL DOCUMENTATION SYSTEM
+           ============================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0A0D12;
+            color: #E3E7EC;
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+            font-size: 13px;
+            line-height: 1.5;
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .sidebar-wrapper {
+            display: flex;
+            flex-shrink: 0;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 200px;
+            min-width: 140px;
+            max-width: 320px;
+            background: #0E1219;
+            border-right: 1px solid #28303C;
+            padding: 0.8rem 0.3rem 0.8rem 0.5rem;
+            overflow-y: auto;
+            overflow-x: hidden;
+            resize: horizontal;
+            height: 100vh;
+            flex-shrink: 0;
+        }
+
+        .sidebar::-webkit-scrollbar { width: 4px; }
+        .sidebar::-webkit-scrollbar-thumb { background: #28303C; border-radius: 2px; }
+        .sidebar::-webkit-scrollbar-track { background: transparent; }
+        .sidebar::-webkit-resizer { background: #28303C; border-radius: 0 0 4px 0; }
+
+        .sidebar .brand {
+            font-size: 13px;
+            font-weight: 600;
+            color: #C6A46A;
+            letter-spacing: 0.04em;
+            padding: 0 0.3rem 0.4rem 0.3rem;
+            border-bottom: 1px solid #28303C;
+            margin-bottom: 0.6rem;
+        }
+        .sidebar .brand span { color: #E3E7EC; font-weight: 300; }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.1rem;
+        }
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            padding: 0.2rem 0.3rem;
+            color: #9AA5B1;
+            text-decoration: none;
+            font-size: 12px;
+            border-radius: 3px;
+            transition: background 0.1s, color 0.1s;
+            line-height: 1.3;
+            white-space: nowrap;
+        }
+        .sidebar-nav a:hover { background: #1E2834; color: #E3E7EC; }
+        .sidebar-nav a.active { background: #28303C; color: #E3E7EC; font-weight: 500; }
+        .sidebar-nav .section-number {
+            display: inline-block;
+            width: 22px;
+            color: #6E7883;
+            font-size: 11px;
+            flex-shrink: 0;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem 2.5rem;
+            max-width: 1200px;
+            min-width: 0;
+            overflow-x: auto;
+        }
+
+        h1 { font-size: 26px; font-weight: 600; letter-spacing: -0.02em; color: #E3E7EC; margin-bottom: 0.25rem; }
+        h2 { font-size: 18px; font-weight: 600; color: #C6A46A; margin: 1.8rem 0 0.8rem 0; border-bottom: 1px solid #28303C; padding-bottom: 0.3rem; }
+        h3 { font-size: 15px; font-weight: 500; color: #C6A46A; margin: 1.2rem 0 0.5rem 0; }
+        h4 { font-size: 13px; font-weight: 500; color: #9AA5B1; margin: 1rem 0 0.3rem 0; }
+        p { margin-bottom: 0.4rem; }
+        a { color: #8BB4F0; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        code { font-family: 'JetBrains Mono', monospace; font-size: 12px; background: #121821; padding: 0.1rem 0.4rem; border: 1px solid #28303C; border-radius: 3px; color: #E3E7EC; }
+        pre {
+            background: #0E1219;
+            border: 1px solid #28303C;
+            border-radius: 6px;
+            padding: 0.8rem 1rem;
+            overflow: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            line-height: 1.5;
+            color: #C5CED9;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        hr { border: none; border-top: 1px solid #28303C; margin: 1.5rem 0; }
+
+        .document-header {
+            background: #121821;
+            border: 1px solid #28303C;
+            border-radius: 6px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .document-header .org { font-size: 14px; font-weight: 600; color: #C6A46A; letter-spacing: 0.05em; }
+        .document-header .title { font-size: 26px; font-weight: 600; color: #E3E7EC; margin: 0.2rem 0; }
+        .document-header .subtitle { font-size: 16px; color: #9AA5B1; }
+        .document-header .meta-line {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            margin-top: 0.6rem;
+            font-size: 13px;
+        }
+        .document-header .meta-line .item { display: flex; align-items: baseline; gap: 0.3rem; }
+        .document-header .meta-line .label { color: #6E7883; text-transform: uppercase; font-size: 11px; letter-spacing: 0.04em; }
+        .document-header .meta-line .value { color: #E3E7EC; font-weight: 500; }
+
+        .badge {
+            display: inline-block;
+            background: #28303C;
+            padding: 0.1rem 0.6rem;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #C6A46A;
+            letter-spacing: 0.02em;
+            margin-left: 0.3rem;
+        }
+        .badge.success { background: #1F3A2A; color: #52A36B; }
+        .badge.warning { background: #3D3420; color: #D1A64A; }
+        .badge.danger { background: #3D2020; color: #B95A5A; }
+
+        .executive-summary {
+            background: #121821;
+            border: 1px solid #28303C;
+            border-radius: 6px;
+            padding: 0.8rem 1.2rem;
+            margin-bottom: 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.3rem 2rem;
+        }
+        .executive-summary .item { display: flex; flex-direction: column; }
+        .executive-summary .item .label { font-size: 11px; text-transform: uppercase; color: #6E7883; letter-spacing: 0.04em; }
+        .executive-summary .item .value { font-size: 14px; font-weight: 500; color: #E3E7EC; }
+
+        table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 0.6rem 0 1rem 0; }
+        th { background: #18202A; color: #9AA5B1; font-weight: 600; text-align: left; padding: 0.3rem 0.5rem; border: 1px solid #28303C; font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; }
+        td { padding: 0.25rem 0.5rem; border: 1px solid #28303C; vertical-align: top; background: #0E1219; }
+        tr:nth-child(even) td { background: #121821; }
+
+        details { background: #0E1219; border: 1px solid #28303C; border-radius: 4px; margin: 0.6rem 0; }
+        summary { padding: 0.3rem 0.6rem; cursor: pointer; font-weight: 500; color: #C5CED9; background: #18202A; border-radius: 4px; user-select: none; font-size: 13px; }
+        summary:hover { background: #1E2834; }
+        details[open] summary { border-bottom: 1px solid #28303C; border-radius: 4px 4px 0 0; }
+        details .content { padding: 0.5rem 0.6rem; font-size: 12px; font-family: 'JetBrains Mono', monospace; white-space: pre-wrap; word-break: break-all; color: #C5CED9; overflow-x: auto; max-height: 500px; overflow-y: auto; }
+
+        .metadata-table td { padding: 0.15rem 0.5rem; }
+        .metadata-table .label { color: #6E7883; width: 140px; font-weight: 400; }
+
+        .text-muted { color: #6E7883; }
+        .text-success { color: #52A36B; }
+        .text-warning { color: #D1A64A; }
+        .text-danger { color: #B95A5A; }
+
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar-wrapper { height: auto; position: static; overflow: visible; }
+            .sidebar { width: 100% !important; height: auto; max-width: none !important; min-width: unset; resize: none; border-right: none; border-bottom: 1px solid #28303C; padding: 0.5rem; }
+            .sidebar-nav { flex-direction: row; flex-wrap: wrap; gap: 0.1rem; }
+            .sidebar-nav a { padding: 0.15rem 0.4rem; font-size: 11px; white-space: nowrap; }
+            .sidebar-nav .section-number { width: auto; margin-right: 0.1rem; }
+            .main-content { padding: 1rem; }
+            .executive-summary { grid-template-columns: 1fr; }
+            .document-header .meta-line { flex-direction: column; gap: 0.3rem; }
+        }
+
+        @media print {
+            .sidebar-wrapper { display: none; }
+            body { background: white; color: black; font-size: 11px; }
+            .main-content { padding: 1rem; max-width: 100%; }
+            .document-header, .executive-summary, table, pre, details { border-color: #ccc; background: #fafafa; }
+            .document-header .meta-line .label { color: #666; }
+            .document-header .meta-line .value { color: #000; }
+            .badge { border: 1px solid #999; background: transparent; color: #000; }
+            .badge.success { border-color: #2a7a3a; color: #2a7a3a; }
+            .badge.warning { border-color: #b08a3a; color: #b08a3a; }
+            .badge.danger { border-color: #b05a5a; color: #b05a5a; }
+            th { background: #eee; color: #333; border-color: #999; }
+            td { background: white; border-color: #999; }
+            tr:nth-child(even) td { background: #f5f5f5; }
+            .text-muted { color: #666; }
+            .text-success { color: #2a7a3a; }
+            .text-warning { color: #b08a3a; }
+            .text-danger { color: #b05a5a; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar-wrapper">
+    <aside class="sidebar">
+        <div class="brand">COREI <span>·</span> DOC</div>
+        <nav class="sidebar-nav">
+            <a href="#sec-01"><span class="section-number">01</span> Executive Summary</a>
+            <a href="#sec-02"><span class="section-number">02</span> Scope</a>
+            <a href="#sec-03"><span class="section-number">03</span> Architecture</a>
+            <a href="#sec-04"><span class="section-number">04</span> Ownership</a>
+            <a href="#sec-05"><span class="section-number">05</span> Responsibilities</a>
+            <a href="#sec-06"><span class="section-number">06</span> Dependencies</a>
+            <a href="#sec-07"><span class="section-number">07</span> Contracts</a>
+            <a href="#sec-08"><span class="section-number">08</span> Interfaces</a>
+            <a href="#sec-09"><span class="section-number">09</span> Runtime</a>
+            <a href="#sec-10"><span class="section-number">10</span> Public API</a>
+            <a href="#sec-11"><span class="section-number">11</span> Components</a>
+            <a href="#sec-12"><span class="section-number">12</span> File Inventory</a>
+            <a href="#sec-13"><span class="section-number">13</span> Validation</a>
+            <a href="#sec-14"><span class="section-number">14</span> Browser Validation</a>
+            <a href="#sec-15"><span class="section-number">15</span> Repository Tree</a>
+            <a href="#sec-16"><span class="section-number">16</span> Build Output</a>
+            <a href="#sec-17"><span class="section-number">17</span> Certification</a>
+            <a href="#sec-18"><span class="section-number">18</span> References</a>
+            <a href="#sec-19"><span class="section-number">19</span> Appendix</a>
+        </nav>
+    </aside>
+</div>
+
+<main class="main-content">
+
+    <header class="document-header">
+        <div class="org">COREI · Institutional Operating Platform</div>
+        <div class="title">Stage 25 · Phase 25</div>
+        <div class="subtitle">Compliance Platform</div>
+        <div class="meta-line">
+            <span class="item"><span class="label">Status</span><span class="value"><span class="badge success">CERTIFIED COMPLETE</span></span></span>
+            <span class="item"><span class="label">Version</span><span class="value">25.25.0</span></span>
+            <span class="item"><span class="label">Repository</span><span class="value">corei</span></span>
+            <span class="item"><span class="label">Commit</span><span class="value">ac8e282</span></span>
+            <span class="item"><span class="label">Tag</span><span class="value">stage25-phase25-certified-v1</span></span>
+            <span class="item"><span class="label">Generated</span><span class="value">2026-08-10</span></span>
+        </div>
+    </header>
+
+    <section class="executive-summary">
+        <div class="item"><span class="label">Purpose</span><span class="value">Operationalize institutional compliance, controls, obligations, evidence, exceptions, monitoring, and reporting.</span></div>
+        <div class="item"><span class="label">Ownership</span><span class="value">Compliance Platform Team</span></div>
+        <div class="item"><span class="label">Consumers</span><span class="value">Shell, Workspace, Panels, Governance, Identity, Intelligence</span></div>
+        <div class="item"><span class="label">Providers</span><span class="value">Platform Kernel (01–16), Shell (17), Capability Provider (18), Workspace (19), Panel (20), Productivity (21), Intelligence (22), Identity (23), Governance (24)</span></div>
+        <div class="item"><span class="label">Protected Boundaries</span><span class="value">src/kernel/, src/platform/, src/providers/, src/shell/, src/workspaces/, src/workbench/, src/visualization/, src/operator-productivity/, src/intelligence/, src/identity/, src/identity-ui/, src/governance/, src/governance-ui/</span></div>
+        <div class="item"><span class="label">Repository Scope</span><span class="value">src/compliance/ (9 files), src/compliance-ui/ (13 files), src/shell/hooks/ (1)</span></div>
+        <div class="item"><span class="label">Certification</span><span class="value"><span class="text-success">PASSED</span></span></div>
+        <div class="item"><span class="label">Validation</span><span class="value"><span class="text-success">PASSED</span></span></div>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-01"><h2><span class="section-number">01</span> Executive Summary</h2>
+        <p><strong>Phase‑25</strong> delivers the <strong>Compliance Platform</strong> – the institutional capability that operationalizes regulatory compliance, internal controls, policy conformance, audit readiness, obligation tracking, evidence management, exception handling, monitoring, and compliance reporting across the COREI‑OS operating environment. It consumes the completed Platform Kernel (Phases 01–16) and all preceding Platform Enablement phases (17–24), and <strong>operationalises</strong> existing compliance foundations – <strong>without rebuilding</strong> any of them.</p>
+        <p>The phase follows the <strong>Platform Enablement</strong> philosophy:</p>
+        <blockquote style="color:#C5CED9; margin:0.5rem 0 0.5rem 1.2rem;"><strong>Consume → Integrate → Coordinate → Operationalize → Validate → Freeze</strong></blockquote>
+        <p>Phase‑25 provides:</p>
+        <ul style="color:#C5CED9; margin-left:1.2rem;">
+            <li>✅ Compliance Runtime – single orchestration entry point</li>
+            <li>✅ Compliance Context – unified institutional compliance context</li>
+            <li>✅ Compliance Services – controls, obligations, evidence, exceptions, monitoring, reporting</li>
+            <li>✅ Compliance State – persistent compliance state</li>
+            <li>✅ Event Integration – consuming identity, governance, workspace, and intelligence events</li>
+            <li>✅ Lifecycle Integration – workspace‑aware lifecycle (init, activate, refresh, suspend, resume, dispose)</li>
+            <li>✅ Multi‑Workspace Coordination – per‑workspace compliance context</li>
+            <li>✅ Shell Integration – compliance status in the shell</li>
+            <li>✅ Workspace Integration – workspace‑aware compliance</li>
+            <li>✅ Governance &amp; Identity Integration – policy‑aware and identity‑aware compliance</li>
+            <li>✅ Diagnostics &amp; Observability – compliance health and diagnostics</li>
+            <li>✅ Compliance Dashboard – institutional compliance visualization</li>
+        </ul>
+        <p><strong>Current Status:</strong> Phase‑25 is <strong>certified complete</strong> and frozen. All 21 steps have been implemented, validated, and the repository is ready for Phase‑26 consumption.</p>
+        <table class="metadata-table">
+            <tr><td class="label">Purpose</td><td>Operationalize institutional compliance, controls, obligations, evidence, exceptions, monitoring, and reporting</td></tr>
+            <tr><td class="label">Ownership</td><td>Compliance Platform Team</td></tr>
+            <tr><td class="label">Consumers</td><td>Shell, Workspace, Panels, Governance, Identity, Intelligence</td></tr>
+            <tr><td class="label">Providers</td><td>Platform Kernel (01–16), Shell (17), Capability Provider (18), Workspace (19), Panel (20), Productivity (21), Intelligence (22), Identity (23), Governance (24)</td></tr>
+            <tr><td class="label">Protected Boundaries</td><td>src/kernel/, src/platform/, src/providers/, src/shell/, src/workspaces/, src/workbench/, src/visualization/, src/operator-productivity/, src/intelligence/, src/identity/, src/identity-ui/, src/governance/, src/governance-ui/</td></tr>
+            <tr><td class="label">Repository Scope</td><td>src/compliance/ (9 files), src/compliance-ui/ (13 files), src/shell/hooks/ (1)</td></tr>
+            <tr><td class="label">Certification</td><td><span class="text-success">PASSED</span></td></tr>
+            <tr><td class="label">Validation</td><td><span class="text-success">PASSED</span></td></tr>
+        </table>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-02"><h2><span class="section-number">02</span> Scope</h2>
+        <table>
+            <thead><tr><th>Category</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td>In Scope</td><td>Compliance Runtime, Services, State, Context, Events, Controls, Obligations, Evidence, Exceptions, Monitoring, Reporting, Dashboard, Workspace integration, Shell integration, Governance integration, Identity integration, Diagnostics, Lifecycle coordination</td></tr>
+                <tr><td>Out of Scope</td><td>Risk Platform (Phase 26), Security Platform (Phase 27), Trading (Phase 28+), implementation of new compliance engines (consumes existing)</td></tr>
+                <tr><td>Consumes</td><td>Platform Kernel (01–16), Shell (17), Capability Provider (18), Workspace (19), Panel (20), Productivity (21), Intelligence (22), Identity (23), Governance (24)</td></tr>
+                <tr><td>Provides</td><td>ComplianceRuntime public API, ComplianceProvider, useCompliance hooks, ComplianceDashboard, ComplianceStatus</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-03"><h2><span class="section-number">03</span> Architecture</h2>
+        <p>The Phase‑25 architecture follows the institutional layered model. It is organised into three execution blocks:</p>
+        <ol style="color:#C5CED9; margin-left:1.2rem;">
+            <li><strong>Repository Truth</strong> (Steps 01–03) – baseline discovery, contract boundary, domain ownership.</li>
+            <li><strong>Operational Implementation</strong> (Steps 04–15) – runtime, lifecycle, state, context, services, events, integrations.</li>
+            <li><strong>Validation &amp; Freeze</strong> (Steps 16–21) – shell consumption, diagnostics, integration validation, audit, certification, freeze.</li>
+        </ol>
+        <p>The target composition chain is:</p>
+        <pre>Platform Kernel (01–16)
+    ↓
+Institutional Shell (17)
+    ↓
+Capability Provider Platform (18)
+    ↓
+Window &amp; Workspace Platform (19)
+    ↓
+Panel &amp; Visualization Platform (20)
+    ↓
+Operator Productivity Platform (21)
+    ↓
+Workspace Intelligence Platform (22)
+    ↓
+Identity &amp; Organization Platform (23)
+    ↓
+Governance Platform (24)
+    ↓
+Compliance Platform (25)
+    │
+    ├── Compliance Runtime (orchestration)
+    ├── Compliance Services (business coordination)
+    ├── Compliance Context (unified compliance context)
+    ├── Compliance State (persisted state)
+    ├── Compliance Event Handlers (event consumption)
+    ├── Shell Integration (status)
+    ├── Workspace Integration (workspace context)
+    ├── Governance Integration (policy context)
+    ├── Identity Integration (authority context)
+    ├── Compliance Dashboard (visualization)
+    └── Compliance Status (operator visibility)</pre>
+        <p>Compliance ownership remains with Phase‑25; all consumed platforms are used through their public APIs.</p>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-04"><h2><span class="section-number">04</span> Ownership</h2>
+        <table>
+            <thead><tr><th>Component</th><th>Owner</th><th>Repository Path</th></tr></thead>
+            <tbody>
+                <tr><td>Compliance Runtime</td><td>Compliance Platform Team</td><td>src/compliance/runtime/</td></tr>
+                <tr><td>Compliance Services</td><td>Compliance Platform Team</td><td>src/compliance/services/</td></tr>
+                <tr><td>Compliance State</td><td>Compliance Platform Team</td><td>src/compliance/state/</td></tr>
+                <tr><td>Compliance Context</td><td>Compliance Platform Team</td><td>src/compliance/state/</td></tr>
+                <tr><td>Compliance Events</td><td>Compliance Platform Team</td><td>src/compliance/events/</td></tr>
+                <tr><td>Compliance Models</td><td>Compliance Platform Team</td><td>src/compliance/models/</td></tr>
+                <tr><td>Compliance Contracts</td><td>Compliance Platform Team</td><td>src/compliance/contracts/</td></tr>
+                <tr><td>Compliance Provider</td><td>Compliance Platform Team</td><td>src/compliance-ui/providers/</td></tr>
+                <tr><td>Compliance Hooks</td><td>Compliance Platform Team</td><td>src/compliance-ui/hooks/</td></tr>
+                <tr><td>Compliance Dashboard</td><td>Compliance Platform Team</td><td>src/compliance-ui/dashboards/</td></tr>
+                <tr><td>Compliance Status</td><td>Compliance Platform Team</td><td>src/compliance-ui/components/</td></tr>
+                <tr><td>Shell Hook (useComplianceRuntime)</td><td>Compliance Platform Team</td><td>src/shell/hooks/useComplianceRuntime.ts</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-05"><h2><span class="section-number">05</span> Responsibilities</h2>
+        <table>
+            <thead><tr><th>Responsibility</th><th>Owner</th></tr></thead>
+            <tbody>
+                <tr><td>Runtime orchestration (initialize, activate, refresh, suspend, resume, dispose)</td><td>Compliance Runtime</td></tr>
+                <tr><td>Control coordination</td><td>Compliance Services</td></tr>
+                <tr><td>Obligation coordination</td><td>Compliance Services</td></tr>
+                <tr><td>Evidence coordination</td><td>Compliance Services</td></tr>
+                <tr><td>Exception coordination</td><td>Compliance Services</td></tr>
+                <tr><td>Monitoring coordination</td><td>Compliance Services</td></tr>
+                <tr><td>Reporting coordination</td><td>Compliance Services</td></tr>
+                <tr><td>State persistence</td><td>Compliance State</td></tr>
+                <tr><td>Event subscription and handling</td><td>Compliance Event Handlers</td></tr>
+                <tr><td>React context provision</td><td>Compliance Provider</td></tr>
+                <tr><td>Dashboard presentation</td><td>Compliance Dashboard</td></tr>
+                <tr><td>Shell integration</td><td>useComplianceRuntime hook</td></tr>
+                <tr><td>Public API exposure</td><td>src/compliance/index.ts</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-06"><h2><span class="section-number">06</span> Dependencies</h2>
+        <table>
+            <thead><tr><th>Dependency</th><th>Type</th><th>Purpose</th></tr></thead>
+            <tbody>
+                <tr><td>Platform Kernel (Phases 01–16)</td><td>Internal</td><td>Runtime, lifecycle, state, events, logging, diagnostics, health</td></tr>
+                <tr><td>Institutional Shell (Phase 17)</td><td>Internal</td><td>Shell regions, RightRegion</td></tr>
+                <tr><td>Capability Provider Platform (Phase 18)</td><td>Internal</td><td>Provider resolution</td></tr>
+                <tr><td>Window &amp; Workspace Platform (Phase 19)</td><td>Internal</td><td>Workspace lifecycle, context</td></tr>
+                <tr><td>Panel &amp; Visualization Platform (Phase 20)</td><td>Internal</td><td>Panel framework</td></tr>
+                <tr><td>Operator Productivity Platform (Phase 21)</td><td>Internal</td><td>Operator activity</td></tr>
+                <tr><td>Workspace Intelligence Platform (Phase 22)</td><td>Internal</td><td>Operational intelligence</td></tr>
+                <tr><td>Identity &amp; Organization Platform (Phase 23)</td><td>Internal</td><td>Identity, organization, roles, permissions</td></tr>
+                <tr><td>Governance Platform (Phase 24)</td><td>Internal</td><td>Governance policies, decisions, approvals</td></tr>
+                <tr><td>React</td><td>External</td><td>UI rendering</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-07"><h2><span class="section-number">07</span> Contracts</h2>
+        <p>The following contracts have been established and certified during Phase‑25 implementation.</p>
+        <details>
+            <summary>ComplianceRuntimeContract</summary>
+            <div class="content">
+export interface ComplianceRuntimeContract {
+  // Context access
+  getComplianceContext(): ComplianceContext;
+  getControls(): ComplianceControl[];
+  getObligations(): ComplianceObligation[];
+  getEvidence(): ComplianceEvidence[];
+  getExceptions(): ComplianceException[];
+  getMonitoring(): ComplianceMonitoring[];
+  getReports(): ComplianceReport[];
+
+  // Lifecycle
+  initialize(): void;
+  activate(): void;
+  refresh(): void;
+  suspend(): void;
+  resume(): void;
+  dispose(): void;
+
+  // Workspace binding
+  bindToWorkspace(workspaceId: string): void;
+  unbindFromWorkspace(): void;
+
+  // Diagnostics
+  getDiagnostics(): any;
+}
+            </div>
+        </details>
+        <details>
+            <summary>ComplianceContext</summary>
+            <div class="content">
+export interface ComplianceContext {
+  controls: ComplianceControl[];
+  obligations: ComplianceObligation[];
+  evidence: ComplianceEvidence[];
+  exceptions: ComplianceException[];
+  monitoring: ComplianceMonitoring[];
+  reports: ComplianceReport[];
+  workspaceId: string | null;
+}
+            </div>
+        </details>
+        <details>
+            <summary>ComplianceControl</summary>
+            <div class="content">
+export interface ComplianceControl {
+  id: string;
+  name: string;
+  description: string;
+  category: string;
+  status: 'active' | 'inactive' | 'review';
+  owner: string;
+  implemented: boolean;
+}
+            </div>
+        </details>
+        <details>
+            <summary>ComplianceObligation</summary>
+            <div class="content">
+export interface ComplianceObligation {
+  id: string;
+  name: string;
+  description: string;
+  regulation: string;
+  status: 'pending' | 'compliant' | 'non-compliant' | 'exempt';
+  dueDate?: string;
+  assignedTo: string;
+}
+            </div>
+        </details>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-08"><h2><span class="section-number">08</span> Interfaces</h2>
+        <table>
+            <thead><tr><th>Interface</th><th>File</th><th>Purpose</th></tr></thead>
+            <tbody>
+                <tr><td><code>ComplianceRuntime</code></td><td>src/compliance/runtime/ComplianceRuntime.ts</td><td>Main runtime orchestrator</td></tr>
+                <tr><td><code>ComplianceService</code></td><td>src/compliance/services/ComplianceService.ts</td><td>Core compliance coordination</td></tr>
+                <tr><td><code>ComplianceState</code></td><td>src/compliance/state/ComplianceState.ts</td><td>Persisted state</td></tr>
+                <tr><td><code>ComplianceEventHandlers</code></td><td>src/compliance/events/ComplianceEventHandlers.ts</td><td>Event subscription</td></tr>
+                <tr><td><code>ComplianceProvider</code></td><td>src/compliance-ui/providers/ComplianceProvider.tsx</td><td>React context provider</td></tr>
+                <tr><td><code>useCompliance</code></td><td>src/compliance-ui/providers/ComplianceProvider.tsx</td><td>React hook to access runtime</td></tr>
+                <tr><td><code>useControls</code></td><td>src/compliance-ui/hooks/useControls.ts</td><td>Hook for controls</td></tr>
+                <tr><td><code>useObligations</code></td><td>src/compliance-ui/hooks/useObligations.ts</td><td>Hook for obligations</td></tr>
+                <tr><td><code>useEvidence</code></td><td>src/compliance-ui/hooks/useEvidence.ts</td><td>Hook for evidence</td></tr>
+                <tr><td><code>useExceptions</code></td><td>src/compliance-ui/hooks/useExceptions.ts</td><td>Hook for exceptions</td></tr>
+                <tr><td><code>useMonitoring</code></td><td>src/compliance-ui/hooks/useMonitoring.ts</td><td>Hook for monitoring</td></tr>
+                <tr><td><code>useReporting</code></td><td>src/compliance-ui/hooks/useReporting.ts</td><td>Hook for reporting</td></tr>
+                <tr><td><code>useComplianceContext</code></td><td>src/compliance-ui/hooks/useComplianceContext.ts</td><td>Hook for full context</td></tr>
+                <tr><td><code>createCompliancePlatform</code></td><td>src/compliance/backend-composition.ts</td><td>Factory for runtime creation</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-09"><h2><span class="section-number">09</span> Runtime</h2>
+        <table>
+            <thead><tr><th>Runtime Component</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td>ComplianceRuntime</td><td>Main orchestrator – composes context, state, services, event handlers</td></tr>
+                <tr><td>ComplianceService</td><td>Core compliance coordination</td></tr>
+                <tr><td>ComplianceState</td><td>Stores and retrieves compliance state via StatePlatform</td></tr>
+                <tr><td>ComplianceEventHandlers</td><td>Subscribes to platform events and triggers refresh</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-10"><h2><span class="section-number">10</span> Public API</h2>
+        <p>The Phase‑25 public API is exposed through <code>src/compliance/index.ts</code>.</p>
+        <pre>
+// Backend
+export { ComplianceRuntime } from './runtime/ComplianceRuntime';
+export { ComplianceState } from './state/ComplianceState';
+export { ComplianceService } from './services/ComplianceService';
+export { ComplianceEventHandlers } from './events/ComplianceEventHandlers';
+export { createCompliancePlatform } from './backend-composition';
+
+// Models – types
+export type {
+  ComplianceControl,
+  ComplianceObligation,
+  ComplianceEvidence,
+  ComplianceException,
+  ComplianceMonitoring,
+  ComplianceReport,
+  ComplianceContext,
+} from './models/ComplianceModels';
+
+// Contracts – type
+export type { ComplianceRuntimeContract } from './contracts/ComplianceContracts';
+        </pre>
+        <p>The frontend API exposes the Compliance Provider, hooks, and components via <code>src/compliance-ui/index.ts</code>.</p>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-11"><h2><span class="section-number">11</span> Components</h2>
+        <table>
+            <thead><tr><th>Component</th><th>Path</th><th>Purpose</th></tr></thead>
+            <tbody>
+                <tr><td><code>ComplianceDashboard</code></td><td>src/compliance-ui/dashboards/ComplianceDashboard.tsx</td><td>Institutional compliance overview</td></tr>
+                <tr><td><code>ComplianceStatus</code></td><td>src/compliance-ui/components/ComplianceStatus.tsx</td><td>Compliance status display</td></tr>
+                <tr><td><code>ComplianceProvider</code></td><td>src/compliance-ui/providers/ComplianceProvider.tsx</td><td>React context provider</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-12"><h2><span class="section-number">12</span> File Inventory</h2>
+        <p><strong>Relevant source directories and file counts:</strong></p>
+        <table>
+            <thead><tr><th>Directory</th><th>File Count</th></tr></thead>
+            <tbody>
+                <tr><td>src/compliance</td><td>9</td></tr>
+                <tr><td>src/compliance-ui</td><td>13</td></tr>
+                <tr><td>src/shell/hooks</td><td>1 (useComplianceRuntime.ts)</td></tr>
+            </tbody>
+        </table>
+        <p><strong>Total Phase‑25 relevant files:</strong> 22 files.</p>
+        <details>
+            <summary>Show key index.ts files (public API surfaces)</summary>
+            <div class="content">
+src/compliance/index.ts
+src/compliance-ui/index.ts
+src/compliance/contracts/ComplianceContracts.ts
+src/compliance/models/ComplianceModels.ts
+            </div>
+        </details>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-13"><h2><span class="section-number">13</span> Validation</h2>
+        <table>
+            <thead><tr><th>Validation Type</th><th>Status</th></tr></thead>
+            <tbody>
+                <tr><td>TypeScript Compilation</td><td><span class="text-success">PASS</span></td></tr>
+                <tr><td>Production Build</td><td><span class="text-success">PASS</span> (with chunk warning)</td></tr>
+                <tr><td>Repository Structure</td><td><span class="text-success">PASS</span></td></tr>
+                <tr><td>Architecture Compliance</td><td><span class="text-success">PASS</span></td></tr>
+                <tr><td>Dependency Analysis (Madge)</td><td><span class="text-success">PASS</span> (no new circular dependencies)</td></tr>
+                <tr><td>Integration Verification</td><td><span class="text-success">PASS</span></td></tr>
+                <tr><td>Browser Validation</td><td><span class="text-success">PASS</span></td></tr>
+            </tbody>
+        </table>
+        <p><strong>Known circular dependencies (inherited, outside Phase‑25 ownership):</strong></p>
+        <ul style="color:#C5CED9; margin-left:1.2rem;">
+            <li><code>workbench/panels/catalog/</code> ↔ <code>intelligence/right-panel/</code> ↔ <code>panel-runtime</code></li>
+            <li><code>workbench/workspace/runtime/workspace-runtime.ts</code> ↔ <code>workspace-loader.ts</code></li>
+        </ul>
+        <p>These are inherited from earlier phases and are not blockers for Phase‑25 certification.</p>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-14"><h2><span class="section-number">14</span> Browser Validation</h2>
+        <table>
+            <thead><tr><th>Browser</th><th>Status</th></tr></thead>
+            <tbody>
+                <tr><td>Chromium (latest)</td><td><span class="text-success">PASS</span> – Shell, Workspace, Compliance Dashboard render correctly</td></tr>
+                <tr><td>Firefox (latest)</td><td><span class="text-success">PASS</span></td></tr>
+                <tr><td>WebKit (latest)</td><td><span class="text-success">PASS</span></td></tr>
+            </tbody>
+        </table>
+        <p>Browser verification confirmed:</p>
+        <ul style="color:#C5CED9; margin-left:1.2rem;">
+            <li>✅ Application loads successfully</li>
+            <li>✅ Institutional Shell remains visible</li>
+            <li>✅ WorkspaceHost mounts correctly</li>
+            <li>✅ Workbench renders with panels</li>
+            <li>✅ Compliance Dashboard appears in the Shell</li>
+            <li>✅ Compliance Status component renders correctly</li>
+            <li>✅ Compliance context is available throughout the workspace</li>
+            <li>✅ Workspace switching updates compliance context</li>
+            <li>✅ Runtime status and diagnostics visible</li>
+            <li>✅ No console errors or runtime exceptions</li>
+            <li>✅ No visual regressions from Phase‑24</li>
+        </ul>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-15"><h2><span class="section-number">15</span> Repository Tree</h2>
+        <details>
+            <summary>Show / Hide tree of key directories</summary>
+            <div class="content">
+src/
+├── compliance/
+│   ├── contracts/
+│   │   └── ComplianceContracts.ts
+│   ├── models/
+│   │   └── ComplianceModels.ts
+│   ├── runtime/
+│   │   └── ComplianceRuntime.ts
+│   ├── services/
+│   │   └── ComplianceService.ts
+│   ├── state/
+│   │   └── ComplianceState.ts
+│   ├── events/
+│   │   └── ComplianceEventHandlers.ts
+│   ├── backend-composition.ts
+│   ├── index.ts
+│   └── types.ts
+├── compliance-ui/
+│   ├── providers/
+│   │   └── ComplianceProvider.tsx
+│   ├── hooks/
+│   │   ├── index.ts
+│   │   ├── useComplianceContext.ts
+│   │   ├── useControls.ts
+│   │   ├── useEvidence.ts
+│   │   ├── useExceptions.ts
+│   │   ├── useMonitoring.ts
+│   │   ├── useObligations.ts
+│   │   └── useReporting.ts
+│   ├── components/
+│   │   └── ComplianceStatus.tsx
+│   ├── dashboards/
+│   │   └── ComplianceDashboard.tsx
+│   ├── index.ts
+│   └── types.ts
+└── shell/
+    └── hooks/
+        └── useComplianceRuntime.ts
+            </div>
+        </details>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-16"><h2><span class="section-number">16</span> Build Output</h2>
+        <pre>
+> @corei/corei-os@1.0.0 build
+> tsc -b && vite build
+
+vite v7.3.6 building client environment for production...
+✓ 2377 modules transformed.
+dist/index.html                     0.43 kB │ gzip:   0.29 kB
+dist/assets/index-BSSyXHgG.css    134.51 kB │ gzip:  13.40 kB
+dist/assets/index-CPvoiRNl.js   1,027.07 kB │ gzip: 257.14 kB
+
+(!) Some chunks are larger than 500 kB after minification.
+✓ built in 3.84s
+        </pre>
+        <p>The chunk-size warning is non‑blocking and will be addressed in a later optimization phase (Phase 30).</p>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-17"><h2><span class="section-number">17</span> Certification</h2>
+        <table>
+            <thead><tr><th>Criteria</th><th>Status</th></tr></thead>
+            <tbody>
+                <tr><td>Architecture Review</td><td><span class="text-success">PASS</span></td></tr>
+                <tr><td>Repository Audit</td><td><span class="text-success">PASS</span></td></tr>
+                <tr><td>Integration Test</td><td><span class="text-success">PASS</span></td></tr>
+                <tr><td>Browser Validation</td><td><span class="text-success">PASS</span></td></tr>
+                <tr><td>Documentation Completeness</td><td><span class="text-success">PASS</span></td></tr>
+                <tr><td>Institutional Sign‑off</td><td><span class="text-success">PASS</span></td></tr>
+            </tbody>
+        </table>
+        <p><strong>Status:</strong> <span class="badge success">CERTIFIED COMPLETE</span></p>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-18"><h2><span class="section-number">18</span> References</h2>
+        <ul>
+            <li><a href="#">DOC-11: COREI Stage‑25 Execution Constitution</a></li>
+            <li><a href="#">DOC-11 Stage‑25 Phase‑25 (Authoritative)</a></li>
+            <li><a href="#">DOC-11 Stage‑25 Phase‑25-old (Historical)</a></li>
+            <li><a href="#">COREI_Phase25_Reference.html (this document)</a></li>
+        </ul>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="sec-19"><h2><span class="section-number">19</span> Appendix</h2>
+
+        <h3>A. Phase‑25 21‑Step Execution Map</h3>
+        <ol style="color:#C5CED9; margin-left:1.2rem;">
+            <li><strong>Repository Reality &amp; Compliance Discovery</strong> – Baseline discovery; certification of existing compliance capabilities.</li>
+            <li><strong>Compliance Platform Contract Boundary</strong> – Platform‑level contracts – no runtime.</li>
+            <li><strong>Compliance Domain &amp; Ownership Certification</strong> – Domain ownership and public/private boundaries.</li>
+            <li><strong>Compliance Runtime Coordination</strong> – Runtime orchestration (initialize, activate, refresh, suspend, resume, dispose).</li>
+            <li><strong>Compliance Lifecycle Integration</strong> – Lifecycle synchronization with Workspace.</li>
+            <li><strong>Compliance State &amp; Context Coordination</strong> – Context and state management.</li>
+            <li><strong>Compliance Service Integration</strong> – Service layer for controls, obligations, evidence, exceptions, monitoring, reporting.</li>
+            <li><strong>Compliance Event Integration</strong> – Event subscription and handling.</li>
+            <li><strong>Compliance Platform Composition</strong> – Compose all backend capabilities.</li>
+            <li><strong>Shell Compliance Integration</strong> – Integration with Institutional Shell.</li>
+            <li><strong>Workspace Compliance Integration</strong> – Integration with Workspace Platform.</li>
+            <li><strong>Governance &amp; Identity Compliance Integration</strong> – Integration with Governance and Identity platforms.</li>
+            <li><strong>Compliance Workflow Coordination</strong> – Workflow lifecycle coordination.</li>
+            <li><strong>Backend Compliance Platform Composition</strong> – Final backend composition.</li>
+            <li><strong>Frontend Compliance Experience</strong> – UI composition and operator experience.</li>
+            <li><strong>Shell Consumption &amp; Browser Validation</strong> – Shell integration and browser validation.</li>
+            <li><strong>Compliance Diagnostics &amp; Observability</strong> – Diagnostics and health reporting.</li>
+            <li><strong>Platform Integration Validation</strong> – End‑to‑end validation.</li>
+            <li><strong>Repository &amp; Architecture Audit</strong> – Final audit.</li>
+            <li><strong>Phase Certification</strong> – Formal certification.</li>
+            <li><strong>Controlled Freeze &amp; Consumption Handoff</strong> – Freeze and handoff to Phase‑26.</li>
+        </ol>
+        <p><strong>Critical rule:</strong> Each step's implementation scope is defined by the phase document; repository reconciliation determines the exact implementation delta <strong>within</strong> that scope, not the step sequence.</p>
+
+        <h3>B. Known Issues &amp; Anti‑Drift Controls</h3>
+        <table>
+            <thead><tr><th>Issue</th><th>Mitigation</th></tr></thead>
+            <tbody>
+                <tr><td>Circular dependencies (<code>panel-catalog ↔ intelligence</code>, <code>workspace-runtime ↔ workspace-loader</code>)</td><td>Inherited from earlier phases; non‑blocking. Will be addressed in later integration steps.</td></tr>
+                <tr><td>Build chunk‑size warning (&gt;500 kB)</td><td>Non‑blocking; will be addressed in Phase‑30 (Performance) – not within Phase‑25.</td></tr>
+            </tbody>
+        </table>
+        <p><strong>Anti‑Drift Controls (permanent):</strong></p>
+        <ul style="color:#C5CED9; margin-left:1.2rem;">
+            <li>No Phase‑25 step implemented Phase‑26 capabilities (Risk Platform).</li>
+            <li>No Phase‑25 step rebuilt Platform Kernel, Shell, Event, State, Registry, Runtime, or any consumed platform.</li>
+            <li>No Step was skipped, merged, or reordered.</li>
+            <li>Every step was validated before advancing.</li>
+        </ul>
+
+        <h3>C. Repository Identity</h3>
+        <table>
+            <thead><tr><th>Property</th><th>Value</th></tr></thead>
+            <tbody>
+                <tr><td>Branch</td><td>main</td></tr>
+                <tr><td>Commit</td><td>ac8e282</td></tr>
+                <tr><td>Tree</td><td>fd80df27</td></tr>
+                <tr><td>Working directory</td><td>~/corei/ui/corei-os</td></tr>
+            </tbody>
+        </table>
+
+        <h3>D. Phase‑25 Certification Summary</h3>
+        <pre>
+===============================================================================
+STAGE-25
+PHASE-25
+COMPLIANCE PLATFORM
+
+STATUS
+------✓ CERTIFIED
+✓ FROZEN
+✓ READY FOR CONSUMPTION
+
+PLATFORM KERNEL                     ✓ CONSUMED
+INSTITUTIONAL SHELL                 ✓ CONSUMED
+CAPABILITY PROVIDER PLATFORM        ✓ CONSUMED
+WINDOW & WORKSPACE PLATFORM         ✓ CONSUMED
+PANEL & VISUALIZATION PLATFORM      ✓ CONSUMED
+OPERATOR PRODUCTIVITY PLATFORM      ✓ CONSUMED
+WORKSPACE INTELLIGENCE PLATFORM     ✓ CONSUMED
+IDENTITY & ORGANIZATION PLATFORM    ✓ CONSUMED
+GOVERNANCE PLATFORM                 ✓ CONSUMED
+
+COMPLIANCE RUNTIME                  ✓ CERTIFIED
+COMPLIANCE SERVICES                 ✓ CERTIFIED
+COMPLIANCE CONTEXT                  ✓ CERTIFIED
+COMPLIANCE STATE                    ✓ CERTIFIED
+COMPLIANCE EVENTS                   ✓ CERTIFIED
+LIFECYCLE INTEGRATION               ✓ CERTIFIED
+CONTROL COORDINATION                ✓ CERTIFIED
+OBLIGATION COORDINATION             ✓ CERTIFIED
+EVIDENCE COORDINATION               ✓ CERTIFIED
+EXCEPTION COORDINATION              ✓ CERTIFIED
+MONITORING COORDINATION             ✓ CERTIFIED
+REPORTING COORDINATION              ✓ CERTIFIED
+SHELL INTEGRATION                   ✓ CERTIFIED
+WORKSPACE INTEGRATION               ✓ CERTIFIED
+GOVERNANCE INTEGRATION              ✓ CERTIFIED
+IDENTITY INTEGRATION                ✓ CERTIFIED
+DIAGNOSTICS & OBSERVABILITY         ✓ CERTIFIED
+===============================================================================
+AUTHORIZED CHANGE BOUNDARY
+--------------------------
+PHASE-25 IS NOW FROZEN
+
+FUTURE PHASES MAY ONLY CONSUME
+THIS PLATFORM.
+
+NO REDESIGN
+NO OWNERSHIP TRANSFER
+NO DUPLICATE IMPLEMENTATION
+===============================================================================
+HANDOFF
+
+Authorized Next Phase
+STAGE-25 → PHASE-26 — Risk Platform
+
+Consumption Baseline
+✓ Platform Kernel (Phase-01–16)
+✓ Institutional Shell (Phase-17)
+✓ Capability Provider Platform (Phase-18)
+✓ Window & Workspace Platform (Phase-19)
+✓ Panel & Visualization Platform (Phase-20)
+✓ Operator Productivity Platform (Phase-21)
+✓ Workspace Intelligence Platform (Phase-22)
+✓ Identity & Organization Platform (Phase-23)
+✓ Governance Platform (Phase-24)
+✓ Compliance Platform (Phase-25)
+
+Phase-26 will consume all certified foundations above and begin operationalizing the Risk Platform, without redesigning or duplicating any completed capabilities.
+===============================================================================
+        </pre>
+    </section>
+
+    <div style="text-align:center;font-size:11px;color:#6E7883;border-top:1px solid #28303C;padding-top:1rem;margin-top:2rem;">
+        <p>COREI Stage‑25 Phase‑25 Reference &bull; Generated 2026-08-10 &bull; Authoritative</p>
+    </div>
+
+</main>
+</body>
+</html>

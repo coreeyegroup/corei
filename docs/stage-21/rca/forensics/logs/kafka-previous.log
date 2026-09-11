@@ -1,0 +1,2 @@
+Defaulted container "kafka" out of: kafka, volume-permissions (init)
+Error from server (BadRequest): previous terminated container "kafka" in pod "kafka-0" not found

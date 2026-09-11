@@ -1,0 +1,1075 @@
+PHASE B — STEP 4: DOMAIN MODEL DEFINITION
+
+1. PHASE IDENTITY LAYER
+	1.1 Phase Name
+
+		Phase B — Step 4: Domain Model Definition
+
+	1.2 Phase Role
+
+		Defines the complete, deterministic domain model for the constraint system governing all upstream logical outputs from Phase A.
+
+	1.3 Phase Objective
+
+		Construct a fully deterministic, canonical, and execution-safe constraint domain model that formalizes all entities, attributes, relationships, and ownership required for constraint evaluation and enforcement.
+
+	1.4 Why This Phase Exists
+
+		Prevents:
+
+			implicit constraint interpretation
+			cross-phase data leakage
+			undefined constraint inputs to Phase D
+			non-deterministic constraint evaluation behavior
+			structural ambiguity in constraint system
+
+		Ensures:
+
+			all constraint logic (Step 5) operates on a closed, canonical domain
+			Phase D receives fully defined constraint output objects
+
+2. PHASE SCOPE CONTROL
+	2.1 INCLUDED (STRICT)
+		Constraint domain entities
+		Entity attributes (fully bounded)
+		Inter-entity relationships
+		Ownership mapping (cross-phase)
+		Canonical entity definitions
+		Deterministic ordering definitions
+		Canonical input binding (domain-level)
+
+	2.2 EXCLUDED (STRICT)
+		Constraint logic (Step 5)
+		Rule execution
+		Flow processing logic
+		Pipeline execution
+		State transitions (Section 9 only defines structure)
+		Execution behavior (Phase D)
+		Risk philosophy logic (Phase A Step 5 — reference only)
+
+3. ARCHITECTURAL INTENT LAYER
+	3.1 Core Design Principles
+		Determinism (strict)
+		Canonical data modeling
+		Zero ambiguity
+		Cross-phase isolation
+		Immutable entities
+		Replayability
+		Fixed-point numeric system
+
+	3.2 Architectural Model
+
+		Constraint Domain Model (CDM)
+
+		Pure structural layer
+		No execution logic
+		No transformation logic
+
+	3.3 System Positioning
+
+		Phase A Outputs
+		→ Phase B Step 4 (Domain Model)
+		→ Phase B Step 5 (Constraint Logic Engine)
+		→ Phase D (Enforcement)
+
+4. DOMAIN MODEL DEFINITION (CORE SECTION)
+	Canonical Derivation Rule (MANDATORY)
+
+		ALL entities (E1–E10) MUST be constructed ONLY from:
+
+			canonical_input_set
+
+		Constraint:
+
+			No entity may be instantiated from:
+				- external inputs
+				- intermediate state
+				- inferred values
+
+		Violation → INVALID DOMAIN MODEL
+
+	4.1 CORE ENTITIES (MANDATORY — COMPLETE SET)
+		E1: Constraint Context
+
+			Deterministic evaluation container for all constraint computation
+
+			Numeric Model Enforcement (MANDATORY)
+
+				ALL numeric values in this phase MUST use:
+
+					fixed-point representation:
+
+						value = integer / 10^6
+
+				Applies to:
+
+					constraint_score
+					size_adjustment
+					parameter values (min, max, default)
+					trigger_value
+					threshold_value
+					any derived numeric field
+
+				Constraints:
+
+					floating-point arithmetic is strictly forbidden
+
+					ALL computations MUST use deterministic rounding:
+
+						ROUND_HALF_UP
+
+					overflow condition:
+
+						if value exceeds bounds → computation MUST fail
+
+					underflow condition:
+
+						if value < minimum precision → treat as zero
+
+		E2: Constraint Input Snapshot
+
+			Canonical representation of all upstream inputs used for constraint evaluation
+
+		E3: Constraint Rule Definition
+
+			Formal definition of constraint rules (non-executable structure only)
+
+			target_binding_reference = {
+
+					target_entity
+					target_field
+				}
+
+		E4: Constraint Evaluation Unit
+
+			Per-instrument / per-strategy constraint evaluation object
+
+		E5: Constraint Decision
+
+			Final constraint outcome applied to a trade intent
+
+		E6: Constraint Parameter Set
+
+			All bounded numeric parameters used by constraints
+
+		E7: Constraint Violation Record
+
+			Explicit record of any constraint breach
+
+		E8: Constraint Priority Layer
+
+			Defines precedence hierarchy across constraint types
+
+		E9: Constraint Scope Unit
+
+			Defines scope of constraint application
+
+			Values:
+
+				firm
+				portfolio
+				strategy
+				instrument
+				trade
+
+		E10: Constraint Output Object
+
+		Final structured output passed to Phase D
+
+
+		entity_version_id
+			entity_hash
+
+			Constraint:
+
+				entity_hash = HASH_v1(entity_payload)
+
+				entity_version_id MUST be version-controlled
+
+				identical entity definition → identical hash
+
+			Entity Payload Definition Rule (MANDATORY)
+
+				entity_payload MUST include:
+
+					1. entity_id
+					2. entity_type
+					3. all attributes (ordered)
+					4. version_identifiers
+
+				Serialization MUST follow canonical ordering:
+
+					1. entity_type
+					2. entity_id
+					3. attributes (lexicographic)
+					4. version_identifiers
+
+				Constraint:
+
+					identical entity → identical entity_hash
+
+	4.2 ENTITY ATTRIBUTES (FULLY DEFINED — NO GAPS)
+
+		E1: Constraint Context
+			constraint_context_id
+			input_snapshot_hash
+			evaluation_time
+			context_scope
+			version_identifiers
+
+			Constraints:
+
+				MUST be hash-identifiable
+				MUST be immutable
+
+			Input Hash Rule (MANDATORY)
+
+				input_snapshot_hash MUST be:
+
+					HASH_v1(canonical_input_set)
+
+				Constraint:
+
+					identical canonical_input_set → identical input_snapshot_hash
+
+			Hash Construction Rule (MANDATORY)
+
+				All hashes MUST be computed as:
+
+					HASH_v1(canonical_payload)
+
+				Where:
+
+					canonical_payload MUST be:
+						- deterministically serialized
+						- fixed field order
+						- no optional field omission
+						- no whitespace variation
+
+				Field ordering MUST follow:
+
+					1. version_identifiers
+					2. input_data_snapshot
+					3. configuration_snapshot
+
+				Constraint:
+
+					identical canonical_input_set → identical hash
+
+			Output Hash Payload Rule (MANDATORY)
+
+				output_hash MUST include:
+
+					1. version_identifiers
+					2. input_data_snapshot
+					3. configuration_snapshot
+					4. constraint_decision_set (ordered)
+					5. violation_set (ordered)
+
+				Constraint:
+
+					output_hash MUST reflect FULL output payload
+
+
+			evaluation_time MUST be sourced from:
+
+					Phase B Step 1 Global Evaluation Time
+
+				Constraint:
+
+					No step may redefine evaluation_time
+					decision_time usage → FORBIDDEN
+
+			Context Scope Definition (MANDATORY)
+
+				context_scope ∈ {
+				 firm,
+				 portfolio,
+				 strategy,
+				 instrument,
+				 trade
+				}
+
+				Constraints:
+
+				case-sensitive
+				canonical values only
+				any deviation → INVALID
+
+		E2: Constraint Input Snapshot
+
+				trade_intent_snapshot
+				execution_instruction_snapshot
+				portfolio_state_snapshot
+				capital_allocation_snapshot
+				configuration_snapshot
+				version_identifiers
+
+			Canonical Mapping Rule (MANDATORY)
+
+				input_data_snapshot = {
+				 trade_intent_snapshot
+				 execution_instruction_snapshot
+				 portfolio_state_snapshot
+				 capital_allocation_snapshot
+				}
+
+				canonical_input_set = {
+
+					input_data_snapshot {
+
+						trade_intent_snapshot
+						execution_instruction_snapshot
+						portfolio_state_snapshot
+						capital_allocation_snapshot
+
+					}
+
+					configuration_snapshot
+
+					constraint_definition_set
+					constraint_parameter_set
+
+					version_identifiers
+				}
+
+			Capital Allocation Validation Rule (MANDATORY)
+
+				capital_allocation_snapshot MUST satisfy:
+
+					- complete allocation map
+					- no missing strategies
+					- all weights defined
+					- deterministic ordering by strategy_id
+
+				Else:
+
+					Constraint Context MUST NOT be created
+
+			Canonical Enforcement Rule (STRICT)
+				ALL computations MUST use ONLY:
+				canonical_input_set.input_data_snapshot
+
+				Direct access to individual snapshots → FORBIDDEN
+
+			Input Completeness Rule (MANDATORY)
+
+				Constraint Input Snapshot is VALID IF AND ONLY IF:
+
+					all fields present
+					no null values
+					timestamps aligned
+					hashes valid
+
+				Else:
+
+					→ Constraint Context MUST NOT be created
+
+			Time Alignment Rule (MANDATORY)
+
+				For each input snapshot:
+
+					selected_value MUST satisfy:
+
+						1. timestamp ≤ evaluation_time
+						2. maximum timestamp among valid candidates
+
+				If multiple candidates exist:
+
+					select using deterministic hash ordering
+
+				Constraint:
+
+					selection MUST be deterministic across runs
+
+			External Input Isolation (MANDATORY)
+
+				Dual Domain Input Model (MANDATORY)
+
+					input_data_snapshot MUST be partitioned into:
+
+						CORE_input_data_snapshot
+						CEIL_input_data_snapshot
+
+					Evaluation MUST execute:
+
+						pass 1 → CORE
+						pass 2 → CEIL
+
+					Domain model MUST support BOTH domains
+
+					Isolation Constraint:
+
+						CORE constraints MUST NOT reference CEIL inputs
+						CEIL constraints MUST NOT affect CORE outputs
+
+					No shared state allowed
+
+		E3: Constraint Rule Definition
+			rule_id
+			rule_type
+			applicable_scope
+			parameter_reference_set
+			priority_level
+			activation_condition_reference
+
+			Constraint:
+
+				NO executable logic here (structure only)
+
+		E4: Constraint Evaluation Unit
+			evaluation_unit_id
+			instrument
+			strategy_id
+			trade_intent_id
+			applicable_rules
+			evaluation_status
+
+			Evaluation Unit Ordering Rule (MANDATORY)
+
+				Constraint Evaluation Units MUST be ordered by:
+
+					1. instrument (lexicographic)
+					2. strategy_id (lexicographic)
+					3. trade_intent_id (lexicographic)
+
+				Constraint:
+
+					generation, processing, and output MUST preserve this order
+
+			evaluation_status ∈ {PENDING, EVALUATED, FINALIZED}
+
+				Constraint:
+
+					transitions MUST be deterministic
+
+		E5: Constraint Decision
+
+				constraint_decision_id
+				trade_intent_id
+				decision_status ∈ {ALLOW, MODIFY, BLOCK}
+				modification_vector
+				constraint_score
+				decision_trace_hash
+
+			Decision Constraints
+				decision_status MUST be mutually exclusive
+				BLOCK overrides MODIFY and ALLOW
+				MODIFY overrides ALLOW
+
+				Invalid combinations → REJECT
+
+			Decision Trace Hash Rule (MANDATORY)
+
+				decision_trace_hash MUST be computed from:
+
+					1. trade_intent_id
+					2. applicable_rules
+					3. evaluation_unit_id
+					4. constraint_score
+					5. decision_status
+
+				Serialization MUST be canonical and ordered
+
+			Modification Vector Definition (MANDATORY)
+
+				modification_vector = {
+				 size_adjustment ∈ [0,1]
+				 direction_override ∈ {-1,0,1}
+				}
+
+			Constraint Score Definition (MANDATORY)
+
+				constraint_score ∈ [0,1]
+
+				Constraints:
+
+					fixed-point representation
+					monotonic mapping to severity
+
+		E6: Constraint Parameter Set
+
+				parameter_id
+				parameter_type
+				min_value
+				max_value
+				default_value
+				edge_behavior
+				invalid_condition
+
+			Boundary Standardization (MANDATORY)
+
+				edge_behavior ∈ {
+				 clamp,
+				 reject,
+				 fail
+				}
+
+				invalid_condition MUST define:
+
+					violation trigger
+					system response
+
+		E7: Constraint Violation Record
+			violation_id
+			rule_id
+			violation_type
+			trigger_value
+			threshold_value
+			severity_level
+			timestamp
+
+			Constraints:
+
+				MUST be generated deterministically
+				MUST NOT be optional
+
+			severity_level ∈ {LOW, MEDIUM, HIGH, CRITICAL}
+
+				Ordering priority:
+
+					CRITICAL > HIGH > MEDIUM > LOW
+
+		E8: Constraint Priority Layer
+			priority_id
+			priority_level
+			constraint_type
+			precedence_rank
+
+			Constraint Resolution Rule (MANDATORY)
+
+				Hierarchy
+
+				firm > portfolio > strategy > instrument > trade
+
+			Constraint:
+
+				higher scope overrides lower
+				priority layer MUST NOT override hierarchy
+
+		E9: Constraint Scope Unit
+			scope_id
+			scope_type
+			applicable_entities
+			scope_boundary_definition
+
+		E10: Constraint Output Object
+			constraint_output_id
+			constraint_context_id
+			constraint_decision_set
+			violation_set
+			output_hash
+
+		Constraints:
+
+			MUST be fully derived from Constraint Context
+			MUST be immutable
+
+	Canonical Ordering Rule (MANDATORY)
+
+		constraint_decision_set ORDER:
+
+			instrument (lexicographic)
+			strategy_id (lexicographic)
+			trade_intent_id (lexicographic)
+
+		violation_set ORDER:
+
+			severity_level (descending)
+			rule_id (lexicographic)
+
+	Traceability Mapping (MANDATORY)
+
+		constraint_output
+		→ constraint_decision
+		→ constraint_evaluation_unit
+		→ constraint_rule
+		→ input_data_snapshot
+
+		Missing linkage → INVALID
+
+	4.3 RELATIONSHIPS (STRICT — NO AMBIGUITY)
+		R1: Input Lineage
+		Constraint Input Snapshot
+			← Phase A Outputs:
+				trade_intent (Step 3)
+				execution_instruction (Step 4)
+				portfolio_state (Step 7)
+				capital_allocation (Step 6)
+
+		R2: Context Formation
+		Constraint Context
+			← Constraint Input Snapshot
+
+		R3: Evaluation Mapping
+		Constraint Context
+			→ Constraint Evaluation Unit (per instrument/strategy)
+
+		R4: Rule Binding
+		Constraint Evaluation Unit
+			→ applies → Constraint Rule Definition
+
+		R5: Violation Generation
+		Constraint Evaluation Unit
+			→ produces → Constraint Violation Record
+
+		R6: Decision Formation
+		Constraint Evaluation Unit
+			→ produces → Constraint Decision
+
+		R7: Priority Enforcement
+		Constraint Priority Layer
+			→ governs → Constraint Decision resolution
+
+		R8: Output Composition
+		Constraint Context
+			→ aggregates → Constraint Output Object
+
+		Relationship Evaluation Ordering Rule (MANDATORY)
+
+			All relationships MUST be evaluated in order:
+
+				1. entity_id (lexicographic)
+				2. relationship_type (lexicographic)
+
+			Constraint:
+
+				traversal order MUST be deterministic
+
+
+	4.4 OWNERSHIP (CRITICAL — CROSS-PHASE CONTROL)
+		Entity						Owner Phase				Notes
+		Constraint Context			Phase B				Exclusive
+		Constraint Input Snapshot	Phase B				Derived only
+		Constraint Rule Definition	Phase B Step 5		Referenced
+		Constraint Evaluation Unit	Phase B				Exclusive
+		Constraint Decision			Phase B				Exclusive
+		Constraint Parameter Set	Phase B				Exclusive
+		Constraint Violation Record	Phase B				Exclusive
+		Constraint Priority Layer	Phase B				Must align with Phase A risk hierarchy
+		Constraint Scope Unit		Phase B				Exclusive
+		Constraint Output Object	Phase B → Phase D	Output boundary
+
+	4.5 SECTION OWNERSHIP ENFORCEMENT (MANDATORY)
+
+		Strict compliance with template :
+
+		Concept					Allowed Section
+		Entities				Section 4
+		Attributes				Section 4
+		Relationships			Section 4
+		Logic					Section 5 (NOT here)
+		Inputs/Outputs			Section 6
+		Constraints/Invariants	Section 8
+		State					Section 9
+
+	Violation → NON-DETERMINISM
+
+5. LOGIC / RULE ENGINE (DOMAIN-LEVEL ONLY)
+
+	IMPORTANT:
+		No constraint logic is defined here — only structural validation rules
+
+	5.1 Rules
+		Entity completeness rule
+		Attribute completeness rule
+		Canonical binding rule
+		Ordering rule enforcement
+		Hash determinism rule
+
+	5.2 Conditions
+		All entities MUST be fully defined
+		No optional attributes allowed
+		No implicit relationships allowed
+
+	5.3 Decision Logic
+		IF entity_definition incomplete → REJECT
+		IF attribute undefined → REJECT
+		IF ordering violated → REJECT
+		IF canonical binding missing → REJECT
+
+	5.4 Constraints
+		No duplicate entity definitions
+		No duplicate identifiers
+		No cross-section duplication
+		No undefined numeric bounds
+
+	5.5 RULE EXECUTION ORDER (MANDATORY)
+		Entity completeness validation
+		Attribute validation
+		Canonical binding validation
+		Ordering validation
+		Relationship validation
+
+		Constraint:
+
+			Failure at any step → STOP
+			No partial acceptance allowed
+
+6. FLOW ARCHITECTURE (MANDATORY — ADDED)
+	6.0 Canonical Contract
+		canonical_input_set = {
+
+			input_data_snapshot {
+
+				trade_intent_snapshot
+				execution_instruction_snapshot
+				portfolio_state_snapshot
+				capital_allocation_snapshot
+
+			}
+
+			configuration_snapshot
+
+			constraint_definition_set
+			constraint_parameter_set
+
+			version_identifiers
+		}
+
+		Constraints:
+
+			immutable
+			complete
+			hash-identifiable
+			no external dependency
+
+	6.1 Input Definition
+
+		Input ← Phase A outputs:
+
+		trade_intent_snapshot
+		execution_instruction_snapshot
+		portfolio_state_snapshot
+		capital_allocation_snapshot
+		configuration_snapshot
+		version_identifiers
+
+	6.2 Processing Flow
+		Input Snapshots
+		→ Canonical Input Construction
+		→ Constraint Input Snapshot (E2)
+		→ Constraint Context (E1)
+		→ Domain Entity Instantiation
+		→ Validation
+		→ Domain Model Output
+
+	6.3 Output Definition
+		This step contributes to:
+
+			constraint_output.definition_layer.domain_model_spec
+
+			Standalone outputs → FORBIDDEN
+
+	6.4 Flow Model
+
+		Input → Canonicalization → Entity Construction → Validation → Output
+
+
+	6.5 Flow Canonicalization Rule
+		No external data allowed
+		No runtime state
+		No derived implicit values
+		All outputs MUST originate from canonical_input_set
+
+	Canonical Mapping Binding Rule (MANDATORY)
+
+		Each entity attribute MUST define:
+
+			source_field ∈ canonical_input_set
+
+		Mapping MUST be:
+
+			explicit
+			one-to-one
+			non-overlapping
+
+		Constraint:
+
+			No attribute may be:
+
+				inferred
+				computed implicitly
+				mapped from multiple sources
+
+		Violation → INVALID DOMAIN MODEL
+
+7. PIPELINE STRUCTURE (ADDED)
+	Domain Model Pipeline:
+		Define → Validate → Canonicalize → Freeze → Emit
+
+	Stages:
+		Input Intake
+		Canonical Binding
+		Entity Construction
+		Validation
+		Finalization
+
+	Transitions:
+		Sequential only
+		No skipping
+		No parallel ambiguity
+
+	Freeze Stage Rule (MANDATORY)
+
+		After "Freeze" stage:
+
+			ALL entities MUST be immutable
+
+			No mutation allowed post-freeze
+
+		Violation → INVALID OUTPUT
+
+8. CONTROL & CONSTRAINTS (ADDED)
+	8.1 Hard Rules
+		Determinism mandatory
+		Canonical input dependency only
+		No missing attributes
+		No unordered collections
+		No floating-point usage
+
+	8.2 Soft Rules
+		Prefer minimal entity coupling
+		Prefer normalized attribute sets
+
+	8.3 Guardrails
+		Reject incomplete domain model
+		Reject invalid ordering
+		Reject inconsistent relationships
+
+	8.4 Boundary Definition Rule
+
+	All numeric fields MUST define:
+
+		min
+		max
+		edge_behavior
+		invalid_condition
+
+	8.5 Domain Invariants
+		identical input → identical domain model
+		no entity duplication
+		full traceability chain exists
+
+	Control Enforcement Rule (MANDATORY)
+
+		All rules defined in Section 8 MUST be:
+
+			validated in Section 12
+			enforced via failure model (Section 10)
+
+		Unlinked rule → INVALID
+
+9. STATE & DATA MODEL (ADDED)
+	9.1 State Definition
+
+		Stateless system
+
+	9.2 State Transitions
+
+		None (pure definition layer)
+
+	9.3 Source of Truth
+		canonical_input_set
+		constraint_domain_model_spec
+
+	Stateless Enforcement Rule (MANDATORY)
+
+		System MUST NOT:
+
+			use cache
+			reuse entities across runs
+			store intermediate state
+
+		Each execution MUST reconstruct domain model from canonical_input_set
+
+10. FAILURE MODEL (ADDED)
+	10.1 Failure Scenarios
+		missing entity
+		missing attribute
+		invalid ordering
+		duplicate IDs
+		broken relationships
+		invalid canonical input
+
+	10.2 Failure Impact
+		constraint system invalid
+		Step 5 cannot execute
+		Phase D receives invalid inputs
+
+	10.3 Mitigation Logic
+		reject domain model generation
+		halt pipeline
+
+	10.4 Detection Rule
+
+		Each failure MUST define:
+
+		Trigger					Detection				Response
+		Missing attribute		schema validation		reject
+		Ordering violation		ordering check			reject
+		Duplicate ID			uniqueness check		reject
+
+11. ASSUMPTION REGISTER (ADDED)
+	Assumption							Reason			Validation Phase		Status
+	Phase A outputs valid				prerequisite	Phase A					VALIDATED
+	configuration_snapshot complete		required		Step 1					CONTROLLED
+	version_identifiers present			determinism		Step 1					VALIDATED
+
+
+12. VALIDATION FRAMEWORK (ADDED)
+	12.1 Checklist
+		all entities defined
+		all attributes bounded
+		relationships deterministic
+		canonical binding present
+
+	12.2 Validation Method
+		deterministic replay
+		schema validation
+		ordering verification
+
+	12.3 Acceptance Criteria
+
+		PASS / FAIL (binary)
+
+	12.4 Coverage Rule
+		every rule mapped to Red Team + Blue Team layers
+
+	12.5 Ambiguity Check
+		simulate multiple interpretations
+		outputs MUST match
+
+13. OUTPUT (DELIVERABLE SPEC)
+			This step contributes ONLY to:
+			constraint_output.definition_layer.domain_model_spec
+
+			Domain Hash Ordering Rule (MANDATORY)
+
+			entity_set MUST be ordered by:
+
+				1. entity_type
+				2. entity_id
+
+			relationship_set MUST be ordered by:
+
+				1. source_entity_id
+				2. target_entity_id
+				3. relationship_type
+
+			domain_model_hash = HASH_v1(
+				ordered(entity_set) + ordered(relationship_set)
+			)
+
+14. TRACEABILITY MAPPING (ADDED)
+	Input:
+		Phase A outputs
+
+	Step 4:
+		constraint_domain_model_spec
+
+	Output:
+		Step 5 (Constraint Logic Engine)
+
+	Full lineage MUST exist:
+
+		input → entity → relationship → output
+
+	Reverse Traceability Rule (MANDATORY)
+
+		constraint_domain_model_spec MUST support:
+
+			output → entity → input reconstruction
+
+		Constraint:
+
+			Full bidirectional trace MUST exist
+
+15. CROSS-PHASE CONSISTENCY RULES
+
+	Owns:
+
+		constraint domain structure
+
+	References:
+
+		Phase A outputs
+		Step 5 logic
+
+16. SCALABILITY MODEL
+	Linear scaling with number of constraints
+	Supports multi-asset / multi-strategy
+
+17. GOVERNANCE INTEGRATION
+	version-controlled domain model
+	change requires approval
+	hash-based versioning
+
+18. AUDITABILITY & OBSERVABILITY
+
+	Must support:
+
+	full traceability
+	deterministic replay
+	hash verification
+
+19. RISK CONSIDERATIONS
+
+	Risks:
+
+		invalid domain model → system failure
+		missing entity → execution ambiguity
+
+	Control:
+
+		strict validation
+		canonical enforcement
+
+20. FAILURE CONDITION (PHASE LEVEL)
+
+	Phase FAILS if:
+
+		any section missing
+		ambiguity exists
+		determinism broken
+		traceability incomplete
+
+21. PHASE LOCK CRITERIA
+
+	Phase can proceed ONLY IF:
+
+		all sections complete
+		validation passed
+		no ambiguity
+		governance approved
+
+	Hash Standard (GLOBAL)
+
+	HASH_v1:
+
+		algorithm: SHA-256
+		encoding: UTF-8
+		serialization: canonical
+
+	Rules:
+
+		no whitespace variation
+		fixed field ordering
+		deterministic ordering of lists
+
+Dual Domain Input Model (MANDATORY)
+
+	input_data_snapshot MUST be partitioned into:
+
+		CORE_input_data_snapshot
+		CEIL_input_data_snapshot
+
+	Evaluation MUST execute:
+
+		pass 1 → CORE
+		pass 2 → CEIL
+
+	Domain model MUST support BOTH domains
+	BUT MUST NOT mix them
+
+	No shared state allowed

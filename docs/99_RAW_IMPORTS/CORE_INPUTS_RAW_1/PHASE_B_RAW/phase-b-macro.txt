@@ -1,0 +1,306 @@
+PHASE B — MACRO VIEW (INSTITUTIONAL, LOCK-READY)
+
+	You are entering the first reality-constraining layer of the system.
+
+	Phase A defined:
+
+		what the system wants to do (pure logic)
+
+	Phase B defines:
+
+		what the system is allowed to do (hard reality boundaries)
+
+	This is not just “limits” — this is the enforcement surface that makes Phase A executable without breaking determinism, capital safety, or system stability.
+
+1. POSITIONING IN SYSTEM (CRITICAL)
+
+	From blueprint:
+
+		Phase A → logical model (already LOCKED)
+		Phase B → constraint system (THIS PHASE)
+		Phase C → infrastructure
+		Phase D → execution
+
+	👉 Formal definition:
+
+	Phase B = Constraint Translation Layer
+	Converts Phase A outputs into bounded, enforceable system invariants
+
+2. CORE ROLE OF PHASE B
+	2.1 What Phase B DOES
+
+		Phase B DOES NOT create logic
+
+		It wraps Phase A with constraints
+
+			It defines:
+			Global system constraints
+			Capital limits (numeric, enforceable)
+			Exposure limits (portfolio + strategy + instrument)
+			Risk thresholds (drawdown, loss, concentration)
+			Time constraints (latency, staleness, ordering)
+			Determinism guarantees (strict vs relaxed = must be STRICT)
+			System invariants (must NEVER break)
+
+	2.2 What Phase B DOES NOT DO
+
+		Strictly excluded:
+
+			❌ Strategy logic
+			❌ Signal generation
+			❌ Decision logic
+			❌ Execution logic
+			❌ Infrastructure design
+
+		👉 This is enforced by scope rules
+
+3. MENTAL MODEL (VERY IMPORTANT)
+	Phase A output:
+		trade_intent (logical, unconstrained)
+
+	Phase B transforms system into:
+		trade_intent (bounded by constraints)
+
+	Think of Phase B as:
+
+		Mathematical constraint envelope around Phase A
+
+	Without Phase B:
+
+		Allocation can explode
+		Exposure can accumulate silently
+		Risk philosophy has no enforcement boundary
+		Replay may still work, but system becomes unsafe
+
+4. MACRO COMPONENTS OF PHASE B
+
+	Phase B is NOT a single block.
+
+	It is a multi-layer constraint system:
+
+	4.1 GLOBAL CONSTRAINT LAYER
+
+		Defines system-wide invariants:
+
+			max capital at risk (firm level)
+			max drawdown allowed
+			max daily loss
+			allowed instruments
+			allowed trade windows
+
+		👉 Derived from:
+
+			Firm-level risk policy
+
+	4.2 CAPITAL CONSTRAINT SYSTEM
+
+		Bridges:
+
+			Phase A Step 6 (allocation logic)
+			Phase D (actual enforcement)
+
+		Defines:
+
+			total deployable capital bounds
+			per-strategy capital caps
+			capital partitioning:
+			CORE capital
+			EXTERNAL (CEIL) capital
+
+		👉 Must enforce:
+
+			isolation between CORE and CEIL (non-negotiable)
+
+	4.3 EXPOSURE CONSTRAINT SYSTEM
+
+		Applies to:
+
+			Portfolio (Step 7)
+			Risk Philosophy (Step 5)
+
+		Defines:
+
+			max exposure per instrument
+			max exposure per asset class
+			max exposure per correlation cluster
+			net directional exposure limits
+
+		👉 Converts logical exposure (Phase A) into numeric bounds
+
+	4.4 RISK THRESHOLD SYSTEM
+
+		Quantifies Step 5 (Risk Philosophy):
+
+			drawdown thresholds (T1, T2 → now numeric)
+			risk score thresholds (R1, R2)
+			exposure limits (E_max_class, cluster_limit)
+
+		👉 Phase A defines structure
+		👉 Phase B defines numbers
+
+	4.5 TIME & DETERMINISM CONSTRAINTS
+
+		Critical for replay:
+
+			event_time vs processing_time rules
+			staleness limits
+			ordering guarantees
+			latency bounds
+
+		👉 Must align with:
+
+			Signal Model (Step 2)
+			Decision Engine (Step 3)
+
+	4.6 SYSTEM INVARIANTS (MOST IMPORTANT)
+
+		These are non-negotiable truths
+
+		Examples:
+
+			Total allocation ≤ 100%
+			Exposure must be bounded
+			Drawdown must not exceed threshold
+			No negative capital
+			No undefined state allowed
+
+		👉 Violation = system failure
+
+5. RELATIONSHIP WITH PHASE A (STRICT)
+	5.1 Phase A → defines LOGIC
+		signal_strength
+		trade_intent
+		allocation weights
+		exposure structure
+		risk philosophy
+
+	5.2 Phase B → defines LIMITS
+		max(signal_strength impact)
+		max capital per trade
+		max exposure
+		max drawdown
+		max system load
+
+	5.3 CRITICAL RULE
+
+		Phase B MUST NOT modify Phase A logic
+		Phase B ONLY constrains outputs
+
+6. CEIL COEXISTENCE (MANDATORY ALIGNMENT)
+
+	From blueprint:
+
+		CEIL is external input lane
+		isolated from core system
+
+	Phase B responsibility for CEIL:
+	MUST define:
+		stricter limits for EXTERNAL trades
+		separate capital pool
+		tighter exposure caps
+		stricter risk thresholds
+
+	MUST enforce:
+		CORE constraints ≠ EXTERNAL constraints
+
+	But:
+
+		same constraint engine
+		different parameter set
+
+	CRITICAL:
+	NO contamination into Phase A (already satisfied)
+	Phase B must maintain:
+		logical separation
+		numeric isolation
+
+7. FLOW POSITION (END-TO-END VIEW)
+
+	Full system flow with Phase B:
+
+	Phase A:
+	Market → Signal → Decision → Trade Intent
+
+	Phase B:
+	Trade Intent → Constraint Validation Envelope
+
+	Phase D:
+	→ Risk Engine → Policy Engine → Execution
+
+	👉 Phase B is NOT executed as a runtime engine
+	👉 It defines what Phase D must enforce
+
+8. OUTPUT OF PHASE B
+
+	From blueprint:
+
+	Phase B produces: System Constraints Specification
+
+	This includes:
+	1. Quantified limits
+		capital
+		exposure
+		drawdown
+		throughput
+
+	2. Constraint rules
+		hard constraints (must never break)
+		soft constraints (preference)
+
+	3. Invariants
+		system-level truths
+
+	4. Time model
+		ordering
+		staleness
+		latency
+
+9. FAILURE MODES (VERY IMPORTANT)
+
+If Phase B is weak:
+
+	Phase C over-engineers or under-engineers
+	Phase D cannot enforce risk correctly
+	system collapses under load
+	capital loss becomes possible
+
+	From blueprint:
+
+	“If Phase B is wrong → system becomes unrealistic or unsafe”
+
+10. SUCCESS CRITERIA (MACRO)
+
+	Phase B is VALID ONLY IF:
+
+	all constraints are:
+		numeric
+		bounded
+		deterministic
+	no vague terms (e.g. “low risk”, “high exposure” ❌)
+	every constraint has:
+		min
+		max
+		edge behavior
+	all constraints map to:
+		Phase A outputs
+		Phase D enforcement
+
+11. ONE-LINE INSTITUTIONAL DEFINITION
+
+	Phase B = Deterministic, quantified constraint system that bounds Phase A outputs into a safe, executable, and enforceable domain
+
+NEXT STEP
+
+	If this macro view is aligned:
+
+	👉 Next we go micro (hardcore):
+
+	We will build Phase B using universal structure:
+
+		1. Domain Model (constraint entities)
+		2. Constraint Engine (rule system)
+		3. Canonical Input Set
+		4. Constraint evaluation order
+		5. Invariants (formalized)
+		6. Numeric boundaries (fully defined)
+		7. Failure model (strict)

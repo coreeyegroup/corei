@@ -1,27 +1,11 @@
-/******************************************************************************
- *
- * COREI OPERATING SYSTEM
- *
- * STAGE-25
- * PHASE-17
- * STEP-19
- *
- * FILE:
- * src/intelligence/right-panel/index.ts
- *
- * PURPOSE:
- * Intelligence Right Panel Public API
- *
- ******************************************************************************/
-
-export * from "./IntelligenceRightPanel";
-export * from "./layout/right-panel";
-
-export * from "./components/IntelligencePanelHeader";
-export * from "./components/IntelligenceContextSurface";
-export * from "./components/IntelligenceInsightSurface";
-export * from "./components/IntelligencePanelFooter";
-
-export * from "./models/intelligence-micro-model";
-
-export * from "./provider/intelligence-provider";
+export * from './runtime/intelligence-runtime';
+export * from './IntelligenceRightPanel';
+export * from './components';
+export * from './core';
+export * from './engine';
+export * from './layout';
+export * from './models';
+export * from './provider';
+export * from './registry';
+export * from './services';
+export * from './IntelligenceRightPanel';

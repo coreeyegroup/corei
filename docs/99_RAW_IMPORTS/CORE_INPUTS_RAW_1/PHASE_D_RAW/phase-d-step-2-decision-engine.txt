@@ -1,0 +1,597 @@
+PHASE D — STEP 2: DECISION ENGINE (EXECUTION LAYER)
+1. PHASE IDENTITY LAYER
+	1.1 Phase Name
+
+		Phase D — Step 2: Decision Engine (Execution Validation Layer)
+
+	1.2 Phase Role
+
+		Deterministic execution-side validation and normalization layer that:
+
+			consumes execution_intent_stream (from Step 1)
+			validates execution readiness
+			resolves conflicts deterministically
+			guarantees ordering and consistency
+			produces decision_validated_intent_stream
+
+		This sits strictly before Risk Engine per Phase D macro ordering
+
+	1.3 Phase Objective
+
+		Transform:
+
+			ExecutionIntent → DecisionValidatedIntent
+
+		Such that output is:
+
+			conflict-free
+			schema-complete
+			deterministically ordered
+			execution-safe (structurally only, NOT risk-safe)
+
+	1.4 Why This Phase Exists
+
+		Prevents:
+
+			(F1) conflicting execution intents entering Risk Engine
+			(F2) duplicate trades causing double exposure
+			(F3) non-deterministic ordering → execution divergence
+			(F4) malformed intents causing downstream failure
+			(F5) ambiguous intent sets (same instrument, opposing directions)
+
+2. PHASE SCOPE CONTROL
+	2.1 INCLUDED (STRICT)
+		execution intent validation
+		conflict detection and resolution
+		deduplication
+		priority resolution
+		deterministic ordering enforcement
+		sequencing guarantees
+		output normalization
+
+	2.2 EXCLUDED (STRICT)
+		strategy logic (Phase A)
+		constraint enforcement (Phase B / Risk Engine)
+		policy enforcement
+		capital allocation
+		order generation
+		execution routing
+
+	2.3 BOUNDARY RULE
+
+		Decision Engine MUST:
+
+			validate and resolve ONLY
+
+		MUST NOT:
+
+			modify economic meaning (size, direction, instrument)
+			apply risk or capital logic
+			introduce new intents
+
+		Violation → PHASE INVALID
+
+3. ARCHITECTURAL INTENT LAYER
+	3.1 Core Principles
+
+		P1 — Determinism
+		P2 — Zero Intent Mutation
+		P3 — Conflict Isolation
+		P4 — Canonical Dependency Only
+		P5 — Ordering Preservation (Phase C + D alignment)
+		P6 — Stateless Processing
+		P7 — Replay Fidelity
+
+	3.2 Architectural Model
+		DecisionValidatedIntentStream = F(
+			execution_intent_stream,
+			configuration_snapshot,
+			version_identifiers
+		)
+
+	3.3 System Positioning
+
+		Phase D Step 1 → ExecutionIntent
+				↓
+		Phase D Step 2 → DecisionValidatedIntent (THIS)
+				↓
+		Risk Engine
+
+		Aligned with macro execution chain
+
+4. DOMAIN MODEL DEFINITION
+	4.1 Entities
+		ExecutionIntent (input)
+		DecisionValidatedIntent (output)
+		ConflictGroup
+		ValidationFlag
+		ResolutionMetadata
+
+	4.2 DecisionValidatedIntent Schema
+		DecisionValidatedIntent = {
+			decision_validated_intent_id
+			execution_intent_id
+			trade_intent_id
+			instrument
+			direction
+			target_size
+			execution_type
+			priority_level
+			origin_type
+			validation_status
+			resolution_status
+			sequence_id
+			signal_id
+			lineage_hash_reference
+		}
+
+	4.3 Relationships
+		1 ExecutionIntent → 0 or 1 DecisionValidatedIntent
+		ConflictGroup → N ExecutionIntents
+		Resolution → produces deterministic subset
+
+	4.4 Identity Rule
+		decision_validated_intent_id = HASH_v1(
+			execution_intent_id +
+			resolution_status +
+			sequence_id
+		)
+
+	4.5 Ownership
+		ExecutionIntent → Step 1
+		DecisionValidatedIntent → Step 2
+
+	4.6 ConflictGroup Definition (MANDATORY)
+
+			conflict_group_id = HASH_v1(
+				sorted(
+					execution_intent_id[]
+				)
+			)
+
+			grouping_key = {
+				instrument
+			}
+
+			Rules:
+
+			- All intents sharing same instrument MUST belong to same ConflictGroup
+			- ConflictGraph MUST be constructed per instrument
+			- grouping MUST be deterministic and complete
+
+			Constraint:
+
+			same execution_intent_stream → identical ConflictGroups
+
+			sorted_execution_intent_ids MUST be ordered by:
+
+					execution_intent_id ASC (lexicographic)
+
+				Constraint:
+
+				- sorting method MUST be fixed and versioned
+				- identical input → identical sorted list
+
+5. LOGIC / RULE ENGINE
+	5.1 Rule Classes
+
+		R1 — Schema Validation
+		R2 — Consistency Validation
+		R3 — Conflict Detection
+		R4 — Deduplication
+		R5 — Conflict Graph Resolution (includes priority ordering)
+		R6 — Ordering Enforcement
+		R7 — Sequencing Assignment
+
+	5.2 Validation Rules
+
+		Reject intent if:
+
+			missing required fields
+			invalid enum values
+			target_size ≤ 0
+			duplicate execution_intent_id (pre-resolution)
+
+		R-LINEAGE-CHECK:
+
+			assert current_lineage_hash ==
+				   HASH(previous_lineage_hash + current_entity_id)
+
+	5.3 Conflict Detection Rules
+
+		Conflict if:
+
+			same instrument AND opposite direction
+			same trade_intent_id duplicated
+			overlapping execution scope
+
+	5.4 Deduplication Rule
+
+		If identical intents:
+
+			same {
+				trade_intent_id,
+				instrument,
+				direction,
+				target_size
+			}
+
+			→ keep ONE (lowest hash)
+
+		dedup_hash = HASH_v1(
+				trade_intent_id +
+				instrument +
+				direction +
+				target_size +
+				strategy_id
+			)
+
+			Rule:
+
+			- duplicates = identical dedup_hash
+			- retain lowest execution_intent_id
+
+
+	5.6 Rule Execution Order (STRICT)
+			Schema Validation
+			Consistency Validation
+			Conflict Grouping
+			Deduplication
+			Conflict Graph Resolution
+			Ordering Enforcement
+			Sequencing Assignment
+			Output Construction
+
+			No lower rule overrides higher rule
+
+	5.7 Conflict Graph Resolution (MANDATORY)
+
+			Model:
+
+			ConflictGraph = {
+				nodes: ExecutionIntent
+				edges: conflict_relation
+			}
+
+			Conflict Relation:
+
+			- opposite direction
+			- overlapping scope
+
+			Resolution Algorithm:
+
+			1. sort nodes by:
+			   priority_level DESC
+			   event_time ASC
+			   origin_type ASC (CORE first)
+			   trade_intent_id ASC
+
+			2. iterate sorted list:
+
+			   IF node not eliminated:
+				   select node
+				   eliminate all conflicting neighbors
+
+			3. output selected set
+
+			Constraint:
+
+			- graph MUST be acyclic post-resolution
+			- identical graph → identical output
+
+		Origin Priority Rule (MANDATORY)
+
+			CORE intents MUST dominate EXTERNAL intents in conflict resolution.
+
+			Implementation:
+
+			origin_type priority:
+			CORE = 1
+			EXTERNAL = 2
+
+			Applied BEFORE trade_intent_id ordering
+
+		overlapping scope MUST be defined as:
+
+			scope_key = {
+				instrument
+			}
+
+			Constraint:
+
+			- two intents overlap ONLY IF:
+				instrument is identical
+
+			No other dimensions allowed
+
+		Priority is applied ONLY inside graph resolution sorting phase.
+
+		No separate priority resolution stage exists.
+
+6. FLOW ARCHITECTURE
+	6.0 Canonical Input Set
+		canonical_input_set_D2 = {
+			execution_intent_stream,
+			configuration_snapshot,
+			version_identifiers
+		}
+
+		execution_intent_stream MUST include:
+
+			- event_time
+			- strategy_id
+			- execution_intent_id
+
+			Constraint:
+
+			- no implicit fields allowed
+
+	6.1 Input
+
+		ExecutionIntent stream from Step 1
+
+	6.2 Processing Flow
+		ExecutionIntent
+		→ Validation
+		→ Conflict Detection
+		→ Deduplication
+		→ Resolution
+		→ Ordering
+		→ Sequencing
+		→ DecisionValidatedIntent
+
+	6.3 Output
+		decision_validated_intent_stream = {
+			DecisionValidatedIntent[]
+		}
+
+	6.4 Ordering Rule (MANDATORY)
+
+		Must follow Phase D macro:
+
+			1. event_time ASC
+			2. origin_type (CORE=1, EXTERNAL=2)
+			3. trade_intent_id ASC
+
+		Final Tie-Break Rule (MANDATORY)
+
+			ordering_key = {
+				event_time ASC
+				origin_type ASC (CORE=1, EXTERNAL=2)
+				priority_level DESC
+				trade_intent_id ASC
+				execution_intent_id ASC
+			}
+
+			sequence_id = index(ordering_key)
+
+			Constraint:
+
+			- sequence_id MUST be globally unique
+			- MUST be stable across replay
+
+		sequence_id assignment MUST occur AFTER:
+
+			- validation
+			- deduplication
+			- conflict graph resolution (final set)
+
+			Constraint:
+
+			- sequence_id applies ONLY to surviving DecisionValidatedIntent
+			- eliminated intents MUST NOT receive sequence_id
+
+	6.5 Flow Canonicalization Rule
+		no external inputs
+		no runtime state
+		no mutation of economic fields
+
+	Event Time Rule (MANDATORY)
+
+		event_time MUST be inherited from:
+
+		execution_intent.event_time
+		(which MUST originate from Phase C event model)
+
+		System clock usage: FORBIDDEN
+
+7. PIPELINE STRUCTURE
+	P1: Input Validation
+	P2: Schema Validation
+	P3: Conflict Detection
+	P4: Deduplication
+	P5: Conflict Graph Resolution (includes priority ordering)
+	P6: Ordering Enforcement
+	P7: Sequencing
+	P8: Output Emission
+
+8. CONTROL & CONSTRAINTS
+	8.1 Hard Rules
+		determinism mandatory
+		no mutation of intent fields
+		no reordering outside defined rule
+		no duplicate output
+
+	8.2 Guardrails
+		reject invalid intent
+		reject ambiguous conflict resolution
+		reject incomplete canonical input
+
+	8.3 Invariants
+
+		I1 — Same input → same output
+		I2 — Ordering preserved globally
+		I3 — No duplicate trade_intent_id post-resolution
+		I4 — Conflict groups resolved deterministically
+
+		I-GLOBAL-2: Lineage chain MUST be continuous and verifiable
+
+		Decision Purity Rule (MANDATORY)
+
+			Conflict resolution MUST NOT use:
+
+			- capital
+			- exposure
+			- portfolio state
+			- risk thresholds
+
+			Only allowed inputs:
+
+			- execution_intent fields
+			- configuration_snapshot
+
+			Violation → PHASE INVALID
+
+9. STATE & DATA MODEL
+	9.1 State
+
+		Stateless
+
+	9.2 Source of Truth
+
+		canonical_input_set_D2
+
+	9.3 State Rule
+
+		No internal memory or caching allowed
+
+10. FAILURE MODEL
+	10.1 Scenarios
+		duplicate intents
+		unresolved conflicts
+		invalid schema
+		ordering violation
+
+	10.2 Impact
+		downstream risk corruption
+		execution inconsistency
+
+	10.3 Mitigation
+		reject entire batch OR isolate invalid intents
+
+		Mitigation:
+
+			- ONLY isolate invalid intents
+			- batch rejection is FORBIDDEN
+
+	10.4 Detection
+		validation checks
+		ordering verification
+
+	Invalid Intent Handling (MANDATORY)
+
+		- invalid intents MUST be isolated (NOT batch rejected)
+		- each invalid intent MUST produce:
+
+		RejectedIntent = {
+			execution_intent_id
+			rejection_reason
+			validation_stage
+		}
+
+		- valid intents MUST proceed independently
+
+11. ASSUMPTION REGISTER
+Assumption				Reason					Status
+Step 1 output valid		upstream lock			VALIDATED
+config complete			deterministic mapping	CONTROLLED
+
+12. VALIDATION FRAMEWORK
+	12.1 Method
+		Red Team (13 layers × 3 rounds)
+		Blue Team validation
+
+	12.2 Coverage Rule
+
+		Every rule mapped to validation layer
+
+	12.3 Acceptance
+
+		PASS / FAIL only
+
+	12.4 Ambiguity Test
+
+		Multiple interpretations → identical output
+
+13. OUTPUT (DELIVERABLE)
+	decision_validated_intent_stream = {
+		intents: [DecisionValidatedIntent]
+	}
+
+	All fields mandatory
+
+14. TRACEABILITY MAPPING
+	trade_intent_id
+	→ execution_intent_id
+	→ decision_validated_intent_id
+
+	Full lineage must be preserved
+
+	Dropped / Rejected Traceability
+
+		trace_rejection = {
+			execution_intent_id
+			decision_status ∈ {REJECTED, ELIMINATED}
+			reason_code
+			conflict_group_id
+		}
+
+		Constraint:
+
+		- NO intent may disappear without trace
+
+	reason_code ∈ {
+			SCHEMA_INVALID,
+			DUPLICATE_DETECTED,
+			CONFLICT_ELIMINATED
+		}
+
+15. CROSS-PHASE CONSISTENCY
+	Uses Phase D Step 1 output
+	aligns with Phase C ordering model
+
+16. SCALABILITY MODEL
+	partition by instrument
+	parallel conflict resolution (partition-safe)
+	deterministic merge
+
+17. GOVERNANCE
+	version-controlled rules
+	config snapshot mandatory
+	change approval required
+
+18. AUDITABILITY & OBSERVABILITY
+	full intent lineage
+	conflict resolution logs
+	deterministic replay
+
+19. RISK CONSIDERATIONS
+
+	Risk if weak:
+
+		duplicate exposure
+		contradictory trades
+		invalid inputs to Risk Engine
+
+	Mitigation:
+
+		strict validation + rejection
+
+20. FAILURE CONDITION (PHASE LEVEL)
+
+	Phase FAILS if:
+
+	determinism breaks
+	conflicts unresolved
+	ordering violated
+	traceability broken
+
+21. PHASE LOCK CRITERIA
+
+	Phase LOCKED only if:
+
+	all 21 sections complete
+	Red Team passed (3 rounds)
+	Blue Team validated
+	CEI validation passed
+	deterministic replay proven

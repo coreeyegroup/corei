@@ -1,0 +1,231 @@
+[EVENT EMITTED] topic=instrument_screened file=20260527T111000959288.json
+[EVENT EMITTED] topic=instrument_screened file=20260527T111000959425.json
+[EVENT EMITTED] topic=instrument_screened file=20260527T111000959513.json
+[
+  {
+    "instrument_id": "BANKNIFTY",
+    "screen_cycle_id": "c36e3b48ef9e3f8efbaa9c44e7b0ff73a3365f4395ad1ecd9bedef460fff8c2b",
+    "ranking": 1,
+    "liquidity_score": 9000,
+    "volatility_score": 8100,
+    "trend_score": 7200,
+    "momentum_score": 6300,
+    "correlation_score": 900,
+    "event_time": "2026-05-27T11:10:00.959218+00:00"
+  },
+  {
+    "instrument_id": "NIFTY50",
+    "screen_cycle_id": "a52fe668b9bf3bb22662187e8d67540265853cebf7e860de6c8ff31282e5a852",
+    "ranking": 2,
+    "liquidity_score": 7000,
+    "volatility_score": 6300,
+    "trend_score": 5600,
+    "momentum_score": 4900,
+    "correlation_score": 700,
+    "event_time": "2026-05-27T11:10:00.959218+00:00"
+  },
+  {
+    "instrument_id": "XAUUSD",
+    "screen_cycle_id": "481b787d2130f2fa7a62f43d3b5504f79e00fbafe45ea19e4e23a0c508912f2b",
+    "ranking": 3,
+    "liquidity_score": 6000,
+    "volatility_score": 5400,
+    "trend_score": 4800,
+    "momentum_score": 4200,
+    "correlation_score": 600,
+    "event_time": "2026-05-27T11:10:00.959218+00:00"
+  }
+]
+[EVENT EMITTED] topic=instrument_screened file=20260527T111101019465.json
+[EVENT EMITTED] topic=instrument_screened file=20260527T111101019656.json
+[EVENT EMITTED] topic=instrument_screened file=20260527T111101019756.json
+[
+  {
+    "instrument_id": "BANKNIFTY",
+    "screen_cycle_id": "6b7c1718ed72630dc6fa7b2e7553072266250909dd5b9be2c96651ae2f026f58",
+    "ranking": 1,
+    "liquidity_score": 9000,
+    "volatility_score": 8100,
+    "trend_score": 7200,
+    "momentum_score": 6300,
+    "correlation_score": 900,
+    "event_time": "2026-05-27T11:11:01.019328+00:00"
+  },
+  {
+    "instrument_id": "NIFTY50",
+    "screen_cycle_id": "32b284926a63c8375c7a24135f119072cfa2f67090e122f112a942ec0834ca4e",
+    "ranking": 2,
+    "liquidity_score": 7000,
+    "volatility_score": 6300,
+    "trend_score": 5600,
+    "momentum_score": 4900,
+    "correlation_score": 700,
+    "event_time": "2026-05-27T11:11:01.019328+00:00"
+  },
+  {
+    "instrument_id": "XAUUSD",
+    "screen_cycle_id": "6804787ae53ee3a91b5b158b070610923566238655ba4964239eaaa185ad26f1",
+    "ranking": 3,
+    "liquidity_score": 6000,
+    "volatility_score": 5400,
+    "trend_score": 4800,
+    "momentum_score": 4200,
+    "correlation_score": 600,
+    "event_time": "2026-05-27T11:11:01.019328+00:00"
+  }
+]
+[EVENT EMITTED] topic=instrument_screened file=20260527T111201078652.json
+[EVENT EMITTED] topic=instrument_screened file=20260527T111201078909.json
+[EVENT EMITTED] topic=instrument_screened file=20260527T111201079158.json
+[
+  {
+    "instrument_id": "BANKNIFTY",
+    "screen_cycle_id": "94ad2d21a85bc53b72121f14564fe145a1071266ae099680768758ea67f03076",
+    "ranking": 1,
+    "liquidity_score": 9000,
+    "volatility_score": 8100,
+    "trend_score": 7200,
+    "momentum_score": 6300,
+    "correlation_score": 900,
+    "event_time": "2026-05-27T11:12:01.078471+00:00"
+  },
+  {
+    "instrument_id": "NIFTY50",
+    "screen_cycle_id": "6ab2338fbaec5a8f8462cb387d7484beb37359a12d1b529609aaeb137d2217c0",
+    "ranking": 2,
+    "liquidity_score": 7000,
+    "volatility_score": 6300,
+    "trend_score": 5600,
+    "momentum_score": 4900,
+    "correlation_score": 700,
+    "event_time": "2026-05-27T11:12:01.078471+00:00"
+  },
+  {
+    "instrument_id": "XAUUSD",
+    "screen_cycle_id": "8bea6a3c842cc26b127f0304a1d4bce092f7c985d3f0d45d454682362b370853",
+    "ranking": 3,
+    "liquidity_score": 6000,
+    "volatility_score": 5400,
+    "trend_score": 4800,
+    "momentum_score": 4200,
+    "correlation_score": 600,
+    "event_time": "2026-05-27T11:12:01.078471+00:00"
+  }
+]
+[EVENT EMITTED] topic=instrument_screened file=20260527T111301134075.json
+[EVENT EMITTED] topic=instrument_screened file=20260527T111301134484.json
+[EVENT EMITTED] topic=instrument_screened file=20260527T111301134693.json
+[
+  {
+    "instrument_id": "BANKNIFTY",
+    "screen_cycle_id": "1dbfc4e2f9250262bcd8f905637c3e2d786c5b9d80ea0e8af1b8bb7ea484ab50",
+    "ranking": 1,
+    "liquidity_score": 9000,
+    "volatility_score": 8100,
+    "trend_score": 7200,
+    "momentum_score": 6300,
+    "correlation_score": 900,
+    "event_time": "2026-05-27T11:13:01.133900+00:00"
+  },
+  {
+    "instrument_id": "NIFTY50",
+    "screen_cycle_id": "8823b257d17ee2dd943d8a2b580b4d7acd90e9348cb8a277c121762c8d6254aa",
+    "ranking": 2,
+    "liquidity_score": 7000,
+    "volatility_score": 6300,
+    "trend_score": 5600,
+    "momentum_score": 4900,
+    "correlation_score": 700,
+    "event_time": "2026-05-27T11:13:01.133900+00:00"
+  },
+  {
+    "instrument_id": "XAUUSD",
+    "screen_cycle_id": "8df492d0bb317dcad3ce2fce4d2c041ae379e98ef081437944b998b28632271c",
+    "ranking": 3,
+    "liquidity_score": 6000,
+    "volatility_score": 5400,
+    "trend_score": 4800,
+    "momentum_score": 4200,
+    "correlation_score": 600,
+    "event_time": "2026-05-27T11:13:01.133900+00:00"
+  }
+]
+[EVENT EMITTED] topic=instrument_screened file=20260527T111401194464.json
+[EVENT EMITTED] topic=instrument_screened file=20260527T111401194809.json
+[EVENT EMITTED] topic=instrument_screened file=20260527T111401195125.json
+[
+  {
+    "instrument_id": "BANKNIFTY",
+    "screen_cycle_id": "933af0f076155fef921a980b7b7556a4e1608ccd3457f9b60751b76e30faf0cc",
+    "ranking": 1,
+    "liquidity_score": 9000,
+    "volatility_score": 8100,
+    "trend_score": 7200,
+    "momentum_score": 6300,
+    "correlation_score": 900,
+    "event_time": "2026-05-27T11:14:01.194280+00:00"
+  },
+  {
+    "instrument_id": "NIFTY50",
+    "screen_cycle_id": "c28d90506ccb1390265c7013238c1281365a58f1367209c1eee808ba582868ef",
+    "ranking": 2,
+    "liquidity_score": 7000,
+    "volatility_score": 6300,
+    "trend_score": 5600,
+    "momentum_score": 4900,
+    "correlation_score": 700,
+    "event_time": "2026-05-27T11:14:01.194280+00:00"
+  },
+  {
+    "instrument_id": "XAUUSD",
+    "screen_cycle_id": "290b95288f8374897bfa3b05c282528b993620090891b5aa3d7fc5f0eafe5513",
+    "ranking": 3,
+    "liquidity_score": 6000,
+    "volatility_score": 5400,
+    "trend_score": 4800,
+    "momentum_score": 4200,
+    "correlation_score": 600,
+    "event_time": "2026-05-27T11:14:01.194280+00:00"
+  }
+]
+[EVENT EMITTED] topic=instrument_screened file=20260527T111501255667.json
+[EVENT EMITTED] topic=instrument_screened file=20260527T111501255855.json
+[EVENT EMITTED] topic=instrument_screened file=20260527T111501255946.json
+[
+  {
+    "instrument_id": "BANKNIFTY",
+    "screen_cycle_id": "41cb5109574d4f9d96901ea25b1dde0e1a573fb9141dff3bcd7eabf1835d4248",
+    "ranking": 1,
+    "liquidity_score": 9000,
+    "volatility_score": 8100,
+    "trend_score": 7200,
+    "momentum_score": 6300,
+    "correlation_score": 900,
+    "event_time": "2026-05-27T11:15:01.255544+00:00"
+  },
+  {
+    "instrument_id": "NIFTY50",
+    "screen_cycle_id": "763db3e95aadf7f48cc772fbc14ec28f53e775808c2c474947d33dcec9436adb",
+    "ranking": 2,
+    "liquidity_score": 7000,
+    "volatility_score": 6300,
+    "trend_score": 5600,
+    "momentum_score": 4900,
+    "correlation_score": 700,
+    "event_time": "2026-05-27T11:15:01.255544+00:00"
+  },
+  {
+    "instrument_id": "XAUUSD",
+    "screen_cycle_id": "a0dc53b213dcc832d126284955b325f6b3f56ec784ef457ccc8f3e8cb415a24d",
+    "ranking": 3,
+    "liquidity_score": 6000,
+    "volatility_score": 5400,
+    "trend_score": 4800,
+    "momentum_score": 4200,
+    "correlation_score": 600,
+    "event_time": "2026-05-27T11:15:01.255544+00:00"
+  }
+]
+[EVENT EMITTED] topic=instrument_screened file=20260527T111601316412.json
+[EVENT EMITTED] topic=instrument_screened file=20260527T111601316660.json
+[EVENT EMITTED] topic=instrument_screened file=20260527T111601316802.json

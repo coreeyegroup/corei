@@ -1,0 +1,1082 @@
+/* ==========================================================================
+ * COREI WORKSPACE NAVIGATION
+ *
+ * STAGE-25
+ *
+ * Presentation layer only.
+ *
+ * Architecture:
+ * - PRESERVED
+ *
+ * Runtime:
+ * - PRESERVED
+ *
+ * State:
+ * - PRESERVED
+ *
+ * Navigation ownership:
+ * - PRESERVED
+ *
+ * This stylesheet controls visual geometry, density, typography,
+ * interaction states, and workspace navigation presentation.
+ * ========================================================================== */
+
+
+/* ==========================================================================
+ * ACTIVITY BAR
+ * ========================================================================== */
+
+.corei-activity-bar {
+    width: 40px;
+    min-width: 40px;
+    max-width: 40px;
+
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    box-sizing: border-box;
+
+    overflow: hidden;
+
+    background: #0b0e12;
+
+    border-right:
+        1px solid rgba(255, 255, 255, 0.075);
+}
+
+
+/* ==========================================================================
+ * ACTIVITY DOMAIN STACK
+ * ========================================================================== */
+
+.corei-activity-items {
+    width: 100%;
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+
+    box-sizing: border-box;
+
+    padding:
+        4px 0;
+
+    gap: 1px;
+}
+
+
+/* ==========================================================================
+ * ACTIVITY ITEM
+ * ========================================================================== */
+
+.corei-activity-item {
+    position: relative;
+
+    width: 100%;
+    min-width: 0;
+
+    height: 38px;
+    min-height: 38px;
+    max-height: 38px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    margin: 0;
+    padding:
+        3px 1px;
+
+    border: 0;
+
+    background: transparent;
+
+    color:
+        rgba(255, 255, 255, 0.58);
+
+    cursor: pointer;
+
+    overflow: hidden;
+
+    font-family:
+        Inter,
+        "Segoe UI",
+        system-ui,
+        sans-serif;
+
+    transition:
+        background-color 80ms ease,
+        color 80ms ease;
+}
+
+
+/* ==========================================================================
+ * ACTIVITY ACTIVE
+ * ========================================================================== */
+
+.corei-activity-item.active {
+    background:
+        rgba(255, 255, 255, 0.055);
+
+    color:
+        rgba(255, 255, 255, 0.94);
+}
+
+
+.corei-activity-item.active::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 4px;
+    bottom: 4px;
+
+    width: 2px;
+
+    background:
+        #d3aa58;
+}
+
+
+/* ==========================================================================
+ * ACTIVITY ICON
+ * ========================================================================== */
+
+.corei-activity-icon {
+    width: 100%;
+    height: 14px;
+
+    min-height: 14px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 14px;
+
+    margin:
+        0 0 2px;
+
+    padding: 0;
+
+    box-sizing: border-box;
+
+    line-height: 0;
+
+    text-align: center;
+}
+
+
+.corei-activity-icon svg {
+    width: 16px;
+    height: 16px;
+
+    min-width: 16px;
+    min-height: 16px;
+
+    max-width: 16px;
+    max-height: 16px;
+
+    display: block;
+
+    flex: 0 0 16px;
+
+    margin: 0 auto;
+}
+
+
+/* ==========================================================================
+ * ACTIVITY LABEL
+ * ========================================================================== */
+
+.corei-activity-short {
+    width: 100%;
+    max-width: 100%;
+
+    min-width: 0;
+
+    display: block;
+
+    margin: 0;
+    padding: 0;
+
+    box-sizing: border-box;
+
+    overflow: hidden;
+
+    text-align: center;
+
+    white-space: nowrap;
+    text-overflow: clip;
+
+    color:
+        rgba(255, 255, 255, 0.60);
+
+    font-family:
+        Inter,
+        "Segoe UI",
+        system-ui,
+        sans-serif;
+
+    font-size: 9px;
+    line-height: 9px;
+
+    font-weight: 500;
+
+    letter-spacing:
+        0.35px;
+}
+
+
+.corei-activity-item.active
+.corei-activity-short {
+    color:
+        rgba(255, 255, 255, 0.88);
+}
+
+
+/* ==========================================================================
+ * ACTIVITY HOVER
+ * ========================================================================== */
+
+.corei-activity-item:hover:not(.active) {
+    background:
+        rgba(255, 255, 255, 0.028);
+
+    color:
+        rgba(255, 255, 255, 0.82);
+}
+
+
+/* ==========================================================================
+ * ACTIVITY UTILITIES
+ * ========================================================================== */
+
+.corei-activity-utilities {
+    width: 100%;
+    min-width: 0;
+
+    margin-top: auto;
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+
+    box-sizing: border-box;
+
+    padding:
+        3px 0 5px;
+
+    gap: 1px;
+}
+
+
+.corei-activity-utility {
+    height: 38px;
+    min-height: 38px;
+    max-height: 38px;
+
+    padding:
+        3px 1px;
+}
+
+
+.corei-activity-utility
+.corei-activity-icon {
+    width: 100%;
+    height: 14px;
+
+    min-height: 14px;
+
+    flex-basis: 14px;
+
+    margin-bottom: 1px;
+}
+
+
+.corei-activity-utility
+.corei-activity-icon svg {
+    width: 14px;
+    height: 14px;
+
+    min-width: 14px;
+    min-height: 14px;
+
+    max-width: 14px;
+    max-height: 14px;
+}
+
+
+.corei-activity-utility
+.corei-activity-short {
+    font-size: 9px;
+    line-height: 9px;
+    font-weight: 500;
+}
+
+
+/* ==========================================================================
+ * SIDEBAR
+ *
+ * Resizable workspace navigation surface.
+ * Runtime ownership remains outside CSS.
+ * ========================================================================== */
+
+.corei-sidebar {
+    position: relative;
+
+    flex:
+        0 0 auto;
+
+    width: 220px;
+
+    min-width: 20px;
+    max-width: 480px;
+
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    box-sizing: border-box;
+
+    overflow: hidden;
+
+    background:
+        #15191f;
+
+    border-right:
+        1px solid rgba(255, 255, 255, 0.075);
+
+    color:
+        rgba(255, 255, 255, 0.78);
+
+    font-family:
+        Inter,
+        "Segoe UI",
+        system-ui,
+        sans-serif;
+}
+
+
+/* ==========================================================================
+ * SIDEBAR RESIZE HANDLE
+ *
+ * Deliberately subtle.
+ * Visible primarily through cursor / hover feedback.
+ * ========================================================================== */
+
+.corei-sidebar-resize-handle {
+    position: absolute;
+
+    top: 0;
+    right: -2px;
+    bottom: 0;
+
+    width: 4px;
+
+    z-index: 20;
+
+    cursor: col-resize;
+
+    background: transparent;
+}
+
+
+.corei-sidebar-resize-handle:hover {
+    background:
+        rgba(211, 170, 88, 0.28);
+}
+
+
+.corei-sidebar-resize-handle.active {
+    background:
+        rgba(211, 170, 88, 0.52);
+}
+
+
+body.corei-sidebar-resizing,
+body.corei-sidebar-resizing * {
+    cursor:
+        col-resize !important;
+
+    user-select:
+        none !important;
+}
+
+
+/* ==========================================================================
+ * EXPLORER ROOT
+ * ========================================================================== */
+
+.corei-explorer {
+    width: 100%;
+    height: 100%;
+
+    min-width: 0;
+    min-height: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    box-sizing: border-box;
+
+    overflow: hidden;
+}
+
+
+/* ==========================================================================
+ * EXPLORER HEADER
+ *
+ * Compact institutional header.
+ * ========================================================================== */
+
+.corei-explorer-header {
+    width: 100%;
+
+    height: 34px;
+    min-height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding:
+        0 6px 0 12px;
+
+    box-sizing: border-box;
+
+    background:
+        #11151a;
+
+    border-bottom:
+        1px solid rgba(255, 255, 255, 0.065);
+}
+
+
+.corei-explorer-title {
+    min-width: 0;
+
+    overflow: hidden;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    color:
+        rgba(255, 255, 255, 0.70);
+
+    font-family:
+        Inter,
+        "Segoe UI",
+        system-ui,
+        sans-serif;
+
+    font-size: 10px;
+    line-height: 12px;
+
+    font-weight: 600;
+
+    letter-spacing:
+        0.65px;
+}
+
+
+/* ==========================================================================
+ * EXPLORER HEADER ACTIONS
+ * ========================================================================== */
+
+.corei-explorer-actions {
+    display: flex;
+    align-items: center;
+
+    flex:
+        0 0 auto;
+
+    gap: 0;
+}
+
+
+.corei-explorer-action {
+    width: 24px;
+    height: 24px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+    margin: 0;
+
+    border: 0;
+
+    background:
+        transparent;
+
+    color:
+        rgba(255, 255, 255, 0.42);
+
+    cursor: pointer;
+
+    transition:
+        background-color 80ms ease,
+        color 80ms ease;
+}
+
+
+.corei-explorer-action:hover {
+    background:
+        rgba(255, 255, 255, 0.04);
+
+    color:
+        rgba(255, 255, 255, 0.80);
+}
+
+
+/* ==========================================================================
+ * SEARCH ROW
+ *
+ * Dedicated row below Explorer header.
+ *
+ * Reference characteristics:
+ * - compact
+ * - full width
+ * - restrained border
+ * - no rounded card treatment
+ * ========================================================================== */
+
+.corei-explorer-search-row {
+    width: 100%;
+
+    height: 36px;
+    min-height: 36px;
+
+    display: flex;
+    align-items: center;
+
+    padding:
+        4px 8px;
+
+    box-sizing: border-box;
+
+    background:
+        #11151a;
+
+    border-bottom:
+        1px solid rgba(255, 255, 255, 0.055);
+}
+
+
+.corei-explorer-search {
+    width: 100%;
+    min-width: 0;
+
+    height: 28px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 5px;
+
+    padding:
+        0 6px;
+
+    box-sizing: border-box;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.105);
+
+    border-radius: 2px;
+
+    background:
+        rgba(255, 255, 255, 0.022);
+
+    color:
+        rgba(255, 255, 255, 0.44);
+
+    transition:
+        border-color 80ms ease,
+        background-color 80ms ease;
+}
+
+
+.corei-explorer-search:hover {
+    border-color:
+        rgba(255, 255, 255, 0.16);
+
+    background:
+        rgba(255, 255, 255, 0.028);
+}
+
+
+.corei-explorer-search:focus-within {
+    border-color:
+        rgba(211, 170, 88, 0.42);
+
+    background:
+        rgba(255, 255, 255, 0.032);
+}
+
+
+.corei-explorer-search input {
+    width: 100%;
+    min-width: 0;
+
+    height: 100%;
+
+    padding: 0;
+
+    border: 0;
+    outline: 0;
+
+    background:
+        transparent;
+
+    color:
+        rgba(255, 255, 255, 0.84);
+
+    font-family:
+        inherit;
+
+    font-size: 11px;
+    line-height: 14px;
+
+    font-weight: 400;
+}
+
+
+.corei-explorer-search input::placeholder {
+    color:
+        rgba(255, 255, 255, 0.32);
+}
+
+
+.corei-explorer-search-close {
+    width: 20px;
+    height: 20px;
+
+    min-width: 20px;
+
+    flex:
+        0 0 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+    margin: 0;
+
+    border: 0;
+
+    background:
+        transparent;
+
+    color:
+        rgba(255, 255, 255, 0.38);
+
+    cursor: pointer;
+}
+
+
+.corei-explorer-search-close:hover {
+    background:
+        rgba(255, 255, 255, 0.04);
+
+    color:
+        rgba(255, 255, 255, 0.78);
+}
+
+
+/* ==========================================================================
+ * EXPLORER CONTENT
+ *
+ * Dense vertical workspace.
+ * ========================================================================== */
+
+.corei-explorer-content {
+    flex:
+        1 1 auto;
+
+    min-width: 0;
+    min-height: 0;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    padding:
+        3px 0 10px;
+
+    box-sizing: border-box;
+
+    scrollbar-width:
+        thin;
+
+    scrollbar-color:
+        rgba(255, 255, 255, 0.12)
+        transparent;
+}
+
+
+.corei-explorer-content::-webkit-scrollbar {
+    width: 5px;
+}
+
+
+.corei-explorer-content::-webkit-scrollbar-track {
+    background:
+        transparent;
+}
+
+
+.corei-explorer-content::-webkit-scrollbar-thumb {
+    background:
+        rgba(255, 255, 255, 0.11);
+
+    border-radius:
+        2px;
+}
+
+
+.corei-explorer-content::-webkit-scrollbar-thumb:hover {
+    background:
+        rgba(255, 255, 255, 0.18);
+}
+
+
+/* ==========================================================================
+ * EXPLORER SECTION
+ * ========================================================================== */
+
+.corei-explorer-section {
+    width: 100%;
+
+    margin: 0;
+    padding: 0;
+}
+
+
+/* ==========================================================================
+ * SECTION HEADER
+ *
+ * Dense IDE-style hierarchy.
+ * ========================================================================== */
+
+.corei-explorer-section-header {
+    width: 100%;
+
+    height: 26px;
+    min-height: 26px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 3px;
+
+    padding:
+        0 8px;
+
+    box-sizing: border-box;
+
+    border: 0;
+
+    background:
+        transparent;
+
+    color:
+        rgba(255, 255, 255, 0.62);
+
+    cursor: pointer;
+
+    text-align: left;
+
+    font-family:
+        inherit;
+
+    font-size: 10px;
+    line-height: 12px;
+
+    font-weight: 600;
+
+    letter-spacing:
+        0.40px;
+
+    transition:
+        background-color 70ms ease,
+        color 70ms ease;
+}
+
+
+.corei-explorer-section-header:hover {
+    background:
+        rgba(255, 255, 255, 0.032);
+
+    color:
+        rgba(255, 255, 255, 0.86);
+}
+
+
+.corei-explorer-section-chevron {
+    width: 14px;
+    height: 14px;
+
+    min-width: 14px;
+
+    flex:
+        0 0 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color:
+        rgba(255, 255, 255, 0.42);
+}
+
+
+.corei-explorer-section-header:hover
+.corei-explorer-section-chevron {
+    color:
+        rgba(255, 255, 255, 0.70);
+}
+
+
+/* ==========================================================================
+ * SECTION CONTENT
+ * ========================================================================== */
+
+.corei-explorer-section-content {
+    width: 100%;
+
+    padding:
+        0 0 3px;
+}
+
+
+/* ==========================================================================
+ * EXPLORER ITEM
+ *
+ * Compact item geometry.
+ * ========================================================================== */
+
+.corei-explorer-item {
+    position: relative;
+
+    width: 100%;
+
+    height: 24px;
+    min-height: 24px;
+
+    display: flex;
+    align-items: center;
+
+    padding:
+        0 8px 0 25px;
+
+    margin: 0;
+
+    box-sizing: border-box;
+
+    border: 0;
+
+    border-radius: 0;
+
+    background:
+        transparent;
+
+    color:
+        rgba(255, 255, 255, 0.56);
+
+    cursor: pointer;
+
+    text-align: left;
+
+    font-family:
+        inherit;
+
+    font-size: 11px;
+    line-height: 14px;
+
+    font-weight: 400;
+
+    transition:
+        background-color 60ms ease,
+        color 60ms ease;
+}
+
+
+.corei-explorer-item:hover {
+    background:
+        rgba(255, 255, 255, 0.034);
+
+    color:
+        rgba(255, 255, 255, 0.86);
+}
+
+
+.corei-explorer-item.selected {
+    background:
+        rgba(211, 170, 88, 0.075);
+
+    color:
+        rgba(255, 255, 255, 0.94);
+}
+
+
+/* ==========================================================================
+ * ITEM MARKER
+ * ========================================================================== */
+
+.corei-explorer-item-marker {
+    position: absolute;
+
+    left: 16px;
+
+    width: 3px;
+    height: 3px;
+
+    border-radius:
+        50%;
+
+    background:
+        rgba(255, 255, 255, 0.22);
+}
+
+
+.corei-explorer-item.selected
+.corei-explorer-item-marker {
+    background:
+        #d3aa58;
+}
+
+
+/* ==========================================================================
+ * ITEM LABEL
+ * ========================================================================== */
+
+.corei-explorer-item-label {
+    min-width: 0;
+
+    overflow: hidden;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    color:
+        inherit;
+}
+
+
+/* ==========================================================================
+ * COMPACT WIDTH BEHAVIOUR
+ *
+ * Keeps the Explorer usable when the operator reduces its width.
+ * ========================================================================== */
+
+@media (max-width: 160px) {
+
+    .corei-explorer-header {
+        padding-left:
+            8px;
+    }
+
+
+    .corei-explorer-title {
+        font-size: 9px;
+        letter-spacing:
+            0.45px;
+    }
+
+
+    .corei-explorer-search-row {
+        padding-left:
+            5px;
+
+        padding-right:
+            5px;
+    }
+
+
+    .corei-explorer-item {
+        padding-left:
+            21px;
+
+        padding-right:
+            5px;
+    }
+
+
+    .corei-explorer-section-header {
+        padding-left:
+            5px;
+
+        padding-right:
+            5px;
+    }
+
+
+    .corei-explorer-item-marker {
+        left:
+            12px;
+    }
+}
+
+
+/* ==========================================================================
+ * VERY NARROW EXPLORER
+ * ========================================================================== */
+
+@media (max-width: 100px) {
+
+    .corei-explorer-header {
+        padding:
+            0 4px;
+    }
+
+
+    .corei-explorer-title {
+        font-size:
+            8px;
+    }
+
+
+    .corei-explorer-actions {
+        display:
+            none;
+    }
+
+
+    .corei-explorer-search-row {
+        padding:
+            4px;
+    }
+
+
+    .corei-explorer-section-header {
+        padding:
+            0 4px;
+    }
+
+
+    .corei-explorer-item {
+        padding-left:
+            18px;
+
+        padding-right:
+            4px;
+    }
+
+
+    .corei-explorer-item-marker {
+        left:
+            9px;
+    }
+}

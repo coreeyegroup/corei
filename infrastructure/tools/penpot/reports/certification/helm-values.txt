@@ -1,0 +1,26 @@
+USER-SUPPLIED VALUES:
+config:
+  objectsStorage:
+    storageBackend: fs
+  postgresql:
+    database: penpot
+    host: penpot-postgres.tools.svc.cluster.local
+    password: penpot-postgres-password
+    port: 5432
+    username: penpot
+  publicUri: http://192.168.1.100:30080
+  redis:
+    database: "0"
+    host: penpot-redis.tools.svc.cluster.local
+    port: 6379
+global:
+  storageClass: longhorn
+ingress:
+  enabled: false
+persistence:
+  assets:
+    enabled: true
+    size: 20Gi
+    storageClass: longhorn
+service:
+  type: NodePort

@@ -1,0 +1,374 @@
+UNIVERSAL PHASE STRUCTURE (MANDATORY TEMPLATE)
+
+This document is a deterministic system contract, not a descriptive guideline.
+
+Every phase (A → D and beyond) MUST contain the following sections.
+
+This is non-negotiable.
+If any section is missing → phase is incomplete.
+
+GLOBAL RULES / CONSTRAINTS (MANDATORY)
+
+	1.	Single Ownership Rule:
+		Each concept MUST be defined in only one section.
+		Cross-section duplication is strictly prohibited.
+
+	2.	Deterministic Completeness Rule (MANDATORY):
+
+		Every section MUST satisfy:
+
+			- No ambiguity
+			- No multiple interpretations
+			- No missing execution conditions
+
+		Each definition MUST be:
+
+			closed (no missing variables)
+			ordered (execution precedence defined if applicable)
+			deterministic (same input → same output)
+
+		Violation:
+			Phase is INVALID
+
+	3. Execution Completeness Constraint (MANDATORY)
+
+		If any section contains:
+
+			undefined variables
+			missing ordering
+			implicit behavior
+
+		→ Phase MUST be REJECTED
+
+1. PHASE IDENTITY LAYER
+	1.1 Phase Name
+		Clear, unambiguous identity
+		Example: Phase A — Trading Model Design
+	1.2 Phase Role
+		What role this phase plays in the system
+		Must map to global system lifecycle
+	1.3 Phase Objective
+		Single measurable objective
+		Not descriptive — must be outcome-driven
+	1.4 Why This Phase Exists
+		What failure it prevents
+		What risk it controls
+
+2. PHASE SCOPE CONTROL
+	2.1 Included Scope (STRICT)
+		Explicit list of what is allowed
+		No ambiguity
+	2.2 Excluded Scope (STRICT)
+		Explicit list of what is NOT allowed
+		Prevents cross-phase leakage
+	This enforces:
+		Clean architecture boundaries
+		No infra logic inside Phase A
+		No trading logic inside Phase C
+
+3. ARCHITECTURAL INTENT LAYER
+	3.1 Core Design Principles
+		Determinism
+		Modularity
+		Auditability
+		Scalability
+	3.2 Architectural Model
+		Logical / Constraint / Infra / Execution (depends on phase)
+	3.3 System Positioning
+		Where this phase sits in:
+			Data flow
+			Decision flow
+			Execution chain
+
+4. DOMAIN MODEL DEFINITION
+This is critical and often missed.
+	4.1 Entities
+		Define all objects in this phase
+			Example (Phase A): signal, decision, trade_intent
+	4.2 Attributes
+		What defines each entity
+	4.3 Relationships
+		How entities interact
+	4.4 Ownership
+		Which phase owns each entity (cross-phase control)
+
+	4.5	SECTION OWNERSHIP ENFORCEMENT (MANDATORY)
+
+			Concept → Allowed Section:
+
+				Entities → Section 4
+				Attributes → Section 4
+				Logic → Section 5
+				Input/Output → Section 6
+				Constraints/Invariants → Section 8
+				State → Section 9
+				Traceability/Hash → Section 18
+
+			Constraint:
+
+				Same concept MUST NOT appear in multiple sections
+
+			Violation:
+				DUPLICATION → NON-DETERMINISM
+
+5. LOGIC / RULE ENGINE (CORE OF PHASE)
+This is the heart of each phase.
+	Must define:
+	5.1	Rules
+	5.2	Conditions
+	5.3	Decision logic
+	5.4	Constraints (if applicable)
+
+	Example:
+		Phase A → trading logic rules
+		Phase B → system constraints rules
+		Phase D → execution + risk rules
+
+	5.5	RULE EXECUTION ORDER (MANDATORY)
+
+		All rules MUST define:
+
+			execution sequence (strict order)
+			precedence hierarchy
+			conflict resolution order
+
+		Constraints:
+
+			- No rule may override higher-precedence rule
+			- No implicit ordering allowed
+
+		Violation:
+			RULE COLLISION / AMBIGUITY
+
+6. FLOW ARCHITECTURE
+	6.0	CANONICAL CONTRACT (MANDATORY)
+
+		Each phase MUST define:
+
+		canonical_input_set = {
+			input_data_snapshot
+			configuration_snapshot
+			version_identifiers
+		}
+
+		Constraints:
+
+			- MUST be immutable
+			- MUST be complete (no implicit fields)
+			- MUST be hash-identifiable
+
+		All computations MUST use ONLY canonical_input_set
+
+		Output MUST be:
+
+			deterministic
+			fully derived from canonical_input_set
+
+		Violation:
+			NON-DETERMINISTIC SYSTEM
+
+	6.1 Input Definition
+		What comes into this phase
+		Must map from previous phase
+	6.2 Processing Flow
+		Step-by-step deterministic transformation
+	6.3 Output Definition
+		Exact outputs produced
+	6.4 Flow Diagram (mandatory conceptually)
+		Even if text-based:
+		Input → Transform → Output
+
+	6.5	Flow Canonicalization Rule (MANDATORY):
+
+			Input MUST be EXACT (no extra fields)
+			Processing MUST be deterministic
+			Output MUST be fully defined
+
+			Flow MUST NOT:
+
+			- introduce new data not in input
+			- depend on runtime state
+
+7. PIPELINE STRUCTURE
+This is different from flow — more operational.
+	Define:
+		Stages
+		Transitions
+		State changes
+	Example:
+		Strategy lifecycle pipeline
+		Order lifecycle pipeline
+
+8. CONTROL & CONSTRAINTS
+	8.1 Hard Rules
+		Must NEVER be violated
+	8.2 Soft Rules
+		Preferable but flexible
+	8.3 Guardrails
+		Prevent invalid states
+
+	8.4	Boundary Definition Rule (MANDATORY):
+
+			All numeric values MUST define:
+
+				min
+				max
+				edge behavior
+				invalid condition
+
+			No implicit bounds allowed
+
+9. STATE & DATA MODEL
+	9.1 State Definition
+		What state exists in this phase
+	9.2 State Transitions
+		How state changes
+	9.3 Source of Truth
+		Who owns the state
+	Critical for:
+		Phase C & D especially
+
+10. FAILURE MODEL
+	10.1 Failure Scenarios
+		What can go wrong
+	10.2 Failure Impact
+		System-level consequences
+	10.3 Mitigation Logic
+		How system reacts
+	This is where most systems collapse if skipped.
+
+	10.4 Failure Detection Rule (MANDATORY):
+
+			Each failure scenario MUST define:
+
+				trigger condition (deterministic)
+				detection method
+				system response
+
+			Silent failure is NOT allowed
+
+11. ASSUMPTION REGISTER
+	Mandatory.
+		Each assumption must include:
+		Assumption statement
+		Why it exists / reason
+		Validation phase
+		Status (open / validated / rejected)
+	Constraint:
+		From blueprint- no hidden assumptions allowed
+
+12. VALIDATION FRAMEWORK
+	12.1 Completeness Checklist
+		What must exist
+	12.2 Validation Method
+		How it is tested
+	12.3 Acceptance Criteria
+		Binary: pass / fail
+
+		Constraint:
+			Without this → fake completion
+
+	12.4 Validation Coverage Rule (MANDATORY):
+
+			Each section MUST map to:
+
+				Red Team attack layers (1–13)
+				Blue Team validation layers (1–13)
+
+			Constraint:
+
+				Every rule MUST be tested by at least one validation scenario
+
+			Violation:
+				INCOMPLETE VALIDATION
+
+	12.5 Ambiguity Check (MANDATORY):
+
+			For each rule:
+
+				simulate multiple interpretations
+
+			If outputs differ:
+
+				rule MUST be rewritten
+
+			Phase fails if ANY ambiguity exists
+
+13. OUTPUT (DELIVERABLE SPEC)
+	Must define:
+		Exact structure of output
+		Format
+		Components
+	Example:
+		Phase A → Trading Model Spec
+		Phase B → Constraints Spec
+
+14. TRACEABILITY MAPPING
+	Mandatory linkage:
+		Input ← previous phase
+		Output → next phase
+	Example:
+		Phase D must map to Phase A logic
+	Constraint:
+		Full lineage must exist
+
+15. CROSS-PHASE CONSISTENCY RULES
+	Define:
+		What this phase OWNS
+		What it REFERENCES
+	Constraint:
+		No duplication across phases
+
+16. SCALABILITY MODEL
+	Must define:
+		Horizontal scaling behavior
+		Limits
+		Expansion capability
+	Required for institutional system
+
+17. GOVERNANCE INTEGRATION
+From Phase 0:
+	Include:
+		Approval required
+		Versioning applied
+		Change control impact
+
+18. AUDITABILITY & OBSERVABILITY REQUIREMENTS
+	Must define:
+		traceability requirements
+		logging requirements
+		explainability requirements
+		replay capability
+
+19. RISK CONSIDERATIONS
+	Define:
+		Risks introduced in this phase
+		Risk controls inside phase
+		Dependencies on global risk policy
+
+20. FAILURE CONDITION (PHASE LEVEL)
+	Explicitly define:
+		When is this phase considered FAILED?
+	Example:
+		Ambiguous logic exists
+		Non-deterministic behavior
+		traceability missing
+		validation incomplete
+		Missing mappings
+
+21. PHASE LOCK CRITERIA (CRITICAL)
+	Phase cannot proceed unless:
+		All sections complete
+		Validation passed
+		Assumptions resolved or tracked
+		Approved via governance
+
+FINAL EXECUTION RULE (VERY IMPORTANT)
+	From blueprint reinforcement:
+
+		If a phase is weak → all downstream phases collapse
+
+		So:
+			No skipping
+			No approximation
+			No deferred fixes ("fix later" is prohibited)

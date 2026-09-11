@@ -1,0 +1,494 @@
+🧱 PHASE C (PHASE 1–5) — EVENT BACKBONE (KAFKA)
+🔵 OBJECTIVE
+Build deterministic, persistent, broker-based event backbone
+for trading platform (real-time data pipeline)
+🔴 INITIAL STATE (PROBLEM)
+log.dirs = /tmp/kafka-logs ❌
+
+Observed:
+
+ls /tmp/kafka-logs → No such file
+ROOT ISSUE
+Kafka was writing to ephemeral storage (/tmp)
+→ Data loss risk
+→ Not production-safe
+🔵 FINAL ARCHITECTURE
+1️⃣ STORAGE DESIGN
+PersistentVolumeClaim (PVC)
+→ Mounted at: /var/lib/kafka/data
+→ StorageClass: local-path
+→ AccessMode: ReadWriteOnce
+2️⃣ KAFKA MODE
+KRaft Mode (No Zookeeper)
+process.roles = broker,controller
+3️⃣ CONFIGMAP (Kafka Config)
+process.roles=broker,controller
+node.id=1
+controller.quorum.voters=1@kafka-0.kafka:9093
+
+listeners=PLAINTEXT://:9092,CONTROLLER://:9093
+advertised.listeners=PLAINTEXT://kafka-0.kafka:9092
+
+listener.security.protocol.map=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
+controller.listener.names=CONTROLLER
+inter.broker.listener.name=PLAINTEXT
+
+log.dirs=/var/lib/kafka/data
+4️⃣ STATEFULSET DESIGN
+
+Key properties:
+
+volumeMounts:
+  - mountPath: /var/lib/kafka/data
+    name: kafka-data
+
+volumeClaimTemplates:
+  storage: 5Gi
+  storageClassName: local-path
+5️⃣ STORAGE INITIALIZATION LOGIC
+if [ ! -f /var/lib/kafka/data/meta.properties ]; then
+  kafka-storage.sh format
+fi
+6️⃣ HEADLESS SERVICE
+clusterIP: None
+
+Used for:
+
+kafka-0.kafka DNS resolution
+🔵 VALIDATION DONE
+✔ Kafka pod running
+✔ PVC bound
+✔ No /tmp usage
+✔ Persistent data path working
+✔ KRaft cluster initialized
+🧠 KEY DECISIONS
+• No Helm (full control via YAML)
+• No ephemeral storage
+• Deterministic startup (format only once)
+⚠️ FUTURE DEBUG NOTES
+If Kafka restarts frequently:
+→ Check meta.properties existence
+
+If no data:
+→ Check log.dirs path mapping
+
+If DNS issue:
+→ Check headless service
+🗄️ PHASE 6 — STORAGE LAYER
+🔵 OBJECTIVE
+Provide durable + analytical + low-latency storage
+🔵 COMPONENTS
+1️⃣ PostgreSQL (Transactional DB)
+
+Installed via Helm:
+
+helm install postgres bitnami/postgresql
+Purpose
+• relational data
+• metadata
+• transactional storage
+2️⃣ TimescaleDB (Time-series DB)
+Deployment
+StatefulSet + Service
+Namespace: storage
+Validation
+SELECT extname FROM pg_extension;
+
+→ timescaledb ✔
+Purpose
+• market data
+• time-series analytics
+• candle storage
+3️⃣ Redis (Cache Layer)
+
+Installed via Helm:
+
+helm install redis bitnami/redis
+Architecture
+redis-master (stateful)
+headless service
+Purpose
+• low-latency cache
+• session storage
+• fast reads
+🔵 VALIDATION
+✔ postgres → Running
+✔ timescaledb → extension enabled
+✔ redis → master running
+✔ services accessible
+🧠 KEY DECISIONS
+• Separate transactional vs time-series DB
+• Redis isolated for latency-sensitive operations
+• Namespace: storage (logical isolation)
+⚠️ TROUBLESHOOT NOTES
+If Timescale fails:
+→ check extension creation
+
+If Redis unavailable:
+→ check master service
+
+If Postgres not reachable:
+→ check Helm secrets / svc
+🔐 PHASE 7 — IDENTITY & SECRETS
+🔵 OBJECTIVE
+Secure system:
+• authentication
+• authorization
+• secrets management
+🔵 COMPONENTS
+1️⃣ KEYCLOAK (Identity Provider)
+
+Installed via Helm (after fixing image issues)
+
+CONFIGURATION
+Realm: core-system
+Client: core-api
+Authentication Flow
+Client Credentials Grant
+VALIDATION
+curl /token → access_token received ✔
+ISSUE ENCOUNTERED
+invalid_grant: Account not fully set up
+FIX
+Use client_credentials instead of password grant
+2️⃣ VAULT (Secrets Management)
+Deployment
+helm install vault hashicorp/vault --set server.dev.enabled=true
+Secrets Engine
+vault secrets enable kv-v2
+Secret Stored
+vault kv put secret/core/db \
+  username=postgres \
+  password=corepass
+VALIDATION
+vault kv get secret/core/db ✔
+3️⃣ VAULT + KEYCLOAK INTEGRATION (JWT)
+AUTH ENABLE
+vault auth enable jwt
+CONFIG
+vault write auth/jwt/config \
+  oidc_discovery_url=Keycloak URL \
+  bound_issuer=Keycloak issuer
+ROLE
+vault write auth/jwt/role/core-role \
+  role_type=jwt \
+  bound_audiences=account \
+  user_claim=preferred_username
+VALIDATION
+vault write auth/jwt/login jwt=<token>
+→ token issued ✔
+ISSUE ENCOUNTERED
+token expired
+FIX
+Use fresh JWT token
+🔵 FINAL STATE
+✔ Keycloak issuing tokens
+✔ Vault validating JWT
+✔ Secrets stored securely
+✔ Auth flow functional
+🧠 KEY DECISIONS
+• Use JWT instead of static credentials
+• Centralized secret storage (Vault)
+• Identity separated from application
+⚠️ TROUBLESHOOT NOTES
+If JWT fails:
+→ check token expiry
+
+If Vault auth fails:
+→ check bound_issuer
+
+If Keycloak UI missing fields:
+→ check realm/client setup
+🔚 CONSOLIDATED SYSTEM STATE
+✔ INFRA
+Kubernetes stable
+PVC working
+Networking stable
+✔ DATA
+Kafka → event stream
+Postgres → relational
+Timescale → time-series
+Redis → cache
+✔ SECURITY
+Keycloak → auth
+Vault → secrets
+JWT → integration
+✔ PLATFORM READY FOR
+Phase 8 → Observability
+Phase 9 → API Layer
+Strategy Engine
+Execution Engine
+🧠 FINAL ENGINEERING INSIGHT
+BEFORE
+Loose components
+No guarantees
+Unstable behavior
+AFTER
+Deterministic platform:
+
+• persistent storage
+• isolated services
+• secured access
+• validated data flow base
+📌 THIS DOCUMENT ENABLES
+✔ Full rebuild from scratch
+✔ Root cause tracing
+✔ System audits
+✔ Production debugging
+
+1️⃣ FULL ARCHITECTURE DIAGRAM
+
+(Event → Storage → Auth → Execution → Observability)
+
+🔵 SYSTEM VIEW (END-TO-END DATA FLOW)
+┌─────────────────────────────────────────────────────────────┐
+│                     EXTERNAL MARKET DATA                    │
+│   (Broker APIs / Exchanges / WebSockets / FIX / REST)       │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│                EVENT INGESTION SERVICE (Phase 8.1)          │
+│  • Normalization                                            │
+│  • Validation pre-check                                     │
+│  • Emits raw events                                         │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│                    KAFKA EVENT BACKBONE                     │
+│  Topics:                                                    │
+│   • raw_events                                              │
+│   • validated_events                                        │
+│   • signals                                                 │
+│   • execution_orders                                        │
+│   • dead_letter                                             │
+│                                                             │
+│  Config:                                                    │
+│   • KRaft mode                                              │
+│   • Persistent PVC (/var/lib/kafka/data)                    │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│               EVENT VALIDATION SERVICE                      │
+│  • Schema validation                                        │
+│  • Data integrity checks                                    │
+│  • Routing (valid / dead_letter)                            │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│                   STORAGE LAYER (Phase 6)                   │
+│                                                             │
+│  ┌──────────────────────┐   ┌────────────────────────────┐   │
+│  │ PostgreSQL           │   │ TimescaleDB                │   │
+│  │ • Orders             │   │ • Market ticks             │   │
+│  │ • Trades             │   │ • Candles                  │   │
+│  │ • Metadata           │   │ • Indicators               │   │
+│  └──────────────────────┘   └────────────────────────────┘   │
+│                                                             │
+│  ┌────────────────────────────────────────────────────────┐ │
+│  │ Redis                                                  │ │
+│  │ • Cache                                                │ │
+│  │ • Real-time state                                      │ │
+│  │ • Session / hot data                                   │ │
+│  └────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│                STRATEGY / SIGNAL ENGINE (Future)            │
+│  • Consumes validated_events                               │
+│  • Generates signals                                       │
+│  • Publishes → Kafka (signals topic)                       │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│                EXECUTION ENGINE (Future)                    │
+│  • Consumes signals                                        │
+│  • Risk checks                                             │
+│  • Order creation                                          │
+│  • Publishes execution_orders                              │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│                  BROKER / EXCHANGE API                      │
+└─────────────────────────────────────────────────────────────┘
+🔐 AUTH & SECRETS LAYER (PHASE 7)
+┌───────────────────────────────┐
+│          KEYCLOAK             │
+│  • Realm: core-system         │
+│  • Client: core-api           │
+│  • JWT Issuer                 │
+└───────────────┬───────────────┘
+                │ JWT
+                ▼
+┌───────────────────────────────┐
+│            VAULT              │
+│  • KV secrets                │
+│  • JWT auth (OIDC)           │
+│  • Dynamic credentials       │
+└───────────────┬───────────────┘
+                │
+                ▼
+┌───────────────────────────────┐
+│        SERVICES               │
+│  • Fetch secrets dynamically  │
+│  • No hardcoded credentials   │
+└───────────────────────────────┘
+📊 OBSERVABILITY LAYER (PHASE 8)
+┌───────────────────────────────┐
+│        METRICS SERVER         │
+│  • kubectl top               │
+└───────────────┬───────────────┘
+                ▼
+┌───────────────────────────────┐
+│         PROMETHEUS            │
+│  • Scrapes cluster metrics    │
+│  • Stores time-series         │
+└───────────────┬───────────────┘
+                ▼
+┌───────────────────────────────┐
+│          GRAFANA              │
+│  • Dashboards                 │
+│  • Alerts (future)            │
+└───────────────────────────────┘
+🧠 ARCHITECTURE PROPERTIES
+✔ Event-driven (Kafka backbone)
+✔ Decoupled services
+✔ Persistent state (PVC-backed)
+✔ Secure (JWT + Vault)
+✔ Observable (metrics pipeline)
+✔ Scalable (horizontal-ready)
+2️⃣ FAILURE SCENARIO PLAYBOOK
+
+(Production Troubleshooting Guide)
+
+🔴 CATEGORY A — CLUSTER / INFRA FAILURE
+❌ SYMPTOM
+Pods → Evicted / Pending
+kubectl top → not working
+ROOT CAUSE
+• Memory pressure
+• Disk pressure
+• No resource limits
+ACTION
+kubectl get nodes
+kubectl describe node
+
+kubectl scale deployment <heavy-service> --replicas=0
+kubectl delete pod <evicted> --force --grace-period=0
+PREVENTION
+✔ Always define resources (requests + limits)
+✔ Monitor node usage
+✔ Deploy observability early
+🔴 CATEGORY B — KAFKA FAILURE
+❌ SYMPTOM
+No events flowing
+Topics empty
+CHECK
+kubectl exec -it kafka-0 -n kafka -- \
+/opt/kafka/bin/kafka-console-consumer.sh \
+--topic validated_events \
+--bootstrap-server localhost:9092
+ROOT CAUSE
+• Wrong log.dirs
+• PVC not mounted
+• Broker restart without storage
+FIX
+✔ Ensure log.dirs=/var/lib/kafka/data
+✔ PVC bound
+✔ meta.properties exists
+🔴 CATEGORY C — STORAGE FAILURE
+❌ SYMPTOM
+DB connection fails
+Queries slow
+CHECK
+kubectl get pods -n storage
+kubectl exec -it timescaledb-0 -- psql
+ROOT CAUSE
+• PVC issue
+• Extension missing
+• Memory pressure
+FIX
+CREATE EXTENSION IF NOT EXISTS timescaledb;
+🔴 CATEGORY D — AUTH FAILURE
+❌ SYMPTOM
+401 Unauthorized
+invalid_grant
+ROOT CAUSE
+• Wrong grant type
+• Token expired
+• Client misconfigured
+FIX
+grant_type=client_credentials
+VAULT FAILURE
+error validating token
+FIX
+✔ Check bound_issuer
+✔ Use fresh JWT
+✔ Verify OIDC URL
+🔴 CATEGORY E — METRICS FAILURE
+❌ SYMPTOM
+kubectl top node → not working
+ROOT CAUSE
+metrics-server misconfigured
+FIX
+--kubelet-insecure-tls
+--kubelet-preferred-address-types=InternalIP
+--kubelet-use-node-status-port
+🔴 CATEGORY F — DEPLOYMENT FAILURE
+❌ SYMPTOM
+InvalidImageName
+ImagePullBackOff
+ROOT CAUSE
+Invalid image / private registry
+FIX
+✔ Use valid image
+✔ Check imagePullSecrets
+🔴 CATEGORY G — SYSTEM INSTABILITY
+❌ SYMPTOM
+Random crashes
+Pods restarting
+ROOT CAUSE
+No resource governance
+FIX
+resources:
+  requests:
+    memory: 128Mi
+  limits:
+    memory: 256Mi
+🧠 GLOBAL RECOVERY STRATEGY
+STEP 1
+Stabilize cluster
+STEP 2
+Remove failing workloads
+STEP 3
+Validate core infra:
+Kafka + DB + Redis + Vault
+STEP 4
+Reintroduce workloads one-by-one
+STEP 5
+Enable observability
+🔒 FINAL ENGINEERING PRINCIPLE
+SYSTEM ORDER:
+
+1. Infrastructure
+2. Storage
+3. Event Backbone
+4. Identity + Secrets
+5. Workloads
+6. Observability
+7. Execution Layer
+🚀 RESULT
+
+You now have:
+
+✔ Deterministic event-driven trading backbone
+✔ Persistent + scalable storage
+✔ Secure auth system
+✔ Real-time observability capability
+✔ Clear failure recovery path

@@ -1,0 +1,489 @@
+/******************************************************************************
+ *
+ * COREI OPERATING SYSTEM
+ *
+ * STAGE-25
+ * PHASE-17
+ * STEP-04
+ *
+ * FILE:
+ * navigation.css
+ *
+ * PURPOSE:
+ * Institutional Dense Navigation Surface
+ *
+ * DESCRIPTION:
+ * VS Code style operator navigation foundation.
+ *
+ * OWNERSHIP:
+ * Navigation Domain
+ *
+ ******************************************************************************/
+
+.corei-navigation {
+
+    width:100%;
+
+    height:100%;
+
+    display:flex;
+
+    flex-direction:column;
+
+    overflow:hidden;
+
+    box-sizing:border-box;
+
+    padding: 2px 4px;
+
+    background:
+        var(--corei-color-surface-1);
+
+    color:
+        var(--corei-color-text-primary);
+
+}
+
+.corei-navigation__body {
+
+    flex:1;
+
+    overflow-y:auto;
+
+    overflow-x:hidden;
+
+    padding:4px 0;
+
+}
+
+
+/* HEADER */
+
+.corei-navigation-header {
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:2px;
+
+    padding:8px 8px 6px;
+
+}
+
+.corei-navigation-header__identity {
+
+    display:flex;
+
+    align-items:flex-start;
+
+    gap:8px;
+
+    min-width:0;
+
+}
+
+.corei-navigation-header__mark {
+
+    width:18px;
+
+    flex-shrink:0;
+
+    font-size:14px;
+
+    font-weight:400;
+
+    line-height:1;
+
+    opacity:.65;
+
+    color:
+        var(--corei-color-text-secondary);
+
+}
+
+.corei-navigation-header__copy {
+
+    flex:1;
+
+    min-width:0;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    gap:2px;
+
+}
+
+
+.corei-navigation-header__eyebrow {
+
+    font-size:10px;
+
+    opacity:.55;
+
+}
+
+
+.corei-navigation-header__title {
+
+    font-size:12px;
+
+    font-weight:600;
+
+    line-height:1.25;
+
+}
+
+
+.corei-navigation-header__description {
+
+    font-size:11px;
+
+    line-height:1.35;
+
+    opacity:.65;
+
+}
+
+
+/* SEARCH */
+
+.corei-navigation-search {
+
+    height:26px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:4px;
+
+    margin:6px 0 8px;
+
+    padding:0 8px;
+
+    background:
+        var(--corei-color-surface-0);
+
+    border:
+        1px solid var(--corei-color-border);
+
+}
+
+
+.corei-navigation-search__input {
+
+    flex:1;
+
+    height:100%;
+
+    border:none;
+
+    outline:none;
+
+    background:transparent;
+
+    color:
+        var(--corei-color-text-primary);
+
+    font-size:12px;
+
+}
+
+.corei-navigation-search__input::placeholder {
+
+    color:var(--corei-color-text-secondary);
+
+    opacity:.75;
+
+}
+
+
+/* GROUP */
+
+.corei-navigation-group {
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:0;
+
+    margin-bottom:2px;
+
+}
+
+
+.corei-navigation-group__header {
+
+    height:18px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:2px 8px;
+
+    font-size:10px;
+
+    text-transform:uppercase;
+
+    opacity:.55;
+
+}
+
+
+/* ITEMS */
+
+.corei-navigation-group__items {
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:1px;
+
+}
+
+
+.corei-navigation-item {
+
+    width:100%;
+
+    display:flex;
+
+    align-items:flex-start;
+
+    height:34px;
+
+    gap:6px;
+
+    padding:4px 6px 2px;
+
+    border:none;
+
+    background:transparent;
+
+    color:
+        var(--corei-color-text-secondary);
+
+    font-size:12px;
+
+    cursor:pointer;
+
+}
+
+
+.corei-navigation-item[data-navigation-active="true"] {
+
+    background:
+        rgba(255,255,255,.045);
+
+    color:
+        var(--corei-color-text-primary);
+
+}
+
+.corei-navigation-item:hover{
+
+    background:
+        rgba(255,255,255,.03);
+
+}
+
+
+.corei-navigation-item__icon {
+
+    width:16px;
+
+    height:16px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    flex-shrink:0;
+
+    font-size:11px;
+
+    opacity:.8;
+
+    margin-top:1px;
+
+}
+
+
+.corei-navigation-item__content {
+
+    display:flex;
+
+    flex-direction:column;
+
+    min-width:0;
+
+    gap:0;
+
+}
+
+.corei-navigation-item__label,
+.corei-navigation-item__path{
+
+    text-align:left;
+
+}
+
+
+.corei-navigation-item__label {
+
+    font-size: 11px;
+
+    font-weight:500;
+
+    line-height: 1.05;
+
+}
+
+
+.corei-navigation-item__path {
+
+    font-size:10px;
+
+    line-height:1;
+
+    opacity:.65;
+
+    margin-top:-1px;
+
+    color:
+        var(--corei-color-text-secondary);
+
+}
+
+
+.corei-navigation-item__chevron {
+
+    margin-left:auto;
+
+    opacity:.4;
+
+    display:flex;
+
+    align-items:center;
+
+    height:100%;
+
+}
+
+.corei-navigation-item__indicator {
+
+    width:1px;
+
+    align-self:flex-start;
+
+    margin-top:3px;
+
+    height:18px;
+
+    border-radius:0;
+
+    background:rgba(212,175,55,.35);
+
+}
+
+
+/* FOOTER */
+
+.corei-navigation-footer {
+
+    margin-top:auto;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+    gap:2px;
+
+    padding:6px 8px;
+
+    border-top:
+        1px solid var(--corei-color-border);
+
+}
+
+.corei-navigation-footer__status {
+
+    display:none;
+
+}
+
+.corei-navigation-footer__label {
+
+    font-size:10px;
+
+    opacity:.55;
+
+    letter-spacing:.04em;
+
+}
+
+.corei-navigation-footer__active {
+
+    font-size:11px;
+
+    font-weight:400;
+
+}
+
+/******************************************************************************
+ * Institutional Scrollbar
+ ******************************************************************************/
+
+.corei-navigation__body::-webkit-scrollbar {
+
+    width: 6px;
+
+}
+
+.corei-navigation__body::-webkit-scrollbar-track {
+
+    background: transparent;
+
+}
+
+.corei-navigation__body::-webkit-scrollbar-thumb {
+
+    border-radius: 999px;
+
+    background: rgba(255,255,255,.12);
+
+}
+
+.corei-navigation__body::-webkit-scrollbar-thumb:hover {
+
+    background: rgba(255,255,255,.22);
+
+}
+
+::-webkit-scrollbar {
+
+    width: 6px;
+
+}
+
+
+::-webkit-scrollbar-thumb {
+
+    background:
+    var(--corei-color-border);
+
+}

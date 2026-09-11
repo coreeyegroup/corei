@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <title>docs docs docs stage 24 Build Phase 02 BU 008.md.md.md</title>
+  <style>
+  body {
+    background: #0A0D12;
+    color: #E3E7EC;
+    font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px 40px;
+  }
+
+  h1 {
+    font-size: 26px;
+    font-weight: 600;
+    color: #C6A46A;
+    margin: 24px 0 12px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 8px;
+  }
+
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #D4B88A;
+    margin: 20px 0 10px 0;
+    border-bottom: 1px solid #28303C;
+    padding-bottom: 6px;
+  }
+
+  h3 {
+    font-size: 17px;
+    font-weight: 500;
+    color: #E3E7EC;
+    margin: 16px 0 8px 0;
+  }
+
+  h4 {
+    font-size: 15px;
+    font-weight: 500;
+    color: #C5CED9;
+    margin: 12px 0 6px 0;
+  }
+
+  p {
+    margin-bottom: 8px;
+    color: #C5CED9;
+  }
+
+  ul,
+  ol {
+    padding-left: 24px;
+    margin-bottom: 8px;
+    color: #C5CED9;
+  }
+
+  li {
+    margin-bottom: 2px;
+  }
+
+  code {
+    font-family: 'JetBrains Mono', 'Cascadia Code', monospace;
+    font-size: 13px;
+    background: rgba(255,255,255,0.05);
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid #28303C;
+    color: #C5CED9;
+  }
+
+  pre {
+    background: #18202A;
+    border: 1px solid #28303C;
+    border-radius: 6px;
+    padding: 16px 20px;
+    overflow: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 12px 0 16px 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #C5CED9;
+  }
+
+  pre code {
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 16px 0;
+    font-size: 13px;
+    color: #C5CED9;
+  }
+
+  th {
+    background: #18202A;
+    color: #C5CED9;
+    font-weight: 600;
+    text-align: left;
+    padding: 6px 12px;
+    border: 1px solid #28303C;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  td {
+    padding: 4px 12px;
+    border: 1px solid #28303C;
+    background: #0E1219;
+  }
+
+  tr:nth-child(even) td {
+    background: #121821;
+  }
+
+  blockquote {
+    border-left: 3px solid #C6A46A;
+    padding-left: 16px;
+    margin: 8px 0 12px 0;
+    color: #6E7883;
+    font-style: italic;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #28303C;
+    margin: 24px 0;
+  }
+
+  a {
+    color: #8BB4F0;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  strong {
+    color: #E3E7EC;
+    font-weight: 600;
+  }
+
+  img {
+    max-width: 100%;
+    border-radius: 4px;
+    border: 1px solid #28303C;
+  }
+
+  .doc-footer {
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid #28303C;
+    font-size: 12px;
+    color: #6E7883;
+    font-family: monospace;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+</style>
+</head>
+
+<body>
+
+  <div
+    class="doc-header"
+    style="
+      background:#121821;
+      border:1px solid #28303C;
+      border-radius:8px;
+      padding:1.2rem 1.8rem;
+      margin-bottom:1.8rem;
+    "
+  >
+
+    <div
+      style="
+        color:#C6A46A;
+        font-weight:600;
+        font-size:13px;
+        text-transform:uppercase;
+        letter-spacing:0.05em;
+      "
+    >
+      COREI · Stage Documentation
+    </div>
+
+
+
+    <h1
+      style="
+        font-size:28px;
+        font-weight:600;
+        color:#E3E7EC;
+        margin:0.1rem 0;
+        border-bottom:none;
+        padding-bottom:0;
+      "
+    >
+      docs docs docs stage 24 Build Phase 02 BU 008.md.md.md
+    </h1>
+
+    <div
+      style="
+        font-size:16px;
+        color:#C5CED9;
+      "
+    >
+      Stage Documentation
+      ·
+      Operational
+    </div>
+
+    <div
+      style="
+        display:flex;
+        flex-wrap:wrap;
+        gap:0.6rem 1.8rem;
+        margin-top:0.6rem;
+        font-size:13px;
+      "
+    >
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Status
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          Approved
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Version
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          1.0
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Classification
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          Operational
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Owner
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+          "
+        >
+          COREI
+        </span>
+      </span>
+
+      <span
+        style="
+          display:flex;
+          align-items:baseline;
+          gap:0.3rem;
+        "
+      >
+        <span
+          style="
+            color:#6E7883;
+            text-transform:uppercase;
+            font-size:10px;
+            letter-spacing:0.04em;
+            font-weight:600;
+          "
+        >
+          Repository
+        </span>
+
+        <span
+          style="
+            color:#E3E7EC;
+            font-weight:500;
+            font-family:monospace;
+          "
+        >
+          docs/docs_docs_docs_stage-24_Build_Phase-02_BU-008.md.md.md.md
+        </span>
+      </span>
+
+    </div>
+
+
+
+  </div>
+
+
+
+  <h1>BUILD UNIT-008</h1>
+<h2>Title</h2>
+<p>COREI OS Docking Engine</p>
+<hr>
+<h2>Objective</h2>
+<p>Implement the COREI OS Docking Engine responsible for managing the spatial organization of application windows within a workspace.</p>
+<p>Unlike the Window Manager, the Docking Engine does not own windows. Its responsibility is to arrange, organize, split, dock, and persist window layouts while remaining independent of window lifecycle management.</p>
+<hr>
+<h2>Scope</h2>
+<p>This Build Unit establishes the Docking Engine.</p>
+<p>Implemented:</p>
+<ul>
+<li>Dock Repository</li>
+<li>Dock Contracts</li>
+<li>Dock Models</li>
+<li>Dock Registry</li>
+<li>Runtime State</li>
+<li>Runtime Model</li>
+<li>Lifecycle</li>
+<li>Persistence</li>
+<li>Provider</li>
+<li>Components</li>
+<li>Hooks</li>
+<li>Public API</li>
+</ul>
+<hr>
+<h1>Docking Engine Architecture</h1>
+<pre><code>Docking Engine
+
+│
+
+├── Contracts
+
+├── Models
+
+├── Registry
+
+├── Runtime
+
+├── Lifecycle
+
+├── Persistence
+
+├── State
+
+├── Provider
+
+├── Components
+
+└── Hooks
+</code></pre>
+<p>The Docking Engine owns layout composition only.</p>
+<p>It does not own:</p>
+<ul>
+<li>Window Lifecycle</li>
+<li>Window Registration</li>
+<li>Window Focus</li>
+<li>Window Creation</li>
+</ul>
+<p>These responsibilities remain within the Window Manager.</p>
+<hr>
+<h1>Repository Structure</h1>
+<p>Implemented</p>
+<pre><code>src/docking/
+
+components/
+    Dock.tsx
+    DockHost.tsx
+
+contracts/
+    dock-contract.ts
+    dock-layout-contract.ts
+
+hooks/
+    use-dock.ts
+
+lifecycle/
+    dock-lifecycle.ts
+
+models/
+    dock.ts
+
+persistence/
+    dock-persistence.ts
+
+providers/
+    dock-provider.tsx
+
+registry/
+    dock-registry.ts
+
+runtime/
+    dock-runtime.ts
+
+state/
+    dock-state.ts
+
+index.ts
+</code></pre>
+<hr>
+<h1>Dock Contracts</h1>
+<p>Implemented:</p>
+<pre><code>dock-contract.ts
+</code></pre>
+<p>Defines the institutional dock contract.</p>
+<p>Current properties:</p>
+<ul>
+<li>Dock Identifier</li>
+<li>Title</li>
+<li>Active State</li>
+</ul>
+<p>Future extensions:</p>
+<ul>
+<li>Dock Region</li>
+<li>Dock Type</li>
+<li>Parent Container</li>
+<li>Orientation</li>
+<li>Tab Group</li>
+<li>Split Information</li>
+</ul>
+<hr>
+<h1>Dock Layout Contract</h1>
+<p>Implemented:</p>
+<pre><code>dock-layout-contract.ts
+</code></pre>
+<p>Defines runtime layout metadata.</p>
+<p>Current properties:</p>
+<ul>
+<li>Orientation</li>
+<li>Size</li>
+</ul>
+<p>Future extensions:</p>
+<ul>
+<li>Nested Splits</li>
+<li>Dock Groups</li>
+<li>Floating Containers</li>
+<li>Multi-monitor Layout</li>
+<li>Serialization Metadata</li>
+</ul>
+<hr>
+<h1>Dock Model</h1>
+<p>Implemented:</p>
+<pre><code>dock.ts
+</code></pre>
+<p>Provides the runtime model for dock management.</p>
+<p>Current implementation maps directly to the Dock Contract.</p>
+<p>Future versions will include:</p>
+<ul>
+<li>Child Nodes</li>
+<li>Parent Nodes</li>
+<li>Layout Metadata</li>
+<li>Runtime Metadata</li>
+<li>Persistence Metadata</li>
+</ul>
+<hr>
+<h1>Dock Registry</h1>
+<p>Implemented:</p>
+<pre><code>dock-registry.ts
+</code></pre>
+<p>Created the authoritative runtime registry for dock layouts.</p>
+<p>Current implementation initializes an empty institutional registry.</p>
+<p>Future responsibility:</p>
+<ul>
+<li>Dock Registration</li>
+<li>Layout Discovery</li>
+<li>Container Registration</li>
+<li>Runtime Layout Graph</li>
+</ul>
+<hr>
+<h1>Runtime State</h1>
+<p>Implemented:</p>
+<pre><code>dock-state.ts
+</code></pre>
+<p>Built using Zustand.</p>
+<p>Current state:</p>
+<ul>
+<li>Registered Docks</li>
+</ul>
+<p>Current actions:</p>
+<ul>
+<li>Register Dock</li>
+</ul>
+<p>Future state additions:</p>
+<ul>
+<li>Active Layout</li>
+<li>Dock Tree</li>
+<li>Split Graph</li>
+<li>Tab Groups</li>
+<li>Floating Containers</li>
+<li>Detached Containers</li>
+</ul>
+<hr>
+<h1>Runtime Model</h1>
+<p>Implemented:</p>
+<pre><code>dock-runtime.ts
+</code></pre>
+<p>Introduced the runtime model responsible for tracking Docking Engine initialization.</p>
+<p>Current property:</p>
+<ul>
+<li>initialized</li>
+</ul>
+<p>Future runtime properties:</p>
+<ul>
+<li>Loaded</li>
+<li>Active</li>
+<li>Restored</li>
+<li>Serialized</li>
+<li>Dirty State</li>
+</ul>
+<hr>
+<h1>Lifecycle</h1>
+<p>Implemented:</p>
+<pre><code>dock-lifecycle.ts
+</code></pre>
+<p>Provides the initialization entry point.</p>
+<p>Future lifecycle phases:</p>
+<ul>
+<li>Initialize</li>
+<li>Create Layout</li>
+<li>Attach Window</li>
+<li>Split</li>
+<li>Merge</li>
+<li>Restore</li>
+<li>Serialize</li>
+<li>Dispose</li>
+</ul>
+<hr>
+<h1>Persistence</h1>
+<p>Implemented:</p>
+<pre><code>dock-persistence.ts
+</code></pre>
+<p>Created persistence interface.</p>
+<p>Current operations:</p>
+<ul>
+<li>Load Dock Layout</li>
+<li>Save Dock Layout</li>
+</ul>
+<p>Future implementation will integrate:</p>
+<ul>
+<li>Workspace Layout Storage</li>
+<li>Session Restore</li>
+<li>Runtime Snapshots</li>
+<li>Cloud Profiles</li>
+</ul>
+<hr>
+<h1>Provider</h1>
+<p>Implemented:</p>
+<pre><code>dock-provider.tsx
+</code></pre>
+<p>Provides the Docking Engine runtime boundary.</p>
+<p>Future responsibilities:</p>
+<ul>
+<li>Runtime Initialization</li>
+<li>Registry Integration</li>
+<li>Layout Restoration</li>
+<li>Dock Graph Management</li>
+</ul>
+<hr>
+<h1>Components</h1>
+<p>Implemented</p>
+<h3>Dock</h3>
+<p>Institutional dock root.</p>
+<hr>
+<h3>DockHost</h3>
+<p>Host container responsible for future dock composition.</p>
+<p>Future responsibilities:</p>
+<ul>
+<li>Split Containers</li>
+<li>Dock Regions</li>
+<li>Tab Containers</li>
+<li>Floating Containers</li>
+</ul>
+<hr>
+<h1>Hook</h1>
+<p>Implemented</p>
+<pre><code>useDock()
+</code></pre>
+<p>Provides access to Docking Engine runtime state.</p>
+<hr>
+<h1>Public API</h1>
+<p>Created</p>
+<pre><code>src/docking/index.ts
+</code></pre>
+<p>Exports:</p>
+<ul>
+<li>Components</li>
+<li>Provider</li>
+<li>Hooks</li>
+<li>Contracts</li>
+</ul>
+<p>This becomes the public integration point for the Docking Engine.</p>
+<hr>
+<h1>Validation</h1>
+<p>Successfully validated:</p>
+<ul>
+<li>TypeScript Compilation</li>
+<li>Dock Contracts</li>
+<li>Registry</li>
+<li>Runtime</li>
+<li>Lifecycle</li>
+<li>Persistence</li>
+<li>Provider</li>
+<li>Components</li>
+<li>Public API</li>
+<li>Vite Production Build</li>
+</ul>
+<p>Validation Result</p>
+<pre><code>TypeScript Compilation     PASS
+
+Vite Production Build      PASS
+</code></pre>
+<hr>
+<h1>Deliverables</h1>
+<p>Completed:</p>
+<ul>
+<li>Dock Repository</li>
+<li>Dock Contracts</li>
+<li>Dock Layout Contract</li>
+<li>Dock Model</li>
+<li>Dock Registry</li>
+<li>Runtime State</li>
+<li>Runtime Model</li>
+<li>Lifecycle</li>
+<li>Persistence</li>
+<li>Provider</li>
+<li>Components</li>
+<li>Hooks</li>
+<li>Public API</li>
+</ul>
+<hr>
+<h1>Repository Impact</h1>
+<p>Created the complete Docking Engine under:</p>
+<pre><code>src/docking/
+</code></pre>
+<p>The Docking Engine now becomes the authoritative runtime responsible for workspace layout composition within COREI OS.</p>
+<hr>
+<h1>Result</h1>
+<p>COREI OS now supports a structured runtime for organizing application windows into institutional layouts.</p>
+<p>This Build Unit establishes the operational foundation required for:</p>
+<ul>
+<li>Split Layouts</li>
+<li>Tab Groups</li>
+<li>Dock Regions</li>
+<li>Floating Layouts</li>
+<li>Layout Persistence</li>
+<li>Multi-monitor Expansion</li>
+</ul>
+<p>The Docking Engine is now the runtime bridge between the Window Manager and future user interaction frameworks.</p>
+<hr>
+<h1>Next Build Unit</h1>
+<p><strong>BU-009 – Ribbon Framework</strong></p>
+<p>Implementation Order</p>
+<ul>
+<li>Ribbon Contracts</li>
+<li>Ribbon Models</li>
+<li>Zone Contracts</li>
+<li>Widget Contracts</li>
+<li>Ribbon Registry</li>
+<li>Ribbon Runtime</li>
+<li>Ribbon State</li>
+<li>Ribbon Provider</li>
+<li>Ribbon Components</li>
+<li>Validation</li>
+</ul>
+<hr>
+<h1>Status</h1>
+<p><strong>COMPLETED</strong></p>
+
+
+  <div class="doc-footer">
+
+    <span>DOCUMENT KEY: docs:docs_docs_docs_stage-24_Build_Phase-02_BU-008.md.md.md.md</span>
+
+    <span>
+      DOCUMENT NAME: docs docs docs stage 24 Build Phase 02 BU 008.md.md.md
+    </span>
+
+    <span>
+      VERSION: 1.0
+    </span>
+
+  </div>
+
+</body>
+</html>

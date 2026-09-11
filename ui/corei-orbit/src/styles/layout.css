@@ -1,9 +1,13 @@
 /* src/styles/layout.css */
-html, body, #root {
+
+html,
+body,
+#root {
   height: 100%;
   margin: 0;
   overflow: hidden;
 }
+
 .app-container {
   display: flex;
   flex-direction: column;
@@ -11,16 +15,19 @@ html, body, #root {
   background: var(--bg-primary);
   color: var(--text-primary);
 }
+
 .main-panels {
   flex: 1;
   min-height: 0;
 }
+
 .bottom-panel-group {
   height: 200px;
   min-height: 80px;
   max-height: 400px;
   flex-shrink: 0;
 }
+
 .resize-handle-horizontal {
   width: 4px;
   background: var(--border-color);
@@ -30,6 +37,7 @@ html, body, #root {
 .resize-handle-horizontal:hover {
   background: var(--accent-teal);
 }
+
 .resize-handle-vertical {
   height: 4px;
   background: var(--border-color);
@@ -39,30 +47,43 @@ html, body, #root {
 .resize-handle-vertical:hover {
   background: var(--accent-teal);
 }
+
+/* ─── Main body: flex row with three columns ─────────────────────────── */
 .main-body {
   display: flex;
   flex: 1;
+  overflow: hidden;
   min-height: 0;
+  height: 100%; /* ensure it fills remaining space */
 }
+
+/* ─── Left sidebar wrapper: does not grow/shrink, respects inner width ─ */
 .left-sidebar-wrapper {
-  width: 220px;
-  min-width: 120px;
+  flex: 0 0 auto;
+  /* width is set dynamically by the LeftSidebar component via style prop */
   background: var(--bg-secondary);
-  border-right: 1px solid var(--border-color);
+  border-right: 0 solid var(--border-color);
   overflow: hidden;
 }
+
+/* ─── Workspace wrapper: takes all remaining space ────────────────────── */
 .workspace-wrapper {
   flex: 1;
-  background: var(--bg-primary);
   overflow: hidden;
+  background: var(--bg-primary);
 }
+
+/* ─── Right sidebar wrapper ───────────────────────────────────────────── */
 .right-sidebar-wrapper {
+  flex: 0 0 auto;
   width: 200px;
   min-width: 100px;
   background: var(--bg-secondary);
   border-left: 1px solid var(--border-color);
   overflow: hidden;
 }
+
+/* ─── Bottom panel ────────────────────────────────────────────────────── */
 .bottom-panel-wrapper {
   height: 160px;
   min-height: 80px;
@@ -71,28 +92,167 @@ html, body, #root {
   overflow: hidden;
 }
 
-/* ─── Professional scrollbars ─── */
+/* ─── Professional Thin Scrollbars ────────────────────────────────────── */
+/* WebKit (Chrome, Edge, Safari) */
 ::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
+  width: 3px;
+  height: 3px;
 }
-
 ::-webkit-scrollbar-track {
   background: transparent;
 }
-
 ::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.3); /* #94A3B8 with opacity */
+  background: rgba(148, 163, 184, 0.25);
   border-radius: 2px;
-  transition: background 0.2s;
+  transition: background 0.15s;
 }
-
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(148, 163, 184, 0.6);
+  background: rgba(148, 163, 184, 0.5);
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
 }
 
-/* For Firefox */
+/* Firefox */
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(148, 163, 184, 0.3) transparent;
+  scrollbar-color: rgba(148, 163, 184, 0.25) transparent;
+}
+
+/* Monaco editor scrollbars (override) */
+.monaco-editor .scrollbar .slider {
+  background: rgba(148, 163, 184, 0.25) !important;
+}
+.monaco-editor .scrollbar .slider:hover {
+  background: rgba(148, 163, 184, 0.5) !important;
+}
+
+/* ─── Keyboard shortcuts overlay ──────────────────────────────────────── */
+.shortcuts-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.shortcuts-modal {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 24px;
+  min-width: 400px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+.shortcuts-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+}
+.shortcuts-header h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+.shortcuts-close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+.shortcuts-close:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.shortcuts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+.shortcut-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 8px;
+  border-radius: 4px;
+  transition: background 0.1s;
+}
+.shortcut-item:hover {
+  background: var(--bg-hover);
+}
+.shortcut-key {
+  font-family: monospace;
+  font-size: 0.8rem;
+  color: var(--accent-teal);
+  background: var(--bg-input);
+  padding: 2px 8px;
+  border-radius: 3px;
+  border: 1px solid var(--border-color);
+}
+.shortcut-desc {
+  font-size: 0.85rem;
+  color: var(--text-primary);
+}
+
+.shortcuts-footer {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+.shortcuts-footer kbd {
+  background: var(--bg-input);
+  padding: 1px 6px;
+  border-radius: 3px;
+  border: 1px solid var(--border-color);
+  font-family: monospace;
+  font-size: 0.7rem;
+}
+
+/* ─── NEW: Standalone Mode (Center Workspace Only) ─────────────────── */
+.app-container.standalone-mode {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.app-container.standalone-mode .workspace-wrapper {
+  flex: 1;
+  overflow: hidden;
 }

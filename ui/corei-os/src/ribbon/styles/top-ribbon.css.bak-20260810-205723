@@ -1,0 +1,1444 @@
+/******************************************************************************
+ * COREI OS
+ * TOP RIBBON
+ *
+ * Institutional developer / operational control surface.
+ *
+ * Design principles:
+ * - dense
+ * - readable
+ * - restrained
+ * - information-first
+ * - low visual noise
+ * - consistent control rhythm
+ ******************************************************************************/
+
+.corei-top-ribbon {
+    width: 100%;
+    height: 60px;
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    box-sizing: border-box;
+
+    overflow: visible;
+
+    background: var(--corei-color-surface-1);
+    color: var(--corei-color-text-primary);
+
+    border-bottom: 1px solid var(--corei-color-border);
+
+    font-family: var(--corei-font-family);
+
+    white-space: nowrap;
+}
+
+
+/* ============================================================================
+   PRIMARY OPERATIONAL ROW
+   ========================================================================== */
+
+.corei-ribbon-primary-row {
+    width: 100%;
+    height: 34px;
+    min-height: 34px;
+    max-height: 34px;
+
+    display: flex;
+    align-items: stretch;
+
+    box-sizing: border-box;
+
+    border-bottom: 1px solid var(--corei-color-border);
+
+    overflow: visible;
+}
+
+
+/* ============================================================================
+   INSTITUTION IDENTITY
+   ========================================================================== */
+
+.corei-ribbon-identity {
+    flex: 0 0 154px;
+
+    width: 154px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 0 10px;
+
+    box-sizing: border-box;
+
+    border-right: 1px solid var(--corei-color-border);
+}
+
+.corei-ribbon-product {
+    color: var(--corei-color-text-primary);
+
+    font-size: 12px;
+    font-weight: 600;
+
+    letter-spacing: .01em;
+}
+
+.corei-ribbon-identity-divider {
+    color: var(--corei-color-border);
+
+    font-size: 10px;
+    font-weight: 400;
+}
+
+.corei-ribbon-identity-type {
+    color: var(--corei-color-text-secondary);
+
+    font-size: 8.5px;
+    font-weight: 450;
+
+    letter-spacing: .055em;
+}
+
+
+/* ============================================================================
+   SWITCHABLE CONTROLS
+   ========================================================================== */
+
+.corei-ribbon-selector {
+    position: relative;
+
+    flex: 0 0 auto;
+
+    height: 34px;
+
+    box-sizing: border-box;
+
+    border-right: 1px solid var(--corei-color-border);
+}
+
+.corei-ribbon-selector[data-ribbon-block="org"] {
+    width: 165px;
+}
+
+.corei-ribbon-selector[data-ribbon-block="workspace"] {
+    width: 150px;
+}
+
+.corei-ribbon-selector-trigger {
+    width: 100%;
+    height: 34px;
+
+    display: grid;
+
+    grid-template-columns:
+        auto
+        minmax(0, 1fr)
+        auto;
+
+    align-items: center;
+
+    column-gap: 7px;
+
+    padding: 0 9px;
+
+    border: 0;
+    border-radius: 0;
+
+    background: transparent;
+
+    color: var(--corei-color-text-primary);
+
+    font: inherit;
+
+    cursor: pointer;
+
+    text-align: left;
+}
+
+.corei-ribbon-selector-trigger:hover,
+.corei-ribbon-selector-trigger[aria-expanded="true"] {
+    background: var(--corei-color-surface-2);
+}
+
+.corei-ribbon-selector-label {
+    color: var(--corei-color-text-secondary);
+
+    font-size: 8px;
+    font-weight: 550;
+
+    letter-spacing: .065em;
+}
+
+.corei-ribbon-selector-value {
+    min-width: 0;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    color: var(--corei-color-text-primary);
+
+    font-size: 11px;
+    font-weight: 450;
+
+    line-height: 1;
+}
+
+.corei-ribbon-selector-chevron {
+    color: var(--corei-color-text-secondary);
+
+    font-size: 8px;
+
+    line-height: 1;
+}
+
+
+/* ============================================================================
+   SELECTOR MENU
+   ========================================================================== */
+
+.corei-ribbon-selector-menu {
+    position: absolute;
+
+    z-index: 1000;
+
+    top: calc(100% + 1px);
+    left: 0;
+
+    min-width: 100%;
+
+    padding: 3px;
+
+    box-sizing: border-box;
+
+    background: var(--corei-color-surface-2);
+
+    border: 1px solid var(--corei-color-border);
+
+    box-shadow:
+        0 8px 22px rgba(0, 0, 0, .35);
+}
+
+.corei-ribbon-selector-menu button {
+    width: 100%;
+    min-height: 28px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    padding: 0 8px;
+
+    border: 0;
+
+    background: transparent;
+
+    color: var(--corei-color-text-secondary);
+
+    font: inherit;
+    font-size: 10.5px;
+    font-weight: 450;
+
+    text-align: left;
+
+    cursor: pointer;
+}
+
+.corei-ribbon-selector-menu button:hover,
+.corei-ribbon-selector-menu button.selected {
+    background: var(--corei-color-surface-1);
+    color: var(--corei-color-text-primary);
+}
+
+.corei-ribbon-selector-check {
+    color: #67c96a;
+
+    font-size: 6px;
+}
+
+
+/* ============================================================================
+   STATUS BLOCKS
+   ========================================================================== */
+
+.corei-ribbon-primary-row .corei-ribbon-status {
+    flex: 0 0 auto;
+
+    min-width: 86px;
+    max-width: 138px;
+
+    height: 34px;
+
+    display: grid;
+
+    grid-template-columns: auto minmax(0, 1fr);
+
+    align-items: center;
+
+    column-gap: 6px;
+
+    padding: 0 8px;
+
+    box-sizing: border-box;
+
+    border-right: 1px solid var(--corei-color-border);
+}
+
+.corei-ribbon-primary-row
+.corei-ribbon-status-label {
+    color: var(--corei-color-text-secondary);
+
+    font-size: 8px;
+    font-weight: 450;
+
+    letter-spacing: .055em;
+
+    line-height: 1;
+}
+
+.corei-ribbon-primary-row
+.corei-ribbon-status-value {
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+
+    gap: 4px;
+
+    overflow: hidden;
+
+    color: var(--corei-color-text-primary);
+
+    font-size: 10.5px;
+    font-weight: 450;
+
+    line-height: 1;
+}
+
+.corei-ribbon-primary-row
+.corei-ribbon-status-value i {
+    width: 5px;
+    height: 5px;
+
+    flex: 0 0 5px;
+
+    border-radius: 50%;
+}
+
+
+/* ============================================================================
+   STATUS TONES
+   ========================================================================== */
+
+.corei-ribbon-status[data-status-tone="operational"]
+.corei-ribbon-status-value {
+    color: #a8d66d;
+}
+
+.corei-ribbon-status[data-status-tone="operational"]
+.corei-ribbon-status-value i {
+    background: #67c96a;
+}
+
+.corei-ribbon-status[data-status-tone="attention"]
+.corei-ribbon-status-value {
+    color: #d5ad58;
+}
+
+.corei-ribbon-status[data-status-tone="attention"]
+.corei-ribbon-status-value i {
+    background: #d5ad58;
+}
+
+.corei-ribbon-status[data-status-tone="critical"]
+.corei-ribbon-status-value {
+    color: #d75b5b;
+}
+
+.corei-ribbon-status[data-status-tone="critical"]
+.corei-ribbon-status-value i {
+    background: #d75b5b;
+}
+
+
+/* ============================================================================
+   PRIMARY FLEX / COMMAND
+   ========================================================================== */
+
+.corei-ribbon-primary-spacer {
+    flex: 1 1 auto;
+
+    min-width: 6px;
+}
+
+.corei-ribbon-command {
+    flex: 0 0 auto;
+
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+
+    padding: 0 10px;
+
+    border: 0;
+    border-left: 1px solid var(--corei-color-border);
+
+    background: transparent;
+
+    color: var(--corei-color-text-secondary);
+
+    font: inherit;
+
+    font-size: 10px;
+    font-weight: 450;
+
+    letter-spacing: .035em;
+
+    cursor: pointer;
+}
+
+.corei-ribbon-command:hover {
+    background: var(--corei-color-surface-2);
+
+    color: var(--corei-color-text-primary);
+}
+
+.corei-ribbon-command-icon {
+    color: var(--corei-color-text-primary);
+
+    font-size: 12px;
+}
+
+.corei-ribbon-command-label {
+    color: inherit;
+}
+
+.corei-ribbon-command kbd {
+    padding: 2px 4px;
+
+    border: 1px solid var(--corei-color-border);
+
+    background: var(--corei-color-surface-2);
+
+    color: var(--corei-color-text-secondary);
+
+    font-family: inherit;
+
+    font-size: 8px;
+    font-weight: 450;
+
+    line-height: 1;
+}
+
+
+/* ============================================================================
+   CLOCK
+   ========================================================================== */
+
+.corei-ribbon-clock {
+    flex: 0 0 108px;
+
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 5px;
+
+    padding: 0 8px;
+
+    box-sizing: border-box;
+
+    border-left: 1px solid var(--corei-color-border);
+}
+
+.corei-ribbon-clock-time {
+    color: var(--corei-color-text-primary);
+
+    font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        Monaco,
+        Consolas,
+        monospace;
+
+    font-size: 11px;
+    font-weight: 450;
+}
+
+.corei-ribbon-clock-zone {
+    color: var(--corei-color-text-secondary);
+
+    font-size: 8px;
+    font-weight: 450;
+
+    letter-spacing: .04em;
+}
+
+
+/* ============================================================================
+   SECONDARY ROW
+   ========================================================================== */
+
+.corei-ribbon-secondary-row {
+    width: 100%;
+    height: 26px;
+    min-height: 26px;
+    max-height: 26px;
+
+    display: flex;
+    align-items: stretch;
+
+    box-sizing: border-box;
+
+    overflow: hidden;
+}
+
+
+/* ============================================================================
+   TWO TOP-RIBBON TABS
+   ========================================================================== */
+
+.corei-ribbon-tabs {
+    flex: 0 0 170px;
+
+    width: 170px;
+    height: 26px;
+
+    display: flex;
+
+    box-sizing: border-box;
+
+    border-right: 1px solid var(--corei-color-border);
+}
+
+.corei-ribbon-tabs button {
+    position: relative;
+
+    flex: 1 1 50%;
+
+    height: 26px;
+
+    padding: 0 8px;
+
+    border: 0;
+
+    background: transparent;
+
+    color: var(--corei-color-text-secondary);
+
+    font: inherit;
+
+    font-size: 9px;
+    font-weight: 500;
+
+    letter-spacing: .045em;
+
+    cursor: pointer;
+}
+
+.corei-ribbon-tabs button:hover {
+    background: var(--corei-color-surface-2);
+
+    color: var(--corei-color-text-primary);
+}
+
+.corei-ribbon-tabs button.active {
+    background: var(--corei-color-surface-2);
+
+    color: var(--corei-color-text-primary);
+}
+
+.corei-ribbon-tabs button.active::after {
+    content: "";
+
+    position: absolute;
+
+    left: 8px;
+    right: 8px;
+    bottom: 0;
+
+    height: 2px;
+
+    background: #d5ad58;
+}
+
+
+/* ============================================================================
+   SECONDARY DATA
+   ========================================================================== */
+
+.corei-ribbon-secondary-content {
+    flex: 1 1 auto;
+
+    min-width: 0;
+
+    display: flex;
+
+    overflow: hidden;
+}
+
+.corei-ribbon-secondary-content
+.corei-ribbon-status {
+    flex: 1 1 112px;
+
+    min-width: 90px;
+
+    height: 26px;
+
+    display: grid;
+
+    grid-template-columns: auto minmax(0, 1fr);
+
+    align-items: center;
+
+    column-gap: 6px;
+
+    padding: 0 9px;
+
+    box-sizing: border-box;
+
+    border-right: 1px solid var(--corei-color-border);
+}
+
+.corei-ribbon-secondary-content
+.corei-ribbon-status-label {
+    min-width: 0;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    color: var(--corei-color-text-secondary);
+
+    font-size: 8px;
+    font-weight: 450;
+
+    letter-spacing: .045em;
+}
+
+.corei-ribbon-secondary-content
+.corei-ribbon-status-value {
+    min-width: 0;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    color: var(--corei-color-text-primary);
+
+    font-size: 9.5px;
+    font-weight: 450;
+}
+
+
+/* ============================================================================
+   GLOBAL TYPOGRAPHY
+   ========================================================================== */
+
+.corei-top-ribbon span,
+.corei-top-ribbon button,
+.corei-top-ribbon section {
+    box-sizing: border-box;
+}
+
+.corei-top-ribbon span {
+    line-height: 1;
+}
+
+.corei-top-ribbon button {
+    line-height: 1;
+}
+
+.corei-top-ribbon .corei-ribbon-status {
+    white-space: nowrap;
+}
+
+
+/* ============================================================================
+   DESKTOP
+   ========================================================================== */
+
+@media (min-width: 1200px) {
+
+    .corei-ribbon-identity {
+        flex-basis: 154px;
+        width: 154px;
+    }
+
+    .corei-ribbon-selector[data-ribbon-block="org"] {
+        width: 185px;
+    }
+
+    .corei-ribbon-selector[data-ribbon-block="workspace"] {
+        width: 170px;
+    }
+
+    .corei-ribbon-primary-row .corei-ribbon-status {
+        min-width: 92px;
+    }
+}
+
+
+/* ============================================================================
+   NARROW DESKTOP
+   ========================================================================== */
+
+@media (max-width: 1100px) {
+
+    .corei-ribbon-identity {
+        flex-basis: 145px;
+        width: 145px;
+    }
+
+    .corei-ribbon-selector[data-ribbon-block="org"] {
+        width: 165px;
+    }
+
+    .corei-ribbon-selector[data-ribbon-block="workspace"] {
+        width: 150px;
+    }
+
+    .corei-ribbon-primary-row .corei-ribbon-status {
+        min-width: 78px;
+        padding-left: 6px;
+        padding-right: 6px;
+    }
+
+    .corei-ribbon-primary-row
+    .corei-ribbon-status-label {
+        font-size: 7.5px;
+    }
+
+    .corei-ribbon-primary-row
+    .corei-ribbon-status-value {
+        font-size: 10px;
+    }
+}
+
+
+/* ============================================================================
+   COREI TOP RIBBON — INSTITUTIONAL POLISH
+   ========================================================================== */
+
+.corei-top-ribbon {
+    height: 58px;
+    min-height: 58px;
+    max-height: 58px;
+
+    font-size: 11px;
+
+    letter-spacing: 0;
+}
+
+
+/* --------------------------------------------------------------------------
+   PRIMARY ROW
+   -------------------------------------------------------------------------- */
+
+.corei-ribbon-primary-row {
+    height: 32px;
+    min-height: 32px;
+    max-height: 32px;
+
+    align-items: stretch;
+
+    background:
+        var(--corei-color-surface-1);
+}
+
+
+/* --------------------------------------------------------------------------
+   IDENTITY
+   -------------------------------------------------------------------------- */
+
+.corei-ribbon-identity {
+    flex: 0 0 145px;
+
+    width: 145px;
+    height: 32px;
+
+    gap: 6px;
+
+    padding: 0 9px;
+}
+
+.corei-ribbon-product {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: .005em;
+}
+
+.corei-ribbon-identity-divider {
+    font-size: 9px;
+    font-weight: 400;
+}
+
+.corei-ribbon-identity-type {
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: .045em;
+}
+
+
+/* --------------------------------------------------------------------------
+   SELECTORS
+   -------------------------------------------------------------------------- */
+
+.corei-ribbon-selector {
+    height: 32px;
+
+    border-right:
+        1px solid
+        var(--corei-color-border);
+}
+
+.corei-ribbon-selector[data-ribbon-block="org"] {
+    width: 170px;
+}
+
+.corei-ribbon-selector[data-ribbon-block="workspace"] {
+    width: 155px;
+}
+
+.corei-ribbon-selector-trigger {
+    height: 32px;
+
+    grid-template-columns:
+        auto
+        minmax(0, 1fr)
+        auto;
+
+    column-gap: 6px;
+
+    padding: 0 8px;
+
+    font-weight: 400;
+}
+
+.corei-ribbon-selector-trigger:hover,
+.corei-ribbon-selector-trigger[aria-expanded="true"] {
+    background:
+        rgba(255, 255, 255, .035);
+}
+
+.corei-ribbon-selector-label {
+    font-size: 8.5px;
+    font-weight: 500;
+    letter-spacing: .055em;
+}
+
+.corei-ribbon-selector-value {
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 1;
+}
+
+.corei-ribbon-selector-chevron {
+    font-size: 8px;
+    font-weight: 400;
+}
+
+
+/* --------------------------------------------------------------------------
+   PORTALED SELECTOR MENU
+   -------------------------------------------------------------------------- */
+
+.corei-ribbon-selector-menu {
+    position: fixed;
+
+    z-index: 10000;
+
+    min-width: 170px;
+    max-width: 320px;
+
+    padding: 3px;
+
+    background:
+        var(--corei-color-surface-2);
+
+    border:
+        1px solid
+        var(--corei-color-border);
+
+    box-shadow:
+        0 10px 28px rgba(0, 0, 0, .42);
+
+    border-radius: 2px;
+}
+
+.corei-ribbon-selector-menu button {
+    min-height: 26px;
+
+    padding: 0 8px;
+
+    gap: 10px;
+
+    font-size: 10.5px;
+    font-weight: 400;
+
+    line-height: 1;
+
+    border-radius: 1px;
+}
+
+.corei-ribbon-selector-menu button:hover,
+.corei-ribbon-selector-menu button.selected {
+    background:
+        var(--corei-color-surface-1);
+
+    color:
+        var(--corei-color-text-primary);
+}
+
+.corei-ribbon-selector-menu button.selected {
+    box-shadow:
+        inset 2px 0 0 #d5ad58;
+}
+
+.corei-ribbon-selector-check {
+    font-size: 6px;
+}
+
+
+/* --------------------------------------------------------------------------
+   PRIMARY STATUS
+   -------------------------------------------------------------------------- */
+
+.corei-ribbon-primary-row .corei-ribbon-status {
+    height: 32px;
+
+    min-width: 0;
+    max-width: none;
+
+    padding: 0 8px;
+
+    column-gap: 6px;
+
+    flex: 0 0 auto;
+}
+
+.corei-ribbon-primary-row
+.corei-ribbon-status-label {
+    font-size: 8.5px;
+    font-weight: 450;
+
+    letter-spacing: .045em;
+}
+
+.corei-ribbon-primary-row
+.corei-ribbon-status-value {
+    font-size: 10.5px;
+    font-weight: 400;
+}
+
+
+/* Stable widths for the primary context blocks */
+
+.corei-ribbon-primary-row
+.corei-ribbon-status[data-status-tone="attention"] {
+    flex-basis: 95px;
+}
+
+.corei-ribbon-primary-row
+.corei-ribbon-status[data-status-tone="neutral"] {
+    flex-basis: 105px;
+}
+
+.corei-ribbon-primary-row
+.corei-ribbon-status[data-status-tone="operational"] {
+    flex-basis: 95px;
+}
+
+.corei-ribbon-primary-row
+.corei-ribbon-status[data-status-tone="critical"] {
+    flex-basis: 95px;
+}
+
+
+/* --------------------------------------------------------------------------
+   SEARCH
+   -------------------------------------------------------------------------- */
+
+.corei-ribbon-search {
+    position: relative;
+
+    flex: 0 0 210px;
+
+    width: 210px;
+    height: 32px;
+
+    box-sizing: border-box;
+
+    border-left:
+        1px solid
+        var(--corei-color-border);
+    border-right:
+        1px solid
+        var(--corei-color-border);
+}
+
+.corei-ribbon-search-trigger {
+    width: 100%;
+    height: 32px;
+
+    display: grid;
+
+    grid-template-columns:
+        auto
+        minmax(0, 1fr)
+        auto;
+
+    align-items: center;
+
+    column-gap: 7px;
+
+    padding: 0 8px;
+
+    border: 0;
+    border-radius: 0;
+
+    background: transparent;
+
+    color:
+        var(--corei-color-text-secondary);
+
+    font: inherit;
+
+    cursor: pointer;
+
+    text-align: left;
+}
+
+.corei-ribbon-search-trigger:hover,
+.corei-ribbon-search-trigger[aria-expanded="true"] {
+    background:
+        rgba(255, 255, 255, .035);
+
+    color:
+        var(--corei-color-text-primary);
+}
+
+.corei-ribbon-search-icon {
+    color:
+        var(--corei-color-text-primary);
+
+    font-size: 13px;
+    font-weight: 400;
+}
+
+.corei-ribbon-search-label {
+    font-size: 9px;
+    font-weight: 500;
+
+    letter-spacing: .055em;
+}
+
+.corei-ribbon-search-trigger kbd,
+.corei-ribbon-search-input-row kbd,
+.corei-ribbon-search-actions kbd {
+    padding: 2px 4px;
+
+    border:
+        1px solid
+        var(--corei-color-border);
+
+    background:
+        var(--corei-color-surface-2);
+
+    color:
+        var(--corei-color-text-secondary);
+
+    font-family: inherit;
+
+    font-size: 8px;
+    font-weight: 400;
+
+    line-height: 1;
+}
+
+
+/* --------------------------------------------------------------------------
+   SEARCH POPOVER
+   -------------------------------------------------------------------------- */
+
+.corei-ribbon-search-panel {
+    position: fixed;
+
+    z-index: 11000;
+
+    box-sizing: border-box;
+
+    overflow: hidden;
+
+    background:
+        var(--corei-color-surface-2);
+
+    border:
+        1px solid
+        var(--corei-color-border);
+
+    border-radius: 2px;
+
+    box-shadow:
+        0 12px 32px rgba(0, 0, 0, .48);
+
+    color:
+        var(--corei-color-text-primary);
+}
+
+.corei-ribbon-search-input-row {
+    height: 34px;
+
+    display: grid;
+
+    grid-template-columns:
+        auto
+        minmax(0, 1fr)
+        auto;
+
+    align-items: center;
+
+    column-gap: 7px;
+
+    padding: 0 9px;
+
+    border-bottom:
+        1px solid
+        var(--corei-color-border);
+}
+
+.corei-ribbon-search-input-row > span {
+    font-size: 14px;
+}
+
+.corei-ribbon-search-input-row input {
+    width: 100%;
+    min-width: 0;
+
+    height: 26px;
+
+    padding: 0;
+
+    border: 0;
+    outline: 0;
+
+    background: transparent;
+
+    color:
+        var(--corei-color-text-primary);
+
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 400;
+}
+
+.corei-ribbon-search-input-row input::placeholder {
+    color:
+        var(--corei-color-text-secondary);
+
+    opacity: .72;
+}
+
+
+/* --------------------------------------------------------------------------
+   SEARCH ACTIONS
+   -------------------------------------------------------------------------- */
+
+.corei-ribbon-search-actions {
+    padding: 3px 0;
+
+    border-bottom:
+        1px solid
+        var(--corei-color-border);
+}
+
+.corei-ribbon-search-actions button {
+    width: 100%;
+    height: 27px;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        auto;
+
+    align-items: center;
+
+    column-gap: 12px;
+
+    padding: 0 9px;
+
+    border: 0;
+    border-radius: 0;
+
+    background: transparent;
+
+    color:
+        var(--corei-color-text-secondary);
+
+    font-family: inherit;
+
+    font-size: 10px;
+    font-weight: 400;
+
+    text-align: left;
+
+    cursor: pointer;
+}
+
+.corei-ribbon-search-actions button:hover {
+    background:
+        var(--corei-color-surface-1);
+
+    color:
+        var(--corei-color-text-primary);
+}
+
+
+/* --------------------------------------------------------------------------
+   SEARCH RESULTS
+   -------------------------------------------------------------------------- */
+
+.corei-ribbon-search-results {
+    max-height: 300px;
+
+    overflow-y: auto;
+}
+
+.corei-ribbon-search-results-heading {
+    height: 23px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 9px;
+
+    color:
+        var(--corei-color-text-secondary);
+
+    font-size: 8px;
+    font-weight: 500;
+
+    letter-spacing: .06em;
+}
+
+.corei-ribbon-search-results-heading span:last-child {
+    color:
+        var(--corei-color-text-primary);
+}
+
+.corei-ribbon-search-empty {
+    min-height: 34px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 9px;
+
+    color:
+        var(--corei-color-text-secondary);
+
+    font-size: 10px;
+}
+
+.corei-ribbon-search-result {
+    min-height: 29px;
+
+    display: grid;
+
+    grid-template-columns:
+        68px
+        minmax(0, 1fr);
+
+    align-items: center;
+
+    column-gap: 8px;
+
+    padding: 0 9px;
+
+    border-top:
+        1px solid
+        rgba(255,255,255,.025);
+
+    color:
+        var(--corei-color-text-primary);
+}
+
+.corei-ribbon-search-result:hover {
+    background:
+        var(--corei-color-surface-1);
+}
+
+.corei-ribbon-search-result-type {
+    color:
+        var(--corei-color-text-secondary);
+
+    font-size: 8px;
+    font-weight: 500;
+
+    letter-spacing: .05em;
+}
+
+.corei-ribbon-search-result-name {
+    min-width: 0;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+    font-size: 10.5px;
+    font-weight: 400;
+}
+
+
+/* --------------------------------------------------------------------------
+   COMMAND
+   -------------------------------------------------------------------------- */
+
+.corei-ribbon-command {
+    height: 32px;
+
+    gap: 5px;
+
+    padding: 0 9px;
+
+    font-size: 9.5px;
+    font-weight: 400;
+
+    letter-spacing: .03em;
+}
+
+.corei-ribbon-command-icon {
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.corei-ribbon-command kbd {
+    font-size: 8px;
+    font-weight: 400;
+}
+
+
+/* --------------------------------------------------------------------------
+   CLOCK
+   -------------------------------------------------------------------------- */
+
+.corei-ribbon-clock {
+    flex: 0 0 95px;
+
+    height: 32px;
+
+    gap: 4px;
+
+    padding: 0 7px;
+}
+
+.corei-ribbon-clock-time {
+    font-size: 10.5px;
+    font-weight: 400;
+}
+
+.corei-ribbon-clock-zone {
+    font-size: 8px;
+    font-weight: 400;
+}
+
+
+/* --------------------------------------------------------------------------
+   SECONDARY ROW
+   -------------------------------------------------------------------------- */
+
+.corei-ribbon-secondary-row {
+    height: 26px;
+    min-height: 26px;
+    max-height: 26px;
+
+    overflow: hidden;
+}
+
+.corei-ribbon-tabs {
+    flex: 0 0 160px;
+
+    width: 160px;
+    height: 26px;
+}
+
+.corei-ribbon-tabs button {
+    height: 26px;
+
+    padding: 0 8px;
+
+    font-size: 9px;
+    font-weight: 450;
+
+    letter-spacing: .04em;
+}
+
+.corei-ribbon-tabs button.active::after {
+    left: 8px;
+    right: 8px;
+
+    height: 2px;
+}
+
+
+/* --------------------------------------------------------------------------
+   SECONDARY INFORMATION BLOCKS
+   -------------------------------------------------------------------------- */
+
+.corei-ribbon-secondary-content
+.corei-ribbon-status {
+    flex: 1 1 112px;
+
+    min-width: 90px;
+
+    height: 26px;
+
+    padding: 0 8px;
+
+    column-gap: 5px;
+}
+
+.corei-ribbon-secondary-content
+.corei-ribbon-status-label {
+    font-size: 8px;
+    font-weight: 450;
+
+    letter-spacing: .045em;
+}
+
+.corei-ribbon-secondary-content
+.corei-ribbon-status-value {
+    font-size: 9.5px;
+    font-weight: 400;
+}
+
+
+/* --------------------------------------------------------------------------
+   REMOVE HEAVY / EXCESSIVE VISUAL WEIGHT
+   -------------------------------------------------------------------------- */
+
+.corei-top-ribbon button {
+    font-weight: 400;
+}
+
+.corei-top-ribbon strong {
+    font-weight: 500;
+}
+
+.corei-top-ribbon kbd {
+    font-weight: 400;
+}

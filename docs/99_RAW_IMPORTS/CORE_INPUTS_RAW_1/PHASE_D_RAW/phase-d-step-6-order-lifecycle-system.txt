@@ -1,0 +1,766 @@
+Phase D — Step 6: Order Lifecycle System
+
+1. PHASE IDENTITY LAYER
+
+	1.1 Phase Name
+
+		Phase D — Step 6: Order Lifecycle System (Execution State Realization Layer)
+
+	1.2 Phase Role
+
+		Step 6 is a PURE INTERNAL LIFECYCLE SIMULATION ENGINE.
+
+			It MUST:
+
+				- generate deterministic execution events
+				- simulate fills using configuration_snapshot.fill_model
+				- drive OrderState transitions
+				- update PortfolioState using INTERNAL events ONLY
+
+			It MUST NOT:
+
+				- consume external broker fills
+				- reconcile external execution
+				- override events from Step 7
+
+			External execution truth is handled ONLY in Step 7 and Step 8.
+
+	1.3 Phase Objective
+
+		Construct:
+
+			ExecutionOrder
+			→ ExecutionEvent Log
+			→ OrderState(t)
+			→ PortfolioState(t)
+
+		Such that:
+
+			state = f(event_log)
+			replay(EventLog) → identical state
+			execution is audit-complete
+
+	1.4 Why This Phase Exists
+
+		Without lifecycle:
+
+			Orders never evolve
+			No fills
+			No portfolio updates
+			No audit trail
+
+		Execution system is non-functional
+
+		Aligned with Step 5 lifecycle init
+
+	2. PHASE SCOPE CONTROL
+	2.1 INCLUDED (STRICT)
+		order lifecycle state machine
+		execution event generation
+		fill processing logic
+		state transition engine
+		portfolio update engine
+		replay reconstruction system
+
+		STRICT EXCLUSION RULE:
+
+			ExternalFillEvent (from Step 7) MUST NOT enter Step 6.
+
+			Violation:
+
+			→ NON-DETERMINISTIC STATE
+			→ REPLAY FAILURE
+
+		Lifecycle MUST consume execution events from:
+
+			- OMS/EMS routed execution (internal)
+			- OR Step 7 normalized events (external)
+
+			BUT:
+
+			- MUST NOT depend on OMS/EMS runtime state
+
+		microstructure-aware fill simulation
+			slippage realization engine
+			transaction cost analysis (TCA)
+			PnL computation (realized + unrealized)
+			large-scale batch simulation support (≥ 10,000 orders)
+
+	2.2 EXCLUDED (STRICT)
+		order generation (Step 5)
+		risk enforcement (Step 3)
+		policy enforcement (Step 4)
+		broker integration (future step)
+		market microstructure
+
+	2.3 Boundary Rule
+
+		Lifecycle MUST:
+
+		be event-driven ONLY
+		NOT mutate state directly
+		NOT depend on external systems
+
+3. ARCHITECTURAL INTENT LAYER
+	3.1 Core Principles
+
+		P1 — Event-Driven State
+		P2 — Deterministic Transitions
+		P3 — Replay Fidelity
+		P4 — No Hidden State
+		P5 — Fill-Driven Portfolio
+
+	3.2 Model
+		OrderState(t) = f(EventLog_order[0 → t])
+		PortfolioState(t) = f(EventLog_execution[0 → t])
+
+	3.3 System Position
+		Step 5 → ExecutionOrder
+		Step 6 → Lifecycle System (THIS)
+		Step 7 → Broker Adapter (future)
+
+	3.4 Simulation Mode Contract (MANDATORY)
+
+		Step 6 operates in SIMULATION MODE ONLY.
+
+		Definition:
+
+			ExecutionEventStream = F(
+				ExecutionOrder,
+				configuration_snapshot.fill_model
+			)
+
+		Constraints:
+
+			- MUST NOT depend on external inputs
+			- MUST NOT ingest broker events
+			- MUST be fully reproducible
+			- MUST produce identical output for identical input
+
+		Purpose:
+
+			- enables deterministic replay
+			- enables backtesting parity
+			- provides baseline execution model
+
+		OMS/EMS are NOT state authorities.
+
+			Lifecycle state MUST be derived ONLY from ExecutionEvent stream.
+
+4. DOMAIN MODEL DEFINITION
+
+	4.1 Entities
+		ExecutionOrder (input)
+		ExecutionEvent
+		FillEvent
+		OrderState
+		PortfolioState
+		PortfolioDelta
+		ExecutionCostModel
+		RealizedSlippage
+		TransactionCost
+		PnLRecord
+		SimulationBatch
+
+			ExecutionCostModel:
+				execution_cost_model = {
+					fee_per_trade
+					fee_per_unit
+					exchange_fee
+					broker_fee
+				}
+
+			RealizedSlippage:
+				realized_slippage = {
+					order_id
+					expected_slippage
+					realized_slippage
+					slippage_delta
+				}
+
+			TransactionCost:
+				transaction_cost = {
+					order_id
+					total_cost
+					cost_breakdown {
+						fees
+						slippage_cost
+					}
+				}
+
+			PnLRecord:
+				pnl_record = {
+					order_id
+					realized_pnl
+					unrealized_pnl
+					execution_value
+					cost
+					net_pnl
+				}
+
+			SimulationBatch:
+				simulation_batch = {
+					batch_id
+					total_orders
+					total_volume
+					total_pnl
+					total_cost
+				}
+
+	4.2 ExecutionEvent Schema (CRITICAL)
+		ExecutionEvent = {
+			event_id
+			order_id
+
+			executed_size
+			remaining_size
+			execution_price
+			event_time
+			lineage_hash
+			lineage_hash_reference
+		}
+
+		event_type ∈ {
+			ORDER_CREATED
+			ORDER_ROUTED
+			PARTIAL_FILL
+			FULL_FILL
+			ORDER_COMPLETED   ← ADD
+			ORDER_FAILED
+		}
+
+		Event ID Rule (MANDATORY):
+
+			event_id = HASH_v1(
+				order_id +
+				event_type +
+				executed_size +
+				remaining_size +
+				event_time
+			)
+
+			Constraints:
+
+			- deterministic
+			- identical input → identical event_id
+			- globally unique
+
+		partition_key = {
+				instrument
+				order_id
+			}
+
+			partition_id = HASH_v1(partition_key) mod N_partitions
+
+			Constraints:
+
+			- MUST match Phase C partition routing
+			- MUST be deterministic
+
+		ppartition_key = order_id
+
+			BUT:
+
+			introduce deterministic sub-partitioning:
+
+			partition_key = HASH(order_id + shard_id)
+
+			CONDITION
+				shard_id MUST be deterministic
+				lifecycle still co-located
+
+
+	4.3 OrderState
+		GLOBAL OrderState (MANDATORY — CROSS-PHASE)
+
+			OrderState ∈ {
+				ORDER_CREATED
+				ORDER_ROUTED
+				PARTIALLY_FILLED
+				FULLY_FILLED
+				ORDER_COMPLETED
+				ORDER_FAILED
+			}
+
+	4.4 PortfolioState
+
+		PortfolioState (SIMULATED):
+
+			- derived ONLY from internal ExecutionEvent stream
+			- represents simulated execution state
+
+			Final PortfolioState authority:
+
+			→ MUST be determined ONLY in Step 8 (Post-Execution Control)
+
+			Constraint:
+
+			Step 6 PortfolioState MUST NOT be treated as final truth.
+
+
+	4.5 Relationships
+		1 ExecutionOrder → N ExecutionEvents
+		ExecutionEvents → drive OrderState
+		ExecutionEvents → update PortfolioState
+
+5. LOGIC / RULE ENGINE
+	5.1 Rule Classes
+
+		R1 — Event Generation
+		R2 — Fill Processing
+		R3 — State Transition
+		R4 — Portfolio Update
+		R5 — Replay Validation
+		R6 — Event Generation Function
+
+			ExecutionEventStream = F(
+				ExecutionOrder,
+				configuration_snapshot
+			)
+
+			Constraints:
+
+			- deterministic
+			- no randomness
+			- no external input
+
+		R7 — Slippage Realization
+			realized_slippage = deterministic_function(
+					execution_schedule,
+					slippage_model
+				)
+
+				Constraint:
+
+				must be bounded by Step 5 slippage_model
+
+		R8 — Transaction Cost Computation
+			transaction_cost = (
+					executed_size × fee_per_unit
+				) + fixed_fee
+
+		R9 — PnL Computation
+			realized_pnl = (sell_value - buy_value) - transaction_cost
+
+		R10 — Batch Aggregation
+			simulation_batch.total_pnl = Σ(pnl_record.net_pnl)
+
+	5.2 State Transition Function
+		OrderState(t+1) = f(
+			OrderState(t),
+			ExecutionEvent
+		)
+
+	5.3 Transition Rules (STRICT)
+		OrderState Transition Model (GLOBAL)
+
+		ORDER_CREATED		→ ORDER_ROUTED
+
+		ORDER_ROUTED		→ PARTIALLY_FILLED
+		ORDER_ROUTED 		→ FULLY_FILLED
+		ORDER_ROUTED 		→ ORDER_FAILED
+
+		PARTIALLY_FILLED 	→ PARTIALLY_FILLED
+		PARTIALLY_FILLED 	→ FULLY_FILLED
+		PARTIALLY_FILLED 	→ ORDER_FAILED
+
+		FULLY_FILLED 		→ ORDER_COMPLETED
+
+		ORDER_FAILED 		→ terminal
+		ORDER_COMPLETED 	→ terminal
+
+		Constraints:
+
+			monotonic transitions only
+			no skipping states
+			invalid transition → HARD FAIL
+
+
+		FULL_FILL Rule:
+
+			- MUST occur exactly once
+			- MUST be last fill event
+			- AFTER FULL_FILL → no further PARTIAL_FILL allowed
+
+	5.4 Fill Processing Rule
+			remaining_size = order.size - Σ(executed_size)
+
+		Constraints:
+
+			remaining_size ≥ 0
+			remaining_size == 0 → FULL_FILL
+
+		(Aligned with Step 5 invariant )
+
+		Fill Generation Model:
+
+			executed_size_i = f(
+				remaining_size,
+				configuration_snapshot.fill_model
+			)
+
+			Constraints:
+
+			- deterministic partitioning
+			- Σ(executed_size_i) = order.size
+			- final event MUST be FULL_FILL
+
+		Numeric Constraints:
+
+			executed_size:
+				min > 0
+				max ≤ order.size
+				type = fixed-point (integer / 10^6)
+
+			remaining_size:
+				min = 0
+				max = order.size
+
+	5.5 Portfolio Update Rule
+			PortfolioState(t+1) = f(
+				PortfolioState(t),
+				ExecutionEvent.executed_size,
+				direction
+			)
+
+		BUY:
+
+			position += executed_size
+
+		SELL:
+
+			position -= executed_size
+
+		Portfolio Value Update:
+
+			total_executed_value += executed_size * execution_price
+
+		execution_price MUST be derived from:
+
+			configuration_snapshot.price_model
+
+			External market data: FORBIDDEN
+
+	5.6 Rule Execution Order
+		Event Generation
+		Event Validation
+		State Transition
+		Portfolio Update
+		Snapshot Update
+
+	5.7 ExecutionEvent Ordering Key:
+
+		1. event_time ASC
+		2. partition_id ASC
+		3. order_id ASC
+		4. event_id ASC
+
+		Constraint:
+
+		- MUST be globally consistent
+		- MUST match Phase C ordering model
+
+6. FLOW ARCHITECTURE
+	6.0 Canonical Input Set
+		canonical_input_set_D6 = {
+			execution_order_stream,
+			configuration_snapshot,
+			version_identifiers
+		}
+
+	6.1 Processing Flow
+		ExecutionOrder
+		→ Lifecycle Init
+		→ Execution Scheduling (from Step 5)
+		→ Fill Simulation (schedule-driven)
+		→ Slippage Realization
+		→ Transaction Cost Computation
+		→ Portfolio Update
+		→ PnL Computation
+		→ Batch Aggregation
+		→ Feasibility Validation Layer
+
+		for each venue_allocation:
+
+			assert venue_status == AVAILABLE
+
+			assert connectivity == ACTIVE
+
+			assert allocation <= safe_liquidity_threshold
+
+	6.2 Output
+		execution_lifecycle_output = {
+			execution_event_stream
+			order_state_snapshots
+			portfolio_state_snapshots
+		}
+
+	6.3 Flow Rule
+		NO external inputs
+		NO implicit events
+		FULL determinism
+
+	Step 6 → Step 7 Handoff Contract:
+
+		Output:
+
+		execution_event_stream (SIMULATED)
+
+		Usage:
+
+		- used ONLY for:
+			- simulation
+			- replay without broker
+			- baseline lifecycle validation
+
+		Step 7 MUST:
+
+		- IGNORE Step 6 fill events when external fills exist
+		- REBUILD lifecycle using external events
+
+		EXECUTION FEEDBACK LOOP (MANDATORY)
+
+			FOR each execution_order:
+
+			MUST produce:
+
+			execution_fill_event
+
+			→ reconciliation_event
+
+			→ state update (Phase C)
+
+			Constraint:
+
+			No execution without feedback closure
+
+			Audit rule:
+
+			count(execution_orders) ==
+			count(reconciliation_events)
+
+		Execution Feedback Update Rule (MANDATORY)
+
+			Input:
+
+				execution_fill_event = {
+					order_id
+					fill_price
+					fill_size
+					execution_time
+				}
+
+			Processing:
+
+				execution_fill_event MUST be converted into:
+
+				portfolio_update_event
+
+				and sent to Phase C Event System
+
+			Output:
+
+				portfolio_state_snapshot MUST be updated via:
+
+					State(t+1) = f(State(t), execution_fill_event)
+
+			Constraints:
+
+				- MUST preserve event_time lineage
+				- MUST be deterministic
+				- MUST update:
+					- positions
+					- exposure
+					- capital
+
+			Violation:
+
+				missing feedback → SYSTEM AUDIT FAILURE
+
+7. PIPELINE STRUCTURE
+
+	P1 — Order Initialization
+	P2 — Routing Event
+	P3 — Execution Events
+	P4 — Fill Processing
+	P5 — State Transition
+	P6 — Portfolio Update
+	P7 — Completion
+
+8. CONTROL & CONSTRAINTS
+	8.1 Hard Rules
+		state = f(events) ONLY
+		no direct mutation
+		event ordering mandatory
+
+		HR-S1: Fill simulation MUST follow execution_schedule
+		HR-S2: Slippage MUST be derived from SlippageModel only
+		HR-S3: PnL MUST include transaction costs
+		HR-S4: Batch simulation MUST be deterministic
+
+	8.2 Guardrails
+		reject invalid event
+		reject negative remaining_size
+		reject duplicate events
+
+	8.3 Invariants
+
+		I1 — remaining_size ≥ 0
+		I2 — Σ(executed_size) ≤ order.size
+		I3 — state monotonic
+		I4 — replay identical
+
+		I-S1: Same ExecutionOrder → identical PnL
+		I-S2: Slippage ≤ worst_case_slippage
+		I-S3: Σ(batch pnl) = total pnl
+		I-S4: Simulation must be replayable at scale (10k+)
+
+		I-SOR-4: Execution MUST NOT proceed if any venue allocation is infeasible
+
+9. STATE & DATA MODEL
+	9.1 State Definition
+		execution_state = {
+			order_id → OrderState
+		}
+
+	9.2 State Transition
+		State(t+1) = f(State(t), Event)
+
+	9.3 Source of Truth
+		PRIMARY → Event Log
+		SECONDARY → Snapshot
+
+		(Aligned with Phase C event-state model )
+
+	9.4 Reconstruction Rule
+		Replay(EventLog) → identical OrderState + PortfolioState
+
+10. FAILURE MODEL
+	10.1 Scenarios
+		invalid state transition
+		fill overflow
+		event ordering violation
+		replay mismatch
+
+	10.2 Impact
+		broken audit
+		incorrect portfolio
+
+	10.3 Mitigation
+		reject event
+		replay rebuild
+
+11. ASSUMPTION REGISTER
+	Assumption						Status
+	ExecutionOrder valid			VALIDATED
+	Event ordering deterministic	CONTROLLED
+	No external fills				ENFORCED
+
+12. VALIDATION FRAMEWORK
+	12.1 Method
+		replay tests
+		state reconstruction
+		fill consistency
+
+	12.2 Acceptance
+
+		PASS if:
+
+			replay identical
+			no invalid transitions
+
+13. OUTPUT
+	execution_lifecycle_spec = {
+		event_model
+		state_model
+		portfolio_model
+		lifecycle_pipeline
+	}
+
+14. TRACEABILITY
+	order_id
+	→ event_id
+	→ state_hash
+	→ portfolio_state_hash
+
+	lineage_hash = HASH_v1(
+			previous_lineage_hash +
+			event_id
+		)
+
+		Constraints:
+
+		- first event uses:
+			previous_lineage_hash = order_id
+
+		- MUST form continuous chain
+		- MUST be verifiable during replay
+
+15. CROSS-PHASE CONSISTENCY
+	Step 5 → order input
+	Phase C → event/state rules
+	Phase B → constraints (indirect)
+
+16. SCALABILITY
+	partition by order_id
+	parallel event processing
+	deterministic merge
+
+17. GOVERNANCE
+	versioned lifecycle rules
+	deterministic upgrades
+
+18. AUDITABILITY
+	full event log
+	full replay
+	hash chain verification
+
+19. RISK CONSIDERATIONS
+	fill inconsistency risk
+	state divergence risk
+
+	Mitigation:
+
+		strict event validation
+
+20. FAILURE CONDITION
+
+	Phase FAILS if:
+
+		state not reconstructable
+		replay mismatch
+		non-monotonic transitions
+
+21. PHASE LOCK CRITERIA
+
+LOCK ONLY IF:
+
+	all transitions deterministic
+	replay validated
+	Red Team passed
+	Blue Team validated
+	no ambiguity
+
+Naming Separation Rule (MANDATORY)
+
+	- EventType uses verbs:
+		PARTIAL_FILL, FULL_FILL
+
+	- OrderState uses state form:
+		PARTIALLY_FILLED, FULLY_FILLED
+
+	Mapping is strict and 1:1:
+
+	PARTIAL_FILL → PARTIALLY_FILLED
+	FULL_FILL → FULLY_FILLED
+
+
+✅ FINAL STATUS
+
+	PHASE D — STEP 6: ORDER LIFECYCLE SYSTEM
+
+	Fully deterministic
+	Event-driven
+	Replay-safe
+	Audit-complete
+	Portfolio-integrated

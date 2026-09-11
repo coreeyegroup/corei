@@ -1,0 +1,308 @@
+CORE SYSTEM — MASTER EXECUTION DOCUMENT
+doc_id = CORE-TRADING-SYSTEM-MASTER-EXECUTION-DOC-V1
+status = PRE-LOCK (Phase B Step 2 fixed → FULL LOCK)
+scope = Phase A (4–8) + Phase B (1–2)
+standard = INSTITUTIONAL / DETERMINISTIC
+1. SYSTEM OVERVIEW
+1.1 System Definition
+
+The system is a deterministic algorithmic trading platform composed of:
+
+Phase A → Logical System (WHAT to do)
+Phase B → Constraint System (WHAT is allowed)
+Phase C → Infrastructure (HOW system runs)
+Phase D → Execution (WHAT actually happens)
+1.2 Core Principle
+Same canonical_input_set → identical output (bit-level)
+1.3 Determinism Enforcement
+Fixed-point arithmetic (global)
+Canonical input sets
+Ordered computation
+Hash-based traceability
+No runtime dependency
+2. PHASE A — LOGICAL SYSTEM (LOCKED)
+2.1 STEP 4 — EXECUTION BEHAVIOR SYSTEM
+
+📄 Source:
+
+ROLE
+
+Translate:
+
+Trade Intent → Execution Instruction (logical only)
+CORE FUNCTION
+ExecutionInstruction = f(
+    trade_intent_snapshot,
+    execution_profile_set,
+    configuration_snapshot
+)
+KEY COMPONENTS
+Execution Instruction
+execution_profile_id
+urgency
+slicing_plan
+timing_constraints
+Deterministic Constraints
+No broker awareness
+No infra leakage
+No runtime state
+No floating-point
+CRITICAL RULES
+Profile Selection
+profile_score =
+    a1 * confidence
+  + a2 * (1 - validity_window_remaining_ratio)
+  + a3 * conflict_intensity
+
+Tie-break:
+
+lowest profile_id
+Urgency
+U = w1 * confidence
+  + w2 * (1 - validity_window_remaining_ratio)
+  + w3 * conflict_intensity
+Slicing
+N = ceil(execution_horizon / slice_interval)
+
+Constraints:
+
+N ≤ N_max
+Fixed interval
+No adaptive slicing
+OUTPUT
+execution_instruction (immutable, hash-bound)
+2.2 STEP 5 — RISK PHILOSOPHY LAYER
+
+📄 Source:
+
+ROLE
+
+Defines risk meaning, not enforcement.
+
+HIERARCHY
+Firm > Portfolio > Strategy > Trade
+CORE FUNCTION
+Risk_Context = f(
+    trade_intent_snapshot,
+    execution_instruction,
+    portfolio_state,
+    configuration
+)
+RISK MODEL
+Drawdown
+drawdown_ratio = current_drawdown / peak_equity
+Risk Score
+risk_score =
+    w1 * drawdown_ratio
+  + w2 * (1 - exposure_balance_score)
+Classification
+LOW / MEDIUM / HIGH
+OUTPUT
+Risk_Context (logical constraints + flags)
+2.3 STEP 6 — CAPITAL ALLOCATION MODEL
+
+📄 Source:
+
+ROLE
+Decision → Capital Distribution
+CORE FLOW
+signal_strength → weight → normalized → capital
+FORMULAS
+W_adj = W_base × Risk_Modifier
+W_norm = W_constrained / Σ(W_constrained)
+Capital_i = Total_Capital × W_norm_i
+CRITICAL RULES
+Σ weights = 1
+No negative allocation
+Zero-allocation state supported
+OUTPUT
+capital_allocation_map
+2.4 STEP 7 — PORTFOLIO MODEL
+
+📄 Source:
+
+ROLE
+Aggregate → Portfolio Structure
+CORE FUNCTION
+Portfolio = Σ(strategy_exposures)
+KEY RULES
+Exposure
+net_exposure(asset) = Σ(strategy_exposure)
+Normalization
+W_i = E_i / C_total
+Determinism
+Strategy ordering: lexicographic
+Asset ordering: lexicographic
+OUTPUT
+portfolio_state_snapshot
+2.5 STEP 8 — FEEDBACK / LEARNING MODEL
+
+📄 Source:
+
+ROLE
+
+Offline deterministic learning
+
+CORE FUNCTION
+model_version = f(
+    performance_snapshot_set,
+    configuration_snapshot
+)
+RULES
+No runtime learning
+Fixed dataset
+Fixed parameter grid
+Versioned output
+OUTPUT
+parameter_update_set
+model_version_object
+3. PHASE B — CONSTRAINT SYSTEM
+3.1 MACRO VIEW
+
+📄 Source:
+
+ROLE
+Phase B = Constraint Envelope
+
+Transforms:
+
+unbounded logic → bounded system
+CORE RESPONSIBILITY
+Capital limits
+Exposure limits
+Risk thresholds
+Time constraints
+System invariants
+CRITICAL RULE
+Phase B MUST NOT change Phase A logic
+3.2 STEP 1 — IDENTITY LAYER
+
+📄 Source:
+
+OUTPUT
+constraint_specification
+CANONICAL INPUT
+canonical_input_set = {
+    phase_a_output_snapshot
+    configuration_snapshot
+    version_identifiers
+}
+PROPERTIES
+Deterministic
+Numeric
+Bounded
+Replay-safe
+3.3 STEP 2 — SCOPE CONTROL (LOCKED)
+
+📄 Source:
+
+ROLE
+
+Defines constraint domain boundaries
+
+CORE ENTITY
+constraint = {
+    constraint_id
+    constraint_type
+    scope_level
+    target_variable
+    min_value
+    max_value
+    edge_behavior
+    precedence_level
+}
+ENUMS
+constraint_type ∈ {
+    NUMERIC_BOUND
+    STATE_BOUND
+    TIME_BOUND
+    STRUCTURAL_CONSTRAINT
+}
+ORDERING
+sort by:
+    precedence_level ASC
+    constraint_id ASC
+CONFLICT RESOLUTION
+lowest precedence wins
+OUTPUT
+scope_control_spec = {
+    constraint_set
+    boundary_definition_set
+    precedence_ordering
+    constraint_scope_map
+}
+HASH
+scope_control_hash = SHA-256(canonical_binary(scope_control_spec))
+4. END-TO-END SYSTEM FLOW
+MARKET DATA
+    ↓
+Signal Model (Step 2)
+    ↓
+Decision Engine (Step 3)
+    ↓
+Trade Intent
+    ↓
+Execution Behavior (Step 4)
+    ↓
+Risk Philosophy (Step 5)
+    ↓
+Capital Allocation (Step 6)
+    ↓
+Portfolio Model (Step 7)
+    ↓
+----------------------------------
+Phase B Constraint Envelope
+----------------------------------
+    ↓
+Phase D (Execution Engine)
+5. CANONICAL ARCHITECTURE RULES
+5.1 Global Determinism
+No randomness
+No system clock
+No implicit state
+5.2 Numeric Model
+value = integer / 10^6
+ROUND_HALF_UP
+5.3 Canonical Input Enforcement
+
+ALL computations MUST use:
+
+canonical_input_set ONLY
+5.4 Ordering Rules
+Strategy → lexicographic
+Asset → lexicographic
+Constraints → precedence
+5.5 Hash Integrity
+identical input → identical hash → identical output
+6. FAILURE MODEL (SYSTEM LEVEL)
+FAILURE CONDITIONS
+non-determinism
+missing input
+constraint ambiguity
+hash inconsistency
+RESPONSE
+REJECT → NO OUTPUT
+7. TRACEABILITY (FULL LINEAGE)
+Signal
+→ Decision
+→ Trade Intent
+→ Execution Instruction
+→ Risk Context
+→ Capital Allocation
+→ Portfolio State
+→ Constraint Spec
+
+Every entity MUST have:
+
+id + hash + lineage mapping
+8. FINAL SYSTEM STATE
+Phase A = LOCKED
+Phase B Step 1 = LOCKED
+Phase B Step 2 = LOCKED (after cleanup)
+
+System Status = PRE-PRODUCTION READY
+9. FINAL CEI CERTIFICATION
+determinism = VERIFIED
+traceability = COMPLETE
+constraint_model = VALID
+architecture = CONSISTENT

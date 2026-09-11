@@ -1,0 +1,26 @@
+=====================================
+KAFKA CLIENT DISCOVERY
+=====================================
+
+infrastructure/phases/stage-12-market-data/manifests/kafka/market-topics-job.yaml:              --bootstrap-server kafka-broker-0.kafka.kafka.svc.cluster.local:9092 \
+infrastructure/phases/stage-12-market-data/manifests/kafka/market-topics-job.yaml:              --bootstrap-server kafka-broker-0.kafka.kafka.svc.cluster.local:9092 \
+infrastructure/phases/stage-12-market-data/manifests/kafka/market-topics-job.yaml:              --bootstrap-server kafka-broker-0.kafka.kafka.svc.cluster.local:9092 \
+infrastructure/phases/stage-12-market-data/manifests/kafka/kafka-statefulset.yaml:              advertised.listeners=PLAINTEXT://kafka.kafka.svc.cluster.local:9092
+infrastructure/components/kafka/market-data/create-topics.sh:BOOTSTRAP_SERVER="kafka.kafka.svc.cluster.local:9092"
+infrastructure/components/kafka/market-data/validate-topics.sh:BOOTSTRAP_SERVER="kafka.kafka.svc.cluster.local:9092"
+infrastructure/components/kafka/market-data/topic-config.env:KAFKA_BOOTSTRAP_SERVER=kafka.kafka.svc.cluster.local:9092
+infrastructure/components/kafka/market-data/delete-topics.sh:BOOTSTRAP_SERVER="kafka.kafka.svc.cluster.local:9092"
+infrastructure/components/kafka/tls/generate-broker-cert.sh:-subj "/CN=kafka.kafka.svc.cluster.local" \
+infrastructure/services/persistence-writer/app/main.py:    "kafka-broker-0.kafka.kafka.svc.cluster.local:9092"
+infrastructure/kubernetes/kafka/market-topics-job.yaml:              --bootstrap-server kafka-broker-0.kafka.kafka.svc.cluster.local:9092 \
+infrastructure/kubernetes/kafka/market-topics-job.yaml:              --bootstrap-server kafka-broker-0.kafka.kafka.svc.cluster.local:9092 \
+infrastructure/kubernetes/kafka/market-topics-job.yaml:              --bootstrap-server kafka-broker-0.kafka.kafka.svc.cluster.local:9092 \
+infrastructure/kubernetes/kafka/kafka-statefulset.yaml:              advertised.listeners=PLAINTEXT://kafka.kafka.svc.cluster.local:9092
+infrastructure/kubernetes/kafka/bootstrap.env:KAFKA_BOOTSTRAP_SERVER=kafka.kafka.svc.cluster.local:9092
+infrastructure/kubernetes/persistence/persistence-writer.yaml:              value: kafka-broker-0.kafka.kafka.svc.cluster.local:9092
+infrastructure/kubernetes/market-data/configmap.yaml:  KAFKA_BOOTSTRAP_SERVERS: "kafka.kafka.svc.cluster.local:9092"
+scripts/security/kafka/build-client-inventory.sh:"kafka.kafka.svc.cluster.local" \
+scripts/security/kafka/discover-kafka-clients.sh:"kafka.kafka.svc.cluster.local" \
+scripts/security/vault/kafka/create-kafka-secrets.sh:bootstrap_server='kafka.kafka.svc.cluster.local:9092' \
+
+=====================================

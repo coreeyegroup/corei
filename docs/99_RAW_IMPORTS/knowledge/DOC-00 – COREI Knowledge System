@@ -1,0 +1,388 @@
+# =============================================================================
+#
+# COREI KNOWLEDGE SYSTEM
+#
+# DOCUMENT ID
+# DOC-00
+#
+# DOCUMENT NAME
+#
+# COREI KNOWLEDGE SYSTEM
+#
+# VERSION
+#
+# 1.0
+#
+# STATUS
+#
+# AUTHORITATIVE
+#
+# PURPOSE
+#
+# Define the institutional knowledge system used by COREI.
+#
+# This document establishes how institutional knowledge is organized,
+# classified, governed and maintained throughout the lifecycle
+# of the COREI Operating System.
+#
+# =============================================================================
+
+
+
+# =============================================================================
+#
+# CHAPTER 01
+#
+# INTRODUCTION
+#
+# =============================================================================
+
+The COREI Knowledge System is the authoritative institutional knowledge
+foundation of the COREI Operating System.
+
+Its responsibility is not to store implementation.
+
+Its responsibility is to organize institutional knowledge.
+
+Every future knowledge asset shall follow this Knowledge System.
+
+The objective is to ensure that COREI continues evolving without losing
+institutional thinking, engineering knowledge, architectural reasoning,
+or historical continuity.
+
+
+
+# =============================================================================
+#
+# CHAPTER 02
+#
+# PURPOSE
+#
+# =============================================================================
+
+The COREI Knowledge System exists to
+
+• Preserve institutional knowledge.
+
+• Organize knowledge consistently.
+
+• Prevent knowledge duplication.
+
+• Maintain a Single Source of Truth.
+
+• Support engineering continuity.
+
+• Support future engineering teams.
+
+• Support AI-assisted reasoning.
+
+• Improve discoverability.
+
+• Ensure long-term scalability.
+
+Knowledge is considered an institutional asset.
+
+Documentation is one representation of that knowledge.
+
+
+
+# =============================================================================
+#
+# CHAPTER 03
+#
+# KNOWLEDGE ARCHITECTURE
+#
+# =============================================================================
+
+The COREI Knowledge System organizes all institutional knowledge into
+permanent Knowledge Domains.
+
+Every Knowledge Asset belongs to one primary Knowledge Domain.
+
+Knowledge Domains remain stable regardless of
+
+• Technology
+
+• Programming Language
+
+• Framework
+
+• Repository
+
+• Implementation
+
+This allows COREI to evolve without reorganizing institutional knowledge.
+
+
+
+# =============================================================================
+#
+# CHAPTER 04
+#
+# LEVEL-1 KNOWLEDGE DOMAINS
+#
+# =============================================================================
+
+The COREI Knowledge System is organized into the following permanent
+Knowledge Domains.
+
+01 Identity
+
+Defines who COREI is.
+
+--------------------------------------------
+
+02 Governance
+
+Defines laws, principles, policies and governance.
+
+--------------------------------------------
+
+03 Architecture
+
+Defines institutional architecture.
+
+--------------------------------------------
+
+04 Engineering
+
+Defines engineering methodology.
+
+--------------------------------------------
+
+05 Standards
+
+Defines reusable institutional standards.
+
+--------------------------------------------
+
+06 Specifications
+
+Defines detailed technical specifications.
+
+--------------------------------------------
+
+07 Operations
+
+Defines operational knowledge.
+
+--------------------------------------------
+
+08 Implementation
+
+Defines implementation methodology.
+
+--------------------------------------------
+
+09 Reference
+
+Defines glossary, taxonomy, indexes and references.
+
+--------------------------------------------
+
+10 History
+
+Defines institutional evolution.
+
+--------------------------------------------
+
+11 Research
+
+Defines investigations and exploratory knowledge.
+
+These domains represent the highest level of institutional knowledge
+classification within COREI.
+
+
+
+# =============================================================================
+#
+# CHAPTER 05
+#
+# DOMAIN OWNERSHIP
+#
+# =============================================================================
+
+Each Knowledge Domain owns a specific area of institutional knowledge.
+
+Identity owns
+
+• Identity
+
+• Vision
+
+• Mission
+
+• Purpose
+
+It does not own
+
+• Architecture
+
+• Implementation
+
+--------------------------------------------
+
+Governance owns
+
+• Laws
+
+• Principles
+
+• Policies
+
+It does not own
+
+• Architecture Design
+
+--------------------------------------------
+
+Architecture owns
+
+• Structural Design
+
+• System Architecture
+
+• Repository Architecture
+
+It does not own
+
+• Coding Standards
+
+--------------------------------------------
+
+Engineering owns
+
+• Engineering Methodology
+
+• Development Practices
+
+It does not own
+
+• Platform Architecture
+
+...continues for all remaining Knowledge Domains...
+
+
+
+# =============================================================================
+#
+# CHAPTER 06
+#
+# KNOWLEDGE CLASSIFICATION
+#
+# =============================================================================
+
+Before creating a new Knowledge Asset,
+
+the following questions shall always be answered.
+
+Which Knowledge Domain owns this knowledge?
+
+Does an authoritative Knowledge Asset already exist?
+
+Does this duplicate existing knowledge?
+
+Should this become a new Knowledge Asset
+or belong to an existing one?
+
+Knowledge shall always be classified before documentation begins.
+
+
+
+# =============================================================================
+#
+# CHAPTER 07
+#
+# KNOWLEDGE LIFECYCLE
+#
+# =============================================================================
+
+Every Knowledge Asset follows the same lifecycle.
+
+Draft
+
+↓
+
+Review
+
+↓
+
+Approved
+
+↓
+
+Authoritative
+
+↓
+
+Frozen
+
+↓
+
+Superseded
+
+↓
+
+Archived
+
+This lifecycle applies to every Knowledge Asset
+within the COREI Knowledge System.
+
+
+
+# =============================================================================
+#
+# CHAPTER 08
+#
+# KNOWLEDGE REPOSITORY
+#
+# =============================================================================
+
+The institutional Knowledge Repository is organized as
+
+knowledge/
+
+    00-KNOWLEDGE-SYSTEM.md
+
+    01-identity/
+
+    02-governance/
+
+    03-architecture/
+
+    04-engineering/
+
+    05-standards/
+
+    06-specifications/
+
+    07-operations/
+
+    08-implementation/
+
+    09-reference/
+
+    10-history/
+
+    11-research/
+
+Every Knowledge Asset belongs to one primary Knowledge Domain.
+
+
+
+# =============================================================================
+#
+# END OF DOCUMENT
+#
+# DOC-00
+#
+# COREI KNOWLEDGE SYSTEM
+#
+# VERSION
+# 1.0
+#
+# STATUS
+# AUTHORITATIVE
+#
+# =============================================================================

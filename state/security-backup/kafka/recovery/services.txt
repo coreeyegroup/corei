@@ -1,0 +1,3 @@
+NAME             TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)             AGE
+kafka            ClusterIP   10.104.37.26   <none>        9092/TCP            3d1h
+kafka-headless   ClusterIP   None           <none>        9092/TCP,9093/TCP   3d1h
